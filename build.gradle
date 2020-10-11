@@ -15,12 +15,14 @@ def npmTask(taskName, workingDir, commandArgs, group) {
     }
 }
 
-npmTask("polygloatJsNpmInstall", project.projectDir, ["install"], "JS - Polygloat")
+npmTask("polygloatJsNpmInstall", project.projectDir, ["install"], "Polygloat Js - Core")
 
-npmTask("polygloatJsDevelop", project.projectDir, ["run", "develop", "--watch"], "JS - Polygloat")
+npmTask("polygloatJsDevelop", project.projectDir, ["run", "develop", "--watch"], "Polygloat Js - Core")
 
 idea {
-    project {
-        vcs = "Git"
+    module {
+        excludeDirs += file('node_modules')
+        excludeDirs += file('dist')
+        excludeDirs += file('lib')
     }
 }
