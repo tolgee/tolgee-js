@@ -1,0 +1,66 @@
+{
+  "name": "polygloat",
+  "version": "0.0.12",
+  "description": "Library providing ability to translate messages directly in context of developed application.",
+  "main": "dist/polygloat.umd.js",
+  "browser": "dist/polygloat.window.js",
+  "types": "lib/index.d.ts",
+  "declaration": true,
+  "directories": {
+    "lib": "lib",
+    "dist": "dist"
+  },
+  "scripts": {
+    "build": "webpack --env.mode=production && tsc",
+    "test": "jest",
+    "develop": "webpack --env.mode=development --watch"
+  },
+  "author": "JanCizmar",
+  "license": "ISC",
+  "files": [
+    "lib/**/*",
+    "dist/**/*"
+  ],
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@types/jest": "^26.0.14",
+    "clsx": "^1.1.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-multi-select-component": "^3.0.4",
+    "regenerator-runtime": "^0.13.7",
+    "webpack-cli": "^3.3.12"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-proposal-numeric-separator": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-transform-async-to-generator": "^7.10.4",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-react": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@testing-library/dom": "^7.24.5",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@types/node": "^13.13.25",
+    "@types/react": "^16.9.51",
+    "@types/react-dom": "16.9.0",
+    "babel-loader": "^8.1.0",
+    "babel-plugin-import": "^1.13.1",
+    "babel-plugin-transform-typescript-metadata": "^0.2.2",
+    "css-loader": "^4.3.0",
+    "jest": "^26.5.2",
+    "jest-fetch-mock": "^3.0.3",
+    "reflect-metadata": "^0.1.13",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "^6.2.2",
+    "tslint": "~5.15.0",
+    "tsyringe": "^4.3.0",
+    "typescript": "^3.9.7",
+    "webpack": "^4.44.2",
+    "webpack-bundle-analyzer": "^3.9.0"
+  }
+}
