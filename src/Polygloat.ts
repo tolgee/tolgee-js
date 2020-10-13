@@ -1,24 +1,27 @@
 import {PolygloatService} from './services/polygloatService';
 import {PolygloatConfig} from './PolygloatConfig';
 import {Properties} from './Properties';
-import {container} from 'tsyringe';
+import {container as rootContainer} from 'tsyringe';
 import {EventService} from './services/EventService';
 import {TranslationParams} from "./Types";
 import {PluginManager} from "./toolsManager/PluginManager";
-import {Observer} from "./component/Observer";
+import {Observer} from "./Observer";
 
 export class Polygloat {
-    public properties: Properties = container.resolve(Properties);
-    private _service: PolygloatService = container.resolve(PolygloatService);
-    private eventService: EventService = container.resolve(EventService);
-    private pluginManager = container.resolve(PluginManager);
-    private observer: Observer;
+    private container = rootContainer.createChildContainer();
+    public properties: Properties = this.container.resolve(Properties);
+    private _service: PolygloatService = this.container.resolve(PolygloatService);
+    private eventService: EventService = this.container.resolve(EventService);
+    private pluginManager = this.container.resolve(PluginManager);
+    private observer: Observer = this.container.resolve(Observer);
 
     constructor(config: PolygloatConfig) {
         this.properties.config = {...(new PolygloatConfig()), ...config};
         this.properties.config.mode = this.properties.config.mode || this.properties.config.apiKey ? "development" : "production";
         this.properties.currentLanguage = this.properties.config.defaultLanguage;
-        this.properties.config.watch = this.properties.config.watch === undefined ? this.properties.config.mode === "development" : false;
+        if (this.properties.config.watch === undefined) {
+            this.properties.config.watch = this.properties.config.mode === "development";
+        }
     }
 
     public get lang() {
@@ -38,12 +41,11 @@ export class Polygloat {
         this.pluginManager.run();
         if (this.properties.config.mode === "development") {
             this.properties.scopes = await this.service.getScopes();
-            this.observer = container.resolve(Observer);
-            await this.service.getTranslations(this.lang);
         }
         if (this.properties.config.watch) {
             this.observer.observe();
         }
+        await this.service.getTranslations(this.lang);
         await this.refresh();
     }
 

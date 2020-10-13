@@ -1,13 +1,11 @@
 import {PolygloatService} from '../services/polygloatService';
-import {container} from 'tsyringe';
 import {TranslationHighlighter} from '../TranslationHighlighter';
 import {PolygloatTextAreaElement, PolygloatTextInputElement} from '../Types';
 import {Properties} from "../Properties";
 
 export abstract class TextInputHandler {
-    private service = container.resolve(PolygloatService);
-    private highlighter = container.resolve(TranslationHighlighter);
-    private properties = container.resolve(Properties);
+    constructor(private service: PolygloatService, private highlighter: TranslationHighlighter, private properties: Properties) {
+    }
 
     async refresh(node: Element) {
         let textArea: PolygloatTextAreaElement = node as PolygloatTextAreaElement;
@@ -35,7 +33,7 @@ export abstract class TextInputHandler {
                 = await this.replace(node.getAttribute('placeholder'));
             node.setAttribute('placeholder', newPlaceholder);
 
-            this.addPolygloatToPrototype(node);
+            TextInputHandler.addPolygloatToPrototype(node);
 
             let textInputElement: PolygloatTextInputElement = node as PolygloatTextInputElement;
             textInputElement.__polygloat = {
@@ -70,8 +68,7 @@ export abstract class TextInputHandler {
 
     protected abstract getValue(node: HTMLElement): string;
 
-
-    private addPolygloatToPrototype(element: Element) {
+    private static addPolygloatToPrototype(element: Element) {
         let spanPrototype = Object.getPrototypeOf(element);
         spanPrototype.__polygloat = {};
     }

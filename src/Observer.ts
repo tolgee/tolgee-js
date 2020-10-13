@@ -1,14 +1,13 @@
-import {container, injectable} from "tsyringe";
-import {NodeHelper} from "../helpers/NodeHelper";
-import {CoreHandler} from "../handlers/CoreHandler";
-import {Properties} from "../Properties";
+import {Lifecycle, scoped} from "tsyringe";
+import {NodeHelper} from "./helpers/NodeHelper";
+import {CoreHandler} from "./handlers/CoreHandler";
+import {Properties} from "./Properties";
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class Observer {
-    constructor(private properties: Properties) {
+    constructor(private properties: Properties, private coreHandler: CoreHandler) {
     }
 
-    private coreHandler: CoreHandler = container.resolve(CoreHandler);
     private observer = new MutationObserver(
         async (mutationsList: MutationRecord[]) => {
             for (let mutation of mutationsList) {

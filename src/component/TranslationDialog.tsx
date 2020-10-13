@@ -2,15 +2,15 @@ import * as React from "react";
 import {FunctionComponent, useEffect, useState} from "react";
 import {TranslationData} from "../DTOs/TranslationData";
 import {container} from "tsyringe";
-import {PolygloatService} from "../services/polygloatService";
 import {Properties} from "../Properties";
-import {EventService} from "../services/EventService";
 import TranslationDialogInner from "./TranslatonDialogInner";
+import {ComponentDependencies} from "./PolygloatViewer";
 
 type DialogProps = {
     input: string,
-    open: boolean
-    onClose: () => void
+    open: boolean,
+    onClose: () => void,
+    dependencies: ComponentDependencies
 }
 
 export type DialogContextType = {
@@ -36,7 +36,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
     const [translations, setTranslations] = useState<TranslationData>(null);
-    const service = container.resolve(PolygloatService);
+    const service = props.dependencies.polygloatService;
     const properties = container.resolve(Properties);
 
     const onTranslationInputChange = (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -71,7 +71,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
         try {
             setSaving(true);
             await service.setTranslations(translations);
-            container.resolve(EventService).TRANSLATION_CHANGED.emit(translations);
+            props.dependencies.eventService.TRANSLATION_CHANGED.emit(translations);
             setSuccess(true);
             await new Promise((resolve => setTimeout(resolve, 500)));
             setError(null);

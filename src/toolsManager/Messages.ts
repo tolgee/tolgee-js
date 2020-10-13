@@ -1,4 +1,4 @@
-import {singleton} from "tsyringe";
+import {Lifecycle, scoped} from "tsyringe";
 
 type Listener = {
     type: string
@@ -14,7 +14,7 @@ type PgEvent = {
     data: Message
 } & MessageEvent;
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class Messages {
     private listeners: Listener[] = [];
     private listenersPopup: Listener[] = [];

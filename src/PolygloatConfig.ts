@@ -11,7 +11,7 @@ export class PolygloatConfig {
     inputPostfix?: string = '%-%';
     apiUrl?: string;
     apiKey?: string;
-    filesUrlPrefix?: string;
+    filesUrlPrefix: string = "/i18n/";
     mode?: Mode;
     targetElement: Node = document.body;
     watch?: boolean;

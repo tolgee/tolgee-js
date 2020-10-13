@@ -1,7 +1,7 @@
 import {PolygloatConfig} from './PolygloatConfig';
-import {injectable} from 'tsyringe';
+import {Lifecycle, scoped} from 'tsyringe';
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class Properties {
     config: PolygloatConfig = new PolygloatConfig();
     currentLanguage: string = this.config.defaultLanguage;

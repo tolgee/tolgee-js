@@ -1,9 +1,9 @@
-import {singleton} from "tsyringe";
+import {Lifecycle, scoped} from "tsyringe";
 import {Messages} from "./Messages";
 import {PolygloatSimpleSpanElement} from "../Types";
 import {Properties} from "../Properties";
 
-@singleton()
+@scoped(Lifecycle.ContainerScoped)
 export class PluginManager {
     private handshakeSucceed = false;
     private spans: { [key: number]: PolygloatSimpleSpanElement } = {};

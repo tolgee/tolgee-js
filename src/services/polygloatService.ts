@@ -1,9 +1,9 @@
 import {TranslationData} from '../DTOs/TranslationData';
 import {Properties, Scope} from '../Properties';
-import {injectable} from 'tsyringe';
+import {Lifecycle, scoped} from 'tsyringe';
 import {PolygloatData, TranslationParams, Translations} from "../Types";
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class PolygloatService {
 
     private translationsCache: Map<string, Translations> = new Map<string, Translations>();

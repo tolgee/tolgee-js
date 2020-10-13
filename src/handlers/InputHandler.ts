@@ -1,7 +1,7 @@
-import {injectable} from 'tsyringe';
+import {Lifecycle, scoped} from 'tsyringe';
 import {TextInputHandler} from './AbstractTextInputHandler';
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class InputHandler extends TextInputHandler {
     protected getValue(node) {
         return node.value;

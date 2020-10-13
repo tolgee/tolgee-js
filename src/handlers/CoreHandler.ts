@@ -2,12 +2,12 @@ import {NodeHelper} from '../helpers/NodeHelper';
 import {PolygloatService} from '../services/polygloatService';
 import {BasicTextHandler} from './BasicTextHandler';
 import {TextAreaHandler} from './TextAreaHandler';
-import {injectable} from 'tsyringe';
+import {Lifecycle, scoped} from 'tsyringe';
 import {EventService} from '../services/EventService';
 import {Properties} from '../Properties';
 import {InputHandler} from './InputHandler';
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class CoreHandler {
     constructor(private service: PolygloatService,
                 private basicTextHandler: BasicTextHandler,
@@ -29,8 +29,6 @@ export class CoreHandler {
 
     onNewNodes = async (nodes: Element[]): Promise<void> => {
         for (const node of nodes) {
-            const hasAncestor = node.parentNode !== null;
-            //texts inside newValue areas can not be replaced with spans, because it is not going to be rendered properly
             let textInputParent = node.closest("textarea, input")
             if (textInputParent === null) {
                 await this.basicTextHandler.handleNewNode(node);
@@ -51,7 +49,7 @@ export class CoreHandler {
         if (this.isAttributeAllowed(target.tagName, mutation.attributeName)) {
             if (target.getAttribute(mutation.attributeName).indexOf(this.properties.config.inputPrefix) > -1) {
                 if (target.getAttribute('_polygloat') !== '') {
-                    this.onNewNodes([target]);
+                    return this.onNewNodes([target]);
                 }
             }
         }

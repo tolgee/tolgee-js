@@ -2,17 +2,16 @@ import {NodeHelper} from '../helpers/NodeHelper';
 import {PolygloatData, PolygloatSimpleSpanElement} from '../Types';
 import {PolygloatService} from '../services/polygloatService';
 import {Properties} from '../Properties';
-import {container, injectable} from 'tsyringe';
+import {Lifecycle, scoped} from 'tsyringe';
 import {TranslationHighlighter} from '../TranslationHighlighter';
 import {PluginManager} from "../toolsManager/PluginManager";
 
-@injectable()
+@scoped(Lifecycle.ContainerScoped)
 export class BasicTextHandler {
-    private properties: Properties = container.resolve(Properties);
-    private service: PolygloatService = container.resolve(PolygloatService);
-    private highlighter: TranslationHighlighter = container.resolve(TranslationHighlighter);
-
-    constructor(private pluginManager: PluginManager) {
+    constructor(private pluginManager: PluginManager,
+                private properties: Properties,
+                private service: PolygloatService,
+                private highlighter: TranslationHighlighter) {
     }
 
     async refresh(node: Element) {
@@ -51,7 +50,7 @@ export class BasicTextHandler {
         const span: PolygloatSimpleSpanElement = document.createElement("span") as PolygloatSimpleSpanElement;
         span.setAttribute("_polygloat", "");
 
-        this.addPolygloatToPrototype(span);
+        BasicTextHandler.addPolygloatToPrototype(span);
 
         span.__polygloat = {...data};
         let translation = await this.service.getTranslation(data.input, this.properties.currentLanguage);
@@ -62,7 +61,7 @@ export class BasicTextHandler {
         return span;
     };
 
-    private addPolygloatToPrototype(span) {
+    private static addPolygloatToPrototype(span) {
         let spanPrototype = Object.getPrototypeOf(span);
         spanPrototype.__polygloat = {};
     }
