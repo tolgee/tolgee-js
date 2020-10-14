@@ -10,6 +10,8 @@ export class PluginManager {
     private counter = 0;
 
     constructor(private messages: Messages, private properties: Properties) {
+        this.properties = {...properties};
+        delete this.properties.config.targetElement;
     }
 
     readonly run = () => {

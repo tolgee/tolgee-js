@@ -1,8 +1,6 @@
 import * as React from "react";
 import {FunctionComponent, useEffect, useState} from "react";
-import {TranslationData} from "../DTOs/TranslationData";
-import {container} from "tsyringe";
-import {Properties} from "../Properties";
+import {TranslationData} from "../core/DTOs/TranslationData";
 import TranslationDialogInner from "./TranslatonDialogInner";
 import {ComponentDependencies} from "./PolygloatViewer";
 
@@ -37,7 +35,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
     const [error, setError] = useState<string>(null);
     const [translations, setTranslations] = useState<TranslationData>(null);
     const service = props.dependencies.polygloatService;
-    const properties = container.resolve(Properties);
+    const properties = props.dependencies.properties;
 
     const onTranslationInputChange = (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSuccess(false);
@@ -106,7 +104,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
 
     return (
         <TranslationDialogContext.Provider value={contextValue}>
-            <div style={{fontFamily: "Rubik, Roboto, Arial"}}>
+            <div style={{fontFamily: "Rubik, Roboto, Arial"}} data-polygloat-restricted={true}>
                 <TranslationDialogInner/>
             </div>
         </TranslationDialogContext.Provider>

@@ -1,4 +1,5 @@
 import {Mode} from "./Properties";
+import {UI} from "polygloat/ui";
 
 export class PolygloatConfig {
     tagAttributes?: { [key: string]: string[] } = {
@@ -11,8 +12,9 @@ export class PolygloatConfig {
     inputPostfix?: string = '%-%';
     apiUrl?: string;
     apiKey?: string;
-    filesUrlPrefix: string = "/i18n/";
+    filesUrlPrefix?: string = "i18n/";
     mode?: Mode;
-    targetElement: Node = document.body;
+    targetElement?: Node = document.body;
     watch?: boolean;
+    ui?: typeof UI;
 }

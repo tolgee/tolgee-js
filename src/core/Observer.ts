@@ -15,9 +15,11 @@ export class Observer {
                     if (!!mutation.target.parentElement) {
                         await this.coreHandler.onNewNodes([mutation.target.parentElement]);
                     }
+                    continue;
                 }
                 if (mutation.type === 'childList') {
                     await this.handleSubtree(mutation.target);
+                    continue;
                 }
                 if (mutation.type === 'attributes') {
                     await this.coreHandler.handleAttribute(mutation);
@@ -26,14 +28,21 @@ export class Observer {
         });
 
     public async handleSubtree(target: Node) {
-        let xPath = `./descendant-or-self::*[text()[contains(., '${this.properties.config.inputPrefix}') and contains(., '${this.properties.config.inputPostfix}')]]`;
+        let inputPrefix = this.properties.config.inputPrefix;
+        let inputPostfix = this.properties.config.inputPostfix;
+
+        let xPath = `./descendant-or-self::*[text()[contains(., '${inputPrefix}') and contains(., '${inputPostfix}')]]`;
         let nodes: XPathResult = document.evaluate(xPath, target, null, XPathResult.ANY_TYPE);
         let inputNodes = (target as Element).getElementsByTagName("input");
-        let polygloatInputs = Array.from(inputNodes)
-            .filter(i => i.value.indexOf(this.properties.config.inputPrefix) > -1);
 
-        const newNodes = NodeHelper.nodeListToArray(nodes).concat(polygloatInputs)
-            .filter(n => this.properties.config.restrictedElements.indexOf(n.tagName.toLowerCase()) === -1);
+        let polygloatInputs = Array.from(inputNodes)
+            .filter(i => i.value.indexOf(inputPrefix) > -1 && i.value.indexOf(inputPostfix) > -1);
+
+        let restrictedElements = this.properties.config.restrictedElements;
+        const newNodes = NodeHelper.nodeListToArray(nodes)
+            .concat(polygloatInputs)
+            .filter(n => restrictedElements.indexOf(n.tagName.toLowerCase()) === -1 && n.closest("[data-polygloat-restricted=\"true\"]") === null);
+
         if (newNodes.length) {
             await this.coreHandler.onNewNodes(newNodes);
         }

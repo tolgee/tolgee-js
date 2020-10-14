@@ -14,12 +14,22 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "polygloat/ui": [
+        "ui"
+      ],
+      "polygloat/core": [
+        "core"
+      ]
+    }
   },
   "include": [
     "src"
   ],
   "exclude": [
     "node_modules"
-  ]
+  ],
+
 }

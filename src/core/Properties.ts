@@ -3,6 +3,10 @@ import {Lifecycle, scoped} from 'tsyringe';
 
 @scoped(Lifecycle.ContainerScoped)
 export class Properties {
+    constructor() {
+        //@ts-ignore
+        window.__properties = this;
+    }
     config: PolygloatConfig = new PolygloatConfig();
     currentLanguage: string = this.config.defaultLanguage;
     scopes: Scope[] = [];

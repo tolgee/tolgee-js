@@ -1,15 +1,17 @@
-import {PolygloatViewer} from './component/PolygloatViewer';
-import {createElement} from 'react';
-import * as ReactDOM from 'react-dom';
 import {PolygloatService} from './services/polygloatService';
 import {PolygloatSimpleSpanElement, PolygloatTextInputElement} from './Types';
 import {Lifecycle, scoped} from 'tsyringe';
 import {Properties} from './Properties';
 import {EventService} from "./services/EventService";
+import {UI} from "polygloat/ui";
 
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationHighlighter {
-    private viewerComponent: PolygloatViewer;
+    private _renderer: UI;
+
+    constructor(private service: PolygloatService, private properties: Properties, private eventService: EventService) {
+
+    }
 
     private isKeyDown = (() => {
         let state = {};
@@ -20,17 +22,17 @@ export class TranslationHighlighter {
         return (key) => state.hasOwnProperty(key) && state[key] || false;
     })();
 
-    constructor(private service: PolygloatService, private properties: Properties, private eventService: EventService) {
-        let polygloatModalContainer = document.createElement('div');
-        document.body.append(polygloatModalContainer);
-        let element = createElement(PolygloatViewer, {
-            dependencies: {
-                polygloatService: service,
-                properties: properties,
-                eventService: eventService
+    private get renderer() {
+        if (this._renderer === undefined) {
+            if (typeof this.properties.config.ui === "function") {
+                this._renderer = new this.properties.config.ui({
+                    polygloatService: this.service,
+                    properties: this.properties,
+                    eventService: this.eventService
+                });
             }
-        });
-        this.viewerComponent = ReactDOM.render(element, polygloatModalContainer);
+        }
+        return this._renderer;
     }
 
     listen(node: Element) {
@@ -41,7 +43,7 @@ export class TranslationHighlighter {
         const clickListener = (e: MouseEvent) => {
             e.preventDefault();
             e.stopPropagation();
-            this.translationEdit(node);
+            this.translationEdit(node).then();
         };
 
         const leaveListener = () => {
@@ -135,6 +137,11 @@ export class TranslationHighlighter {
 
     private translationEdit = async (node) => {
         let input = await this.getInput(node);
-        this.viewerComponent.translationEdit(input);
+        if (typeof this.renderer === "object") {
+            this.renderer.renderViewer(input)
+            return;
+        }
+        console.warn("Polygloat UI is not provided. To translate interactively provide polygloat ui constructor to \"ui\" configuration property. " +
+            "To disable highlighting use production mode.");
     };
 }

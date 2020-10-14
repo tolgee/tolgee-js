@@ -1,7 +1,7 @@
 import {waitFor,} from '@testing-library/dom'
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
-import {Polygloat} from "../src";
+import {Polygloat} from "../index";
 import mockTranslations from "./mockTranslations";
 
 import fetchMock from "jest-fetch-mock";
