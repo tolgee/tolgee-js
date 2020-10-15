@@ -47,16 +47,20 @@ export class BasicTextHandler {
     }
 
     readonly createSpan = async (data: PolygloatData): Promise<PolygloatSimpleSpanElement> => {
+        const translation = await this.service.getTranslation(data.input, this.properties.currentLanguage);
+        const translatedString = this.service.replaceParams(translation, data.params)
+
         const span: PolygloatSimpleSpanElement = document.createElement("span") as PolygloatSimpleSpanElement;
         span.setAttribute("_polygloat", "");
 
         BasicTextHandler.addPolygloatToPrototype(span);
 
         span.__polygloat = {...data};
-        let translation = await this.service.getTranslation(data.input, this.properties.currentLanguage);
-        span.innerHTML = this.service.replaceParams(translation, data.params);
+        span.innerHTML = translatedString
+        if(this.properties.config.mode === "development") {
+            this.highlighter.listen(span);
+        }
 
-        this.highlighter.listen(span);
         this.pluginManager.registerSpan(span);
         return span;
     };

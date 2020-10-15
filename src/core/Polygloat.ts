@@ -17,12 +17,8 @@ export class Polygloat {
 
     constructor(config: PolygloatConfig) {
         this.container = rootContainer.createChildContainer();
-        this.properties.config = {...(new PolygloatConfig()), ...config};
-        this.properties.config.mode = this.properties.config.mode || this.properties.config.apiKey ? "development" : "production";
+        this.properties.config = new PolygloatConfig(config);
         this.properties.currentLanguage = this.properties.config.defaultLanguage;
-        if (this.properties.config.watch === undefined) {
-            this.properties.config.watch = this.properties.config.mode === "development";
-        }
     }
 
     public get lang() {

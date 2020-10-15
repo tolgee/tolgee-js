@@ -17,4 +17,14 @@ export class PolygloatConfig {
     targetElement?: Node = document.body;
     watch?: boolean;
     ui?: typeof UI;
+
+
+    constructor(config?: PolygloatConfig) {
+        debugger;
+        config && Object.assign(this, config);
+        this.mode = this.mode || (this.apiKey ? "development" : "production");
+        if (this.watch === undefined) {
+            this.watch = this.mode === "development";
+        }
+    }
 }
