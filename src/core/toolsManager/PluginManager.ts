@@ -10,11 +10,9 @@ export class PluginManager {
     private counter = 0;
 
     constructor(private messages: Messages, private properties: Properties) {
-        this.properties = {...properties};
-        delete this.properties.config.targetElement;
     }
 
-    readonly run = () => {
+    run() {
         try {
             this.messages.startListening();
             this.handshake();
@@ -22,13 +20,13 @@ export class PluginManager {
             console.warn(e);
             console.warn("Can not start communication with browser plugin. Check waning above.")
         }
-    };
+    }
 
     readonly handshake = () => {
         this.messages.send("POLYGLOAT_READY");
         this.messages.listen("POLYGLOAT_PLUGIN_READY", () => {
             this.handshakeSucceed = true;
-            this.messages.send("POLYGLOAT_READY", this.properties);
+            this.messages.send("POLYGLOAT_READY", {...this.properties, config: {...this.properties.config, targetElement: undefined}} as Properties);
             this.initListeners();
         });
     };

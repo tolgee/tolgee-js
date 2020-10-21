@@ -1,6 +1,6 @@
 import {Subscription} from "./Subscription";
 
-export type CallbackType<T> = (data: T) => void;
+export type CallbackType<T> = (data: T) => Promise<void>;
 
 export class EventEmitter<T> {
     private idCounter: number = 0;
@@ -10,23 +10,23 @@ export class EventEmitter<T> {
         return this._subscriptions;
     }
 
-    public emit = (data: T) => {
+    public async emit(data: T) {
         for (const callback of this.subscriptions.values()) {
-            callback(data);
+            await callback(data);
         }
-    };
+    }
 
-    public subscribe = (callback: CallbackType<T>) => {
+    public subscribe(callback: CallbackType<T>) {
         const newId = this.idCounter++;
         const subscription = new Subscription(() => this.unsubscribe(newId));
         this.subscriptions.set(newId, callback);
         return subscription;
-    };
+    }
 
-    private unsubscribe = (id: number) => {
+    private unsubscribe(id: number) {
         const wasPresent = this._subscriptions.delete(id);
         if (!wasPresent) {
             console.warn("Event to unsubscribe was not found");
         }
-    };
+    }
 }

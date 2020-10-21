@@ -1,7 +1,8 @@
-import {Mode} from "./Properties";
 import {UI} from "polygloat/ui";
+import {Mode} from "./Types";
 
 export class PolygloatConfig {
+    noWrapIn?: ["textarea"];
     tagAttributes?: { [key: string]: string[] } = {
         'textarea': ['placeholder'],
         'input': ['value', 'placeholder']
@@ -9,18 +10,16 @@ export class PolygloatConfig {
     restrictedElements?: string[] = ['script', 'style'];
     defaultLanguage?: string = 'en';
     inputPrefix?: string = '%-%polygloat:';
-    inputPostfix?: string = '%-%';
+    inputSuffix?: string = '%-%';
     apiUrl?: string;
     apiKey?: string;
     filesUrlPrefix?: string = "i18n/";
     mode?: Mode;
-    targetElement?: Node = document.body;
+    targetElement?: Element = document.body;
     watch?: boolean;
     ui?: typeof UI;
 
-
     constructor(config?: PolygloatConfig) {
-        debugger;
         config && Object.assign(this, config);
         this.mode = this.mode || (this.apiKey ? "development" : "production");
         if (this.watch === undefined) {

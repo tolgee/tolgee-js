@@ -1,9 +1,10 @@
-import {waitFor,} from '@testing-library/dom'
+jest.autoMockOff();
+
+import {waitFor} from '@testing-library/dom'
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
-import {Polygloat} from "../index";
+import {Polygloat} from "../src/core";
 import mockTranslations from "./mockTranslations";
-
 import fetchMock from "jest-fetch-mock";
 
 const API_URL = "http://localhost";
@@ -21,15 +22,6 @@ const fetch = fetchMock.mockResponse(async req => {
     throw new Error("Invalid request");
 });
 
-test('it evaluates document properly', async () => {
-    let htmlDivElement = document.createElement("div");
-    htmlDivElement.textContent = "{{hello_world}}"
-
-    const el = document.evaluate("./descendant-or-self::*[text()[contains(., '{{') and contains(., '}}')]]", htmlDivElement, null, 0).iterateNext()
-    expect(el).not.toBeNull();
-});
-
-
 test('it translates some existing text', async () => {
     fetch.enableMocks();
     Error.stackTraceLimit = 50;
@@ -41,7 +33,7 @@ test('it translates some existing text', async () => {
         apiKey: API_KEY,
         apiUrl: API_URL,
         inputPrefix: "{{",
-        inputPostfix: "}}",
+        inputSuffix: "}}",
     });
 
     await polygloat.run().then();

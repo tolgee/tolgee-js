@@ -24,10 +24,24 @@ export interface TextInputElementData {
 
 export type Translations = { [key: string]: string | Translations };
 export type TranslationParams = { [key: string]: string }
-export type PolygloatData = { input: string, params: TranslationParams }
+
+export type KeyAndParams = { key: string, params: TranslationParams }
+export type TranslatedWithMetadata = { translated: string, key: string, params: TranslationParams }
+
+export type NodeWithMeta = Node & {
+    _polygloat: NodeMeta;
+};
+
+export type ElementWithMeta = Element & {
+    _polygloat: ElementMeta
+}
+
+export type ElementMeta = { nodes: Set<NodeWithMeta> }
+
+export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[] };
 
 export interface SimpleSpanElementData {
-    input: string;
+    key: string;
     params?: TranslationParams;
 }
 
@@ -35,9 +49,6 @@ export interface PolygloatSimpleSpanElement extends HTMLSpanElement {
     __polygloat: SimpleSpanElementData;
 }
 
-export interface PolygloatInWindow {
-    registered?: Element[];
-    pluginReady?: () => void;
-}
+export type Scope = "translations.edit" | "translations.view" | "sources.edit";
 
-export type PgDocument = Document & { __polygloat?: PolygloatInWindow, __polygloatPlugin: { registerToPlugin?: () => void } }
+export type Mode = 'development' | 'production';

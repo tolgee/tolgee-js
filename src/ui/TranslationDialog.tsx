@@ -34,8 +34,9 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
     const [translations, setTranslations] = useState<TranslationData>(null);
-    const service = props.dependencies.polygloatService;
+    const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
+    const translationService = props.dependencies.translationService;
 
     const onTranslationInputChange = (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSuccess(false);
@@ -44,7 +45,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
     };
 
     const loadTranslations = (languages?: Set<string>) => {
-        service.getSourceTranslations(props.input, languages).then(result => {
+        translationService.getSourceTranslations(props.input, languages).then(result => {
             setTranslations(result);
             setLoading(false);
         });
@@ -55,9 +56,9 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
             setLoading(true);
             setSuccess(false);
             setError(null);
-            loadTranslations(service.preferredLanguages);
+            loadTranslations(properties.preferredLanguages);
             if (availableLanguages === undefined) {
-                service.getLanguages().then(l => {
+                coreService.getLanguages().then(l => {
                     setAvailableLanguages(l);
                 });
             }
@@ -68,8 +69,8 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
         setSaving(true);
         try {
             setSaving(true);
-            await service.setTranslations(translations);
-            props.dependencies.eventService.TRANSLATION_CHANGED.emit(translations);
+            await translationService.setTranslations(translations);
+            await props.dependencies.eventService.TRANSLATION_CHANGED.emit(translations);
             setSuccess(true);
             await new Promise((resolve => setTimeout(resolve, 500)));
             setError(null);
@@ -82,16 +83,16 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
         }
     };
 
-    const editDisabled = loading || !service.isKeyAllowed("translations.edit");
+    const editDisabled = loading || !coreService.isAuthorizedTo("translations.edit");
 
     const [availableLanguages, setAvailableLanguages] = useState(undefined);
 
-    const [selectedLanguages, setSelectedLanguages] = useState(service.preferredLanguages || new Set([properties.currentLanguage]));
+    const [selectedLanguages, setSelectedLanguages] = useState(properties.preferredLanguages || new Set([properties.currentLanguage]));
 
     const onSelectedLanguagesChange = (value: Set<string>) => {
         if (value.size) {
             setSelectedLanguages(value);
-            service.preferredLanguages = value;
+            properties.preferredLanguages = value;
             loadTranslations(value);
         }
     };

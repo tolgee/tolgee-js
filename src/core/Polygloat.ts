@@ -1,4 +1,4 @@
-import {PolygloatService} from './services/polygloatService';
+import {CoreService} from './services/CoreService';
 import {PolygloatConfig} from './PolygloatConfig';
 import {Properties} from './Properties';
 import {container as rootContainer} from 'tsyringe';
@@ -6,14 +6,20 @@ import {EventService} from './services/EventService';
 import {TranslationParams} from "./Types";
 import {PluginManager} from "./toolsManager/PluginManager";
 import {Observer} from "./Observer";
+import {TranslationService} from "./services/TranslationService";
+import {TextService} from "./services/TextService";
+import {CoreHandler} from "./handlers/CoreHandler";
 
 export class Polygloat {
     private readonly container = rootContainer.createChildContainer();
     public properties: Properties = this.container.resolve(Properties);
-    private _service: PolygloatService = this.container.resolve(PolygloatService);
+    private _coreService: CoreService = this.container.resolve(CoreService);
     private eventService: EventService = this.container.resolve(EventService);
-    private pluginManager = this.container.resolve(PluginManager);
+    private pluginManager: PluginManager = this.container.resolve(PluginManager);
     private observer: Observer = this.container.resolve(Observer);
+    private translationService: TranslationService = this.container.resolve(TranslationService);
+    private textService: TextService = this.container.resolve(TextService);
+    private coreHandler: CoreHandler = this.container.resolve(CoreHandler);
 
     constructor(config: PolygloatConfig) {
         this.container = rootContainer.createChildContainer();
@@ -30,56 +36,48 @@ export class Polygloat {
         this.eventService.LANGUAGE_CHANGED.emit(value);
     }
 
-    public get service() {
-        return this._service;
+    public get coreService() {
+        return this._coreService;
     }
 
     public async run(): Promise<void> {
         this.pluginManager.run();
         if (this.properties.config.mode === "development") {
-            this.properties.scopes = await this.service.getScopes();
+            this.properties.scopes = await this.coreService.getScopes();
         }
         if (this.properties.config.watch) {
             this.observer.observe();
         }
-        await this.service.getTranslations(this.lang);
+        await this.translationService.getTranslations(this.lang);
         await this.refresh();
     }
 
     public async refresh() {
-        return this.observer.handleSubtree(this.properties.config.targetElement);
+        return this.coreHandler.handleSubtree(this.properties.config.targetElement);
     }
 
     public get defaultLanguage() {
         return this.properties.config.defaultLanguage;
     }
 
-    translate = async (inputText: string, params: TranslationParams = {}, noWrap: boolean = false): Promise<string> => {
+    translate = async (key: string, params: TranslationParams = {}, noWrap: boolean = false): Promise<string> => {
         if (this.properties.config.mode === 'development' && !noWrap) {
-            return this.wrap(inputText, params);
+            return this.textService.wrap(key, params);
         }
-        return this.service.replaceParams(await this.service.getTranslation(inputText), params);
+        return this.textService.translate(key, params);
     };
 
-    instant = (inputText: string, params: TranslationParams = {}, noWrap: boolean = false, orEmpty?: boolean): string => {
+    instant = (key: string, params: TranslationParams = {}, noWrap: boolean = false, orEmpty?: boolean): string => {
         if (this.properties.config.mode === 'development' && !noWrap) {
-            return this.wrap(inputText, params);
+            return this.textService.wrap(key, params);
         }
-        return this.service.replaceParams(this.service.instant(inputText, null, orEmpty), params);
+        return this.textService.instant(key, params, undefined, orEmpty);
     };
 
     public stop = () => {
-        this.observer && this.observer.stopObserving();
+        this.observer.stopObserving();
         this.pluginManager.stop()
     }
-
-    private wrap(inputText: string, params: TranslationParams = {}): string {
-        let paramString = Object.entries(params).map(([name, value]) => `${this.escapeParam(name)}:${this.escapeParam(value)}`).join(",");
-        paramString = paramString.length ? `:${paramString}` : "";
-        return `${this.properties.config.inputPrefix}${this.escapeParam(inputText)}${paramString}${this.properties.config.inputPostfix}`;
-    }
-
-    private readonly escapeParam = (string: string) => string.replace(",", "\\,").replace(":", "\\:");
 
     public get onLangChange() {
         return this.eventService.LANGUAGE_CHANGED;

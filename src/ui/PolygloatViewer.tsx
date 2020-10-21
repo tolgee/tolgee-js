@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {TranslationDialog} from "./TranslationDialog";
 import {BodyEnd} from "./BodyEnd";
-import {PolygloatService} from "../core/services/polygloatService";
+import {CoreService} from "../core/services/CoreService";
 import {Properties} from "../core/Properties";
 import {EventService} from "../core/services/EventService";
+import {TranslationService} from "../core/services/TranslationService";
 
 export type ComponentDependencies = {
-    polygloatService: PolygloatService,
+    coreService: CoreService,
+    translationService: TranslationService,
     properties: Properties,
     eventService: EventService
 }

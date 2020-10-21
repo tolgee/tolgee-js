@@ -34,6 +34,7 @@ export class Messages {
 
         window.addEventListener("message", receiveMessage, false);
 
+        typeof this._stopListening === "function" && this._stopListening();
         this._stopListening = () => {
             window.removeEventListener("message", receiveMessage, false);
         }

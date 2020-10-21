@@ -1,17 +1,19 @@
 import {PolygloatConfig} from './PolygloatConfig';
 import {Lifecycle, scoped} from 'tsyringe';
+import {Scope} from "./Types";
 
 @scoped(Lifecycle.ContainerScoped)
 export class Properties {
-    constructor() {
-        //@ts-ignore
-        window.__properties = this;
-    }
-    config: PolygloatConfig = new PolygloatConfig();
-    currentLanguage: string = this.config.defaultLanguage;
+    config: PolygloatConfig;
+    currentLanguage: string;
     scopes: Scope[] = [];
+
+    set preferredLanguages(languages: Set<string>) {
+        localStorage.setItem("__polygloat_preferredLanguages", JSON.stringify(Array.from(languages)));
+    }
+
+    get preferredLanguages(): Set<string> {
+        return new Set(JSON.parse(localStorage.getItem("__polygloat_preferredLanguages")));
+    }
 }
 
-export type Scope = "translations.edit" | "translations.view" | "sources.edit";
-
-export type Mode = 'development' | 'production';

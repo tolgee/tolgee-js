@@ -1,16 +1,19 @@
-import {PolygloatService} from './services/polygloatService';
+import {CoreService} from './services/CoreService';
 import {PolygloatSimpleSpanElement, PolygloatTextInputElement} from './Types';
 import {Lifecycle, scoped} from 'tsyringe';
 import {Properties} from './Properties';
 import {EventService} from "./services/EventService";
 import {UI} from "polygloat/ui";
+import {TranslationService} from "./services/TranslationService";
 
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationHighlighter {
     private _renderer: UI;
 
-    constructor(private service: PolygloatService, private properties: Properties, private eventService: EventService) {
-
+    constructor(private service: CoreService,
+                private properties: Properties,
+                private eventService: EventService,
+                private translationService: TranslationService) {
     }
 
     private isKeyDown = (() => {
@@ -26,9 +29,10 @@ export class TranslationHighlighter {
         if (this._renderer === undefined) {
             if (typeof this.properties.config.ui === "function") {
                 this._renderer = new this.properties.config.ui({
-                    polygloatService: this.service,
+                    coreService: this.service,
                     properties: this.properties,
-                    eventService: this.eventService
+                    eventService: this.eventService,
+                    translationService: this.translationService
                 });
             }
         }
@@ -86,10 +90,10 @@ export class TranslationHighlighter {
         node.addEventListener('mouseleave', leaveListener);
     };
 
-    private getInput(node: Element): Promise<string> {
+    private getKey(node: Element): Promise<string> {
         return new Promise(resolve => {
             if (node instanceof HTMLSpanElement) {
-                resolve((node as PolygloatSimpleSpanElement).__polygloat.input);
+                resolve((node as PolygloatSimpleSpanElement).__polygloat.key);
                 return;
             }
 
@@ -107,7 +111,7 @@ export class TranslationHighlighter {
                     let nearestDistance = undefined;
 
                     for (const input of textInputElement.__polygloat.valueInputs) {
-                        let translation = this.service.instant(input, this.properties.currentLanguage);
+                        let translation = this.translationService.getFromCacheOrFallback(input, this.properties.currentLanguage);
                         let index = 0;
                         let end = 0;
                         do {
@@ -136,7 +140,7 @@ export class TranslationHighlighter {
     }
 
     private translationEdit = async (node) => {
-        let input = await this.getInput(node);
+        let input = await this.getKey(node);
         if (typeof this.renderer === "object") {
             this.renderer.renderViewer(input)
             return;

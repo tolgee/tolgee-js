@@ -10,9 +10,10 @@ export class UI {
         document.body.append(polygloatModalContainer);
         let element = createElement(PolygloatViewer, {
             dependencies: {
-                polygloatService: this.dependencies.polygloatService,
+                coreService: this.dependencies.coreService,
                 properties: this.dependencies.properties,
-                eventService: this.dependencies.eventService
+                eventService: this.dependencies.eventService,
+                translationService: this.dependencies.translationService
             }
         });
         this.viewerComponent = ReactDOM.render(element, polygloatModalContainer);
