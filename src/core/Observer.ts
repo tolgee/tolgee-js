@@ -1,14 +1,14 @@
 import {Lifecycle, scoped} from "tsyringe";
 import {CoreHandler} from "./handlers/CoreHandler";
 import {Properties} from "./Properties";
-import {BasicTextHandler} from "./handlers/BasicTextHandler";
+import {TextHandler} from "./handlers/TextHandler";
 import {AttributeHandler} from "./handlers/AttributeHandler";
 
 @scoped(Lifecycle.ContainerScoped)
 export class Observer {
     constructor(private properties: Properties,
                 private coreHandler: CoreHandler,
-                private basicTextHandler: BasicTextHandler,
+                private basicTextHandler: TextHandler,
                 private attributeHandler: AttributeHandler) {
     }
 

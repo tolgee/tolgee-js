@@ -21,7 +21,7 @@ export class AttributeHandler extends AbstractHandler {
 
         for (let [tag, attributes] of Object.entries(this.properties.config.tagAttributes)) {
             for (let attribute of attributes) {
-                let expression = `descendant-or-self::*/@${attribute}[name() = '${tag}' and contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+                let expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
                 const nodes: Generator<Attr> = NodeHelper.evaluate(expression, node);
                 await this.translateParentNodes(nodes);
             }

@@ -48,7 +48,7 @@ export class Polygloat {
         if (this.properties.config.watch) {
             this.observer.observe();
         }
-        await this.translationService.getTranslations(this.lang);
+        await this.translationService.loadTranslations();
         await this.refresh();
     }
 

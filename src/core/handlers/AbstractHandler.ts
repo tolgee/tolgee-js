@@ -28,9 +28,11 @@ export abstract class AbstractHandler {
             const result = await this.textService.replace(textNode.textContent);
 
             if (result) {
-                const {newValue, keysAndParams} = result;
-                let translatedNode = this.translateChildNode(textNode, newValue, keysAndParams);
-                this.registerForHighlighting(translatedNode);
+                const {text, keys} = result;
+                let translatedNode = this.translateChildNode(textNode, text, keys);
+                const parentElement = AbstractHandler.getParentElement(translatedNode);
+                parentElement._polygloat.nodes.add(translatedNode);
+                this.registerForHighlighting(parentElement);
             }
         }
     }
@@ -45,11 +47,9 @@ export abstract class AbstractHandler {
         return node as Node as NodeWithMeta;
     }
 
-    protected registerForHighlighting(node: NodeWithMeta) {
+    protected registerForHighlighting(element: ElementWithMeta) {
         if (this.properties.config.mode === "development") {
-            const parentElement = AbstractHandler.getParentElement(node);
-            parentElement._polygloat.nodes.add(node);
-            this.translationHighlighter.listen(parentElement);
+            this.translationHighlighter.listen(element);
         }
     }
 

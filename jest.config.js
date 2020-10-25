@@ -2,6 +2,7 @@ module.exports = {
   automock: true,
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/src/__testFixtures/setupAfterEnv.ts'],
   "unmockedModulePathPatterns": [
     "<rootDir>/node_modules/react",
     "<rootDir>/node_modules/react-dom",
@@ -12,11 +13,4 @@ module.exports = {
     "/node_modules/*",
 
   ],
-  globals: {
-    'ts-jest': {
-      tsConfig: {
-        "experimentalDecorators": true,
-      }
-    }
-  }
 };

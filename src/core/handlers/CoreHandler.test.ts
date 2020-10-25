@@ -1,22 +1,26 @@
+jest.dontMock("./CoreHandler");
+jest.dontMock("../helpers/NodeHelper");
+jest.dontMock("../services/EventEmitter");
+
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
 import {getMockedInstance} from "../../__testFixtures/mocked";
-import {BasicTextHandler} from "./BasicTextHandler";
+import {TextHandler} from "./TextHandler";
 import {AttributeHandler} from "./AttributeHandler";
 import {EventService} from "../services/EventService";
 import {EventEmitter} from "../services/EventEmitter";
 import {mocked} from "ts-jest/utils";
 import {TranslationData} from "../DTOs/TranslationData";
 import {Properties} from "../Properties";
-import {ElementMeta, NodeMeta, NodeWithMeta} from "../Types";
+import {NodeWithMeta, NodeMeta, ElementMeta} from "../Types";
 import {ReplacedType, TextService} from "../services/TextService";
-
-jest.dontMock("./CoreHandler");
-jest.dontMock("../helpers/NodeHelper.ts");
-jest.dontMock("../services/EventEmitter");
 
 describe("CoreHandler", () => {
     const mockedTranslationChanged = new EventEmitter<TranslationData>();
     const mockedLanguageChanged = new EventEmitter<string>();
+    const mockedReplaceReturn: ReplacedType = {
+        keys: [{} as any],
+        text: "This is refreshed"
+    };
 
     mocked(EventService).mockImplementation(() => {
         return {
@@ -24,11 +28,6 @@ describe("CoreHandler", () => {
             LANGUAGE_CHANGED: mockedLanguageChanged
         } as EventService
     });
-
-    const mockedReplaceReturn: ReplacedType = {
-        keysAndParams: [{} as any],
-        newValue: "This is refreshed"
-    };
 
     mocked(TextService).mockImplementation(() => {
         return ({
@@ -38,8 +37,10 @@ describe("CoreHandler", () => {
 
     const getCoreHandler = describeClassFromContainer(import("./CoreHandler"), "CoreHandler");
     let coreHandler: ReturnType<typeof getCoreHandler>;
+
     beforeEach(async () => {
         coreHandler = getCoreHandler();
+        getMockedInstance(Properties).config.targetElement = document.body;
     });
 
     test("Can be created", () => {
@@ -54,8 +55,8 @@ describe("CoreHandler", () => {
         })
 
         test("will call basic text handler", async () => {
-            expect(getMockedInstance(BasicTextHandler).handle).toBeCalledWith(document.body);
-            expect(getMockedInstance(BasicTextHandler).handle).toBeCalledTimes(1);
+            expect(getMockedInstance(TextHandler).handle).toBeCalledWith(document.body);
+            expect(getMockedInstance(TextHandler).handle).toBeCalledTimes(1);
         });
 
         test("will call attribute handler", async () => {
@@ -73,18 +74,18 @@ describe("CoreHandler", () => {
         pgDiv["_polygloat"] = {
             nodes: new Set([textNode as any as NodeWithMeta])
         } as ElementMeta;
+        pgDiv.append(textNode);
 
         beforeEach(async () => {
             document.body = document.createElement("body");
             document.body.append(pgDiv);
-            getMockedInstance(Properties).config.targetElement = document.body;
 
             await mockedLanguageChanged.emit("aaa");
             await mockedTranslationChanged.emit(null);
         })
 
         test("will refresh the text", async () => {
-            expect(textNode.textContent).toEqual(mockedReplaceReturn.newValue);
+            expect(textNode.textContent).toEqual(mockedReplaceReturn.text);
         });
 
     });

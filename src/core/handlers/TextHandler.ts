@@ -8,7 +8,7 @@ import {NodeRegistrar} from "../services/NodeRegistrar";
 
 
 @scoped(Lifecycle.ContainerScoped)
-export class BasicTextHandler extends AbstractHandler {
+export class TextHandler extends AbstractHandler {
     constructor(protected properties: Properties,
                 protected translationHighlighter: TranslationHighlighter,
                 protected textService: TextService,
@@ -22,7 +22,7 @@ export class BasicTextHandler extends AbstractHandler {
         let inputSuffix = this.properties.config.inputSuffix;
 
         let xPath = `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-        let nodes: Text[] = this.filterRestricted(NodeHelper.evaluateArray(xPath, node));
+        let nodes: Text[] = this.filterRestricted(NodeHelper.evaluateToArray(xPath, node));
 
         await this.translateParentNodes(nodes);
     }

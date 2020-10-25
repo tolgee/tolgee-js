@@ -43,6 +43,6 @@ test('it translates some existing text', async () => {
         }
     );
 
-    const el = document.evaluate(".//*[contains(text(), 'Hello world!')]", document.body, null, 0).iterateNext();
+    const el = document.evaluate("descendant-or-self::*[contains(text(), 'Hello world!')]", document.body, null, 0).iterateNext();
     expect(el).toBeInTheDocument();
 })

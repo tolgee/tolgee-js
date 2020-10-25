@@ -7,7 +7,10 @@ export const Properties = classMock<Module.Properties>(() => ({
     config: {
         inputPrefix: "{{",
         inputSuffix: "}}",
-        restrictedElements: []
+        restrictedElements: [],
+        tagAttributes: {
+            "*": ["aria-label"]
+        }
     },
     preferredLanguages: new Set<string>()
 }), (moduleMock as typeof Module).Properties);

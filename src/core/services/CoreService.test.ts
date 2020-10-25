@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
+
+jest.dontMock("./CoreService");
+
 import {CoreService} from "./CoreService";
 import {container, DependencyContainer} from 'tsyringe';
 import {getMockedInstance} from "../../__testFixtures/mocked";
@@ -10,7 +13,6 @@ import {Properties} from "../Properties";
 import {Scope} from "../Types";
 import {ApiHttpError} from "../Errors/ApiHttpError";
 
-jest.dontMock("./CoreService");
 
 
 describe("CoreService", () => {

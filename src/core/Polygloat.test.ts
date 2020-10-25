@@ -1,3 +1,6 @@
+jest.dontMock("./Polygloat");
+jest.mock("./toolsManager/PluginManager");
+
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
@@ -20,10 +23,6 @@ import {EventEmitter} from "./services/EventEmitter";
 import {Scope} from "./Types";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
-
-jest.dontMock("./Polygloat");
-
-jest.mock("./toolsManager/PluginManager");
 
 describe("Polygloat", () => {
     let polygloat: Polygloat;
@@ -91,7 +90,7 @@ describe("Polygloat", () => {
     test("will try to get translations with current language from properties", async () => {
         propertiesMock.mock.instances[0].currentLanguage = "dummyLang"
         await polygloat.run();
-        expect(translationServiceMock.mock.instances[0].getTranslations).toBeCalledWith("dummyLang")
+        expect(translationServiceMock.mock.instances[0].loadTranslations).toBeCalledWith()
     });
 
     test("will refresh translations using observer on run", async () => {

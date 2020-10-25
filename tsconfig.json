@@ -12,6 +12,7 @@
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "emitDeclarationOnly": true,
     "jsx": "react",
     "downlevelIteration": true,
     "resolveJsonModule": true,
@@ -26,13 +27,9 @@
     }
   },
   "include": [
-    "src"
+    "src", "typings"
   ],
   "exclude": [
-    "node_modules",
-    "**/__testFixtures/**/*",
-    "**/__mocks__/**/*",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "node_modules"
   ]
 }

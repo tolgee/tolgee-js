@@ -9,8 +9,19 @@ export class NodeHelper {
         }
     }
 
-    static evaluateArray<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluate>): T[] {
+    static evaluateToArray<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluate>): T[] {
         return Array.from(this.evaluate(...args)) as T[];
+    }
+
+    static evaluateToSingle<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluate>): T {
+        const arr = this.evaluateToArray<T>(...args);
+        if (arr.length === 1) {
+            return arr[0];
+        }
+        if (arr.length < 1) {
+            throw new Error("No element found");
+        }
+        throw new Error("Multiple elements found");
     }
 
     public static closestElement(node: Element | Text) {
@@ -24,8 +35,9 @@ export class NodeHelper {
         if (node.parentElement) {
             return node.parentElement;
         }
-        if (node.parentNode.parentElement) {
-            return node.parentNode.parentElement;
+        if ((node as Attr).ownerElement) {
+            return (node as Attr).ownerElement;
         }
     }
+
 }

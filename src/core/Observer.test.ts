@@ -1,17 +1,19 @@
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
-import {Observer} from "./Observer";
 
 import {container, DependencyContainer} from 'tsyringe';
 import {getMockedInstance} from "../__testFixtures/mocked";
 import {Properties} from "./Properties";
 import {CoreHandler} from "./handlers/CoreHandler";
 import {waitFor} from '@testing-library/dom'
-import {BasicTextHandler} from "./handlers/BasicTextHandler";
+import {TextHandler} from "./handlers/TextHandler";
 import {AttributeHandler} from "./handlers/AttributeHandler";
 
 jest.dontMock("./Observer");
+
+import {Observer} from "./Observer";
+
 
 describe("Observer", () => {
     let observer: Observer;
@@ -45,7 +47,7 @@ describe("Observer", () => {
             text.textContent = "Dummy text node modified";
 
             await waitFor(() => {
-                let onNewNodesMock = getMockedInstance(BasicTextHandler).handle;
+                let onNewNodesMock = getMockedInstance(TextHandler).handle;
 
                 expect(onNewNodesMock).toBeCalledTimes(1);
                 expect(onNewNodesMock).toBeCalledWith(text);

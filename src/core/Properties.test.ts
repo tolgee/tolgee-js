@@ -1,12 +1,11 @@
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
-import {mocked} from 'ts-jest/utils';
-import {Properties} from "./Properties";
-
+jest.mock("./toolsManager/PluginManager");
 jest.dontMock("./Properties");
 
-jest.mock("./toolsManager/PluginManager");
+import {mocked} from 'ts-jest/utils';
+import {Properties} from "./Properties";
 
 describe("Properties", () => {
     let properties: Properties;

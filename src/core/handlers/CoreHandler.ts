@@ -1,6 +1,6 @@
 import {NodeHelper} from '../helpers/NodeHelper';
 import {CoreService} from '../services/CoreService';
-import {BasicTextHandler} from './BasicTextHandler';
+import {TextHandler} from './TextHandler';
 import {Lifecycle, scoped} from 'tsyringe';
 import {EventService} from '../services/EventService';
 import {Properties} from '../Properties';
@@ -11,7 +11,7 @@ import {TextService} from "../services/TextService";
 @scoped(Lifecycle.ContainerScoped)
 export class CoreHandler {
     constructor(private service: CoreService,
-                private basicTextHandler: BasicTextHandler,
+                private basicTextHandler: TextHandler,
                 private eventService: EventService,
                 private properties: Properties,
                 private attributeHandler: AttributeHandler,
@@ -34,7 +34,7 @@ export class CoreHandler {
             for (const textNode of node._polygloat.nodes) {
                 const result = await this.textService.replace(textNode.textContent);
                 if (result) {
-                    textNode.textContent = result.newValue;
+                    textNode.textContent = result.text;
                 }
             }
         }
