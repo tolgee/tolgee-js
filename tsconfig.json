@@ -19,15 +19,19 @@
     "baseUrl": "src",
     "paths": {
       "polygloat/ui": [
-        "ui"
+        "./ui"
       ],
       "polygloat/core": [
-        "core"
+        "./core"
+      ],
+      "@testFixtures/*": [
+        "./__testFixtures/*"
       ]
     }
   },
   "include": [
-    "src", "typings"
+    "src",
+    "typings"
   ],
   "exclude": [
     "node_modules"

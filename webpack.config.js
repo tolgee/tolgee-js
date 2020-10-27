@@ -11,7 +11,10 @@ const targets = [
         }
     }, {
         submodule: "ui",
-        targets: ["umd", "window", "commonjs"]
+        targets: ["umd", "window", "commonjs"],
+        externals: {
+            "polygloat/core": "polygloat/core"
+        }
     }
 ]
 

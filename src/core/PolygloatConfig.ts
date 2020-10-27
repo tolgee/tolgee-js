@@ -9,6 +9,7 @@ export class PolygloatConfig {
     };
     restrictedElements?: string[] = ['script', 'style'];
     defaultLanguage?: string = 'en';
+    fallbackLanguage?: string;
     inputPrefix?: string = '%-%polygloat:';
     inputSuffix?: string = '%-%';
     apiUrl?: string;
@@ -22,6 +23,7 @@ export class PolygloatConfig {
     constructor(config?: PolygloatConfig) {
         config && Object.assign(this, config);
         this.mode = this.mode || (this.apiKey ? "development" : "production");
+        this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;
         if (this.watch === undefined) {
             this.watch = this.mode === "development";
         }

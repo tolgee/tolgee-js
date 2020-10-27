@@ -1,4 +1,5 @@
 jest.dontMock("./TextService");
+jest.dontMock("../helpers/TextHelper");
 
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
 import {getMockedInstance} from "../../__testFixtures/mocked";
@@ -115,6 +116,18 @@ describe("AttributeHandler", () => {
             const text = "\\{{text}}, text continues {{other text}}";
             const replaced = await textService.replace(text);
             expect(replaced.text).toEqual("{{text}}, text continues translated");
+        });
+
+        test("will translate when the text begins with escaped escape character", async () => {
+            const text = "\\\\{{text}}, text continues {{other text}}";
+            const replaced = await textService.replace(text);
+            expect(replaced.text).toEqual("\\translated, text continues translated");
+        });
+
+        test("will translate when the text begins with escaped escape character, what is escaped", async () => {
+            const text = "\\\\\\{{text}}, text continues {{other text}}";
+            const replaced = await textService.replace(text);
+            expect(replaced.text).toEqual("\\{{text}}, text continues translated");
         });
     });
 

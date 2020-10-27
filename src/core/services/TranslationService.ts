@@ -4,6 +4,8 @@ import {TranslationData} from "../DTOs/TranslationData";
 import {Properties} from "../Properties";
 import {CoreService} from "./CoreService";
 import {ApiHttpService} from "./ApiHttpService";
+import {TextHelper} from "../helpers/TextHelper";
+import {ApiHttpError} from "../Errors/ApiHttpError";
 
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationService {
@@ -24,10 +26,8 @@ export class TranslationService {
     }
 
     async getTranslation(name: string, lang: string = this.properties.currentLanguage): Promise<string> {
-        await this.loadTranslations(lang);
-        if (lang !== this.properties.config.defaultLanguage && !this.getFromCache(name, lang)) {
+        if (!this.getFromCache(name, lang)) {
             await this.loadTranslations(lang);
-            return this.getFromCacheOrFallback(name, this.properties.config.defaultLanguage);
         }
         return this.getFromCacheOrFallback(name, lang);
     }
@@ -35,21 +35,11 @@ export class TranslationService {
     async setTranslations(translationData: TranslationData) {
         this.coreService.checkScope("translations.edit");
 
-        let response = await this.apiHttpService.fetch(``, {
-            body: JSON.stringify(translationData),
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        });
-
-        if (response.status != 200) {
-            throw new Error("Server responded with error status code");
-        }
+        await this.apiHttpService.post('', translationData);
 
         Object.keys(translationData.translations).forEach(lang => {
-            if (this.translationsCache.get(lang)) {
-                const path = translationData.sourceFullPath.split('.');
+            if (this.translationsCache.get(lang)) { // if the language is not loaded, then ignore the change
+                const path = TextHelper.splitOnNonEscapedDelimiter(translationData.key, ".");
                 let root: string | Translations = this.translationsCache.get(lang);
                 for (let i = 0; i < path.length; i++) {
                     let item = path[i];
@@ -67,23 +57,28 @@ export class TranslationService {
     }
 
     getFromCacheOrFallback(name: string, lang: string = this.properties.currentLanguage, orEmpty: boolean = false): string {
-        return this.getFromCache(name, lang) || this.getFromCache(name, this.properties.config.defaultLanguage) || (orEmpty ? "" : name);
+        return this.getFromCache(name, lang) || this.getFromCache(name, this.properties.config.fallbackLanguage) || (orEmpty ? "" : name);
     }
 
-    getSourceTranslations = async (sourceText: string, languages: Set<string> = new Set([this.properties.currentLanguage])): Promise<TranslationData> => {
+    getTranslationsOfKey = async (key: string, languages: Set<string> = new Set([this.properties.currentLanguage])): Promise<TranslationData> => {
         this.coreService.checkScope("translations.view");
-        let response = await this.apiHttpService.fetch(`source/${sourceText}/${Array.from(languages).join(",")}`);
-        let data = await response.json();
-
-        if (response.status === 404) {
-            if (data.code && data.code === "language_not_found") {
-                this.properties.preferredLanguages = new Set(await this.coreService.getLanguages());
-                console.error("Requested language not found, refreshing the page!");
-                location.reload();
+        try {
+            let data = await this.apiHttpService.fetchJson(`source/${key}/${Array.from(languages).join(",")}`);
+            return new TranslationData(key, data);
+        } catch (e) {
+            //only possible option of lot found error is, that languages definition is changed, but the old value is stored in preferred languages
+            if (e instanceof ApiHttpError) {
+                if (e.response.status === 404) {
+                    if (e.code === "language_not_found") {
+                        this.properties.preferredLanguages = await this.coreService.getLanguages();
+                        console.error("Requested language not found, refreshing the page!");
+                        location.reload();
+                        return;
+                    }
+                }
             }
+            throw e;
         }
-
-        return new TranslationData(sourceText, data);
     };
 
 
@@ -94,22 +89,31 @@ export class TranslationService {
         return await this.fetchTranslationsProduction(lang);
     }
 
-    private async fetchTranslationsDevelopment(lang: string) {
-        this.coreService.checkScope("translations.view");
-        let requestResult = await this.apiHttpService.fetch(`${lang}`);
-
-        if (requestResult.status >= 400) {
+    private async fetchTranslationsProduction(lang: string) {
+        let result = await fetch(`${this.properties.config.filesUrlPrefix || "/"}${lang}.json`);
+        if (result.status >= 400) {
             //on error set language data as empty object to not break the flow
             this.translationsCache.set(lang, {});
             return;
         }
+        let data = (await result.json());
+        this.translationsCache.set(lang, data);
+    }
 
-        let data = (await requestResult.json());
-        this.translationsCache.set(lang, data[lang] || {});
+    private async fetchTranslationsDevelopment(lang: string) {
+        this.coreService.checkScope("translations.view");
+        try {
+            let data = await this.apiHttpService.fetchJson(`${lang}`);
+            this.translationsCache.set(lang, data[lang] || {});
+        } catch (e) {
+            console.error(e);
+            this.translationsCache.set(lang, {});
+            return;
+        }
     }
 
     private getFromCache(name: string, lang: string = this.properties.currentLanguage): string {
-        const path = name.split('.');
+        const path = TextHelper.splitOnNonEscapedDelimiter(name, ".");
         let root: string | Translations = this.translationsCache.get(lang);
 
         //if lang is not downloaded or does not exist at all
@@ -124,16 +128,5 @@ export class TranslationService {
             root = root[item];
         }
         return root as string;
-    }
-
-    private async fetchTranslationsProduction(lang: string) {
-        let requestResult = await fetch(`${this.properties.config.filesUrlPrefix || "/"}${lang}.json`);
-        if (requestResult.status >= 400) {
-            //on error set language data as empty object to not break the flow
-            this.translationsCache.set(lang, {});
-            return;
-        }
-        let data = (await requestResult.json());
-        this.translationsCache.set(lang, data);
     }
 }

@@ -2,6 +2,7 @@ import {Lifecycle, scoped} from "tsyringe";
 import {KeyAndParams, TranslatedWithMetadata, TranslationParams} from "../Types";
 import {TranslationService} from "./TranslationService";
 import {Properties} from "../Properties";
+import {TextHelper} from "../helpers/TextHelper";
 
 export type ReplacedType = { text: string, keys: KeyAndParams[] };
 
@@ -27,9 +28,11 @@ export class TextService {
         const keysAndParams: KeyAndParams[] = []
 
         let matched = false;
-        const translated = text.replace(matchRegexp, (_, pre: string, wrapped: string, unwrapped: string) => {
+        const translated = text.replace(matchRegexp, (_, pre: string, wrapped: string, unwrapped: string, position: number) => {
             if (pre === "\\") {
-                return pre + wrapped;
+                if(!TextHelper.isCharEscaped(position, text)){
+                    return pre + wrapped;
+                }
             }
             const translated = this.getTranslatedWithMetadata(unwrapped);
             keysAndParams.push({key: translated.key, params: translated.params});
@@ -37,7 +40,7 @@ export class TextService {
             return pre + translated.translated;
         });
 
-        const withoutEscapes = TextService.removeEscapes(translated);
+        const withoutEscapes = TextHelper.removeEscapes(translated);
 
         if (matched) {
             return {text: withoutEscapes, keys: keysAndParams};
@@ -56,15 +59,6 @@ export class TextService {
         const {key, params} = TextService.parseUnwrapped(text);
         const translated = this.instant(key, params, undefined, true);
         return {translated, key: key, params}
-    }
-
-    private static removeEscapes(text: string) {
-        return text.replace(/\\?\\?/g, (match) => {
-            if (match == "\\\\") {
-                return "\\";
-            }
-            return "";
-        });
     }
 
     private static parseUnwrapped(unWrappedString: string): KeyAndParams {
@@ -93,7 +87,7 @@ export class TextService {
     private get rawUnWrapRegex(): string {
         const escapedPrefix = this.escapeForRegExp(this.properties.config.inputPrefix);
         const escapedSuffix = this.escapeForRegExp(this.properties.config.inputSuffix);
-        return `(\\\\?\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
+        return `(\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
     }
 
     private readonly escapeParam = (string: string) => string.replace(/[,:\\]/gs, "\\$&");

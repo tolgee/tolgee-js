@@ -23,7 +23,7 @@ export abstract class AbstractHandler {
         });
     }
 
-    protected async translateParentNodes(nodes: Iterable<Text | Attr>) {
+    protected async handleNodes(nodes: Iterable<Text | Attr>) {
         for (const textNode of nodes) {
             const result = await this.textService.replace(textNode.textContent);
 

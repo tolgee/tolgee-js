@@ -23,7 +23,7 @@ export class AttributeHandler extends AbstractHandler {
             for (let attribute of attributes) {
                 let expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
                 const nodes: Generator<Attr> = NodeHelper.evaluate(expression, node);
-                await this.translateParentNodes(nodes);
+                await this.handleNodes(nodes);
             }
         }
     }

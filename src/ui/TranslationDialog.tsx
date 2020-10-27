@@ -45,7 +45,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
     };
 
     const loadTranslations = (languages?: Set<string>) => {
-        translationService.getSourceTranslations(props.input, languages).then(result => {
+        translationService.getTranslationsOfKey(props.input, languages).then(result => {
             setTranslations(result);
             setLoading(false);
         });

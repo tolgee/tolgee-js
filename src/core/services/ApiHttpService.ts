@@ -3,6 +3,14 @@ import {Properties} from "../Properties";
 import {ApiHttpError} from "../Errors/ApiHttpError";
 import {ArgumentTypes} from "../helpers/commonTypes";
 
+type FetchArgumentTypes = ArgumentTypes<typeof fetch>;
+
+type Tail<T extends any[]> = ((...args: T) => any) extends ((
+    _: infer First,
+    ...rest: infer Rest
+    ) => any)
+    ? T extends any[] ? Rest : ReadonlyArray<Rest[number]>
+    : []
 
 @scoped(Lifecycle.ContainerScoped)
 export class ApiHttpService {
@@ -23,9 +31,27 @@ export class ApiHttpService {
         });
     }
 
+    async post(url, body, init: FetchArgumentTypes[1] = {}, ...rest: Tail<Tail<FetchArgumentTypes>>) {
+        return await this.fetch(url, {
+            body: JSON.stringify(body),
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            ...init
+        }, ...rest);
+    }
+
     private static async handleErrors(response: Response) {
         if (response.status >= 400) {
-            throw new ApiHttpError(response);
+            const error = new ApiHttpError(response);
+            try {
+                const data = await response.json();
+                error.code = data.code;
+            } catch (e) {
+                console.warn("Polygloat server responded with invalid status code.")
+            }
+            throw error;
         }
         return response;
     }

@@ -24,6 +24,6 @@ export class TextHandler extends AbstractHandler {
         let xPath = `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
         let nodes: Text[] = this.filterRestricted(NodeHelper.evaluateToArray(xPath, node));
 
-        await this.translateParentNodes(nodes);
+        await this.handleNodes(nodes);
     }
 }
