@@ -1,0 +1,1 @@
+export const RESTRICTED_ASCENDANT_ATTRIBUTE = "data-polygloat-restricted"

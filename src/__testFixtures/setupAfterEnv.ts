@@ -6,7 +6,7 @@ const {prettyDOM} = domTestingLib
 
 expect.extend({
     toBeFoundIn(xpath, contextNode) {
-        let result = NodeHelper.evaluateToArray(xpath, contextNode)[0];
+        let result = NodeHelper.evaluateToSingle(xpath, contextNode);
         if (result && document.contains(result)) {
             return {
                 message: () => `Xpath ${xpath} should not be found in ${contextNode}\n\n${prettyDOM(contextNode)}`,

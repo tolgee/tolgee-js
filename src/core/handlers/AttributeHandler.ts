@@ -4,7 +4,7 @@ import {Properties} from "../Properties";
 import {NodeHelper} from "../helpers/NodeHelper";
 import {TextService} from "../services/TextService";
 import {NodeRegistrar} from "../services/NodeRegistrar";
-import {TranslationHighlighter} from "../TranslationHighlighter";
+import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 
 @scoped(Lifecycle.ContainerScoped)
 export class AttributeHandler extends AbstractHandler {
@@ -22,7 +22,7 @@ export class AttributeHandler extends AbstractHandler {
         for (let [tag, attributes] of Object.entries(this.properties.config.tagAttributes)) {
             for (let attribute of attributes) {
                 let expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-                const nodes: Generator<Attr> = NodeHelper.evaluate(expression, node);
+                const nodes: Array<Attr | Text> = NodeHelper.evaluate(expression, node);
                 await this.handleNodes(nodes);
             }
         }

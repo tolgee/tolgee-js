@@ -3,6 +3,7 @@ import {FunctionComponent, useEffect, useState} from "react";
 import {TranslationData} from "../core/DTOs/TranslationData";
 import TranslationDialogInner from "./TranslatonDialogInner";
 import {ComponentDependencies} from "./PolygloatViewer";
+import {RESTRICTED_ASCENDANT_ATTRIBUTE} from "../Constants/Global";
 
 type DialogProps = {
     input: string,
@@ -72,12 +73,12 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
             await translationService.setTranslations(translations);
             await props.dependencies.eventService.TRANSLATION_CHANGED.emit(translations);
             setSuccess(true);
-            await new Promise((resolve => setTimeout(resolve, 500)));
+            await new Promise((resolve => setTimeout(resolve, 200)));
             setError(null);
             props.onClose();
         } catch (e) {
             setError("Unexpected error occurred :(");
-            throw e;
+            console.error(e);
         } finally {
             setSaving(false);
         }
@@ -105,7 +106,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
 
     return (
         <TranslationDialogContext.Provider value={contextValue}>
-            <div style={{fontFamily: "Rubik, Roboto, Arial"}} data-polygloat-restricted={true}>
+            <div style={{fontFamily: "Rubik, Roboto, Arial"}} {...{[RESTRICTED_ASCENDANT_ATTRIBUTE]: "true"}}>
                 <TranslationDialogInner/>
             </div>
         </TranslationDialogContext.Provider>

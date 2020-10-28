@@ -13,7 +13,8 @@ export const TranslationFields: FunctionComponent = () => {
         width: "100%",
         borderRadius: "5px",
         fontStyle: "inherit",
-        fontFamily: "inherit"
+        fontFamily: "inherit",
+        boxSizing: "border-box",
     };
 
     return <>

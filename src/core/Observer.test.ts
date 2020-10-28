@@ -1,17 +1,16 @@
+jest.dontMock("./Observer");
+
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
 
 import {container, DependencyContainer} from 'tsyringe';
-import {getMockedInstance} from "../__testFixtures/mocked";
+import {getMockedInstance} from "@testFixtures/mocked";
 import {Properties} from "./Properties";
 import {CoreHandler} from "./handlers/CoreHandler";
 import {waitFor} from '@testing-library/dom'
 import {TextHandler} from "./handlers/TextHandler";
 import {AttributeHandler} from "./handlers/AttributeHandler";
-
-jest.dontMock("./Observer");
-
 import {Observer} from "./Observer";
 
 
@@ -104,7 +103,7 @@ describe("Observer", () => {
             observer.stopObserving();
 
             document.body.textContent = "Nothing";
-            await new Promise(resolve => setTimeout(resolve, 50));
+            await new Promise(resolve => setTimeout(resolve, 10));
 
             let handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
             expect(handleSubtree).not.toBeCalledTimes(1);

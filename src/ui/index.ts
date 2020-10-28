@@ -1,14 +1,20 @@
 import {ComponentDependencies, PolygloatViewer} from "./PolygloatViewer";
-import {createElement} from 'react';
+import {createElement} from "react";
 import * as ReactDOM from 'react-dom';
+import {KeyContextMenu} from "./KeyContextMenu";
 
 export class UI {
     private viewerComponent: PolygloatViewer;
+    private keyContextMenu: KeyContextMenu;
 
     constructor(private dependencies: ComponentDependencies) {
-        let polygloatModalContainer = document.createElement('div');
+        const polygloatModalContainer = document.createElement('div');
         document.body.append(polygloatModalContainer);
-        let element = createElement(PolygloatViewer, {
+
+        const contextMenuContainer = document.createElement('div');
+        document.body.append(contextMenuContainer);
+
+        const viewerElement = createElement(PolygloatViewer, {
             dependencies: {
                 coreService: this.dependencies.coreService,
                 properties: this.dependencies.properties,
@@ -16,10 +22,25 @@ export class UI {
                 translationService: this.dependencies.translationService
             }
         });
-        this.viewerComponent = ReactDOM.render(element, polygloatModalContainer);
+
+        this.viewerComponent = ReactDOM.render(viewerElement, polygloatModalContainer);
+
+        this.keyContextMenu = ReactDOM.render(createElement(KeyContextMenu, {
+            dependencies: {
+                translationService: this.dependencies.translationService
+            }
+        }), contextMenuContainer);
     }
 
-    public renderViewer(input: string){
+    public renderViewer(input: string) {
         this.viewerComponent.translationEdit(input);
+    }
+
+    public async getKey(props: { openEvent: MouseEvent, keys: Set<string> }): Promise<string> {
+        return await new Promise<string>(resolve => {
+            this.keyContextMenu.show({
+                ...props, onSelect: (key) => resolve(key)
+            });
+        });
     }
 }

@@ -3,7 +3,8 @@ import {Properties} from "../Properties";
 import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../Types";
 import {TextService} from "../services/TextService";
 import {NodeRegistrar} from "../services/NodeRegistrar";
-import {TranslationHighlighter} from "../TranslationHighlighter";
+import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
+import {RESTRICTED_ASCENDANT_ATTRIBUTE} from "../../Constants/Global";
 
 export abstract class AbstractHandler {
     protected constructor(protected properties: Properties,
@@ -19,11 +20,11 @@ export abstract class AbstractHandler {
         return nodes.filter(n => {
             let e = NodeHelper.closestElement(n);
             return restrictedElements.indexOf(e.tagName.toLowerCase()) === -1
-                && e.closest("[data-polygloat-restricted=\"true\"]") === null;
+                && e.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}=\"true\"]`) === null;
         });
     }
 
-    protected async handleNodes(nodes: Iterable<Text | Attr>) {
+    protected async handleNodes(nodes: Array<Text | Attr>) {
         for (const textNode of nodes) {
             const result = await this.textService.replace(textNode.textContent);
 
@@ -49,7 +50,7 @@ export abstract class AbstractHandler {
 
     protected registerForHighlighting(element: ElementWithMeta) {
         if (this.properties.config.mode === "development") {
-            this.translationHighlighter.listen(element);
+            this.translationHighlighter.listen(element as ElementWithMeta & ElementCSSInlineStyle);
         }
     }
 
@@ -58,6 +59,7 @@ export abstract class AbstractHandler {
             element["_polygloat"] = {
                 nodes: new Set()
             } as ElementMeta
+            element.setAttribute("_polygloat", "");
         }
 
         if (element.hasAttribute("_polygloat")) {

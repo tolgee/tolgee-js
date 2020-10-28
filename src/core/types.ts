@@ -36,18 +36,9 @@ export type ElementWithMeta = Element & {
     _polygloat: ElementMeta
 }
 
-export type ElementMeta = { nodes: Set<NodeWithMeta> }
+export type ElementMeta = { nodes: Set<NodeWithMeta>, removeHighlightListeners: () => void }
 
-export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[] };
-
-export interface SimpleSpanElementData {
-    key: string;
-    params?: TranslationParams;
-}
-
-export interface PolygloatSimpleSpanElement extends HTMLSpanElement {
-    __polygloat: SimpleSpanElementData;
-}
+export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[]};
 
 export type Scope = "translations.edit" | "translations.view" | "sources.edit";
 

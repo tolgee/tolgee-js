@@ -12,7 +12,6 @@
     ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "emitDeclarationOnly": true,
     "jsx": "react",
     "downlevelIteration": true,
     "resolveJsonModule": true,

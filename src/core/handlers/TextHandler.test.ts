@@ -8,11 +8,11 @@ jest.dontMock("../helpers/NodeHelper.ts");
 import {NodeHelper} from "../helpers/NodeHelper";
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
 import {TextHandler} from "./TextHandler";
-import {createTestDom} from "../../__testFixtures/createTestDom";
+import {createTestDom} from "@testFixtures/createTestDom";
 import {ReplacedType, TextService} from "../services/TextService";
-import {getMockedInstance} from "../../__testFixtures/mocked";
+import {getMockedInstance} from "@testFixtures/mocked";
 import {Properties} from "../Properties";
-import {TranslationHighlighter} from "../TranslationHighlighter";
+import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 import { mocked } from "ts-jest/utils";
 
 describe("TextHandler", () => {
@@ -88,7 +88,7 @@ describe("TextHandler", () => {
             });
         });
 
-        describe("Parent element's _polygloat property", () => {
+        describe("Parent element's _polygloat property and attribute", () => {
             let element: ElementWithMeta;
             let node: NodeWithMeta
 
@@ -97,12 +97,16 @@ describe("TextHandler", () => {
                 element = node.parentElement as any as ElementWithMeta;
             });
 
-            test("will be defined", () => {
+            test("property will be defined", () => {
                 expect(element._polygloat).toBeDefined();
             });
 
             test("will contain nodes array with correct node", () => {
                 expect(element._polygloat.nodes).toEqual(new Set([node]));
+            });
+
+            test("attribute will be set", () => {
+                expect(element.getAttribute("_polygloat")).toEqual("");
             });
         });
     });

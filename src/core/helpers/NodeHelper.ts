@@ -1,7 +1,7 @@
 import {ArgumentTypes} from "./commonTypes";
 
 export class NodeHelper {
-    static* evaluate<T extends Node>(expression: string, targetNode: Node): Generator<T> {
+    private static* evaluateGenerator<T extends Node>(expression: string, targetNode: Node): Generator<T> {
         let node: Node;
         const evaluated = document.evaluate(expression, targetNode, undefined, XPathResult.ANY_TYPE);
         while ((node = evaluated.iterateNext()) !== null) {
@@ -9,12 +9,12 @@ export class NodeHelper {
         }
     }
 
-    static evaluateToArray<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluate>): T[] {
-        return Array.from(this.evaluate(...args)) as T[];
+    static evaluate<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluateGenerator>): T[] {
+        return Array.from(this.evaluateGenerator(...args)) as T[];
     }
 
-    static evaluateToSingle<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluate>): T {
-        const arr = this.evaluateToArray<T>(...args);
+    static evaluateToSingle<T extends Node>(...args: ArgumentTypes<typeof NodeHelper.evaluateGenerator>): T {
+        const arr = this.evaluate<T>(...args);
         if (arr.length === 1) {
             return arr[0];
         }
