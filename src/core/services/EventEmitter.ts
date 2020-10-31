@@ -1,6 +1,6 @@
 import {Subscription} from "./Subscription";
 
-export type CallbackType<T> = (data: T) => Promise<void>;
+export type CallbackType<T> = (data: T) => (Promise<void> | void);
 
 export class EventEmitter<T> {
     private idCounter: number = 0;
@@ -10,10 +10,20 @@ export class EventEmitter<T> {
         return this._subscriptions;
     }
 
-    public async emit(data: T) {
+    public emit(data?: T): Promise<void> | void {
+        const promiseReturns = [];
         for (const callback of this.subscriptions.values()) {
-            await callback(data);
+            const returned = callback(data);
+            if (typeof returned?.["then"] === "function") {
+                promiseReturns.push(returned);
+            }
         }
+
+        if (promiseReturns.length === 0) {
+            return;
+        }
+
+        return new Promise(resolve => Promise.all(promiseReturns).then(() => resolve()));
     }
 
     public subscribe(callback: CallbackType<T>) {

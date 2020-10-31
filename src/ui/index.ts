@@ -32,8 +32,8 @@ export class UI {
         }), contextMenuContainer);
     }
 
-    public renderViewer(input: string) {
-        this.viewerComponent.translationEdit(input);
+    public renderViewer(key: string) {
+        this.viewerComponent.translationEdit(key);
     }
 
     public async getKey(props: { openEvent: MouseEvent, keys: Set<string> }): Promise<string> {

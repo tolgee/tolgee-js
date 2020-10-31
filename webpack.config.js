@@ -1,7 +1,5 @@
 const path = require('path');
 
-const WebpackBundleAnalyzer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-
 const targets = [
     {
         submodule: "core",
@@ -42,14 +40,11 @@ module.exports = env => {
                     {
                         test: /\.tsx?$/,
                         use: [isDevelopment && "ts-loader" || "babel-loader"],
-                        exclude: [/node_modules/, /lib/],
+                        exclude: [/node_modules/, /lib/, /\.spec\.ts/, /\.test\.ts/, /__mocks__/, /__testFixtures/],
                     },
                 ]
             },
             mode: env.mode,
-            plugins: [
-                //new WebpackBundleAnalyzer()
-            ],
             externals
         }
     };

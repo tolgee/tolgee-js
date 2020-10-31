@@ -3,7 +3,7 @@ jest.dontMock("../helpers/NodeHelper");
 jest.dontMock("../services/EventEmitter");
 
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
-import {getMockedInstance} from "../../__testFixtures/mocked";
+import {getMockedInstance} from "@testFixtures/mocked";
 import {TextHandler} from "./TextHandler";
 import {AttributeHandler} from "./AttributeHandler";
 import {EventService} from "../services/EventService";

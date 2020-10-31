@@ -32,13 +32,17 @@ export type NodeWithMeta = Node & {
     _polygloat: NodeMeta;
 };
 
-export type ElementWithMeta = Element & {
+export type ElementWithMeta = Element & ElementCSSInlineStyle & {
     _polygloat: ElementMeta
 }
 
-export type ElementMeta = { nodes: Set<NodeWithMeta>, removeHighlightListeners: () => void }
+export type ElementMeta = {
+    nodes: Set<NodeWithMeta>,
+    listeningForHighlighting?: boolean,
+    initialBackgroundColor?: string;
+}
 
-export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[]};
+export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[] };
 
 export type Scope = "translations.edit" | "translations.view" | "sources.edit";
 

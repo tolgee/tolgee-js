@@ -8,6 +8,7 @@
     "lib": [
       "es2015",
       "es2018",
+      "es2020",
       "dom"
     ],
     "experimentalDecorators": true,
@@ -33,6 +34,11 @@
     "typings"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__testFixtures/*",
+    "**/__mocks__/*",
+    "@testFixtures/*"
   ]
 }
