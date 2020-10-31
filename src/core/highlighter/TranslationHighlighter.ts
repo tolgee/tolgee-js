@@ -30,6 +30,7 @@ export class TranslationHighlighter {
         if (keys.size === 1) {
             return Array.from(keys)[0];
         }
+        console.error("No key to translate. This seems like a bug in polygloat.");
     }
 
     private static getKeyOptions(node: ElementWithMeta): Set<string> {
@@ -46,7 +47,6 @@ export class TranslationHighlighter {
                 this.renderer.renderViewer(key);
                 return;
             }
-            console.error("No key to translate. This seems like a bug in polygloat.");
             return;
         }
         console.warn("Polygloat UI is not provided. To translate interactively provide polygloat ui constructor to \"ui\" configuration property. " +

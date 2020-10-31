@@ -39,7 +39,6 @@ export type ElementWithMeta = Element & ElementCSSInlineStyle & {
 export type ElementMeta = {
     nodes: Set<NodeWithMeta>,
     listeningForHighlighting?: boolean,
-    initialBackgroundColor?: string;
 }
 
 export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[] };

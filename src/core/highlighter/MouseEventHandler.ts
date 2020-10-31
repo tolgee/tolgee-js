@@ -37,33 +37,33 @@ export class MouseEventHandler {
 
         this.mouseOnChanged.subscribe(() => {
             if (this.highlighted !== this.getMouseOn()) {
-                this.highlight();
+                this.onConditionsChanged();
             }
         });
 
         this.keysChanged.subscribe(() => {
-            if (this.areKeysDown()) {
-                this.highlight();
-                return;
-            }
-            this.unhighlight();
+            this.onConditionsChanged();
         });
     }
 
-    private highlight() {
+    private onConditionsChanged() {
         this.unhighlight();
         if (this.areKeysDown() && this.getMouseOn()) {
-            this.highlightedInitialBackgroundColor = this.getMouseOn().style.backgroundColor;
-            this.getMouseOn().style.backgroundColor = this.properties.config.highlightColor;
+            this.highlight();
         }
+    }
+
+    private highlight() {
+        this.highlightedInitialBackgroundColor = this.getMouseOn().style.backgroundColor;
+        this.getMouseOn().style.backgroundColor = this.properties.config.highlightColor;
         this.highlighted = this.getMouseOn();
     }
 
-    private unhighlight(){
+    private unhighlight() {
         if (this.highlighted) {
             this.highlighted.style.backgroundColor = this.highlightedInitialBackgroundColor;
+            this.highlighted = null;
         }
-        this.highlighted = null;
     }
 
     private onMouseLeave(element) {
@@ -85,6 +85,7 @@ export class MouseEventHandler {
     private initKeyListener() {
         window.addEventListener('blur', () => {
             this.keysDown = new Set();
+            this.keysChanged.emit(this.areKeysDown());
         });
 
         window.addEventListener('keydown', (e) => {
