@@ -31,6 +31,7 @@ export class MouseEventHandler {
         element.addEventListener("click", (e: MouseEvent) => {
             if (this.areKeysDown()) {
                 e.stopPropagation();
+                e.preventDefault();
                 onclick(e);
             }
         });

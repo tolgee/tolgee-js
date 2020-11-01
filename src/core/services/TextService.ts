@@ -22,7 +22,6 @@ export class TextService {
     async replace(text: string): Promise<ReplacedType> {
         const matchRegexp = new RegExp(this.rawUnWrapRegex, "gs");
 
-        //todo: implement init language translations function to avoid this
         await this.translationService.loadTranslations();
 
         const keysAndParams: KeyAndParams[] = []
@@ -57,7 +56,7 @@ export class TextService {
 
     private getTranslatedWithMetadata(text: string): TranslatedWithMetadata {
         const {key, params} = TextService.parseUnwrapped(text);
-        const translated = this.instant(key, params, undefined, true);
+        const translated = this.instant(key, params, undefined, false);
         return {translated, key: key, params}
     }
 

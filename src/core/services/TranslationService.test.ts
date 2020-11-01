@@ -157,4 +157,13 @@ describe("TranslationService", () => {
         await translationService.setTranslations(dummyTranslationData);
         expect(await translationService.getTranslation(dummyTranslationData.key, "en")).toEqual(dummyTranslationData.translations.en);
     });
+
+    test("will return last chunk of key path when no translation found", async () => {
+        expect(await translationService.getTranslation("test\\.key.this\\.is\\.it", "en")).toEqual("this.is.it");
+    });
+
+    test("will return proper text without any dot", async () => {
+        expect(await translationService.getTranslation("text without any dot", "en")).toEqual("text without any dot");
+    });
+
 });

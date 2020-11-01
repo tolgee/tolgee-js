@@ -27,7 +27,6 @@ export abstract class AbstractHandler {
     protected async handleNodes(nodes: Array<Text | Attr>) {
         for (const textNode of nodes) {
             const result = await this.textService.replace(textNode.textContent);
-
             if (result) {
                 const {text, keys} = result;
                 let translatedNode = this.translateChildNode(textNode, text, keys);
@@ -50,7 +49,7 @@ export abstract class AbstractHandler {
 
     protected registerForHighlighting(element: ElementWithMeta) {
         if (this.properties.config.mode === "development") {
-            this.translationHighlighter.listen(element as ElementWithMeta & ElementCSSInlineStyle);
+            this.translationHighlighter.listen(element);
         }
     }
 

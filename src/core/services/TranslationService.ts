@@ -57,7 +57,17 @@ export class TranslationService {
     }
 
     getFromCacheOrFallback(name: string, lang: string = this.properties.currentLanguage, orEmpty: boolean = false): string {
-        return this.getFromCache(name, lang) || this.getFromCache(name, this.properties.config.fallbackLanguage) || (orEmpty ? "" : name);
+        const translatedText = this.getFromCache(name, lang) || this.getFromCache(name, this.properties.config.fallbackLanguage);
+
+        if(translatedText){
+            return translatedText;
+        }
+
+        if(orEmpty){
+            return "";
+        }
+        const path = TextHelper.splitOnNonEscapedDelimiter(name, ".");
+        return path[path.length -1];
     }
 
     getTranslationsOfKey = async (key: string, languages: Set<string> = new Set([this.properties.currentLanguage])): Promise<TranslationData> => {

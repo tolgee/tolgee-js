@@ -50,6 +50,6 @@ export class PluginManager {
         }
 */
         stop() {
-            this.messages.stopListening();
+            //this.messages.stopListening();
         }
 }
