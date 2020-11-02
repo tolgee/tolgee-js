@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  push:
+    branches:
+     - prerelease-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+        run: npm install
+      - name: Test
+        run: npm run test
+      - name: Version
+         run: npm version prerelease
+
+      - name: Set git globals
+          run: |
+            git config --local user.email "machine@polygloat.io"
+            git config --local user.name "Polygloat Machine"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
+
+      - name: Build
+        run: npm run build
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
