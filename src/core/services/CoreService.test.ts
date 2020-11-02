@@ -10,7 +10,7 @@ import {getMockedInstance} from "../../__testFixtures/mocked";
 import {ApiHttpService} from "./ApiHttpService";
 import {mocked} from 'ts-jest/utils';
 import {Properties} from "../Properties";
-import {Scope} from "../Types";
+import {Scope} from "../types";
 import {ApiHttpError} from "../Errors/ApiHttpError";
 
 

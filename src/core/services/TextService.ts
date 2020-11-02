@@ -1,5 +1,5 @@
 import {Lifecycle, scoped} from "tsyringe";
-import {KeyAndParams, TranslatedWithMetadata, TranslationParams} from "../Types";
+import {KeyAndParams, TranslatedWithMetadata, TranslationParams} from "../types";
 import {TranslationService} from "./TranslationService";
 import {Properties} from "../Properties";
 import {TextHelper} from "../helpers/TextHelper";
@@ -49,7 +49,7 @@ export class TextService {
     }
 
     public wrap(key: string, params: TranslationParams = {}): string {
-        let paramString = Object.entries(params).map(([name, value]) => `${this.escapeParam(name)}:${this.escapeParam(value)}`).join(",");
+        let paramString = Object.entries(params).map(([name, value]) => `${this.escapeParam(name)}:${this.escapeParam(value as string)}`).join(",");
         paramString = paramString.length ? `:${paramString}` : "";
         return `${this.properties.config.inputPrefix}${this.escapeParam(key)}${paramString}${this.properties.config.inputSuffix}`;
     }

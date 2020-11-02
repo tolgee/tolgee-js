@@ -20,7 +20,7 @@ import {
     translationServiceMock
 } from "../__testFixtures/mocked";
 import {EventEmitter} from "./services/EventEmitter";
-import {Scope} from "./Types";
+import {Scope} from "./types";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
 

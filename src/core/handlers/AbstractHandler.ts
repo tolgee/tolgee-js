@@ -1,6 +1,6 @@
 import {NodeHelper} from "../helpers/NodeHelper";
 import {Properties} from "../Properties";
-import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../Types";
+import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../types";
 import {TextService} from "../services/TextService";
 import {NodeRegistrar} from "../services/NodeRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";

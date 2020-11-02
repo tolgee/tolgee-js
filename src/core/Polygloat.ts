@@ -3,7 +3,7 @@ import {PolygloatConfig} from './PolygloatConfig';
 import {Properties} from './Properties';
 import {container as rootContainer} from 'tsyringe';
 import {EventService} from './services/EventService';
-import {TranslationParams} from "./Types";
+import {TranslationParams} from "./types";
 import {PluginManager} from "./toolsManager/PluginManager";
 import {Observer} from "./Observer";
 import {TranslationService} from "./services/TranslationService";

@@ -5,7 +5,7 @@ import {Lifecycle, scoped} from 'tsyringe';
 import {EventService} from '../services/EventService';
 import {Properties} from '../Properties';
 import {AttributeHandler} from "./AttributeHandler";
-import {ElementWithMeta} from "../Types";
+import {ElementWithMeta} from "../types";
 import {TextService} from "../services/TextService";
 
 @scoped(Lifecycle.ContainerScoped)

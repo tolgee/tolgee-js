@@ -11,7 +11,7 @@ import {EventEmitter} from "../services/EventEmitter";
 import {mocked} from "ts-jest/utils";
 import {TranslationData} from "../DTOs/TranslationData";
 import {Properties} from "../Properties";
-import {NodeWithMeta, NodeMeta, ElementMeta} from "../Types";
+import {NodeWithMeta, NodeMeta, ElementMeta} from "../types";
 import {ReplacedType, TextService} from "../services/TextService";
 
 describe("CoreHandler", () => {

@@ -1,7 +1,7 @@
 import {Properties} from '../Properties';
 import {Lifecycle, scoped} from 'tsyringe';
 import {ApiHttpService} from "./ApiHttpService";
-import {Scope} from "../Types";
+import {Scope} from "../types";
 
 @scoped(Lifecycle.ContainerScoped)
 export class CoreService {

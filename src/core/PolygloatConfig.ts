@@ -1,5 +1,5 @@
 import {UI} from "polygloat/ui";
-import {Mode} from "./Types";
+import {Mode} from "./types";
 import {ModifierKey} from "../Constants/ModifierKey";
 
 export class PolygloatConfig {

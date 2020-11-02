@@ -1,5 +1,5 @@
 import {Lifecycle, scoped} from "tsyringe";
-import {Translations} from "../Types";
+import {Translations} from "../types";
 import {TranslationData} from "../DTOs/TranslationData";
 import {Properties} from "../Properties";
 import {CoreService} from "./CoreService";

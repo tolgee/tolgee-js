@@ -1,6 +1,6 @@
 import {PolygloatConfig} from './PolygloatConfig';
 import {Lifecycle, scoped} from 'tsyringe';
-import {Scope} from "./Types";
+import {Scope} from "./types";
 
 const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY = "__polygloat_preferredLanguages";
 
