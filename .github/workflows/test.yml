@@ -18,10 +18,10 @@ jobs:
       - name: Test
         run: npm run test
       - name: Version
-         run: npm version prerelease
+        run: npm version prerelease
 
       - name: Set git globals
-          run: |
+        run: |
             git config --local user.email "machine@polygloat.io"
             git config --local user.name "Polygloat Machine"
       - name: Push changes
