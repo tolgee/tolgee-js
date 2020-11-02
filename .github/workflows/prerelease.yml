@@ -17,13 +17,15 @@ jobs:
       - run: npm install
       - name: Test
         run: npm run test
-      - name: Version
-        run: npm version prerelease
 
       - name: Set git globals
         run: |
             git config --local user.email "machine@polygloat.io"
             git config --local user.name "Polygloat Machine"
+
+      - name: Version
+        run: npm version prerelease
+
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
