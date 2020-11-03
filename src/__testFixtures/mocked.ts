@@ -1,4 +1,3 @@
-import {PluginManager} from "../core/toolsManager/PluginManager";
 import {PolygloatConfig} from "../core/PolygloatConfig";
 import {Properties} from "../core/Properties";
 import {CoreService} from "../core/services/CoreService";
@@ -9,7 +8,6 @@ import {TextService} from "../core/services/TextService";
 import {EventService} from "../core/services/EventService";
 import {EventEmitter} from "../core/services/EventEmitter";
 
-export const pluginManagerMock = mocked(PluginManager);
 export const configMock = mocked(PolygloatConfig);
 export const propertiesMock = mocked(Properties);
 export const coreServiceMock = mocked(CoreService);

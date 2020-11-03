@@ -1,5 +1,4 @@
 jest.dontMock("./Polygloat");
-jest.mock("./toolsManager/PluginManager");
 
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
@@ -14,7 +13,6 @@ import {
     eventServiceMock,
     getMockedInstance,
     observerMock,
-    pluginManagerMock,
     propertiesMock,
     textServiceMock,
     translationServiceMock
@@ -49,12 +47,6 @@ describe("Polygloat", () => {
 
     test("returns instance of polygloat service", () => {
         expect(polygloat.coreService instanceof CoreService).toBeTruthy();
-    });
-
-    test("will run plugin manager on run", async () => {
-        const runMocked = mocked(pluginManagerMock.mock.instances[0].run);
-        await polygloat.run();
-        expect(runMocked).toBeCalledTimes(1);
     });
 
     test("will set properties.scopes on run in development mode", async () => {
@@ -205,7 +197,6 @@ describe("Polygloat", () => {
     test("will stop on stop function", () => {
         polygloat.run();
         polygloat.stop();
-        expect(pluginManagerMock.mock.instances[0].stop).toBeCalledTimes(1);
         expect(observerMock.mock.instances[0].stopObserving).toBeCalledTimes(1);
     });
 

@@ -4,7 +4,6 @@ import {Properties} from './Properties';
 import {container as rootContainer} from 'tsyringe';
 import {EventService} from './services/EventService';
 import {TranslationParams} from "./types";
-import {PluginManager} from "./toolsManager/PluginManager";
 import {Observer} from "./Observer";
 import {TranslationService} from "./services/TranslationService";
 import {TextService} from "./services/TextService";
@@ -15,7 +14,6 @@ export class Polygloat {
     public properties: Properties = this.container.resolve(Properties);
     private _coreService: CoreService = this.container.resolve(CoreService);
     private eventService: EventService = this.container.resolve(EventService);
-    private pluginManager: PluginManager = this.container.resolve(PluginManager);
     private observer: Observer = this.container.resolve(Observer);
     private translationService: TranslationService = this.container.resolve(TranslationService);
     private textService: TextService = this.container.resolve(TextService);
@@ -41,7 +39,6 @@ export class Polygloat {
     }
 
     public async run(): Promise<void> {
-        this.pluginManager.run();
         if (this.properties.config.mode === "development") {
             this.properties.scopes = await this.coreService.getScopes();
         }
@@ -76,7 +73,6 @@ export class Polygloat {
 
     public stop = () => {
         this.observer.stopObserving();
-        this.pluginManager.stop()
     }
 
     public get onLangChange() {
