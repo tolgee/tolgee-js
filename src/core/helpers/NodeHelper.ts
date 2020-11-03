@@ -1,4 +1,5 @@
 import {ArgumentTypes} from "./commonTypes";
+import {POLYGLOAT_TARGET_ATTRIBUTE} from "../../Constants/Global";
 
 export class NodeHelper {
     private static* evaluateGenerator<T extends Node>(expression: string, targetNode: Node): Generator<T> {
@@ -40,4 +41,15 @@ export class NodeHelper {
         }
     }
 
+    static isElementTargetElement(element: Element): boolean {
+        return element.hasAttribute(POLYGLOAT_TARGET_ATTRIBUTE)
+    }
+
+    static markElementAsTargetElement(element: Element): void {
+        element.setAttribute(POLYGLOAT_TARGET_ATTRIBUTE, "");
+    }
+
+    static unmarkElementAsTargetElement(element: Element): void {
+        element.removeAttribute(POLYGLOAT_TARGET_ATTRIBUTE);
+    }
 }

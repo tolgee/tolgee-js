@@ -8,6 +8,8 @@ import {Observer} from "./Observer";
 import {TranslationService} from "./services/TranslationService";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
+import {ElementRegistrar} from "./services/ElementRegistrar";
+import {NodeHelper} from "./helpers/NodeHelper";
 
 export class Polygloat {
     private readonly container = rootContainer.createChildContainer();
@@ -18,6 +20,7 @@ export class Polygloat {
     private translationService: TranslationService = this.container.resolve(TranslationService);
     private textService: TextService = this.container.resolve(TextService);
     private coreHandler: CoreHandler = this.container.resolve(CoreHandler);
+    private elementRegistrar: ElementRegistrar = this.container.resolve(ElementRegistrar);
 
     constructor(config: PolygloatConfig) {
         this.container = rootContainer.createChildContainer();
@@ -73,6 +76,8 @@ export class Polygloat {
 
     public stop = () => {
         this.observer.stopObserving();
+        this.elementRegistrar.cleanAll();
+        NodeHelper.unmarkElementAsTargetElement(this.properties.config.targetElement);
     }
 
     public get onLangChange() {

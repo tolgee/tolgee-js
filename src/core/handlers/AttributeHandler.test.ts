@@ -6,9 +6,10 @@ jest.dontMock("../helpers/NodeHelper.ts");
 import {ElementWithMeta, NodeWithMeta} from "../types";
 import {NodeHelper} from "../helpers/NodeHelper";
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
-import {createTestDom} from "../../__testFixtures/createTestDom";
+import {createTestDom} from "@testFixtures/createTestDom";
 import {ReplacedType, TextService} from "../services/TextService";
-import {getMockedInstance} from "../../__testFixtures/mocked";
+import {getMockedInstance} from "@testFixtures/mocked";
+import {ElementRegistrar} from "../services/ElementRegistrar";
 
 describe("AttributeHandler", () => {
     const getAttributeHandler = describeClassFromContainer(import("./AttributeHandler"), "AttributeHandler");
@@ -79,4 +80,11 @@ describe("AttributeHandler", () => {
             });
         });
     });
+
+    test("will register the node", async () => {
+        await attributeHandle.handle(document.body);
+        const xPath = `./div/div/@aria-label[contains(., '${gv(c.ariaLabelKey)}')]`;
+        const node = NodeHelper.evaluateToSingle(xPath, document.body) as Attr
+        expect(getMockedInstance(ElementRegistrar).register).toBeCalledWith(node.ownerElement);
+    })
 });

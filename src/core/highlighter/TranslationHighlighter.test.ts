@@ -1,3 +1,4 @@
+
 jest.dontMock("./TranslationHighlighter");
 
 import classMock from "@testFixtures/classMock";
@@ -5,9 +6,10 @@ import describeClassFromContainer from "@testFixtures/describeClassFromContainer
 import {MouseEventHandler} from "./MouseEventHandler";
 import {getMockedInstance} from "@testFixtures/mocked";
 import {TranslationHighlighter} from "./TranslationHighlighter";
-import {ElementWithMeta, NodeMeta, NodeWithMeta} from "../types";
+import {ElementWithMeta} from "../types";
 import {Properties} from "../Properties";
 import {UI} from "../../ui";
+import {createElement} from "@testFixtures/createElement";
 
 describe("TranslationHighlighter", () => {
     const getTranslationHighlighter = describeClassFromContainer(import("./TranslationHighlighter"), "TranslationHighlighter");
@@ -33,7 +35,7 @@ describe("TranslationHighlighter", () => {
 
 
         test("will open translation dialog when single key", async () => {
-            const mockedElement = createElements(1, 1, true);
+            const mockedElement = createElement(1, 1, true);
             translationHighlighter.listen(mockedElement);
             await savedCallback(openEvent);
 
@@ -42,7 +44,7 @@ describe("TranslationHighlighter", () => {
         });
 
         test("will open translation dialog when single key multiplied", async () => {
-            const mockedElement = createElements(20, 20, true);
+            const mockedElement = createElement(20, 20, true);
             translationHighlighter.listen(mockedElement);
             await savedCallback(openEvent);
 
@@ -64,7 +66,7 @@ describe("TranslationHighlighter", () => {
                 getKey: rendererGetKeyMock,
             }), UI);
 
-            translationHighlighter.listen(createElements(0, 0));
+            translationHighlighter.listen(createElement(0, 0));
 
             await savedCallback(openEvent);
 
@@ -76,7 +78,7 @@ describe("TranslationHighlighter", () => {
 
             getMockedInstance(Properties).config.ui = null;
 
-            translationHighlighter.listen(createElements(1, 1));
+            translationHighlighter.listen(createElement(1, 1));
 
             await savedCallback(openEvent);
 
@@ -89,36 +91,6 @@ describe("TranslationHighlighter", () => {
     });
 
     let savedCallback: (e: MouseEvent) => void;
-
-    const createElements = (nodesCount: number, keysCount: number, sameKeys: boolean = false) => {
-        const mockedElement = document.createElement("div") as Element as ElementWithMeta;
-
-        let keyNum = 0;
-
-        const cn = (text) => {
-            const node = document.createTextNode(text) as Node as NodeWithMeta;
-            const keys = [];
-
-            for (let i = 0; i < keysCount; i++) {
-                keys.push({key: `key${sameKeys ? `` : ` ${keyNum++}`}`, params: {a: "aaa"}})
-            }
-            node._polygloat = {
-                oldTextContent: `"${text}" before translation.`,
-                keys
-            } as NodeMeta
-            return node;
-        }
-
-        const nodes = [];
-        for (let i = 0; i < nodesCount; i++) {
-            nodes.push(cn(`text ${i}`));
-        }
-        mockedElement._polygloat = {
-            nodes: new Set(nodes)
-        }
-        return mockedElement;
-    }
-
 
     let rendererGetKeyMock: (...args) => Promise<string>;
     let rendererViewerMock: (...args) => void;
@@ -144,7 +116,7 @@ describe("TranslationHighlighter", () => {
     const openEvent = new MouseEvent("click");
 
     const testNodeCounts = async (nodeCount, keyCount) => {
-        const mockedElement = createElements(nodeCount, keyCount);
+        const mockedElement = createElement(nodeCount, keyCount);
         translationHighlighter.listen(mockedElement);
         savedCallback(openEvent);
         expect(rendererGetKeyMock).toBeCalledTimes(1);

@@ -3,14 +3,14 @@ import {AbstractHandler} from "./AbstractHandler";
 import {Properties} from "../Properties";
 import {NodeHelper} from "../helpers/NodeHelper";
 import {TextService} from "../services/TextService";
-import {NodeRegistrar} from "../services/NodeRegistrar";
+import {ElementRegistrar} from "../services/ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 
 @scoped(Lifecycle.ContainerScoped)
 export class AttributeHandler extends AbstractHandler {
     constructor(protected properties: Properties,
                 protected textService: TextService,
-                protected nodeRegistrar: NodeRegistrar,
+                protected nodeRegistrar: ElementRegistrar,
                 protected translationHighlighter: TranslationHighlighter) {
         super(properties, textService, nodeRegistrar, translationHighlighter);
     }
