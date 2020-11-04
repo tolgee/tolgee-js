@@ -17,7 +17,7 @@ import {
     textServiceMock,
     translationServiceMock
 } from "@testFixtures/mocked";
-import {EventEmitter} from "./services/EventEmitter";
+import {EventEmitterImpl} from "./services/EventEmitter";
 import {Scope} from "./types";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
@@ -209,7 +209,7 @@ describe("Polygloat", () => {
     });
 
     test("will return proper onLangChange emitter", () => {
-        let eventEmitter = new EventEmitter();
+        let eventEmitter = new EventEmitterImpl();
         (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = eventEmitter;
         expect(polygloat.onLangChange).toEqual(eventEmitter);
     });
@@ -218,7 +218,7 @@ describe("Polygloat", () => {
         const dummyLang = "dummyLang";
 
         beforeEach(() => {
-            (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = new EventEmitter();
+            (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = new EventEmitterImpl();
             polygloat.lang = dummyLang;
         })
 

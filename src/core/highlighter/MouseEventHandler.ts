@@ -2,7 +2,7 @@ import {ElementMeta, ElementWithMeta} from "../types";
 import {ModifierKey} from "../../Constants/ModifierKey";
 import {Lifecycle, scoped} from "tsyringe";
 import {Properties} from "../Properties";
-import {EventEmitter} from "../services/EventEmitter";
+import {EventEmitterImpl} from "../services/EventEmitter";
 
 @scoped(Lifecycle.ContainerScoped)
 export class MouseEventHandler {
@@ -14,8 +14,8 @@ export class MouseEventHandler {
     private mouseOn: Set<ElementWithMeta> = new Set();
     private highlighted: ElementWithMeta;
     private highlightedInitialBackgroundColor: string;
-    private mouseOnChanged = new EventEmitter<ElementWithMeta>();
-    private keysChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+    private mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
+    private keysChanged: EventEmitterImpl<boolean> = new EventEmitterImpl<boolean>();
 
 
     handle(element: ElementWithMeta & ElementCSSInlineStyle, onclick: (clickEvent: MouseEvent) => void) {

@@ -7,7 +7,7 @@ import {getMockedInstance} from "@testFixtures/mocked";
 import {TextHandler} from "./TextHandler";
 import {AttributeHandler} from "./AttributeHandler";
 import {EventService} from "../services/EventService";
-import {EventEmitter} from "../services/EventEmitter";
+import {EventEmitterImpl} from "../services/EventEmitter";
 import {mocked} from "ts-jest/utils";
 import {TranslationData} from "../DTOs/TranslationData";
 import {Properties} from "../Properties";
@@ -15,8 +15,8 @@ import {NodeWithMeta, NodeMeta, ElementMeta} from "../types";
 import {ReplacedType, TextService} from "../services/TextService";
 
 describe("CoreHandler", () => {
-    const mockedTranslationChanged = new EventEmitter<TranslationData>();
-    const mockedLanguageChanged = new EventEmitter<string>();
+    const mockedTranslationChanged = new EventEmitterImpl<TranslationData>();
+    const mockedLanguageChanged = new EventEmitterImpl<string>();
     const mockedReplaceReturn: ReplacedType = {
         keys: [{} as any],
         text: "This is refreshed"

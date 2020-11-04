@@ -10,6 +10,7 @@ import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
 import {ElementRegistrar} from "./services/ElementRegistrar";
 import {NodeHelper} from "./helpers/NodeHelper";
+import {EventEmitterImpl} from "./services/EventEmitter";
 
 export class Polygloat {
     private readonly container = rootContainer.createChildContainer();
@@ -34,7 +35,7 @@ export class Polygloat {
 
     public set lang(value) {
         this.properties.currentLanguage = value;
-        this.eventService.LANGUAGE_CHANGED.emit(value);
+        (this.eventService.LANGUAGE_CHANGED as EventEmitterImpl<any>).emit(value);
     }
 
     public get coreService() {

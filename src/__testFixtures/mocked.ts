@@ -6,7 +6,7 @@ import {mocked} from "ts-jest/utils";
 import {TranslationService} from "../core/services/TranslationService";
 import {TextService} from "../core/services/TextService";
 import {EventService} from "../core/services/EventService";
-import {EventEmitter} from "../core/services/EventEmitter";
+import {EventEmitterImpl} from "../core/services/EventEmitter";
 
 export const configMock = mocked(PolygloatConfig);
 export const propertiesMock = mocked(Properties);
@@ -15,7 +15,7 @@ export const observerMock = mocked(Observer);
 export const translationServiceMock = mocked(TranslationService);
 export const textServiceMock = mocked(TextService);
 export const eventServiceMock = mocked(EventService);
-export const eventEmitterMock = mocked(EventEmitter);
+export const eventEmitterMock = mocked(EventEmitterImpl);
 export const polygloatConfigMock = mocked(PolygloatConfig);
 
 export const getMockedInstance = <T>(constructor: new (...args) => T) => {

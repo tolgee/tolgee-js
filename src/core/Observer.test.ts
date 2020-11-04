@@ -1,3 +1,5 @@
+jest.dontMock("./Observer");
+
 import describeClassFromContainer from "@testFixtures/describeClassFromContainer";
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
@@ -10,8 +12,6 @@ import {TextHandler} from "./handlers/TextHandler";
 import {AttributeHandler} from "./handlers/AttributeHandler";
 import {Observer} from "./Observer";
 import {ElementRegistrar} from "./services/ElementRegistrar";
-
-jest.dontMock("./Observer");
 
 describe("Observer", () => {
     const getObserver = describeClassFromContainer(import("./Observer"), "Observer");

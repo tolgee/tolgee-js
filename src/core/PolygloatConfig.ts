@@ -1,4 +1,4 @@
-import {UI} from "polygloat/ui";
+import {UI} from "../ui";
 import {Mode} from "./types";
 import {ModifierKey} from "../Constants/ModifierKey";
 import {NodeHelper} from "./helpers/NodeHelper";
