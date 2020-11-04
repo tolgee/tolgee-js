@@ -1,10 +1,9 @@
 jest.dontMock("./Observer");
 
+import describeClassFromContainer from "@testFixtures/describeClassFromContainer";
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
-
-import {container, DependencyContainer} from 'tsyringe';
 import {getMockedInstance} from "@testFixtures/mocked";
 import {Properties} from "./Properties";
 import {CoreHandler} from "./handlers/CoreHandler";
@@ -12,21 +11,19 @@ import {waitFor} from '@testing-library/dom'
 import {TextHandler} from "./handlers/TextHandler";
 import {AttributeHandler} from "./handlers/AttributeHandler";
 import {Observer} from "./Observer";
-
+import {ElementRegistrar} from "./services/ElementRegistrar";
 
 describe("Observer", () => {
+    const getObserver = describeClassFromContainer(import("./Observer"), "Observer");
     let observer: Observer;
-    let childContainer: DependencyContainer;
 
-    beforeEach(() => {
-        childContainer = container.createChildContainer();
-        observer = childContainer.resolve(Observer);
+    beforeEach(async () => {
+        observer = await getObserver();
         document.body = document.createElement("body");
     });
 
-    afterEach(() => {
-        childContainer.clearInstances();
-        jest.clearAllMocks();
+    beforeEach(() => {
+        getMockedInstance(Properties).config.targetElement = document.body;
     });
 
     test("Can be created", () => {
@@ -34,10 +31,6 @@ describe("Observer", () => {
     });
 
     describe("Tests on document.body", () => {
-
-        beforeEach(() => {
-            getMockedInstance(Properties).config.targetElement = document.body;
-        });
 
         test("Will handle mutation on basic character data", async () => {
             let text = document.createTextNode("Dummy text node");
@@ -109,6 +102,19 @@ describe("Observer", () => {
             expect(handleSubtree).not.toBeCalledTimes(1);
         });
     });
+
+    test("Will call registrar's cleanInactive on change", async () => {
+        let text = document.createTextNode("Dummy text node");
+        document.body.append(text);
+        observer.observe();
+        text.textContent = "Dummy text node modified";
+
+        await waitFor(() => {
+            let refreshAllMock = getMockedInstance(ElementRegistrar).refreshAll;
+            expect(refreshAllMock).toBeCalledTimes(1);
+        });
+    });
+
 
 
 });

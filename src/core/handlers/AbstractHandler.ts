@@ -2,14 +2,14 @@ import {NodeHelper} from "../helpers/NodeHelper";
 import {Properties} from "../Properties";
 import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../types";
 import {TextService} from "../services/TextService";
-import {NodeRegistrar} from "../services/NodeRegistrar";
+import {ElementRegistrar} from "../services/ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
-import {RESTRICTED_ASCENDANT_ATTRIBUTE} from "../../Constants/Global";
+import {POLYGLOAT_ATTRIBUTE_NAME, RESTRICTED_ASCENDANT_ATTRIBUTE} from "../../Constants/Global";
 
 export abstract class AbstractHandler {
     protected constructor(protected properties: Properties,
                           protected textService: TextService,
-                          protected nodeRegistrar: NodeRegistrar,
+                          protected elementRegistrar: ElementRegistrar,
                           protected translationHighlighter: TranslationHighlighter) {
     }
 
@@ -32,14 +32,13 @@ export abstract class AbstractHandler {
                 let translatedNode = this.translateChildNode(textNode, text, keys);
                 const parentElement = AbstractHandler.getParentElement(translatedNode);
                 parentElement._polygloat.nodes.add(translatedNode);
-                this.registerForHighlighting(parentElement);
+                this.elementRegistrar.register(parentElement);
             }
         }
     }
 
     protected translateChildNode(node: (Text | Attr), newValue, keys: KeyAndParams[]) {
-        this.nodeRegistrar.register(node);
-        node["_polygloat"] = {
+        node[POLYGLOAT_ATTRIBUTE_NAME] = {
             oldTextContent: node.textContent,
             keys
         };
@@ -47,22 +46,12 @@ export abstract class AbstractHandler {
         return node as Node as NodeWithMeta;
     }
 
-    protected registerForHighlighting(element: ElementWithMeta) {
-        if (this.properties.config.mode === "development") {
-            this.translationHighlighter.listen(element);
-        }
-    }
-
     private static initParentElement(element: Element): ElementWithMeta {
-        if (element["_polygloat"] === undefined) {
-            element["_polygloat"] = {
+        if (element[POLYGLOAT_ATTRIBUTE_NAME] === undefined) {
+            element[POLYGLOAT_ATTRIBUTE_NAME] = {
                 nodes: new Set()
             } as ElementMeta
-            element.setAttribute("_polygloat", "");
-        }
-
-        if (element.hasAttribute("_polygloat")) {
-            element.setAttribute("_polygloat", "")
+            element.setAttribute(POLYGLOAT_ATTRIBUTE_NAME, "");
         }
 
         return element as ElementWithMeta;

@@ -1,8 +1,8 @@
-import {ElementWithMeta} from "../types";
+import {ElementMeta, ElementWithMeta} from "../types";
 import {ModifierKey} from "../../Constants/ModifierKey";
 import {Lifecycle, scoped} from "tsyringe";
 import {Properties} from "../Properties";
-import {EventEmitter} from "../services/EventEmitter";
+import {EventEmitterImpl} from "../services/EventEmitter";
 
 @scoped(Lifecycle.ContainerScoped)
 export class MouseEventHandler {
@@ -14,27 +14,18 @@ export class MouseEventHandler {
     private mouseOn: Set<ElementWithMeta> = new Set();
     private highlighted: ElementWithMeta;
     private highlightedInitialBackgroundColor: string;
-    private mouseOnChanged = new EventEmitter<ElementWithMeta>();
-    private keysChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
+    private mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
+    private keysChanged: EventEmitterImpl<boolean> = new EventEmitterImpl<boolean>();
 
 
     handle(element: ElementWithMeta & ElementCSSInlineStyle, onclick: (clickEvent: MouseEvent) => void) {
         if (element._polygloat.listeningForHighlighting) {
+            console.error("Element is already listening mouse events! This is probably bug in polygloat");
             return;
         }
         element._polygloat.listeningForHighlighting = true;
 
-        element.addEventListener("mouseover", () => this.onMouseOver(element));
-
-        element.addEventListener("mouseleave", () => this.onMouseLeave(element));
-
-        element.addEventListener("click", (e: MouseEvent) => {
-            if (this.areKeysDown()) {
-                e.stopPropagation();
-                e.preventDefault();
-                onclick(e);
-            }
-        });
+        this.initEventListeners(element, onclick);
 
         this.mouseOnChanged.subscribe(() => {
             if (this.highlighted !== this.getMouseOn()) {
@@ -45,6 +36,27 @@ export class MouseEventHandler {
         this.keysChanged.subscribe(() => {
             this.onConditionsChanged();
         });
+    }
+
+    private initEventListeners(element: Element & ElementCSSInlineStyle & { _polygloat: ElementMeta }, onclick: (clickEvent: MouseEvent) => void) {
+        const onMouseOver = () => this.onMouseOver(element);
+        const onMouseLeave = () => this.onMouseLeave(element);
+        const onClick = (e: MouseEvent) => {
+            if (this.areKeysDown()) {
+                e.stopPropagation();
+                e.preventDefault();
+                onclick(e);
+            }
+        };
+        element.addEventListener("mouseover", onMouseOver);
+        element.addEventListener("click", onClick);
+        element.addEventListener("mouseleave", onMouseLeave);
+
+        element._polygloat.removeAllEventListeners = () => {
+            element.removeEventListener("mouseover", onMouseOver);
+            element.removeEventListener("click", onClick);
+            element.removeEventListener("mouseleave", onMouseLeave);
+        }
     }
 
     private onConditionsChanged() {

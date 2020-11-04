@@ -4,7 +4,7 @@ import {Lifecycle, scoped} from 'tsyringe';
 import {TranslationHighlighter} from '../highlighter/TranslationHighlighter';
 import {TextService} from "../services/TextService";
 import {AbstractHandler} from "./AbstractHandler";
-import {NodeRegistrar} from "../services/NodeRegistrar";
+import {ElementRegistrar} from "../services/ElementRegistrar";
 
 
 @scoped(Lifecycle.ContainerScoped)
@@ -12,7 +12,7 @@ export class TextHandler extends AbstractHandler {
     constructor(protected properties: Properties,
                 protected translationHighlighter: TranslationHighlighter,
                 protected textService: TextService,
-                protected nodeRegistrar: NodeRegistrar
+                protected nodeRegistrar: ElementRegistrar
     ) {
         super(properties, textService, nodeRegistrar, translationHighlighter);
     }

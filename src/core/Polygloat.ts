@@ -4,22 +4,24 @@ import {Properties} from './Properties';
 import {container as rootContainer} from 'tsyringe';
 import {EventService} from './services/EventService';
 import {TranslationParams} from "./types";
-import {PluginManager} from "./toolsManager/PluginManager";
 import {Observer} from "./Observer";
 import {TranslationService} from "./services/TranslationService";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
+import {ElementRegistrar} from "./services/ElementRegistrar";
+import {NodeHelper} from "./helpers/NodeHelper";
+import {EventEmitterImpl} from "./services/EventEmitter";
 
 export class Polygloat {
     private readonly container = rootContainer.createChildContainer();
     public properties: Properties = this.container.resolve(Properties);
     private _coreService: CoreService = this.container.resolve(CoreService);
     private eventService: EventService = this.container.resolve(EventService);
-    private pluginManager: PluginManager = this.container.resolve(PluginManager);
     private observer: Observer = this.container.resolve(Observer);
     private translationService: TranslationService = this.container.resolve(TranslationService);
     private textService: TextService = this.container.resolve(TextService);
     private coreHandler: CoreHandler = this.container.resolve(CoreHandler);
+    private elementRegistrar: ElementRegistrar = this.container.resolve(ElementRegistrar);
 
     constructor(config: PolygloatConfig) {
         this.container = rootContainer.createChildContainer();
@@ -33,7 +35,7 @@ export class Polygloat {
 
     public set lang(value) {
         this.properties.currentLanguage = value;
-        this.eventService.LANGUAGE_CHANGED.emit(value);
+        (this.eventService.LANGUAGE_CHANGED as EventEmitterImpl<any>).emit(value);
     }
 
     public get coreService() {
@@ -41,7 +43,6 @@ export class Polygloat {
     }
 
     public async run(): Promise<void> {
-        this.pluginManager.run();
         if (this.properties.config.mode === "development") {
             this.properties.scopes = await this.coreService.getScopes();
         }
@@ -76,7 +77,8 @@ export class Polygloat {
 
     public stop = () => {
         this.observer.stopObserving();
-        this.pluginManager.stop()
+        this.elementRegistrar.cleanAll();
+        NodeHelper.unmarkElementAsTargetElement(this.properties.config.targetElement);
     }
 
     public get onLangChange() {

@@ -4,6 +4,7 @@ import {TranslationData} from "../core/DTOs/TranslationData";
 import TranslationDialogInner from "./TranslatonDialogInner";
 import {ComponentDependencies} from "./PolygloatViewer";
 import {RESTRICTED_ASCENDANT_ATTRIBUTE} from "../Constants/Global";
+import {EventEmitterImpl} from "../core/services/EventEmitter";
 
 type DialogProps = {
     input: string,
@@ -71,7 +72,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
         try {
             setSaving(true);
             await translationService.setTranslations(translations);
-            await props.dependencies.eventService.TRANSLATION_CHANGED.emit(translations);
+            await (props.dependencies.eventService.TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>).emit(translations);
             setSuccess(true);
             await new Promise((resolve => setTimeout(resolve, 200)));
             setError(null);

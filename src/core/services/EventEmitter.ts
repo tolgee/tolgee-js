@@ -2,7 +2,11 @@ import {Subscription} from "./Subscription";
 
 export type CallbackType<T> = (data: T) => (Promise<void> | void);
 
-export class EventEmitter<T> {
+export interface EventEmitter<T> {
+    subscribe(callback: CallbackType<T>): Subscription;
+}
+
+export class EventEmitterImpl<T> {
     private idCounter: number = 0;
     private _subscriptions: Map<number, CallbackType<T>> = new Map<number, CallbackType<T>>();
 

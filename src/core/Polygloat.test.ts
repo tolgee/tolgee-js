@@ -1,5 +1,4 @@
 jest.dontMock("./Polygloat");
-jest.mock("./toolsManager/PluginManager");
 
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
@@ -14,15 +13,18 @@ import {
     eventServiceMock,
     getMockedInstance,
     observerMock,
-    pluginManagerMock,
     propertiesMock,
     textServiceMock,
     translationServiceMock
-} from "../__testFixtures/mocked";
-import {EventEmitter} from "./services/EventEmitter";
+} from "@testFixtures/mocked";
+import {EventEmitterImpl} from "./services/EventEmitter";
 import {Scope} from "./types";
 import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
+import {ElementRegistrar} from "./services/ElementRegistrar";
+import {NodeHelper} from "./helpers/NodeHelper";
+import {POLYGLOAT_TARGET_ATTRIBUTE} from "../Constants/Global";
+import {Properties} from "./Properties";
 
 describe("Polygloat", () => {
     let polygloat: Polygloat;
@@ -49,12 +51,6 @@ describe("Polygloat", () => {
 
     test("returns instance of polygloat service", () => {
         expect(polygloat.coreService instanceof CoreService).toBeTruthy();
-    });
-
-    test("will run plugin manager on run", async () => {
-        const runMocked = mocked(pluginManagerMock.mock.instances[0].run);
-        await polygloat.run();
-        expect(runMocked).toBeCalledTimes(1);
     });
 
     test("will set properties.scopes on run in development mode", async () => {
@@ -203,14 +199,17 @@ describe("Polygloat", () => {
     });
 
     test("will stop on stop function", () => {
+        getMockedInstance(Properties).config.targetElement = document.body;
+        NodeHelper.markElementAsTargetElement(document.body);
         polygloat.run();
         polygloat.stop();
-        expect(pluginManagerMock.mock.instances[0].stop).toBeCalledTimes(1);
+        expect(getMockedInstance(ElementRegistrar).cleanAll).toBeCalledTimes(1);
         expect(observerMock.mock.instances[0].stopObserving).toBeCalledTimes(1);
+        expect(document.body).not.toHaveAttribute(POLYGLOAT_TARGET_ATTRIBUTE);
     });
 
     test("will return proper onLangChange emitter", () => {
-        let eventEmitter = new EventEmitter();
+        let eventEmitter = new EventEmitterImpl();
         (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = eventEmitter;
         expect(polygloat.onLangChange).toEqual(eventEmitter);
     });
@@ -219,7 +218,7 @@ describe("Polygloat", () => {
         const dummyLang = "dummyLang";
 
         beforeEach(() => {
-            (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = new EventEmitter();
+            (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = new EventEmitterImpl();
             polygloat.lang = dummyLang;
         })
 

@@ -1,23 +1,20 @@
 import {ElementWithMeta, NodeWithMeta} from "../types";
-
-jest.dontMock("./TextHandler");
-jest.dontMock("./AbstractHandler");
-jest.dontMock("../services/EventService");
-jest.dontMock("../helpers/NodeHelper.ts");
-
 import {NodeHelper} from "../helpers/NodeHelper";
 import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
 import {TextHandler} from "./TextHandler";
 import {createTestDom} from "@testFixtures/createTestDom";
 import {ReplacedType, TextService} from "../services/TextService";
 import {getMockedInstance} from "@testFixtures/mocked";
-import {Properties} from "../Properties";
-import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
-import { mocked } from "ts-jest/utils";
+import {ElementRegistrar} from "../services/ElementRegistrar";
+
+jest.dontMock("./TextHandler");
+jest.dontMock("./AbstractHandler");
+jest.dontMock("../services/EventService");
+jest.dontMock("../helpers/NodeHelper.ts");
 
 describe("TextHandler", () => {
     const getTextHandler = describeClassFromContainer(import("./TextHandler"), "TextHandler");
-    let basicTextHandler: ReturnType<typeof getTextHandler>;
+    let textHandler: ReturnType<typeof getTextHandler>;
 
     const mockedKeys = [{
         key: "dummyKey",
@@ -37,17 +34,17 @@ describe("TextHandler", () => {
 
     beforeEach(() => {
         c = createTestDom(document);
-        basicTextHandler = getTextHandler();
+        textHandler = getTextHandler();
         getMockedInstance(TextService).replace = async (...args) => mockedTranslate(...args);
     })
 
     describe("in production mode", () => {
         beforeEach(async () => {
-            await basicTextHandler.handle(document.body);
+            await textHandler.handle(document.body);
         });
 
         test("Can be created", () => {
-            expect(basicTextHandler).not.toBeUndefined();
+            expect(textHandler).not.toBeUndefined();
         });
 
         test("will handle text in root", async () => {
@@ -111,18 +108,9 @@ describe("TextHandler", () => {
         });
     });
 
-    describe("In development mode", () => {
-        beforeEach(async () => {
-            getMockedInstance(Properties).config.mode = "development";
-            await basicTextHandler.handle(document.body);
-        });
-
-        test("will be registered for highlighting in development mode", () => {
-            const node = NodeHelper.evaluateToSingle(`./text()[contains(., ${gv(c.keyInRoot)})]`, document.body)
-            const element = node.parentElement as any as ElementWithMeta;
-
-            expect(mocked(getMockedInstance(TranslationHighlighter)).listen).toBeCalledWith(element);
-            expect(mocked(getMockedInstance(TranslationHighlighter)).listen).toBeCalledTimes(4);
-        });
-    });
+    test("will register the node", async () => {
+        await textHandler.handle(document.body);
+        const node = NodeHelper.evaluateToSingle(`./text()[contains(., ${gv(c.keyInRoot)})]`, document.body)
+        expect(getMockedInstance(ElementRegistrar).register).toBeCalledWith(node.parentElement);
+    })
 });

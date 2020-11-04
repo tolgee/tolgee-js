@@ -1,6 +1,6 @@
 jest.dontMock("../core/helpers/NodeHelper.ts");
-import {NodeHelper} from "../core/helpers/NodeHelper";
 
+import {NodeHelper} from "../core/helpers/NodeHelper";
 const domTestingLib = require('@testing-library/dom')
 const {prettyDOM} = domTestingLib
 

@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
-jest.mock("./toolsManager/PluginManager");
 jest.dontMock("./Properties");
 
 import {mocked} from 'ts-jest/utils';
