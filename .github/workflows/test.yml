@@ -25,5 +25,5 @@ jobs:
       - name: Start docker stack
         run: docker-compose -f test-docker-compose.yml up -d
 
-      - name Run cypress test
+      - name: Run cypress test
       - run: "npm run cy:run"
