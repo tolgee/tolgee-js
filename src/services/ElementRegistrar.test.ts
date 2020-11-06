@@ -8,7 +8,7 @@ import {ElementRegistrar} from "./ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 import {createElement} from "@testFixtures/createElement";
 import {Properties} from "../Properties";
-import {POLYGLOAT_ATTRIBUTE_NAME} from "../../Constants/Global";
+import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
 
 describe("ElementRegistrar", () => {
     const getElementRegistrar = describeClassFromContainer(import("./ElementRegistrar"), "ElementRegistrar");

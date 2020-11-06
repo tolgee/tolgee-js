@@ -1,5 +1,5 @@
 jest.dontMock("./MouseEventHandler");
-jest.dontMock("../../Constants/ModifierKey");
+jest.dontMock("../Constants/ModifierKey");
 jest.dontMock("../services/EventEmitter");
 jest.dontMock("../services/Subscription");
 
@@ -8,7 +8,7 @@ import describeClassFromContainer from "@testFixtures/describeClassFromContainer
 import {MouseEventHandler} from "./MouseEventHandler";
 import {getMockedInstance} from "@testFixtures/mocked";
 import {Properties} from "../Properties";
-import {ModifierKey} from "../../Constants/ModifierKey";
+import {ModifierKey} from "../Constants/ModifierKey";
 
 describe("MouseEventHandler", () => {
     const getMouseEventHandler = describeClassFromContainer(import("./MouseEventHandler"), "MouseEventHandler");

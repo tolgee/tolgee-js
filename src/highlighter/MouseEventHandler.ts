@@ -1,5 +1,5 @@
 import {ElementMeta, ElementWithMeta} from "../types";
-import {ModifierKey} from "../../Constants/ModifierKey";
+import {ModifierKey} from "../Constants/ModifierKey";
 import {Lifecycle, scoped} from "tsyringe";
 import {Properties} from "../Properties";
 import {EventEmitterImpl} from "../services/EventEmitter";

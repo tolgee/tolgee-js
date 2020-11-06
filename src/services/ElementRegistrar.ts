@@ -1,7 +1,7 @@
 import {Lifecycle, scoped} from "tsyringe";
 import {ElementWithMeta} from "../types";
 import {Properties} from "../Properties";
-import {POLYGLOAT_ATTRIBUTE_NAME} from "../../Constants/Global";
+import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 
 @scoped(Lifecycle.ContainerScoped)

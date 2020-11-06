@@ -1,5 +1,5 @@
 import {ArgumentTypes} from "./commonTypes";
-import {POLYGLOAT_TARGET_ATTRIBUTE} from "../../Constants/Global";
+import {POLYGLOAT_TARGET_ATTRIBUTE} from "../Constants/Global";
 
 export class NodeHelper {
     private static* evaluateGenerator<T extends Node>(expression: string, targetNode: Node): Generator<T> {

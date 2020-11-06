@@ -4,7 +4,7 @@ import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../types
 import {TextService} from "../services/TextService";
 import {ElementRegistrar} from "../services/ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
-import {POLYGLOAT_ATTRIBUTE_NAME, RESTRICTED_ASCENDANT_ATTRIBUTE} from "../../Constants/Global";
+import {POLYGLOAT_ATTRIBUTE_NAME, RESTRICTED_ASCENDANT_ATTRIBUTE} from "../Constants/Global";
 
 export abstract class AbstractHandler {
     protected constructor(protected properties: Properties,
