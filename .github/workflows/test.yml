@@ -32,3 +32,10 @@ jobs:
 
       - name: Run cypress test
         run: "npm run cy:run"
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: cypress
+          path: |
+            cypress/videos/**/*
+            cypress/screenshots/**/*
