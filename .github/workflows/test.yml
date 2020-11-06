@@ -11,6 +11,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+
+      - name: Npm install
       - run: npm install
 
       - name: Unit test
@@ -26,4 +28,4 @@ jobs:
         run: docker-compose -f test-docker-compose.yml up -d
 
       - name: Run cypress test
-      - run: "npm run cy:run"
+        run: "npm run cy:run"
