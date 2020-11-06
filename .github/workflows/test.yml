@@ -1,0 +1,29 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+
+      - name: Unit test
+        run: npm run test
+
+      - name: Build core
+        run: npm run build
+
+      - name: Build testApps
+        run: npm run buildTestApps
+
+      - name: Start docker stack
+        run: docker-compose -f test-docker-compose.yml up -d
+
+      - name Run cypress test
+      - run: "npm run cy:run"

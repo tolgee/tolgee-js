@@ -6,6 +6,7 @@ idea {
         excludeDirs += file('dist')
         excludeDirs += file('lib')
         excludeDirs += file('cypress/testapps/dist')
+        excludeDirs += file('cypress/videos')
     }
 }
 
