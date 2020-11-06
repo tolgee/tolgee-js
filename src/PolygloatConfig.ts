@@ -2,6 +2,8 @@ import {Mode} from "./types";
 import {ModifierKey} from "./Constants/ModifierKey";
 import {NodeHelper} from "./helpers/NodeHelper";
 
+const DEFAULT_TARGET_ELEMENT = document.body;
+
 export class PolygloatConfig {
     tagAttributes?: { [key: string]: string[] } = {
         'textarea': ['placeholder'],
@@ -21,7 +23,7 @@ export class PolygloatConfig {
     highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
     highlightColor?: string = "rgb(224 240 255)";
     targetElement?: Element;
-    private _targetElement?: Element = document.body;
+    private _targetElement?: Element;
 
     constructor(config?: PolygloatConfig) {
         //workaround for: https://stackoverflow.com/questions/48725916/typescript-optional-property-with-a-getter
@@ -31,7 +33,7 @@ export class PolygloatConfig {
                     throw new Error("Target element is already defined!");
                 }
                 if(targetElement === undefined){
-                    this._targetElement = document.body;
+                    this._targetElement = DEFAULT_TARGET_ELEMENT;
                 }
                 if (NodeHelper.isElementTargetElement(targetElement)) {
                     console.error("Target element: ", this._targetElement);
@@ -45,8 +47,10 @@ export class PolygloatConfig {
             }
         });
 
-        config && Object.assign(this, config);
-
+        Object.assign(this, config || {});
+        if(this._targetElement === undefined){
+            this._targetElement = DEFAULT_TARGET_ELEMENT;
+        }
         this.mode = this.mode || (this.apiKey ? "development" : "production");
         this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;
         if (this.watch === undefined) {
