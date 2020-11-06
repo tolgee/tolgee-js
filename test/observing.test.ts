@@ -3,7 +3,7 @@ jest.autoMockOff();
 import {waitFor} from '@testing-library/dom'
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
-import {Polygloat} from "../src/core";
+import {Polygloat} from "../src";
 import mockTranslations from "./mockTranslations";
 import fetchMock from "jest-fetch-mock";
 

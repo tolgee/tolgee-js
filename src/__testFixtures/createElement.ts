@@ -1,4 +1,4 @@
-import {ElementWithMeta, NodeMeta, NodeWithMeta} from "../core/types";
+import {ElementWithMeta, NodeMeta, NodeWithMeta} from "../types";
 import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
 
 export const createElement = (nodesCount: number, keysCount: number, sameKeys: boolean = false) => {

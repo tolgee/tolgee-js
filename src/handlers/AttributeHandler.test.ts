@@ -5,7 +5,7 @@ jest.dontMock("../helpers/NodeHelper.ts");
 
 import {ElementWithMeta, NodeWithMeta} from "../types";
 import {NodeHelper} from "../helpers/NodeHelper";
-import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
+import describeClassFromContainer from "../__testFixtures/describeClassFromContainer";
 import {createTestDom} from "@testFixtures/createTestDom";
 import {ReplacedType, TextService} from "../services/TextService";
 import {getMockedInstance} from "@testFixtures/mocked";

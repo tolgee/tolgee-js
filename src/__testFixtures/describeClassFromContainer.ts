@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
 import {container, DependencyContainer} from 'tsyringe';
-import {ThenArg} from "../core/helpers/commonTypes";
+import {ThenArg} from "../helpers/commonTypes";
 
 type ImportedClassType<T, K extends keyof T> = T extends Record<K, infer S>
     ? S extends new (...args: any[]) => infer R

@@ -1,5 +1,5 @@
 import * as Module from "../Properties";
-import classMock from "../../__testFixtures/classMock";
+import classMock from "../__testFixtures/classMock";
 
 const moduleMock = jest.genMockFromModule("../Properties");
 

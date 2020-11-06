@@ -8,7 +8,6 @@ import {getMockedInstance} from "@testFixtures/mocked";
 import {TranslationHighlighter} from "./TranslationHighlighter";
 import {ElementWithMeta} from "../types";
 import {Properties} from "../Properties";
-import {UI} from "../../ui";
 import {createElement} from "@testFixtures/createElement";
 
 describe("TranslationHighlighter", () => {
@@ -62,9 +61,9 @@ describe("TranslationHighlighter", () => {
 
             rendererViewerMock = jest.fn();
 
-            getMockedInstance(Properties).config.ui = classMock<UI>(() => ({
+            getMockedInstance(Properties).config.ui = classMock<any>(() => ({
                 getKey: rendererGetKeyMock,
-            }), UI);
+            }), function (){return{}} as any);
 
             translationHighlighter.listen(createElement(0, 0));
 
@@ -102,10 +101,10 @@ describe("TranslationHighlighter", () => {
 
         rendererViewerMock = jest.fn();
 
-        getMockedInstance(Properties).config.ui = classMock<UI>(() => ({
+        getMockedInstance(Properties).config.ui = classMock<any>(() => ({
             getKey: rendererGetKeyMock,
             renderViewer: rendererViewerMock
-        }), UI);
+        }), function (){return{}} as any);
 
         getMockedInstance(MouseEventHandler).handle = (element, callback) => {
             savedCallback = callback;

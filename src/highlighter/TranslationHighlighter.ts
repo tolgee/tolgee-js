@@ -3,13 +3,12 @@ import {ElementWithMeta} from '../types';
 import {Lifecycle, scoped} from 'tsyringe';
 import {Properties} from '../Properties';
 import {EventService} from "../services/EventService";
-import {UI} from "polygloat/ui";
 import {TranslationService} from "../services/TranslationService";
 import {MouseEventHandler} from "./MouseEventHandler";
 
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationHighlighter {
-    private _renderer: UI;
+    private _renderer: any;
 
     constructor(private service: CoreService,
                 private properties: Properties,

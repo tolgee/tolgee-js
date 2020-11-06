@@ -1,6 +1,5 @@
-import {UI} from "../ui";
 import {Mode} from "./types";
-import {ModifierKey} from "../Constants/ModifierKey";
+import {ModifierKey} from "./Constants/ModifierKey";
 import {NodeHelper} from "./helpers/NodeHelper";
 
 export class PolygloatConfig {
@@ -18,7 +17,7 @@ export class PolygloatConfig {
     filesUrlPrefix?: string = "i18n/";
     mode?: Mode;
     watch?: boolean;
-    ui?: typeof UI;
+    ui?: new (...args) => any;
     highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
     highlightColor?: string = "rgb(224 240 255)";
     targetElement?: Element;

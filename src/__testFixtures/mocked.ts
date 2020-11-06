@@ -1,12 +1,12 @@
-import {PolygloatConfig} from "../core/PolygloatConfig";
-import {Properties} from "../core/Properties";
-import {CoreService} from "../core/services/CoreService";
-import {Observer} from "../core/Observer";
+import {PolygloatConfig} from "../PolygloatConfig";
+import {Properties} from "../Properties";
+import {CoreService} from "../services/CoreService";
+import {Observer} from "../Observer";
 import {mocked} from "ts-jest/utils";
-import {TranslationService} from "../core/services/TranslationService";
-import {TextService} from "../core/services/TextService";
-import {EventService} from "../core/services/EventService";
-import {EventEmitterImpl} from "../core/services/EventEmitter";
+import {TranslationService} from "../services/TranslationService";
+import {TextService} from "../services/TextService";
+import {EventService} from "../services/EventService";
+import {EventEmitterImpl} from "../services/EventEmitter";
 
 export const configMock = mocked(PolygloatConfig);
 export const propertiesMock = mocked(Properties);

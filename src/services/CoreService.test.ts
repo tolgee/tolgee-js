@@ -6,7 +6,7 @@ jest.dontMock("./CoreService");
 
 import {CoreService} from "./CoreService";
 import {container, DependencyContainer} from 'tsyringe';
-import {getMockedInstance} from "../../__testFixtures/mocked";
+import {getMockedInstance} from "../__testFixtures/mocked";
 import {ApiHttpService} from "./ApiHttpService";
 import {mocked} from 'ts-jest/utils';
 import {Properties} from "../Properties";

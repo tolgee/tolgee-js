@@ -1,8 +1,8 @@
 jest.dontMock("./TextService");
 jest.dontMock("../helpers/TextHelper");
 
-import describeClassFromContainer from "../../__testFixtures/describeClassFromContainer";
-import {getMockedInstance} from "../../__testFixtures/mocked";
+import describeClassFromContainer from "../__testFixtures/describeClassFromContainer";
+import {getMockedInstance} from "../__testFixtures/mocked";
 import {TranslationService} from "./TranslationService";
 
 describe("AttributeHandler", () => {
