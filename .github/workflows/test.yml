@@ -27,5 +27,8 @@ jobs:
       - name: Start docker stack
         run: docker-compose -f test-docker-compose.yml up -d
 
+      - name: Wait for running container
+        run: 'until docker logs --since 5m polygloat | grep -m 1 "started on port(s): 8080"; do : ;done'
+
       - name: Run cypress test
         run: "npm run cy:run"
