@@ -25,7 +25,7 @@ export class PolygloatConfig {
 
     constructor(config?: PolygloatConfig) {
         //workaround for: https://stackoverflow.com/questions/48725916/typescript-optional-property-with-a-getter
-        Object.defineProperty(this, 'fullName', {
+        Object.defineProperty(this, 'targetElement', {
             set(targetElement: Element) {
                 if (this.targetElement !== undefined) {
                     throw new Error("Target element is already defined!");

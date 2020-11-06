@@ -15,10 +15,10 @@ export class ElementRegistrar {
         if (this.getActiveNodes(element).next().value === undefined) {
             throw new Error("Registered element with no nodes. This is probably an bug in Polygloat.");
         }
-        this.registeredElements.add(element);
-        if (this.properties.config.mode === "development") {
+        if (this.properties.config.mode === "development" && !this.registeredElements.has(element)) {
             this.translationHighlighter.listen(element);
         }
+        this.registeredElements.add(element);
     }
 
     refreshAll() {

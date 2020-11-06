@@ -2,7 +2,7 @@
   "name": "@polygloat/core",
   "version": "1.0.0-alpha.3",
   "description": "Library providing ability to translate messages directly in context of developed application.",
-  "main": "core/index.js",
+  "main": "dist/polygloat.umd.js",
   "declaration": true,
   "directories": {
     "lib": "lib",

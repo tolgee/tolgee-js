@@ -23,8 +23,8 @@ module.exports = env => {
                 rules: [
                     {
                         test: /\.tsx?$/,
-                        use: [isDevelopment && "ts-loader" || "babel-loader"],
-                        exclude: [/node_modules/, /lib/, /\.spec\.ts/, /\.test\.ts/, /__mocks__/,/__testFixtures/],
+                        use: ["ts-loader"],
+                        exclude: [/node_modules/, /lib/, /\.spec\.ts/, /\.test\.ts/, /__mocks__/, /__testFixtures/],
                     },
                 ]
             },

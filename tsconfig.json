@@ -12,7 +12,6 @@
       "dom"
     ],
     "experimentalDecorators": true,
-    "emitDeclarationOnly": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
