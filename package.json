@@ -10,7 +10,7 @@
   },
   "scripts": {
     "build": "webpack --env.mode=production && tsc",
-    "buildTestApps": "webpack --config cypress/testapps/webpack.config.js --watch",
+    "buildTestApps": "webpack --config cypress/testapps/webpack.config.js",
     "developTestApps": "webpack --config cypress/testapps/webpack.config.js --watch",
     "test": "jest --config ./jest.config.js",
     "cy:open": "cypress open",
