@@ -1,4 +1,4 @@
-name: Build
+name: Test
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       "!prerelease-*"
 
 jobs:
-  prepare:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
