@@ -35,7 +35,6 @@ jobs:
         run: "npm run cy:run"
 
       - name: Set git globals
-        if: startsWt(${{BRANCH}}, )
         run: |
           git config --local user.email "machine@polygloat.io"
           git config --local user.name "Polygloat Machine"
