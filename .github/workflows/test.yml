@@ -1,12 +1,12 @@
-name: Build
+name: Test
 
 on:
   push:
-    brancges-ignore:
+    branches-ignore:
       "prerelease-*"
 
 jobs:
-  test:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
