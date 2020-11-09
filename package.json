@@ -26,9 +26,6 @@
     "ui/**/*"
   ],
   "dependencies": {},
-  "resolutions": {
-    "@types/react": "^16.9.51"
-  },
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
