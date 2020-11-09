@@ -2,8 +2,8 @@ name: Build
 
 on:
   push:
-    brancges:
-      "!prerelease-*"
+    brancges-ignore:
+      "prerelease-*"
 
 jobs:
   test:
