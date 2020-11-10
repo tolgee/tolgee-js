@@ -5,7 +5,8 @@ export const createTestDom = (document: Document) => {
         hereKey: "here",
         hereTooKey: "here_too",
         appendedKey: "appended_key",
-        ariaLabelKey: "aria_label_key"
+        ariaLabelKey: "aria_label_key",
+        optionKey: "option_key"
     }
 
     document.body = document.createElement("body");
@@ -14,6 +15,7 @@ export const createTestDom = (document: Document) => {
         '   <div>Some other text to translate <span>{{${c.hereKey}}} and {{${c.hereTooKey}}}</span> text continues.'</div> +
         '   <div id="multipleTextNodes">Before text</div>' +
         '   <div aria-label="this is {{${c.ariaLabelKey}}} label"></div>' +
+        '   <select><option>{{${c.optionKey}}}</option></select>'+
         '<div>`;
     document.getElementById("multipleTextNodes").append("some text node");
     document.getElementById("multipleTextNodes").append(`{{${c.appendedKey}}}`);

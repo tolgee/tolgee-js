@@ -52,4 +52,17 @@ export class NodeHelper {
     static unmarkElementAsTargetElement(element: Element): void {
         element.removeAttribute(POLYGLOAT_TARGET_ATTRIBUTE);
     }
+
+    static nodeContains(descendant: Node, node: Node) {
+        if (descendant.contains(node)) {
+            return true;
+        }
+        if (node instanceof Attr) {
+            const ownerContainsAttr = Object.values(node.ownerElement.attributes).indexOf(node) > -1;
+            if (descendant.contains(node.ownerElement) && ownerContainsAttr) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
