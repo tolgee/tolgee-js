@@ -42,6 +42,11 @@ export class ApiHttpService {
         }, ...rest);
     }
 
+
+    async postJson(url, body, init: FetchArgumentTypes[1] = {}, ...rest: Tail<Tail<FetchArgumentTypes>>) {
+        return await this.post(url, body, init, ...rest).then(res => res.json());
+    }
+
     private static async handleErrors(response: Response) {
         if (response.status >= 400) {
             const error = new ApiHttpError(response);

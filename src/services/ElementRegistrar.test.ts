@@ -1,4 +1,4 @@
-import {ElementWithMeta} from "../types";
+import {ElementWithMeta, NodeWithMeta} from "../types";
 
 jest.dontMock("./ElementRegistrar");
 
@@ -84,6 +84,16 @@ describe("ElementRegistrar", () => {
                 expect(mockedElement._polygloat).not.toBeDefined();
             }
         });
-
     });
+
+    test("will register attribute node", () => {
+        const inputElement = document.createElement("input") as any as ElementWithMeta;
+        document.body.append(inputElement);
+        inputElement.setAttribute("_polygloat", "");
+        inputElement.setAttribute("placeholder", "Text")
+        inputElement._polygloat = {
+            nodes: new Set([inputElement.attributes["placeholder"]])
+        }
+        elementRegistrar.register(inputElement);
+    })
 });

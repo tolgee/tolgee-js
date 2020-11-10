@@ -89,14 +89,14 @@ describe("TranslationService", () => {
         });
 
         test("will get translations of key", async () => {
-            getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => ({en: "translated", de: "übersetzen"}));
+            getMockedInstance(ApiHttpService).postJson = jest.fn(async () => ({en: "translated", de: "übersetzen"}));
             const translationData = await translationService.getTranslationsOfKey("key", new Set<string>(["en", "de"]));
             expect(translationData).toEqual({key: "key", translations: {en: "translated", de: "übersetzen"}});
         });
 
         test("will reset prefered languages when language is not found", async () => {
             global["apierror"] = ApiHttpError;
-            getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => {
+            getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
                 throw new ApiHttpError({status: 404} as Response, "language_not_found")
             });
 

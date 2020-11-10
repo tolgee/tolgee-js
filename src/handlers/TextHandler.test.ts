@@ -12,6 +12,8 @@ jest.dontMock("./AbstractHandler");
 jest.dontMock("../services/EventService");
 jest.dontMock("../helpers/NodeHelper.ts");
 
+import {Properties} from "../Properties";
+
 describe("TextHandler", () => {
     const getTextHandler = describeClassFromContainer(import("./TextHandler"), "TextHandler");
     let textHandler: ReturnType<typeof getTextHandler>;
@@ -23,7 +25,7 @@ describe("TextHandler", () => {
 
     const mockedTranslateInner = (text) => {
         return {
-            text: text.replace(/{{(.*?)}}/gs, "$1"),
+            text: text.replace(/{{(.*?)}}/gs, "translated $1"),
             keys: mockedKeys
         } as ReplacedType
     }
@@ -33,6 +35,7 @@ describe("TextHandler", () => {
     let c: ReturnType<typeof createTestDom>;
 
     beforeEach(() => {
+        getMockedInstance(Properties).config.passToParent = ["option"];
         c = createTestDom(document);
         textHandler = getTextHandler();
         getMockedInstance(TextService).replace = async (...args) => mockedTranslate(...args);
@@ -52,14 +55,13 @@ describe("TextHandler", () => {
         });
 
         test("will handle text in div", async () => {
-            expect(`./div/text()[contains(., 'Some trash... ${gv(c.keyInRootDiv)}')]`).toBeFoundIn(document.body);
+            expect(`./div/text()[contains(., 'Some trash... translated ${gv(c.keyInRootDiv)}')]`).toBeFoundIn(document.body);
         });
 
         test("will handle text in div > div > span", async () => {
-            const xpath = `./div/div/span/text()[contains(., '${gv(c.hereKey)} and ${gv(c.hereTooKey)}')]`;
+            const xpath = `./div/div/span/text()[contains(., 'translated ${gv(c.hereKey)} and translated ${gv(c.hereTooKey)}')]`;
             expect(xpath).toBeFoundIn(document.body);
         });
-
 
         describe("Node's _polygloat property", () => {
             let node: NodeWithMeta;
@@ -106,7 +108,32 @@ describe("TextHandler", () => {
                 expect(element.getAttribute("_polygloat")).toEqual("");
             });
         });
+
+        test("will pass option's text node to select element", () => {
+            const xPath = `//text()[contains(., 'translated option_key')]`;
+            const node = NodeHelper.evaluateToSingle(xPath, document.body);
+            expect(node.parentElement.parentElement).toHaveAttribute("_polygloat", "");
+            expect(node.parentElement).not.toHaveAttribute("_polygloat");
+        });
     });
+
+    test("will pass recursively", async () => {
+        getMockedInstance(Properties).config.passToParent = ["option", "select"];
+        await textHandler.handle(document.body);
+        const xPath = `//text()[contains(., 'translated option_key')]`;
+        const node = NodeHelper.evaluateToSingle(xPath, document.body);
+        expect(node.parentElement.parentElement.parentElement).toHaveAttribute("_polygloat", "");
+        expect(node.parentElement.parentElement).not.toHaveAttribute("_polygloat");
+    })
+
+    test("will pass with function", async () => {
+        getMockedInstance(Properties).config.passToParent = (element) => element.tagName === "OPTION";
+        await textHandler.handle(document.body);
+        const xPath = `//text()[contains(., 'translated option_key')]`;
+        const node = NodeHelper.evaluateToSingle(xPath, document.body);
+        expect(node.parentElement.parentElement).toHaveAttribute("_polygloat", "");
+        expect(node.parentElement).not.toHaveAttribute("_polygloat");
+    })
 
     test("will register the node", async () => {
         await textHandler.handle(document.body);

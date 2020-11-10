@@ -59,25 +59,25 @@ export class TranslationService {
     getFromCacheOrFallback(name: string, lang: string = this.properties.currentLanguage, orEmpty: boolean = false): string {
         const translatedText = this.getFromCache(name, lang) || this.getFromCache(name, this.properties.config.fallbackLanguage);
 
-        if(translatedText){
+        if (translatedText) {
             return translatedText;
         }
 
-        if(orEmpty){
+        if (orEmpty) {
             return "";
         }
         const path = TextHelper.splitOnNonEscapedDelimiter(name, ".");
-        return path[path.length -1];
+        return path[path.length - 1];
     }
 
     getTranslationsOfKey = async (key: string, languages: Set<string> = new Set([this.properties.currentLanguage])): Promise<TranslationData> => {
         this.coreService.checkScope("translations.view");
         try {
-            let data = await this.apiHttpService.fetchJson(`source/${key}/${Array.from(languages).join(",")}`);
+            let data = await this.apiHttpService.postJson(`keyTranslations/${Array.from(languages).join(",")}`, {key});
             return new TranslationData(key, data);
         } catch (e) {
-            //only possible option of lot found error is, that languages definition is changed, but the old value is stored in preferred languages
             if (e instanceof ApiHttpError) {
+                //only possible option of this error is, that languages definition is changed, but the old value is stored in preferred languages
                 if (e.response.status === 404) {
                     if (e.code === "language_not_found") {
                         this.properties.preferredLanguages = await this.coreService.getLanguages();

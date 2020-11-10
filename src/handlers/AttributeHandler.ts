@@ -10,9 +10,9 @@ import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 export class AttributeHandler extends AbstractHandler {
     constructor(protected properties: Properties,
                 protected textService: TextService,
-                protected nodeRegistrar: ElementRegistrar,
+                protected elementRegistrar: ElementRegistrar,
                 protected translationHighlighter: TranslationHighlighter) {
-        super(properties, textService, nodeRegistrar, translationHighlighter);
+        super(properties, textService, elementRegistrar, translationHighlighter);
     }
 
     async handle(node: Element) {

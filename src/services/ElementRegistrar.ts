@@ -3,6 +3,7 @@ import {ElementWithMeta} from "../types";
 import {Properties} from "../Properties";
 import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
+import {NodeHelper} from "../helpers/NodeHelper";
 
 @scoped(Lifecycle.ContainerScoped)
 export class ElementRegistrar {
@@ -54,7 +55,7 @@ export class ElementRegistrar {
 
     private* getActiveNodes(element: ElementWithMeta) {
         for (const node of element._polygloat.nodes) {
-            if (this.properties.config.targetElement.contains(node)) {
+            if (NodeHelper.nodeContains(this.properties.config.targetElement, node)) {
                 yield node;
             }
         }

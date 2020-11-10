@@ -62,7 +62,7 @@ export class TextService {
 
     private static parseUnwrapped(unWrappedString: string): KeyAndParams {
         const strings = unWrappedString.match(/(?:[^\\,:\n]|\\.)+/g);
-        const result = {key: strings.shift(), params: {}};
+        const result = {key: TextHelper.removeEscapes(strings.shift()), params: {}};
 
         while (strings.length) {
             const [name, value] = strings.splice(0, 2);

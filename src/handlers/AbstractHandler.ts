@@ -30,7 +30,7 @@ export abstract class AbstractHandler {
             if (result) {
                 const {text, keys} = result;
                 let translatedNode = this.translateChildNode(textNode, text, keys);
-                const parentElement = AbstractHandler.getParentElement(translatedNode);
+                const parentElement = this.getParentElement(translatedNode);
                 parentElement._polygloat.nodes.add(translatedNode);
                 this.elementRegistrar.register(parentElement);
             }
@@ -57,7 +57,36 @@ export abstract class AbstractHandler {
         return element as ElementWithMeta;
     }
 
-    private static getParentElement(node: Node) {
-        return AbstractHandler.initParentElement(NodeHelper.getParentElement(node));
+    private getParentElement(node: Node) {
+        const parent = this.getSuitableParent(node);
+        return AbstractHandler.initParentElement(parent);
+    }
+
+    private getSuitableParent(node: Node): Element {
+        const domParent = NodeHelper.getParentElement(node);
+
+        if(domParent === undefined){
+            console.error(node);
+            throw new Error("No suitable parent found for node above.")
+        }
+
+        if (!this.properties.config.passToParent) {
+            return domParent;
+        }
+
+        if (Array.isArray(this.properties.config.passToParent)) {
+            const tagNameEquals = (elementTagName: string) => domParent.tagName.toLowerCase() === elementTagName.toLowerCase();
+            if (this.properties.config.passToParent.findIndex(tagNameEquals) === -1) {
+                return domParent;
+            }
+        }
+
+        if (typeof this.properties.config.passToParent === "function") {
+            if (!this.properties.config.passToParent(domParent)) {
+                return domParent;
+            }
+        }
+
+        return this.getSuitableParent(domParent);
     }
 }

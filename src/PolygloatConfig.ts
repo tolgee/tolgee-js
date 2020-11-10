@@ -9,6 +9,7 @@ export class PolygloatConfig {
         'textarea': ['placeholder'],
         'input': ['value', 'placeholder']
     };
+    passToParent?: string[] | ((node: Element) => boolean) = ["option"];
     restrictedElements?: string[] = ['script', 'style'];
     defaultLanguage?: string = 'en';
     fallbackLanguage?: string;
@@ -32,7 +33,7 @@ export class PolygloatConfig {
                 if (this.targetElement !== undefined) {
                     throw new Error("Target element is already defined!");
                 }
-                if(targetElement === undefined){
+                if (targetElement === undefined) {
                     this._targetElement = DEFAULT_TARGET_ELEMENT;
                 }
                 if (NodeHelper.isElementTargetElement(targetElement)) {
@@ -48,7 +49,7 @@ export class PolygloatConfig {
         });
 
         Object.assign(this, config || {});
-        if(this._targetElement === undefined){
+        if (this._targetElement === undefined) {
             this._targetElement = DEFAULT_TARGET_ELEMENT;
         }
         this.mode = this.mode || (this.apiKey ? "development" : "production");
