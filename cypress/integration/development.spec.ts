@@ -16,10 +16,4 @@ context('Base test', () => {
         })
         cy.get('body').trigger('keyup', {key: "Alt"})
     });
-
-    it('will highlight select', () => {
-        cy.get('body').trigger('keydown', {key: "Alt"})
-        const element = cy.xpath("//select").trigger("mouseover").should("have.css", "background-color", "rgb(255, 255, 0)");
-        cy.get('body').trigger('keyup', {key: "Alt"})
-    })
 });
