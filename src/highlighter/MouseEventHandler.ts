@@ -50,9 +50,21 @@ export class MouseEventHandler {
         };
         element.addEventListener("mouseover", onMouseOver);
         element.addEventListener("click", onClick);
+
+        const onMouseDownOrUp = (e: MouseEvent) => {
+            if (this.areKeysDown()) {
+                e.stopPropagation();
+                e.preventDefault();
+            }
+        };
+
+        element.addEventListener("mousedown", onMouseDownOrUp);
+        element.addEventListener("mouseup", onMouseDownOrUp);
         element.addEventListener("mouseleave", onMouseLeave);
 
         element._polygloat.removeAllEventListeners = () => {
+            element.removeEventListener("mousedown", onMouseDownOrUp);
+            element.removeEventListener("mouseup", onMouseDownOrUp);
             element.removeEventListener("mouseover", onMouseOver);
             element.removeEventListener("click", onClick);
             element.removeEventListener("mouseleave", onMouseLeave);

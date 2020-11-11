@@ -9,7 +9,7 @@ export class PolygloatConfig {
         'textarea': ['placeholder'],
         'input': ['value', 'placeholder']
     };
-    passToParent?: string[] | ((node: Element) => boolean) = ["option"];
+    passToParent?: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean) = ["option", "optgroup"];
     restrictedElements?: string[] = ['script', 'style'];
     defaultLanguage?: string = 'en';
     fallbackLanguage?: string;

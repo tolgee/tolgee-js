@@ -16,3 +16,29 @@ polygloatNpm {
     library = true
 }
 
+task runTestServer(group: "docker") {
+    doLast {
+        def exec = Runtime.getRuntime().exec("docker-compose --env-file ${project.projectDir}/.env -f ${project.projectDir}/test-docker-compose.yml up");
+        def exit = false;
+        def thread = new Thread() {
+            void run() {
+                while (!exit) {
+                    def b = exec.inputStream.read()
+                    while(b != 0){
+                        System.out.write(b)
+                        b = exec.inputStream.read()
+                    }
+                    System.out.flush();
+                    sleep(10);
+                }
+            }
+        }
+
+        thread.start()
+        exec.waitFor()
+        exit = true;
+        if (exec.exitValue() != 0) {
+            throw RuntimeException(exec.errorStream.readLines().join("\n"));
+        }
+    }
+}
