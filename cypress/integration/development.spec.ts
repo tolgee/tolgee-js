@@ -19,11 +19,7 @@ context('Base test', () => {
 
     it('will highlight select', () => {
         cy.get('body').trigger('keydown', {key: "Alt"})
-        const element = cy.xpath("//select").trigger("mouseover");
-        element.then(e => {
-            expect(e.attr("style")).to.contain("background-color");
-            expect(e.attr("style")).to.contain("yellow");
-        });
+        const element = cy.xpath("//select").trigger("mouseover").should("have.css", "background-color", "rgb(255, 255, 0)");
         cy.get('body').trigger('keyup', {key: "Alt"})
     })
 });
