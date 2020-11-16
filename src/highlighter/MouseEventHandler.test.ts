@@ -20,7 +20,7 @@ describe("MouseEventHandler", () => {
     const mockedCallback = jest.fn();
     const mockedClick = new MouseEvent("click");
     const mockedMouseOver = new MouseEvent("mouseover");
-    const mockedMouseLeave = new MouseEvent("mouseleave");
+    const mockedMouseOut = new MouseEvent("mouseout");
     const mockedKeydown = new KeyboardEvent("keydown", {key});
     const mockedKeyup = new KeyboardEvent("keyup", {key});
 
@@ -43,20 +43,20 @@ describe("MouseEventHandler", () => {
 
 
         test("Will unhighlight", async () => {
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             expect(mockedElement.style.backgroundColor).toEqual("");
         });
 
         test("Will reset to correct initial color", async () => {
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             mockedElement.style.backgroundColor = "#222222"
             mockedElement.dispatchEvent(mockedMouseOver);
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             expect(mockedElement.style.backgroundColor).toEqual("rgb(34, 34, 34)");
         });
 
         test("Will not highlight just on mouseover", async () => {
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             window.dispatchEvent(mockedKeyup);
             mockedElement.dispatchEvent(mockedMouseOver);
             expect(mockedElement.style.backgroundColor).toEqual("");
@@ -64,7 +64,7 @@ describe("MouseEventHandler", () => {
 
         test("Will not highlight just on keydown", async () => {
             window.dispatchEvent(mockedKeyup);
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             window.dispatchEvent(mockedKeydown)
             expect(mockedElement.style.backgroundColor).toEqual("");
         });
@@ -72,7 +72,7 @@ describe("MouseEventHandler", () => {
 
         test("Will highlight when keydown first", async () => {
             window.dispatchEvent(mockedKeyup);
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             window.dispatchEvent(mockedKeydown);
             mockedElement.dispatchEvent(mockedMouseOver);
             expect(mockedElement.style.backgroundColor).toEqual(mockedColor);
@@ -121,7 +121,7 @@ describe("MouseEventHandler", () => {
 
         test("will not handle mouse leave after it's call", () => {
             mockedElement._polygloat.removeAllEventListeners();
-            mockedElement.dispatchEvent(mockedMouseLeave);
+            mockedElement.dispatchEvent(mockedMouseOut);
             expect(mockedCallback).toBeCalledTimes(0);
         })
     })
