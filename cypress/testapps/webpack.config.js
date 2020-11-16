@@ -31,7 +31,7 @@ module.exports = () => {
                             to: '' //Copies all files from above dest to dist/assets
                         },]
                     }),
-                new Dotenv({path: path.resolve(__dirname, "../../.env")})
+                new Dotenv({path: path.resolve(__dirname, "../../.test.docker.env")})
             ]
         }));
 };
