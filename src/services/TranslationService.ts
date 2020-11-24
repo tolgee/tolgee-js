@@ -26,9 +26,9 @@ export class TranslationService {
                 this.fetchPromises[lang] = this.fetchTranslations(lang);
             }
             await this.fetchPromises[lang];
-            (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(lang);
         }
         this.fetchPromises[lang] = undefined;
+        (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(lang);
     }
 
     async getTranslation(name: string, lang: string = this.properties.currentLanguage): Promise<string> {
