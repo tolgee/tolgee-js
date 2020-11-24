@@ -117,8 +117,12 @@ describe("TranslationService", () => {
 
         test("will emit on translations load", async () => {
             await translationService.loadTranslations("en");
-            expect(languageLoadedEmitMock).toBeCalledTimes(1);
-            expect(languageLoadedEmitMock).toBeCalledWith("en");
+            await translationService.loadTranslations("de");
+            await translationService.loadTranslations("en");
+
+            expect(languageLoadedEmitMock).toBeCalledTimes(3);
+            expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(1, "en");
+            expect(languageLoadedEmitMock).toBeCalledWith(2, "de");
         });
     })
 
