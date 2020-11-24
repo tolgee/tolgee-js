@@ -6,13 +6,18 @@ import {CoreService} from "./CoreService";
 import {ApiHttpService} from "./ApiHttpService";
 import {TextHelper} from "../helpers/TextHelper";
 import {ApiHttpError} from "../Errors/ApiHttpError";
+import {EventService} from "./EventService";
+import {EventEmitterImpl} from "./EventEmitter";
 
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationService {
     private translationsCache: Map<string, Translations> = new Map<string, Translations>();
     private fetchPromises: Promise<any>[] = [];
 
-    constructor(private properties: Properties, private coreService: CoreService, private apiHttpService: ApiHttpService) {
+    constructor(private properties: Properties,
+                private coreService: CoreService,
+                private apiHttpService: ApiHttpService,
+                private eventService: EventService) {
     }
 
     async loadTranslations(lang: string = this.properties.currentLanguage) {
@@ -21,6 +26,7 @@ export class TranslationService {
                 this.fetchPromises[lang] = this.fetchTranslations(lang);
             }
             await this.fetchPromises[lang];
+            (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(lang);
         }
         this.fetchPromises[lang] = undefined;
     }
@@ -94,7 +100,7 @@ export class TranslationService {
 
     private async fetchTranslations(lang: string) {
         if (this.properties.config.mode === "development") {
-            return await this.fetchTranslationsDevelopment(lang);
+           return await this.fetchTranslationsDevelopment(lang);
         }
         return await this.fetchTranslationsProduction(lang);
     }

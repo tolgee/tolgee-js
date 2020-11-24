@@ -40,7 +40,7 @@ export class MouseEventHandler {
 
     private initEventListeners(element: Element & ElementCSSInlineStyle & { _polygloat: ElementMeta }, onclick: (clickEvent: MouseEvent) => void) {
         const onMouseOver = () => this.onMouseOver(element);
-        const onMouseLeave = () => this.onMouseLeave(element);
+        const onMouseOut = () => this.onMouseOut(element);
         const onClick = (e: MouseEvent) => {
             if (this.areKeysDown()) {
                 e.stopPropagation();
@@ -60,14 +60,14 @@ export class MouseEventHandler {
 
         element.addEventListener("mousedown", onMouseDownOrUp);
         element.addEventListener("mouseup", onMouseDownOrUp);
-        element.addEventListener("mouseleave", onMouseLeave);
+        element.addEventListener("mouseout", onMouseOut);
 
         element._polygloat.removeAllEventListeners = () => {
             element.removeEventListener("mousedown", onMouseDownOrUp);
             element.removeEventListener("mouseup", onMouseDownOrUp);
             element.removeEventListener("mouseover", onMouseOver);
             element.removeEventListener("click", onClick);
-            element.removeEventListener("mouseleave", onMouseLeave);
+            element.removeEventListener("mouseout", onMouseOut);
         }
     }
 
@@ -91,7 +91,7 @@ export class MouseEventHandler {
         }
     }
 
-    private onMouseLeave(element) {
+    private onMouseOut(element) {
         this.mouseOn.delete(element)
         this.mouseOnChanged.emit(this.getMouseOn());
     }

@@ -11,6 +11,7 @@ import {Properties} from "../Properties";
 import {CoreService} from "./CoreService";
 import {TranslationData} from "../DTOs/TranslationData";
 import {ApiHttpError} from "../Errors/ApiHttpError";
+import {EventService} from "./EventService";
 
 const mockedTranslations = {
     en: {
@@ -40,9 +41,13 @@ global.fetch = jest.fn(async () => {
 describe("TranslationService", () => {
     const getTranslationService = describeClassFromContainer(import("./TranslationService"), "TranslationService");
     let translationService: ReturnType<typeof getTranslationService>;
+    const languageLoadedEmitMock = jest.fn();
 
     beforeEach(async () => {
         translationService = await getTranslationService();
+        (getMockedInstance(EventService) as any).LANGUAGE_LOADED = {
+            emit: languageLoadedEmitMock
+        }
         getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => mockedTranslations);
     });
 
@@ -108,7 +113,12 @@ describe("TranslationService", () => {
             expect(getMockedInstance(Properties).preferredLanguages).toEqual(new Set(["dummyLang"]));
             expect(console.error).toBeCalledTimes(1);
             expect(location.reload).toBeCalledTimes(1);
+        });
 
+        test("will emit on translations load", async () => {
+            await translationService.loadTranslations("en");
+            expect(languageLoadedEmitMock).toBeCalledTimes(1);
+            expect(languageLoadedEmitMock).toBeCalledWith("en");
         });
     })
 
