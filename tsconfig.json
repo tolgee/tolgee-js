@@ -8,6 +8,7 @@
     "lib": [
       "es2015",
       "es2018",
+      "es2020",
       "dom"
     ],
     "experimentalDecorators": true,
@@ -18,18 +19,26 @@
     "baseUrl": "src",
     "paths": {
       "polygloat/ui": [
-        "ui"
+        "./ui"
       ],
       "polygloat/core": [
-        "core"
+        "./core"
+      ],
+      "@testFixtures/*": [
+        "./__testFixtures/*"
       ]
     }
   },
   "include": [
-    "src"
+    "src",
+    "typings"
   ],
   "exclude": [
-    "node_modules"
-  ],
-
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__testFixtures/*",
+    "**/__mocks__/*",
+    "@testFixtures/*"
+  ]
 }

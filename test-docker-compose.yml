@@ -1,0 +1,9 @@
+version: '3'
+services:
+  app:
+    container_name: polygloat
+    image: polygloat/polygloat:${TEST_POLYGLOAT_SERVER_VERSION}
+    ports:
+      - "${TEST_POLYGLOAT_API_PORT}:8080"
+    environment:
+      - app.populate=true

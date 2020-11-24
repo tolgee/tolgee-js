@@ -1,34 +1,19 @@
 const path = require('path');
 
-const WebpackBundleAnalyzer = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
-
-const targets = [
-    {
-        submodule: "core",
-        targets: ["umd", "window", "commonjs"],
-        externals: {
-            "polygloat/ui": "polygloat/ui"
-        }
-    }, {
-        submodule: "ui",
-        targets: ["umd", "window", "commonjs"]
-    }
-]
+const targets = ["umd", "window", "commonjs"];
 
 
 module.exports = env => {
     const isDevelopment = env.mode === "development";
 
-    const makeTarget = (submodule, target, externals) => {
-        const subModuleBundleStr = (submodule !== "core" ? "." + submodule : "");
-        const subModuleLibraryStr = (submodule !== "core" ? "/" + submodule : "");
+    const makeTarget = (target) => {
         return {
-            entry: path.join(__dirname, "src", submodule, "index.ts"),
+            entry: path.join(__dirname, "src", "index.ts"),
             devtool: 'source-map',
             output: {
-                filename: "polygloat." + target + subModuleBundleStr + ".js",
+                filename: "polygloat." + target + ".js",
                 path: path.resolve(__dirname, 'dist'),
-                library: 'polygloat' + subModuleLibraryStr,
+                library: '@polygloat/core',
                 libraryTarget: target
             },
             resolve: {
@@ -38,19 +23,14 @@ module.exports = env => {
                 rules: [
                     {
                         test: /\.tsx?$/,
-                        use: [isDevelopment && "ts-loader" || "babel-loader"],
-                        exclude: [/node_modules/, /lib/],
+                        use: ["ts-loader"],
+                        exclude: [/node_modules/, /lib/, /\.spec\.ts/, /\.test\.ts/, /__mocks__/, /__testFixtures/],
                     },
                 ]
             },
             mode: env.mode,
-            plugins: [
-                //new WebpackBundleAnalyzer()
-            ],
-            externals
         }
     };
 
-    return targets.reduce((acc, config) =>
-        [...acc, ...config.targets.map(t => makeTarget(config.submodule, t, config.externals))], []);
+    return targets.map(t => makeTarget(t));
 };

@@ -1,0 +1,62 @@
+name: Prerelease
+
+on:
+  push:
+    branches:
+      - 'prerelease-*'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - run: npm install
+
+      - name: Build core
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Build testApps
+        run: npm run buildTestApps
+
+      - name: Start docker stack
+        run: docker-compose --env-file .test.docker.env -f test-docker-compose.yml up -d
+
+      - name: Wait for running container
+        run: 'until docker logs --since 5m polygloat | grep -m 1 "started on port(s): 8080"; do : ;done'
+
+      - name: Run cypress test
+        run: "npm run cy:run"
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@polygloat.io"
+          git config --local user.name "Polygloat Machine"
+
+      - name: Version
+        run: npm version prerelease
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: cypress
+          path: |
+            cypress/videos/**/*
+            cypress/screenshots/**/*
