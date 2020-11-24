@@ -122,7 +122,7 @@ describe("TranslationService", () => {
 
             expect(languageLoadedEmitMock).toBeCalledTimes(3);
             expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(1, "en");
-            expect(languageLoadedEmitMock).toBeCalledWith(2, "de");
+            expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(2, "de");
         });
     })
 
