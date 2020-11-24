@@ -25,7 +25,8 @@ describe("CoreHandler", () => {
     mocked(EventService).mockImplementation(() => {
         return {
             TRANSLATION_CHANGED: mockedTranslationChanged,
-            LANGUAGE_CHANGED: mockedLanguageChanged
+            LANGUAGE_CHANGED: mockedLanguageChanged,
+            LANGUAGE_LOADED: null
         } as EventService
     });
 

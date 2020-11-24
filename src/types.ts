@@ -44,6 +44,6 @@ export type ElementMeta = {
 
 export type NodeMeta = { oldTextContent: string, keys: KeyAndParams[] };
 
-export type Scope = "translations.edit" | "translations.view" | "sources.edit";
+export type Scope = "translations.edit" | "translations.view" | "keys.edit";
 
 export type Mode = 'development' | 'production';

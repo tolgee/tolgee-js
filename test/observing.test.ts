@@ -12,7 +12,7 @@ const API_KEY = "dummyApiKey";
 
 const fetch = fetchMock.mockResponse(async req => {
     if (req.url === API_URL + "/uaa/scopes?ak=" + API_KEY) {
-        return "[\"translations.edit\",\"translations.view\",\"sources.edit\"]";
+        return "[\"translations.edit\",\"translations.view\",\"keys.edit\"]";
     }
 
     if (req.url === API_URL + "/uaa/en?ak=" + API_KEY) {

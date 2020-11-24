@@ -81,13 +81,13 @@ describe("CoreService", () => {
     describe("Authorization", () => {
         test("will return proper value on isAuthorizedTo", () => {
             getMockedInstance(Properties).scopes = ["translations.edit", "translations.view"] as Scope[];
-            expect(coreService.isAuthorizedTo("sources.edit")).toBeFalsy();
+            expect(coreService.isAuthorizedTo("keys.edit")).toBeFalsy();
             expect(coreService.isAuthorizedTo("translations.view")).toBeTruthy();
         });
 
         test("will return proper on checkScopes", () => {
             getMockedInstance(Properties).scopes = ["translations.edit", "translations.view"] as Scope[];
-            expect(jest.fn(() => coreService.checkScope("sources.edit"))).toThrowError();
+            expect(jest.fn(() => coreService.checkScope("keys.edit"))).toThrowError();
             const checkMock = jest.fn(() => coreService.checkScope("translations.view"));
             checkMock();
             expect(checkMock).toReturn();

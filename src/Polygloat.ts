@@ -84,6 +84,10 @@ export class Polygloat {
     public get onLangChange() {
         return this.eventService.LANGUAGE_CHANGED;
     }
+
+    public get onLangLoaded(){
+        return this.eventService.LANGUAGE_LOADED;
+    }
 }
 
 export default Polygloat;
