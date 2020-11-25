@@ -49,7 +49,7 @@
     "babel-plugin-transform-typescript-metadata": "^0.2.2",
     "clsx": "^1.1.1",
     "copy-webpack-plugin": "^6.3.0",
-    "css-loader": "^4.3.0",
+    "css-loader": "^5.0.1",
     "cypress": "^6.0.0",
     "cypress-dotenv": "^1.2.2",
     "cypress-xpath": "^1.6.1",
