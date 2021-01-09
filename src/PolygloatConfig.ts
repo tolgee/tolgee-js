@@ -13,6 +13,7 @@ export class PolygloatConfig {
     restrictedElements?: string[] = ['script', 'style'];
     defaultLanguage?: string = 'en';
     fallbackLanguage?: string;
+    availableLanguages?: string[] = ['en'];
     inputPrefix?: string = '%-%polygloat:';
     inputSuffix?: string = '%-%';
     apiUrl?: string;
