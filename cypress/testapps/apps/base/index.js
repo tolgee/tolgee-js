@@ -3,7 +3,6 @@ import * as commonjs from "../../../../dist/polygloat.commonjs";
 import '../../../../dist/polygloat.window';
 
 [umd, commonjs["@polygloat/core"], window["@polygloat/core"]].forEach(bundle => {
-    console.log(bundle)
     const bundleDivElement = document.createElement("div");
 
     const polygloat = new bundle.Polygloat({watch: true, targetElement: bundleDivElement});

@@ -26,7 +26,6 @@ export class Polygloat {
     constructor(config: PolygloatConfig) {
         this.container = rootContainer.createChildContainer();
         this.properties.config = new PolygloatConfig(config);
-        this.properties.currentLanguage = this.properties.config.defaultLanguage;
     }
 
     public get lang() {
