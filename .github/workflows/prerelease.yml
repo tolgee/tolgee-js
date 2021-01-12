@@ -31,7 +31,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish
-        run: lerna publish prerelease
+        run: lerna publish prerelease --yes
 
       - uses: actions/upload-artifact@v2
         if: always()
