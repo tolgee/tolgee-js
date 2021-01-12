@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "lib": [
+      "es2015",
+      "es2018",
+      "es2020",
+      "dom"
+    ],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "jsx": "react",
+    "downlevelIteration": true,
+    "resolveJsonModule": true,
+    "baseUrl": "src",
+    "paths": {
+      "@testFixtures/*": [
+        "./__testFixtures/*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "typings"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/__testFixtures/*",
+    "**/__mocks__/*",
+    "@testFixtures/*"
+  ]
+}

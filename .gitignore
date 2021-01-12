@@ -1,8 +1,9 @@
 node_modules
-lib
-dist
-polygloatRestructure.polygloat-js.iml
-/IdeaProjects.polygloatRestructure.polygloat-js.iml
-polygloatRestructure.core.iml
-cypress/testapps/dist
-cypress/videos
+packages/*/lib
+packages/*/dist
+packages/*/node_modules
+e2e/cypress/videos
+packages/*/*.iml
+e2e/node_modules
+e2e/testapps/dist
+clients.polygloatRestructure.core.iml

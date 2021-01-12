@@ -14,44 +14,24 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - run: npm install
 
-      - name: Build core
-        run: npm run build
+      - name: Npm install lerna
+        run: npm install -g lerna
 
-      - name: Test
-        run: npm run test
-
-      - name: Build testApps
-        run: npm run buildTestApps
-
-      - name: Start docker stack
-        run: docker-compose --env-file .test.docker.env -f test-docker-compose.yml up -d
-
-      - name: Wait for running container
-        run: 'until docker logs --since 5m polygloat | grep -m 1 "started on port(s): 8080"; do : ;done'
-
-      - name: Run cypress test
-        run: "npm run cy:run"
+      - name: Build (build & test)
+        run: ./gradlew build
 
       - name: Set git globals
         run: |
           git config --local user.email "machine@polygloat.io"
           git config --local user.name "Polygloat Machine"
 
-      - name: Version
-        run: npm version prerelease
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
-          tags: true
-
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+      - name: Publish
+        run: lerna publish prerelease
 
       - uses: actions/upload-artifact@v2
         if: always()
