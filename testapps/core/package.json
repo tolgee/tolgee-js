@@ -18,7 +18,7 @@
     "dotenv-webpack": "^6.0.0",
     "html-webpack-plugin": "^4.5.1",
     "serve": "^11.3.2",
-    "webpack": "^5.13.0",
+    "webpack": "^4.46.0",
     "webpack-cli": "^4.3.1"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
