@@ -1,4 +1,12 @@
-import io.polygloat.node.PolygloatNodePlugin
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+}
+
+group 'io.polygloat'
+apply plugin: 'idea'
 
 idea {
     module {
@@ -10,35 +18,43 @@ idea {
     }
 }
 
-apply plugin: PolygloatNodePlugin
+apply from: "./gradle/e2e.gradle"
 
-polygloatNpm {
-    library = true
+task lernaBootstrap(type: Exec){
+    commandLine "lerna", "bootstrap"
 }
 
-task runTestServer(group: "docker") {
-    doLast {
-        def exec = Runtime.getRuntime().exec("docker-compose --env-file ${project.projectDir}/.env -f ${project.projectDir}/test-docker-compose.yml up");
-        def exit = false;
-        def thread = new Thread() {
-            void run() {
-                while (!exit) {
-                    def b = exec.inputStream.read()
-                    while(b != 0){
-                        System.out.write(b)
-                        b = exec.inputStream.read()
-                    }
-                    System.out.flush();
-                    sleep(10);
-                }
-            }
-        }
+task buildCore(type: Exec){
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/core"
+}
 
-        thread.start()
-        exec.waitFor()
-        exit = true;
-        if (exec.exitValue() != 0) {
-            throw RuntimeException(exec.errorStream.readLines().join("\n"));
-        }
-    }
+task buildUi(type: Exec){
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/core"
+}
+
+task buildAll(type: Task){
+    dependsOn "buildCore", "buildUi"
+}
+
+task developAll(type: Exec){
+    dependsOn "lernaBootstrap", "buildAll"
+    commandLine "lerna", "exec", "--parallel", "--", "npm", "run", "develop"
+}
+
+task testCore(type: Exec){
+    commandLine "npm", "run", "test"
+    workingDir "packages/core"
+}
+
+task testUi(type: Exec){
+    commandLine "npm", "run", "test"
+    workingDir "packages/ui"
+}
+
+task build(type: Task){
+    dependsOn "buildAll", "testUi", "testCore", "runE2e"
 }
