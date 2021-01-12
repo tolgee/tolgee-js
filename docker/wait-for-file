@@ -1,0 +1,10 @@
+#!/bin/sh
+
+file="$1"
+shift
+cmd="$@"
+
+until [ -f "$file" ]; do
+  >&2 echo "File $file does not exist"
+  sleep 1
+done
