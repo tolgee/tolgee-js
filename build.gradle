@@ -11,10 +11,14 @@ apply plugin: 'idea'
 idea {
     module {
         excludeDirs += file('node_modules')
-        excludeDirs += file('dist')
-        excludeDirs += file('lib')
-        excludeDirs += file('cypress/testapps/dist')
-        excludeDirs += file('cypress/videos')
+        excludeDirs += file('packages/core/node_modules')
+        excludeDirs += file('packages/core/dist')
+        excludeDirs += file('packages/core/lib')
+        excludeDirs += file('packages/ui/node_modules')
+        excludeDirs += file('packages/ui/dist')
+        excludeDirs += file('packages/ui/lib')
+        excludeDirs += file('e2e/cypress/testapps/dist')
+        excludeDirs += file('e2e/cypress/videos')
     }
 }
 
