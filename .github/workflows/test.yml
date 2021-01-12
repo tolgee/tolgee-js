@@ -18,7 +18,7 @@ jobs:
       - name: Npm install lerna
         run: npm install -g lerna
 
-      - name: Unit test
+      - name: Build (build & test)
         run: ./gradlew build
 
       - uses: actions/upload-artifact@v2
