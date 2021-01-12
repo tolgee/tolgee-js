@@ -1,6 +1,6 @@
 {
   "name": "@polygloat/ui",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.15",
   "description": "Translation mode UI for @polygloat/core package",
   "main": "dist/polygloat.umd.js",
   "types": "lib/index.d.ts",
@@ -21,10 +21,9 @@
     "dist/**/*"
   ],
   "peerDependencies": {
-    "@types/react": "^16.9.55",
-    "@polygloat/core": "^1.0.0-alpha.14"
+    "@polygloat/core": "^1.0.0-alpha.14",
+    "@types/react": "^16.9.55"
   },
-  "dependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.11.6",
     "@babel/core": "^7.11.6",
@@ -36,7 +35,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@polygloat/core": "^1.0.0-alpha.14",
+    "@polygloat/core": "^1.0.0-alpha.15",
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@types/jest": "^26.0.14",
