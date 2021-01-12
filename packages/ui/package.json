@@ -77,5 +77,6 @@
   "bugs": {
     "url": "https://github.com/polygloat/polygloat-js-core/issues"
   },
-  "homepage": "https://github.com/polygloat/polygloat-js-core#readme"
+  "homepage": "https://github.com/polygloat/polygloat-js-core#readme",
+  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
 }
