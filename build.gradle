@@ -57,7 +57,7 @@ task buildNgx(type: Exec) {
 task buildUi(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
-    workingDir "packages/core"
+    workingDir "packages/ui"
 }
 
 task buildCoreTestapps(type: Exec) {
