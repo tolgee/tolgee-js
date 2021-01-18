@@ -46,6 +46,7 @@
     "typescript": "~4.0.5"
   },
   "publishConfig": {
-    "directory": "./dist/ngx-polygloat"
+    "directory": "./dist/ngx-polygloat",
+    "access": "public"
   }
 }
