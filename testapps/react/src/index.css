@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik&display=swap');
+
+body {
+    font-family: 'Rubik', sans-serif;
+}
+
+select{
+    font: 15px 'Rubik', sans-serif;
+}

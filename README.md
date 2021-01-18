@@ -4,4 +4,4 @@ This repository contains browser integration packages of Polygloat localization 
 
 It provides ability to easily manage localization texts directly in context of web application developed by you.
 
-To learn more visit [https://polygloat.io]()
+To learn more visit [https://polygloat.io](https://polygloat.io)

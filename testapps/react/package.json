@@ -1,0 +1,53 @@
+{
+  "name": "@polygloat/testapps-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/jest": "^24.9.1",
+    "@types/node": "^12.12.62",
+    "@types/react": "16.9.55",
+    "@types/react-dom": "^16.9.8",
+    "concurrently": "^5.3.0",
+    "@polygloat/react": "^1.0.0-alpha.16",
+    "@polygloat/ui": "^1.0.0-alpha.16",
+    "react": "../../packages/react/node_modules/react",
+    "react-dom": "../../packages/react/node_modules/react-dom",
+    "react-scripts": "3.4.3",
+    "typescript": "^3.7.5",
+    "serve": "^11.3.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "develop": "concurrently \"react-scripts start\"",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "serve": "serve -p 8101 ./build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^react$": "<rootDir>/node_modules/react"
+    }
+  },
+  "devDependencies": {
+    "mutationobserver-shim": "^0.3.7"
+  }
+}

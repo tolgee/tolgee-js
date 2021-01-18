@@ -1,0 +1,70 @@
+{
+  "name": "@polygloat/react",
+  "version": "1.0.0-alpha.16",
+  "description": "React implementation for polygloat localization framework",
+  "main": "dist/polygloat-react.umd.js",
+  "types": "lib/index.d.ts",
+  "repository": "https://github.com/polygloat/polygloat-react",
+  "declaration": true,
+  "directories": {
+    "lib": "lib",
+    "dist": "dist"
+  },
+  "scripts": {
+    "build": "webpack --env.mode=production && tsc",
+    "test": "jest",
+    "develop": "webpack --env.mode=development --watch"
+  },
+  "author": "JanCizmar",
+  "license": "ISC",
+  "files": [
+    "lib/**/*",
+    "dist/**/*"
+  ],
+  "resolutions": {
+    "@types/react": "16.9.55"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "^16.14.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-proposal-numeric-separator": "^7.7.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.7.4",
+    "@babel/plugin-transform-async-to-generator": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.7.4",
+    "@polygloat/core": "1.0.0-alpha.16",
+    "@polygloat/ui": "1.0.0-alpha.16",
+    "@testing-library/dom": "^7.24.5",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.1",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^13.9.2",
+    "@types/react": "16.9.55",
+    "@types/react-dom": "^16.9.9",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-import": "^1.13.0",
+    "babel-plugin-transform-typescript-metadata": "^0.2.2",
+    "jest": "^26.5.2",
+    "jest-fetch-mock": "^3.0.3",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "reflect-metadata": "^0.1.13",
+    "regenerator-runtime": "^0.13.3",
+    "source-map-loader": "^1.1.0",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "^6.2.2",
+    "tslint": "~5.15.0",
+    "tsyringe": "^4.0.1",
+    "typescript": "^3.5.3",
+    "webpack": "^4.41.2",
+    "webpack-bundle-analyzer": "^3.6.0",
+    "webpack-cli": "^3.3.10"
+  }
+}

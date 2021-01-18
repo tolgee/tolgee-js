@@ -1,0 +1,55 @@
+name: Prerelease
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install proper core version
+        run: |
+          source .buildversions
+          npm install @polygloat/core@${CORE_VERSION}
+
+      - run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@polygloat.io"
+          git config --local user.name "Polygloat Machine"
+
+      - name: Commit updated build versions
+        run: |
+          git add package.json
+          git add package-lock.json
+          git commit -m "Updating dependencies" || true
+
+      - name: Version
+        run: npm version prerelease
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+          tags: true
+
+      - uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          access: public

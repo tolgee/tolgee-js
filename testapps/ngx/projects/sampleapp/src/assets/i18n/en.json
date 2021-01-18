@@ -1,0 +1,1301 @@
+{
+  "VO_DETAIL": {
+    "SETTINGS": {
+      "APPLICATION_FORM": {
+        "PREVIEW_PAGE": {
+          "SWITCH_ENGLISH": "Switch to English",
+          "SWITCH_CZECH": "Switch to Czech",
+          "SWITCH_EXTENSION": "Switch to Extension",
+          "SWITCH_INITIAL": "Switch to Initial",
+          "TITLE": "Application form preview"
+        },
+        "TITLE": "Application form",
+        "DRAG_AND_DROP_INFO": "You can move the table items by dragging them with the handle on the left side.",
+        "ADD_BUTTON": "Add",
+        "COPY_VO_BUTTON": "Copy from VO",
+        "PREVIEW_BUTTON": "Preview",
+        "SETTINGS_BUTTON": "Change Settings",
+        "NO_APPLICATION_FORM": "Application form have no items.",
+        "SHORTNAME": "Short name",
+        "TYPE": "Type",
+        "PREVIEW": "Preview",
+        "EDIT": "Edit",
+        "DELETE": "Delete",
+        "MODULE_NAME": "Module name",
+        "APPLICATION_TYPE": "Approval style",
+        "MANUAL": "Manual",
+        "AUTOMATIC": "Automatic",
+        "DELETE_MESSAGE": "Item was successfully deleted",
+        "CHANGE_SETTINGS_SUCCESS": "Settings were successfully changed",
+        "NOT_SELECTED": "Not selected",
+        "CLEAR_SELECTION": "Clear Selection",
+        "HIDDEN_VALUE": "Hidden",
+        "OTHER_VALUE": "-- other value --",
+        "TYPES": {
+          "HEADER": "Header",
+          "SUBMIT_BUTTON": "Submit button",
+          "HTML_COMMENT": "Custom HTML text",
+          "TEXTFIELD": "Input text field",
+          "FROM_FEDERATION_SHOW": "Input text field pre-filled from external source",
+          "FROM_FEDERATION_HIDDEN": "Hidden input text pre-filled from external source",
+          "VALIDATED_EMAIL": "Input text field for email",
+          "SELECTIONBOX": "Single value selection from list",
+          "USERNAME": "Input text field for username",
+          "PASSWORD": "Input text field for password",
+          "TEXTAREA": "Input text multi-line field",
+          "COMBOBOX": "Single value selection with opt. custom value",
+          "CHECKBOX": "Checkbox (multiple selection)",
+          "RADIO": "Radio (single selection)",
+          "TIMEZONE": "Selection of timezone",
+          "AUTO_SUBMIT_BUTTON": "Submit button with auto-submit"
+        },
+        "WIDGET_DESCRIPTION": {
+          "HEADER": "Item is used to display customizable heading of form. Can have any HTML content.",
+          "SUBMIT_BUTTON": "Button used to submit the form with custom label. All other form items are checked on valid input before submission. If it fails, form is not sent.",
+          "HTML_COMMENT": "Item is used to display custom HTML content anywhere on form. Useful for explanation descriptions, dividing parts of form etc.",
+          "TEXTFIELD": "Editable text field useful to gather short text input, e.g. name, phone.",
+          "FROM_FEDERATION_SHOW": "Non-editable and visible form item. Form is submitted even on invalid input ! Useful to automatically gather information provided by AUTH mechanism (IdP federation, certificate).",
+          "FROM_FEDERATION_HIDDEN": "Non-editable and hidden form item. Form is submitted even on invalid input ! Useful to automatically gather information provided by AUTH mechanism (IdP federation, certificate).",
+          "VALIDATED_EMAIL": "Special text field to gather and verify user`s email address. Input is checked on email address format. If user enters new value, then validation email is sent. Application then can't be approved unless provided email address is validated.",
+          "SELECTIONBOX": "Simple selection box with defined custom values that user can choose.",
+          "USERNAME": "Special text field to gather user`s login. It checks login availability on user input.",
+          "PASSWORD": "Two password fields to gather user`s new password. Input is never displayed. User must type same password in both fields.",
+          "TEXTAREA": "Editable text area useful to gather longer text input with linebreaks, e.g. comments, SSH key",
+          "COMBOBOX": "Selection box with defined custom values and one special option: \"--custom value--\", which allows users to input own text (as simple text field).",
+          "CHECKBOX": "List of defined custom options with checkboxes. Selected values are gathered as comma separated string.",
+          "RADIO": "List of defined custom options with radio buttons. Single selection model. Value is stored as string.",
+          "TIMEZONE": "Selection box with pre-defined values of UTC timezones.",
+          "AUTO_SUBMIT_BUTTON": "Button used to auto-submit the form with custom label. All other form items are checked on valid input before submission. If validation fail (at least once) user must submit form manually. If it's OK, then form is automatically submitted."
+        }
+      },
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      },
+      "NOTIFICATIONS": {
+        "TITLE": "Email notifications",
+        "ADD": "Add",
+        "REMOVE": "Remove",
+        "EMAIL_FOOTER": "E-mail footer",
+        "COPY_FROM_VO": "Copy from Vo",
+        "TABLE_EMAIL_ID": "E-Mail ID",
+        "TABLE_EMAIL_TYPE": "E-Mail type",
+        "TABLE_APPLICATION_TYPE": "Application type",
+        "TABLE_SENDING_ENABLED": "Sending enabled",
+        "TABLE_APPLICATION_TYPE_INITIAL": "Initial",
+        "TABLE_APPLICATION_TYPE_EXTENSION": "Extension",
+        "MAIL_TYPE_APP_CREATED_USER": "Created / user",
+        "MAIL_TYPE_APP_CREATED_VO_ADMIN": "Created / manager",
+        "MAIL_TYPE_MAIL_VALIDATION": "Mail validation / user",
+        "MAIL_TYPE_APP_APPROVED_USER": "Approved / user",
+        "MAIL_TYPE_APP_REJECTED_USER": "Rejected / user",
+        "MAIL_TYPE_APP_ERROR_VO_ADMIN": "Error / manager",
+        "MAIL_TYPE_USER_INVITE": "Invitation / user",
+        "DELETE_SUCCESS": "Email notification deleted.",
+        "NO_EMAILS": "No mail notifications found for this VO.",
+        "EDIT_SUCCESS": "Email notification was successfully edited",
+        "ADD_SUCCESS": "Email notification was successfully added"
+      },
+      "EXT_SOURCES": {
+        "TITLE": "External sources",
+        "ADD": "Add...",
+        "REMOVE": "Remove",
+        "FILTER": "Filter by ID, name or type",
+        "SUCCESS_REMOVED": "External source successfully removed: "
+      },
+      "EXPIRATION": {
+        "SUCCESS_MESSAGE": "Settings saved.",
+        "ERROR_MESSAGE": "Failed to save settings."
+      }
+    },
+    "APPLICATION": {
+      "TITLE": "Application",
+      "FILTER": "Filter",
+      "SELECTION_ALL": "All",
+      "SELECTION_WFMV": "Waiting for mail verification",
+      "SELECTION_SUBMITTED": "Submitted",
+      "SELECTION_PENDING": "Pending",
+      "SELECTION_APPROVED": "Approved",
+      "SELECTION_REJECTED": "Rejected",
+      "TABLE_ID": "App ID",
+      "TABLE_CREATED_DATE": "Created Date",
+      "TABLE_TYPE": "Type",
+      "TABLE_STATE": "State",
+      "TABLE_SUBMITTED_BY": "Submitted by",
+      "TABLE_LOA": "LoA",
+      "TABLE_GROUP_NAME": "Group",
+      "TABLE_MODIFIED_BY": "Modified by",
+      "NO_APPLICATION_FOUND": "No applications matching search criteria found for this VO or it's groups.",
+      "STATE": {
+        "APPROVED": "Approved",
+        "REJECTED": "Rejected",
+        "NEW": "Waiting for mail verification",
+        "VERIFIED": "Submitted"
+      },
+      "APPLICATION_DETAIL": {
+        "TITLE": "Application detail",
+        "APPROVE": "Approve",
+        "REJECT": "Reject",
+        "SEND_NOTIFICATION": "Re-send notifications",
+        "DELETE": "Delete",
+        "TYPE": "Type",
+        "STATE": "State",
+        "SUBMITTED_BY": "Submitted by",
+        "EXT_SRC": "From External Source",
+        "LOA": "Level of Assurance",
+        "APPLICATION_FOR_VO": "Application for VO",
+        "APPROVED_BY": "Approved by",
+        "REJECTED_BY": "Rejected by",
+        "DATE": "Date",
+        "VALUE_BY_EXTERNALS": "Value provided by external source.",
+        "VERIFY": "Verify",
+        "DELETE_MESSAGE": "Application was deleted",
+        "APPROVE_MESSAGE": "Application was approved",
+        "VERIFY_MESSAGE": "Application was verified"
+      }
+    },
+    "TITLE": "Organization - ",
+    "BACK": "Back",
+    "RESOURCES": {
+      "LIST": {
+        "TITLE": "Resources",
+        "DELETE": "Remove selected",
+        "NO_RESOURCES_ALERT": "No resources found."
+      },
+      "STATES": {
+        "TITLE": "Resources state",
+        "ERROR_RESOURCES": "Resources with tasks in error state",
+        "FROM": "from",
+        "TASKS_WITH_ERROR_STATE": "tasks with error state",
+        "OK_RESOURCES": "Resources with tasks in Ok state",
+        "NO_TASKS": "No service configuration was propagated to this resource.",
+        "NOT_YET": "Not yet",
+        "NO_RESOURCES_IN_ERROR": "No resources with task in error state",
+        "NO_RESOURCES_IN_OK": "No resources with task in success state",
+        "TABLE_ID": "Task Id",
+        "TABLE_SERVICE": "Service",
+        "TABLE_STATUS": "Status",
+        "TABLE_SCHEDULED": "Scheduled",
+        "TABLE_STARTED": "Started",
+        "TABLE_ENDED": "Ended"
+      },
+      "TAGS": {
+        "TITLE": "Resource tags",
+        "TAG_ID": "Tag ID",
+        "TAG_NAME": "Tag name",
+        "CREATE_BUTTON": "Create",
+        "DELETE_BUTTON": "Delete",
+        "EDIT_BUTTON": "Edit",
+        "SAVE_BUTTON": "Save",
+        "DELETE_SUCCESS": "Resource tags were successfully deleted.",
+        "CREATE_SUCCESS": "Resource tag was successfully created.",
+        "NO_TAGS": "VO has no resource tags defined."
+      }
+    },
+    "GROUPS": {
+      "TITLE": "Groups",
+      "CREATE_GROUP": "Create...",
+      "DELETE_GROUP": "Delete...",
+      "TITLE_SUBGROUPS": "Subgroups",
+      "LIST_VIEW": "List view",
+      "MENU_MOVE": "Move group",
+      "FILTER": "Filter",
+      "MENU_RENAME": "Update name/description",
+      "NO_GROUPS": "No groups found."
+    },
+    "MEMBERS": {
+      "TITLE": "Members",
+      "ADD_MEMBER": "Add...",
+      "REMOVE_MEMBERS": "Remove...",
+      "SEARCH_DESCRIPTION": "Search by name, login or email",
+      "LIST_MEMBERS": "List members",
+      "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
+      "NO_MEMBERS_ALERT": "No members found.",
+      "STATUS": "Status"
+    },
+    "OVERVIEW": {
+      "INVITE_MEMBER": "Invite member",
+      "CREATE_SERVICE_MEMBER": "Create service member",
+      "ADD_MANAGER": "Add manager",
+      "CREATE_GROUP": "Create group",
+      "ADD_MEMBER": "Add member"
+    }
+  },
+  "sampleApp": {
+    "this_is_textarea_with_placeholder_and_valueeee": "This is textarea with placeholder and value. aaa yas {{ name }}",
+    "this_is_translation_in_home_foldereee": "This is translation in home folder",
+    "this_is_translation_in_news_folder": "This is translation in news folder",
+    "this_is_translation_retrieved_by_service": "This is translation retrieved by service.",
+    "this_is_input_with_placeholder": "This is input with placeholder.",
+    "this_is_another_standard_text_somewhere_in_dom": "Hiaahajja a dsadasda",
+    "this_is_another_standard_text_somewhere_in_dom_with_param2": "dasdas",
+    "this_is_standard_text_somewhere_in_dom": "This is Englishaaa!",
+    "this_is_another_standard_text_somewhere_in_dom_with_param": "dasdasdas",
+    "subfolder": {
+      "subfolder": {
+        "subfolder": {
+          "new_translation": "dsadasdsadasdas"
+        },
+        "new_translation": "dasdasda"
+      }
+    },
+    "this_is_textarea_with_placeholder_and_value": "ddasdasdasdasdasdsa",
+    "this_is_textarea_with_placeholder": "English"
+  },
+  "GROUP_DETAIL": {
+    "TITLE": "Group - ",
+    "SUBGROUPS": {
+      "TITLE": "Subgroups",
+      "CREATE_GROUP": "Create subgroup",
+      "DELETE_GROUP": "Delete subgroup",
+      "SHOW_LIST": "List view",
+      "NO_SUBGROUPS": "This group has no subgroups.",
+      "FILTER": "Filter"
+    },
+    "SUBGROUP_INFO": "This group is a subgroup of ",
+    "MEMBERS": {
+      "TITLE": "Members",
+      "ADD_MEMBER": "Add...",
+      "REMOVE_MEMBERS": "Remove...",
+      "SEARCH_DESCRIPTION": "Search by name, login or email",
+      "LIST_ALL": "List all members",
+      "SEARCH_ALERT": "You can search member by name, login and email. Also, you can list all valid members.",
+      "NO_MEMBERS_ALERT": "No members found."
+    },
+    "RESOURCES": {
+      "TITLE": "Resources",
+      "DELETE": "Remove selected",
+      "NO_RESOURCES_WARNING": "Group has no resources assigned."
+    },
+    "SETTINGS": {
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      },
+      "EXPIRATION": {
+        "SUCCESS_MESSAGE": "Settings saved.",
+        "ERROR_MESSAGE": "Failed to save settings."
+      },
+      "MANAGERS": {
+        "TITLE": "Managers",
+        "ADD": "Add...",
+        "REMOVE": "Remove",
+        "SELECT_MODE": "Select mode",
+        "SELECT_ROLE": "Select role",
+        "USER": "User",
+        "GROUP": "Group",
+        "NO_MANAGERS": "This role has no managers.",
+        "NO_GROUP_MANAGERS": "This role has no group managers."
+      },
+      "APPLICATION_FORM": {
+        "TITLE": "Application form",
+        "MODULE_NAME": "Module name",
+        "APPLICATION_TYPE": "Approval style",
+        "AUTOMATIC": "Automatic",
+        "MANUAL": "Manual",
+        "SETTINGS_BUTTON": "Change Settings",
+        "ADD_BUTTON": "Add",
+        "COPY_GROUP_BUTTON": "Copy from VO/Group",
+        "PREVIEW_BUTTON": "Preview",
+        "DRAG_AND_DROP_INFO": "You can move with table items by dragging and dropping",
+        "NO_APPLICATION_FORM": "Application form doesn't exists",
+        "CREATE_APPLICATION_FORM": "Create empty form"
+      },
+      "NOTIFICATIONS": {
+        "TITLE": "Email notifications",
+        "ADD": "Add",
+        "REMOVE": "Remove",
+        "EMAIL_FOOTER": "E-mail footer",
+        "COPY_FROM_VO": "Copy from Vo/Group",
+        "NO_EMAILS": "No mail notifications found for this group.",
+        "ADD_SUCCESS": "Email notification was successfully added",
+        "DELETE_SUCCESS": "Email notification deleted.",
+        "NO_APPLICATION_FORM": "Application form doesn't exist",
+        "CREATE_APPLICATION_FORM": "Create application form"
+      },
+      "RELATIONS": {
+        "TITLE": "Relations",
+        "DELETE": "Remove selected",
+        "CREATE": "Add...",
+        "FILTER": "Filter by name, id or description",
+        "REVERSE_UNIONS": "Show reverse unions"
+      }
+    }
+  },
+  "MEMBER_DETAIL": {
+    "TITLE": "Member - ",
+    "USER_LINK": "See user detail",
+    "OVERVIEW": {
+      "NEVER_EXPIRES": "never",
+      "MEMBERSHIP": "Membership"
+    },
+    "GROUPS": {
+      "TITLE": "Member groups",
+      "TABLE_GROUP_ID": "Id",
+      "TABLE_GROUP_NAME": "Name"
+    },
+    "SETTINGS": {
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      }
+    }
+  },
+  "MENU_ITEMS": {
+    "VO": {
+      "OVERVIEW": "Overview",
+      "MEMBERS": "Members",
+      "GROUPS": "Groups",
+      "APPLICATIONS": "Applications",
+      "RESOURCES": "Resources",
+      "RESOURCE_PREVIEW": "Resource list",
+      "RESOURCE_STATES": "Resource states",
+      "RESOURCE_TAGS": "Resource tags",
+      "SETTINGS": "Settings",
+      "ATTRIBUTES": "Attributes",
+      "EXPIRATION": "Membership",
+      "MANAGERS": "Managers",
+      "APPLICATION_FORM": "Application form",
+      "NOTIFICATIONS": "Notifications",
+      "EXTSOURCES": "External sources"
+    },
+    "FACILITY": {
+      "OVERVIEW": "Overview",
+      "RESOURCES": "Resources",
+      "ALLOWED_GROUPS": "Allowed groups",
+      "SETTINGS": "Settings",
+      "ATTRIBUTES": "Attributes"
+    },
+    "RESOURCE": {
+      "OVERVIEW": "Overview",
+      "ASSIGNED_GROUPS": "Assigned groups",
+      "SETTINGS": "Settings",
+      "ATTRIBUTES": "Attributes"
+    },
+    "GROUP": {
+      "OVERVIEW": "Overview",
+      "MEMBERS": "Members",
+      "SUBGROUPS": "Subgroups",
+      "RESOURCES": "Resources",
+      "APPLICATIONS": "Applications",
+      "SETTINGS": "Settings",
+      "ATTRIBUTES": "Attributes",
+      "MANAGERS": "Managers",
+      "EXPIRATION": "Membership",
+      "APPLICATION_FORM": "Application form",
+      "NOTIFICATIONS": "Notifications",
+      "RELATIONS": "Relations"
+    },
+    "MEMBER": {
+      "OVERVIEW": "Overview",
+      "GROUPS": "Groups",
+      "SETTINGS": "Settings",
+      "ATTRIBUTES": "Attributes"
+    },
+    "ADMIN": {
+      "TITLE": "Perun admin",
+      "OVERVIEW": "Overview",
+      "ATTRIBUTES": "Attributes",
+      "VISUALIZER": "Visualizer",
+      "USERS": "Users",
+      "EXT_SOURCES": "External sources"
+    },
+    "VISUALIZER": {
+      "ATTR_DEPENDENCIES": "Modules dependencies",
+      "USER_DESTINATION": "User-destination relationship"
+    },
+    "USER": {
+      "OVERVIEW": "Overview",
+      "GROUPS": "Groups",
+      "SETTINGS": "Settings",
+      "ORGANIZATIONS": "Organizations",
+      "DETAIL": "Detail",
+      "ATTRIBUTES": "Attributes",
+      "TITLE": "User - "
+    }
+  },
+  "DIALOGS": {
+    "BUG_REPORT": {
+      "TITLE": "Report a bug",
+      "SUBJECT": "Subject",
+      "SUBJECT_VALUE": "Reported error: ",
+      "SUBJECT_ERROR": "Subject cannot be empty.",
+      "MESSAGE": "Message",
+      "MESSAGE_PLACEHOLDER": "You can describe what you did that caused the error. (Minimal length is 60 characters)",
+      "MESSAGE_ERROR": "Minimal length is 60.",
+      "CANCEL": "Cancel",
+      "SEND": "Send",
+      "SUCCESS": "Bug report send"
+    },
+    "REPORT_ISSUE": {
+      "TITLE": "Report an issue",
+      "SUBJECT": "Subject",
+      "SUBJECT_ERROR": "Subject cannot be empty.",
+      "MESSAGE": "Message",
+      "MESSAGE_PLACEHOLDER": "You can describe an issue. (Minimal length is 60 characters)",
+      "MESSAGE_ERROR": "Minimal length is 60.",
+      "CANCEL": "Cancel",
+      "SEND": "Send",
+      "SUCCESS": "Bug report send"
+    },
+    "MOVE_GROUP": {
+      "TITLE": "Move group - ",
+      "INFO": "Selected group will be moved (including all its sub-groups).",
+      "GROUP_SELECT": "Select a new parent group",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Move",
+      "NO_GROUP": "Move to the root",
+      "TO_GROUP": "Move under a group",
+      "ERROR": "Failed to move group",
+      "SUCCESS": "Group successfully moved"
+    },
+    "CREATE_GROUP": {
+      "TITLE": "Create group",
+      "TITLE_SUB_GROUP": "Create subgroup for ",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "CANCEL": "Cancel",
+      "CREATE": "Create",
+      "SUCCESS": "New group successfully created",
+      "SUCCESS_SUBGROUP": "New subgroup successfully created",
+      "FILL_VALUE": "Please fill this value."
+    },
+    "CREATE_VO": {
+      "TITLE": "Create organization",
+      "FULL_NAME": "Full name:",
+      "SHORT_NAME": "Short name:",
+      "CANCEL": "Cancel",
+      "CREATE": "Create",
+      "SUCCESS": "New organization was successfully created",
+      "TOOLTIP": "Short name and full name have to be filled and valid",
+      "FILL_FULL_NAME": "Length of full name has to be between 1 to 128 characters",
+      "FILL_SHORT_NAME": "Length of short name has to be between 1 to 32 characters, allowed characters are a-z, A-Z, 0-9, ., _, -"
+    },
+    "REMOVE_VO": {
+      "TITLE": "Remove organization",
+      "CANCEL": "Cancel",
+      "REMOVE": "Remove",
+      "FORCE": "Force",
+      "FORCE_WARNING": "Using force also deletes all groups, members and resources of selected organizations.",
+      "DESCRIPTION": "Following organizations will be removed",
+      "ASK": "Do you want to proceed?",
+      "SUCCESS": "Organization was successfully removed"
+    },
+    "INVITE_MEMBER": {
+      "TITLE": "Invite member",
+      "DESCRIPTION": "The person you are inviting will receive an email with a link to VOs application form. You can set up an email template in: Vo manager (advanced) -> Application form -> Notifications.",
+      "INVITE": "Invite",
+      "CANCEL": "Cancel",
+      "NAME": "Name",
+      "EMAIL": "Email",
+      "LANGUAGE": "Language",
+      "LANGUAGE_ENGLISH": "English",
+      "LANGUAGE_CZECH": "Czech",
+      "EMAIL_ERROR": "Fill in an correct email!",
+      "SUCCESS": "Invite was send to given email"
+    },
+    "DELETE_ATTRIBUTES": {
+      "TITLE": "Confirm delete action",
+      "DESCRIPTION": "Following attributes will be removed.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Selected attributes were removed"
+    },
+    "DELETE_GROUP": {
+      "TITLE": "Confirm delete action",
+      "DESCRIPTION": "Following groups (including all sub-groups) will be deleted.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Selected groups were deleted"
+    },
+    "REMOVE_MEMBERS": {
+      "TITLE": "Confirm removal",
+      "DESCRIPTION": "Following members will be removed from VO and their settings will be lost.\n\nYou can consider changing their status to \"DISABLED\", which will prevent them from accessing VO resources.",
+      "DESCRIPTION_GROUP": "Following members will be removed from group. They will lose access to resources provided by this group.",
+      "ASK": "Do you want to proceed?",
+      "SUCCESS": "Selected members were deleted",
+      "SUCCESS_GROUP": "Selected members were removed",
+      "REMOVE": "Delete",
+      "REMOVE_GROUP": "Remove"
+    },
+    "REMOVE_RESOURCES": {
+      "TITLE": "Confirm removal",
+      "DESCRIPTION": "Following resources will be removed.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Selected resources were deleted"
+    },
+    "REMOVE_MANAGERS": {
+      "TITLE": "Confirm removal",
+      "DESCRIPTION": "Following managers will be removed.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Remove",
+      "SUCCESS": "Selected managers were removed"
+    },
+    "ADD_MANAGERS": {
+      "TITLE": "Add manager",
+      "DESCRIPTION": "Search user by name, login or email",
+      "SEARCH": "Search",
+      "CANCEL": "Cancel",
+      "CREATE": "Add",
+      "SUCCESS": "Selected managers were added",
+      "COUNT": "Count",
+      "NO_USERS_FOUND": "No users found"
+    },
+    "ADD_MEMBERS": {
+      "TITLE": "Add member",
+      "DESCRIPTION": "Search user by name, login or email",
+      "SEARCH": "Search",
+      "CANCEL": "Cancel",
+      "CREATE": "Add",
+      "INVITE": "Invite",
+      "SUCCESS": "Selected members were added",
+      "SUCCESS_INVITE": "Invite was send to given user",
+      "NO_USERS_FOUND": "No users found"
+    },
+    "ADD_GROUPS": {
+      "TITLE": "Add group",
+      "SEARCH": "Search",
+      "CANCEL": "Cancel",
+      "CREATE": "Add",
+      "SUCCESS": "Selected groups were added",
+      "COUNT": "Count",
+      "NO_GROUPS_FOUND": "No groups found",
+      "SELECT_VO": "Select organization"
+    },
+    "REMOVE_GROUPS": {
+      "TITLE": "Confirm removal",
+      "DESCRIPTION": "Following groups will be removed.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Remove",
+      "SUCCESS": "Selected groups were removed"
+    },
+    "RE_SEND_NOTIFICATION": {
+      "TITLE": "Re-send notification",
+      "SEND": "Send",
+      "CANCEL": "Cancel",
+      "SELECT": "Select notification",
+      "REASON": "Reason",
+      "SUCCESS": "Notification was sent",
+      "NOTIFICATION_TYPE": {
+        "APP_CREATED_USER": "Created / user",
+        "APP_CREATED_VO_ADMIN": "Created / manager",
+        "MAIL_VALIDATION": "Mail validation / user",
+        "APP_APPROVED_USER": "Approved / user",
+        "APP_REJECTED_USER": "Rejected / user",
+        "APP_ERROR_VO_ADMIN": "Error / manager"
+      }
+    },
+    "REJECT_APPLICATION": {
+      "TITLE": "Specify reason",
+      "TEXT": "Please specify reason of rejection to let user know why was application rejected.",
+      "SUBMIT": "Reject",
+      "CANCEL": "Cancel",
+      "SUCCESS": "Application was rejected"
+    },
+    "UPDATE_APPLICATION_FORM": {
+      "TITLE": "Change application form settings",
+      "MODULE_NAME": "Module name",
+      "INITIAL": "Initial",
+      "EXTENSION": "Extension",
+      "MANUAL": "Manual",
+      "AUTOMATIC": "Automatic",
+      "SUBMIT_BUTTON": "Submit",
+      "CANCEL_BUTTON": "Cancel"
+    },
+    "DELETE_APPLICATION_FORM_ITEM": {
+      "TITLE": "Delete confirm",
+      "INFO_1": "Deleting of form items is NOT RECOMMENDED!",
+      "INFO_2": "You will loose access to data users submitted in older applications within this form item!",
+      "INFO_3": "Do you want to continue?",
+      "CANCEL_BUTTON": "Cancel",
+      "SUBMIT_BUTTON": "Delete"
+    },
+    "APPLICATION_FORM_COPY_ITEMS": {
+      "TITLE": "Copy form items from VO / group",
+      "SOURCE_VO": "Source VO",
+      "SOURCE_GROUP": "Source group",
+      "CANCEL_BUTTON": "Cancel",
+      "SUBMIT_BUTTON": "Submit",
+      "NO_GROUP_SELECTED": "Not selected",
+      "DESCRIPTION": "All form items will be added to yours.",
+      "ERROR_INVALID_VO": "Please choose Vo from options",
+      "ERROR_NO_VO": "Please choose Vo",
+      "ERROR_INVALID_GROUP": "Please choose group from options",
+      "ERROR_NO_GROUP": "Please choose group"
+    },
+    "APPLICATION_FORM_ADD_ITEM": {
+      "TITLE": "Add form item",
+      "CREATE": "Create",
+      "CANCEL": "Cancel",
+      "SHORT_NAME": "Short Name",
+      "INPUT_WIDGET": "Input widget",
+      "INSERT_AFTER": "Insert after",
+      "INSERT_TO_BEGINNING": "- insert to the beginning -",
+      "NO_SHORTNAME_ERROR": "Please fill the shortname"
+    },
+    "APPLICATION_FORM_EDIT_ITEM": {
+      "TITLE": "Edit form item",
+      "SHORT_NAME": "Short name",
+      "SHORT_NAME_DESCRIPTION": "Internal item identification (used as fallback when you forgot to set \"Label\" for some language).",
+      "CANCEL_BUTTON": "Cancel",
+      "SUBMIT_BUTTON": "Submit",
+      "BASIC_SETTINGS": "Basic settings",
+      "LANGUAGE_CS": "Language: cz",
+      "LANGUAGE_EN": "Language: en",
+      "INPUT_WIDGET": "Input widget",
+      "INPUT_WIDGET_DESCRIPTION": "Specify what input widget is used for this item.",
+      "DISPLAY_ON_APPLICATION": "Display on application",
+      "INITIAL": "Initial",
+      "EXTENSION": "Extension",
+      "DISPLAY_ON_APPLICATION_DESCRIPTION": "Define on which application types is this item displayed.",
+      "CONTENT": "Content",
+      "CONTENT_DESCRIPTION": "HTML formatted content of form item. It spans through all columns to full form width.",
+      "LABEL": "Label",
+      "LABEL_DESCRIPTION": "Label displayed to users to identify item on application form. If empty, \"Short name\" from basic settings is used as fallback.",
+      "LABEL_BUTTON_DESCRIPTION": "Label displayed on submit button.",
+      "HELP": "Help",
+      "HELP_DESCRIPTION": "Help text displayed to user along with input widget.",
+      "ERROR": "Error",
+      "ERROR_DESCRIPTION": "Error message displayed to user when enters wrong value.",
+      "REGEX": "Regular expression",
+      "REGEX_DESCRIPTION": "Regular expression used for item value validation (before submitting by user).",
+      "SOURCE_ATTRIBUTE": "Source attribute",
+      "SOURCE_ATTRIBUTE_DESCRIPTION": "Select attribute, which will be used to pre-fill form value. You can select also VO attributes.",
+      "DESTINATION_ATTRIBUTE": "Destination attribute",
+      "DESTINATION_ATTRIBUTE_DESCRIPTION": "Select attribute, where will be submitted value stored after accepting user`s application.",
+      "FEDERATION_ATTRIBUTE": "Federation attribute",
+      "FEDERATION_ATTRIBUTE_DESCRIPTION": "Select federation attribute to get pre-filed value from.",
+      "REQUIRED": "Required",
+      "REQUIRED_DESCRIPTION": "If checked, user can`t submit empty value (doesn't apply to non-editable fields).",
+      "NO_SELECTED_ITEM": "No item selected (empty value)",
+      "CUSTOM_VALUE": " -- custom value -- ",
+      "OPTIONS": "Options",
+      "OPTIONS_DESCRIPTION": "Define possible options for selection in SELECTIONBOX, COMBOBOX, CHECKBOX, RADIO widget. Empty options are not used.",
+      "ADD_OPTION": "Add option",
+      "VALUE": "Value",
+      "SORT_BY_LABEL_AZ": "Sort by label(A-Z)",
+      "SORT_BY_LABEL_ZA": "Sort by label(Z-A)"
+    },
+    "APPLICATION_FORM_DELETE_MAIL": {
+      "TITLE": "Confirm delete action",
+      "DESCRIPTION": "Following mail definitions will be removed and users won't receive them anymore.",
+      "CONFIRMATION": "Do you want to proceed?",
+      "SUBMIT": "Delete",
+      "CANCEL": "Cancel"
+    },
+    "CREATE_ATTRIBUTE": {
+      "SET_NEW": "Set new attributes",
+      "SAVE": "Save selected",
+      "CANCEL": "Cancel",
+      "SUCCESS_SAVE": "Attributes saved successfully",
+      "ERROR_EMPTY_VALUE": "You can't save attribute with empty value"
+    },
+    "CREATE_RESOURCE_TAG": {
+      "TITLE": "Create resource tag",
+      "NAME": "Tag name",
+      "CREATE": "Create",
+      "CANCEL": "Cancel",
+      "EMPTY_NAME": "Please fill name"
+    },
+    "DELETE_RESOURCE_TAG": {
+      "TITLE": "Confirm delete action",
+      "DESCRIPTION": "Following tags will be deleted and won't be used to tag VO resources.",
+      "ASK": "Do you want to proceed?",
+      "SUBMIT": "Delete",
+      "CANCEL": "Cancel"
+    },
+    "NOTIFICATIONS_EDIT_FOOTER": {
+      "TITLE": "Edit mail footer",
+      "DESCRIPTION": "This text will be added as footer for all email notifications (replacing {mailFooter} tag in mail definition).",
+      "LABEL": "Footer text",
+      "SUBMIT_BUTTON": "Save",
+      "CANCEL_BUTTON": "Cancel",
+      "SUCCESS": "Email footer was successfully edited."
+    },
+    "NOTIFICATIONS_ADD_EDIT_MAIL": {
+      "TITLE_CREATE": "Add email notification",
+      "TITLE_EDIT": "Edit notification",
+      "CANCEL_BUTTON": "Cancel",
+      "CREATE_BUTTON": "Create",
+      "SAVE_BUTTON": "Save",
+      "BASIC_SETTINGS": "Basic settings",
+      "EMAIL_TYPE": "Email type",
+      "EMAIL_TYPE_DESCRIPTION_CREATE": "Selected type of notification (action which trigger sending and who is notified).",
+      "EMAIL_TYPE_DESCRIPTION_EDIT": "Type of notification (action which trigger sending and who is notified).",
+      "APPLICATION_TYPE": "Application type",
+      "INITIAL": "Initial",
+      "EXTENSION": "Extension",
+      "APPLICATION_TYPE_DESCRIPTION_CREATE": "Select which application type will trigger sending.",
+      "APPLICATION_TYPE_DESCRIPTION_EDIT": "Application type which will trigger sending.",
+      "SENDING_ENABLED": "Sending enabled",
+      "SENDING_ENABLED_DESCRIPTION": "If checked, notification will be sent. Un-check it to temporary disable sending.",
+      "LANG_EN": "Language: en",
+      "LANG_CS": "Language: cz",
+      "AVAILABLE_TAGS": "Available tags",
+      "SUBJECT": "Subject",
+      "TEXT": "Text",
+      "SHOW_TAGS": "Show tags",
+      "HIDE_TAGS": "Hide tags",
+      "TAGS_DESCRIPTION": "Following tags can be used in mail's subject and text and are replaced by actual data on sending. Just choose place where you want tag and click on tag button. When no data for tag is found, it's replaced by whitespace.",
+      "APPLICATION_RELATED_SECTION": "Application related",
+      "USER_RELATED_SECTION": "User related",
+      "VALIDATION_LINKS_USERS_SECTION": "Validation links for users",
+      "APPLICATION_LINKS_USERS_SECTION": "Application GUI links for users",
+      "APPLICATION_LINKS_ADMINISTRATOR_SECTION": "Application GUI links for administrators",
+      "PERUN_LINKS_ADMINISTRATOR_SECTION": "Perun GUI links for administrators",
+      "USER_INVITATIONS_SECTION": "User invitations",
+      "APPID_DESCRIPTION": "application ID",
+      "ACTOR_DESCRIPTION": "user's login used when submitting application",
+      "EXTSOURCE_DESCRIPTION": "user's identity provider when submitting application",
+      "VONAME_DESCRIPTION": "name of VO of application form",
+      "GROUPNAME_DESCRIPTION": "name of group, if application form is for group membership",
+      "MAILFOOTER_DESCRIPTION": "common mail footer defined by VO",
+      "ERRORS_DESCRIPTION": "errors description, what happened while processing new application. Useful for VO administrators",
+      "CUSTOMMESSAGE_DESCRIPTION": "optional message passed by administrators when rejecting an application",
+      "FIRSTNAME_DESCRIPTION": "users first name taken from application form or Perun",
+      "LASTNAME_DESCRIPTION": "users last name taken from application form or Perun",
+      "DISPLAYNAME_DESCRIPTION": "users display name taken from application form or Perun",
+      "MAIL_DESCRIPTION": "users preferred mail from application form or Perun",
+      "PHONE_DESCRIPTION": "users phone from application form or Perun",
+      "LOGINNAMESPACE_DESCRIPTION": "user's login in selected namespace, taken from registration form or Perun. You MUST specify the namespace, e.g. {login-einfra} will print user's login in einfra namespace.",
+      "MEMBERSHIPEXPIRATION_DESCRIPTION": "membership expiration date decided after membership creation or extension",
+      "VALIDATION_LINKS_DESCRIPTION": "Works only for \"Mail validation / user \" mail type! Used to verify email address provided by users => verify application.",
+      "VALIDATIONLINK_DESCRIPTION": "link for email address verification. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
+      "VALIDATIONKRB_DESCRIPTION": "link for Kerberos authentication",
+      "VALIDATIONFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
+      "VALIDATIONCERT_DESCRIPTION": "link for personal certificate authentication",
+      "VALIDATIONNON_DESCRIPTION": "link without any authentication",
+      "APPLICATION_LINKS_DESCRIPTION": "Used to navigate users to the list of theirs applications.",
+      "APPGUIURL_DESCRIPTION": "link to overview of submitted registrations for users. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
+      "APPGUIURLKRB_DESCRIPTION": "link for Kerberos authentication",
+      "APPGUIURLFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
+      "APPGUIURLCERT_DESCRIPTION": "link for personal certificate authentication",
+      "APPGUIURLNON_DESCRIPTION": "link without any authentication",
+      "APPLICATION_LINKS_ADMINISTRATOR_DESCRIPTION": "Used to navigate administrators to the registration detail, where they can check and approve or reject the application.",
+      "APPDETAILURL_DESCRIPTION": "link to registration detail in administrative GUI. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
+      "APPDETAILURLKRB_DESCRIPTION": "link for Kerberos authentication",
+      "APPDETAILURLFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
+      "APPDETAILURLCERT_DESCRIPTION": "link for personal certificate authentication",
+      "PERUN_LINKS_ADMINISTRATOR_DESCRIPTION": "Used to navigate administrators to the administrative GUI of Perun. Can be used for users to locate user detail too.",
+      "PERUNGUIURL_DESCRIPTION": "link to administrative GUI. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
+      "PERUNGUIURLKRB_DESCRIPTION": "link for Kerberos authentication",
+      "PERUNGUIURLFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
+      "PERUNGUIURLCERT_DESCRIPTION": "link for personal certificate authentication",
+      "USER_INVITATIONS_DESCRIPTION": "Following tags can be used on user invitation template",
+      "USER_INVITATIONS_VONAME_DESCRIPTION": "name of VO to invite user into",
+      "USER_INVITATIONS_GROUPNAME_DESCRIPTION": "name of Group to invite user into",
+      "USER_INVITATIONS_DISPLAYNAME_DESCRIPTION": "invited user's name",
+      "USER_INVITATIONS_MAILFOOTER_DESCRIPTION": "common mail footer defined by VO",
+      "INVITATIONLINK_DESCRIPTION": "link to registration form. Please make sure you set \"Registrar URL\" setting of your VO/group. If you don't specify authorization in \"Registrar URL\", you can use following options:",
+      "INVITATIONLINKKRB_DESCRIPTION": "link for Kerberos authentication",
+      "INVITATIONLINKFED_DESCRIPTION": "link for Shibboleth IdP (federation) authentication",
+      "INVITATIONLINKCERT_DESCRIPTION": "link for personal certificate authentication",
+      "INVITATIONLINKNON_DESCRIPTION": "link without any authentication",
+      "INVALID_NOTIFICATION": "Notification with selected type and selected application type already exist."
+    },
+    "NOTIFICATIONS_COPY_MAILS": {
+      "TITLE": "Copy mail notifications from Vo/group",
+      "SOURCE_VO": "Source VO",
+      "SOURCE_GROUP": "Source group",
+      "CANCEL_BUTTON": "Cancel",
+      "SUBMIT_BUTTON": "Submit",
+      "NO_GROUP_SELECTED": "Not selected",
+      "DESCRIPTION": "All mail definitions will be added to yours.",
+      "ERROR_INVALID_VO": "Please choose Vo from options",
+      "ERROR_NO_VO": "Please choose Vo",
+      "ERROR_INVALID_GROUP": "Please choose Group from options",
+      "ERROR_NO_GROUP": "Please choose Group"
+    },
+    "CREATE_ATTRIBUTE_DEFINITION": {
+      "TITLE": "Create Attribute Definition",
+      "FRIENDLY_NAME": "Friendly name",
+      "DISPLAY_NAME": "Display name",
+      "DESCRIPTION": "Description",
+      "ENTITY": "Entity",
+      "DEFINITION": "Definition",
+      "VALUE_TYPE": "Value Type",
+      "UNIQUE": "Unique",
+      "READ": "Read",
+      "WRITE": "Write",
+      "SELF": "Self",
+      "SELF_PUBLIC": "Self Public",
+      "SELF_VO": "Self Vo",
+      "VO": "Vo",
+      "GROUP": "Group",
+      "FACILITY": "Facility",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Create",
+      "SUCCESS": "Attribute Definition successfully created",
+      "ERROR_FIELD_EMPTY": "This field can't be empty",
+      "ERROR_SELECT_SOMETHING": "You have to select something",
+      "ERROR_FILL_REQUIRED": "Fill all required fields",
+      "TOOLTIP_UNIQUE": "Entityless Attributes or Attributes with definitions 'virt' CAN'T be UNIQUE",
+      "TOOLTIP_CONFIRM": "Fill every required field"
+    },
+    "DELETE_ATTRIBUTE_DEFINITION": {
+      "TITLE": "Confirm delete action",
+      "TEXT_LINE1": "Following attribute definitions will be removed.",
+      "TEXT_LINE2": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Delete",
+      "WARNING": "This action will also delete all assigned values",
+      "SUCCESS": "Selected attributes has been deleted successfully"
+    },
+    "NOTIFICATION_LIST": {
+      "TITLE": "Recent notifications",
+      "CANCEL": "Cancel",
+      "NO_NOTIFICATIONS_ALERT": "There are no recent notifications",
+      "CLEAR": "Clear notifications"
+    },
+    "CREATE_RELATION": {
+      "TITLE": "Create relation",
+      "CANCEL": "Cancel",
+      "CREATE": "Create",
+      "SUCCESS": "Relation successfully created"
+    },
+    "REMOVE_RELATION": {
+      "TITLE": "Confirm removal",
+      "DESCRIPTION": "Following relations will be removed.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Remove",
+      "SUCCESS": "Selected relations were removed"
+    },
+    "CHANGE_STATUS": {
+      "TITLE": "Change status",
+      "CANCEL": "Cancel",
+      "CURRENT_STATUS": "Current status",
+      "NEW_STATUS": "New status",
+      "CHANGE_VALID": "Changing status to VALID will trigger automatic configuration for provided resources. \nIf successful, member will have access on provided resources. \nIf not, see displayed error message and do manual configuration on 'settings' tab on members detail.",
+      "INVALID_DESCRIPTION": "Member have configuration error and DON'T have access on provided resources. You can check what is wrong by changing member's status to VALID. If possible, procedure will configure all necessary settings by itself.",
+      "SUCCESS": "Member status was changed"
+    },
+    "REMOVE_GROUP_FROM_RESOURCE": {
+      "TITLE": "Confirm delete action",
+      "DESCRIPTION": "Following groups will be removed from resource.",
+      "ASK": "Do you want to proceed?",
+      "CANCEL": "Cancel",
+      "DELETE": "Delete",
+      "SUCCESS": "Selected groups were removed from resource"
+    },
+    "ASSIGN_GROUP_TO_RESOURCE": {
+      "TITLE": "Assign group",
+      "FILTER_DESCRIPTION": "Find group",
+      "ADD_BUTTON": "Add",
+      "CANCEL_BUTTON": "Cancel",
+      "SUCCESS_MESSAGE": "Selected groups were assigned to resource",
+      "CONFIGURE_GROUPS": "Configure group(s) before assign"
+    },
+    "CREATE_RESOURCE": {
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "SELECT_VO": "Select organization",
+      "CANCEL": "Cancel",
+      "CREATE": "Create",
+      "SUCCESS": "Resource successfully created"
+    },
+    "ADD_EXT_SOURCES": {
+      "TITLE": "Add external sources",
+      "FILTER": "Filter by ID, name or type",
+      "CANCEL": "Cancel",
+      "ADD": "Add",
+      "SUCCESS_ADDED": "External source successfully added: "
+    },
+    "EDIT_ATTRIBUTE_DEFINITION": {
+      "SUCCESS": "Attribute definition successfully edited",
+      "DISPLAY_NAME": "Display name",
+      "ERROR_FIELD_EMPTY": "This field can't be empty",
+      "DESCRIPTION": "Description",
+      "UNIQUE": "Unique",
+      "TOOLTIP_UNIQUE": "Entityless Attributes or Attributes with definitions 'virt' CAN'T be UNIQUE",
+      "READ": "Read",
+      "WRITE": "Write",
+      "SELF": "Self",
+      "SELF_PUBLIC": "Self Public",
+      "SELF_VO": "Self Vo",
+      "VO": "Vo",
+      "GROUP": "Group",
+      "FACILITY": "Facility",
+      "CANCEL": "Cancel",
+      "CONFIRM": "Submit",
+      "TOOLTIP_CONFIRM": "Fill every required field",
+      "SHOW_KEYS": "Show keys",
+      "SERVICES": "Dependent services:"
+    }
+  },
+  "this_is_source_test": "",
+  "MEMBERS_LIST": {
+    "ID": "Id",
+    "NAME": "Name",
+    "STATUS": "Status",
+    "GROUP_STATUS": "Group status",
+    "EMAIL": "Email",
+    "LOGINS": "Logins"
+  },
+  "MEMBERS_CANDIDATES_LIST": {
+    "STATUS": "Status",
+    "NAME": "Name",
+    "ORGANIZATION": "Organization or Ext source",
+    "EMAIL": "Email",
+    "LOGINS": "Logins",
+    "ALREADY_MEMBER": "Already member"
+  },
+  "MANAGERS_LIST": {
+    "ID": "User ID",
+    "NAME": "Name",
+    "ORGANIZATION": "Organization",
+    "EMAIL": "Email",
+    "LOGINS": "Logins"
+  },
+  "NOTIFICATOR": {
+    "NOTIFICATION": {
+      "DEFAULT_ACTION": "Show",
+      "DIALOG_CLOSE": "Close",
+      "DIALOG_BUG_REPORT": "Report a bug",
+      "DEFAULT_RPC_ERROR_MESSAGE": "An operation failed."
+    }
+  },
+  "ADMIN_USER": {
+    "TITLE": "User - "
+  },
+  "ADMIN": {
+    "TITLE": "Perun admin",
+    "ATTRIBUTES": {
+      "TITLE": "Attribute definitions",
+      "TABLE_ATTR_ID": "Id",
+      "TABLE_ATTR_FRIENDLY_NAME": "Friendly name",
+      "TABLE_ATTR_ENTITY": "Entity",
+      "TABLE_ATTR_DEF": "Def",
+      "TABLE_ATTR_TYPE": "Type",
+      "TABLE_ATTR_UNIQUE": "Unique",
+      "CREATE": "New attribute definition...",
+      "DELETE": "Delete",
+      "SEARCH": "Filter by ID, name, entity, definition, or type",
+      "NO_ATTRIBUTES": "There are no attributes available."
+    },
+    "USERS": {
+      "TITLE": "Users",
+      "SEARCH_PLACEHOLDER": "Search by name, email or login",
+      "SEARCH_INFO": "You can search users by name, email or login or you can list all users without vo.",
+      "NO_USERS_FOUND": "No users found."
+    },
+    "VISUALIZER": {
+      "ATTR_DEPENDENCIES": {
+        "TITLE": "Attribute modules dependencies",
+        "HINT": "You can use arrow keys to move the image."
+      },
+      "USER_DESTINATION": {
+        "TITLE": "User destination relationship",
+        "SELECT_USER": "Select User",
+        "SELECT_DESTINATION": "Select Destination",
+        "DESTINATION_EXAMPLE": "eg. documents.ics.muni.cz",
+        "SELECT_SERVICE": "Select Service",
+        "SUBMIT_BUTTON": "Find relationships",
+        "USER_HINT": "Type names with punctuation, case insensitive",
+        "USER_EXAMPLE": "eg. Jan Novák",
+        "SELECT_NO_SERVICE": "I don't want specify service",
+        "BUTTON_NEXT": "Next",
+        "BUTTON_BACK": "Previous",
+        "ERROR_NO_NAME": "Please fill name",
+        "ERROR_WRONG_NAME": "Given name not found",
+        "ERROR_NO_DESTINATION": "Please fill destination",
+        "ERROR_WRONG_DESTINATION": "Given destination not found",
+        "ERROR_NOT_CHOSEN_SERVICE": "Please choose service",
+        "FOUND_1": "Path was found between user",
+        "FOUND_2": "and destination",
+        "FOUND_3": "for service",
+        "NOT_FOUND_1": "For user",
+        "NOT_FOUND_2": "and destination",
+        "NOT_FOUND_3": "with dependency on service",
+        "NOT_FOUND_4": "weren't found any connection in database",
+        "USER": "User",
+        "GROUP": "Group",
+        "VO": "Vo",
+        "RESOURCE": "Resource",
+        "FACILITY": "Facility",
+        "SERVICE": "Service",
+        "DESTINATION": "Destination"
+      }
+    },
+    "EXT_SOURCES": {
+      "TITLE": "External sources",
+      "LOAD": "Load External sources",
+      "SEARCH": "Search by ID, Name or Type",
+      "LOAD_SUCCESS": "External sources successfully loaded"
+    }
+  },
+  "NAV": {
+    "LOGOUT": "Log out",
+    "PROFILE": "Profile",
+    "NOTIFICATIONS_TOOLTIP": "Recent notifications"
+  },
+  "MAIN_MENU": {
+    "ACCESS": "Access management",
+    "FACILITIES": "Facilities management",
+    "ADMIN": "Perun admin",
+    "PROFILE": "Profile",
+    "ACCESS_DESC": "Manage organizations, groups and members.",
+    "FACILITIES_DESC": "Manage facilities and resources.",
+    "ADMIN_DESC": "Manage attributes, users and do diagnostics.",
+    "PROFILE_DESC": "View information about you and your organizations and groups."
+  },
+  "VO_MANAGEMENT": {
+    "TITLE": "Select organization",
+    "CREATE_VO": "New...",
+    "REMOVE_VO": "Remove...",
+    "FILTER_PLACEHOLDER": "Filter by name",
+    "TABLE": {
+      "ID": "Id",
+      "NAME": "Name",
+      "RECENT": "Recently viewed"
+    },
+    "SETTINGS": {
+      "EXPIRATION": {
+        "TITLE": "Membership expiration",
+        "DISABLED": "Disabled",
+        "ENABLED": "Enabled",
+        "PERIOD_LABEL": "Period",
+        "PERIOD_TYPE_STATIC": "Static",
+        "PERIOD_TYPE_DYNAMIC": "Dynamic",
+        "PERIOD_INPUT_STATIC": "Date",
+        "DP_HINT": "Date in format DD.MM.",
+        "AMOUNT_VALUE": "Amount",
+        "AMOUNT_TYPE": "Unit",
+        "DONT_ALLOW_LOA_LABEL": "Don't allow LOAs",
+        "DONT_ALLOW_LOA_SELECT": "Choose LOAs",
+        "DONT_EXTEND_LOA_LABEL": "Don't extend LOAs",
+        "DONT_EXTEND_LOA_SELECT": "Choose LOAs",
+        "GRACE_PERIOD_LABEL": "Grace period",
+        "GRACE_AMOUNT_VALUE": "Amount",
+        "GRACE_AMOUNT_TYPE": "Unit",
+        "LOA_PERIOD_LABEL": "Special period for loa",
+        "SAVE": "Save",
+        "SPECIAL_LOA_SELECT": "Choose loa",
+        "EXTEND_EXPIRED_MEMBERS_CHECKBOX": "Extend already expired members"
+      }
+    }
+  },
+  "FACILITY_MANAGEMENT": {
+    "TITLE": "Select facility",
+    "FILTER_PLACEHOLDER": "Filter by name, id, description or owner",
+    "TABLE": {
+      "ID": "Id",
+      "NAME": "Name",
+      "DESCRIPTION": "Description",
+      "TECHNICAL_OWNERS": "Technical owners",
+      "RECENT": "Recently viewed"
+    }
+  },
+  "USER_MANAGEMENT": {
+    "TITLE": "Users",
+    "INPUT_PLACEHOLDER": "Enter user's name, login or email...",
+    "NO_USERS_FOUND": "No users found."
+  },
+  "FACILITY_DETAIL": {
+    "TITLE": "Facility - ",
+    "BACK": "Back",
+    "RESOURCES": {
+      "TITLE": "Resources",
+      "DELETE": "Remove selected",
+      "CREATE": "New...",
+      "NO_RESOURCES_ALERT": "No resources found."
+    },
+    "ALLOWED_GROUPS": {
+      "SHOW_VOS_GROUPS": "Select organization",
+      "TABLE_GROUP_ID": "Id",
+      "TABLE_GROUP_NAME": "Name",
+      "ALL": "All",
+      "NO_GROUPS_ALERT": "No groups found."
+    },
+    "SETTINGS": {
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      }
+    }
+  },
+  "RESOURCE_DETAIL": {
+    "TITLE": "Resource - ",
+    "ASSIGNED_GROUPS": {
+      "TITLE": "Assigned groups",
+      "ADD_GROUP": "Add..",
+      "REMOVE_GROUP": "Remove groups",
+      "FILTER_GROUPS": "Filter groups",
+      "NO_GROUPS": "No groups."
+    },
+    "SETTINGS": {
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      }
+    }
+  },
+  "dasd": "",
+  "dsadasdas": "dasdas",
+  "dsadas": "dasdas",
+  "USER_DETAIL": {
+    "OVERVIEW": {
+      "TITLE": "User - ",
+      "FULL_NAME": "Full name",
+      "USER_ID": "User ID",
+      "USER_TYPE": "User type",
+      "EDIT_NAME": "Edit name"
+    },
+    "ORGANIZATIONS": {
+      "TITLE": "User organizations",
+      "FILTER": "Filter by name or ID",
+      "IS_ADMIN": "Organizations where you are admin",
+      "IS_MEMBER": "Organizations where you are member"
+    },
+    "SETTINGS": {
+      "ATTRIBUTES": {
+        "TITLE": "Attributes",
+        "DELETE": "Remove selected",
+        "FILTER": "Filter by id, name, value or description",
+        "SAVE": "Save selected",
+        "CREATE": "Add...",
+        "CANCEL": "Cancel",
+        "SUCCESS_DELETE": "Attributes deleted successfully",
+        "SUCCESS_SAVE": "Attributes saved successfully"
+      }
+    }
+  },
+  "SHARED": {
+    "COMPONENTS": {
+      "RESOURCES_TAGS_LIST": {
+        "EDIT_SUCCESS": "Resource tag was successfully edited."
+      },
+      "NO_FILTER_RESULTS_ALERT": "No results match given search criteria.",
+      "RESOURCES_LIST": {
+        "TITLE": "Resources",
+        "DELETE": "Remove selected",
+        "TABLE_RESOURCE_ID": "id",
+        "TABLE_RESOURCE_NAME": "Name",
+        "TABLE_FACILITY_NAME": "Facility name",
+        "TABLE_RESOURCE_TAGS": "Tags",
+        "TABLE_SEARCH": "Filter by name, description or ID",
+        "TABLE_RESOURCE_DESCRIPTION": "Description",
+        "NO_RESOURCES_WARNING": "No resources assigned."
+      },
+      "GROUPS_LIST": {
+        "TABLE_GROUP_ID": "Id",
+        "TABLE_VO_NAME": "Vo",
+        "TABLE_GROUP_NAME": "Name",
+        "TABLE_SEARCH": "Filter by name, description or ID",
+        "TABLE_GROUP_DESCRIPTION": "Description"
+      },
+      "ATTRIBUTES_LIST": {
+        "FILTER": "Filter by id, name, value or description",
+        "ID": "id",
+        "NAME": "Name",
+        "VALUE": "Value",
+        "DESCRIPTION": "Description"
+      },
+      "USERS_LIST": {
+        "TABLE_SEARCH": "Filter by name or ID"
+      },
+      "REFRESH_BUTTON": {
+        "TOOLTIP": "Refresh"
+      },
+      "MANAGERS_PAGE": {
+        "TITLE": "Managers",
+        "ADD": "Add...",
+        "REMOVE": "Remove",
+        "SELECT_MODE": "Select mode",
+        "SELECT_ROLE": "Select role",
+        "USER": "User",
+        "GROUP": "Group",
+        "NO_MANAGERS": "This role has no managers.",
+        "NO_GROUP_MANAGERS": "This role has no group managers."
+      },
+      "USER_DETAIL": {
+        "GROUPS": {
+          "MEMBER_GROUPS": "Member groups",
+          "ADMINS_GROUPS": "Groups where user is admin"
+        }
+      },
+      "EXT_SOURCES_LIST": {
+        "ID": "ID",
+        "NAME": "Name",
+        "TYPE": "Type",
+        "NO_EXT_SOURCES": "No external sources",
+        "NO_FILTER_RESULTS": "There are no external sources matching your query"
+      },
+      "SERVICES_LIST": {
+        "ID": "Id",
+        "NAME": "Name",
+        "ENABLED": "Enabled",
+        "SCRIPT": "Script",
+        "DESCRIPTION": "Description",
+        "NO_SERVICES_WARNING": "No services assigned."
+      },
+      "ENTITYLESS_ATTRIBUTES_LIST": {
+        "CANCEL": "Back",
+        "SAVE": "Save",
+        "ADD": "Add",
+        "REMOVE": "Remove",
+        "KEY": "Key",
+        "VALUE": "Value",
+        "NO_KEYS_WARNING": "Use 'Add' button to add new Key-Attribute pair",
+        "SAVE_SUCCESS": "Attributes successfully saved",
+        "REMOVE_SUCCESS": "Attributes successfully removed"
+      }
+    },
+    "FOOTER": {
+      "ABOUT_PERUN": "About",
+      "HELP": "Help",
+      "PERUN_WEB": "Perun website",
+      "PERUN_TEAM": "Perun team",
+      "SUPPORT": "Support",
+      "USER_DOCUMENTATION": "Documentation",
+      "ADMINISTRATOR_DOCUMENTATION": "API Documentation",
+      "REPORT_ISSUE": "Report Issue",
+      "PRIVACY_POLICY": "Privacy Policy"
+    }
+  },
+  "ROLES": {
+    "VOADMIN": "Vo admin",
+    "VOOBSERVER": "Vo observer",
+    "TOPGROUPCREATOR": "Top group creator",
+    "PERUN_ADMIN": "Perun admin",
+    "SELF": "Self",
+    "FACILITYADMIN": "Facility admin",
+    "GROUPADMIN": "Group admin"
+  }
+}

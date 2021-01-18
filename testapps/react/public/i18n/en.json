@@ -1,0 +1,16 @@
+{
+  "sampleApp" : {
+    "hello_world!" : "Hello world!",
+    "english_text_one" : "English text one.",
+    "this_is_translation_in_home_folder" : "This is translation in home folder",
+    "this_is_translation_in_news_folder" : "This is translation in news folder",
+    "this_is_another_translation_in_news_folder" : "This is another translation in news folder",
+    "this_is_standard_text_somewhere_in_dom" : "This is standard text somewhere in DOM.",
+    "this_is_another_standard_text_somewhere_in_dom" : "This is another standard text somewhere in DOM.",
+    "this_is_translation_retrieved_by_service" : "This is translation retrieved by service.",
+    "this_is_textarea_with_placeholder_and_value" : "This is textarea with placeholder and value.",
+    "this_is_textarea_with_placeholder" : "This is textarea with placeholder.",
+    "this_is_input_with_value" : "This is input with value.",
+    "this_is_input_with_placeholder" : "This is input with placeholder."
+  }
+}

@@ -24,41 +24,60 @@ idea {
 
 apply from: "./gradle/e2e.gradle"
 
-task lernaBootstrap(type: Exec){
+task lernaBootstrap(type: Exec) {
     commandLine "lerna", "bootstrap"
 }
 
-task buildCore(type: Exec){
+task buildCore(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/core"
 }
 
-task buildUi(type: Exec){
+task buildReact(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/react"
+    mustRunAfter "buildCore", "buildUi"
+}
+
+task buildNgx(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/ngx"
+    mustRunAfter "buildCore", "buildUi"
+}
+
+task buildUi(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/core"
 }
 
-task buildAll(type: Task){
-    dependsOn "buildCore", "buildUi"
+task buildAll(type: Task) {
+    dependsOn "buildCore", "buildUi", "buildReact", "buildNgx"
 }
 
-task developAll(type: Exec){
+task developAll(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
     commandLine "lerna", "exec", "--parallel", "--", "npm", "run", "develop"
 }
 
-task testCore(type: Exec){
+task testCore(type: Exec) {
     commandLine "npm", "run", "test"
     workingDir "packages/core"
 }
 
-task testUi(type: Exec){
+task testReact(type: Exec) {
+    commandLine "npm", "run", "test"
+    workingDir "packages/react"
+}
+
+task testUi(type: Exec) {
     commandLine "npm", "run", "test"
     workingDir "packages/ui"
 }
 
-task build(type: Task){
-    dependsOn "buildAll", "testUi", "testCore", "runE2e"
+task build(type: Task) {
+    dependsOn "buildAll", "testUi", "testCore", "testReact", "runE2e"
 }

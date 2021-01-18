@@ -1,0 +1,37 @@
+{
+  "sampleApp": {
+    "this_is_textarea_with_placeholder_and_valueeee": "Das ist ein Textarea mit Placeholder und Value. {{ name }}",
+    "this_is_translation_in_home_foldereee": "Das ist die Übersetzung im Home-Ordner",
+    "this_is_translation_in_news_folder": "Das ist die Übersetzung im News-Ordner",
+    "this_is_translation_retrieved_by_service": "Dase Übersetzung wird vom Service abgerufen.",
+    "this_is_input_with_placeholder": "Das ist ein Input mit Placeholder.",
+    "this_is_another_standard_text_somewhere_in_dom": "Ahahaha asd",
+    "this_is_another_standard_text_somewhere_in_dom_with_param2": "",
+    "this_is_standard_text_somewhere_in_dom": "Deutsch",
+    "this_is_another_standard_text_somewhere_in_dom_with_param": "",
+    "subfolder": {
+      "subfolder": {
+        "new_translation": "asdsa",
+        "subfolder": {
+          "new_translation": "dasdas"
+        }
+      }
+    },
+    "this_is_textarea_with_placeholder_and_value": "dsadas",
+    "this_is_textarea_with_placeholder": "Deutsch"
+  },
+  "this_is_source_test": "dada",
+  "dasd": "dsadas",
+  "dsadasdas": "adsasd",
+  "dsadas": "dasdas",
+  "ADMIN": {
+    "ATTRIBUTES": {
+      "CREATE": ""
+    }
+  },
+  "DIALOGS": {
+    "MOVE_GROUP": {
+      "SUCCESS": "Deutsch"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: polygloat_js_e2e
+    container_name: polygloat_js_e2e_server
     image: polygloat/polygloat:latest
     ports:
       - 8202:8080
@@ -15,7 +15,7 @@ services:
       - polygloat.internal.fake-emails-sent=true
       - polygloat.authentication.initialPassword=admin
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=*:8091,server=y,suspend=n
-  e2e:
+  e2e_app_core:
     container_name: polygloat_js_e2e_serve_testapps_core
     build: ../docker
     volumes:
@@ -24,3 +24,21 @@ services:
       - 8101:8101
     command: ["npm", "run", "serve"]
     working_dir: /data
+  e2e_app_react:
+    container_name: polygloat_js_e2e_serve_testapps_react
+    build: ../docker
+    volumes:
+      - "../:/data"
+    ports:
+      - 8102:8101
+    command: [ "npm", "run", "serve" ]
+    working_dir: /data/testapps/react
+  e2e_app_angular:
+    container_name: polygloat_js_e2e_serve_testapps_ngx
+    build: ../docker
+    volumes:
+      - "../:/data"
+    ports:
+      - 8103:8101
+    command: [ "npm", "run", "serve" ]
+    working_dir: /data/testapps/ngx
