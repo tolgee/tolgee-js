@@ -54,31 +54,30 @@ task buildNgx(type: Exec) {
     mustRunAfter "buildCore", "buildUi"
 }
 
-task buildCoreTestapps(type: Exec) {
+task buildUi(type: Exec) {
     dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/core"
+}
+
+task buildCoreTestapps(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/core"
 }
 
 task buildReactTestapps(type: Exec) {
-    dependsOn "lernaBootstrap"
+    dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/react"
     mustRunAfter "buildCore", "buildUi"
 }
 
 task buildNgxTestapps(type: Exec) {
-    dependsOn "lernaBootstrap"
+    dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildNgx"
     commandLine "npm", "run", "build"
     workingDir "testapps/ngx"
-    mustRunAfter "buildCore", "buildUi"
-}
-
-
-task buildUi(type: Exec) {
-    dependsOn "lernaBootstrap"
-    commandLine "npm", "run", "build"
-    workingDir "packages/core"
+    mustRunAfter "buildCore", "buildUi", "buildNgx"
 }
 
 task buildAll(type: Task) {
