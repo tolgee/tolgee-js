@@ -1,6 +1,6 @@
 {
   "name": "@polygloat/ngx",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "scripts": {
     "ng": "ng",
     "develop": "ng build --watch",
@@ -22,15 +22,15 @@
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@polygloat/core": "^1.0.0-alpha.16",
     "@angular-devkit/build-angular": "~0.1002.0",
     "@angular-devkit/build-ng-packagr": "~0.1002.0",
     "@angular/cli": "~10.2.0",
     "@angular/compiler-cli": "~10.2.2",
     "@angular/language-service": "~10.2.2",
-    "@types/node": "^14.14.6",
+    "@polygloat/core": "^1.0.0-alpha.17",
     "@types/jasmine": "~3.6.1",
     "@types/jasminewd2": "~2.0.3",
+    "@types/node": "^14.14.6",
     "codelyzer": "^6.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~6.0.0",
