@@ -1,10 +1,10 @@
 {
   "name": "@polygloat/testapps-react",
-  "version": "1.0.0-alpha.19",
+  "version": "1.0.0-alpha.20",
   "private": true,
   "dependencies": {
-    "@polygloat/react": "^1.0.0-alpha.19",
-    "@polygloat/ui": "^1.0.0-alpha.19",
+    "@polygloat/react": "^1.0.0-alpha.20",
+    "@polygloat/ui": "^1.0.0-alpha.20",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
