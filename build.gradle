@@ -54,6 +54,12 @@ task buildNgx(type: Exec) {
     mustRunAfter "buildCore", "buildUi"
 }
 
+task buildNgxForPublish(type: Exec) {
+    commandLine "npm", "run", "buildProd"
+    workingDir "packages/ngx"
+    mustRunAfter "buildCore", "buildUi"
+}
+
 task buildUi(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"

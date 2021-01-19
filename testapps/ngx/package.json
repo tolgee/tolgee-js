@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "buildProd": "ng build --prod",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "serve -p 8101 ./dist/sampleapp"
@@ -21,7 +22,7 @@
     "@angular/router": "~10.2.2",
     "@polygloat/core": "^1.0.0-alpha.18",
     "@polygloat/ngx": "^1.0.0-alpha.18",
-    "@polygloat/ui": "^1.0.0-alpha.18",
+    "@polygloat/ui": "1.0.0-alpha.18",
     "@types/react": "^16.9.55",
     "rxjs": "~6.6.3",
     "serve": "^11.3.2",

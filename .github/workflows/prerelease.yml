@@ -30,6 +30,9 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Build ngx production build
+        run: ./gradlew buildNgxForPublish
+
       - name: Publish
         run: lerna publish prerelease --yes
 
