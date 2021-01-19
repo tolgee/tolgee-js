@@ -30,11 +30,14 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Build ngx production build
+      - name: Create lerna version
+        run: lerna version prerelease --yes
+
+      - name: Rebuild ngx package with correct version and without Ivy
         run: ./gradlew buildNgxForPublish
 
       - name: Publish
-        run: lerna publish prerelease --yes
+        run: lerna publish from-git
 
       - uses: actions/upload-artifact@v2
         if: always()

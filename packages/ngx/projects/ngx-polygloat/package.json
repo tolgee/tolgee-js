@@ -1,5 +1,9 @@
 {
   "name": "@polygloat/ngx",
   "description": "Angular implementation of polygloat translation framework",
-  "version": "1.0.0-alpha.16"
+  "version": "1.0.0-alpha.19",
+  "publishConfig": {
+    "directory": "../../dist/ngx-polygloat",
+    "access": "public"
+  }
 }

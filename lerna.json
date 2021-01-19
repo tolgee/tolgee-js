@@ -1,7 +1,8 @@
 {
   "packages": [
     "packages/*",
-    "testapps/*"
+    "testapps/*",
+    "packages/ngx/projects/ngx-polygloat"
   ],
   "version": "1.0.0-alpha.19"
 }
