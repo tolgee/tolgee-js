@@ -5,6 +5,7 @@
     "ng": "ng",
     "develop": "ng build --watch",
     "build": "ng build",
+    "buildProd": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint"
   },

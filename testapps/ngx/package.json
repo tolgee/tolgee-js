@@ -5,7 +5,6 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "buildProd": "ng build --prod",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "serve -p 8101 ./dist/sampleapp"
