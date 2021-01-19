@@ -1,6 +1,6 @@
 {
   "name": "angular",
-  "version": "1.0.0-alpha.18",
+  "version": "1.0.0-alpha.19",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,9 +19,9 @@
     "@angular/platform-browser": "~10.2.2",
     "@angular/platform-browser-dynamic": "~10.2.2",
     "@angular/router": "~10.2.2",
-    "@polygloat/core": "^1.0.0-alpha.18",
-    "@polygloat/ngx": "^1.0.0-alpha.18",
-    "@polygloat/ui": "1.0.0-alpha.18",
+    "@polygloat/core": "^1.0.0-alpha.19",
+    "@polygloat/ngx": "^1.0.0-alpha.19",
+    "@polygloat/ui": "^1.0.0-alpha.19",
     "@types/react": "^16.9.55",
     "rxjs": "~6.6.3",
     "serve": "^11.3.2",
