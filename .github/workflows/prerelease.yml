@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew buildNgxForPublish
 
       - name: Publish
-        run: lerna publish from-git
+        run: lerna publish from-git --yes
 
       - uses: actions/upload-artifact@v2
         if: always()
