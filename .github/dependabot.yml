@@ -18,3 +18,33 @@ updates:
     interval: daily
   open-pull-requests-limit: 20
   target-branch: develop
+- package-ecosystem: npm
+  directory: "/packages/react/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 20
+  target-branch: develop
+- package-ecosystem: npm
+  directory: "/packages/ngx/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 20
+  target-branch: develop
+- package-ecosystem: npm
+  directory: "/testapps/react"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 20
+  target-branch: develop
+- package-ecosystem: npm
+  directory: "/testapps/core"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 20
+  target-branch: develop
+- package-ecosystem: npm
+  directory: "/testapps/react"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 20
+  target-branch: develop
