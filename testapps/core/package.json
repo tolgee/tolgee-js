@@ -1,6 +1,6 @@
 {
   "name": "@polygloat/testapps-core",
-  "version": "1.0.0-alpha.20",
+  "version": "1.0.0-alpha.21",
   "description": "Test applications for Polygloat JS core.",
   "main": "index.js",
   "private": true,
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@polygloat/core": "^1.0.0-alpha.20",
-    "@polygloat/ui": "^1.0.0-alpha.20",
+    "@polygloat/core": "^1.0.0-alpha.21",
+    "@polygloat/ui": "^1.0.0-alpha.21",
     "copy-webpack-plugin": "^7.0.0",
     "dotenv-webpack": "^6.0.0",
     "html-webpack-plugin": "^4.5.1",
