@@ -1,13 +1,13 @@
-import {PolygloatConfig} from './PolygloatConfig';
+import {TolgeeConfig} from './TolgeeConfig';
 import {Lifecycle, scoped} from 'tsyringe';
 import {Scope} from "./types";
 
-const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY = "__polygloat_preferredLanguages";
-const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = "__polygloat_currentLanguage";
+const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY = "__tolgee_preferredLanguages";
+const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = "__tolgee_currentLanguage";
 
 @scoped(Lifecycle.ContainerScoped)
 export class Properties {
-    config: PolygloatConfig;
+    config: TolgeeConfig;
     scopes: Scope[] = [];
 
     set preferredLanguages(languages: Set<string>) {

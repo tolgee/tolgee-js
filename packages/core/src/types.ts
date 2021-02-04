@@ -1,15 +1,15 @@
-export interface PolygloatTextInputElement extends HTMLElement {
-    __polygloat: TextInputElementData;
+export interface TolgeeTextInputElement extends HTMLElement {
+    __tolgee: TextInputElementData;
     selectionStart: number;
     value: string;
 }
 
-export interface PolygloatTextAreaElement extends PolygloatTextInputElement, HTMLTextAreaElement {
+export interface TolgeeTextAreaElement extends TolgeeTextInputElement, HTMLTextAreaElement {
     addEventListener: any;
     removeEventListener: any;
 }
 
-export interface PolygloatInputElement extends PolygloatTextInputElement, HTMLInputElement {
+export interface TolgeeInputElement extends TolgeeTextInputElement, HTMLInputElement {
     addEventListener: any;
     removeEventListener: any;
 }
@@ -29,11 +29,11 @@ export type KeyAndParams = { key: string, params: TranslationParams }
 export type TranslatedWithMetadata = { translated: string, key: string, params: TranslationParams }
 
 export type NodeWithMeta = Node & {
-    _polygloat: NodeMeta;
+    _tolgee: NodeMeta;
 };
 
 export type ElementWithMeta = Element & ElementCSSInlineStyle & {
-    _polygloat: ElementMeta
+    _tolgee: ElementMeta
 }
 
 export type ElementMeta = {

@@ -19,11 +19,11 @@ export class MouseEventHandler {
 
 
     handle(element: ElementWithMeta & ElementCSSInlineStyle, onclick: (clickEvent: MouseEvent) => void) {
-        if (element._polygloat.listeningForHighlighting) {
-            console.error("Element is already listening mouse events! This is probably bug in polygloat");
+        if (element._tolgee.listeningForHighlighting) {
+            console.error("Element is already listening mouse events! This is probably bug in tolgee");
             return;
         }
-        element._polygloat.listeningForHighlighting = true;
+        element._tolgee.listeningForHighlighting = true;
 
         this.initEventListeners(element, onclick);
 
@@ -38,7 +38,7 @@ export class MouseEventHandler {
         });
     }
 
-    private initEventListeners(element: Element & ElementCSSInlineStyle & { _polygloat: ElementMeta }, onclick: (clickEvent: MouseEvent) => void) {
+    private initEventListeners(element: Element & ElementCSSInlineStyle & { _tolgee: ElementMeta }, onclick: (clickEvent: MouseEvent) => void) {
         const onMouseOver = () => this.onMouseOver(element);
         const onMouseOut = () => this.onMouseOut(element);
         const onClick = (e: MouseEvent) => {
@@ -62,7 +62,7 @@ export class MouseEventHandler {
         element.addEventListener("mouseup", onMouseDownOrUp);
         element.addEventListener("mouseout", onMouseOut);
 
-        element._polygloat.removeAllEventListeners = () => {
+        element._tolgee.removeAllEventListeners = () => {
             element.removeEventListener("mousedown", onMouseDownOrUp);
             element.removeEventListener("mouseup", onMouseDownOrUp);
             element.removeEventListener("mouseover", onMouseOver);

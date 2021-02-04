@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: polygloat_js_e2e_server
+    container_name: tolgee_js_e2e_server
     image: polygloat/polygloat:latest
     ports:
       - 8202:8080
@@ -16,7 +16,7 @@ services:
       - polygloat.authentication.initialPassword=admin
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=*:8091,server=y,suspend=n
   e2e_app_core:
-    container_name: polygloat_js_e2e_serve_testapps_core
+    container_name: tolgee_js_e2e_serve_testapps_core
     build: ../docker
     volumes:
       - "../testapps/core:/data"
@@ -25,7 +25,7 @@ services:
     command: ["npm", "run", "serve"]
     working_dir: /data
   e2e_app_react:
-    container_name: polygloat_js_e2e_serve_testapps_react
+    container_name: tolgee_js_e2e_serve_testapps_react
     build: ../docker
     volumes:
       - "../:/data"
@@ -34,7 +34,7 @@ services:
     command: [ "npm", "run", "serve" ]
     working_dir: /data/testapps/react
   e2e_app_angular:
-    container_name: polygloat_js_e2e_serve_testapps_ngx
+    container_name: tolgee_js_e2e_serve_testapps_ngx
     build: ../docker
     volumes:
       - "../:/data"

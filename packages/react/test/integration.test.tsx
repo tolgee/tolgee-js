@@ -1,6 +1,6 @@
 jest.autoMockOff();
 
-import {PolygloatProvider, T} from "../src";
+import {TolgeeProvider, T} from "../src";
 import * as React from 'react'
 import {render, waitFor, screen} from '@testing-library/react'
 
@@ -18,10 +18,10 @@ describe("integration", () => {
             }) as any;
 
             render(
-                <PolygloatProvider>
+                <TolgeeProvider>
                     <div><T>sampleApp.english_text_one</T></div>
                     <div><T>sampleApp.not_found</T></div>
-                </PolygloatProvider>);
+                </TolgeeProvider>);
         })
 
         test("Will translate string", async () => {

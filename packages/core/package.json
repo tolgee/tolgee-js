@@ -1,8 +1,8 @@
 {
-  "name": "@polygloat/core",
-  "version": "1.0.0-alpha.21",
+  "name": "@tolgee/core",
+  "version": "1.0.0-alpha.22",
   "description": "Library providing ability to translate messages directly in context of developed application.",
-  "main": "dist/polygloat.umd.js",
+  "main": "dist/tolgee.umd.js",
   "types": "./lib/index.d.ts",
   "declaration": true,
   "directories": {
@@ -66,5 +66,8 @@
     "webpack-bundle-analyzer": "^4.3.0",
     "webpack-cli": "^3.3.12"
   },
-  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
+  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
+  "publishConfig": {
+    "access": "public"
+  }
 }

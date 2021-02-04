@@ -1,4 +1,4 @@
-import {useSetLanguage, useCurrentLanguage} from "@polygloat/react";
+import {useSetLanguage, useCurrentLanguage} from "@tolgee/react";
 import React, {FunctionComponent} from "react";
 
 export const ChooseLanguage: FunctionComponent<React.ComponentProps<"select">> = (props) => {

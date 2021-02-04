@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import 'regenerator-runtime/runtime';
 
-import {Polygloat} from './Polygloat';
-import {PolygloatConfig} from "./PolygloatConfig";
+import {Tolgee} from './Tolgee';
+import {TolgeeConfig} from "./TolgeeConfig";
 import {ModifierKey} from './Constants/ModifierKey';
 
-export {Polygloat, PolygloatConfig, ModifierKey};
+export {Tolgee, TolgeeConfig, ModifierKey};

@@ -24,14 +24,14 @@ describe("Properties", () => {
             Storage.prototype.getItem = jest.fn();
             mocked(localStorage.getItem).mockReturnValueOnce(JSON.stringify(dummyReturn));
             expect(properties.preferredLanguages).toEqual(new Set(dummyReturn));
-            expect(localStorage.getItem).toBeCalledWith("__polygloat_preferredLanguages");
+            expect(localStorage.getItem).toBeCalledWith("__tolgee_preferredLanguages");
         });
 
         test("setter sets local storage item", () => {
             let dummySet = ["dummyLang1"];
             Storage.prototype.setItem = jest.fn();
             properties.preferredLanguages = new Set(dummySet);
-            expect(localStorage.setItem).toBeCalledWith("__polygloat_preferredLanguages", JSON.stringify(dummySet));
+            expect(localStorage.setItem).toBeCalledWith("__tolgee_preferredLanguages", JSON.stringify(dummySet));
         })
     });
 
@@ -41,14 +41,14 @@ describe("Properties", () => {
             Storage.prototype.getItem = jest.fn();
             mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
             expect(properties.currentLanguage).toEqual(dummyReturn);
-            expect(localStorage.getItem).toBeCalledWith("__polygloat_currentLanguage");
+            expect(localStorage.getItem).toBeCalledWith("__tolgee_currentLanguage");
         });
 
         test("setter sets local storage item", () => {
             let dummySet = "dummyLang1";
             Storage.prototype.setItem = jest.fn();
             properties.currentLanguage = dummySet;
-            expect(localStorage.setItem).toBeCalledWith("__polygloat_currentLanguage", dummySet);
+            expect(localStorage.setItem).toBeCalledWith("__tolgee_currentLanguage", dummySet);
         })
 
         test("returns correct lang by navigator", () => {

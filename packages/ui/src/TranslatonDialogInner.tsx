@@ -5,7 +5,7 @@ import {LanguageSelect} from "./LanguageSelect";
 import {TranslationFields} from "./TranslationFields";
 import {Dialog} from './common/Dialog';
 import {Button} from './common/Button';
-import {TextHelper} from '@polygloat/core/lib/helpers/TextHelper'
+import {TextHelper} from '@tolgee/core/lib/helpers/TextHelper'
 
 export default () => {
     let context = useContext(TranslationDialogContext);

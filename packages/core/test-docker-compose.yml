@@ -1,8 +1,8 @@
 version: '3'
 services:
   app:
-    container_name: polygloat
-    image: polygloat/polygloat:${TEST_POLYGLOAT_SERVER_VERSION}
+    container_name: tolgee
+    image: tolgee/tolgee:${TEST_POLYGLOAT_SERVER_VERSION}
     ports:
       - "${TEST_POLYGLOAT_API_PORT}:8080"
     environment:

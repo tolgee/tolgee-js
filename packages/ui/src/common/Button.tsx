@@ -3,7 +3,7 @@ import * as React from "react";
 import {FunctionComponent} from "react";
 
 const css = `
-.polygloat-button{
+.tolgee-button{
     border: 1px solid rgba(0, 0, 0, 0.23);
     color: rgba(0, 0, 0, 0.87);
     padding: 6px 16px;
@@ -22,31 +22,31 @@ const css = `
     cursor: pointer;
 }
 
-.polygloat-button:disabled, .polygloat-button:disabled:hover{
+.tolgee-button:disabled, .tolgee-button:disabled:hover{
     background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.23);
     color: rgba(0, 0, 0, 0.87);
 }
 
-.polygloat-button:hover{
+.tolgee-button:hover{
     background-color: rgba(0, 0, 0, 0.04);
 }
 
-.polygloat-button-primary{
+.tolgee-button-primary{
     color: #1976d2;
     border-color: rgba(25, 118, 210, 0.5);
 }
-.polygloat-button-primary:hover{
+.tolgee-button-primary:hover{
     border: 1px solid #1976d2;
     background-color: rgba(25, 118, 210, 0.04);
 }
 
-.polygloat-button-secondary {
+.tolgee-button-secondary {
     color: rgb(220, 0, 78);
     border: 1px solid rgba(220, 0, 78, 0.5);
 }
 
-.polygloat-button-secondary:hover {
+.tolgee-button-secondary:hover {
     color: rgb(220, 0, 78);
     border: 1px solid rgba(220, 0, 78, 0.5);
 }
@@ -59,6 +59,6 @@ type ButtonProps = React.ComponentProps<'button'> & { variant?: Variant };
 export const Button: FunctionComponent<ButtonProps> = (props) => {
     useWithStyles(css);
 
-    const variantClass = props.variant || props.variant === "default" ? `polygloat-button-${props.variant}` : "";
-    return <button {...props} className={`polygloat-button ${variantClass}`}/>
+    const variantClass = props.variant || props.variant === "default" ? `tolgee-button-${props.variant}` : "";
+    return <button {...props} className={`tolgee-button ${variantClass}`}/>
 }

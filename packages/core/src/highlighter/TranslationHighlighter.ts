@@ -29,13 +29,13 @@ export class TranslationHighlighter {
         if (keys.size === 1) {
             return Array.from(keys)[0];
         }
-        console.error("No key to translate. This seems like a bug in polygloat.");
+        console.error("No key to translate. This seems like a bug in tolgee.");
     }
 
     private static getKeyOptions(node: ElementWithMeta): Set<string> {
-        const nodes = Array.from(node._polygloat.nodes);
+        const nodes = Array.from(node._tolgee.nodes);
         const keys = nodes.reduce((acc, curr) =>
-            [...acc, ...curr._polygloat.keys.map(k => k.key)], []);
+            [...acc, ...curr._tolgee.keys.map(k => k.key)], []);
         return new Set(keys);
     }
 
@@ -48,7 +48,7 @@ export class TranslationHighlighter {
             }
             return;
         }
-        console.warn("Polygloat UI is not provided. To translate interactively provide polygloat ui constructor to \"ui\" configuration property. " +
+        console.warn("Tolgee UI is not provided. To translate interactively provide tolgee ui constructor to \"ui\" configuration property. " +
             "To disable highlighting use production mode.");
     };
 

@@ -5,7 +5,7 @@ buildscript {
     }
 }
 
-group 'io.polygloat'
+group 'io.tolgee'
 apply plugin: 'idea'
 
 idea {
@@ -109,9 +109,6 @@ task testUi(type: Exec) {
     commandLine "npm", "run", "test"
     workingDir "packages/ui"
 }
-
-
-
 
 task build(type: Task) {
     dependsOn "buildAll", "testUi", "testCore", "testReact", "runE2e"

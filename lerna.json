@@ -2,7 +2,7 @@
   "packages": [
     "packages/*",
     "testapps/*",
-    "packages/ngx/projects/ngx-polygloat"
+    "packages/ngx/projects/ngx-tolgee"
   ],
-  "version": "1.0.0-alpha.21"
+  "version": "1.0.0-alpha.22"
 }

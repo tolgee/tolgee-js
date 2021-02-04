@@ -1,11 +1,11 @@
-jest.dontMock("./Polygloat");
+jest.dontMock("./Tolgee");
 
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
 import "reflect-metadata"
 import {mocked} from 'ts-jest/utils'
 import {CoreService} from "./services/CoreService";
-import Polygloat from "./Polygloat";
+import Tolgee from "./Tolgee";
 import {
     configMock,
     coreServiceMock,
@@ -26,36 +26,36 @@ import {NodeHelper} from "./helpers/NodeHelper";
 import {POLYGLOAT_TARGET_ATTRIBUTE} from "./Constants/Global";
 import {Properties} from "./Properties";
 
-describe("Polygloat", () => {
-    let polygloat: Polygloat;
+describe("Tolgee", () => {
+    let tolgee: Tolgee;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        polygloat = new Polygloat({});
+        tolgee = new Tolgee({});
     });
 
     test("can be created", () => {
-        expect(polygloat).not.toBeNull();
+        expect(tolgee).not.toBeNull();
     });
 
     test("returns proper default language", () => {
         configMock.mock.instances[0].defaultLanguage = "testDefaultLanguage"
         expect(configMock).toBeCalledTimes(1);
-        expect(polygloat.defaultLanguage).toEqual("testDefaultLanguage");
+        expect(tolgee.defaultLanguage).toEqual("testDefaultLanguage");
     });
 
     test("returns proper language", () => {
         propertiesMock.mock.instances[0].currentLanguage = "currentLang"
-        expect(polygloat.lang).toEqual("currentLang");
+        expect(tolgee.lang).toEqual("currentLang");
     });
 
-    test("returns instance of polygloat service", () => {
-        expect(polygloat.coreService instanceof CoreService).toBeTruthy();
+    test("returns instance of tolgee service", () => {
+        expect(tolgee.coreService instanceof CoreService).toBeTruthy();
     });
 
     test("will set properties.scopes on run in development mode", async () => {
         propertiesMock.mock.instances[0].config.mode = "development";
-        await polygloat.run();
+        await tolgee.run();
         expect(coreServiceMock.mock.instances[0].getScopes).toBeCalledTimes(1);
         expect(propertiesMock.mock.instances[0].scopes).toContain("translations.edit" as Scope);
         expect(propertiesMock.mock.instances[0].scopes).not.toContain("translations.view" as Scope);
@@ -63,7 +63,7 @@ describe("Polygloat", () => {
 
     test("will not set properties.scopes on run in production mode", async () => {
         propertiesMock.mock.instances[0].config.mode = "production";
-        await polygloat.run();
+        await tolgee.run();
         expect(coreServiceMock.mock.instances[0].getScopes).toBeCalledTimes(0);
         expect(propertiesMock.mock.instances[0].scopes).toBeUndefined();
     });
@@ -71,28 +71,28 @@ describe("Polygloat", () => {
 
     test("will run the observer when watch is on", async () => {
         propertiesMock.mock.instances[0].config.watch = true;
-        await polygloat.run();
+        await tolgee.run();
         expect(observerMock.mock.instances[0].observe).toBeCalledTimes(1)
     });
 
 
     test("will not the observer when watch is off", async () => {
         propertiesMock.mock.instances[0].config.watch = false;
-        await polygloat.run();
+        await tolgee.run();
         expect(observerMock.mock.instances[0].observe).toBeCalledTimes(0)
     });
 
 
     test("will try to get translations with current language from properties", async () => {
         propertiesMock.mock.instances[0].currentLanguage = "dummyLang"
-        await polygloat.run();
+        await tolgee.run();
         expect(translationServiceMock.mock.instances[0].loadTranslations).toBeCalledWith()
     });
 
     test("will refresh translations using observer on run", async () => {
         let htmlElement = document.createElement("dummyElement");
         propertiesMock.mock.instances[0].config.targetElement = htmlElement;
-        await polygloat.run();
+        await tolgee.run();
         expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(htmlElement)
     });
 
@@ -100,14 +100,14 @@ describe("Polygloat", () => {
     test("will refresh translations using observer on refresh", async () => {
         let htmlElement = document.createElement("dummyElement");
         propertiesMock.mock.instances[0].config.targetElement = htmlElement;
-        await polygloat.refresh();
+        await tolgee.refresh();
         expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(htmlElement)
     });
 
 
     test("will get defaultLanguage from config", async () => {
         propertiesMock.mock.instances[0].config.defaultLanguage = "dummyLang"
-        expect(polygloat.defaultLanguage).toEqual("dummyLang");
+        expect(tolgee.defaultLanguage).toEqual("dummyLang");
     });
 
     describe("translation functions", () => {
@@ -131,7 +131,7 @@ describe("Polygloat", () => {
         describe("async translate", () => {
             test("will return wrapped string from text service in development mode", async () => {
                 propertiesMock.mock.instances[0].config.mode = "development";
-                const translated = await polygloat.translate(dummyKey, dummyParams);
+                const translated = await tolgee.translate(dummyKey, dummyParams);
 
                 expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams)
                 expect(mockedTranslate).not.toBeCalled();
@@ -141,7 +141,7 @@ describe("Polygloat", () => {
 
             test("will return translated string from text service in production mode", async () => {
                 propertiesMock.mock.instances[0].config.mode = "production";
-                const translated = await polygloat.translate(dummyKey, dummyParams);
+                const translated = await tolgee.translate(dummyKey, dummyParams);
 
                 expect(translated).toEqual(translatedDummyText);
                 expect(mockedWrap).not.toBeCalled();
@@ -150,7 +150,7 @@ describe("Polygloat", () => {
 
             test("will not wrap when development is on, but noWrap is true", async () => {
                 propertiesMock.mock.instances[0].config.mode = "development";
-                const translated = await polygloat.translate(dummyKey, dummyParams, true);
+                const translated = await tolgee.translate(dummyKey, dummyParams, true);
 
                 expect(mockedWrap).not.toBeCalled()
                 expect(translated).toEqual(translatedDummyText);
@@ -161,7 +161,7 @@ describe("Polygloat", () => {
             test("will return wrapped string from text service in development mode", async () => {
                 propertiesMock.mock.instances[0].config.mode = "development";
                 const dummyParams = {};
-                const translated = polygloat.instant(dummyKey, dummyParams);
+                const translated = tolgee.instant(dummyKey, dummyParams);
 
                 expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams)
                 expect(mockedInstant).not.toBeCalled();
@@ -171,7 +171,7 @@ describe("Polygloat", () => {
 
             test("will return translated string from text service in production mode", async () => {
                 propertiesMock.mock.instances[0].config.mode = "production";
-                const translated = polygloat.instant(dummyKey, dummyParams);
+                const translated = tolgee.instant(dummyKey, dummyParams);
 
                 expect(translated).toEqual(translatedDummyText);
                 expect(mockedWrap).not.toBeCalled();
@@ -179,20 +179,20 @@ describe("Polygloat", () => {
             });
 
             test("will pass noEmpty parameter", () => {
-                polygloat.instant(dummyKey, dummyParams, undefined, true);
+                tolgee.instant(dummyKey, dummyParams, undefined, true);
                 expect(mockedInstant).toBeCalledWith(dummyKey, dummyParams, undefined, true);
             });
 
             test("will not wrap when development is on, but noWrap is true", async () => {
                 propertiesMock.mock.instances[0].config.mode = "development";
-                const translated = polygloat.instant(dummyKey, dummyParams, true);
+                const translated = tolgee.instant(dummyKey, dummyParams, true);
 
                 expect(mockedWrap).not.toBeCalled()
                 expect(translated).toEqual(translatedDummyText);
             });
 
             test("will call instant with orEmpty true", async () => {
-                polygloat.instant(dummyKey, dummyParams, true, true);
+                tolgee.instant(dummyKey, dummyParams, true, true);
                 expect(getMockedInstance(TextService).instant).toBeCalledWith(dummyKey, dummyParams, undefined, true);
             });
         });
@@ -201,8 +201,8 @@ describe("Polygloat", () => {
     test("will stop on stop function", () => {
         getMockedInstance(Properties).config.targetElement = document.body;
         NodeHelper.markElementAsTargetElement(document.body);
-        polygloat.run();
-        polygloat.stop();
+        tolgee.run();
+        tolgee.stop();
         expect(getMockedInstance(ElementRegistrar).cleanAll).toBeCalledTimes(1);
         expect(observerMock.mock.instances[0].stopObserving).toBeCalledTimes(1);
         expect(document.body).not.toHaveAttribute(POLYGLOAT_TARGET_ATTRIBUTE);
@@ -211,7 +211,7 @@ describe("Polygloat", () => {
     test("will return proper onLangChange emitter", () => {
         let eventEmitter = new EventEmitterImpl();
         (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = eventEmitter;
-        expect(polygloat.onLangChange).toEqual(eventEmitter);
+        expect(tolgee.onLangChange).toEqual(eventEmitter);
     });
 
     describe("lang setter", () => {
@@ -219,7 +219,7 @@ describe("Polygloat", () => {
 
         beforeEach(() => {
             (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = new EventEmitterImpl();
-            polygloat.lang = dummyLang;
+            tolgee.lang = dummyLang;
         })
 
         test("will change the language", () => {
