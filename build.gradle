@@ -5,7 +5,7 @@ buildscript {
     }
 }
 
-group 'io.polygloat'
+group 'io.tolgee'
 apply plugin: 'idea'
 
 idea {

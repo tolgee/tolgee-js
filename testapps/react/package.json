@@ -1,10 +1,10 @@
 {
-  "name": "@polygloat/testapps-react",
+  "name": "@tolgee/testapps-react",
   "version": "1.0.0-alpha.21",
   "private": true,
   "dependencies": {
-    "@polygloat/react": "^1.0.0-alpha.21",
-    "@polygloat/ui": "^1.0.0-alpha.21",
+    "@tolgee/react": "^1.0.0-alpha.21",
+    "@tolgee/ui": "^1.0.0-alpha.21",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",

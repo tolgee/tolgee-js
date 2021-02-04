@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import {PolygloatProvider} from "@polygloat/react";
-import {UI} from "@polygloat/ui"
+import {TolgeeProvider} from "@tolgee/react";
+import {UI} from "@tolgee/ui"
 import {Page} from "./Page";
 
 
 const App = () => {
     return (
-        <PolygloatProvider
+        <TolgeeProvider
             filesUrlPrefix="i18n/"
             apiUrl={process.env.REACT_APP_POLYGLOAT_API_URL}
             apiKey={process.env.REACT_APP_POLYGLOAT_API_KEY}
@@ -32,7 +32,7 @@ const App = () => {
             }}>
                 <Page/>
             </div>
-        </PolygloatProvider>
+        </TolgeeProvider>
     )
 };
 

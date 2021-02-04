@@ -1,7 +1,7 @@
 {
-  "name": "@polygloat/testapps-core",
+  "name": "@tolgee/testapps-core",
   "version": "1.0.0-alpha.21",
-  "description": "Test applications for Polygloat JS core.",
+  "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
   "scripts": {
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@polygloat/core": "^1.0.0-alpha.21",
-    "@polygloat/ui": "^1.0.0-alpha.21",
+    "@tolgee/core": "^1.0.0-alpha.21",
+    "@tolgee/ui": "^1.0.0-alpha.21",
     "copy-webpack-plugin": "^7.0.0",
     "dotenv-webpack": "^6.0.0",
     "html-webpack-plugin": "^4.5.1",

@@ -1,22 +1,22 @@
 import * as React from 'react';
 import {FunctionComponent, useEffect, useState} from 'react';
-import {usePolygloatContext} from "./usePolygloatContext";
+import {useTolgeeContext} from "./useTolgeeContext";
 import {TranslationParameters} from "./types";
 
 type TProps = { parameters?: TranslationParameters, children: string, noWrap?: boolean }
 
 export const T: FunctionComponent<TProps> = (props: TProps) => {
-    const context = usePolygloatContext();
+    const context = useTolgeeContext();
 
-    const [translated, setTranslated] = useState(context.polygloat.instant(props.children, props.parameters, props.noWrap, true));
-    const translate = () => context.polygloat.translate(props.children, props.parameters, props.noWrap).then(t => {
+    const [translated, setTranslated] = useState(context.tolgee.instant(props.children, props.parameters, props.noWrap, true));
+    const translate = () => context.tolgee.translate(props.children, props.parameters, props.noWrap).then(t => {
         setTranslated(t);
     });
 
     useEffect(() => {
         translate();
 
-        const subscription = context.polygloat.onLangChange.subscribe(() => {
+        const subscription = context.tolgee.onLangChange.subscribe(() => {
             translate();
         });
 

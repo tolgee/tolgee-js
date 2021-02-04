@@ -18,10 +18,10 @@
     "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "polygloat/ui": [
+      "tolgee/ui": [
         "./ui"
       ],
-      "polygloat/core": [
+      "tolgee/core": [
         "./core"
       ],
       "@testFixtures/*": [

@@ -31,7 +31,7 @@ export abstract class AbstractHandler {
                 const {text, keys} = result;
                 let translatedNode = this.translateChildNode(textNode, text, keys);
                 const parentElement = this.getParentElement(translatedNode);
-                parentElement._polygloat.nodes.add(translatedNode);
+                parentElement._tolgee.nodes.add(translatedNode);
                 this.elementRegistrar.register(parentElement);
             }
         }

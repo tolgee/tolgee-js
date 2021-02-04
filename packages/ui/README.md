@@ -1,1 +1,1 @@
-# polygloat-js-core
+# tolgee-js-core

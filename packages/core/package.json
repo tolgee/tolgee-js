@@ -1,8 +1,8 @@
 {
-  "name": "@polygloat/core",
+  "name": "@tolgee/core",
   "version": "1.0.0-alpha.21",
   "description": "Library providing ability to translate messages directly in context of developed application.",
-  "main": "dist/polygloat.umd.js",
+  "main": "dist/tolgee.umd.js",
   "types": "./lib/index.d.ts",
   "declaration": true,
   "directories": {

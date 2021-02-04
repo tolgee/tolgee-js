@@ -3,7 +3,7 @@ import {TranslatePipe} from './translate.pipe';
 import {TranslationsProvider} from './translations-provider';
 import {TranslateService} from "./translate.service";
 import {STranslatePipe} from "./stranslate.pipe";
-import {PolygloatConfig} from "./polygloatConfig";
+import {TolgeeConfig} from "./tolgeeConfig";
 
 @NgModule({
   declarations: [
@@ -16,12 +16,12 @@ import {PolygloatConfig} from "./polygloatConfig";
   ],
   providers: []
 })
-export class NgxPolygloatModule {
+export class NgxTolgeeModule {
   // @dynamic
-  static forRoot(options: PolygloatConfig): ModuleWithProviders<NgxPolygloatModule> {
+  static forRoot(options: TolgeeConfig): ModuleWithProviders<NgxTolgeeModule> {
     options = {filesUrlPrefix: "/assets/i18n/", ...options};
     return {
-      ngModule: NgxPolygloatModule,
+      ngModule: NgxTolgeeModule,
       providers: [
         TranslateService, TranslationsProvider,
         {
@@ -32,7 +32,7 @@ export class NgxPolygloatModule {
           deps: [TranslationsProvider, TranslateService],
           multi: true
         },
-        {provide: PolygloatConfig, useValue: options}
+        {provide: TolgeeConfig, useValue: options}
       ],
     };
   }

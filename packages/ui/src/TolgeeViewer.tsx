@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {TranslationDialog} from "./TranslationDialog";
 import {BodyEnd} from "./BodyEnd";
-import {CoreService} from '@polygloat/core/lib/services/CoreService';
-import {TranslationService} from '@polygloat/core/lib/services/TranslationService';
-import {Properties} from '@polygloat/core/lib/Properties';
-import {EventService} from '@polygloat/core/lib/services/EventService';
+import {CoreService} from '@tolgee/core/lib/services/CoreService';
+import {TranslationService} from '@tolgee/core/lib/services/TranslationService';
+import {Properties} from '@tolgee/core/lib/Properties';
+import {EventService} from '@tolgee/core/lib/services/EventService';
 
 
 export type ComponentDependencies = {
@@ -18,7 +18,7 @@ export type ViewerProps = {
     dependencies: ComponentDependencies
 }
 
-export class PolygloatViewer extends React.Component<ViewerProps> {
+export class TolgeeViewer extends React.Component<ViewerProps> {
     state = {
         translationInput: null,
         dialogOpened: false

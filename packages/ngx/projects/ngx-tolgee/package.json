@@ -1,0 +1,9 @@
+{
+  "name": "@tolgee/ngx",
+  "description": "Angular implementation of tolgee translation framework",
+  "version": "1.0.0-alpha.21",
+  "publishConfig": {
+    "directory": "../../dist/ngx-tolgee",
+    "access": "public"
+  }
+}

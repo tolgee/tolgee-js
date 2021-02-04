@@ -27,7 +27,7 @@ describe("MouseEventHandler", () => {
     beforeEach(async () => {
         mouseEventHandler = await getMouseEventHandler();
         mockedElement = document.createElement("div") as Element as ElementWithMeta;
-        mockedElement._polygloat = {} as ElementMeta;
+        mockedElement._tolgee = {} as ElementMeta;
         mouseEventHandler.handle(mockedElement, mockedCallback);
         getMockedInstance(Properties).config.highlightKeys = [ModifierKey[key]];
         getMockedInstance(Properties).config.highlightColor = mockedColor;
@@ -104,23 +104,23 @@ describe("MouseEventHandler", () => {
 
     describe("Remove all listeners callback", () => {
         test("will be assigned on init", () => {
-            expect(typeof mockedElement._polygloat.removeAllEventListeners).toEqual("function");
+            expect(typeof mockedElement._tolgee.removeAllEventListeners).toEqual("function");
         });
 
         test("will not handle click after it's call", () => {
-            mockedElement._polygloat.removeAllEventListeners();
+            mockedElement._tolgee.removeAllEventListeners();
             mockedElement.dispatchEvent(mockedClick);
             expect(mockedCallback).toBeCalledTimes(0);
         })
 
         test("will not handle mouse over after it's call", () => {
-            mockedElement._polygloat.removeAllEventListeners();
+            mockedElement._tolgee.removeAllEventListeners();
             mockedElement.dispatchEvent(mockedMouseOver);
             expect(mockedCallback).toBeCalledTimes(0);
         })
 
         test("will not handle mouse leave after it's call", () => {
-            mockedElement._polygloat.removeAllEventListeners();
+            mockedElement._tolgee.removeAllEventListeners();
             mockedElement.dispatchEvent(mockedMouseOut);
             expect(mockedCallback).toBeCalledTimes(0);
         })

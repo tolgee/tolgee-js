@@ -14,7 +14,7 @@ export class ElementRegistrar {
 
     register(element: ElementWithMeta) {
         if (this.getActiveNodes(element).next().value === undefined) {
-            throw new Error("Registered element with no nodes. This is probably an bug in Polygloat.");
+            throw new Error("Registered element with no nodes. This is probably an bug in Tolgee.");
         }
         if (this.properties.config.mode === "development" && !this.registeredElements.has(element)) {
             this.translationHighlighter.listen(element);
@@ -25,7 +25,7 @@ export class ElementRegistrar {
     refreshAll() {
         for (const element of this.registeredElements) {
             this.cleanElementInactiveNodes(element);
-            if (element._polygloat.nodes.size === 0) {
+            if (element._tolgee.nodes.size === 0) {
                 this.cleanElement(element);
             }
         }
@@ -39,22 +39,22 @@ export class ElementRegistrar {
 
     private cleanElementInactiveNodes(element: ElementWithMeta) {
         if (this.isElementActive(element)) {
-            element._polygloat.nodes = new Set(this.getActiveNodes(element));
+            element._tolgee.nodes = new Set(this.getActiveNodes(element));
             return;
         }
     }
 
     private cleanElement(element: ElementWithMeta) {
-        if (typeof element._polygloat.removeAllEventListeners === "function") {
-            element._polygloat.removeAllEventListeners();
+        if (typeof element._tolgee.removeAllEventListeners === "function") {
+            element._tolgee.removeAllEventListeners();
         }
         element.removeAttribute(POLYGLOAT_ATTRIBUTE_NAME);
-        delete element._polygloat;
+        delete element._tolgee;
         this.registeredElements.delete(element);
     }
 
     private* getActiveNodes(element: ElementWithMeta) {
-        for (const node of element._polygloat.nodes) {
+        for (const node of element._tolgee.nodes) {
             if (NodeHelper.nodeContains(this.properties.config.targetElement, node)) {
                 yield node;
             }

@@ -1,27 +1,27 @@
-import {Polygloat} from "@polygloat/core";
+import {Tolgee} from "@tolgee/core";
 
-const polygloat = new Polygloat({
+const tolgee = new Tolgee({
     watch: true,
     targetElement: document.body,
     highlightColor: "yellow"
 });
 
-polygloat.onLangChange.subscribe(() => {
+tolgee.onLangChange.subscribe(() => {
     refresh();
 })
 
 
-const refresh = () => polygloat.translate("test").then(t => {
+const refresh = () => tolgee.translate("test").then(t => {
     document.body = document.createElement("body");
     const htmlElement = document.createElement("div");
     document.body.append(htmlElement);
     htmlElement.append(t);
     const p = document.createElement("p");
-    window.setLang = () => polygloat.lang = "cs";
+    window.setLang = () => tolgee.lang = "cs";
     p.innerHTML = "<button onclick='window.setLang()'>cs</button>"
     document.body.append(p);
 })
 
 refresh();
 
-polygloat.run();
+tolgee.run();

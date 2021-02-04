@@ -9,9 +9,9 @@ module.exports = env => {
         entry: "./src/index.ts",
         devtool: 'source-map',
         output: {
-            filename: "polygloat-react." + target + ".js",
+            filename: "tolgee-react." + target + ".js",
             path: path.resolve(__dirname, 'dist'),
-            library: 'polygloat-react',
+            library: 'tolgee-react',
             libraryTarget: target
         },
         resolve: {
@@ -38,7 +38,7 @@ module.exports = env => {
         externals: {
             react: "react",
             "react-dom": "react-dom",
-            "polygloat/ui": "polygloat/ui"
+            "tolgee/ui": "tolgee/ui"
         }
     });
 

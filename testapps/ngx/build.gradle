@@ -1,4 +1,4 @@
-import io.polygloat.node.PolygloatNodePlugin
+import io.tolgee.node.TolgeeNodePlugin
 
 idea {
     module {
@@ -8,10 +8,10 @@ idea {
     }
 }
 
-apply plugin: PolygloatNodePlugin
+apply plugin: TolgeeNodePlugin
 
-polygloatNpm {
+tolgeeNpm {
     library = false
-    linkablePackages = ["@polygloat/core", "ngx-polygloat"]
+    linkablePackages = ["@tolgee/core", "ngx-tolgee"]
 }
 

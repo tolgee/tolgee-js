@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {TranslateService} from "@polygloat/ngx";
+import {TranslateService} from "@tolgee/ngx";
 
 @Component({
   selector: 'app-root',

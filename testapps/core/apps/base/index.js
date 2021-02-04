@@ -1,11 +1,11 @@
-import * as umd from "../../node_modules/@polygloat/core/dist/polygloat.umd";
-import * as commonjs from "../../node_modules/@polygloat/core/dist/polygloat.commonjs";
-import '../../node_modules/@polygloat/core/dist/polygloat.window';
+import * as umd from "../../node_modules/@tolgee/core/dist/tolgee.umd";
+import * as commonjs from "../../node_modules/@tolgee/core/dist/tolgee.commonjs";
+import '../../node_modules/@tolgee/core/dist/tolgee.window';
 
-[umd, commonjs["@polygloat/core"], window["@polygloat/core"]].forEach(bundle => {
+[umd, commonjs["@tolgee/core"], window["@tolgee/core"]].forEach(bundle => {
     const bundleDivElement = document.createElement("div");
 
-    const polygloat = new bundle.Polygloat({watch: true, targetElement: bundleDivElement});
+    const tolgee = new bundle.Tolgee({watch: true, targetElement: bundleDivElement});
 
 
     bundleDivElement.setAttribute("id", bundle);
@@ -16,10 +16,10 @@ import '../../node_modules/@polygloat/core/dist/polygloat.window';
 
     bundleDivElement.append(htmlParagraphElement);
 
-    polygloat.run().then(() => {
-        polygloat.translate("test").then(t => {
+    tolgee.run().then(() => {
+        tolgee.translate("test").then(t => {
             htmlParagraphElement.append(t);
-            bundleDivElement.append("%-%polygloat:test%-%")
+            bundleDivElement.append("%-%tolgee:test%-%")
         });
     });
 })

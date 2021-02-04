@@ -6,7 +6,7 @@ e2e/cypress/videos
 packages/*/*.iml
 e2e/node_modules
 e2e/testapps/dist
-clients.polygloatRestructure.core.iml
+clients.tolgeeRestructure.core.iml
 testapps/*/node_modules
 testapps/*/build
 **/packahe.json.lerna_backup

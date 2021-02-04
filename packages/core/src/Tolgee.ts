@@ -1,5 +1,5 @@
 import {CoreService} from './services/CoreService';
-import {PolygloatConfig} from './PolygloatConfig';
+import {TolgeeConfig} from './TolgeeConfig';
 import {Properties} from './Properties';
 import {container as rootContainer} from 'tsyringe';
 import {EventService} from './services/EventService';
@@ -12,7 +12,7 @@ import {ElementRegistrar} from "./services/ElementRegistrar";
 import {NodeHelper} from "./helpers/NodeHelper";
 import {EventEmitterImpl} from "./services/EventEmitter";
 
-export class Polygloat {
+export class Tolgee {
     private readonly container = rootContainer.createChildContainer();
     public properties: Properties = this.container.resolve(Properties);
     private _coreService: CoreService = this.container.resolve(CoreService);
@@ -23,9 +23,9 @@ export class Polygloat {
     private coreHandler: CoreHandler = this.container.resolve(CoreHandler);
     private elementRegistrar: ElementRegistrar = this.container.resolve(ElementRegistrar);
 
-    constructor(config: PolygloatConfig) {
+    constructor(config: TolgeeConfig) {
         this.container = rootContainer.createChildContainer();
-        this.properties.config = new PolygloatConfig(config);
+        this.properties.config = new TolgeeConfig(config);
     }
 
     public get lang() {
@@ -89,4 +89,4 @@ export class Polygloat {
     }
 }
 
-export default Polygloat;
+export default Tolgee;
