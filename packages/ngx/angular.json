@@ -3,38 +3,38 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-polygloat": {
+    "ngx-tolgee": {
       "projectType": "library",
-      "root": "projects/ngx-polygloat",
-      "sourceRoot": "projects/ngx-polygloat/src",
+      "root": "projects/ngx-tolgee",
+      "sourceRoot": "projects/ngx-tolgee/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "tsConfig": "projects/ngx-polygloat/tsconfig.lib.json",
-            "project": "projects/ngx-polygloat/ng-package.json"
+            "tsConfig": "projects/ngx-tolgee/tsconfig.lib.json",
+            "project": "projects/ngx-tolgee/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/ngx-polygloat/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-tolgee/tsconfig.lib.prod.json"
             }
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-polygloat/src/test.ts",
-            "tsConfig": "projects/ngx-polygloat/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-polygloat/karma.conf.js"
+            "main": "projects/ngx-tolgee/src/test.ts",
+            "tsConfig": "projects/ngx-tolgee/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-tolgee/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/ngx-polygloat/tsconfig.lib.json",
-              "projects/ngx-polygloat/tsconfig.spec.json"
+              "projects/ngx-tolgee/tsconfig.lib.json",
+              "projects/ngx-tolgee/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -44,5 +44,5 @@
       }
     }
   },
-  "defaultProject": "ngx-polygloat"
+  "defaultProject": "ngx-tolgee"
 }

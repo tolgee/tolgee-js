@@ -4,7 +4,7 @@ import {NodeHelper} from "./helpers/NodeHelper";
 
 const DEFAULT_TARGET_ELEMENT = document.body;
 
-export class PolygloatConfig {
+export class TolgeeConfig {
     tagAttributes?: { [key: string]: string[] } = {
         'textarea': ['placeholder'],
         'input': ['value', 'placeholder']
@@ -14,7 +14,7 @@ export class PolygloatConfig {
     defaultLanguage?: string = 'en';
     fallbackLanguage?: string;
     availableLanguages?: string[] = ['en'];
-    inputPrefix?: string = '%-%polygloat:';
+    inputPrefix?: string = '%-%tolgee:';
     inputSuffix?: string = '%-%';
     apiUrl?: string;
     apiKey?: string;
@@ -27,7 +27,7 @@ export class PolygloatConfig {
     targetElement?: Element;
     private _targetElement?: Element;
 
-    constructor(config?: PolygloatConfig) {
+    constructor(config?: TolgeeConfig) {
         //workaround for: https://stackoverflow.com/questions/48725916/typescript-optional-property-with-a-getter
         Object.defineProperty(this, 'targetElement', {
             set(targetElement: Element) {
@@ -39,7 +39,7 @@ export class PolygloatConfig {
                 }
                 if (NodeHelper.isElementTargetElement(targetElement)) {
                     console.error("Target element: ", this._targetElement);
-                    throw new Error("An polygloat instance is inited with provided target element");
+                    throw new Error("An tolgee instance is inited with provided target element");
                 }
                 this._targetElement = targetElement;
                 NodeHelper.markElementAsTargetElement(this._targetElement);

@@ -63,7 +63,7 @@ describe("TextHandler", () => {
             expect(xpath).toBeFoundIn(document.body);
         });
 
-        describe("Node's _polygloat property", () => {
+        describe("Node's _tolgee property", () => {
             let node: NodeWithMeta;
 
             beforeEach(() => {
@@ -71,23 +71,23 @@ describe("TextHandler", () => {
             });
 
             test("will be defined", () => {
-                expect(node._polygloat).toBeDefined();
+                expect(node._tolgee).toBeDefined();
             });
 
             test("will have proper oldTextContent", () => {
-                expect(node._polygloat.oldTextContent).toContain(`{{${c.keyInRoot}}}`);
+                expect(node._tolgee.oldTextContent).toContain(`{{${c.keyInRoot}}}`);
             });
 
             test("will have proper keys length", () => {
-                expect(node._polygloat.keys).toHaveLength(1);
+                expect(node._tolgee.keys).toHaveLength(1);
             });
 
             test("will have proper first key", () => {
-                expect(node._polygloat.keys).toEqual(mockedKeys);
+                expect(node._tolgee.keys).toEqual(mockedKeys);
             });
         });
 
-        describe("Parent element's _polygloat property and attribute", () => {
+        describe("Parent element's _tolgee property and attribute", () => {
             let element: ElementWithMeta;
             let node: NodeWithMeta
 
@@ -97,23 +97,23 @@ describe("TextHandler", () => {
             });
 
             test("property will be defined", () => {
-                expect(element._polygloat).toBeDefined();
+                expect(element._tolgee).toBeDefined();
             });
 
             test("will contain nodes array with correct node", () => {
-                expect(element._polygloat.nodes).toEqual(new Set([node]));
+                expect(element._tolgee.nodes).toEqual(new Set([node]));
             });
 
             test("attribute will be set", () => {
-                expect(element.getAttribute("_polygloat")).toEqual("");
+                expect(element.getAttribute("_tolgee")).toEqual("");
             });
         });
 
         test("will pass option's text node to select element", () => {
             const xPath = `//text()[contains(., 'translated option_key')]`;
             const node = NodeHelper.evaluateToSingle(xPath, document.body);
-            expect(node.parentElement.parentElement).toHaveAttribute("_polygloat", "");
-            expect(node.parentElement).not.toHaveAttribute("_polygloat");
+            expect(node.parentElement.parentElement).toHaveAttribute("_tolgee", "");
+            expect(node.parentElement).not.toHaveAttribute("_tolgee");
         });
     });
 
@@ -122,8 +122,8 @@ describe("TextHandler", () => {
         await textHandler.handle(document.body);
         const xPath = `//text()[contains(., 'translated option_key')]`;
         const node = NodeHelper.evaluateToSingle(xPath, document.body);
-        expect(node.parentElement.parentElement.parentElement).toHaveAttribute("_polygloat", "");
-        expect(node.parentElement.parentElement).not.toHaveAttribute("_polygloat");
+        expect(node.parentElement.parentElement.parentElement).toHaveAttribute("_tolgee", "");
+        expect(node.parentElement.parentElement).not.toHaveAttribute("_tolgee");
     })
 
     test("will pass with function", async () => {
@@ -131,8 +131,8 @@ describe("TextHandler", () => {
         await textHandler.handle(document.body);
         const xPath = `//text()[contains(., 'translated option_key')]`;
         const node = NodeHelper.evaluateToSingle(xPath, document.body);
-        expect(node.parentElement.parentElement).toHaveAttribute("_polygloat", "");
-        expect(node.parentElement).not.toHaveAttribute("_polygloat");
+        expect(node.parentElement.parentElement).toHaveAttribute("_tolgee", "");
+        expect(node.parentElement).not.toHaveAttribute("_tolgee");
     })
 
     test("will register the node", async () => {

@@ -11,9 +11,9 @@ module.exports = env => {
             entry: path.join(__dirname, "src", "index.ts"),
             devtool: 'source-map',
             output: {
-                filename: "polygloat." + target + ".js",
+                filename: "tolgee." + target + ".js",
                 path: path.resolve(__dirname, 'dist'),
-                library: '@polygloat/core',
+                library: '@tolgee/core',
                 libraryTarget: target
             },
             resolve: {

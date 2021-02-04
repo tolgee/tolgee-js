@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ContextMenu} from "./common/ContextMenu/ContextMenu";
 import {ContextMenuItem} from "./common/ContextMenu/ContextMenuItem";
-import {TranslationService} from "@polygloat/core/lib/services/TranslationService";
+import {TranslationService} from "@tolgee/core/lib/services/TranslationService";
 
 export interface KeyContextMenuParams {
     openEvent: MouseEvent;

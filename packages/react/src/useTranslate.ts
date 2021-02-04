@@ -1,9 +1,9 @@
-import {usePolygloatContext} from "./usePolygloatContext";
+import {useTolgeeContext} from "./useTolgeeContext";
 import {TranslationParameters, TranslationsStateKey} from "./types";
 import {useEffect, useState} from "react";
 
 export const useTranslate = () => {
-    const context = usePolygloatContext();
+    const context = useTolgeeContext();
     const [translated, setTranslated] = useState({});
     const [wasInstant, setWasInstant] = useState(false);
 
@@ -19,7 +19,7 @@ export const useTranslate = () => {
         let jsonKey = getJsonKey(source, parameters, noWrap);
 
         if (translated[jsonKey] === undefined) {
-            translated[jsonKey] = context.polygloat.instant(source, parameters, noWrap, true)
+            translated[jsonKey] = context.tolgee.instant(source, parameters, noWrap, true)
             setTranslated({...translated});
             setWasInstant(true);
         }
@@ -39,7 +39,7 @@ export const useTranslate = () => {
         const transactionPremises = Object.entries(translated).map(([jsonKey, _]) => {
             const params = parseJsonKey(jsonKey);
             return new Promise(resolve => {
-                context.polygloat.translate(params.source, params.parameters, params.noWrap)
+                context.tolgee.translate(params.source, params.parameters, params.noWrap)
                     .then(translated => resolve({jsonKey, translated}));
             });
         });
@@ -56,7 +56,7 @@ export const useTranslate = () => {
     useEffect(() => {
         translateAll();
 
-        const subscription = context.polygloat.onLangChange.subscribe(() => translateAll());
+        const subscription = context.tolgee.onLangChange.subscribe(() => translateAll());
 
         return () => subscription.unsubscribe();
 

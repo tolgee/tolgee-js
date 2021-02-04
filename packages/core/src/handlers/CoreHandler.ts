@@ -28,10 +28,10 @@ export class CoreHandler {
     }
 
     private async refresh() {
-        let nodes: ElementWithMeta[] = NodeHelper.evaluate(`//*[@_polygloat]`, this.properties.config.targetElement);
+        let nodes: ElementWithMeta[] = NodeHelper.evaluate(`//*[@_tolgee]`, this.properties.config.targetElement);
         for (const node of nodes) {
-            for (const textNode of node._polygloat.nodes) {
-                const result = await this.textService.replace(textNode._polygloat.oldTextContent);
+            for (const textNode of node._tolgee.nodes) {
+                const result = await this.textService.replace(textNode._tolgee.oldTextContent);
                 if (result) {
                     textNode.textContent = result.text;
                 }

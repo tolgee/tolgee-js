@@ -1,9 +1,9 @@
-import {Polygloat} from "@polygloat/core";
+import {Tolgee} from "@tolgee/core";
 
 const HOST = process.env.TEST_POLYGLOAT_API_HOST || "localhost";
 const PORT = process.env.TEST_POLYGLOAT_API_PORT || 8202
 
-const polygloat = new Polygloat({
+const tolgee = new Tolgee({
     watch: true,
     targetElement: document.body,
     apiUrl: "http://" + HOST + ":" + PORT,
@@ -11,12 +11,12 @@ const polygloat = new Polygloat({
     highlightColor: "yellow"
 });
 
-polygloat.translate("sampleApp.english_text_one").then(t => {
+tolgee.translate("sampleApp.english_text_one").then(t => {
     const htmlElement = document.createElement("div");
     document.body.append(htmlElement);
     htmlElement.append(t);
 })
-polygloat.translate("sampleApp.hello_world!").then(t => {
+tolgee.translate("sampleApp.hello_world!").then(t => {
     const select = document.createElement("select");
     const option = document.createElement("option");
     const option2 = document.createElement("option");
@@ -27,5 +27,5 @@ polygloat.translate("sampleApp.hello_world!").then(t => {
     document.body.append(select);
 })
 
-polygloat.run();
+tolgee.run();
 

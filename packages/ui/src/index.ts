@@ -1,20 +1,20 @@
-import {ComponentDependencies, PolygloatViewer} from "./PolygloatViewer";
+import {ComponentDependencies, TolgeeViewer} from "./TolgeeViewer";
 import {createElement} from "react";
 import * as ReactDOM from 'react-dom';
 import {KeyContextMenu} from "./KeyContextMenu";
 
 export class UI {
-    private viewerComponent: PolygloatViewer;
+    private viewerComponent: TolgeeViewer;
     private keyContextMenu: KeyContextMenu;
 
     constructor(private dependencies: ComponentDependencies) {
-        const polygloatModalContainer = document.createElement('div');
-        document.body.append(polygloatModalContainer);
+        const tolgeeModalContainer = document.createElement('div');
+        document.body.append(tolgeeModalContainer);
 
         const contextMenuContainer = document.createElement('div');
         document.body.append(contextMenuContainer);
 
-        const viewerElement = createElement(PolygloatViewer, {
+        const viewerElement = createElement(TolgeeViewer, {
             dependencies: {
                 coreService: this.dependencies.coreService,
                 properties: this.dependencies.properties,
@@ -23,7 +23,7 @@ export class UI {
             }
         });
 
-        this.viewerComponent = ReactDOM.render(viewerElement, polygloatModalContainer);
+        this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);
 
         this.keyContextMenu = ReactDOM.render(createElement(KeyContextMenu, {
             dependencies: {

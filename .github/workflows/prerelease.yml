@@ -23,8 +23,8 @@ jobs:
 
       - name: Set git globals
         run: |
-          git config --local user.email "machine@polygloat.io"
-          git config --local user.name "Polygloat Machine"
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
 
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:

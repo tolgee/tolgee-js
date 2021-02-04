@@ -1,10 +1,10 @@
 import * as React from "react";
 import {FunctionComponent, useEffect, useState} from "react";
 import TranslationDialogInner from "./TranslatonDialogInner";
-import {ComponentDependencies} from "./PolygloatViewer";
-import { TranslationData } from "@polygloat/core/lib/DTOs/TranslationData";
-import { EventEmitterImpl } from "@polygloat/core/lib/services/EventEmitter";
-import { RESTRICTED_ASCENDANT_ATTRIBUTE } from "@polygloat/core/lib/Constants/Global";
+import {ComponentDependencies} from "./TolgeeViewer";
+import { TranslationData } from "@tolgee/core/lib/DTOs/TranslationData";
+import { EventEmitterImpl } from "@tolgee/core/lib/services/EventEmitter";
+import { RESTRICTED_ASCENDANT_ATTRIBUTE } from "@tolgee/core/lib/Constants/Global";
 
 type DialogProps = {
     input: string,

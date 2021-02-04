@@ -20,20 +20,20 @@ export const TranslationFields: FunctionComponent = () => {
     };
 
     useWithStyles(`
-        .polygloat-translation-input-loading{
+        .tolgee-translation-input-loading{
             background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.1), rgba(0,0,0,0), rgba(0,0,0,0));
             background-size: 500% 500%;
-            animation: polygloat-translation-input-loading 1.5s linear infinite alternate;
+            animation: tolgee-translation-input-loading 1.5s linear infinite alternate;
         }
         
-        @keyframes polygloat-translation-input-loading {
+        @keyframes tolgee-translation-input-loading {
             0%   {background-position: 0%;}
             100% {background-position: 100%;}
         }        
     `);
 
     const LoadingTextArea = () => (
-        <div className="polygloat-translation-input-loading" style={
+        <div className="tolgee-translation-input-loading" style={
             {
                 ...style,
                 height: "42px",

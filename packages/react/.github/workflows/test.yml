@@ -18,7 +18,7 @@ jobs:
       - name: Install proper core version
         run: |
           source .buildversions
-          npm install @polygloat/core@${CORE_VERSION}
+          npm install @tolgee/core@${CORE_VERSION}
 
       - name: Npm install
         run: npm install

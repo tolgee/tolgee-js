@@ -2,8 +2,8 @@ jest.autoMockOff();
 
 import '@testing-library/jest-dom/extend-expect'
 import UI from "../src";
-import {NodeHelper} from "@polygloat/core/lib/helpers/NodeHelper"
-import {TranslationService} from "@polygloat/core/lib/services/TranslationService";
+import {NodeHelper} from "@tolgee/core/lib/helpers/NodeHelper"
+import {TranslationService} from "@tolgee/core/lib/services/TranslationService";
 
 
 test('it selects the key', async (done) => {

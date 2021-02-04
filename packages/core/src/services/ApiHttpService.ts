@@ -54,7 +54,7 @@ export class ApiHttpService {
                 const data = await response.json();
                 error.code = data.code;
             } catch (e) {
-                console.warn("Polygloat server responded with invalid status code.")
+                console.warn("Tolgee server responded with invalid status code.")
             }
             throw error;
         }

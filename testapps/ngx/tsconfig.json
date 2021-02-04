@@ -19,11 +19,11 @@
       "dom"
     ],
     "paths": {
-      "ngx-polygloat": [
-        "dist/ngx-polygloat"
+      "ngx-tolgee": [
+        "dist/ngx-tolgee"
       ],
-      "ngx-polygloat/*": [
-        "dist/ngx-polygloat/*"
+      "ngx-tolgee/*": [
+        "dist/ngx-tolgee/*"
       ]
     }
   },

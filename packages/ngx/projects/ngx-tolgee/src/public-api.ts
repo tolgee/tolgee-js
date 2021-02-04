@@ -1,13 +1,13 @@
 /*
- * Public API Surface of ngx-polygloat
+ * Public API Surface of ngx-tolgee
  */
 import {TranslateService} from "./lib/translate.service";
 import {TranslatePipe} from "./lib/translate.pipe";
 import {STranslatePipe} from "./lib/stranslate.pipe";
-import { PolygloatConfig } from './lib/polygloatConfig';
+import { TolgeeConfig } from './lib/tolgeeConfig';
 
-export * from './lib/ngx-polygloat.module';
-export {PolygloatConfig}
+export * from './lib/ngx-tolgee.module';
+export {TolgeeConfig}
 export {TranslateService}
 export {TranslatePipe}
 export {STranslatePipe}

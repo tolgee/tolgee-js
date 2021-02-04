@@ -1,22 +1,22 @@
 version: '3'
 services:
   app:
-    container_name: polygloat_js_e2e_server
-    image: polygloat/polygloat:latest
+    container_name: tolgee_js_e2e_server
+    image: tolgee/tolgee:latest
     ports:
       - 8202:8080
       - 8092:8091
     environment:
-      - polygloat.internal.populate=true
-      - polygloat.internal.controllerEnabled=true
-      - "polygloat.screenshots-url=http://localhost:8202/screenshots"
-      - polygloat.authentication.needs-email-verification=true
-      - polygloat.authentication.registrations-allowed=true
-      - polygloat.internal.fake-emails-sent=true
-      - polygloat.authentication.initialPassword=admin
+      - tolgee.internal.populate=true
+      - tolgee.internal.controllerEnabled=true
+      - "tolgee.screenshots-url=http://localhost:8202/screenshots"
+      - tolgee.authentication.needs-email-verification=true
+      - tolgee.authentication.registrations-allowed=true
+      - tolgee.internal.fake-emails-sent=true
+      - tolgee.authentication.initialPassword=admin
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=*:8091,server=y,suspend=n
   e2e_app_core:
-    container_name: polygloat_js_e2e_serve_testapps_core
+    container_name: tolgee_js_e2e_serve_testapps_core
     build: ../docker
     volumes:
       - "../testapps/core:/data"
@@ -25,7 +25,7 @@ services:
     command: ["npm", "run", "serve"]
     working_dir: /data
   e2e_app_react:
-    container_name: polygloat_js_e2e_serve_testapps_react
+    container_name: tolgee_js_e2e_serve_testapps_react
     build: ../docker
     volumes:
       - "../:/data"
@@ -34,7 +34,7 @@ services:
     command: [ "npm", "run", "serve" ]
     working_dir: /data/testapps/react
   e2e_app_angular:
-    container_name: polygloat_js_e2e_serve_testapps_ngx
+    container_name: tolgee_js_e2e_serve_testapps_ngx
     build: ../docker
     volumes:
       - "../:/data"
