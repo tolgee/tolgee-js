@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ui",
-  "version": "1.0.0-alpha.21",
+  "version": "1.0.0-alpha.22",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "dist/tolgee.umd.js",
   "types": "lib/index.d.ts",
@@ -35,7 +35,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@tolgee/core": "^1.0.0-alpha.21",
+    "@tolgee/core": "^1.0.0-alpha.22",
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@types/jest": "^26.0.14",
