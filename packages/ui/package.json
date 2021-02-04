@@ -65,7 +65,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tolgee/tolgee-js-core.git"
+    "url": "git+https://github.com/tolgee/tolgee-js.git"
   },
   "keywords": [
     "localization",
@@ -75,8 +75,11 @@
     "localize"
   ],
   "bugs": {
-    "url": "https://github.com/tolgee/tolgee-js-core/issues"
+    "url": "https://github.com/tolgee/tolgee-js/issues"
   },
-  "homepage": "https://github.com/tolgee/tolgee-js-core#readme",
-  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
+  "homepage": "https://github.com/tolgee/tolgee-js#readme",
+  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
+  "publishConfig": {
+    "access": "public"
+  }
 }

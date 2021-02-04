@@ -110,9 +110,6 @@ task testUi(type: Exec) {
     workingDir "packages/ui"
 }
 
-
-
-
 task build(type: Task) {
     dependsOn "buildAll", "testUi", "testCore", "testReact", "runE2e"
 }
