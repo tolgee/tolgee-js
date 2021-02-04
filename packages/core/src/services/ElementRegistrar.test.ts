@@ -55,24 +55,24 @@ describe("ElementRegistrar", () => {
         });
 
         test("refresh all will remove inactive elements", () => {
-            const node = mockedElements[1]._polygloat.nodes.values().next().value;
+            const node = mockedElements[1]._tolgee.nodes.values().next().value;
             node.parentElement.removeChild(node);
             elementRegistrar.refreshAll();
-            expect(mockedElements[1]._polygloat).not.toBeDefined();
+            expect(mockedElements[1]._tolgee).not.toBeDefined();
             expect(mockedElements[1]).not.toHaveAttribute(POLYGLOAT_ATTRIBUTE_NAME);
         });
 
         test("refresh all will remove inactive nodes", () => {
-            const node = mockedElements[2]._polygloat.nodes.values().next().value;
+            const node = mockedElements[2]._tolgee.nodes.values().next().value;
             node.parentElement.removeChild(node);
             elementRegistrar.refreshAll();
-            expect(mockedElements[2]._polygloat.nodes.size).toEqual(2);
+            expect(mockedElements[2]._tolgee.nodes.size).toEqual(2);
         });
 
         test("removal will call remove all event listeners method", () => {
             const mockedCallback = jest.fn();
-            mockedElements[1]._polygloat.removeAllEventListeners = mockedCallback;
-            const node = mockedElements[1]._polygloat.nodes.values().next().value;
+            mockedElements[1]._tolgee.removeAllEventListeners = mockedCallback;
+            const node = mockedElements[1]._tolgee.nodes.values().next().value;
             node.parentElement.removeChild(node);
             elementRegistrar.refreshAll();
             expect(mockedCallback).toBeCalledTimes(1);
@@ -81,7 +81,7 @@ describe("ElementRegistrar", () => {
         test("clean all will clean all elements", () => {
             elementRegistrar.cleanAll();
             for (const mockedElement of mockedElements) {
-                expect(mockedElement._polygloat).not.toBeDefined();
+                expect(mockedElement._tolgee).not.toBeDefined();
             }
         });
     });
@@ -89,9 +89,9 @@ describe("ElementRegistrar", () => {
     test("will register attribute node", () => {
         const inputElement = document.createElement("input") as any as ElementWithMeta;
         document.body.append(inputElement);
-        inputElement.setAttribute("_polygloat", "");
+        inputElement.setAttribute("_tolgee", "");
         inputElement.setAttribute("placeholder", "Text")
-        inputElement._polygloat = {
+        inputElement._tolgee = {
             nodes: new Set([inputElement.attributes["placeholder"]])
         }
         elementRegistrar.register(inputElement);

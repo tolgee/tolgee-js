@@ -1,1 +1,1 @@
-# polygloat-react
+# tolgee-react

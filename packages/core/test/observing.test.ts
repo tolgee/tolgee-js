@@ -3,7 +3,7 @@ jest.autoMockOff();
 import {waitFor} from '@testing-library/dom'
 import '@testing-library/jest-dom/extend-expect';
 import "regenerator-runtime/runtime.js";
-import {Polygloat} from "../src";
+import {Tolgee} from "../src";
 import mockTranslations from "./mockTranslations";
 import fetchMock from "jest-fetch-mock";
 
@@ -28,7 +28,7 @@ test('it translates some existing text', async () => {
 
     document.body.innerHTML = "{{hello_world}}"
 
-    const polygloat = new Polygloat({
+    const tolgee = new Tolgee({
         targetElement: document.body,
         apiKey: API_KEY,
         apiUrl: API_URL,
@@ -36,7 +36,7 @@ test('it translates some existing text', async () => {
         inputSuffix: "}}",
     });
 
-    await polygloat.run().then();
+    await tolgee.run().then();
 
     await waitFor(() => {
             return expect(fetch.mock.calls.length).toEqual(2);

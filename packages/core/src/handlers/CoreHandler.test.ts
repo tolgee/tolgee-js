@@ -69,10 +69,10 @@ describe("CoreHandler", () => {
 
     describe("refresh", () => {
         const pgDiv = document.createElement("div");
-        pgDiv.setAttribute("_polygloat", "");
+        pgDiv.setAttribute("_tolgee", "");
         const textNode = document.createTextNode("Translated text");
-        textNode["_polygloat"] = {oldTextContent: "some_translation_key"} as NodeMeta;
-        pgDiv["_polygloat"] = {
+        textNode["_tolgee"] = {oldTextContent: "some_translation_key"} as NodeMeta;
+        pgDiv["_tolgee"] = {
             nodes: new Set([textNode as any as NodeWithMeta])
         } as ElementMeta;
         pgDiv.append(textNode);

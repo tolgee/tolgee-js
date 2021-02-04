@@ -1,12 +1,12 @@
-import {usePolygloatContext} from "./usePolygloatContext";
+import {useTolgeeContext} from "./useTolgeeContext";
 
 /**
  * Custom react hook
  * @return function accepting language abbreviation as parameter
  */
 export const useSetLanguage = () => {
-    const context = usePolygloatContext();
+    const context = useTolgeeContext();
     return (language: string) => {
-        context.polygloat.lang = language
+        context.tolgee.lang = language
     };
 }

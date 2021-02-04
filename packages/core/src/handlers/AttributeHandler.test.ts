@@ -54,7 +54,7 @@ describe("AttributeHandler", () => {
             expect(xPath).toBeFoundIn(document.body);
         });
 
-        describe("Node's _polygloat property", () => {
+        describe("Node's _tolgee property", () => {
             let node: NodeWithMeta;
 
             beforeEach(() => {
@@ -62,11 +62,11 @@ describe("AttributeHandler", () => {
             });
 
             test("will be defined", () => {
-                expect(node._polygloat).toBeDefined();
+                expect(node._tolgee).toBeDefined();
             });
         });
 
-        describe("Parent element's _polygloat property", () => {
+        describe("Parent element's _tolgee property", () => {
             let element: ElementWithMeta;
             let node: NodeWithMeta
 
@@ -76,7 +76,7 @@ describe("AttributeHandler", () => {
             });
 
             test("will be defined", () => {
-                expect(element._polygloat).toBeDefined();
+                expect(element._tolgee).toBeDefined();
             });
         });
     });

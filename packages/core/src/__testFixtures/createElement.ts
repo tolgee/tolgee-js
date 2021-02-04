@@ -13,7 +13,7 @@ export const createElement = (nodesCount: number, keysCount: number, sameKeys: b
         for (let i = 0; i < keysCount; i++) {
             keys.push({key: `key${sameKeys ? `` : ` ${keyNum++}`}`, params: {a: "aaa"}})
         }
-        node._polygloat = {
+        node._tolgee = {
             oldTextContent: `"${text}" before translation.`,
             keys
         } as NodeMeta
@@ -24,7 +24,7 @@ export const createElement = (nodesCount: number, keysCount: number, sameKeys: b
     for (let i = 0; i < nodesCount; i++) {
         nodes.push(cn(`text ${i}`));
     }
-    mockedElement._polygloat = {
+    mockedElement._tolgee = {
         nodes: new Set(nodes)
     }
     mockedElement.append(...nodes);
