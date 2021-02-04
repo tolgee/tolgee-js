@@ -14,3 +14,4 @@ testapps/*/build
 packages/**/dist
 testapps/*/dist
 testapps/ngx/*/dist
+**/.DS_Store
