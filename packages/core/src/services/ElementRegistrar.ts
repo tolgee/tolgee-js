@@ -1,7 +1,7 @@
 import {Lifecycle, scoped} from "tsyringe";
 import {ElementWithMeta} from "../types";
 import {Properties} from "../Properties";
-import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
+import {TOLGEE_ATTRIBUTE_NAME} from "../Constants/Global";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 import {NodeHelper} from "../helpers/NodeHelper";
 
@@ -48,7 +48,7 @@ export class ElementRegistrar {
         if (typeof element._tolgee.removeAllEventListeners === "function") {
             element._tolgee.removeAllEventListeners();
         }
-        element.removeAttribute(POLYGLOAT_ATTRIBUTE_NAME);
+        element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
         delete element._tolgee;
         this.registeredElements.delete(element);
     }
