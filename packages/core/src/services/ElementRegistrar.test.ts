@@ -8,7 +8,7 @@ import {ElementRegistrar} from "./ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
 import {createElement} from "@testFixtures/createElement";
 import {Properties} from "../Properties";
-import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
+import {TOLGEE_ATTRIBUTE_NAME} from "../Constants/Global";
 
 describe("ElementRegistrar", () => {
     const getElementRegistrar = describeClassFromContainer(import("./ElementRegistrar"), "ElementRegistrar");
@@ -59,7 +59,7 @@ describe("ElementRegistrar", () => {
             node.parentElement.removeChild(node);
             elementRegistrar.refreshAll();
             expect(mockedElements[1]._tolgee).not.toBeDefined();
-            expect(mockedElements[1]).not.toHaveAttribute(POLYGLOAT_ATTRIBUTE_NAME);
+            expect(mockedElements[1]).not.toHaveAttribute(TOLGEE_ATTRIBUTE_NAME);
         });
 
         test("refresh all will remove inactive nodes", () => {

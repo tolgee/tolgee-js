@@ -1,5 +1,5 @@
 import {ElementWithMeta, NodeMeta, NodeWithMeta} from "../types";
-import {POLYGLOAT_ATTRIBUTE_NAME} from "../Constants/Global";
+import {TOLGEE_ATTRIBUTE_NAME} from "../Constants/Global";
 
 export const createElement = (nodesCount: number, keysCount: number, sameKeys: boolean = false) => {
     const mockedElement = document.createElement("div") as Element as ElementWithMeta;
@@ -28,6 +28,6 @@ export const createElement = (nodesCount: number, keysCount: number, sameKeys: b
         nodes: new Set(nodes)
     }
     mockedElement.append(...nodes);
-    mockedElement.setAttribute(POLYGLOAT_ATTRIBUTE_NAME, "");
+    mockedElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, "");
     return mockedElement;
 }
