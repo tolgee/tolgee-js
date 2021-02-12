@@ -23,7 +23,7 @@ import {TextService} from "./services/TextService";
 import {CoreHandler} from "./handlers/CoreHandler";
 import {ElementRegistrar} from "./services/ElementRegistrar";
 import {NodeHelper} from "./helpers/NodeHelper";
-import {POLYGLOAT_TARGET_ATTRIBUTE} from "./Constants/Global";
+import {TOLGEE_TARGET_ATTRIBUTE} from "./Constants/Global";
 import {Properties} from "./Properties";
 
 describe("Tolgee", () => {
@@ -205,7 +205,7 @@ describe("Tolgee", () => {
         tolgee.stop();
         expect(getMockedInstance(ElementRegistrar).cleanAll).toBeCalledTimes(1);
         expect(observerMock.mock.instances[0].stopObserving).toBeCalledTimes(1);
-        expect(document.body).not.toHaveAttribute(POLYGLOAT_TARGET_ATTRIBUTE);
+        expect(document.body).not.toHaveAttribute(TOLGEE_TARGET_ATTRIBUTE);
     });
 
     test("will return proper onLangChange emitter", () => {

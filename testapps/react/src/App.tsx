@@ -9,8 +9,8 @@ const App = () => {
     return (
         <TolgeeProvider
             filesUrlPrefix="i18n/"
-            apiUrl={process.env.REACT_APP_POLYGLOAT_API_URL}
-            apiKey={process.env.REACT_APP_POLYGLOAT_API_KEY}
+            apiUrl={process.env.REACT_APP_TOLGEE_API_URL}
+            apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
             ui={UI}
             availableLanguages={["en", "de"]}
             loadingFallback={
