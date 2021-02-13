@@ -4,7 +4,7 @@ import {ElementMeta, ElementWithMeta, KeyAndParams, NodeWithMeta} from "../types
 import {TextService} from "../services/TextService";
 import {ElementRegistrar} from "../services/ElementRegistrar";
 import {TranslationHighlighter} from "../highlighter/TranslationHighlighter";
-import {POLYGLOAT_ATTRIBUTE_NAME, RESTRICTED_ASCENDANT_ATTRIBUTE} from "../Constants/Global";
+import {TOLGEE_ATTRIBUTE_NAME, RESTRICTED_ASCENDANT_ATTRIBUTE} from "../Constants/Global";
 
 export abstract class AbstractHandler {
     protected constructor(protected properties: Properties,
@@ -38,7 +38,7 @@ export abstract class AbstractHandler {
     }
 
     protected translateChildNode(node: (Text | Attr), newValue, keys: KeyAndParams[]) {
-        node[POLYGLOAT_ATTRIBUTE_NAME] = {
+        node[TOLGEE_ATTRIBUTE_NAME] = {
             oldTextContent: node.textContent,
             keys
         };
@@ -47,11 +47,11 @@ export abstract class AbstractHandler {
     }
 
     private static initParentElement(element: Element): ElementWithMeta {
-        if (element[POLYGLOAT_ATTRIBUTE_NAME] === undefined) {
-            element[POLYGLOAT_ATTRIBUTE_NAME] = {
+        if (element[TOLGEE_ATTRIBUTE_NAME] === undefined) {
+            element[TOLGEE_ATTRIBUTE_NAME] = {
                 nodes: new Set()
             } as ElementMeta
-            element.setAttribute(POLYGLOAT_ATTRIBUTE_NAME, "");
+            element.setAttribute(TOLGEE_ATTRIBUTE_NAME, "");
         }
 
         return element as ElementWithMeta;
