@@ -48,3 +48,6 @@ updates:
     interval: daily
   open-pull-requests-limit: 20
   target-branch: develop
+  ignore:
+    - dependency-name: "react"
+    - dependency-name: "react-dom"
