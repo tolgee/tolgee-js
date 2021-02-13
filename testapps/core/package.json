@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/testapps-core",
-  "version": "1.0.0-alpha.26",
+  "version": "1.0.0-alpha.27",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
@@ -12,8 +12,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@tolgee/core": "^1.0.0-alpha.26",
-    "@tolgee/ui": "^1.0.0-alpha.26",
+    "@tolgee/core": "^1.0.0-alpha.27",
+    "@tolgee/ui": "^1.0.0-alpha.27",
     "copy-webpack-plugin": "^7.0.0",
     "dotenv-webpack": "^6.0.0",
     "html-webpack-plugin": "^4.5.1",
