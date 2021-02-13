@@ -4,8 +4,6 @@ const targets = ["umd", "window", "commonjs"];
 
 
 module.exports = env => {
-    const isDevelopment = env.mode === "development";
-
     const makeTarget = (target) => {
         return {
             entry: path.join(__dirname, "src", "index.ts"),

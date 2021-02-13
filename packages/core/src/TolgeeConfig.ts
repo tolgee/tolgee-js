@@ -2,12 +2,13 @@ import {Mode} from "./types";
 import {ModifierKey} from "./Constants/ModifierKey";
 import {NodeHelper} from "./helpers/NodeHelper";
 
-const DEFAULT_TARGET_ELEMENT = document.body;
+const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => document.body;
 
 export class TolgeeConfig {
     tagAttributes?: { [key: string]: string[] } = {
         'textarea': ['placeholder'],
-        'input': ['value', 'placeholder']
+        'input': ['value', 'placeholder'],
+        'select': ["aria-label"]
     };
     passToParent?: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean) = ["option", "optgroup"];
     restrictedElements?: string[] = ['script', 'style'];
@@ -35,7 +36,7 @@ export class TolgeeConfig {
                     throw new Error("Target element is already defined!");
                 }
                 if (targetElement === undefined) {
-                    this._targetElement = DEFAULT_TARGET_ELEMENT;
+                    this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
                 }
                 if (NodeHelper.isElementTargetElement(targetElement)) {
                     console.error("Target element: ", this._targetElement);
@@ -51,7 +52,7 @@ export class TolgeeConfig {
 
         Object.assign(this, config || {});
         if (this._targetElement === undefined) {
-            this._targetElement = DEFAULT_TARGET_ELEMENT;
+            this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
         }
         this.mode = this.mode || (this.apiKey ? "development" : "production");
         this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;
