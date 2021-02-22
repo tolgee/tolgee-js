@@ -1,51 +1,53 @@
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/packages/core/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/packages/ui/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/packages/react/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/packages/ngx/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/testapps/react"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/testapps/core"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-- package-ecosystem: npm
-  directory: "/testapps/ngx"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 20
-  target-branch: develop
-
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/packages/core/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/packages/ui/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/packages/react/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/packages/ngx/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/testapps/react"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/testapps/core"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+  - package-ecosystem: npm
+    directory: "/testapps/react"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    target-branch: develop
+    ignore:
+      - dependency-name: "react"
+      - dependency-name: "react-dom"

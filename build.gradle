@@ -32,6 +32,21 @@ apply from: "./gradle/e2e.gradle"
 
 task lernaBootstrap(type: Exec) {
     commandLine "lerna", "bootstrap"
+    finalizedBy "linkLibReactToReactTestApp", "linkLibReactDomToReactTestApp"
+}
+
+//this is a solution for multiple react error in hook
+//dependabot cannot handle dependency path which doesn't exist
+task linkLibReactToReactTestApp(type: Exec){
+    commandLine "npm", "link", "../../packages/react/node_modules/react"
+    workingDir "testapps/react"
+}
+
+//this is a solution for multiple react error in hook
+//dependabot cannot handle dependency path which doesn't exist
+task linkLibReactDomToReactTestApp(type: Exec){
+    commandLine "npm", "link", "../../packages/react/node_modules/react-dom"
+    workingDir "testapps/react"
 }
 
 task buildCore(type: Exec) {
