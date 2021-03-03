@@ -1,31 +1,31 @@
 import {Mode} from "./types";
-import {ModifierKey} from "./Constants/ModifierKey";
+import {ModifierKey} from "./index";
 import {NodeHelper} from "./helpers/NodeHelper";
 
 const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => document.body;
 
 export class TolgeeConfig {
+    mode?: Mode;
+    apiUrl?: string = "https://app.tolgee.io";
+    apiKey?: string;
+    inputPrefix?: string = '%-%tolgee:';
+    inputSuffix?: string = '%-%';
+    defaultLanguage?: string = 'en';
+    availableLanguages?: string[] = ['en'];
+    fallbackLanguage?: string;
+    filesUrlPrefix?: string = "i18n/";
+    watch?: boolean;
+    ui?: new (...args) => any;
+    targetElement?: Element;
     tagAttributes?: { [key: string]: string[] } = {
         'textarea': ['placeholder'],
         'input': ['value', 'placeholder'],
         'select': ["aria-label"]
     };
+    highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
     passToParent?: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean) = ["option", "optgroup"];
     restrictedElements?: string[] = ['script', 'style'];
-    defaultLanguage?: string = 'en';
-    fallbackLanguage?: string;
-    availableLanguages?: string[] = ['en'];
-    inputPrefix?: string = '%-%tolgee:';
-    inputSuffix?: string = '%-%';
-    apiUrl?: string;
-    apiKey?: string;
-    filesUrlPrefix?: string = "i18n/";
-    mode?: Mode;
-    watch?: boolean;
-    ui?: new (...args) => any;
-    highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
     highlightColor?: string = "rgb(224 240 255)";
-    targetElement?: Element;
     private _targetElement?: Element;
 
     constructor(config?: TolgeeConfig) {
