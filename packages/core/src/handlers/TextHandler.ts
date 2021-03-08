@@ -22,8 +22,9 @@ export class TextHandler extends AbstractHandler {
         let inputSuffix = this.properties.config.inputSuffix;
 
         let xPath = `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-        let nodes: Text[] = this.filterRestricted(NodeHelper.evaluate(xPath, node));
+        let nodes = NodeHelper.evaluate(xPath, node);
+        let filtered: Text[] = this.filterRestricted(nodes as Text[]);
 
-        await this.handleNodes(nodes);
+        await this.handleNodes(filtered);
     }
 }

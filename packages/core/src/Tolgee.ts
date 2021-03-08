@@ -45,11 +45,13 @@ export class Tolgee {
         if (this.properties.config.mode === "development") {
             this.properties.scopes = await this.coreService.getScopes();
         }
+
+        await this.translationService.loadTranslations();
+        await this.refresh();
+
         if (this.properties.config.watch) {
             this.observer.observe();
         }
-        await this.translationService.loadTranslations();
-        await this.refresh();
     }
 
     public async refresh() {
