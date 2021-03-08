@@ -1,3 +1,4 @@
 {
-  "test": "This is test text!"
+  "test": "This is test text!",
+  "test_param": "This is text with param: {{param}}."
 }
