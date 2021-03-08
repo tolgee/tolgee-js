@@ -1,7 +1,7 @@
 import {Tolgee} from "@tolgee/core";
 
-const HOST = process.env.TEST_TOLGEE_API_HOST || "localhost";
-const PORT = process.env.TEST_TOLGEE_API_PORT || 8202
+const HOST = "localhost";
+const PORT = 8202
 
 const tolgee = new Tolgee({
     watch: true,

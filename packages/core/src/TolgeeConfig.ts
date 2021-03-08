@@ -1,30 +1,31 @@
 import {Mode} from "./types";
-import {ModifierKey} from "./Constants/ModifierKey";
+import {ModifierKey} from "./index";
 import {NodeHelper} from "./helpers/NodeHelper";
 
-const DEFAULT_TARGET_ELEMENT = document.body;
+const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => document.body;
 
 export class TolgeeConfig {
-    tagAttributes?: { [key: string]: string[] } = {
-        'textarea': ['placeholder'],
-        'input': ['value', 'placeholder']
-    };
-    passToParent?: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean) = ["option", "optgroup"];
-    restrictedElements?: string[] = ['script', 'style'];
-    defaultLanguage?: string = 'en';
-    fallbackLanguage?: string;
-    availableLanguages?: string[] = ['en'];
+    mode?: Mode;
+    apiUrl?: string = "https://app.tolgee.io";
+    apiKey?: string;
     inputPrefix?: string = '%-%tolgee:';
     inputSuffix?: string = '%-%';
-    apiUrl?: string;
-    apiKey?: string;
+    defaultLanguage?: string = 'en';
+    availableLanguages?: string[] = ['en'];
+    fallbackLanguage?: string;
     filesUrlPrefix?: string = "i18n/";
-    mode?: Mode;
     watch?: boolean;
     ui?: new (...args) => any;
-    highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
-    highlightColor?: string = "rgb(224 240 255)";
     targetElement?: Element;
+    tagAttributes?: { [key: string]: string[] } = {
+        'textarea': ['placeholder'],
+        'input': ['value', 'placeholder'],
+        'select': ["aria-label"]
+    };
+    highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
+    passToParent?: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean) = ["option", "optgroup"];
+    restrictedElements?: string[] = ['script', 'style'];
+    highlightColor?: string = "rgb(224 240 255)";
     private _targetElement?: Element;
 
     constructor(config?: TolgeeConfig) {
@@ -35,7 +36,7 @@ export class TolgeeConfig {
                     throw new Error("Target element is already defined!");
                 }
                 if (targetElement === undefined) {
-                    this._targetElement = DEFAULT_TARGET_ELEMENT;
+                    this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
                 }
                 if (NodeHelper.isElementTargetElement(targetElement)) {
                     console.error("Target element: ", this._targetElement);
@@ -51,7 +52,7 @@ export class TolgeeConfig {
 
         Object.assign(this, config || {});
         if (this._targetElement === undefined) {
-            this._targetElement = DEFAULT_TARGET_ELEMENT;
+            this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
         }
         this.mode = this.mode || (this.apiKey ? "development" : "production");
         this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;

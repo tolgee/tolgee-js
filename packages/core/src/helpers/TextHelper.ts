@@ -4,12 +4,10 @@ export class TextHelper {
         let actual = "";
         for (let i = 0; i < string.length; i++) {
             const char = string[i];
-            if (char === delimiter) {
-                if (!this.isCharEscaped(i, string)) {
-                    result.push(this.removeEscapes(actual));
-                    actual = "";
-                    continue;
-                }
+            if (char === delimiter && !this.isCharEscaped(i, string)) {
+                result.push(this.removeEscapes(actual));
+                actual = "";
+                continue;
             }
             actual += string[i];
         }

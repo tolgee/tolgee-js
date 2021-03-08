@@ -12,7 +12,7 @@ import {EventEmitterImpl} from "./EventEmitter";
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationService {
     private translationsCache: Map<string, Translations> = new Map<string, Translations>();
-    private fetchPromises: Promise<any>[] = [];
+    private fetchPromises: {[key: string]: Promise<any>} = {};
 
     constructor(private properties: Properties,
                 private coreService: CoreService,
@@ -128,8 +128,8 @@ export class TranslationService {
         }
     }
 
-    private getFromCache(name: string, lang: string = this.properties.currentLanguage): string {
-        const path = TextHelper.splitOnNonEscapedDelimiter(name, ".");
+    private getFromCache(key: string, lang: string = this.properties.currentLanguage): string {
+        const path = TextHelper.splitOnNonEscapedDelimiter(key, ".");
         let root: string | Translations = this.translationsCache.get(lang);
 
         //if lang is not downloaded or does not exist at all

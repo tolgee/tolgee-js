@@ -1,6 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const {readdirSync} = require('fs')
 
@@ -31,7 +30,6 @@ module.exports = () => {
                             to: '' //Copies all files from above dest to dist/assets
                         },]
                     }),
-                new Dotenv({path: path.resolve(__dirname, "../../.test.docker.env")})
             ]
         }));
 };
