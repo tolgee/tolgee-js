@@ -24,6 +24,12 @@ export class Properties {
 
     get currentLanguage(): string {
         let result = localStorage.getItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY);
+
+        const isSavedLanguageAvailable = this.config.availableLanguages.indexOf(result) > -1;
+        if (!isSavedLanguageAvailable) {
+            result = undefined;
+        }
+
         if (!result) {
             result = this.getLanguageByNavigator();
             this.currentLanguage = result

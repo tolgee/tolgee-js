@@ -11,7 +11,7 @@ export class TolgeeConfig {
     inputPrefix?: string = '%-%tolgee:';
     inputSuffix?: string = '%-%';
     defaultLanguage?: string = 'en';
-    availableLanguages?: string[] = ['en'];
+    availableLanguages?: string[];
     fallbackLanguage?: string;
     filesUrlPrefix?: string = "i18n/";
     watch?: boolean;
@@ -58,6 +58,9 @@ export class TolgeeConfig {
         this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;
         if (this.watch === undefined) {
             this.watch = this.mode === "development";
+        }
+        if(this.availableLanguages === undefined){
+            this.availableLanguages = [this.defaultLanguage]
         }
     }
 }
