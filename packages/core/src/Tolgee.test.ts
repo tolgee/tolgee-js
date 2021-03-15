@@ -117,12 +117,14 @@ describe("Tolgee", () => {
         let mockedTranslate;
         let mockedInstant;
         let mockedWrap;
+        let mockedLoadTranslations;
         const dummyParams = {};
 
         beforeEach(() => {
             mockedTranslate = mocked(textServiceMock.mock.instances[0].translate);
             mockedInstant = mocked(textServiceMock.mock.instances[0].instant);
             mockedWrap = mocked(textServiceMock.mock.instances[0].wrap);
+            mockedLoadTranslations = mocked(translationServiceMock.mock.instances[0].loadTranslations);
             mockedTranslate.mockImplementation(async () => translatedDummyText);
             mockedInstant.mockImplementation(() => translatedDummyText);
             mockedWrap.mockImplementation(() => wrappedDummyText);
@@ -154,6 +156,12 @@ describe("Tolgee", () => {
 
                 expect(mockedWrap).not.toBeCalled()
                 expect(translated).toEqual(translatedDummyText);
+            });
+
+            test("will wait for translations load before wrapping", async () => {
+                propertiesMock.mock.instances[0].config.mode = "development";
+                const translated = await tolgee.translate(dummyKey, dummyParams);
+                expect(mockedLoadTranslations).toBeCalled()
             });
         });
 

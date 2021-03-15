@@ -64,6 +64,7 @@ export class Tolgee {
 
     translate = async (key: string, params: TranslationParams = {}, noWrap: boolean = false): Promise<string> => {
         if (this.properties.config.mode === 'development' && !noWrap) {
+            await this.translationService.loadTranslations();
             return this.textService.wrap(key, params);
         }
         return this.textService.translate(key, params);
