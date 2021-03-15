@@ -8,7 +8,7 @@ const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = "__tolgee_currentLanguage";
 @scoped(Lifecycle.ContainerScoped)
 export class Properties {
     config: TolgeeConfig;
-    scopes: Scope[] = [];
+    scopes?: Scope[];
 
     set preferredLanguages(languages: Set<string>) {
         localStorage.setItem(PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY, JSON.stringify(Array.from(languages)));
@@ -25,9 +25,11 @@ export class Properties {
     get currentLanguage(): string {
         let result = localStorage.getItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY);
 
-        const isSavedLanguageAvailable = this.config.availableLanguages.indexOf(result) > -1;
-        if (!isSavedLanguageAvailable) {
-            result = undefined;
+        if (this.config.availableLanguages) {
+            const isSavedLanguageAvailable = this.config.availableLanguages.indexOf(result) > -1;
+            if (!isSavedLanguageAvailable) {
+                result = undefined;
+            }
         }
 
         if (!result) {
@@ -38,7 +40,7 @@ export class Properties {
     }
 
     private getLanguageByNavigator() {
-        if (window) {
+        if (window && this.config.availableLanguages) {
             const preferred = window.navigator.language
             const exactMatch = this.config.availableLanguages.find(l => l === preferred);
             if (exactMatch) {
@@ -53,7 +55,6 @@ export class Properties {
                 return twoLetterMatch;
             }
         }
-
         return this.config.defaultLanguage;
     }
 }

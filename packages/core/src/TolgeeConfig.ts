@@ -59,8 +59,5 @@ export class TolgeeConfig {
         if (this.watch === undefined) {
             this.watch = this.mode === "development";
         }
-        if(this.availableLanguages === undefined){
-            this.availableLanguages = [this.defaultLanguage]
-        }
     }
 }
