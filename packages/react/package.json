@@ -5,6 +5,7 @@
   "main": "dist/tolgee-react.umd.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/tolgee/tolgee-react",
+  "keywords": ["localization", "internationalization", "l10n", "i18n", "translation", "languages"],
   "declaration": true,
   "directories": {
     "lib": "lib",

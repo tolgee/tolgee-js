@@ -2,6 +2,7 @@
   "name": "@tolgee/ngx-workspace",
   "private": true,
   "version": "1.0.0-alpha.32",
+  "keywords": ["localization", "internationalization", "l10n", "i18n", "translation", "languages"],
   "scripts": {
     "ng": "ng",
     "develop": "ng build --watch",
