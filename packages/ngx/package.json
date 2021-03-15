@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/ngx-workspace",
   "private": true,
-  "version": "1.0.0-alpha.32",
+  "version": "1.0.0-alpha.33",
   "keywords": ["localization", "internationalization", "l10n", "i18n", "translation", "languages"],
   "scripts": {
     "ng": "ng",
@@ -29,7 +29,7 @@
     "@angular/cli": "~11.2.1",
     "@angular/compiler-cli": "~11.1.1",
     "@angular/language-service": "~11.1.1",
-    "@tolgee/core": "^1.0.0-alpha.32",
+    "@tolgee/core": "^1.0.0-alpha.33",
     "@types/jasmine": "~3.6.0",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^14.14.6",
