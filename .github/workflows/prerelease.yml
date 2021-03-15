@@ -39,6 +39,13 @@ jobs:
       - name: Publish
         run: lerna publish from-git --yes
 
+      - name: Merge to develop
+        uses: devmasx/merge-branch@v1.3.1
+        with:
+          type: now
+          target_branch: develop
+          github_token: ${{ github.token }}
+
       - uses: actions/upload-artifact@v2
         if: always()
         with:
