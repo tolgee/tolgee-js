@@ -38,6 +38,7 @@ describe("Properties", () => {
     describe("current language", () => {
         test("getter returns from local storage", () => {
             let dummyReturn = "cs";
+            properties.config = {availableLanguages: ["cs", "en"]};
             Storage.prototype.getItem = jest.fn();
             mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
             expect(properties.currentLanguage).toEqual(dummyReturn);
@@ -70,6 +71,14 @@ describe("Properties", () => {
             languageGetter.mockReturnValue("en-GB")
             properties.config = {availableLanguages: ["en-US"], defaultLanguage: "en-US"}
             expect(properties.currentLanguage).toEqual("en-US");
+        })
+
+        test("resets current language when missing in availableLanguages", () => {
+            let dummyReturn = "cs";
+            Storage.prototype.getItem = jest.fn();
+            mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
+            properties.config = {availableLanguages: ["en", "de"], defaultLanguage: "en"}
+            expect(properties.currentLanguage).toEqual("en");
         })
     });
 });

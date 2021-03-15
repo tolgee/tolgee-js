@@ -43,7 +43,7 @@ export class Tolgee {
 
     public async run(): Promise<void> {
         if (this.properties.config.mode === "development") {
-            this.properties.scopes = await this.coreService.getScopes();
+            await this.loadScopes();
         }
 
         await this.translationService.loadTranslations();
@@ -64,6 +64,8 @@ export class Tolgee {
 
     translate = async (key: string, params: TranslationParams = {}, noWrap: boolean = false): Promise<string> => {
         if (this.properties.config.mode === 'development' && !noWrap) {
+            await this.loadScopes();
+            await this.translationService.loadTranslations();
             return this.textService.wrap(key, params);
         }
         return this.textService.translate(key, params);
@@ -88,6 +90,12 @@ export class Tolgee {
 
     public get onLangLoaded(){
         return this.eventService.LANGUAGE_LOADED;
+    }
+
+    private async loadScopes(){
+        if(this.properties.scopes === undefined) {
+            this.properties.scopes = await this.coreService.getScopes();
+        }
     }
 }
 

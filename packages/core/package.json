@@ -8,7 +8,14 @@
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
   },
-  "readme": "",
+  "keywords": [
+    "localization",
+    "internationalization",
+    "l10n",
+    "i18n",
+    "translation",
+    "languages"
+  ],
   "declaration": true,
   "directories": {
     "lib": "lib",
@@ -42,8 +49,6 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.14.22",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
     "babel-loader": "^8.1.0",
     "babel-plugin-import": "^1.13.1",
     "babel-plugin-transform-typescript-metadata": "^0.3.1",
@@ -57,9 +62,6 @@
     "html-webpack-plugin": "^4.5.0",
     "jest": "^26.5.2",
     "jest-fetch-mock": "^3.0.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-multi-select-component": "^3.0.4",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.7",
     "ts-jest": "^26.4.1",

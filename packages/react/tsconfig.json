@@ -5,6 +5,7 @@
     "sourceMap": true,
     "declaration": true,
     "outDir": "./lib",
+    "skipLibCheck": true,
     "lib": [
       "es2018",
       "es2020",
