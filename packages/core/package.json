@@ -8,7 +8,14 @@
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
   },
-  "keywords": ["localization", "internationalization", "l10n", "i18n", "translation", "languages"],
+  "keywords": [
+    "localization",
+    "internationalization",
+    "l10n",
+    "i18n",
+    "translation",
+    "languages"
+  ],
   "declaration": true,
   "directories": {
     "lib": "lib",
