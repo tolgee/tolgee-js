@@ -2,7 +2,7 @@
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/cca5778bcb8f57d28a03065d1927fcea31d0b089/tolgee_logo_text.svg" alt="Tolgee Toolkit" />](https://toolkit.tolgee.io)
 
-Angular integration library of Tolgee localization toolkit. For more information about using Tolgee with angular,
+Angular integration library of Tolgee Localization Toolkit. For more information about using Tolgee with angular,
 visit our [documentation website](https://toolkit.tolgee.io/docs/web/using_with_angular/installation).
 
 
