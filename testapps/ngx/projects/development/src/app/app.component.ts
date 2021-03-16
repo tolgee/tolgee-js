@@ -15,7 +15,7 @@ export class AppComponent implements OnInit {
   text1: string;
 
   async ngOnInit(): Promise<void> {
-    this.translateService.get('sampleApp.this_is_translation_retrieved_by_service').subscribe(r => this.text1);
+    this.translateService.get('sampleApp.this_is_translation_retrieved_by_service').subscribe(r => this.text1 = r);
   }
 
   setLang(lang: string) {
@@ -23,5 +23,4 @@ export class AppComponent implements OnInit {
   }
 
   params = {name: "Honza", surname: "Cizmar"};
-
 }

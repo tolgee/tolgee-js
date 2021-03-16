@@ -33,12 +33,21 @@ services:
       - 8102:8101
     command: [ "npm", "run", "serve" ]
     working_dir: /data/testapps/react
-  e2e_app_angular:
-    container_name: tolgee_js_e2e_serve_testapps_ngx
+  e2e_app_angular_development:
+    container_name: tolgee_js_e2e_serve_testapps_ngx_development
     build: ../docker
     volumes:
       - "../:/data"
     ports:
       - 8103:8101
-    command: [ "npm", "run", "serve" ]
+    command: [ "npm", "run", "serveDevelopment" ]
+    working_dir: /data/testapps/ngx
+  e2e_app_angular_production:
+    container_name: tolgee_js_e2e_serve_testapps_ngx_production
+    build: ../docker
+    volumes:
+      - "../:/data"
+    ports:
+      - 8104:8101
+    command: [ "npm", "run", "serveProduction"]
     working_dir: /data/testapps/ngx

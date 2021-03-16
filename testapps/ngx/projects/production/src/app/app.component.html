@@ -1,0 +1,53 @@
+<button (click)="setLang('en')">en</button>
+<button (click)="setLang('de')">de</button>
+
+<h1>Angular sample app translation using tolgee JS</h1>
+
+<h2>Some basic translations</h2>
+<div>
+  {{ 'sampleApp.this_is_standard_text_somewhere_in_dom' | translate }}<br/>
+  {{ 'sampleApp.this_is_another_standard_text_somewhere_in_dom' | translate }}<br/>
+  {{ 'sampleApp.this_is_another_standard_text_somewhere_in_dom_with_param' | translate:params }}<br/>
+  {{ 'sampleApp.this_is_another_standard_text_somewhere_in_dom_with_param2' | translate:params }}
+</div>
+
+<h2>Service defined translation</h2>
+<div>{{text1}}</div>
+
+<h2>Advanced input translations</h2>
+
+<h3>Textarea with placeholder and value in inner HTML</h3>
+<label>
+  <textarea
+    placeholder="{{ 'sampleApp.this_is_textarea_with_placeholder_and_value' | translate:params }}">
+{{ 'sampleApp.this_is_textarea_with_placeholder_and_value' | translate:params }}
+  </textarea>
+</label>
+
+<h3>Textarea with translated value in inner HTML</h3>
+
+<label>
+  <textarea>{{ 'sampleApp.this_is_textarea_with_placeholder_and_value' | translate }}</textarea>
+</label>
+
+<h3>Empty textarea with placeholder</h3>
+
+<label>
+  <textarea placeholder="{{ 'sampleApp.this_is_textarea_with_placeholder' | translate }}"></textarea>
+</label>
+
+<h3>Input with initial value</h3>
+
+<input type="text" value="{{ 'sampleApp.this_is_input_with_value' | stranslate }}"/>
+
+<h3>Empty input with placeholder</h3>
+
+<input placeholder="{{ 'sampleApp.this_is_input_with_placeholder' | translate }}" type="text"/>
+
+<div>{{'sampleApp.new_translation' | translate }}</div>
+
+<div>{{'sampleApp.subfolder.subfolder.subfolder.new_translation' | translate }}</div>
+
+<div>{{'sampleApp.subfolder.subfolder.subfolder.subfolder.new_translation' | translate }}</div>
+
+<div>{{'sampleApp.subfolder.subfolder.new_translation' | translate }}</div>

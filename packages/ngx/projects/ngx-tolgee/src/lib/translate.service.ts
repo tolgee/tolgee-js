@@ -1,5 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {from, Observable} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Tolgee} from "@tolgee/core";
 import {TolgeeConfig} from "./tolgeeConfig";
 
@@ -33,12 +33,18 @@ export class TranslateService {
     this.tolgee.lang = lang;
   }
 
-  public get(input: string, params = {}): Observable<string> {
-    return from(this.translate(input, params));
+  public get(input: string, params = {}, noWrap = false): Observable<string> {
+    return new Observable(subscriber => {
+      this.translate(input, params, noWrap).then(result => subscriber.next(result));
+
+      this.onLangChange.subscribe(() =>
+        this.translate(input, params, noWrap).then(result => subscriber.next(result))
+      );
+    })
   }
 
   public getSafe(input: string, params = {}): Observable<string> {
-    return from(this.translate(input, params, true));
+    return this.get(input, params, true);
   }
 
   public instant(input: string, params = {}): string {

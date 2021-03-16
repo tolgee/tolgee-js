@@ -8,6 +8,7 @@ buildscript {
 group 'io.tolgee'
 apply plugin: 'idea'
 
+
 idea {
     module {
         excludeDirs += file('node_modules')
@@ -39,6 +40,8 @@ task lernaBootstrap(type: Exec) {
 //dependabot cannot handle dependency path which doesn't exist
 task linkLibReactToReactTestApp {
     def workdir = "testapps/react/node_modules"
+    outputs.dir("$workdir/react")
+    inputs.dir("packages/react/node_modules/react")
     doLast {
         exec {
             workingDir workdir
@@ -55,6 +58,8 @@ task linkLibReactToReactTestApp {
 //dependabot cannot handle dependency path which doesn't exist
 task linkLibReactDomToReactTestApp {
     def workdir = "testapps/react/node_modules"
+    outputs.dir("$workdir/react-dom")
+    inputs.dir("packages/react/node_modules/react-dom")
     doLast {
         exec {
             workingDir workdir
@@ -68,12 +73,18 @@ task linkLibReactDomToReactTestApp {
 }
 
 task buildCore(type: Exec) {
+    inputs.dir("packages/core")
+    outputs.dir("packages/core/dist")
+    outputs.dir("packages/core/lib")
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/core"
 }
 
 task buildReact(type: Exec) {
+    inputs.dir("packages/react")
+    outputs.dir("packages/react/dist")
+    outputs.dir("packages/react/lib")
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/react"
@@ -81,6 +92,8 @@ task buildReact(type: Exec) {
 }
 
 task buildNgx(type: Exec) {
+    inputs.dir("packages/ngx")
+    outputs.dir("packages/ngx/dist")
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/ngx"
@@ -88,24 +101,32 @@ task buildNgx(type: Exec) {
 }
 
 task buildNgxForPublish(type: Exec) {
+    outputs.dir("packages/ngx/dist")
     commandLine "npm", "run", "buildProd"
     workingDir "packages/ngx"
     mustRunAfter "buildCore", "buildUi"
 }
 
 task buildUi(type: Exec) {
+    inputs.dir("packages/ui")
+    outputs.dir("packages/ui/dist")
+    outputs.dir("packages/ui/lib")
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
     workingDir "packages/ui"
 }
 
 task buildCoreTestapps(type: Exec) {
+    inputs.dir("testapps/core")
+    outputs.dir("testapps/core/dist")
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/core"
 }
 
 task buildReactTestapps(type: Exec) {
+    inputs.dir("testapps/react")
+    outputs.dir("testapps/react/dist")
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/react"
@@ -113,6 +134,8 @@ task buildReactTestapps(type: Exec) {
 }
 
 task buildNgxTestapps(type: Exec) {
+    inputs.dir("testapps/ngx")
+    outputs.dir("testapps/ngx/dist")
     dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildNgx"
     commandLine "npm", "run", "build"
     workingDir "testapps/ngx"

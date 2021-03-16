@@ -3,11 +3,15 @@
   "version": "1.0.0-alpha.34",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "startDevelopment": "ng serve development",
+    "startProduction": "ng serve production",
+    "build": "ng build development && ng build production",
+    "buildProduction": "ng build production",
+    "buildDevelopment": "ng build development",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "serve -p 8101 ./dist/sampleapp"
+    "serveDevelopment": "serve -p 8101 ./dist/development",
+    "serveProduction": "serve -p 8101 ./dist/production"
   },
   "private": true,
   "dependencies": {
