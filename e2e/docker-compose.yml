@@ -8,6 +8,7 @@ services:
       - 8092:8091
     environment:
       - tolgee.internal.populate=true
+      - tolgee.authentication.enabled=true
       - tolgee.internal.controllerEnabled=true
       - "tolgee.screenshots-url=http://localhost:8202/screenshots"
       - tolgee.authentication.needs-email-verification=true
