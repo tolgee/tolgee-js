@@ -147,7 +147,7 @@ describe("TextService", () => {
 
         test("it will correctly replace wrapped text", async () => {
             getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
-                return "xxx {{param1}} {{param2}} xxx";
+                return "xxx {param1} {param2} xxx";
             });
 
             const wrapped = textService.wrap(
