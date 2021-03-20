@@ -5,11 +5,11 @@ import describeClassFromContainer from "@testFixtures/describeClassFromContainer
 import {getMockedInstance} from "@testFixtures/mocked";
 import {TranslationService} from "./TranslationService";
 
-describe("AttributeHandler", () => {
+describe("TextService", () => {
     const getTextService = describeClassFromContainer(import("./TextService"), "TextService");
-    const mockedTranslationReturn = "Dummy translated text {{param1}} {{param2}}";
+    const mockedTranslationReturn = "Dummy translated text {param1} {param2}";
     const params = {param1: "Dummy param 1", param2: "Dummy param 2"};
-    const expectedTranslated = mockedTranslationReturn.replace("{{param1}}", params.param1).replace("{{param2}}", params.param2);
+    const expectedTranslated = mockedTranslationReturn.replace("{param1}", params.param1).replace("{param2}", params.param2);
     let textService: ReturnType<typeof getTextService>;
 
 
@@ -43,17 +43,6 @@ describe("AttributeHandler", () => {
         expect(replaced.keys[0].key).toEqual("text");
         expect(replaced.keys[0].params["param1"]).toEqual("hello");
         expect(replaced.keys[0].params["param2"]).toEqual("hello 2 as well");
-    });
-
-
-    test("Will replace repeated parameters", async () => {
-        getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
-            return "Text with {{param1}} {{param1}}";
-        });
-
-        const text = "This is text: {{text:param1:hello}}";
-        const replaced = await textService.replace(text);
-        expect(replaced.text).toEqual("This is text: Dummy translated text hello {{param2}}");
     });
 
     test("replace function does not replace when prefix is escaped", async () => {
@@ -158,7 +147,7 @@ describe("AttributeHandler", () => {
 
         test("it will correctly replace wrapped text", async () => {
             getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
-                return "xxx {{param1}} {{param2}} xxx";
+                return "xxx {param1} {param2} xxx";
             });
 
             const wrapped = textService.wrap(
