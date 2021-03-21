@@ -3,6 +3,7 @@ import {KeyAndParams, TranslatedWithMetadata, TranslationParams} from "../types"
 import {TranslationService} from "./TranslationService";
 import {Properties} from "../Properties";
 import {TextHelper} from "../helpers/TextHelper";
+import IntlMessageFormat from 'intl-messageformat'
 
 export type ReplacedType = { text: string, keys: KeyAndParams[] };
 
@@ -12,11 +13,11 @@ export class TextService {
     }
 
     async translate(key: string, params: TranslationParams, lang = this.properties.currentLanguage) {
-        return this.replaceParams(await this.translationService.getTranslation(key, lang), params)
+        return this.format(await this.translationService.getTranslation(key, lang), params)
     }
 
     instant(key: string, params: TranslationParams, lang = this.properties.currentLanguage, orEmpty?) {
-        return this.replaceParams(this.translationService.getFromCacheOrFallback(key, lang, orEmpty), params);
+        return this.format(this.translationService.getFromCacheOrFallback(key, lang, orEmpty), params);
     }
 
     async replace(text: string): Promise<ReplacedType> {
@@ -29,7 +30,7 @@ export class TextService {
         let matched = false;
         const translated = text.replace(matchRegexp, (_, pre: string, wrapped: string, unwrapped: string, position: number) => {
             if (pre === "\\") {
-                if(!TextHelper.isCharEscaped(position, text)){
+                if (!TextHelper.isCharEscaped(position, text)) {
                     return pre + wrapped;
                 }
             }
@@ -71,12 +72,15 @@ export class TextService {
         return result;
     }
 
-    private readonly replaceParams = (translation: string, params: TranslationParams): string => {
-        let result = translation;
-        const regExp = (name) => new RegExp("\\{\\{\\s*" + this.escapeForRegExp(name) + "\\s*\\}\\}", "g");
-        Object.entries(params).forEach(([name, value]) =>
-            result = result.replace(regExp(name), value));
-        return result;
+    private readonly format = (translation: string, params: TranslationParams): string => {
+        try {
+            return new IntlMessageFormat(translation, this.properties.currentLanguage).format(params) as string;
+        } catch (e) {
+            if (e.code === "MISSING_VALUE") {
+                console.warn(e.message);
+                return e.translation;
+            }
+        }
     };
 
     private readonly escapeForRegExp = (string: string) => {
