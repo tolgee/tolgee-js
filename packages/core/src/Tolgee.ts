@@ -88,12 +88,12 @@ export class Tolgee {
         return this.eventService.LANGUAGE_CHANGED;
     }
 
-    public get onLangLoaded(){
+    public get onLangLoaded() {
         return this.eventService.LANGUAGE_LOADED;
     }
 
-    private async loadScopes(){
-        if(this.properties.scopes === undefined) {
+    private async loadScopes() {
+        if (this.properties.scopes === undefined) {
             this.properties.scopes = await this.coreService.getScopes();
         }
     }
