@@ -93,5 +93,15 @@ export class TextService {
         return `(\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
     }
 
-    private readonly escapeParam = (string: string) => string.replace(/[,:\\]/gs, "\\$&");
+    private readonly escapeParam = (param: any) => {
+        if (typeof param === "string") {
+            return param.replace(/[,:\\]/gs, "\\$&")
+        }
+        if (typeof param === "number" || typeof param === "bigint") {
+            return param.toString();
+        }
+        console.warn(param);
+        console.warn("Unsupported value type of above param. Consider converting to string.")
+        return param;
+    }
 }

@@ -23,7 +23,7 @@ export interface TextInputElementData {
 }
 
 export type Translations = { [key: string]: string | Translations };
-export type TranslationParams = { [key: string]: string }
+export type TranslationParams = { [key: string]: string | number | bigint }
 
 export type KeyAndParams = { key: string, params: TranslationParams }
 export type TranslatedWithMetadata = { translated: string, key: string, params: TranslationParams }

@@ -157,5 +157,37 @@ describe("TextService", () => {
 
             expect((await textService.replace(wrapped)).text).toEqual("xxx ,:,: ....\\..., xxx");
         });
+
+        test("will correctly convert param to string", () => {
+            const wrapped = textService.wrap(
+                "key",
+                {param1: 1}
+            );
+            expect(wrapped).toEqual("{{key:param1:1}}");
+        });
+
+        test("will correctly replace number parameters", async () => {
+            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+                return "xxx {param1, number} {param2, number} xxx";
+            });
+
+            const wrapped = textService.wrap(
+                "key",
+                {param1: 1, param2: 145.5}
+            );
+            expect((await textService.replace(wrapped)).text).toEqual("xxx 1 145.5 xxx");
+        });
+
+        test("will correctly replace bigint parameter", async () => {
+            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+                return "xxx {param1, number} {param2, number} xxx";
+            });
+
+            const wrapped = textService.wrap(
+                "key",
+                {param1: 1, param2: BigInt(129374)}
+            );
+            expect((await textService.replace(wrapped)).text).toEqual("xxx 1 129,374 xxx");
+        });
     });
 });
