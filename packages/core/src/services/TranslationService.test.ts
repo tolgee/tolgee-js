@@ -166,10 +166,12 @@ describe("TranslationService", () => {
 
 
     test("will use fallback language on error", async () => {
-        const dummyTranslationData = {key: "test\\.key", translations: {en: "translation"}} as TranslationData;
-        await translationService.loadTranslations("en");
-        await translationService.setTranslations(dummyTranslationData);
-        expect(await translationService.getTranslation(dummyTranslationData.key, "en")).toEqual(dummyTranslationData.translations.en);
+        translationService.loadTranslations = jest.fn();
+        getMockedInstance(Properties).config.fallbackLanguage = "en";
+        expect(await translationService.getTranslation("aaa", "cs"))
+        expect(translationService.loadTranslations).toBeCalledTimes(2);
+        expect(translationService.loadTranslations).toBeCalledWith("cs")
+        expect(translationService.loadTranslations).toBeCalledWith("en")
     });
 
     test("will return last chunk of key path when no translation found", async () => {

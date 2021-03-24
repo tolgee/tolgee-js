@@ -12,7 +12,7 @@ import {EventEmitterImpl} from "./EventEmitter";
 @scoped(Lifecycle.ContainerScoped)
 export class TranslationService {
     private translationsCache: Map<string, Translations> = new Map<string, Translations>();
-    private fetchPromises: {[key: string]: Promise<any>} = {};
+    private fetchPromises: { [key: string]: Promise<any> } = {};
 
     constructor(private properties: Properties,
                 private coreService: CoreService,
@@ -35,6 +35,11 @@ export class TranslationService {
         if (!this.getFromCache(name, lang)) {
             await this.loadTranslations(lang);
         }
+
+        if (!this.getFromCache(name, this.properties.config.fallbackLanguage)) {
+            await this.loadTranslations(this.properties.config.fallbackLanguage);
+        }
+
         return this.getFromCacheOrFallback(name, lang);
     }
 
@@ -72,6 +77,7 @@ export class TranslationService {
         if (orEmpty) {
             return "";
         }
+
         const path = TextHelper.splitOnNonEscapedDelimiter(name, ".");
         return path[path.length - 1];
     }
@@ -100,7 +106,7 @@ export class TranslationService {
 
     private async fetchTranslations(lang: string) {
         if (this.properties.config.mode === "development") {
-           return await this.fetchTranslationsDevelopment(lang);
+            return await this.fetchTranslationsDevelopment(lang);
         }
         return await this.fetchTranslationsProduction(lang);
     }
