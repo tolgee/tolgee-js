@@ -66,7 +66,7 @@ describe("TextService", () => {
 
     describe("Different key occurrences", () => {
         beforeEach(() => {
-            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+            getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
                 return "translated";
             });
         });
@@ -146,7 +146,7 @@ describe("TextService", () => {
         });
 
         test("it will correctly replace wrapped text", async () => {
-            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+            getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
                 return "xxx {param1} {param2} xxx";
             });
 
@@ -167,7 +167,7 @@ describe("TextService", () => {
         });
 
         test("will correctly replace number parameters", async () => {
-            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+            getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
                 return "xxx {param1, number} {param2, number} xxx";
             });
 
@@ -179,7 +179,7 @@ describe("TextService", () => {
         });
 
         test("will correctly replace bigint parameter", async () => {
-            getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(() => {
+            getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
                 return "xxx {param1, number} {param2, number} xxx";
             });
 

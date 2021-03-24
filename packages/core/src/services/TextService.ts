@@ -12,8 +12,8 @@ export class TextService {
     constructor(private properties: Properties, private translationService: TranslationService) {
     }
 
-    async translate(key: string, params: TranslationParams, lang = this.properties.currentLanguage) {
-        return this.format(await this.translationService.getTranslation(key, lang), params)
+    async translate(key: string, params: TranslationParams, lang = this.properties.currentLanguage, orEmpty?) {
+        return this.format(await this.translationService.getTranslation(key, lang, orEmpty), params)
     }
 
     instant(key: string, params: TranslationParams, lang = this.properties.currentLanguage, orEmpty?) {
@@ -23,24 +23,31 @@ export class TextService {
     async replace(text: string): Promise<ReplacedType> {
         const matchRegexp = new RegExp(this.rawUnWrapRegex, "gs");
 
-        await this.translationService.loadTranslations();
-
         const keysAndParams: KeyAndParams[] = []
 
         let matched = false;
-        const translated = text.replace(matchRegexp, (_, pre: string, wrapped: string, unwrapped: string, position: number) => {
-            if (pre === "\\") {
-                if (!TextHelper.isCharEscaped(position, text)) {
-                    return pre + wrapped;
-                }
+
+        let match;
+        let start = 0;
+        let result = "";
+        while ((match = matchRegexp.exec(text)) !== null) {
+            const [fullMatch, pre, wrapped, unwrapped] = match as [string, string, string, string];
+            const {index, input} = match;
+            result += input.substr(start, index - start);
+            start = index + fullMatch.length
+            if (pre === "\\" && !TextHelper.isCharEscaped(index, text)) {
+                result += wrapped;
+                continue;
             }
-            const translated = this.getTranslatedWithMetadata(unwrapped);
+            const translated = await this.getTranslatedWithMetadata(unwrapped);
             keysAndParams.push({key: translated.key, params: translated.params});
             matched = true;
-            return pre + translated.translated;
-        });
+            result += pre + translated.translated;
+        }
 
-        const withoutEscapes = TextHelper.removeEscapes(translated);
+        result += text.substring(start);
+
+        const withoutEscapes = TextHelper.removeEscapes(result);
 
         if (matched) {
             return {text: withoutEscapes, keys: keysAndParams};
@@ -55,9 +62,9 @@ export class TextService {
         return `${this.properties.config.inputPrefix}${this.escapeParam(key)}${paramString}${this.properties.config.inputSuffix}`;
     }
 
-    private getTranslatedWithMetadata(text: string): TranslatedWithMetadata {
+    private async getTranslatedWithMetadata(text: string): Promise<TranslatedWithMetadata> {
         const {key, params} = TextService.parseUnwrapped(text);
-        const translated = this.instant(key, params, undefined, false);
+        const translated = await this.translate(key, params, undefined, false);
         return {translated, key: key, params}
     }
 
@@ -78,7 +85,7 @@ export class TextService {
         } catch (e) {
             if (e.code === "MISSING_VALUE") {
                 console.warn(e.message);
-                return e.translation;
+                return translation;
             }
         }
     };

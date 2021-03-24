@@ -1,13 +1,13 @@
 {
   "name": "@tolgee/testapps-react",
-  "version": "1.0.0-alpha.38",
+  "version": "1.0.0-alpha.39",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "@tolgee/react": "^1.0.0-alpha.38",
-    "@tolgee/ui": "^1.0.0-alpha.38",
+    "@tolgee/react": "^1.0.0-alpha.39",
+    "@tolgee/ui": "^1.0.0-alpha.39",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.12.62",
     "@types/react": "17.0.1",
