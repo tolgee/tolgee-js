@@ -1,3 +1,8 @@
+jest.dontMock("./TranslationService");
+jest.dontMock("../helpers/TextHelper");
+jest.dontMock("../DTOs/TranslationData");
+jest.dontMock("../Errors/ApiHttpError");
+
 import {Translations} from "../types";
 import describeClassFromContainer from "@testFixtures/describeClassFromContainer";
 import {getMockedInstance} from "@testFixtures/mocked";
@@ -8,11 +13,6 @@ import {CoreService} from "./CoreService";
 import {TranslationData} from "../DTOs/TranslationData";
 import {ApiHttpError} from "../Errors/ApiHttpError";
 import {EventService} from "./EventService";
-
-jest.dontMock("./TranslationService");
-jest.dontMock("../helpers/TextHelper");
-jest.dontMock("../DTOs/TranslationData");
-jest.dontMock("../Errors/ApiHttpError");
 
 const mockedTranslations = {
     en: {
@@ -106,7 +106,7 @@ describe("TranslationService", () => {
             expect(translationData).toEqual({key: "key", translations: {en: "translated", de: "übersetzen"}});
         });
 
-        test("will reset prefered languages when language is not found", async () => {
+        test("will reset preferred languages when language is not found", async () => {
             global["apierror"] = ApiHttpError;
             getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
                 throw new ApiHttpError({status: 404} as Response, "language_not_found")

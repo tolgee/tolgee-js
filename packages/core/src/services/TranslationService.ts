@@ -85,7 +85,7 @@ export class TranslationService {
             return new TranslationData(key, data);
         } catch (e) {
             if (e instanceof ApiHttpError) {
-                //only possible option of this error is, that languages definition is changed, but the old value is stored in preferred languages
+                //only possible reason for this error is, that languages definition is changed, but the old value is stored in preferred languages
                 if (e.response.status === 404) {
                     if (e.code === "language_not_found") {
                         this.properties.preferredLanguages = await this.coreService.getLanguages();
