@@ -20,6 +20,11 @@ const refresh = () => tolgee.translate("test").then(t => {
     window.setLang = () => tolgee.lang = "cs";
     p.innerHTML = "<button onclick='window.setLang()'>cs</button>"
     document.body.append(p);
+    tolgee.translate("this_is_mentioned_just_in_english").then(r => {
+        elementWithInstant.innerText = r;
+    })
+    const elementWithInstant = document.createElement("p");
+    document.body.append(elementWithInstant)
 })
 
 refresh();

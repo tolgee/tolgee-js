@@ -31,9 +31,12 @@ const mockedTranslations = {
     }
 };
 
-global.fetch = jest.fn(async () => {
+global.fetch = jest.fn(async (url: string) => {
+    const isEn = url.indexOf("en.json") > -1
+    const isDe = url.indexOf("en.json") > -1
+
     return {
-        json: jest.fn(async () => (mockedTranslations.en))
+        json: jest.fn(async () => isEn ? mockedTranslations.en : isDe ? mockedTranslations.de : {})
     }
 }) as any;
 
@@ -49,6 +52,7 @@ describe("TranslationService", () => {
             emit: languageLoadedEmitMock
         }
         getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => mockedTranslations);
+        getMockedInstance(Properties).currentLanguage = "en";
     });
 
 
@@ -165,7 +169,7 @@ describe("TranslationService", () => {
     });
 
 
-    test("will use fallback language on error", async () => {
+    test("will call load of fallback language on missing translation", async () => {
         translationService.loadTranslations = jest.fn();
         getMockedInstance(Properties).config.fallbackLanguage = "en";
         expect(await translationService.getTranslation("aaa", "cs"))
@@ -174,6 +178,10 @@ describe("TranslationService", () => {
         expect(translationService.loadTranslations).toBeCalledWith("en")
     });
 
+    test("will use fallback language on missing translation", async () => {
+        getMockedInstance(Properties).config.fallbackLanguage = "en";
+        expect(await translationService.getTranslation("translation\\.with\\.dots", "de")).toEqual("Translation with dots")
+    });
     test("will return last chunk of key path when no translation found", async () => {
         expect(await translationService.getTranslation("test\\.key.this\\.is\\.it", "en")).toEqual("this.is.it");
     });
@@ -181,5 +189,4 @@ describe("TranslationService", () => {
     test("will return proper text without any dot", async () => {
         expect(await translationService.getTranslation("text without any dot", "en")).toEqual("text without any dot");
     });
-
 });

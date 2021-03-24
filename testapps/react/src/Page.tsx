@@ -8,6 +8,7 @@ export const Page: FunctionComponent = () => {
         <div>
             <ChooseLanguage/>
             <h1><T>sampleApp.hello_world!</T></h1>
+            <h1><T>just_english</T></h1>
         </div>
     )
 }
