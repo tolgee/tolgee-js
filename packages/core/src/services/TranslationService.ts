@@ -31,7 +31,7 @@ export class TranslationService {
         this.fetchPromises[lang] = undefined;
     }
 
-    async getTranslation(key: string, lang: string = this.properties.currentLanguage): Promise<string> {
+    async getTranslation(key: string, lang: string = this.properties.currentLanguage, orEmpty = false): Promise<string> {
         let message = this.getFromCache(key, lang);
 
         if (!message) {
@@ -46,7 +46,7 @@ export class TranslationService {
             }
         }
 
-        return TranslationService.translationByValue(message, key, false);
+        return TranslationService.translationByValue(message, key, orEmpty);
     }
 
     async setTranslations(translationData: TranslationData) {
@@ -85,7 +85,7 @@ export class TranslationService {
             return new TranslationData(key, data);
         } catch (e) {
             if (e instanceof ApiHttpError) {
-                //only possible option of this error is, that languages definition is changed, but the old value is stored in preferred languages
+                //only possible reason for this error is, that languages definition is changed, but the old value is stored in preferred languages
                 if (e.response.status === 404) {
                     if (e.code === "language_not_found") {
                         this.properties.preferredLanguages = await this.coreService.getLanguages();

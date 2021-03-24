@@ -3,6 +3,7 @@ jest.dontMock("../helpers/TextHelper");
 jest.dontMock("../DTOs/TranslationData");
 jest.dontMock("../Errors/ApiHttpError");
 
+import {Translations} from "../types";
 import describeClassFromContainer from "@testFixtures/describeClassFromContainer";
 import {getMockedInstance} from "@testFixtures/mocked";
 import {TranslationService} from "./TranslationService";
@@ -24,16 +25,18 @@ const mockedTranslations = {
         },
         "key with: \\\\": {
             t: "Key with strange escapes"
-        }
+        },
+        just_en: "Just en."
     },
     de: {
-        key: "übersetzen"
+        key: "übersetzen",
+        just_en: ""
     }
 };
 
 global.fetch = jest.fn(async (url: string) => {
     const isEn = url.indexOf("en.json") > -1
-    const isDe = url.indexOf("en.json") > -1
+    const isDe = url.indexOf("de.json") > -1
 
     return {
         json: jest.fn(async () => isEn ? mockedTranslations.en : isDe ? mockedTranslations.de : {})
@@ -103,7 +106,7 @@ describe("TranslationService", () => {
             expect(translationData).toEqual({key: "key", translations: {en: "translated", de: "übersetzen"}});
         });
 
-        test("will reset prefered languages when language is not found", async () => {
+        test("will reset preferred languages when language is not found", async () => {
             global["apierror"] = ApiHttpError;
             getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
                 throw new ApiHttpError({status: 404} as Response, "language_not_found")
@@ -182,6 +185,21 @@ describe("TranslationService", () => {
         getMockedInstance(Properties).config.fallbackLanguage = "en";
         expect(await translationService.getTranslation("translation\\.with\\.dots", "de")).toEqual("Translation with dots")
     });
+
+    test("getTranslation will return fallback when message is empty string", async () => {
+        getMockedInstance(Properties).config.fallbackLanguage = "en";
+        expect(await translationService.getTranslation("just_en", "de")).toEqual("Just en.")
+    });
+
+    test("getFromCacheOrCallback will return fallback when message is empty string", async () => {
+        getMockedInstance(Properties).config.fallbackLanguage = "en";
+        const cacheMock = (translationService as any).translationsCache = new Map<string, Translations>();
+        cacheMock.set("en", mockedTranslations.en)
+        cacheMock.set("de", mockedTranslations.de)
+        expect(await translationService.getFromCacheOrFallback("just_en", "de")).toEqual("Just en.")
+    });
+
+
     test("will return last chunk of key path when no translation found", async () => {
         expect(await translationService.getTranslation("test\\.key.this\\.is\\.it", "en")).toEqual("this.is.it");
     });
