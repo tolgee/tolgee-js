@@ -31,7 +31,7 @@ export class TranslationService {
         this.fetchPromises[lang] = undefined;
     }
 
-    async getTranslation(key: string, lang: string = this.properties.currentLanguage): Promise<string> {
+    async getTranslation(key: string, lang: string = this.properties.currentLanguage, orEmpty = false): Promise<string> {
         let message = this.getFromCache(key, lang);
 
         if (!message) {
@@ -46,7 +46,7 @@ export class TranslationService {
             }
         }
 
-        return TranslationService.translationByValue(message, key, false);
+        return TranslationService.translationByValue(message, key, orEmpty);
     }
 
     async setTranslations(translationData: TranslationData) {
