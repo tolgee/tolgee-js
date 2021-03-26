@@ -97,6 +97,7 @@ export class MouseEventHandler {
     }
 
     private onMouseOver(element: ElementWithMeta & ElementCSSInlineStyle) {
+        this.filterMouseOn();
         this.mouseOn.delete(element); //to get in to last place
         this.mouseOn.add(element);
         this.mouseOnChanged.emit(this.getMouseOn());
@@ -126,6 +127,13 @@ export class MouseEventHandler {
         });
     }
 
+    private filterMouseOn() {
+        this.mouseOn.forEach(el => {
+            if (!document.contains(el)) {
+                this.mouseOn.delete(el);
+            }
+        })
+    }
 
     private areKeysDown() {
         for (const key of this.properties.config.highlightKeys) {
