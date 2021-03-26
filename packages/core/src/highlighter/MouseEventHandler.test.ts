@@ -24,10 +24,14 @@ describe("MouseEventHandler", () => {
     const mockedKeydown = new KeyboardEvent("keydown", {key});
     const mockedKeyup = new KeyboardEvent("keyup", {key});
 
+    const withMeta = (element: Element) => {
+        (element as ElementWithMeta)._tolgee = {} as ElementMeta;
+        return element as Element as ElementWithMeta;
+    }
+
     beforeEach(async () => {
         mouseEventHandler = await getMouseEventHandler();
-        mockedElement = document.createElement("div") as Element as ElementWithMeta;
-        mockedElement._tolgee = {} as ElementMeta;
+        mockedElement = withMeta(document.createElement("div"));
         mouseEventHandler.handle(mockedElement, mockedCallback);
         getMockedInstance(Properties).config.highlightKeys = [ModifierKey[key]];
         getMockedInstance(Properties).config.highlightColor = mockedColor;
@@ -80,8 +84,10 @@ describe("MouseEventHandler", () => {
 
         test("Will not handle single element multiple times", async () => {
             console.error = jest.fn();
-            mouseEventHandler.handle(mockedElement, () => {});
-            mouseEventHandler.handle(mockedElement, () => {});
+            mouseEventHandler.handle(mockedElement, () => {
+            });
+            mouseEventHandler.handle(mockedElement, () => {
+            });
 
             expect(console.error).toBeCalledTimes(2);
             mockedElement.dispatchEvent(mockedClick);
@@ -92,6 +98,19 @@ describe("MouseEventHandler", () => {
             window.dispatchEvent(new Event("blur"));
             mockedElement.dispatchEvent(mockedClick);
             expect(mockedCallback).not.toBeCalledTimes(1);
+        });
+
+        test("Will highlight even if some element was removed", async () => {
+            const div = document.createElement("div")
+            div.append(mockedElement);
+            const elementToHighlight = withMeta(document.createElement("div"));
+            div.append(elementToHighlight);
+            mouseEventHandler.handle(elementToHighlight as any as ElementWithMeta, mockedCallback);
+            mockedElement.dispatchEvent(mockedMouseOver);
+            div.removeChild(mockedElement)
+            window.dispatchEvent(mockedKeydown);
+            elementToHighlight.dispatchEvent(mockedMouseOver);
+            expect(elementToHighlight.style.backgroundColor).toEqual(mockedColor);
         });
     });
 
