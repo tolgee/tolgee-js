@@ -5,7 +5,9 @@
     "packages/ngx/projects/ngx-tolgee"
   ],
   "version": "1.0.0-alpha.42",
-  "publish": {
-    "conventionalCommits": true
+  "command": {
+    "publish": {
+      "conventionalCommits": true
+    }
   }
 }
