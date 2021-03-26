@@ -1,7 +1,18 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "commitmsg": "commitlint -e $GIT_PARAMS"
+  },
   "devDependencies": {
+    "@commitlint/cli": "^12.0.1",
+    "@commitlint/config-conventional": "^12.0.1",
+    "husky": "^5.2.0",
     "lerna": "^3.22.1"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
 }
