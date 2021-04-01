@@ -30,14 +30,14 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Create lerna version
-        run: lerna version prerelease --yes
+      - name: Update version
+        run: lerna version --yes
 
       - name: Rebuild ngx package with correct version and without Ivy
         run: ./gradlew buildNgxForPublish
 
       - name: Publish
-        run: lerna publish from-git --yes
+        run: lerna publish --yes
 
       - name: Merge to develop
         uses: devmasx/merge-branch@v1.3.1

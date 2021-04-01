@@ -4,8 +4,10 @@
     "testapps/*",
     "packages/ngx/projects/ngx-tolgee"
   ],
-  "version": "1.0.0-alpha.41",
-  "publish": {
-    "conventionalCommits": true
+  "version": "1.0.0-alpha.43",
+  "command": {
+    "publish": {
+      "conventionalCommits": true
+    }
   }
 }
