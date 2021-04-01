@@ -39,7 +39,9 @@ describe("ElementRegistrar", () => {
         const element = createElement(0, 0);
         getMockedInstance(Properties).config.mode = "development";
         document.body.append(element);
-        expect(() => elementRegistrar.register(element)).toThrowError();
+        elementRegistrar.register(element)
+        expect((elementRegistrar as any).registeredElements).toBeInstanceOf(Set);
+        expect((elementRegistrar as any).registeredElements).not.toContain(element);
     });
 
     describe("register, clean & refresh methods", () => {

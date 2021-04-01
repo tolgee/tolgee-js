@@ -13,8 +13,9 @@ export class ElementRegistrar {
     }
 
     register(element: ElementWithMeta) {
+        //ignore element with no active nodes
         if (this.getActiveNodes(element).next().value === undefined) {
-            throw new Error("Registered element with no nodes. This is probably an bug in Tolgee.");
+            return
         }
         if (this.properties.config.mode === "development" && !this.registeredElements.has(element)) {
             this.translationHighlighter.listen(element);
