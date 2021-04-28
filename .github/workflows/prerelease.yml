@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew buildNgxForPublish
 
       - name: Publish
-        run: lerna publish --yes
+        run: lerna publish from-package --yes
 
       - name: Merge to develop
         uses: devmasx/merge-branch@v1.3.1
