@@ -99,6 +99,12 @@ task buildUi(type: Exec) {
     workingDir "packages/ui"
 }
 
+task buildSocketIoClient(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/socketio-client"
+}
+
 task buildCoreTestapps(type: Exec) {
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
@@ -120,7 +126,8 @@ task buildNgxTestapps(type: Exec) {
 }
 
 task buildAll(type: Task) {
-    dependsOn "buildCore", "buildUi", "buildReact", "buildNgx", "buildCoreTestapps", "buildReactTestapps", "buildNgxTestapps"
+    dependsOn "buildCore", "buildUi", "buildReact", "buildNgx", "buildSocketIoClient",
+            "buildCoreTestapps", "buildReactTestapps", "buildNgxTestapps"
 }
 
 task developAll(type: Exec) {
@@ -143,6 +150,11 @@ task testUi(type: Exec) {
     workingDir "packages/ui"
 }
 
+task testSocketIoClient(type: Exec) {
+    commandLine "npm", "run", "test"
+    workingDir "packages/socketio-client"
+}
+
 task build(type: Task) {
-    dependsOn "buildAll", "testUi", "testCore", "testReact", "runE2e"
+    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSocketIoClient", "runE2e"
 }
