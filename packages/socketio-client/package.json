@@ -1,0 +1,32 @@
+{
+  "name": "@tolgee/socketio-client",
+  "version": "0.0.1",
+  "description": "Client library for Tolgee Socket.io server",
+  "main": "dist/tolgee.umd.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "webpack --env mode=production && tsc",
+    "test": "jest --config ./jest.config.js",
+    "play": "ts-node play.ts"
+  },
+  "directories": {
+    "lib": "lib",
+    "dist": "dist"
+  },
+  "author": "Jan Cizmar",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^26.0.24",
+    "@types/socket.io-client": "^1.4.36",
+    "jest": "^26.5.2",
+    "socket.io-client": "^2.2.0",
+    "ts-jest": "^26.4.1",
+    "ts-loader": "^9.2.3",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.5",
+    "webpack-cli": "^4.7.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
