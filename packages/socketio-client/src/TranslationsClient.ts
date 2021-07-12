@@ -17,7 +17,7 @@ const TRANSLATIONS_CHANNEL_NAME = 'translations';
 
 export class TranslationsClient {
   constructor(private options: TranslationsClientOptions) {
-    options.serverUrl = options.serverUrl || 'https://app.tolgee.io:9090';
+    options.serverUrl = options.serverUrl || 'https://socket.app.tolgee.io';
   }
 
   private _socket?: SocketIOClient.Socket;
@@ -26,6 +26,7 @@ export class TranslationsClient {
       this._socket = io(
         `${this.options.serverUrl}/${TRANSLATIONS_CHANNEL_NAME}`,
         {
+          transports: ['websocket'],
           query: this.options.authentication,
         }
       );
