@@ -1,6 +1,6 @@
-import {useWithStyles} from "./useWithStyles";
-import * as React from "react";
-import {FunctionComponent} from "react";
+import { useWithStyles } from './useWithStyles';
+import * as React from 'react';
+import { FunctionComponent } from 'react';
 
 const css = `
 .tolgee-button{
@@ -50,15 +50,17 @@ const css = `
     color: rgb(220, 0, 78);
     border: 1px solid rgba(220, 0, 78, 0.5);
 }
-`
+`;
 
-
-type Variant = "primary" | "secondary" | "default"
+type Variant = 'primary' | 'secondary' | 'default';
 type ButtonProps = React.ComponentProps<'button'> & { variant?: Variant };
 
 export const Button: FunctionComponent<ButtonProps> = (props) => {
-    useWithStyles(css);
+  useWithStyles(css);
 
-    const variantClass = props.variant || props.variant === "default" ? `tolgee-button-${props.variant}` : "";
-    return <button {...props} className={`tolgee-button ${variantClass}`}/>
-}
+  const variantClass =
+    props.variant || props.variant === 'default'
+      ? `tolgee-button-${props.variant}`
+      : '';
+  return <button {...props} className={`tolgee-button ${variantClass}`} />;
+};

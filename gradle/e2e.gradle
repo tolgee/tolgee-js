@@ -1,18 +1,17 @@
+import java.time.Duration
+
 def E2E_DIR = "${project.projectDir}/e2e"
 
-task waitForRunningContainer(type: Task) {
+task waitForRunningContainer(type: Task, group: "e2e") {
     doLast {
         while (true) {
-            def pb = new ProcessBuilder("docker-compose", "logs")
+            def pb = new ProcessBuilder("docker-compose", "logs", "-f")
             pb.directory(new File(E2E_DIR))
             def proc = pb.start()
-
-            BufferedReader stdInput = new BufferedReader(new
-                    InputStreamReader(proc.getInputStream()))
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()))
             String s = null
-            proc.waitFor()
             while ((s = stdInput.readLine()) != null) {
-                if (s.contains("Tomcat started on port(s): 8080 (http) with context path")) {
+                if (s.contains("Tomcat started on port(s):")) {
                     return
                 }
             }
@@ -21,6 +20,7 @@ task waitForRunningContainer(type: Task) {
             }
         }
     }
+    timeout = Duration.ofSeconds(120)
 }
 
 task installE2eDeps(type: Exec, group: "e2e") {
@@ -33,7 +33,7 @@ task installE2eDeps(type: Exec, group: "e2e") {
 }
 
 task runE2e(type: Exec, group: "e2e") {
-    dependsOn "buildAll" ,"runDockerE2e", "installE2eDeps"
+    dependsOn "buildAll", "runDockerE2e", "installE2eDeps"
 
     commandLine "npm", "run", "cy:run"
 
@@ -43,7 +43,7 @@ task runE2e(type: Exec, group: "e2e") {
 }
 
 task openE2e(type: Exec, group: "e2e") {
-    dependsOn "buildAll" ,"runDockerE2e", "installE2eDeps"
+    dependsOn "buildAll", "runDockerE2e", "installE2eDeps"
 
     commandLine "npm", "run", "cy:open"
 

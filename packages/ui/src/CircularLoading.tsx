@@ -1,6 +1,6 @@
-import * as React from "react";
-import {FunctionComponent} from "react";
-import {useWithStyles} from "./common/useWithStyles";
+import * as React from 'react';
+import { FunctionComponent } from 'react';
+import { useWithStyles } from './common/useWithStyles';
 
 const css = `
 .tolgee-circular-loader {
@@ -18,11 +18,11 @@ const css = `
 }`;
 
 export const CircularLoading: FunctionComponent = () => {
-    useWithStyles(css);
+  useWithStyles(css);
 
-    return (
-        <div style={{width: "100%", display: "flex", justifyContent: "center"}}>
-            <div className="tolgee-circular-loader"/>
-        </div>
-    );
-}
+  return (
+    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+      <div className="tolgee-circular-loader" />
+    </div>
+  );
+};

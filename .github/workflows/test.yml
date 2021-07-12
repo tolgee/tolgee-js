@@ -28,3 +28,27 @@ jobs:
           path: |
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*
+  code-checks:
+    name: Eslint 🪲
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: cache-node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: ./
+
+      - name: Eslint
+        run: npm run eslint
+        working-directory: ./

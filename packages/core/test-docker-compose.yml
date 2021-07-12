@@ -4,6 +4,6 @@ services:
     container_name: tolgee
     image: tolgee/tolgee:${TEST_TOLGEE_SERVER_VERSION}
     ports:
-      - "${TEST_TOLGEE_API_PORT}:8080"
+      - '${TEST_TOLGEE_API_PORT}:8080'
     environment:
       - app.populate=true

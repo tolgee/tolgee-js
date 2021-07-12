@@ -1,0 +1,8 @@
+**/build
+**/dist
+**/lib
+
+**/*.json
+
+**/*.generated.*
+**/*.md

@@ -5,8 +5,8 @@
 Angular integration library of Tolgee Localization Toolkit. For more information about using Tolgee with angular,
 visit our [documentation website](https://toolkit.tolgee.io/docs/web/using_with_angular/installation).
 
-
 ## Installation
+
 First, install the package.
 
     npm install @tolgee/ngx --save
@@ -48,6 +48,9 @@ export class AppModule {
 ```
 
 ### Using translateService
+
 ```ts
-this.translateService.get('hello_world').subscribe(r => this.helloWorld = r);
+this.translateService
+  .get('hello_world')
+  .subscribe((r) => (this.helloWorld = r));
 ```

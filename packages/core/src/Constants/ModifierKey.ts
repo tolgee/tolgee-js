@@ -1,6 +1,6 @@
 export enum ModifierKey {
-    Alt,
-    Control,
-    Shift,
-    Meta
+  Alt,
+  Control,
+  Shift,
+  Meta,
 }

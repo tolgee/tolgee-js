@@ -1,14 +1,9 @@
 {
   "extends": "tslint:recommended",
-  "rulesDirectory": [
-    "codelyzer"
-  ],
+  "rulesDirectory": ["codelyzer"],
   "rules": {
     "align": {
-      "options": [
-        "parameters",
-        "statements"
-      ]
+      "options": ["parameters", "statements"]
     },
     "array-type": false,
     "arrow-parens": false,
@@ -16,23 +11,15 @@
     "deprecation": {
       "severity": "warning"
     },
-    "import-blacklist": [
-      true,
-      "rxjs/Rx"
-    ],
+    "import-blacklist": [true, "rxjs/Rx"],
     "curly": true,
     "interface-name": false,
     "max-classes-per-file": false,
     "eofline": true,
-    "max-line-length": [
-      true,
-      140
-    ],
+    "max-line-length": [true, 140],
     "import-spacing": true,
     "indent": {
-      "options": [
-        "spaces"
-      ]
+      "options": ["spaces"]
     },
     "member-access": false,
     "member-ordering": [
@@ -47,33 +34,17 @@
       }
     ],
     "no-consecutive-blank-lines": false,
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "debug", "info", "time", "timeEnd", "trace"],
     "no-empty": false,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    "no-inferrable-types": [true, "ignore-params"],
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
     "no-var-requires": false,
-    "object-literal-key-quotes": [
-      true,
-      "as-needed"
-    ],
+    "object-literal-key-quotes": [true, "as-needed"],
     "object-literal-sort-keys": false,
     "ordered-imports": false,
-    "quotemark": [
-      true,
-      "single"
-    ],
+    "quotemark": [true, "single"],
     "trailing-comma": false,
     "component-class-suffix": true,
     "contextual-lifecycle": true,
@@ -86,9 +57,7 @@
     "no-output-on-prefix": true,
     "no-output-rename": true,
     "semicolon": {
-      "options": [
-        "always"
-      ]
+      "options": ["always"]
     },
     "space-before-function-paren": {
       "options": {
@@ -123,11 +92,7 @@
     "use-lifecycle-interface": true,
     "use-pipe-transform-interface": true,
     "variable-name": {
-      "options": [
-        "ban-keywords",
-        "check-format",
-        "allow-pascal-case"
-      ]
+      "options": ["ban-keywords", "check-format", "allow-pascal-case"]
     },
     "whitespace": {
       "options": [

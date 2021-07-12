@@ -1,30 +1,33 @@
 import * as React from 'react';
-import {FunctionComponent, ReactNode, useEffect, useState} from 'react';
-import {Tolgee, TolgeeConfig} from "@tolgee/core";
+import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
+import { Tolgee, TolgeeConfig } from '@tolgee/core';
 
 type ContextValueType = TolgeeConfig & { tolgee: Tolgee };
-export const TolgeeProviderContext = React.createContext<ContextValueType>(null);
+export const TolgeeProviderContext =
+  React.createContext<ContextValueType>(null);
 type TolgeeProviderProps = TolgeeConfig & { loadingFallback?: ReactNode };
 
-export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (props) => {
-    const config = {...props};
-    delete config.children;
-    delete config.loadingFallback;
+export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
+  props
+) => {
+  const config = { ...props };
+  delete config.children;
+  delete config.loadingFallback;
 
-    const [tolgee, setTolgee] = useState(new Tolgee(config));
-    const [loading, setLoading] = useState(true);
+  const [tolgee] = useState(new Tolgee(config));
+  const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        tolgee.run().then(() => setLoading(false));
+  useEffect(() => {
+    tolgee.run().then(() => setLoading(false));
 
-        return () => {
-            tolgee.stop();
-        }
-    }, []);
+    return () => {
+      tolgee.stop();
+    };
+  }, []);
 
-    return (
-        <TolgeeProviderContext.Provider value={{...props, tolgee}}>
-            {!loading ? props.children : props.loadingFallback}
-        </TolgeeProviderContext.Provider>
-    );
-}
+  return (
+    <TolgeeProviderContext.Provider value={{ ...props, tolgee }}>
+      {!loading ? props.children : props.loadingFallback}
+    </TolgeeProviderContext.Provider>
+  );
+};
