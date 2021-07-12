@@ -1,12 +1,12 @@
-import {TolgeeConfig} from "../TolgeeConfig";
-import {Properties} from "../Properties";
-import {CoreService} from "../services/CoreService";
-import {Observer} from "../Observer";
-import {mocked} from "ts-jest/utils";
-import {TranslationService} from "../services/TranslationService";
-import {TextService} from "../services/TextService";
-import {EventService} from "../services/EventService";
-import {EventEmitterImpl} from "../services/EventEmitter";
+import { TolgeeConfig } from '../TolgeeConfig';
+import { Properties } from '../Properties';
+import { CoreService } from '../services/CoreService';
+import { Observer } from '../Observer';
+import { mocked } from 'ts-jest/utils';
+import { TranslationService } from '../services/TranslationService';
+import { TextService } from '../services/TextService';
+import { EventService } from '../services/EventService';
+import { EventEmitterImpl } from '../services/EventEmitter';
 
 export const configMock = mocked(TolgeeConfig);
 export const propertiesMock = mocked(Properties);
@@ -19,5 +19,5 @@ export const eventEmitterMock = mocked(EventEmitterImpl);
 export const tolgeeConfigMock = mocked(TolgeeConfig);
 
 export const getMockedInstance = <T>(constructor: new (...args) => T) => {
-    return mocked(constructor).mock.instances[0];
-}
+  return mocked(constructor).mock.instances[0];
+};

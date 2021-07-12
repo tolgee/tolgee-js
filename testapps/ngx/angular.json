@@ -28,9 +28,7 @@
               "projects/sampleapp/src/favicon.ico",
               "projects/sampleapp/src/assets"
             ],
-            "styles": [
-              "projects/sampleapp/src/styles.scss"
-            ],
+            "styles": ["projects/sampleapp/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -91,9 +89,7 @@
               "projects/sampleapp/src/favicon.ico",
               "projects/sampleapp/src/assets"
             ],
-            "styles": [
-              "projects/sampleapp/src/styles.scss"
-            ],
+            "styles": ["projects/sampleapp/src/styles.scss"],
             "scripts": []
           }
         },
@@ -105,9 +101,7 @@
               "projects/sampleapp/tsconfig.spec.json",
               "projects/sampleapp/e2e/tsconfig.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         },
         "e2e": {

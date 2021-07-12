@@ -34,6 +34,7 @@ import {UI} from "@tolgee/ui";
 To translate texts using Tolgee React integration, you can use `T` component or `useTranslate` hook.
 
 ### T component
+
 ```typescript jsx
 import {T} from "@tolgee/react";
 

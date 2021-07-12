@@ -1,8 +1,7 @@
 export class Subscription {
-    constructor(private onUnsubscribe: () => void) {
-    }
+  constructor(private onUnsubscribe: () => void) {}
 
-    unsubscribe() {
-        this.onUnsubscribe();
-    }
+  unsubscribe() {
+    this.onUnsubscribe();
+  }
 }

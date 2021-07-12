@@ -6,20 +6,12 @@
     "declaration": true,
     "outDir": "./lib",
     "skipLibCheck": true,
-    "lib": [
-      "es2018",
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2018", "es2020", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

@@ -1,11 +1,14 @@
-import * as Module from "../CoreService";
-import classMock from "@testFixtures/classMock";
-import {Scope} from "../../types";
+import * as Module from '../CoreService';
+import classMock from '@testFixtures/classMock';
+import { Scope } from '../../types';
 
-const moduleMock = jest.genMockFromModule("../CoreService");
+const moduleMock = jest.genMockFromModule('../CoreService');
 
-export const CoreService = classMock<Module.CoreService>(() => ({
+export const CoreService = classMock<Module.CoreService>(
+  () => ({
     getScopes: jest.fn(async () => {
-        return ["translations.edit", "keys.edit"] as Scope[];
-    })
-}), (moduleMock as typeof Module).CoreService);
+      return ['translations.edit', 'keys.edit'] as Scope[];
+    }),
+  }),
+  (moduleMock as typeof Module).CoreService
+);

@@ -5,12 +5,7 @@
     "sourceMap": true,
     "declaration": true,
     "outDir": "./lib",
-    "lib": [
-      "es2015",
-      "es2018",
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2015", "es2018", "es2020", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
@@ -18,15 +13,10 @@
     "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "@testFixtures/*": [
-        "./__testFixtures/*"
-      ]
+      "@testFixtures/*": ["./__testFixtures/*"]
     }
   },
-  "include": [
-    "src",
-    "typings"
-  ],
+  "include": ["src", "typings"],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
