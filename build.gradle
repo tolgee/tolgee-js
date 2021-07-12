@@ -31,7 +31,7 @@ idea {
 apply from: "./gradle/e2e.gradle"
 
 task lernaBootstrap(type: Exec) {
-    commandLine "lerna", "bootstrap"
+    commandLine "lerna", "bootstrap", "--ci"
     finalizedBy "linkLibReactToReactTestApp", "linkLibReactDomToReactTestApp"
 }
 
