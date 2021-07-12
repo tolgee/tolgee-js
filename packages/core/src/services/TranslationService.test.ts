@@ -6,7 +6,6 @@ jest.dontMock('../Errors/ApiHttpError');
 import { Translations } from '../types';
 import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { getMockedInstance } from '@testFixtures/mocked';
-import { TranslationService } from './TranslationService';
 import { ApiHttpService } from './ApiHttpService';
 import { Properties } from '../Properties';
 import { CoreService } from './CoreService';
@@ -157,6 +156,7 @@ describe('TranslationService', () => {
       expect(getMockedInstance(Properties).preferredLanguages).toEqual(
         new Set(['dummyLang'])
       );
+      // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(1);
       expect(location.reload).toBeCalledTimes(1);
     });

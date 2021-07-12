@@ -1,10 +1,9 @@
-import { ElementWithMeta, NodeWithMeta } from '../types';
+import { ElementWithMeta } from '../types';
 
 jest.dontMock('./ElementRegistrar');
 
 import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { getMockedInstance } from '@testFixtures/mocked';
-import { ElementRegistrar } from './ElementRegistrar';
 import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { createElement } from '@testFixtures/createElement';
 import { Properties } from '../Properties';

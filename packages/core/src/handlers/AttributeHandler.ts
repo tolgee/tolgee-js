@@ -18,14 +18,14 @@ export class AttributeHandler extends AbstractHandler {
   }
 
   async handle(node: Element) {
-    let inputPrefix = this.properties.config.inputPrefix;
-    let inputSuffix = this.properties.config.inputSuffix;
+    const inputPrefix = this.properties.config.inputPrefix;
+    const inputSuffix = this.properties.config.inputSuffix;
 
-    for (let [tag, attributes] of Object.entries(
+    for (const [tag, attributes] of Object.entries(
       this.properties.config.tagAttributes
     )) {
-      for (let attribute of attributes) {
-        let expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+      for (const attribute of attributes) {
+        const expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
         const nodes: Array<Attr | Text> = NodeHelper.evaluate(expression, node);
         await this.handleNodes(nodes);
       }

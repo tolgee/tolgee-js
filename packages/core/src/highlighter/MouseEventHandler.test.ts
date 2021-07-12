@@ -5,7 +5,6 @@ jest.dontMock('../services/Subscription');
 
 import { ElementMeta, ElementWithMeta } from '../types';
 import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
-import { MouseEventHandler } from './MouseEventHandler';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from '../Properties';
 import { ModifierKey } from '../Constants/ModifierKey';
@@ -83,10 +82,12 @@ describe('MouseEventHandler', () => {
     });
 
     test('Will not handle single element multiple times', async () => {
+      // eslint-disable-next-line no-console
       console.error = jest.fn();
       mouseEventHandler.handle(mockedElement, () => {});
       mouseEventHandler.handle(mockedElement, () => {});
 
+      // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(2);
       mockedElement.dispatchEvent(mockedClick);
       expect(mockedCallback).toBeCalledTimes(1);

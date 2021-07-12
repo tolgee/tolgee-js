@@ -60,6 +60,7 @@ describe('CoreService', () => {
   });
 
   describe('getScopes', () => {
+    // eslint-disable-next-line no-console
     console.error = jest.fn();
 
     test('will switch to production mode on error', async () => {
@@ -68,11 +69,12 @@ describe('CoreService', () => {
       });
       await coreService.getScopes();
       expect(getMockedInstance(Properties).config.mode).toEqual('production');
+      // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(2);
     });
 
     test('will return value from http service', async () => {
-      let mockedReturn = ['translations.view', 'translations.edit'];
+      const mockedReturn = ['translations.view', 'translations.edit'];
       mocked(mockedFetchJson).mockImplementation(
         async () => mockedReturn as Scope[]
       );

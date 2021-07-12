@@ -18,12 +18,12 @@ export class TextHandler extends AbstractHandler {
   }
 
   async handle(node: Node): Promise<void> {
-    let inputPrefix = this.properties.config.inputPrefix;
-    let inputSuffix = this.properties.config.inputSuffix;
+    const inputPrefix = this.properties.config.inputPrefix;
+    const inputSuffix = this.properties.config.inputSuffix;
 
-    let xPath = `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-    let nodes = NodeHelper.evaluate(xPath, node);
-    let filtered: Text[] = this.filterRestricted(nodes as Text[]);
+    const xPath = `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+    const nodes = NodeHelper.evaluate(xPath, node);
+    const filtered: Text[] = this.filterRestricted(nodes as Text[]);
 
     await this.handleNodes(filtered);
   }

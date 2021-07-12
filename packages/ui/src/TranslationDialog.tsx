@@ -98,6 +98,7 @@ export const TranslationDialog: FunctionComponent<DialogProps> = (props) => {
       props.onClose();
     } catch (e) {
       setError('Unexpected error occurred :(');
+      // eslint-disable-next-line no-console
       console.error(e);
     } finally {
       setSaving(false);

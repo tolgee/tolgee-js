@@ -129,6 +129,7 @@ export class TextService {
       ).format(params) as string;
     } catch (e) {
       if (e.code === 'MISSING_VALUE') {
+        // eslint-disable-next-line no-console
         console.warn(e.message);
         return translation;
       }
@@ -156,7 +157,9 @@ export class TextService {
     if (typeof param === 'number' || typeof param === 'bigint') {
       return param.toString();
     }
+    // eslint-disable-next-line no-console
     console.warn(param);
+    // eslint-disable-next-line no-console
     console.warn(
       'Unsupported value type of above param. Consider converting to string.'
     );

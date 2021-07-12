@@ -4,7 +4,6 @@ import classMock from '@testFixtures/classMock';
 import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { MouseEventHandler } from './MouseEventHandler';
 import { getMockedInstance } from '@testFixtures/mocked';
-import { TranslationHighlighter } from './TranslationHighlighter';
 import { ElementWithMeta } from '../types';
 import { Properties } from '../Properties';
 import { createElement } from '@testFixtures/createElement';
@@ -53,6 +52,7 @@ describe('TranslationHighlighter', () => {
 
   describe('warnings & errors', () => {
     test('will print error on no key', async () => {
+      // eslint-disable-next-line no-console
       console.error = jest.fn();
       rendererGetKeyMock = jest.fn(async (): Promise<string> => {
         return;
@@ -73,10 +73,12 @@ describe('TranslationHighlighter', () => {
 
       await savedCallback(openEvent);
 
+      // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(1);
     });
 
     test('will print error on no key', async () => {
+      // eslint-disable-next-line no-console
       console.warn = jest.fn();
 
       getMockedInstance(Properties).config.ui = null;
@@ -85,6 +87,7 @@ describe('TranslationHighlighter', () => {
 
       await savedCallback(openEvent);
 
+      // eslint-disable-next-line no-console
       expect(console.warn).toBeCalledTimes(1);
     });
   });

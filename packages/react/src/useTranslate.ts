@@ -24,7 +24,7 @@ export const useTranslate = () => {
     parameters: TranslationParameters,
     noWrap: boolean
   ) => {
-    let jsonKey = getJsonKey(source, parameters, noWrap);
+    const jsonKey = getJsonKey(source, parameters, noWrap);
 
     if (translated[jsonKey] === undefined) {
       translated[jsonKey] = context.tolgee.instant(
@@ -61,11 +61,11 @@ export const useTranslate = () => {
 
     Promise.all(transactionPremises).then((result) => {
       const newTranslated = result.reduce(
-        (newTranslated: object, current: any) => {
+        (newTranslated: Record<string, unknown>, current: any) => {
           return { ...newTranslated, [current.jsonKey]: current.translated };
         },
         {}
-      ) as object;
+      ) as Record<string, unknown>;
       setTranslated({ ...translated, ...newTranslated });
     });
   };

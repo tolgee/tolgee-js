@@ -17,7 +17,7 @@ export class Observer {
 
   private observer = new MutationObserver(
     async (mutationsList: MutationRecord[]) => {
-      for (let mutation of mutationsList) {
+      for (const mutation of mutationsList) {
         if (mutation.type === 'characterData') {
           await this.basicTextHandler.handle(mutation.target as Element);
           continue;

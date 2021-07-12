@@ -1,12 +1,11 @@
 jest.dontMock('../helpers/NodeHelper.ts');
 
 import { NodeHelper } from '../helpers/NodeHelper';
-const domTestingLib = require('@testing-library/dom');
-const { prettyDOM } = domTestingLib;
+import { prettyDOM } from '@testing-library/dom';
 
 expect.extend({
   toBeFoundIn(xpath, contextNode) {
-    let result = NodeHelper.evaluate(xpath, contextNode);
+    const result = NodeHelper.evaluate(xpath, contextNode);
     if (result.length > 0 && document.contains(result[0])) {
       return {
         message: () =>

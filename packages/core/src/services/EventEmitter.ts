@@ -7,7 +7,7 @@ export interface EventEmitter<T> {
 }
 
 export class EventEmitterImpl<T> {
-  private idCounter: number = 0;
+  private idCounter = 0;
   private _subscriptions: Map<number, CallbackType<T>> = new Map<
     number,
     CallbackType<T>
@@ -45,6 +45,7 @@ export class EventEmitterImpl<T> {
   private unsubscribe(id: number) {
     const wasPresent = this._subscriptions.delete(id);
     if (!wasPresent) {
+      // eslint-disable-next-line no-console
       console.warn('Event to unsubscribe was not found');
     }
   }

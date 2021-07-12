@@ -93,7 +93,7 @@ describe('Tolgee', () => {
   });
 
   test('will refresh translations using observer on run', async () => {
-    let htmlElement = document.createElement('dummyElement');
+    const htmlElement = document.createElement('dummyElement');
     propertiesMock.mock.instances[0].config.targetElement = htmlElement;
     await tolgee.run();
     expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(
@@ -102,7 +102,7 @@ describe('Tolgee', () => {
   });
 
   test('will refresh translations using observer on refresh', async () => {
-    let htmlElement = document.createElement('dummyElement');
+    const htmlElement = document.createElement('dummyElement');
     propertiesMock.mock.instances[0].config.targetElement = htmlElement;
     await tolgee.refresh();
     expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(
@@ -166,7 +166,7 @@ describe('Tolgee', () => {
 
       test('will wait for translations load before wrapping', async () => {
         propertiesMock.mock.instances[0].config.mode = 'development';
-        const translated = await tolgee.translate(dummyKey, dummyParams);
+        await tolgee.translate(dummyKey, dummyParams);
         expect(mockedLoadTranslations).toBeCalled();
       });
     });
@@ -237,7 +237,7 @@ describe('Tolgee', () => {
   });
 
   test('will return proper onLangChange emitter', () => {
-    let eventEmitter = new EventEmitterImpl();
+    const eventEmitter = new EventEmitterImpl();
     (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = eventEmitter;
     expect(tolgee.onLangChange).toEqual(eventEmitter);
   });

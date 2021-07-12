@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { TolgeeProviderContext } from './TolgeeProvider';
 
 export const useTolgeeContext = () => {
-  let context = useContext(TolgeeProviderContext);
+  const context = useContext(TolgeeProviderContext);
 
   if (context === null) {
     throw new Error(

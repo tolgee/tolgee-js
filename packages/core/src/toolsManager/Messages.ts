@@ -68,6 +68,7 @@ export class Messages {
     try {
       window.postMessage({ type, data }, window.origin);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.warn('Can not send message.', e);
     }
   };

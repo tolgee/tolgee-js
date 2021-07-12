@@ -3,7 +3,7 @@
     "browser": true,
     "es2021": true
   },
-  "ignorePatterns": ["**/*.generated.*", "*.js"],
+  "ignorePatterns": ["**/*.generated.*", "*.js", "**/lib"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended"
@@ -29,7 +29,6 @@
       { "args": "none", "varsIgnorePattern": "^_" }
     ],
     "@typescript-eslint/no-non-null-assertion": "off",
-    "react/prop-types": "off",
     "@typescript-eslint/no-empty-interface": "off"
   }
 }

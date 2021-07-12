@@ -67,7 +67,7 @@ export class Tolgee {
   translate = async (
     key: string,
     params: TranslationParams = {},
-    noWrap: boolean = false
+    noWrap = false
   ): Promise<string> => {
     if (this.properties.config.mode === 'development' && !noWrap) {
       await this.loadScopes();
@@ -80,7 +80,7 @@ export class Tolgee {
   instant = (
     key: string,
     params: TranslationParams = {},
-    noWrap: boolean = false,
+    noWrap = false,
     orEmpty?: boolean
   ): string => {
     if (this.properties.config.mode === 'development' && !noWrap) {

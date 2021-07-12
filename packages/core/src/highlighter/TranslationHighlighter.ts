@@ -36,6 +36,7 @@ export class TranslationHighlighter {
     if (keys.size === 1) {
       return Array.from(keys)[0];
     }
+    // eslint-disable-next-line no-console
     console.error('No key to translate. This seems like a bug in tolgee.');
   }
 
@@ -50,13 +51,14 @@ export class TranslationHighlighter {
 
   private translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
     if (typeof this.renderer === 'object') {
-      let key = await this.getKey(e, element);
+      const key = await this.getKey(e, element);
       if (key) {
         this.renderer.renderViewer(key);
         return;
       }
       return;
     }
+    // eslint-disable-next-line no-console
     console.warn(
       'Tolgee UI is not provided. To translate interactively provide tolgee ui constructor to "ui" configuration property. ' +
         'To disable highlighting use production mode.'

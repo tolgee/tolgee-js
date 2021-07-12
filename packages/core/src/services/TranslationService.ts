@@ -79,7 +79,7 @@ export class TranslationService {
         );
         let root: string | Translations = this.translationsCache.get(lang);
         for (let i = 0; i < path.length; i++) {
-          let item = path[i];
+          const item = path[i];
           if (root[item] === undefined) {
             root[item] = {};
           }
@@ -96,7 +96,7 @@ export class TranslationService {
   getFromCacheOrFallback(
     key: string,
     lang: string = this.properties.currentLanguage,
-    orEmpty: boolean = false
+    orEmpty = false
   ): string {
     const message =
       this.getFromCache(key, lang) ||
@@ -110,7 +110,7 @@ export class TranslationService {
   ): Promise<TranslationData> => {
     this.coreService.checkScope('translations.view');
     try {
-      let data = await this.apiHttpService.postJson(
+      const data = await this.apiHttpService.postJson(
         `keyTranslations/${Array.from(languages).join(',')}`,
         { key }
       );
@@ -122,6 +122,7 @@ export class TranslationService {
           if (e.code === 'language_not_found') {
             this.properties.preferredLanguages =
               await this.coreService.getLanguages();
+            // eslint-disable-next-line no-console
             console.error('Requested language not found, refreshing the page!');
             location.reload();
             return;
@@ -144,9 +145,10 @@ export class TranslationService {
       this.properties.config.filesUrlPrefix || '/'
     }${language}.json`;
     try {
-      let result = await fetch(url);
+      const result = await fetch(url);
       if (result.status >= 400) {
         //on error set language data as empty object to not break the flow
+        // eslint-disable-next-line no-console
         console.error(
           'Server responend with error status while loading localization data.'
         );
@@ -154,13 +156,15 @@ export class TranslationService {
         return;
       }
       try {
-        let data = await result.json();
+        const data = await result.json();
         this.translationsCache.set(language, data);
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(`Error parsing json retrieved from ${url}.`);
         this.setEmptyLanguageData(language);
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(`Error fetching localization data from ${url}.`);
       this.setEmptyLanguageData(language);
     }
@@ -169,9 +173,10 @@ export class TranslationService {
   private async fetchTranslationsDevelopment(language: string) {
     this.coreService.checkScope('translations.view');
     try {
-      let data = await this.apiHttpService.fetchJson(`${language}`);
+      const data = await this.apiHttpService.fetchJson(`${language}`);
       this.translationsCache.set(language, data[language] || {});
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error('Error while fetching localization data from API.', e);
       this.setEmptyLanguageData(language);
       return;

@@ -41,6 +41,7 @@ export class TolgeeConfig {
           this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
         }
         if (NodeHelper.isElementTargetElement(targetElement)) {
+          // eslint-disable-next-line no-console
           console.error('Target element: ', this._targetElement);
           throw new Error(
             'An tolgee instance is inited with provided target element'

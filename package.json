@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "prettier": "prettier --write ./packages ./testapps",
+    "prettier": "prettier --write ./packages ./testapps ./e2e",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 --report-unused-disable-directives ."
   },
   "devDependencies": {

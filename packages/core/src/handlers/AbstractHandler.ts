@@ -22,7 +22,18 @@ export abstract class AbstractHandler {
     protected translationHighlighter: TranslationHighlighter
   ) {}
 
-  abstract async handle(node: Node);
+  private static initParentElement(element: Element): ElementWithMeta {
+    if (element[TOLGEE_ATTRIBUTE_NAME] === undefined) {
+      element[TOLGEE_ATTRIBUTE_NAME] = {
+        nodes: new Set(),
+      } as ElementMeta;
+      element.setAttribute(TOLGEE_ATTRIBUTE_NAME, '');
+    }
+
+    return element as ElementWithMeta;
+  }
+
+  abstract handle(node: Node);
 
   protected filterRestricted<T extends Element | Text>(nodes: T[]) {
     const restrictedElements = this.properties.config.restrictedElements;
@@ -30,7 +41,7 @@ export abstract class AbstractHandler {
       const e = NodeHelper.closestElement(n);
       return (
         restrictedElements.indexOf(e.tagName.toLowerCase()) === -1 &&
-        e.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}=\"true\"]`) === null
+        e.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}="true"]`) === null
       );
     });
   }
@@ -61,17 +72,6 @@ export abstract class AbstractHandler {
     return node as Node as NodeWithMeta;
   }
 
-  private static initParentElement(element: Element): ElementWithMeta {
-    if (element[TOLGEE_ATTRIBUTE_NAME] === undefined) {
-      element[TOLGEE_ATTRIBUTE_NAME] = {
-        nodes: new Set(),
-      } as ElementMeta;
-      element.setAttribute(TOLGEE_ATTRIBUTE_NAME, '');
-    }
-
-    return element as ElementWithMeta;
-  }
-
   private getParentElement(node: Node) {
     const parent = this.getSuitableParent(node);
     return AbstractHandler.initParentElement(parent);
@@ -81,6 +81,7 @@ export abstract class AbstractHandler {
     const domParent = NodeHelper.getParentElement(node);
 
     if (domParent === undefined) {
+      // eslint-disable-next-line no-console
       console.error(node);
       throw new Error('No suitable parent found for node above.');
     }

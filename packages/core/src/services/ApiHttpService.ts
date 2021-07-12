@@ -72,6 +72,7 @@ export class ApiHttpService {
         const data = await response.json();
         error.code = data.code;
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.warn('Tolgee server responded with invalid status code.');
       }
       throw error;

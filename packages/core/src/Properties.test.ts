@@ -20,7 +20,7 @@ describe('Properties', () => {
 
   describe('preferred languages', () => {
     test('getter returns from local storage', () => {
-      let dummyReturn = ['dummyLang1'];
+      const dummyReturn = ['dummyLang1'];
       Storage.prototype.getItem = jest.fn();
       mocked(localStorage.getItem).mockReturnValueOnce(
         JSON.stringify(dummyReturn)
@@ -32,7 +32,7 @@ describe('Properties', () => {
     });
 
     test('setter sets local storage item', () => {
-      let dummySet = ['dummyLang1'];
+      const dummySet = ['dummyLang1'];
       Storage.prototype.setItem = jest.fn();
       properties.preferredLanguages = new Set(dummySet);
       expect(localStorage.setItem).toBeCalledWith(
@@ -44,7 +44,7 @@ describe('Properties', () => {
 
   describe('current language', () => {
     test('getter returns from local storage', () => {
-      let dummyReturn = 'cs';
+      const dummyReturn = 'cs';
       properties.config = { availableLanguages: ['cs', 'en'] };
       Storage.prototype.getItem = jest.fn();
       mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
@@ -53,7 +53,7 @@ describe('Properties', () => {
     });
 
     test('setter sets local storage item', () => {
-      let dummySet = 'dummyLang1';
+      const dummySet = 'dummyLang1';
       Storage.prototype.setItem = jest.fn();
       properties.currentLanguage = dummySet;
       expect(localStorage.setItem).toBeCalledWith(
@@ -87,7 +87,7 @@ describe('Properties', () => {
     });
 
     test('resets current language when missing in availableLanguages', () => {
-      let dummyReturn = 'cs';
+      const dummyReturn = 'cs';
       Storage.prototype.getItem = jest.fn();
       mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
       properties.config = {

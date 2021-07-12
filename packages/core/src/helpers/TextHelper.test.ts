@@ -5,12 +5,15 @@ import { TextHelper } from './TextHelper';
 describe('TextHelper', () => {
   describe('will split', () => {
     test('on non escaped properly', () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('text.to.split', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter(
+        'text.to.split',
+        '.'
+      );
       expect(strings).toEqual(['text', 'to', 'split']);
     });
 
     test('on escaped and non escaped properly', () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter(
+      const strings = TextHelper.splitOnNonEscapedDelimiter(
         'text\\.to\\.split',
         '.'
       );
@@ -18,27 +21,27 @@ describe('TextHelper', () => {
     });
 
     test('empty string properly', () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter('', '.');
       expect(strings).toEqual(['']);
     });
 
     test('correctly when it begins with escape', async () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('\\.aa', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter('\\.aa', '.');
       expect(strings).toEqual(['.aa']);
     });
 
     test('correctly when it ends with escape', async () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('aa\\.', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter('aa\\.', '.');
       expect(strings).toEqual(['aa.']);
     });
 
     test('correctly when it contains escaped escape character', async () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('aa\\\\.', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter('aa\\\\.', '.');
       expect(strings).toEqual(['aa\\', '']);
     });
 
     test('correctly when it contains escaped escape character and delimiter is escaped', async () => {
-      let strings = TextHelper.splitOnNonEscapedDelimiter('aa\\\\\\.', '.');
+      const strings = TextHelper.splitOnNonEscapedDelimiter('aa\\\\\\.', '.');
       expect(strings).toEqual(['aa\\.']);
     });
   });

@@ -35,13 +35,13 @@ describe('Observer', () => {
 
   describe('Tests on document.body', () => {
     test('Will handle mutation on basic character data', async () => {
-      let text = document.createTextNode('Dummy text node');
+      const text = document.createTextNode('Dummy text node');
       document.body.append(text);
       observer.observe();
       text.textContent = 'Dummy text node modified';
 
       await waitFor(() => {
-        let onNewNodesMock = getMockedInstance(TextHandler).handle;
+        const onNewNodesMock = getMockedInstance(TextHandler).handle;
 
         expect(onNewNodesMock).toBeCalledTimes(1);
         expect(onNewNodesMock).toBeCalledWith(text);
@@ -49,12 +49,12 @@ describe('Observer', () => {
     });
 
     test('Will handle mutation element child list', async () => {
-      let text = document.createTextNode('Dummy text node');
+      const text = document.createTextNode('Dummy text node');
       observer.observe();
       document.body.append(text);
 
       await waitFor(() => {
-        let handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
+        const handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
 
         expect(handleSubtree).toBeCalledTimes(1);
         expect(handleSubtree).toBeCalledWith(document.body);
@@ -70,7 +70,7 @@ describe('Observer', () => {
       span.setAttribute(attributeName, 'modified');
 
       await waitFor(() => {
-        let handleAttributeMock = getMockedInstance(AttributeHandler).handle;
+        const handleAttributeMock = getMockedInstance(AttributeHandler).handle;
 
         expect(handleAttributeMock).toBeCalledTimes(1);
         expect(handleAttributeMock).toBeCalledWith(span);
@@ -81,12 +81,13 @@ describe('Observer', () => {
       const div = document.createElement('div');
       div.innerHTML = "<div><div></div><div id='innerDiv'></div></div>";
       document.body.append(div);
-      let innerDiv = document.getElementById('innerDiv');
+      const innerDiv = document.getElementById('innerDiv');
       observer.observe();
       innerDiv.textContent = 'This is inner text';
 
       await waitFor(() => {
-        let handleAttributeMock = getMockedInstance(CoreHandler).handleSubtree;
+        const handleAttributeMock =
+          getMockedInstance(CoreHandler).handleSubtree;
 
         expect(handleAttributeMock).toBeCalledTimes(1);
         expect(handleAttributeMock).toBeCalledWith(innerDiv);
@@ -100,19 +101,19 @@ describe('Observer', () => {
       document.body.textContent = 'Nothing';
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      let handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
+      const handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
       expect(handleSubtree).not.toBeCalledTimes(1);
     });
   });
 
   test("Will call registrar's cleanInactive on change", async () => {
-    let text = document.createTextNode('Dummy text node');
+    const text = document.createTextNode('Dummy text node');
     document.body.append(text);
     observer.observe();
     text.textContent = 'Dummy text node modified';
 
     await waitFor(() => {
-      let refreshAllMock = getMockedInstance(ElementRegistrar).refreshAll;
+      const refreshAllMock = getMockedInstance(ElementRegistrar).refreshAll;
       expect(refreshAllMock).toBeCalledTimes(1);
     });
   });

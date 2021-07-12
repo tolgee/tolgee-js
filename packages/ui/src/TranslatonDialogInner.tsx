@@ -8,7 +8,7 @@ import { Button } from './common/Button';
 import { TextHelper } from '@tolgee/core/lib/helpers/TextHelper';
 
 export default () => {
-  let context = useContext(TranslationDialogContext);
+  const context = useContext(TranslationDialogContext);
 
   return (
     <div>

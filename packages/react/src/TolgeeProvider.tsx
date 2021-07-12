@@ -14,7 +14,7 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   delete config.children;
   delete config.loadingFallback;
 
-  const [tolgee, setTolgee] = useState(new Tolgee(config));
+  const [tolgee] = useState(new Tolgee(config));
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

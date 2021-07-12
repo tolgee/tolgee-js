@@ -23,6 +23,7 @@ export class MouseEventHandler {
     onclick: (clickEvent: MouseEvent) => void
   ) {
     if (element._tolgee.listeningForHighlighting) {
+      // eslint-disable-next-line no-console
       console.error(
         'Element is already listening mouse events! This is probably bug in tolgee'
       );

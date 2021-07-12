@@ -1,11 +1,10 @@
 import * as React from 'react';
-import { FunctionComponent, useContext, useState, useEffect } from 'react';
+import { FunctionComponent, useContext } from 'react';
 import { TranslationDialogContext } from './TranslationDialog';
-import { CircularLoading } from './CircularLoading';
 import { useWithStyles } from './common/useWithStyles';
 
 export const TranslationFields: FunctionComponent = () => {
-  let context = useContext(TranslationDialogContext);
+  const context = useContext(TranslationDialogContext);
 
   const style: React.CSSProperties = {
     margin: '10px 0 0 0',

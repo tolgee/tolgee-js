@@ -28,7 +28,7 @@ export class CoreHandler {
   }
 
   private async refresh() {
-    let nodes: ElementWithMeta[] = NodeHelper.evaluate(
+    const nodes: ElementWithMeta[] = NodeHelper.evaluate(
       `//*[@_tolgee]`,
       this.properties.config.targetElement
     );

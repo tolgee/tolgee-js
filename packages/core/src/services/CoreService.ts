@@ -30,7 +30,9 @@ export class CoreService {
     try {
       return await this.apiHttpService.fetchJson(`scopes`);
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
+      // eslint-disable-next-line no-console
       console.error(
         'Error getting scopes. Trying to switch to production mode!'
       );
