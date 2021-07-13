@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.52 (2021-07-13)
+
+
+### Bug Fixes
+
+* **sockets:** Fix missing dist ([9d903c6](https://github.com/tolgee/tolgee-js/commit/9d903c697378ed96725fa3efdb6d39146c39aa85))
+
+
+
+
+
 # 1.0.0-alpha.51 (2021-07-13)
 
 
