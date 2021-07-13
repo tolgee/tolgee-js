@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.48 (2021-07-13)
+
+
+### Bug Fixes
+
+* **sockets:** Restrict transport to websockets, fix default url ([44b8e68](https://github.com/tolgee/tolgee-react/commit/44b8e68ba4abe9c400f1cf570316fd28a9db888a))
+
+
+
+
+
 # 1.0.0-alpha.47 (2021-07-12)
 
 
