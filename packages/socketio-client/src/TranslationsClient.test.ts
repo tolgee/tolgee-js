@@ -25,6 +25,7 @@ describe('TranslationsClient', () => {
     } as any);
 
     client = new TranslationsClient({
+      transports: ['polling'],
       serverUrl: 'dummy_server_url',
       authentication,
     });
@@ -34,7 +35,7 @@ describe('TranslationsClient', () => {
     client.on('connect', () => {});
     expect(io).toBeCalledWith('dummy_server_url/translations', {
       query: authentication,
-      transports: ['websocket'],
+      transports: ['polling'],
     });
     expect(io).toHaveBeenCalledTimes(1);
   });

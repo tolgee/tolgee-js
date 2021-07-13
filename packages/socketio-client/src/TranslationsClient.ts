@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 
 type TranslationsClientOptions = {
   serverUrl: string;
+  transports?: ('websocket' | 'polling')[];
   authentication:
     | {
         jwtToken: string;
@@ -26,7 +27,7 @@ export class TranslationsClient {
       this._socket = io(
         `${this.options.serverUrl}/${TRANSLATIONS_CHANNEL_NAME}`,
         {
-          transports: ['websocket'],
+          transports: this.options.transports || ['websocket'],
           query: this.options.authentication,
         }
       );
