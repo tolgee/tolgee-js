@@ -2,12 +2,11 @@
   "name": "@tolgee/socketio-client",
   "version": "1.0.0-alpha.50",
   "description": "Client library for Tolgee Socket.io server",
-  "main": "dist/tolgee.umd.js",
+  "main": "dist/tolgee-socketio-client.commonjs.js",
   "types": "./lib/index.d.ts",
   "scripts": {
     "build": "webpack --env mode=production && tsc",
-    "test": "jest --config ./jest.config.js",
-    "play": "ts-node play.ts"
+    "test": "jest --config ./jest.config.js"
   },
   "files": [
     "lib/**/*",
