@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.51 (2021-07-13)
+
+
+### Bug Fixes
+
+* **sockets:** Publish proper files, fix main ([c2c131c](https://github.com/tolgee/tolgee-js/commit/c2c131c2873ed704635d9c8f9cf0456690d56bbb))
+
+
+
+
+
 # 1.0.0-alpha.50 (2021-07-13)
 
 
