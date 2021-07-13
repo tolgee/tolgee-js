@@ -9,6 +9,10 @@
     "test": "jest --config ./jest.config.js",
     "play": "ts-node play.ts"
   },
+  "files": [
+    "lib/**/*",
+    "dist/**/*"
+  ],
   "directories": {
     "lib": "lib",
     "dist": "dist"
