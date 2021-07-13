@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.49 (2021-07-13)
+
+
+### Bug Fixes
+
+* **sockets:** Add transports configuration option ([2d77f8e](https://github.com/tolgee/tolgee-react/commit/2d77f8ea3369dbf1f3daa10664f1317111c9414a))
+
+
+
+
+
 # 1.0.0-alpha.48 (2021-07-13)
 
 
