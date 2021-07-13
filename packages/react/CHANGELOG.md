@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.50 (2021-07-13)
+
+
+### Bug Fixes
+
+* **sockets:** Publish proper files ([be8181b](https://github.com/tolgee/tolgee-react/commit/be8181b7ffffb829cf7b9d340002c2554850038c))
+
+
+
+
+
 # 1.0.0-alpha.49 (2021-07-13)
 
 
