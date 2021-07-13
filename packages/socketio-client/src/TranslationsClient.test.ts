@@ -34,6 +34,7 @@ describe('TranslationsClient', () => {
     client.on('connect', () => {});
     expect(io).toBeCalledWith('dummy_server_url/translations', {
       query: authentication,
+      transports: ['websocket'],
     });
     expect(io).toHaveBeenCalledTimes(1);
   });
