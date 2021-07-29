@@ -49,11 +49,11 @@ export abstract class AbstractHandler {
 
   protected async handleNodes(nodes: Array<Text | Attr>) {
     for (const textNode of nodes) {
+      const result = await this.textService.replace(textNode.textContent);
       const tolgeeData = textNode[TOLGEE_ATTRIBUTE_NAME] as
         | NodeMeta
         | undefined;
       if (tolgeeData?.oldTextContent == undefined) {
-        const result = await this.textService.replace(textNode.textContent);
         if (result) {
           const { text, keys } = result;
           const translatedNode = this.translateChildNode(textNode, text, keys);
