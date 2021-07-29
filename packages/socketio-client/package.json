@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/socketio-client",
-  "version": "1.0.0-alpha.52",
+  "version": "1.0.0-alpha.53",
   "description": "Client library for Tolgee Socket.io server",
   "main": "dist/tolgee-socketio-client.umd.js",
   "types": "./lib/index.d.ts",

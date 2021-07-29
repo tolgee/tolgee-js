@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.53 (2021-07-29)
+
+
+### Bug Fixes
+
+* **core:** AbstractHandler is handling single text node twice TG-206 ([9da2bbd](https://github.com/tolgee/tolgee-js/commit/9da2bbd80c74d3e5882ad27fcdd2f6cd2e77ac4b))
+
+
+
+
+
 # 1.0.0-alpha.52 (2021-07-13)
 
 
