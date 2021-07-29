@@ -132,7 +132,16 @@ task buildAll(type: Task) {
 
 task developAll(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
-    commandLine "lerna", "exec", "--parallel", "--", "npm", "run", "develop"
+    commandLine "lerna", "run", "--parallel", "develop"
+}
+
+task developReactNoBuild(type: Exec) {
+    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react,*/core", "develop"
+}
+
+task developReact(type: Exec) {
+    dependsOn "lernaBootstrap", "buildAll"
+    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react,*/core", "develop"
 }
 
 task testCore(type: Exec) {

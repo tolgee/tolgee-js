@@ -4,6 +4,7 @@ import {
   ElementMeta,
   ElementWithMeta,
   KeyAndParams,
+  NodeMeta,
   NodeWithMeta,
 } from '../types';
 import { TextService } from '../services/TextService';
@@ -48,13 +49,18 @@ export abstract class AbstractHandler {
 
   protected async handleNodes(nodes: Array<Text | Attr>) {
     for (const textNode of nodes) {
-      const result = await this.textService.replace(textNode.textContent);
-      if (result) {
-        const { text, keys } = result;
-        const translatedNode = this.translateChildNode(textNode, text, keys);
-        const parentElement = this.getParentElement(translatedNode);
-        parentElement._tolgee.nodes.add(translatedNode);
-        this.elementRegistrar.register(parentElement);
+      const tolgeeData = textNode[TOLGEE_ATTRIBUTE_NAME] as
+        | NodeMeta
+        | undefined;
+      if (tolgeeData?.oldTextContent == undefined) {
+        const result = await this.textService.replace(textNode.textContent);
+        if (result) {
+          const { text, keys } = result;
+          const translatedNode = this.translateChildNode(textNode, text, keys);
+          const parentElement = this.getParentElement(translatedNode);
+          parentElement._tolgee.nodes.add(translatedNode);
+          this.elementRegistrar.register(parentElement);
+        }
       }
     }
   }
