@@ -4,7 +4,9 @@ import {
   ElementMeta,
   ElementWithMeta,
   KeyAndParams,
+  NodeLock,
   NodeMeta,
+  NodeWithLock,
   NodeWithMeta,
 } from '../types';
 import { TextService } from '../services/TextService';
@@ -49,11 +51,16 @@ export abstract class AbstractHandler {
 
   protected async handleNodes(nodes: Array<Text | Attr>) {
     for (const textNode of nodes) {
-      const result = await this.textService.replace(textNode.textContent);
+      if (textNode[TOLGEE_ATTRIBUTE_NAME] === undefined) {
+        textNode[TOLGEE_ATTRIBUTE_NAME] = {} as NodeLock;
+      }
       const tolgeeData = textNode[TOLGEE_ATTRIBUTE_NAME] as
         | NodeMeta
+        | NodeLock
         | undefined;
-      if (tolgeeData?.oldTextContent == undefined) {
+      if (tolgeeData?.locked !== true) {
+        this.lockNode(textNode);
+        const result = await this.textService.replace(textNode.textContent);
         if (result) {
           const { text, keys } = result;
           const translatedNode = this.translateChildNode(textNode, text, keys);
@@ -61,6 +68,7 @@ export abstract class AbstractHandler {
           parentElement._tolgee.nodes.add(translatedNode);
           this.elementRegistrar.register(parentElement);
         }
+        this.unlockNode(textNode);
       }
     }
   }
@@ -76,6 +84,25 @@ export abstract class AbstractHandler {
     };
     node.textContent = newValue;
     return node as Node as NodeWithMeta;
+  }
+
+  private lockNode(node: Node | Attr): NodeWithLock {
+    if (node[TOLGEE_ATTRIBUTE_NAME] === undefined) {
+      node[TOLGEE_ATTRIBUTE_NAME] = {} as NodeLock;
+    }
+
+    const tolgeeData = node[TOLGEE_ATTRIBUTE_NAME] as NodeMeta | NodeLock;
+    if (tolgeeData?.locked !== true) {
+      tolgeeData.locked = true;
+    }
+
+    return node as NodeWithLock;
+  }
+
+  private unlockNode(node: Node | Attr) {
+    if (node[TOLGEE_ATTRIBUTE_NAME]) {
+      node[TOLGEE_ATTRIBUTE_NAME].locked = false;
+    }
   }
 
   private getParentElement(node: Node) {

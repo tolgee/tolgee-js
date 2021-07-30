@@ -40,6 +40,10 @@ export type NodeWithMeta = Node & {
   _tolgee: NodeMeta;
 };
 
+export type NodeWithLock = Node & {
+  _tolgee: NodeLock;
+};
+
 export type ElementWithMeta = Element &
   ElementCSSInlineStyle & {
     _tolgee: ElementMeta;
@@ -51,7 +55,14 @@ export type ElementMeta = {
   removeAllEventListeners?: () => void;
 };
 
-export type NodeMeta = { oldTextContent: string; keys: KeyAndParams[] };
+export type NodeMeta = {
+  oldTextContent: string;
+  keys: KeyAndParams[];
+} & NodeLock;
+
+export type NodeLock = {
+  locked?: boolean;
+};
 
 export type Scope = 'translations.edit' | 'translations.view' | 'keys.edit';
 

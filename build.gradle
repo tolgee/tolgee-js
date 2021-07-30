@@ -136,12 +136,12 @@ task developAll(type: Exec) {
 }
 
 task developReactNoBuild(type: Exec) {
-    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react,*/core", "develop"
+    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react", "develop"
 }
 
 task developReact(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
-    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react,*/core", "develop"
+    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react", "develop"
 }
 
 task testCore(type: Exec) {

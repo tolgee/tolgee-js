@@ -103,6 +103,23 @@ describe('TextHandler', () => {
       });
     });
 
+    test('will lock the node', async () => {
+      c = createTestDom(document);
+      const node = NodeHelper.evaluateToSingle(
+        `./text()[contains(., ${gv(c.keyInRoot)})]`,
+        document.body
+      ) as NodeWithMeta;
+      let resolve;
+      getMockedInstance(TextService).replace = () =>
+        new Promise((r) => (resolve = r));
+      const promise = textHandler.handle(node);
+      await new Promise((r) => setTimeout(r));
+      expect(node._tolgee.locked).toEqual(true);
+      resolve();
+      await promise;
+      expect(node._tolgee.locked).toEqual(false);
+    });
+
     describe("Parent element's _tolgee property and attribute", () => {
       let element: ElementWithMeta;
       let node: NodeWithMeta;
