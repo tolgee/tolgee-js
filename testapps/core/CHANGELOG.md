@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.55 (2021-07-30)
+
+
+### Bug Fixes
+
+* Add node locking TG-215 ([ec1e344](https://github.com/tolgee/tolgee-js/commit/ec1e3446f9f477214269541c397eb5f39d3007c1))
+
+
+
+
+
 # 1.0.0-alpha.54 (2021-07-29)
 
 
