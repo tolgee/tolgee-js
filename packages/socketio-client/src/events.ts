@@ -22,6 +22,7 @@ type TranslationType = {
   text: string;
   state: TranslationStateType;
   key: KeyType;
+  languageTag: string;
 };
 
 type TranslationStateType =
