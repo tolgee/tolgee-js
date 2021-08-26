@@ -6,15 +6,17 @@ document.body.append(htmlElement);
 
 const initialTextsToTranslate = document.createElement('div');
 initialTextsToTranslate.innerHTML =
-  '<p>{{test}}</p><p>{{test}}</p><p>{{test_param:param:value}}</p><p>{{test}}</p>';
+  '<p>{{test}}</p><p>{{test}}</p><p>{{test_param:param:value}}</p><p>{{test}}</p><p>{{this_is_mentioned_just_in_english}}</p>';
 document.body.append(initialTextsToTranslate);
 
 const tolgee = new Tolgee({
   watch: true,
   inputPrefix: '{{',
   inputSuffix: '}}',
+  currentLanguage: 'cs',
+  fallbackLanguage: 'en',
 });
-tolgee.lang = 'en';
+tolgee.lang = 'cs';
 tolgee.onLangLoaded.subscribe(() => {
   refresh();
 });

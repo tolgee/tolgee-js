@@ -92,6 +92,19 @@ describe('Tolgee', () => {
     ).toBeCalledWith();
   });
 
+  test('will try to get translations with current language from properties', async () => {
+    propertiesMock.mock.instances[0].currentLanguage = 'dummyLang';
+    propertiesMock.mock.instances[0].config.preloadFallback = true;
+    propertiesMock.mock.instances[0].config.fallbackLanguage = 'fallbackLang';
+    await tolgee.run();
+    expect(
+      translationServiceMock.mock.instances[0].loadTranslations
+    ).toBeCalledWith();
+    expect(
+      translationServiceMock.mock.instances[0].loadTranslations
+    ).toBeCalledWith('fallbackLang');
+  });
+
   test('will refresh translations using observer on run', async () => {
     const htmlElement = document.createElement('dummyElement');
     propertiesMock.mock.instances[0].config.targetElement = htmlElement;

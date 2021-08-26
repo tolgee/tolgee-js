@@ -1,5 +1,6 @@
 {
   "test": "This is test text!",
-  "test_param": "This is text with param: {{param}}.",
-  "this_is_mentioned_just_in_english": "This is just in english."
+  "test_param": "This is text with param: {param}.",
+  "this_is_mentioned_just_in_english": "This is just in english.",
+  "missing_in_current": "I am missing in current"
 }
