@@ -28,6 +28,11 @@ export class TolgeeConfig {
     | ((node: Element) => boolean) = ['option', 'optgroup'];
   restrictedElements?: string[] = ['script', 'style'];
   highlightColor?: string = 'rgb(224 240 255)';
+
+  /**
+   * When true, fallback language will be preloaded on Tolgee.run
+   */
+  preloadFallback?: boolean = false;
   private _targetElement?: Element;
 
   constructor(config?: TolgeeConfig) {

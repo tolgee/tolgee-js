@@ -15,7 +15,6 @@ import { EventEmitterImpl } from './services/EventEmitter';
 export class Tolgee {
   private readonly container = rootContainer.createChildContainer();
   public properties: Properties = this.container.resolve(Properties);
-  private _coreService: CoreService = this.container.resolve(CoreService);
   private eventService: EventService = this.container.resolve(EventService);
   private observer: Observer = this.container.resolve(Observer);
   private translationService: TranslationService =
@@ -30,6 +29,12 @@ export class Tolgee {
     this.properties.config = new TolgeeConfig(config);
   }
 
+  private _coreService: CoreService = this.container.resolve(CoreService);
+
+  public get coreService() {
+    return this._coreService;
+  }
+
   public get lang() {
     return this.properties.currentLanguage;
   }
@@ -39,8 +44,16 @@ export class Tolgee {
     (this.eventService.LANGUAGE_CHANGED as EventEmitterImpl<any>).emit(value);
   }
 
-  public get coreService() {
-    return this._coreService;
+  public get defaultLanguage() {
+    return this.properties.config.defaultLanguage;
+  }
+
+  public get onLangChange() {
+    return this.eventService.LANGUAGE_CHANGED;
+  }
+
+  public get onLangLoaded() {
+    return this.eventService.LANGUAGE_LOADED;
   }
 
   public async run(): Promise<void> {
@@ -49,6 +62,13 @@ export class Tolgee {
     }
 
     await this.translationService.loadTranslations();
+
+    if (this.properties.config.preloadFallback) {
+      await this.translationService.loadTranslations(
+        this.properties.config.fallbackLanguage
+      );
+    }
+
     await this.refresh();
 
     if (this.properties.config.watch) {
@@ -58,10 +78,6 @@ export class Tolgee {
 
   public async refresh() {
     return this.coreHandler.handleSubtree(this.properties.config.targetElement);
-  }
-
-  public get defaultLanguage() {
-    return this.properties.config.defaultLanguage;
   }
 
   translate = async (
@@ -96,14 +112,6 @@ export class Tolgee {
       this.properties.config.targetElement
     );
   };
-
-  public get onLangChange() {
-    return this.eventService.LANGUAGE_CHANGED;
-  }
-
-  public get onLangLoaded() {
-    return this.eventService.LANGUAGE_LOADED;
-  }
 
   private async loadScopes() {
     if (this.properties.scopes === undefined) {
