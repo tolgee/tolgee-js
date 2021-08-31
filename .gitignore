@@ -9,6 +9,7 @@ e2e/testapps/dist
 *.iml
 testapps/*/node_modules
 testapps/*/build
+testapps/react/.env.development.local
 **/packahe.json.lerna_backup
 **/node_modules
 packages/**/dist
