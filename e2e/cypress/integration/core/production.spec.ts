@@ -8,6 +8,7 @@ context('Production test', () => {
   });
 
   it('switches language', () => {
+    cy.wait(200);
     cy.get('button').contains('en').click();
     cy.contains('This is test text!').should('be.visible');
   });
