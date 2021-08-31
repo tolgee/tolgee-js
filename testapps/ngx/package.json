@@ -21,7 +21,7 @@
     "@angular/router": "~11.2.14",
     "@tolgee/core": "^1.0.0-alpha.57",
     "@tolgee/ngx": "^1.0.0-alpha.57",
-    "@tolgee/ui": "^1.0.0-alpha.57",
+    "@tolgee/ui": "^1.0.0-alpha.59",
     "@types/react": "^17.0.19",
     "rxjs": "~6.6.3",
     "serve": "^11.3.2",
