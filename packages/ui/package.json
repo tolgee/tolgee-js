@@ -29,7 +29,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@tolgee/core": "^1.0.0-alpha.36",
     "@types/jest": "^26.0.14",
-    "@types/node": "^14.14.20",
+    "@types/node": "^16.7.8",
     "@types/react-dom": "^17.0.1",
     "babel-loader": "^8.1.0",
     "babel-plugin-import": "^1.13.1",
