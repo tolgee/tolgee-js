@@ -47,7 +47,7 @@
     "cypress-dotenv": "^1.2.2",
     "cypress-xpath": "^1.6.1",
     "dotenv-webpack": "^7.0.2",
-    "html-webpack-plugin": "^4.5.0",
+    "html-webpack-plugin": "^5.3.2",
     "intl-messageformat": "^9.5.3",
     "jest": "^26.5.2",
     "jest-fetch-mock": "^3.0.3",
