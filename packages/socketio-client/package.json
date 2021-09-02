@@ -25,7 +25,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^27.0.1",
-    "@types/socket.io-client": "^1.4.36",
+    "@types/socket.io-client": "^3.0.0",
     "jest": "^26.5.2",
     "socket.io-client": "^4.2.0",
     "ts-jest": "^26.4.1",
