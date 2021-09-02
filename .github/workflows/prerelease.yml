@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: Npm install lerna
-        run: npm install -g lerna
+      - name: Npm ci
+        run: npm ci
 
       - name: Build (build & test)
         run: ./gradlew build
@@ -37,7 +37,7 @@ jobs:
         run: ./gradlew buildNgxForPublish
 
       - name: Publish
-        run: lerna publish from-package --yes
+        run: npm run lerna-publish
 
       - name: Merge to develop
         uses: devmasx/merge-branch@v1.3.1

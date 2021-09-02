@@ -1,12 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-export class BodyEnd extends React.PureComponent<React.ReactNode> {
+export class BodyEnd extends React.PureComponent<{ document?: Document }> {
   _popup = null;
 
+  get document() {
+    return this.props.document || document;
+  }
+
   componentDidMount() {
-    this._popup = document.createElement('div');
-    document.body.appendChild(this._popup);
+    this._popup = this.document.createElement('div');
+    this.document.body.appendChild(this._popup);
     this._render();
   }
 
@@ -16,7 +20,7 @@ export class BodyEnd extends React.PureComponent<React.ReactNode> {
 
   componentWillUnmount() {
     ReactDOM.unmountComponentAtNode(this._popup);
-    document.body.removeChild(this._popup);
+    this.document.body.removeChild(this._popup);
   }
 
   _render() {

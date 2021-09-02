@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core/lib/Constants/Global';
+import { FONT_FAMILY } from '../constants';
 
 const CONTEXT_MENU_ID = '_tolgee-context-menu';
 
@@ -41,7 +42,7 @@ export const ContextMenu: FunctionComponent<ContextMenuProps> = (props) => {
 
   const style: React.CSSProperties = {
     position: 'absolute',
-    fontFamily: 'Arial, Helvetica, sans-serif',
+    fontFamily: FONT_FAMILY,
     top: `${top}px`,
     left: `${left}px`,
     width: width !== null ? `${width + 1}px` : undefined,

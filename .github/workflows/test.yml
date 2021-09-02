@@ -15,8 +15,8 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: Npm install lerna
-        run: npm install -g lerna
+      - name: Npm ci
+        run: npm ci
 
       - name: Build (build & test)
         run: ./gradlew build

@@ -14,7 +14,7 @@ const backdropStyle: React.CSSProperties = {
   top: 0,
   left: 0,
   backgroundColor: 'rgba(0,0,0,0.5)',
-  zIndex: 9999,
+  zIndex: 2147483000,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -28,7 +28,7 @@ const dialogStyle: React.CSSProperties = {
     '0px 11px 15px -7px rgba(0,0,0,0.2), 0px 24px 38px 3px rgba(0,0,0,0.14), 0px 9px 46px 8px rgba(0,0,0,0.12)',
 };
 
-export const Dialog: FunctionComponent<DialogProps> = (props) => {
+export const Modal: FunctionComponent<DialogProps> = (props) => {
   function onKeyDown(key: string) {
     if (key === 'Escape') {
       props.onClose();

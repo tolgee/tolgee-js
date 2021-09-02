@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FunctionComponent } from 'react';
-import { useWithStyles } from '../useWithStyles';
+import { useWithStyles } from '../styles/useWithStyles';
 
 const CLASS_NAME = '_tolgee-menu-item';
 

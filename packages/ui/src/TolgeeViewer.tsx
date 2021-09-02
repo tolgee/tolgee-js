@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { TranslationDialog } from './TranslationDialog';
-import { BodyEnd } from './BodyEnd';
 import { CoreService } from '@tolgee/core/lib/services/CoreService';
 import { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 import { Properties } from '@tolgee/core/lib/Properties';
 import { EventService } from '@tolgee/core/lib/services/EventService';
+import { BodyEnd } from './common/BodyEnd';
+import { TranslationDialogContextProvider } from './translationDialog/TranslationDialogContextProvider';
+import { TranslationDialog } from './translationDialog/TranslationDialog';
 
 export type ComponentDependencies = {
   coreService: CoreService;
@@ -36,14 +37,18 @@ export class TolgeeViewer extends React.Component<ViewerProps> {
   }
 
   public render = () => (
-    <BodyEnd>
-      <TranslationDialog
-        dependencies={this.props.dependencies}
-        open={this.state.dialogOpened}
-        input={this.state.translationInput}
-        onClose={this.onClose}
-      />
-    </BodyEnd>
+    <>
+      <BodyEnd>
+        <TranslationDialogContextProvider
+          dependencies={this.props.dependencies}
+          open={this.state.dialogOpened}
+          input={this.state.translationInput}
+          onClose={this.onClose}
+        >
+          <TranslationDialog />
+        </TranslationDialogContextProvider>
+      </BodyEnd>
+    </>
   );
 
   private onClose = () => {
