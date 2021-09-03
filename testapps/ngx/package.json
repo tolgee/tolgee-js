@@ -1,6 +1,6 @@
 {
   "name": "angular",
-  "version": "1.0.0-alpha.59",
+  "version": "1.0.0-alpha.60",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,9 +19,9 @@
     "@angular/platform-browser": "~11.2.14",
     "@angular/platform-browser-dynamic": "~11.2.14",
     "@angular/router": "~11.2.14",
-    "@tolgee/core": "^1.0.0-alpha.59",
-    "@tolgee/ngx": "^1.0.0-alpha.59",
-    "@tolgee/ui": "^1.0.0-alpha.59",
+    "@tolgee/core": "^1.0.0-alpha.60",
+    "@tolgee/ngx": "^1.0.0-alpha.60",
+    "@tolgee/ui": "^1.0.0-alpha.60",
     "@types/react": "^16.9.55",
     "rxjs": "~6.6.3",
     "serve": "^11.3.2",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.0.0-alpha.60 (2021-09-03)
+
+
+### Features
+
+* Improve UI TG-257 ([#414](https://github.com/tolgee/tolgee-js/issues/414)) ([0f944d8](https://github.com/tolgee/tolgee-js/commit/0f944d8108c226db1893617d2bc55156c79b5399))
+
+
+
+
+
 # 1.0.0-alpha.59 (2021-08-31)
 
 **Note:** Version bump only for package @tolgee/ui
