@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FunctionComponent } from 'react';
-import { useWithStyles } from './common/useWithStyles';
+import { useWithStyles } from './styles/useWithStyles';
 
 const css = `
 .tolgee-circular-loader {
