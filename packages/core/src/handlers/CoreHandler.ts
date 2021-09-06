@@ -1,18 +1,16 @@
 import { NodeHelper } from '../helpers/NodeHelper';
 import { CoreService } from '../services/CoreService';
 import { TextHandler } from './TextHandler';
-import { Lifecycle, scoped } from 'tsyringe';
 import { EventService } from '../services/EventService';
 import { Properties } from '../Properties';
 import { AttributeHandler } from './AttributeHandler';
 import { ElementWithMeta } from '../types';
 import { TextService } from '../services/TextService';
 
-@scoped(Lifecycle.ContainerScoped)
 export class CoreHandler {
   constructor(
     private service: CoreService,
-    private basicTextHandler: TextHandler,
+    private textHandler: TextHandler,
     private eventService: EventService,
     private properties: Properties,
     private attributeHandler: AttributeHandler,
@@ -24,7 +22,7 @@ export class CoreHandler {
 
   public async handleSubtree(target: Element) {
     await this.attributeHandler.handle(target);
-    await this.basicTextHandler.handle(target);
+    await this.textHandler.handle(target);
   }
 
   private async refresh() {

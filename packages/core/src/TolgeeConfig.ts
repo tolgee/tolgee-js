@@ -1,8 +1,12 @@
-import { Mode } from './types';
-import { ModifierKey } from './index';
+import { Mode, Translations } from './types';
 import { NodeHelper } from './helpers/NodeHelper';
+import { ModifierKey } from './Constants/ModifierKey';
 
-const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => document.body;
+const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => {
+  if (typeof document !== 'undefined') {
+    return document.body;
+  }
+};
 
 export class TolgeeConfig {
   mode?: Mode;
@@ -10,6 +14,7 @@ export class TolgeeConfig {
   apiKey?: string;
   inputPrefix?: string = '%-%tolgee:';
   inputSuffix?: string = '%-%';
+  forceLanguage?: string;
   defaultLanguage?: string = 'en';
   availableLanguages?: string[];
   fallbackLanguage?: string;
@@ -28,6 +33,10 @@ export class TolgeeConfig {
     | ((node: Element) => boolean) = ['option', 'optgroup'];
   restrictedElements?: string[] = ['script', 'style'];
   highlightColor?: string = 'rgb(224 240 255)';
+  /** localization data to use in production mode */
+  staticData?: {
+    [key: string]: Translations | (() => Promise<Translations>);
+  };
 
   /**
    * When true, fallback language will be preloaded on Tolgee.run

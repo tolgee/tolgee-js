@@ -1,31 +1,35 @@
-import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
-import 'reflect-metadata';
-
 jest.dontMock('./CoreService');
+jest.dontMock('./DependencyStore');
 
+import '@testing-library/jest-dom/extend-expect';
 import { CoreService } from './CoreService';
-import { container, DependencyContainer } from 'tsyringe';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { ApiHttpService } from './ApiHttpService';
 import { mocked } from 'ts-jest/utils';
 import { Properties } from '../Properties';
 import { Scope } from '../types';
 import { ApiHttpError } from '../Errors/ApiHttpError';
+import { DependencyStore } from './DependencyStore';
 
 describe('CoreService', () => {
   let coreService: CoreService;
-  let childContainer: DependencyContainer;
   let mockedFetchJson;
 
   beforeEach(() => {
-    childContainer = container.createChildContainer();
-    coreService = childContainer.resolve(CoreService);
+    coreService = new DependencyStore().coreService;
+    getMockedInstance(Properties).preferredLanguages = new Set<string>();
+    getMockedInstance(Properties).config = {
+      inputPrefix: '{{',
+      inputSuffix: '}}',
+      restrictedElements: [],
+      tagAttributes: {
+        '*': ['aria-label'],
+      },
+    };
     mockedFetchJson = mocked(getMockedInstance(ApiHttpService).fetchJson);
   });
 
   afterEach(() => {
-    childContainer.clearInstances();
     jest.clearAllMocks();
   });
 

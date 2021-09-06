@@ -3,7 +3,7 @@ import { NewWindow } from '../common/NewWindow';
 import { Modal } from '../common/Modal';
 import { FC } from 'react';
 import { StylesContextProvider } from '../common/styles/StylesContextProvider';
-import React = require('react');
+import * as React from 'react';
 
 export const TranslationDialogWrapper: FC<{ context: DialogContextType }> = ({
   context,

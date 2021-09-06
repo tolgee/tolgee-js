@@ -1,12 +1,10 @@
 import { NodeHelper } from '../helpers/NodeHelper';
 import { Properties } from '../Properties';
-import { Lifecycle, scoped } from 'tsyringe';
 import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { TextService } from '../services/TextService';
 import { AbstractHandler } from './AbstractHandler';
 import { ElementRegistrar } from '../services/ElementRegistrar';
 
-@scoped(Lifecycle.ContainerScoped)
 export class TextHandler extends AbstractHandler {
   constructor(
     protected properties: Properties,

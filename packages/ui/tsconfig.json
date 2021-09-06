@@ -1,22 +1,35 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "esnext",
     "sourceMap": true,
+    "rootDir": "src",
     "declaration": true,
+    "allowJs": true,
     "outDir": "./lib",
-    "lib": ["es2015", "es2018", "es2020", "dom"],
+    "lib": [
+      "es2015",
+      "es2018",
+      "es2020",
+      "dom"
+    ],
     "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "@testFixtures/*": ["./__testFixtures/*"]
+      "@testFixtures/*": [
+        "./__testFixtures/*"
+      ]
     }
   },
-  "include": ["src", "typings"],
+  "include": [
+    "src",
+    "typings"
+  ],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",

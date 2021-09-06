@@ -1,4 +1,4 @@
-import React = require('react');
+import * as React from 'react';
 import { SVGProps } from 'react';
 
 const style: React.CSSProperties = {

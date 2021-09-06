@@ -1,17 +1,27 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "esnext",
+    "rootDir": "src",
     "sourceMap": true,
     "declaration": true,
     "outDir": "./lib",
+    "moduleResolution": "node",
     "skipLibCheck": true,
-    "lib": ["es2018", "es2020", "dom"],
+    "lib": [
+      "es2018",
+      "es2020",
+      "dom"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

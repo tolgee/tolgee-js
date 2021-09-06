@@ -1,41 +1,33 @@
 import { TolgeeConfig } from './TolgeeConfig';
-import { Lifecycle, scoped } from 'tsyringe';
 import { Scope } from './types';
 
 const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY = '__tolgee_preferredLanguages';
 const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = '__tolgee_currentLanguage';
 
-@scoped(Lifecycle.ContainerScoped)
 export class Properties {
   config: TolgeeConfig;
   scopes?: Scope[];
-
-  set preferredLanguages(languages: Set<string>) {
-    localStorage.setItem(
-      PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
-      JSON.stringify(Array.from(languages))
-    );
-  }
-
-  get preferredLanguages(): Set<string> {
-    return new Set(
-      JSON.parse(localStorage.getItem(PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY))
-    );
-  }
-
-  set currentLanguage(language: string) {
-    localStorage.setItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY, language);
-  }
+  _currentLanguage?: string;
 
   get currentLanguage(): string {
-    let result = localStorage.getItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY);
+    let result;
 
-    if (this.config.availableLanguages) {
-      const isSavedLanguageAvailable =
-        this.config.availableLanguages.indexOf(result) > -1;
-      if (!isSavedLanguageAvailable) {
-        result = undefined;
+    if (this.config.forceLanguage) {
+      return this.config.forceLanguage;
+    }
+
+    if (typeof localStorage !== 'undefined') {
+      result = localStorage.getItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY);
+
+      if (this.config.availableLanguages) {
+        const isSavedLanguageAvailable =
+          this.config.availableLanguages.indexOf(result) > -1;
+        if (!isSavedLanguageAvailable) {
+          result = undefined;
+        }
       }
+    } else {
+      result = this._currentLanguage;
     }
 
     if (!result) {
@@ -45,8 +37,29 @@ export class Properties {
     return result;
   }
 
+  set currentLanguage(language: string) {
+    if (typeof localStorage == 'undefined') {
+      this._currentLanguage = language;
+      return;
+    }
+    localStorage.setItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY, language);
+  }
+
+  get preferredLanguages(): Set<string> {
+    return new Set(
+      JSON.parse(localStorage.getItem(PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY))
+    );
+  }
+
+  set preferredLanguages(languages: Set<string>) {
+    localStorage.setItem(
+      PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
+      JSON.stringify(Array.from(languages))
+    );
+  }
+
   private getLanguageByNavigator() {
-    if (window && this.config.availableLanguages) {
+    if (typeof window !== 'undefined' && this.config.availableLanguages) {
       const preferred = window.navigator.language;
       const exactMatch = this.config.availableLanguages.find(
         (l) => l === preferred

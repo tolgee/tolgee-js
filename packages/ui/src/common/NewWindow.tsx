@@ -2,7 +2,7 @@ import { FC, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslationDialogContext } from '../translationDialog/useTranslationDialogContext';
 import { StylesContextProvider } from './styles/StylesContextProvider';
-import React = require('react');
+import * as React from 'react';
 
 export const NewWindow: FC = (props) => {
   const newWindow = useRef(null);

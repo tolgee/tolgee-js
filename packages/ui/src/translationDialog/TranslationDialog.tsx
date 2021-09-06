@@ -2,12 +2,12 @@ import * as React from 'react';
 import { LanguageSelect } from '../LanguageSelect';
 import { TranslationFields } from './TranslationFields';
 import { Button } from '../common/Button';
-import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core/lib/Constants/Global';
 import { TranslationDialogWrapper } from './TranslationDialogWrapper';
 import { TextHelper } from '@tolgee/core/lib/helpers/TextHelper';
 import { useTranslationDialogContext } from './useTranslationDialogContext';
 import { OpenInNew } from '../common/icons';
 import { IconButton } from './IconButton';
+import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core/lib/Constants/Global';
 
 export const TranslationDialog = () => {
   const context = useTranslationDialogContext();

@@ -5,6 +5,6 @@ context('Base test', () => {
 
   it('is working for all bundles', () => {
     const xpath = cy.xpath("//*[contains(text(), 'This is test text!')]");
-    xpath.should('have.length', 6);
+    xpath.should('have.length', 4);
   });
 });

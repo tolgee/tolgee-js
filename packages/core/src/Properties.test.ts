@@ -1,8 +1,6 @@
 jest.dontMock('./Properties');
 
 import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
-import 'reflect-metadata';
 import { mocked } from 'ts-jest/utils';
 import { Properties } from './Properties';
 

@@ -1,8 +1,7 @@
 import * as umd from '../../node_modules/@tolgee/core/dist/tolgee.umd';
-import * as commonjs from '../../node_modules/@tolgee/core/dist/tolgee.commonjs';
-import '../../node_modules/@tolgee/core/dist/tolgee.window';
+import * as commonjs from '../../node_modules/@tolgee/core/dist/tolgee.cjs';
 
-[umd, commonjs['@tolgee/core'], window['@tolgee/core']].forEach((bundle) => {
+[umd, commonjs].forEach((bundle) => {
   const bundleDivElement = document.createElement('div');
 
   const tolgee = new bundle.Tolgee({

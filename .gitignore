@@ -16,3 +16,6 @@ packages/**/dist
 testapps/*/dist
 testapps/ngx/*/dist
 **/.DS_Store
+testapps/gatsby/.env*
+testapps/gatsby.cache
+testapps/gatsby/public

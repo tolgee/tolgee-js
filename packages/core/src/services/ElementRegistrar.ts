@@ -1,11 +1,9 @@
-import { Lifecycle, scoped } from 'tsyringe';
 import { ElementWithMeta } from '../types';
 import { Properties } from '../Properties';
 import { TOLGEE_ATTRIBUTE_NAME } from '../Constants/Global';
 import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { NodeHelper } from '../helpers/NodeHelper';
 
-@scoped(Lifecycle.ContainerScoped)
 export class ElementRegistrar {
   private registeredElements: Set<ElementWithMeta> = new Set();
 

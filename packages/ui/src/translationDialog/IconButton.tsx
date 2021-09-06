@@ -1,4 +1,4 @@
-import React = require('react');
+import * as React from 'react';
 import { FC } from 'react';
 import { useWithStyles } from '../common/styles/useWithStyles';
 
