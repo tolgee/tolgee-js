@@ -2,13 +2,12 @@
   "name": "@tolgee/socketio-client",
   "version": "1.1.0",
   "description": "Client library for Tolgee Socket.io server",
-  "main": "index.js",
+  "main": "dist/tolgee-socketio-client.umd.js",
   "types": "./lib/index.d.ts",
   "declaration": true,
   "scripts": {
-    "build": "rollup -c rollup.config.js && tsc",
-    "test": "jest --config ./jest.config.js",
-    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" "
+    "build": "webpack --env mode=production && tsc",
+    "test": "jest --config ./jest.config.js"
   },
   "repository": {
     "type": "git",
@@ -25,24 +24,16 @@
   "author": "Jan Cizmar",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "7.15.5",
-    "@babel/preset-env": "7.15.4",
-    "@rollup/plugin-commonjs": "20.0.0",
-    "@rollup/plugin-node-resolve": "13.0.4",
-    "@rollup/plugin-typescript": "8.2.5",
     "@types/jest": "^26.0.24",
     "@types/socket.io-client": "^1.4.36",
-    "babel": "6.23.0",
-    "concurrently": "6.2.1",
     "jest": "^26.5.2",
-    "rollup": "2.56.3",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-node-builtins": "2.1.2",
-    "rollup-plugin-terser": "7.0.2",
     "socket.io-client": "^2.2.0",
     "ts-jest": "^26.4.1",
+    "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.7.2"
   },
   "publishConfig": {
     "access": "public"
