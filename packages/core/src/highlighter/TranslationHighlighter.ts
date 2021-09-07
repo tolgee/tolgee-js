@@ -1,12 +1,10 @@
 import { CoreService } from '../services/CoreService';
 import { ElementWithMeta } from '../types';
-import { Lifecycle, scoped } from 'tsyringe';
 import { Properties } from '../Properties';
 import { EventService } from '../services/EventService';
 import { TranslationService } from '../services/TranslationService';
 import { MouseEventHandler } from './MouseEventHandler';
 
-@scoped(Lifecycle.ContainerScoped)
 export class TranslationHighlighter {
   private _renderer: any;
 

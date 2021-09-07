@@ -1,4 +1,3 @@
-import { Lifecycle, scoped } from 'tsyringe';
 import { Properties } from '../Properties';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { ArgumentTypes } from '../helpers/commonTypes';
@@ -14,7 +13,6 @@ type Tail<T extends any[]> = ((...args: T) => any) extends (
     : ReadonlyArray<Rest[number]>
   : [];
 
-@scoped(Lifecycle.ContainerScoped)
 export class ApiHttpService {
   constructor(private properties: Properties) {}
 

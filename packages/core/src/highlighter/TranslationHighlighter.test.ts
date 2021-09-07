@@ -1,19 +1,25 @@
 jest.dontMock('./TranslationHighlighter');
+jest.dontMock('../services/DependencyStore');
 
+import { TranslationHighlighter } from './TranslationHighlighter';
 import classMock from '@testFixtures/classMock';
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { MouseEventHandler } from './MouseEventHandler';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { ElementWithMeta } from '../types';
 import { Properties } from '../Properties';
 import { createElement } from '@testFixtures/createElement';
+import { DependencyStore } from '../services/DependencyStore';
 
 describe('TranslationHighlighter', () => {
-  const getTranslationHighlighter = describeClassFromContainer(
-    import('./TranslationHighlighter'),
-    'TranslationHighlighter'
-  );
-  let translationHighlighter: ReturnType<typeof getTranslationHighlighter>;
+  let translationHighlighter: TranslationHighlighter;
+
+  beforeEach(async () => {
+    translationHighlighter = new DependencyStore().translationHighlighter;
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
+  });
 
   test('will start to using mouseEventHandler', () => {
     getMockedInstance(MouseEventHandler).handle = jest.fn();
@@ -90,10 +96,6 @@ describe('TranslationHighlighter', () => {
       // eslint-disable-next-line no-console
       expect(console.warn).toBeCalledTimes(1);
     });
-  });
-
-  beforeEach(async () => {
-    translationHighlighter = await getTranslationHighlighter();
   });
 
   let savedCallback: (e: MouseEvent) => void;

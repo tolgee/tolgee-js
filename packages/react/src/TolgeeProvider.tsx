@@ -15,7 +15,8 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   delete config.loadingFallback;
 
   const [tolgee] = useState(new Tolgee(config));
-  const [loading, setLoading] = useState(true);
+
+  const [loading, setLoading] = useState(tolgee.initialLoading);
 
   useEffect(() => {
     tolgee.run().then(() => setLoading(false));

@@ -1,8 +1,9 @@
 jest.dontMock('./CoreHandler');
 jest.dontMock('../helpers/NodeHelper');
 jest.dontMock('../services/EventEmitter');
+jest.dontMock('../services/DependencyStore');
 
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
+import { CoreHandler } from './CoreHandler';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { TextHandler } from './TextHandler';
 import { AttributeHandler } from './AttributeHandler';
@@ -11,8 +12,9 @@ import { EventEmitterImpl } from '../services/EventEmitter';
 import { mocked } from 'ts-jest/utils';
 import { TranslationData } from '../DTOs/TranslationData';
 import { Properties } from '../Properties';
-import { NodeWithMeta, NodeMeta, ElementMeta } from '../types';
+import { ElementMeta, NodeMeta, NodeWithMeta } from '../types';
 import { ReplacedType, TextService } from '../services/TextService';
+import { DependencyStore } from '../services/DependencyStore';
 
 describe('CoreHandler', () => {
   const mockedTranslationChanged = new EventEmitterImpl<TranslationData>();
@@ -36,15 +38,15 @@ describe('CoreHandler', () => {
     } as any as TextService;
   });
 
-  const getCoreHandler = describeClassFromContainer(
-    import('./CoreHandler'),
-    'CoreHandler'
-  );
-  let coreHandler: ReturnType<typeof getCoreHandler>;
+  let coreHandler: CoreHandler;
 
   beforeEach(async () => {
-    coreHandler = getCoreHandler();
+    coreHandler = new DependencyStore().coreHandler;
     getMockedInstance(Properties).config.targetElement = document.body;
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   test('Can be created', () => {

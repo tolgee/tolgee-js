@@ -1,8 +1,8 @@
 {
   "name": "@tolgee/react",
-  "version": "1.0.0-alpha.58",
+  "version": "1.1.1",
   "description": "React implementation for tolgee localization framework",
-  "main": "dist/tolgee-react.umd.js",
+  "main": "index.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/tolgee/tolgee-react",
   "keywords": [
@@ -19,13 +19,14 @@
     "dist": "dist"
   },
   "scripts": {
-    "build": "webpack --env mode=production && tsc",
+    "build": "rollup -c rollup.config.js && tsc",
     "test": "jest",
-    "develop": "webpack --env mode=development --watch"
+    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" "
   },
   "author": "JanCizmar",
   "license": "ISC",
   "files": [
+    "index.js",
     "lib/**/*",
     "dist/**/*"
   ],
@@ -33,33 +34,31 @@
     "react": "^16.14.0 || ^17.0.1"
   },
   "dependencies": {
-    "@tolgee/core": "^1.0.0-alpha.58"
+    "@tolgee/core": "^1.1.1"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "8.2.5",
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.1",
     "@tolgee/core": "^1.0.0-alpha.36",
-    "@tolgee/ui": "^1.0.0-alpha.58",
+    "@tolgee/ui": "^1.1.1",
     "@types/jest": "^26.0.14",
     "@types/node": "^13.9.2",
     "@types/react": "^17.0.1",
     "@types/react-dom": "^17.0.1",
+    "concurrently": "6.2.1",
     "jest": "^26.5.2",
     "jest-fetch-mock": "^3.0.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.3",
-    "source-map-loader": "^1.1.0",
+    "rollup": "2.56.3",
+    "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^26.4.1",
-    "ts-loader": "^6.2.2",
     "tslint": "~5.15.0",
-    "tsyringe": "^4.0.1",
-    "typescript": "^3.5.3",
-    "webpack": "^5.21.2",
-    "webpack-bundle-analyzer": "^4.4.0",
-    "webpack-cli": "^4.5.0"
+    "typescript": "^3.5.3"
   },
   "publishConfig": {
     "access": "public"

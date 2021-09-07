@@ -1,24 +1,31 @@
 jest.dontMock('./TextService');
 jest.dontMock('../helpers/TextHelper');
+jest.dontMock('./DependencyStore');
 
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
+import { Properties } from '../Properties';
+import { TextService } from './TextService';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { TranslationService } from './TranslationService';
+import { DependencyStore } from './DependencyStore';
 
 describe('TextService', () => {
-  const getTextService = describeClassFromContainer(
-    import('./TextService'),
-    'TextService'
-  );
   const mockedTranslationReturn = 'Dummy translated text {param1} {param2}';
   const params = { param1: 'Dummy param 1', param2: 'Dummy param 2' };
   const expectedTranslated = mockedTranslationReturn
     .replace('{param1}', params.param1)
     .replace('{param2}', params.param2);
-  let textService: ReturnType<typeof getTextService>;
+  let textService: TextService;
 
   beforeEach(async () => {
-    textService = await getTextService();
+    textService = new DependencyStore().textService;
+    getMockedInstance(Properties).config = {
+      inputPrefix: '{{',
+      inputSuffix: '}}',
+      restrictedElements: [],
+      tagAttributes: {
+        '*': ['aria-label'],
+      },
+    };
     getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
       return mockedTranslationReturn;
     });
@@ -28,6 +35,10 @@ describe('TextService', () => {
         return mockedTranslationReturn;
       }
     );
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   describe('translation functions', () => {

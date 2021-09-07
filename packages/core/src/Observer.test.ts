@@ -1,9 +1,9 @@
 jest.dontMock('./Observer');
+jest.dontMock('./services/DependencyStore');
 
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
+import { DependencyStore } from './services/DependencyStore';
 import '@testing-library/jest-dom/extend-expect';
 import 'regenerator-runtime/runtime.js';
-import 'reflect-metadata';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from './Properties';
 import { CoreHandler } from './handlers/CoreHandler';
@@ -14,19 +14,18 @@ import { Observer } from './Observer';
 import { ElementRegistrar } from './services/ElementRegistrar';
 
 describe('Observer', () => {
-  const getObserver = describeClassFromContainer(
-    import('./Observer'),
-    'Observer'
-  );
   let observer: Observer;
+  let properties: Properties;
 
   beforeEach(async () => {
-    observer = await getObserver();
+    observer = new DependencyStore().observer;
+    properties = getMockedInstance(Properties);
     document.body = document.createElement('body');
+    properties.config.targetElement = document.body;
   });
 
-  beforeEach(() => {
-    getMockedInstance(Properties).config.targetElement = document.body;
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   test('Can be created', () => {
@@ -42,7 +41,6 @@ describe('Observer', () => {
 
       await waitFor(() => {
         const onNewNodesMock = getMockedInstance(TextHandler).handle;
-
         expect(onNewNodesMock).toBeCalledTimes(1);
         expect(onNewNodesMock).toBeCalledWith(text);
       });
@@ -71,7 +69,6 @@ describe('Observer', () => {
 
       await waitFor(() => {
         const handleAttributeMock = getMockedInstance(AttributeHandler).handle;
-
         expect(handleAttributeMock).toBeCalledTimes(1);
         expect(handleAttributeMock).toBeCalledWith(span);
       });

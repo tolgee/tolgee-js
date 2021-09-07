@@ -1,8 +1,7 @@
 jest.dontMock('./Tolgee');
+jest.dontMock('./services/DependencyStore');
 
 import '@testing-library/jest-dom/extend-expect';
-import 'regenerator-runtime/runtime.js';
-import 'reflect-metadata';
 import { mocked } from 'ts-jest/utils';
 import { CoreService } from './services/CoreService';
 import Tolgee from './Tolgee';
@@ -253,6 +252,21 @@ describe('Tolgee', () => {
     const eventEmitter = new EventEmitterImpl();
     (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED = eventEmitter;
     expect(tolgee.onLangChange).toEqual(eventEmitter);
+  });
+
+  test('will return proper initialLoading', () => {
+    tolgee.properties.config.preloadFallback = true;
+    tolgee.properties.currentLanguage = 'cs';
+    tolgee.properties.config.staticData = {
+      cs: {},
+    };
+    expect(tolgee.initialLoading).toEqual(true);
+    tolgee.properties.config.fallbackLanguage = 'en';
+    tolgee.properties.config.preloadFallback = false;
+    expect(tolgee.initialLoading).toEqual(false);
+    tolgee.properties.config.preloadFallback = true;
+    tolgee.properties.config.staticData.en = {};
+    expect(tolgee.initialLoading).toEqual(false);
   });
 
   describe('lang setter', () => {

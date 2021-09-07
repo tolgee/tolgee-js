@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { FunctionComponent, useContext } from 'react';
-import { TranslationDialogContext } from './TranslationDialog';
-import MultiSelect from 'react-multi-select-component';
-import { CircularLoading } from './CircularLoading';
+import { FunctionComponent } from 'react';
+import { CircularLoading } from './common/CircularLoading';
+import { MultiSelect } from './common/multiSelect/MultiSelect';
+import { useTranslationDialogContext } from './translationDialog/useTranslationDialogContext';
 
 export const LanguageSelect: FunctionComponent = () => {
-  const context = useContext(TranslationDialogContext);
+  const context = useTranslationDialogContext();
 
   if (context.availableLanguages === undefined) {
     return <CircularLoading />;
@@ -26,15 +26,12 @@ export const LanguageSelect: FunctionComponent = () => {
     <>
       {context.availableLanguages && (
         <MultiSelect
-          disableSearch={context.availableLanguages.size < 10}
-          options={options}
           value={selected}
-          onChange={onChange}
-          labelledBy={'Choose languages'}
-          hasSelectAll={false}
-          valueRenderer={(o) => {
-            return o.map((o) => o.value).join(', ');
-          }}
+          options={options}
+          onChange={(_, value) => onChange(value)}
+          label={'Choose languages'}
+          renderValues={(v) => v.map((o) => o.value).join(', ')}
+          renderOption={(o) => o.label}
         />
       )}
     </>

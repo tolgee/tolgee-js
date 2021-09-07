@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ContextMenu } from './common/ContextMenu/ContextMenu';
 import { ContextMenuItem } from './common/ContextMenu/ContextMenuItem';
 import { TranslationService } from '@tolgee/core/lib/services/TranslationService';
+import { StylesContextProvider } from './common/styles/StylesContextProvider';
 
 export interface KeyContextMenuParams {
   openEvent: MouseEvent;
@@ -34,9 +35,24 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
     this.setState({ ...params, opened: true });
   }
 
+  keyDown = (e) => {
+    if (e.key === 'Escape') {
+      this.setState((s) => ({ ...s, opened: false }));
+      this.state.onSelect && this.state.onSelect(null);
+    }
+  };
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.keyDown);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.keyDown);
+  }
+
   render() {
     return (
-      <>
+      <StylesContextProvider>
         {this.state.opened && (
           <ContextMenu
             openEvent={this.state.openEvent}
@@ -47,7 +63,10 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
           >
             {Array.from(this.state.keys).map((key, index) => (
               <ContextMenuItem
-                onClick={() => this.state.onSelect(key)}
+                onClick={() => {
+                  this.setState({ opened: false });
+                  this.state.onSelect(key);
+                }}
                 key={index}
               >
                 {this.props.dependencies.translationService.getFromCacheOrFallback(
@@ -70,7 +89,7 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
             ))}
           </ContextMenu>
         )}
-      </>
+      </StylesContextProvider>
     );
   }
 }

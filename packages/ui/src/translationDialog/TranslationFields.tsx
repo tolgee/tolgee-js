@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FunctionComponent, useContext } from 'react';
-import { TranslationDialogContext } from './TranslationDialog';
-import { useWithStyles } from './common/useWithStyles';
+import { useWithStyles } from '../common/styles/useWithStyles';
+import { TranslationDialogContext } from './TranslationDialogContextProvider';
 
 export const TranslationFields: FunctionComponent = () => {
   const context = useContext(TranslationDialogContext);
