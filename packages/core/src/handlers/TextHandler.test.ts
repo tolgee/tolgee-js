@@ -2,23 +2,21 @@ jest.dontMock('./TextHandler');
 jest.dontMock('./AbstractHandler');
 jest.dontMock('../services/EventService');
 jest.dontMock('../helpers/NodeHelper.ts');
+jest.dontMock('../services/DependencyStore');
 
+import { TextHandler } from './TextHandler';
+import '@testing-library/jest-dom/extend-expect';
 import { ElementWithMeta, NodeWithMeta } from '../types';
 import { NodeHelper } from '../helpers/NodeHelper';
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { createTestDom } from '@testFixtures/createTestDom';
 import { ReplacedType, TextService } from '../services/TextService';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { ElementRegistrar } from '../services/ElementRegistrar';
-
 import { Properties } from '../Properties';
+import { DependencyStore } from '../services/DependencyStore';
 
 describe('TextHandler', () => {
-  const getTextHandler = describeClassFromContainer(
-    import('./TextHandler'),
-    'TextHandler'
-  );
-  let textHandler: ReturnType<typeof getTextHandler>;
+  let textHandler: TextHandler;
 
   const mockedKeys = [
     {
@@ -37,13 +35,24 @@ describe('TextHandler', () => {
   const gv = (key) => mockedTranslateInner(key).text;
   const mockedTranslate = jest.fn(mockedTranslateInner);
   let c: ReturnType<typeof createTestDom>;
-
   beforeEach(() => {
-    getMockedInstance(Properties).config.passToParent = ['option'];
+    textHandler = new DependencyStore().textHandler;
+    getMockedInstance(Properties).config = {
+      inputPrefix: '{{',
+      inputSuffix: '}}',
+      restrictedElements: [],
+      tagAttributes: {
+        '*': ['aria-label'],
+      },
+      passToParent: ['option'],
+    };
     c = createTestDom(document);
-    textHandler = getTextHandler();
     getMockedInstance(TextService).replace = async (...args) =>
       mockedTranslate(...args);
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   describe('in production mode', () => {

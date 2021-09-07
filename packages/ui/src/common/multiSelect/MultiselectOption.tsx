@@ -1,7 +1,7 @@
 import { ReactNode, SyntheticEvent } from 'react';
 import { Checkbox, CheckboxChecked } from '../icons';
 import { useWithStyles } from '../styles/useWithStyles';
-import React = require('react');
+import * as React from 'react';
 
 export const MultiselectOption = <Option,>(props: {
   option: Option;

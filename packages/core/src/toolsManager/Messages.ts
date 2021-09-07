@@ -1,5 +1,3 @@
-import { Lifecycle, scoped } from 'tsyringe';
-
 type Listener = {
   type: string;
   callback: (data) => void;
@@ -14,7 +12,6 @@ type PgEvent = {
   data: Message;
 } & MessageEvent;
 
-@scoped(Lifecycle.ContainerScoped)
 export class Messages {
   private listeners: Listener[] = [];
   private listenersPopup: Listener[] = [];

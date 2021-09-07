@@ -1,4 +1,4 @@
-import React = require('react');
+import * as React from 'react';
 import { ReactNode, SyntheticEvent, useRef, useState } from 'react';
 import { MultiSelectMenu } from './MultiSelectMenu';
 

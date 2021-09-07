@@ -1,4 +1,3 @@
-import { Lifecycle, scoped } from 'tsyringe';
 import { Translations } from '../types';
 import { TranslationData } from '../DTOs/TranslationData';
 import { Properties } from '../Properties';
@@ -9,7 +8,6 @@ import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
 import { EventEmitterImpl } from './EventEmitter';
 
-@scoped(Lifecycle.ContainerScoped)
 export class TranslationService {
   private translationsCache: Map<string, Translations> = new Map<
     string,
@@ -23,6 +21,39 @@ export class TranslationService {
     private apiHttpService: ApiHttpService,
     private eventService: EventService
   ) {}
+
+  private static translationByValue(
+    message: string,
+    key: string,
+    orEmpty: boolean
+  ) {
+    if (message) {
+      return message;
+    }
+
+    if (orEmpty) {
+      return '';
+    }
+
+    const path = TextHelper.splitOnNonEscapedDelimiter(key, '.');
+    return path[path.length - 1];
+  }
+
+  initStatic() {
+    if (
+      this.properties.config.mode === 'production' &&
+      typeof this.properties.config?.staticData === 'object'
+    ) {
+      Object.entries(this.properties.config.staticData).forEach(
+        ([language, data]) => {
+          //if not provider or promise then it is raw data
+          if (typeof data !== 'function') {
+            this.translationsCache.set(language, data);
+          }
+        }
+      );
+    }
+  }
 
   async loadTranslations(lang: string = this.properties.currentLanguage) {
     if (this.translationsCache.get(lang) == undefined) {
@@ -141,6 +172,17 @@ export class TranslationService {
   }
 
   private async fetchTranslationsProduction(language: string) {
+    const langStaticData = this.properties.config?.staticData?.[language];
+
+    if (typeof langStaticData === 'function') {
+      const data = await langStaticData();
+      this.translationsCache.set(language, data);
+      return;
+    } else if (langStaticData !== undefined) {
+      this.translationsCache.set(language, langStaticData);
+      return;
+    }
+
     const url = `${
       this.properties.config.filesUrlPrefix || '/'
     }${language}.json`;
@@ -150,7 +192,7 @@ export class TranslationService {
         //on error set language data as empty object to not break the flow
         // eslint-disable-next-line no-console
         console.error(
-          'Server responend with error status while loading localization data.'
+          'Server responded with error status while loading localization data.'
         );
         this.translationsCache.set(language, {});
         return;
@@ -206,22 +248,5 @@ export class TranslationService {
       root = root[item];
     }
     return root as string;
-  }
-
-  private static translationByValue(
-    message: string,
-    key: string,
-    orEmpty: boolean
-  ) {
-    if (message) {
-      return message;
-    }
-
-    if (orEmpty) {
-      return '';
-    }
-
-    const path = TextHelper.splitOnNonEscapedDelimiter(key, '.');
-    return path[path.length - 1];
   }
 }

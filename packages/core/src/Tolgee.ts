@@ -1,38 +1,29 @@
-import { CoreService } from './services/CoreService';
 import { TolgeeConfig } from './TolgeeConfig';
-import { Properties } from './Properties';
-import { container as rootContainer } from 'tsyringe';
-import { EventService } from './services/EventService';
 import { TranslationParams } from './types';
-import { Observer } from './Observer';
-import { TranslationService } from './services/TranslationService';
-import { TextService } from './services/TextService';
-import { CoreHandler } from './handlers/CoreHandler';
-import { ElementRegistrar } from './services/ElementRegistrar';
 import { NodeHelper } from './helpers/NodeHelper';
 import { EventEmitterImpl } from './services/EventEmitter';
+import { DependencyStore } from './services/DependencyStore';
 
 export class Tolgee {
-  private readonly container = rootContainer.createChildContainer();
-  public properties: Properties = this.container.resolve(Properties);
-  private eventService: EventService = this.container.resolve(EventService);
-  private observer: Observer = this.container.resolve(Observer);
-  private translationService: TranslationService =
-    this.container.resolve(TranslationService);
-  private textService: TextService = this.container.resolve(TextService);
-  private coreHandler: CoreHandler = this.container.resolve(CoreHandler);
-  private elementRegistrar: ElementRegistrar =
-    this.container.resolve(ElementRegistrar);
+  export;
+  default;
+  Tolgee;
+  private dependencyStore: DependencyStore;
 
   constructor(config: TolgeeConfig) {
-    this.container = rootContainer.createChildContainer();
-    this.properties.config = new TolgeeConfig(config);
+    this.dependencyStore = new DependencyStore(new TolgeeConfig(config));
   }
 
-  private _coreService: CoreService = this.container.resolve(CoreService);
+  get properties() {
+    return this.dependencyStore.properties;
+  }
 
-  public get coreService() {
-    return this._coreService;
+  get translationService() {
+    return this.dependencyStore.translationService;
+  }
+
+  get coreService() {
+    return this.dependencyStore.coreService;
   }
 
   public get lang() {
@@ -41,7 +32,10 @@ export class Tolgee {
 
   public set lang(value) {
     this.properties.currentLanguage = value;
-    (this.eventService.LANGUAGE_CHANGED as EventEmitterImpl<any>).emit(value);
+    (
+      this.dependencyStore.eventService
+        .LANGUAGE_CHANGED as EventEmitterImpl<any>
+    ).emit(value);
   }
 
   public get defaultLanguage() {
@@ -49,11 +43,34 @@ export class Tolgee {
   }
 
   public get onLangChange() {
-    return this.eventService.LANGUAGE_CHANGED;
+    return this.dependencyStore.eventService.LANGUAGE_CHANGED;
   }
 
   public get onLangLoaded() {
-    return this.eventService.LANGUAGE_LOADED;
+    return this.dependencyStore.eventService.LANGUAGE_LOADED;
+  }
+
+  /**
+   * True if loading is needed to wait for Tolgee init.
+   * When translation data are provided statically (using import
+   * as staticData config property) then there is no need for translation
+   * fetching so initial loading is not needed at all.
+   */
+  get initialLoading(): boolean {
+    const currentLang = this.properties.currentLanguage;
+    const fallbackLang = this.properties.config.fallbackLanguage;
+    const fallbackPreloading = this.properties.config.preloadFallback;
+    const isStaticDataProvided = (data?: any) => {
+      return data !== undefined && typeof data !== 'function';
+    };
+
+    return (
+      !isStaticDataProvided(this.properties.config.staticData?.[currentLang]) ||
+      (!!fallbackPreloading &&
+        !isStaticDataProvided(
+          this.properties.config.staticData?.[fallbackLang]
+        ))
+    );
   }
 
   public async run(): Promise<void> {
@@ -72,12 +89,14 @@ export class Tolgee {
     await this.refresh();
 
     if (this.properties.config.watch) {
-      this.observer.observe();
+      this.dependencyStore.observer.observe();
     }
   }
 
   public async refresh() {
-    return this.coreHandler.handleSubtree(this.properties.config.targetElement);
+    return this.dependencyStore.coreHandler.handleSubtree(
+      this.properties.config.targetElement
+    );
   }
 
   translate = async (
@@ -88,9 +107,9 @@ export class Tolgee {
     if (this.properties.config.mode === 'development' && !noWrap) {
       await this.loadScopes();
       await this.translationService.loadTranslations();
-      return this.textService.wrap(key, params);
+      return this.dependencyStore.textService.wrap(key, params);
     }
-    return this.textService.translate(key, params);
+    return this.dependencyStore.textService.translate(key, params);
   };
 
   instant = (
@@ -100,14 +119,19 @@ export class Tolgee {
     orEmpty?: boolean
   ): string => {
     if (this.properties.config.mode === 'development' && !noWrap) {
-      return this.textService.wrap(key, params);
+      return this.dependencyStore.textService.wrap(key, params);
     }
-    return this.textService.instant(key, params, undefined, orEmpty);
+    return this.dependencyStore.textService.instant(
+      key,
+      params,
+      undefined,
+      orEmpty
+    );
   };
 
   public stop = () => {
-    this.observer.stopObserving();
-    this.elementRegistrar.cleanAll();
+    this.dependencyStore.observer.stopObserving();
+    this.dependencyStore.elementRegistrar.cleanAll();
     NodeHelper.unmarkElementAsTargetElement(
       this.properties.config.targetElement
     );
@@ -115,7 +139,8 @@ export class Tolgee {
 
   private async loadScopes() {
     if (this.properties.scopes === undefined) {
-      this.properties.scopes = await this.coreService.getScopes();
+      this.properties.scopes =
+        await this.dependencyStore.coreService.getScopes();
     }
   }
 }

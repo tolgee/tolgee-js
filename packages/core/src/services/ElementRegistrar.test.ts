@@ -1,24 +1,26 @@
-import { ElementWithMeta } from '../types';
-
 jest.dontMock('./ElementRegistrar');
+jest.dontMock('./DependencyStore');
 
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
+import '@testing-library/jest-dom/extend-expect';
+import { ElementRegistrar } from './ElementRegistrar';
+import { ElementWithMeta } from '../types';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { createElement } from '@testFixtures/createElement';
 import { Properties } from '../Properties';
 import { TOLGEE_ATTRIBUTE_NAME } from '../Constants/Global';
+import { DependencyStore } from './DependencyStore';
 
 describe('ElementRegistrar', () => {
-  const getElementRegistrar = describeClassFromContainer(
-    import('./ElementRegistrar'),
-    'ElementRegistrar'
-  );
-  let elementRegistrar: ReturnType<typeof getElementRegistrar>;
+  let elementRegistrar: ElementRegistrar;
 
   beforeEach(async () => {
-    elementRegistrar = await getElementRegistrar();
+    elementRegistrar = new DependencyStore().elementRegistrar;
     getMockedInstance(Properties).config.targetElement = document.body;
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   describe('In development mode', () => {

@@ -1,24 +1,39 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "moduleResolution": "node",
+    "module": "esnext",
     "sourceMap": true,
     "declaration": true,
+    "rootDir": "src",
     "outDir": "lib",
-    "lib": ["es2015", "es2018", "es2020", "dom"],
+    "lib": [
+      "es2015",
+      "es2018",
+      "es2020",
+      "dom"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "resolveJsonModule": true,
     "baseUrl": "src",
     "paths": {
-      "tolgee/ui": ["./ui"],
-      "tolgee/core": ["./core"],
-      "@testFixtures/*": ["./__testFixtures/*"]
+      "tolgee/ui": [
+        "./ui"
+      ],
+      "tolgee/core": [
+        "./core"
+      ],
+      "@testFixtures/*": [
+        "./__testFixtures/*"
+      ]
     }
   },
-  "include": ["src", "typings"],
+  "include": [
+    "src",
+    "typings"
+  ],
   "exclude": [
     "../../../node_modules",
     "**/*.spec.ts",

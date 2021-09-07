@@ -2,9 +2,10 @@ jest.dontMock('./TranslationService');
 jest.dontMock('../helpers/TextHelper');
 jest.dontMock('../DTOs/TranslationData');
 jest.dontMock('../Errors/ApiHttpError');
+jest.dontMock('./DependencyStore');
 
+import { TranslationService } from './TranslationService';
 import { Translations } from '../types';
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { ApiHttpService } from './ApiHttpService';
 import { Properties } from '../Properties';
@@ -12,6 +13,7 @@ import { CoreService } from './CoreService';
 import { TranslationData } from '../DTOs/TranslationData';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
+import { DependencyStore } from './DependencyStore';
 
 const mockedTranslations = {
   en: {
@@ -45,15 +47,11 @@ global.fetch = jest.fn(async (url: string) => {
 }) as any;
 
 describe('TranslationService', () => {
-  const getTranslationService = describeClassFromContainer(
-    import('./TranslationService'),
-    'TranslationService'
-  );
-  let translationService: ReturnType<typeof getTranslationService>;
+  let translationService: TranslationService;
   const languageLoadedEmitMock = jest.fn();
 
   beforeEach(async () => {
-    translationService = await getTranslationService();
+    translationService = new DependencyStore().translationService;
     (getMockedInstance(EventService) as any).LANGUAGE_LOADED = {
       emit: languageLoadedEmitMock,
     };
@@ -61,6 +59,10 @@ describe('TranslationService', () => {
       async () => mockedTranslations
     );
     getMockedInstance(Properties).currentLanguage = 'en';
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   describe('(translation loading and retrieval)', () => {
@@ -78,6 +80,7 @@ describe('TranslationService', () => {
         'translated'
       );
     });
+
     test('will try to load the languages only single time', async () => {
       await translationService.loadTranslations('en');
       await translationService.loadTranslations('en');
@@ -273,5 +276,33 @@ describe('TranslationService', () => {
     expect(
       await translationService.getTranslation('text without any dot', 'en')
     ).toEqual('text without any dot');
+  });
+
+  test('uses provided static data', async () => {
+    getMockedInstance(Properties).config.staticData = {
+      en: { test: 'Test test' },
+    };
+    translationService.initStatic();
+    expect(await translationService.getTranslation('test', 'en')).toEqual(
+      'Test test'
+    );
+  });
+
+  test('uses provided promise data', async () => {
+    getMockedInstance(Properties).config.staticData = {
+      en: () => new Promise((resolve) => resolve({ test: 'Test test' })),
+    };
+    expect(await translationService.getTranslation('test', 'en')).toEqual(
+      'Test test'
+    );
+  });
+
+  test('uses provided data without init static (when mode is changed dynamically)', async () => {
+    getMockedInstance(Properties).config.staticData = {
+      en: { test: 'Test test' },
+    };
+    expect(await translationService.getTranslation('test', 'en')).toEqual(
+      'Test test'
+    );
   });
 });

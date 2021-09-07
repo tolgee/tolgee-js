@@ -2,19 +2,17 @@ jest.dontMock('./MouseEventHandler');
 jest.dontMock('../Constants/ModifierKey');
 jest.dontMock('../services/EventEmitter');
 jest.dontMock('../services/Subscription');
+jest.dontMock('../services/DependencyStore');
 
+import { MouseEventHandler } from './MouseEventHandler';
 import { ElementMeta, ElementWithMeta } from '../types';
-import describeClassFromContainer from '@testFixtures/describeClassFromContainer';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from '../Properties';
 import { ModifierKey } from '../Constants/ModifierKey';
+import { DependencyStore } from '../services/DependencyStore';
 
 describe('MouseEventHandler', () => {
-  const getMouseEventHandler = describeClassFromContainer(
-    import('./MouseEventHandler'),
-    'MouseEventHandler'
-  );
-  let mouseEventHandler: ReturnType<typeof getMouseEventHandler>;
+  let mouseEventHandler: MouseEventHandler;
   let mockedElement: ElementWithMeta;
   const key = 'Alt';
   const mockedColor = 'rgb(0, 30, 50)';
@@ -32,13 +30,17 @@ describe('MouseEventHandler', () => {
   };
 
   beforeEach(async () => {
-    mouseEventHandler = await getMouseEventHandler();
+    mouseEventHandler = new DependencyStore().mouseEventHandler;
     mockedElement = withMeta(document.createElement('div'));
     mouseEventHandler.handle(mockedElement, mockedCallback);
     getMockedInstance(Properties).config.highlightKeys = [ModifierKey[key]];
     getMockedInstance(Properties).config.highlightColor = mockedColor;
     mockedElement.dispatchEvent(mockedMouseOver);
     window.dispatchEvent(mockedKeydown);
+  });
+
+  afterEach(async () => {
+    jest.clearAllMocks();
   });
 
   describe('highlighting', () => {

@@ -1,4 +1,3 @@
-import { Lifecycle, scoped } from 'tsyringe';
 import {
   KeyAndParams,
   TranslatedWithMetadata,
@@ -11,7 +10,6 @@ import IntlMessageFormat from 'intl-messageformat';
 
 export type ReplacedType = { text: string; keys: KeyAndParams[] };
 
-@scoped(Lifecycle.ContainerScoped)
 export class TextService {
   constructor(
     private properties: Properties,

@@ -1,15 +1,9 @@
 import { ElementMeta, ElementWithMeta } from '../types';
 import { ModifierKey } from '../Constants/ModifierKey';
-import { Lifecycle, scoped } from 'tsyringe';
 import { Properties } from '../Properties';
 import { EventEmitterImpl } from '../services/EventEmitter';
 
-@scoped(Lifecycle.ContainerScoped)
 export class MouseEventHandler {
-  constructor(private properties: Properties) {
-    this.initKeyListener();
-  }
-
   private keysDown = new Set<ModifierKey>();
   private mouseOn: Set<ElementWithMeta> = new Set();
   private highlighted: ElementWithMeta;
@@ -17,6 +11,13 @@ export class MouseEventHandler {
   private mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
   private keysChanged: EventEmitterImpl<boolean> =
     new EventEmitterImpl<boolean>();
+
+  constructor(private properties: Properties) {
+    if (typeof window !== 'undefined') {
+      this.initKeyListener();
+      return;
+    }
+  }
 
   handle(
     element: ElementWithMeta & ElementCSSInlineStyle,

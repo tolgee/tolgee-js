@@ -1,6 +1,6 @@
 module.exports = {
   automock: true,
-  preset: 'ts-jest',
+  preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
   unmockedModulePathPatterns: ['/node_modules/*'],
   moduleNameMapper: {
@@ -11,4 +11,5 @@ module.exports = {
       tsConfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  //transformIgnorePatterns: ['node_modules/(?!(@tolgee))'],
 };
