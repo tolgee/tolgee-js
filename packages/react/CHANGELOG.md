@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.1.1 (2021-09-07)
+
+
+### Bug Fixes
+
+* Fix socket.io bundle TG-271 ([#423](https://github.com/tolgee/tolgee-react/issues/423)) ([17e1cb4](https://github.com/tolgee/tolgee-react/commit/17e1cb42f66428ea2588330e19294357c1932d12))
+
+
+
+
+
 # 1.1.0 (2021-09-07)
 
 
