@@ -255,6 +255,7 @@ describe('Tolgee', () => {
   });
 
   test('will return proper initialLoading', () => {
+    tolgee.properties.config.mode = 'production';
     tolgee.properties.config.preloadFallback = true;
     tolgee.properties.currentLanguage = 'cs';
     tolgee.properties.config.staticData = {
@@ -267,6 +268,8 @@ describe('Tolgee', () => {
     tolgee.properties.config.preloadFallback = true;
     tolgee.properties.config.staticData.en = {};
     expect(tolgee.initialLoading).toEqual(false);
+    tolgee.properties.config.mode = 'development';
+    expect(tolgee.initialLoading).toEqual(true);
   });
 
   describe('lang setter', () => {

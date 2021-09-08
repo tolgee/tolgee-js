@@ -57,6 +57,10 @@ export class Tolgee {
    * fetching so initial loading is not needed at all.
    */
   get initialLoading(): boolean {
+    if (this.properties?.config?.mode !== 'production') {
+      return true;
+    }
+
     const currentLang = this.properties.currentLanguage;
     const fallbackLang = this.properties.config.fallbackLanguage;
     const fallbackPreloading = this.properties.config.preloadFallback;
