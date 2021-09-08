@@ -12,12 +12,15 @@ type TProps = {
 export const T: FunctionComponent<TProps> = (props: TProps) => {
   const context = useTolgeeContext();
 
+  const noWrap = typeof window !== 'undefined' ? props.noWrap : true;
+
   const [translated, setTranslated] = useState(
-    context.tolgee.instant(props.children, props.parameters, props.noWrap, true)
+    context.tolgee.instant(props.children, props.parameters, noWrap, true)
   );
+
   const translate = () =>
     context.tolgee
-      .translate(props.children, props.parameters, props.noWrap)
+      .translate(props.children, props.parameters, noWrap)
       .then((t) => {
         setTranslated(t);
       });

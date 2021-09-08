@@ -19,6 +19,13 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   const [loading, setLoading] = useState(tolgee.initialLoading);
 
   useEffect(() => {
+    if (config.forceLanguage !== undefined) {
+      tolgee.properties.config.forceLanguage = config.forceLanguage;
+      tolgee.lang = config.forceLanguage;
+    }
+  }, [config.forceLanguage]);
+
+  useEffect(() => {
     tolgee.run().then(() => setLoading(false));
 
     return () => {
