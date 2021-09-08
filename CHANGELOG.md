@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.2.0 (2021-09-08)
+
+
+### Features
+
+* **js sdk:** Prepare for Next.js TG-272 ([#425](https://github.com/tolgee/tolgee-js/issues/425)) ([7c75a1b](https://github.com/tolgee/tolgee-js/commit/7c75a1b059610ef51889e03577be0095d8cace38))
+
+
+
+
+
 ## 1.1.1 (2021-09-07)
 
 
