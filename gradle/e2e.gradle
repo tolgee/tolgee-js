@@ -1,25 +1,36 @@
 import java.time.Duration
 
-def E2E_DIR = "${project.projectDir}/e2e"
+ext.E2E_DIR = "${project.projectDir}/e2e"
 
-task waitForRunningContainer(type: Task, group: "e2e") {
-    doLast {
-        while (true) {
-            def pb = new ProcessBuilder("docker-compose", "logs", "-f")
-            pb.directory(new File(E2E_DIR))
-            def proc = pb.start()
-            BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()))
-            String s = null
-            while ((s = stdInput.readLine()) != null) {
-                println(s)
-                if (s.contains("Tomcat started on port(s):")) {
-                    return
-                }
-            }
-            if (proc.exitValue() != 0) {
-                throw new RuntimeException("Docker-compose logs retuned non zero exit code")
+def waitForDockerComposeOutput(String output) {
+    while (true) {
+        def pb = new ProcessBuilder("docker-compose", "logs", "-f")
+        pb.directory(new File(E2E_DIR))
+        def proc = pb.start()
+        BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()))
+        String s = null
+        while ((s = stdInput.readLine()) != null) {
+            println(s)
+            if (s.contains(output)) {
+                return
             }
         }
+        if (proc.exitValue() != 0) {
+            throw new RuntimeException("Docker-compose logs retuned non zero exit code")
+        }
+    }
+}
+
+task waitForRunningServer(type: Task, group: "e2e") {
+    doLast {
+        waitForDockerComposeOutput("Tomcat started on port(s):")
+    }
+    timeout = Duration.ofSeconds(120)
+}
+
+task waitForRunningGatsbyDev(type: Task, group: "e2e") {
+    doLast {
+        waitForDockerComposeOutput("You can now view tolgee-gatsby-test-app in the browser")
     }
     timeout = Duration.ofSeconds(120)
 }
@@ -56,7 +67,8 @@ task openE2e(type: Exec, group: "e2e") {
 task runDockerE2e(type: Exec, group: "e2e") {
     commandLine "docker-compose", "up", "-d"
     workingDir E2E_DIR
-    finalizedBy "waitForRunningContainer"
+    finalizedBy "waitForRunningServer"
+    finalizedBy "waitForRunningGatsbyDev"
 }
 
 task stopDockerE2e(type: Exec, group: "e2e") {
