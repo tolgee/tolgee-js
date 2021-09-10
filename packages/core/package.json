@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/core",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Library providing ability to translate messages directly in context of developed application.",
   "main": "index.js",
   "types": "./lib/index.d.ts",
