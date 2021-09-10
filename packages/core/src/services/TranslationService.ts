@@ -241,6 +241,11 @@ export class TranslationService {
       return undefined;
     }
 
+    //if data contains key directly, just return it
+    if (typeof root[key] === 'string') {
+      return root[key] as string;
+    }
+
     for (const item of path) {
       if (root[item] === undefined) {
         return undefined;

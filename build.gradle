@@ -32,7 +32,7 @@ apply from: "./gradle/e2e.gradle"
 
 task lernaBootstrap(type: Exec) {
     commandLine "npm", "run", "lerna-bootstrap", "--", "--ci"
-    finalizedBy "linkLibReactToReactTestApp", "linkLibReactDomToReactTestApp"
+    finalizedBy "linkLibReactToReactTestApp", "linkLibReactDomToReactTestApp", "linkLibReactToNextTestApp"
 }
 
 //this is a solution for multiple react error in hook
@@ -50,6 +50,23 @@ task linkLibReactToReactTestApp {
         }
     }
 }
+
+//this is a solution for multiple react error in hook
+//dependabot cannot handle dependency path which doesn't exist
+task linkLibReactToNextTestApp {
+    def workdir = "testapps/next/node_modules"
+    doLast {
+        exec {
+            workingDir workdir
+            commandLine "rm", "-rf", "react"
+        }
+        exec {
+            workingDir workdir
+            commandLine "ln", "-sf", "../../../packages/react/node_modules/react", "."
+        }
+    }
+}
+
 
 //this is a solution for multiple react error in hook
 //dependabot cannot handle dependency path which doesn't exist
@@ -125,9 +142,25 @@ task buildNgxTestapps(type: Exec) {
     mustRunAfter "buildCore", "buildUi", "buildNgx"
 }
 
+task buildGatsbyTestapps(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildReact"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/gatsby"
+    mustRunAfter "buildCore", "buildReact", "buildUi", "buildNgx"
+}
+
+
+task buildNextTestapps(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildReact"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/next"
+    environment "NEXT_BUILD_DIR", "dist"
+    mustRunAfter "buildCore", "buildReact", "buildUi"
+}
+
 task buildAll(type: Task) {
     dependsOn "buildCore", "buildUi", "buildReact", "buildNgx", "buildSocketIoClient",
-            "buildCoreTestapps", "buildReactTestapps", "buildNgxTestapps"
+            "buildCoreTestapps", "buildReactTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps"
 }
 
 task developAll(type: Exec) {
@@ -136,12 +169,12 @@ task developAll(type: Exec) {
 }
 
 task developReactNoBuild(type: Exec) {
-    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react", "develop"
+    commandLine "lerna", "run", "--parallel", "--include-dependencies", "--scope", "*/react", "develop"
 }
 
 task developReact(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
-    commandLine "lerna", "run", "--parallel", "--include-dependencies" ,"--scope", "*/react", "develop"
+    commandLine "lerna", "run", "--parallel", "--include-dependencies", "--scope", "*/react", "develop"
 }
 
 task testCore(type: Exec) {

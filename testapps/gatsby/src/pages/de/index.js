@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { T, TolgeeProvider } from '@tolgee/react';
+import { TolgeeProvider } from '@tolgee/react';
 import * as translationsEn from '../../i18n/en.json';
-import * as translationsCs from '../../i18n/cs.json';
+import * as translationsDe from '../../i18n/de.json';
+import { HelloWorld } from '../../component/helloWorld';
+import UI from '../../../../../packages/ui/src';
 
 const IndexPage = () => {
   return (
@@ -10,15 +12,16 @@ const IndexPage = () => {
         <a href={'/'}>EN</a>
       </div>
       <TolgeeProvider
-        forceLanguage="cs"
-        //apiKey={process.env.GATSBY_TOLGEE_API_KEY}
+        forceLanguage="de"
+        ui={UI}
+        apiKey={process.env.GATSBY_TOLGEE_API_KEY}
         apiUrl={process.env.GATSBY_TOLGEE_API_URL}
         staticData={{
           en: translationsEn,
-          cs: translationsCs,
+          de: translationsDe,
         }}
       >
-        <T>hello_world</T>
+        <HelloWorld />
       </TolgeeProvider>
     </main>
   );

@@ -9,7 +9,7 @@
   "author": "Jan Cizmar",
   "license": "BSD",
   "devDependencies": {
-    "cypress": "^5.6.0",
+    "cypress": "^8.3.1",
     "cypress-dotenv": "^1.2.2",
     "cypress-file-upload": "^4.1.1",
     "cypress-xpath": "^1.6.1",

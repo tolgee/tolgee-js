@@ -19,3 +19,6 @@ testapps/ngx/*/dist
 testapps/gatsby/.env*
 testapps/gatsby.cache
 testapps/gatsby/public
+testapps/next/.idea
+testapps/next/.next
+testapps/next/dist
