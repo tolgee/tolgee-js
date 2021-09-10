@@ -16,6 +16,21 @@ type Tail<T extends any[]> = ((...args: T) => any) extends (
 export class ApiHttpService {
   constructor(private properties: Properties) {}
 
+  private static async handleErrors(response: Response) {
+    if (response.status >= 400) {
+      const error = new ApiHttpError(response);
+      try {
+        const data = await response.json();
+        error.code = data.code;
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn('Tolgee server responded with invalid status code.');
+      }
+      throw error;
+    }
+    return response;
+  }
+
   async fetch(...args: ArgumentTypes<typeof fetch>) {
     if (typeof args[0] === 'object') {
       return await fetch({ ...args[0], url: this.getUrl(args[0].url) }).then(
@@ -63,22 +78,8 @@ export class ApiHttpService {
     return await this.post(url, body, init, ...rest).then((res) => res.json());
   }
 
-  private static async handleErrors(response: Response) {
-    if (response.status >= 400) {
-      const error = new ApiHttpError(response);
-      try {
-        const data = await response.json();
-        error.code = data.code;
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.warn('Tolgee server responded with invalid status code.');
-      }
-      throw error;
-    }
-    return response;
-  }
-
   private getUrl(path: string) {
-    return `${this.properties.config.apiUrl}/uaa/${path}?ak=${this.properties.config.apiKey}`;
+    const querySeparator = path.indexOf('?') < 0 ? '?' : '&';
+    return `${this.properties.config.apiUrl}/${path}${querySeparator}ak=${this.properties.config.apiKey}`;
   }
 }

@@ -39,6 +39,7 @@ export const Page: FunctionComponent = () => {
           <T>text_in_dialog2</T>
         </DialogContent>
       </Dialog>
+      <T>!??!&? sdůlaksd</T>
     </div>
   );
 };

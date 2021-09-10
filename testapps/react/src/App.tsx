@@ -12,7 +12,7 @@ const App = () => {
         de: () => import('./i18n/de.json'),
       }}
       apiUrl={process.env.REACT_APP_TOLGEE_API_URL}
-      //apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
+      apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
       ui={UI}
       availableLanguages={['en', 'de']}
       loadingFallback={

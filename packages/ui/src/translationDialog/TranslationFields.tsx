@@ -43,8 +43,8 @@ export const TranslationFields: FunctionComponent = () => {
 
   const Loading = () => (
     <>
-      {context.availableLanguages ? (
-        [...context.availableLanguages].map((lang) => (
+      {context.selectedLanguages ? (
+        [...context.selectedLanguages].map((lang) => (
           <LoadingTextArea key={lang} />
         ))
       ) : (
