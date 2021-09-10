@@ -99,7 +99,7 @@ export class TranslationService {
   async setTranslations(translationData: TranslationData) {
     this.coreService.checkScope('translations.edit');
 
-    await this.apiHttpService.post('', translationData);
+    await this.apiHttpService.post('v2/projects/translations', translationData);
 
     Object.keys(translationData.translations).forEach((lang) => {
       if (this.translationsCache.get(lang)) {
@@ -141,11 +141,31 @@ export class TranslationService {
   ): Promise<TranslationData> => {
     this.coreService.checkScope('translations.view');
     try {
-      const data = await this.apiHttpService.postJson(
-        `keyTranslations/${Array.from(languages).join(',')}`,
-        { key }
+      const languagesArray = [...languages];
+      const languagesQuery = languagesArray
+        .map((l) => `languages=${l}`)
+        .join('&');
+      const data = await this.apiHttpService.fetchJson(
+        `v2/projects/translations?${languagesQuery}&filterKeyName=${encodeURIComponent(
+          key
+        )}`
       );
-      return new TranslationData(key, data);
+
+      const translationData = languagesArray.reduce(
+        (acc, curr) => ({ ...acc, [curr]: '' }),
+        {}
+      );
+
+      const fetchedData = data._embedded?.keys?.[0]?.translations;
+
+      if (fetchedData) {
+        Object.entries(data._embedded?.keys?.[0]?.translations).forEach(
+          ([language, translation]) =>
+            (translationData[language] = (translation as any).text)
+        );
+      }
+
+      return new TranslationData(key, translationData);
     } catch (e) {
       if (e instanceof ApiHttpError) {
         //only possible reason for this error is, that languages definition is changed, but the old value is stored in preferred languages
@@ -215,7 +235,9 @@ export class TranslationService {
   private async fetchTranslationsDevelopment(language: string) {
     this.coreService.checkScope('translations.view');
     try {
-      const data = await this.apiHttpService.fetchJson(`${language}`);
+      const data = await this.apiHttpService.fetchJson(
+        `v2/projects/translations/${language}`
+      );
       this.translationsCache.set(language, data[language] || {});
     } catch (e) {
       // eslint-disable-next-line no-console

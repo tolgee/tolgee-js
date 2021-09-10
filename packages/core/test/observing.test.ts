@@ -11,11 +11,11 @@ const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
 
 const fetch = fetchMock.mockResponse(async (req) => {
-  if (req.url === API_URL + '/uaa/scopes?ak=' + API_KEY) {
+  if (req.url === API_URL + '/api/apiKeys/scopes?ak=' + API_KEY) {
     return '["translations.edit","translations.view","keys.edit"]';
   }
 
-  if (req.url === API_URL + '/uaa/en?ak=' + API_KEY) {
+  if (req.url === API_URL + '/v2/projects/translations/en?ak=' + API_KEY) {
     return JSON.stringify(mockTranslations);
   }
 

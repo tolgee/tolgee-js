@@ -3,7 +3,16 @@ import { ApiHttpService } from './ApiHttpService';
 import { Scope } from '../types';
 
 export class CoreService {
-  private languagePromise: Promise<string[]>;
+  private languagePromise: Promise<{
+    _embedded: {
+      languages: {
+        tag: string;
+        name: string;
+        originalName: string;
+        flagEmoji: string;
+      }[];
+    };
+  }>;
 
   constructor(
     private properties: Properties,
@@ -12,10 +21,14 @@ export class CoreService {
 
   async getLanguages(): Promise<Set<string>> {
     if (!(this.languagePromise instanceof Promise)) {
-      this.languagePromise = this.apiHttpService.fetchJson(`languages`);
+      this.languagePromise = this.apiHttpService.fetchJson(
+        `v2/projects/languages?size=1000`
+      );
     }
 
-    const languages = new Set(await this.languagePromise);
+    const languages = new Set(
+      (await this.languagePromise)._embedded.languages.map((l) => l.tag)
+    );
     this.properties.preferredLanguages = new Set<string>(
       Array.from(this.properties.preferredLanguages).filter((l) =>
         languages.has(l)
@@ -26,7 +39,7 @@ export class CoreService {
 
   async getScopes() {
     try {
-      return await this.apiHttpService.fetchJson(`scopes`);
+      return await this.apiHttpService.fetchJson(`api/apiKeys/scopes`);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

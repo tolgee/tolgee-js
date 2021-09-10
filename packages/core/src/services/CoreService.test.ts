@@ -42,14 +42,20 @@ describe('CoreService', () => {
 
     beforeEach(() => {
       mockedFetchJson.mockImplementation(async () => {
-        return dummyLanguages;
+        return {
+          _embedded: {
+            languages: dummyLanguages.map((l) => ({
+              tag: l,
+            })),
+          },
+        };
       });
     });
 
     test('will return languages returned from api http service', async () => {
       expect(await coreService.getLanguages()).toEqual(new Set(dummyLanguages));
       expect(mockedFetchJson).toBeCalledTimes(1);
-      expect(mockedFetchJson).toBeCalledWith(`languages`);
+      expect(mockedFetchJson).toBeCalledWith(`v2/projects/languages?size=1000`);
     });
 
     test('sets preferred languages of properties', async () => {

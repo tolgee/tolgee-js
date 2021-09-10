@@ -126,9 +126,17 @@ describe('TranslationService', () => {
     });
 
     test('will get translations of key', async () => {
-      getMockedInstance(ApiHttpService).postJson = jest.fn(async () => ({
-        en: 'translated',
-        de: 'übersetzen',
+      getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => ({
+        _embedded: {
+          keys: [
+            {
+              translations: {
+                en: { text: 'translated' },
+                de: { text: 'übersetzen' },
+              },
+            },
+          ],
+        },
       }));
       const translationData = await translationService.getTranslationsOfKey(
         'key',
@@ -142,7 +150,7 @@ describe('TranslationService', () => {
 
     test('will reset preferred languages when language is not found', async () => {
       global['apierror'] = ApiHttpError;
-      getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+      getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => {
         throw new ApiHttpError(
           { status: 404 } as Response,
           'language_not_found'
@@ -188,7 +196,7 @@ describe('TranslationService', () => {
     test('will call the api http service', async () => {
       expect(getMockedInstance(ApiHttpService).post).toBeCalledTimes(1);
       expect(getMockedInstance(ApiHttpService).post).toBeCalledWith(
-        '',
+        'v2/projects/translations',
         dummyTranslationData
       );
     });
