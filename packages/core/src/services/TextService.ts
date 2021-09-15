@@ -16,6 +16,30 @@ export class TextService {
     private translationService: TranslationService
   ) {}
 
+  private get rawUnWrapRegex(): string {
+    const escapedPrefix = this.escapeForRegExp(
+      this.properties.config.inputPrefix
+    );
+    const escapedSuffix = this.escapeForRegExp(
+      this.properties.config.inputSuffix
+    );
+    return `(\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
+  }
+
+  private static parseUnwrapped(unWrappedString: string): KeyAndParams {
+    const strings = unWrappedString.match(/(?:[^\\,:\n]|\\.)+/g);
+    const result = {
+      key: TextHelper.removeEscapes(strings.shift()),
+      params: {},
+    };
+
+    while (strings.length) {
+      const [name, value] = strings.splice(0, 2);
+      result.params[name] = value;
+    }
+    return result;
+  }
+
   async translate(
     key: string,
     params: TranslationParams,
@@ -102,20 +126,6 @@ export class TextService {
     return { translated, key: key, params };
   }
 
-  private static parseUnwrapped(unWrappedString: string): KeyAndParams {
-    const strings = unWrappedString.match(/(?:[^\\,:\n]|\\.)+/g);
-    const result = {
-      key: TextHelper.removeEscapes(strings.shift()),
-      params: {},
-    };
-
-    while (strings.length) {
-      const [name, value] = strings.splice(0, 2);
-      result.params[name] = value;
-    }
-    return result;
-  }
-
   private readonly format = (
     translation: string,
     params: TranslationParams
@@ -123,7 +133,11 @@ export class TextService {
     try {
       return new IntlMessageFormat(
         translation,
-        this.properties.currentLanguage
+        this.properties.currentLanguage,
+        undefined,
+        {
+          ignoreTag: true,
+        }
       ).format(params) as string;
     } catch (e) {
       if (e.code === 'MISSING_VALUE') {
@@ -137,16 +151,6 @@ export class TextService {
   private readonly escapeForRegExp = (string: string) => {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   };
-
-  private get rawUnWrapRegex(): string {
-    const escapedPrefix = this.escapeForRegExp(
-      this.properties.config.inputPrefix
-    );
-    const escapedSuffix = this.escapeForRegExp(
-      this.properties.config.inputSuffix
-    );
-    return `(\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
-  }
 
   private readonly escapeParam = (param: any) => {
     if (typeof param === 'string') {

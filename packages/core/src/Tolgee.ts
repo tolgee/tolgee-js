@@ -5,9 +5,6 @@ import { EventEmitterImpl } from './services/EventEmitter';
 import { DependencyStore } from './services/DependencyStore';
 
 export class Tolgee {
-  export;
-  default;
-  Tolgee;
   private dependencyStore: DependencyStore;
 
   constructor(config: TolgeeConfig) {
@@ -44,6 +41,10 @@ export class Tolgee {
 
   public get onLangChange() {
     return this.dependencyStore.eventService.LANGUAGE_CHANGED;
+  }
+
+  public get onTranslationChange() {
+    return this.dependencyStore.eventService.TRANSLATION_CHANGED;
   }
 
   public get onLangLoaded() {

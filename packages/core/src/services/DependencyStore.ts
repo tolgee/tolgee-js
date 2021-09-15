@@ -12,6 +12,7 @@ import { CoreHandler } from '../handlers/CoreHandler';
 import { Observer } from '../Observer';
 import { CoreService } from './CoreService';
 import { TolgeeConfig } from '../TolgeeConfig';
+import { WrappedHandler } from '../handlers/WrappedHandler';
 
 export class DependencyStore {
   public properties: Properties = new Properties();
@@ -55,13 +56,22 @@ export class DependencyStore {
     this.elementRegistrar,
     this.translationHighlighter
   );
+
+  public wrappedHandler = new WrappedHandler(
+    this.properties,
+    this.translationHighlighter,
+    this.textService,
+    this.elementRegistrar
+  );
+
   public coreHandler: CoreHandler = new CoreHandler(
     this.coreService,
     this.textHandler,
     this.eventService,
     this.properties,
     this.attributeHandler,
-    this.textService
+    this.textService,
+    this.wrappedHandler
   );
   public observer: Observer = new Observer(
     this.properties,

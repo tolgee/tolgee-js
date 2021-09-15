@@ -15,6 +15,7 @@ const App = () => {
       apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
       ui={UI}
       availableLanguages={['en', 'de']}
+      preloadFallback={true}
       loadingFallback={
         <div
           style={{

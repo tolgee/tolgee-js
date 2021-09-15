@@ -10,6 +10,7 @@ import { UI } from '@tolgee/ui';
   imports: [
     BrowserModule,
     NgxTolgeeModule.forRoot({
+      preloadFallback: true,
       apiUrl: 'http://localhost:8202',
       apiKey: 'this_is_dummy_api_key',
       ui: UI,

@@ -25,7 +25,7 @@ export abstract class AbstractHandler {
     protected translationHighlighter: TranslationHighlighter
   ) {}
 
-  private static initParentElement(element: Element): ElementWithMeta {
+  protected static initParentElement(element: Element): ElementWithMeta {
     if (element[TOLGEE_ATTRIBUTE_NAME] === undefined) {
       element[TOLGEE_ATTRIBUTE_NAME] = {
         nodes: new Set(),

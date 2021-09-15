@@ -6,6 +6,7 @@ import { Properties } from '../Properties';
 import { AttributeHandler } from './AttributeHandler';
 import { ElementWithMeta } from '../types';
 import { TextService } from '../services/TextService';
+import { WrappedHandler } from './WrappedHandler';
 
 export class CoreHandler {
   constructor(
@@ -14,7 +15,8 @@ export class CoreHandler {
     private eventService: EventService,
     private properties: Properties,
     private attributeHandler: AttributeHandler,
-    private textService: TextService
+    private textService: TextService,
+    private wrappedHandler: WrappedHandler
   ) {
     eventService.LANGUAGE_CHANGED.subscribe(this.refresh.bind(this));
     eventService.TRANSLATION_CHANGED.subscribe(this.refresh.bind(this));
@@ -23,6 +25,7 @@ export class CoreHandler {
   public async handleSubtree(target: Element) {
     await this.attributeHandler.handle(target);
     await this.textHandler.handle(target);
+    await this.wrappedHandler.handle(target);
   }
 
   private async refresh() {

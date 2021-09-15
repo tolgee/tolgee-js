@@ -4,6 +4,8 @@
 
 export const environment = {
   production: false,
+  tolgeeApiKey: 'this_is_dummy_api_key',
+  tolgeeApiUrl: 'http://localhost:8202',
 };
 
 /*

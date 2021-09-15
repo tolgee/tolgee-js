@@ -14,7 +14,10 @@ export class ElementRegistrar {
 
   register(element: ElementWithMeta) {
     //ignore element with no active nodes
-    if (this.getActiveNodes(element).next().value === undefined) {
+    if (
+      this.getActiveNodes(element).next().value === undefined &&
+      !element._tolgee.wrappedWithElementOnlyKey
+    ) {
       return;
     }
     if (
@@ -29,7 +32,10 @@ export class ElementRegistrar {
   refreshAll() {
     for (const element of this.registeredElements) {
       this.cleanElementInactiveNodes(element);
-      if (element._tolgee.nodes.size === 0) {
+      if (
+        element._tolgee.nodes.size === 0 &&
+        !element._tolgee.wrappedWithElementOnlyKey
+      ) {
         this.cleanElement(element);
       }
     }
