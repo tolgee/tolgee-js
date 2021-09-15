@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.2.4 (2021-09-15)
+
+
+### Bug Fixes
+
+* **sdk:** fix default tagAttributes property TG-288 ([#436](https://github.com/tolgee/tolgee-js/issues/436)) ([db19266](https://github.com/tolgee/tolgee-js/commit/db192665ed9409e39a2ff65cffd720e41265eefd))
+
+
+
+
+
 ## 1.2.3 (2021-09-15)
 
 
