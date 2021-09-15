@@ -25,7 +25,8 @@ export class TolgeeConfig {
   tagAttributes?: { [key: string]: string[] } = {
     textarea: ['placeholder'],
     input: ['value', 'placeholder'],
-    select: ['aria-label'],
+    img: ['alt'],
+    '*': ['aria-label', 'title'],
   };
   highlightKeys?: ModifierKey[] = [ModifierKey.Alt];
   passToParent?:

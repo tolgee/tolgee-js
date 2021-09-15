@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { FunctionComponent, useState } from 'react';
-import { T } from '@tolgee/react';
+import { T, useTranslate } from '@tolgee/react';
 import { ChooseLanguage } from './ChooseLanguage';
 import { Dialog, DialogContent } from '@material-ui/core';
 
 export const Page: FunctionComponent = () => {
   const [disappeared, setDisappeared] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const t = useTranslate();
 
   function disappear() {
     setDisappeared(true);
@@ -39,7 +41,14 @@ export const Page: FunctionComponent = () => {
           <T>text_in_dialog2</T>
         </DialogContent>
       </Dialog>
-      <T>!??!&? sdůlaksd</T>
+
+      <div title={t('sampleApp.hello_world!')}>
+        <h3>Div with title</h3>
+      </div>
+
+      <div aria-label={t('sampleApp.hello_world!')}>
+        <h3>Div with aria label</h3>
+      </div>
     </div>
   );
 };
