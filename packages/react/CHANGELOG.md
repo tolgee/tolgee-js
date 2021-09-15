@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0 (2021-09-15)
+
+
+### Features
+
+* **js sdk:** Allow element wrapping & test TG-280 ([#435](https://github.com/tolgee/tolgee-react/issues/435)) ([f47c3ed](https://github.com/tolgee/tolgee-react/commit/f47c3ed92ae2b55da8701d19d5e5d099ed2d3156))
+
+
+
+
+
 ## 1.2.4 (2021-09-15)
 
 
