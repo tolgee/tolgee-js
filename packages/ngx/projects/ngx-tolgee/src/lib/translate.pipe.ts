@@ -1,30 +1,24 @@
-import {Pipe, PipeTransform} from '@angular/core';
-import {TranslateService} from "./translate.service";
-import {Observable} from "rxjs";
+import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { TranslateService } from './translate.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Pipe({
   name: 'translate',
-  pure: false
+  pure: false,
 })
-export class TranslatePipe implements PipeTransform {
+export class TranslatePipe implements PipeTransform, OnDestroy {
   value = '';
   lastHash: string;
+  private langChangeSubscription: Subscription;
 
-  constructor(protected translateService: TranslateService) {
-  }
-
-  private getHash(input: string, params: object, language: string): string {
-    return JSON.stringify({input, params, language});
-  }
+  constructor(protected translateService: TranslateService) {}
 
   protected get resultProvider(): (input, params) => Observable<string> {
     return (input, params) => this.translateService.get(input, params);
   }
 
-  private onLangChange(input, params) {
-    this.resultProvider(input, params).subscribe(r => {
-      this.value = r;
-    });
+  ngOnDestroy(): void {
+    this.langChangeSubscription.unsubscribe();
   }
 
   transform(input: any, params = {}): any {
@@ -32,20 +26,37 @@ export class TranslatePipe implements PipeTransform {
       return input;
     }
 
-    const newHash = this.getHash(input, params, this.translateService.getCurrentLang());
+    const newHash = this.getHash(
+      input,
+      params,
+      this.translateService.getCurrentLang()
+    );
 
     if (newHash === this.lastHash) {
       return this.value;
     }
 
-    this.translateService.onLangChange.subscribe(() => {
-      this.onLangChange(input, params);
-    });
+    this.langChangeSubscription?.unsubscribe();
+    this.langChangeSubscription = this.translateService.onLangChange.subscribe(
+      () => {
+        this.onLangChange(input, params);
+      }
+    );
 
     this.onLangChange(input, params);
 
     this.lastHash = newHash;
 
     return this.value;
+  }
+
+  private getHash(input: string, params: object, language: string): string {
+    return JSON.stringify({ input, params, language });
+  }
+
+  private onLangChange(input, params) {
+    this.resultProvider(input, params).subscribe((r) => {
+      this.value = r;
+    });
   }
 }

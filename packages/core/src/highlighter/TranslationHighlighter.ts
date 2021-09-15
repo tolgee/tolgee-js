@@ -6,8 +6,6 @@ import { TranslationService } from '../services/TranslationService';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export class TranslationHighlighter {
-  private _renderer: any;
-
   constructor(
     private service: CoreService,
     private properties: Properties,
@@ -15,6 +13,31 @@ export class TranslationHighlighter {
     private translationService: TranslationService,
     private mouseEventHandler: MouseEventHandler
   ) {}
+
+  private _renderer: any;
+
+  private get renderer() {
+    if (this._renderer === undefined) {
+      if (typeof this.properties.config.ui === 'function') {
+        this._renderer = new this.properties.config.ui({
+          coreService: this.service,
+          properties: this.properties,
+          eventService: this.eventService,
+          translationService: this.translationService,
+        });
+      }
+    }
+    return this._renderer;
+  }
+
+  private static getKeyOptions(node: ElementWithMeta): Set<string> {
+    const nodes = Array.from(node._tolgee.nodes);
+    const keys = nodes.reduce(
+      (acc, curr) => [...acc, ...curr._tolgee.keys.map((k) => k.key)],
+      []
+    );
+    return new Set(keys);
+  }
 
   listen(element: ElementWithMeta & ElementCSSInlineStyle) {
     this.mouseEventHandler.handle(
@@ -27,6 +50,9 @@ export class TranslationHighlighter {
     mouseEvent: MouseEvent,
     element: ElementWithMeta
   ): Promise<string> {
+    if (element._tolgee.wrappedWithElementOnlyKey) {
+      return element._tolgee.wrappedWithElementOnlyKey;
+    }
     const keys = TranslationHighlighter.getKeyOptions(element);
     if (keys.size > 1) {
       return await this.renderer.getKey({ keys: keys, openEvent: mouseEvent });
@@ -36,15 +62,6 @@ export class TranslationHighlighter {
     }
     // eslint-disable-next-line no-console
     console.error('No key to translate. This seems like a bug in tolgee.');
-  }
-
-  private static getKeyOptions(node: ElementWithMeta): Set<string> {
-    const nodes = Array.from(node._tolgee.nodes);
-    const keys = nodes.reduce(
-      (acc, curr) => [...acc, ...curr._tolgee.keys.map((k) => k.key)],
-      []
-    );
-    return new Set(keys);
   }
 
   private translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
@@ -62,18 +79,4 @@ export class TranslationHighlighter {
         'To disable highlighting use production mode.'
     );
   };
-
-  private get renderer() {
-    if (this._renderer === undefined) {
-      if (typeof this.properties.config.ui === 'function') {
-        this._renderer = new this.properties.config.ui({
-          coreService: this.service,
-          properties: this.properties,
-          eventService: this.eventService,
-          translationService: this.translationService,
-        });
-      }
-    }
-    return this._renderer;
-  }
 }

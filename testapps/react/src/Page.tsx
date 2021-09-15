@@ -49,6 +49,26 @@ export const Page: FunctionComponent = () => {
       <div aria-label={t('sampleApp.hello_world!')}>
         <h3>Div with aria label</h3>
       </div>
+
+      <div>
+        <h3>Deprecated noWrap prop:</h3>
+        <T noWrap>sampleApp.hello_world!</T>
+      </div>
+
+      <div>
+        <h3>TEXT_WRAP strategy</h3>
+        <T strategy="TEXT_WRAP">sampleApp.hello_world!</T>
+      </div>
+
+      <div>
+        <h3>NO_WRAP strategy</h3>
+        <T strategy="NO_WRAP">sampleApp.hello_world!</T>
+      </div>
+
+      <div>
+        <h3>ELEMENT_WRAP strategy</h3>
+        <T strategy="ELEMENT_WRAP">sampleApp.hello_world!</T>
+      </div>
     </div>
   );
 };
