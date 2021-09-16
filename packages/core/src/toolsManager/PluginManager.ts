@@ -5,7 +5,7 @@ import { ElementRegistrar } from '../services/ElementRegistrar';
 import { TolgeeConfig } from '../TolgeeConfig';
 
 export class PluginManager {
-  private handshakeSucceed = false;
+  public handshakeSucceed = false;
 
   constructor(
     private messages: Messages,
@@ -40,6 +40,19 @@ export class PluginManager {
   stop() {
     this.messages.stopListening();
   }
+
+  public readonly takeScreenshot = () => {
+    return new Promise((resolve, reject) => {
+      try {
+        this.messages.send('TOLGEE_TAKE_SCREENSHOT');
+        this.messages.listen('TOLGEE_SCREENSHOT_TAKEN', (data) => {
+          resolve(data);
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
 
   private readonly handshake = () => {
     const sharedConfiguration: Partial<Properties> & {

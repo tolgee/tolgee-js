@@ -9,7 +9,11 @@ export const NewWindow: FC = (props) => {
   const { container, setContainer, onClose } = useTranslationDialogContext();
   useEffect(() => {
     // Create container element on client-side
-    setContainer(document.createElement('div'));
+    const div = document.createElement('div');
+    div.style.width = '100vw';
+    div.style.height = '100vh';
+    div.style.position = 'relative';
+    setContainer(div);
   }, []);
 
   useEffect(() => {
@@ -23,6 +27,7 @@ export const NewWindow: FC = (props) => {
       }
       newWindow.current = win;
       // Append container
+      win.document.body.style.margin = '0px';
       win.document.body.appendChild(container);
 
       const onExit = () => {
@@ -31,9 +36,10 @@ export const NewWindow: FC = (props) => {
         onClose();
       };
 
-      win.addEventListener('close', () => {
+      win.onbeforeunload = () => {
         setContainer(null);
-      });
+        onClose();
+      };
 
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {

@@ -56,6 +56,10 @@ export class ElementRegistrar {
   findAllByKey(key: string) {
     const result: ElementWithMeta[] = [];
     for (const registeredElement of this.registeredElements) {
+      if (registeredElement._tolgee.wrappedWithElementOnlyKey === key) {
+        result.push(registeredElement);
+        continue;
+      }
       for (const node of registeredElement._tolgee.nodes) {
         if (
           node._tolgee.keys.findIndex(

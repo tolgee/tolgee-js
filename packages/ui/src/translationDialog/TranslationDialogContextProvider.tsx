@@ -1,8 +1,9 @@
-import * as React from 'react';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { ComponentDependencies } from '../TolgeeViewer';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { TranslationData } from '@tolgee/core/lib/DTOs/TranslationData';
 import { EventEmitterImpl } from '@tolgee/core/lib/services/EventEmitter';
+
+import { ComponentDependencies } from '../TolgeeViewer';
+import { sleep } from '../tools/sleep';
 
 type DialogProps = {
   input: string;
@@ -29,6 +30,12 @@ export type DialogContextType = {
   setContainer: (el: Element) => void;
   useBrowserWindow: boolean;
   setUseBrowserWindow: (value: boolean) => void;
+  pluginAvailable: boolean;
+  takingScreenshot: boolean;
+  handleTakeScreenshot: (key: string) => Promise<any>;
+  lastScreenshot?: string;
+  removeLastScreenshot: () => void;
+  onScreenshotUpload: () => Promise<void>;
 } & DialogProps;
 
 export const TranslationDialogContext =
@@ -40,6 +47,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const [saving, setSaving] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
+    const [takingScreenshot, setTakingScreenshot] = useState<boolean>(false);
     const [translations, setTranslations] = useState<TranslationData>(null);
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
@@ -48,6 +56,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       undefined as Element | undefined
     );
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
+    const [lastScreenshot, setLastScreenshot] = useState<string>();
 
     const onTranslationInputChange =
       (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -68,15 +77,30 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const onClose = () => {
       props.onClose();
       setUseBrowserWindow(false);
+      setLastScreenshot(undefined);
     };
+
+    const removeLastScreenshot = () => setLastScreenshot(undefined);
 
     useEffect(() => {
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
-          onClose();
+          if (lastScreenshot) {
+            removeLastScreenshot();
+          } else {
+            onClose();
+          }
         }
       };
+      if (!useBrowserWindow) {
+        window.addEventListener('keydown', onKeyDown);
+        return () => {
+          window.removeEventListener('keydown', onKeyDown);
+        };
+      }
+    }, [useBrowserWindow, lastScreenshot]);
 
+    useEffect(() => {
       if (props.open) {
         setLoading(true);
         setSuccess(false);
@@ -87,14 +111,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
             setAvailableLanguages(l);
           });
         }
-        if (!useBrowserWindow) {
-          window.addEventListener('keydown', onKeyDown);
-        }
       }
-
-      return () => {
-        window.removeEventListener('keydown', onKeyDown);
-      };
     }, [props.open, useBrowserWindow, props.input]);
 
     const onSave = async () => {
@@ -107,7 +124,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
             .TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
         ).emit(translations);
         setSuccess(true);
-        await new Promise((resolve) => setTimeout(resolve, 200));
+        await sleep(200);
         setError(null);
         props.onClose();
       } catch (e) {
@@ -117,6 +134,33 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       } finally {
         setSaving(false);
       }
+    };
+
+    const onScreenshotUpload = async () => {
+      let id = translations?.id;
+      if (!id) {
+        const newEntry = await translationService.setTranslations(
+          new TranslationData(props.input, {})
+        );
+        id = newEntry.keyId;
+      }
+      await translationService.uploadScreenshot(id, lastScreenshot);
+      loadTranslations(properties.preferredLanguages);
+    };
+
+    const handleTakeScreenshot = async () => {
+      setTakingScreenshot(true);
+      props.dependencies.elementRegistrar
+        .findAllByKey(props.input)
+        .forEach((el) => el._tolgee.highlight());
+      await sleep(100);
+      const data = await props.dependencies.pluginManager.takeScreenshot();
+      props.dependencies.elementRegistrar
+        .findAllByKey(props.input)
+        .forEach((el) => el._tolgee.unhighlight());
+      setTakingScreenshot(false);
+      setLastScreenshot(data as string);
+      return data;
     };
 
     const editDisabled =
@@ -154,6 +198,12 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       setContainer,
       useBrowserWindow,
       setUseBrowserWindow,
+      pluginAvailable: props.dependencies.pluginManager.handshakeSucceed,
+      takingScreenshot,
+      handleTakeScreenshot,
+      lastScreenshot,
+      removeLastScreenshot,
+      onScreenshotUpload,
     };
 
     return (

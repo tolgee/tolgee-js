@@ -41,14 +41,7 @@ export class DependencyStore {
     this.properties
   );
 
-  public translationHighlighter = new TranslationHighlighter(
-    this.coreService,
-    this.properties,
-    this.eventService,
-    this.translationService,
-    this.mouseEventHandler,
-    this.highlightFunctionInitializer
-  );
+  public translationHighlighter = new TranslationHighlighter(this);
 
   public elementRegistrar: ElementRegistrar = new ElementRegistrar(
     this.properties,
@@ -105,5 +98,6 @@ export class DependencyStore {
   constructor(config: TolgeeConfig = new TolgeeConfig()) {
     this.properties.config = config;
     this.translationService.initStatic();
+    this.translationHighlighter.pluginManager = this.pluginManager;
   }
 }

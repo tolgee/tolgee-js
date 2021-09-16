@@ -65,7 +65,7 @@ export const TranslationFields: FunctionComponent = () => {
             key={key}
             lang={key}
             placeholder={key}
-            value={context.translations.translations[key]}
+            value={context.translations.translations[key] || ''}
             onChange={context.onTranslationInputChange(key)}
           />
         ))

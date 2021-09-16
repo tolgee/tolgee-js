@@ -15,12 +15,7 @@ export class UI {
     document.body.append(contextMenuContainer);
 
     const viewerElement = createElement(TolgeeViewer, {
-      dependencies: {
-        coreService: this.dependencies.coreService,
-        properties: this.dependencies.properties,
-        eventService: this.dependencies.eventService,
-        translationService: this.dependencies.translationService,
-      },
+      dependencies: this.dependencies,
     });
 
     this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);

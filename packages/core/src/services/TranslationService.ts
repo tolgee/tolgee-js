@@ -99,7 +99,13 @@ export class TranslationService {
   async setTranslations(translationData: TranslationData) {
     this.coreService.checkScope('translations.edit');
 
-    await this.apiHttpService.post('v2/projects/translations', translationData);
+    const result = await this.apiHttpService.postJson(
+      'v2/projects/translations',
+      {
+        key: translationData.key,
+        translations: translationData.translations,
+      }
+    );
 
     Object.keys(translationData.translations).forEach((lang) => {
       if (this.translationsCache.get(lang)) {
@@ -122,6 +128,22 @@ export class TranslationService {
         }
       }
     });
+    return result;
+  }
+
+  async uploadScreenshot(key, data) {
+    this.coreService.checkScope('translations.edit');
+
+    const formData = new FormData();
+
+    const blob = await fetch(data).then((r) => r.blob());
+    formData.append('screenshot', blob);
+
+    return this.apiHttpService.post(
+      `v2/projects/keys/${key}/screenshots`,
+      undefined,
+      { headers: {}, body: formData }
+    );
   }
 
   getFromCacheOrFallback(
@@ -156,7 +178,9 @@ export class TranslationService {
         {}
       );
 
-      const fetchedData = data._embedded?.keys?.[0]?.translations;
+      const firstItem = data._embedded?.keys?.[0];
+
+      const fetchedData = firstItem?.translations;
 
       if (fetchedData) {
         Object.entries(data._embedded?.keys?.[0]?.translations).forEach(
@@ -165,22 +189,22 @@ export class TranslationService {
         );
       }
 
-      return new TranslationData(key, translationData);
+      return new TranslationData(key, translationData, firstItem?.keyId);
     } catch (e) {
-      if (e instanceof ApiHttpError) {
+      if (
+        e instanceof ApiHttpError &&
+        e.response.status === 404 &&
+        e.code === 'language_not_found'
+      ) {
         //only possible reason for this error is, that languages definition is changed, but the old value is stored in preferred languages
-        if (e.response.status === 404) {
-          if (e.code === 'language_not_found') {
-            this.properties.preferredLanguages =
-              await this.coreService.getLanguages();
-            // eslint-disable-next-line no-console
-            console.error('Requested language not found, refreshing the page!');
-            location.reload();
-            return;
-          }
-        }
+        this.properties.preferredLanguages =
+          await this.coreService.getLanguages();
+        // eslint-disable-next-line no-console
+        console.error('Requested language not found, refreshing the page!');
+        location.reload();
+      } else {
+        throw e;
       }
-      throw e;
     }
   };
 

@@ -194,8 +194,8 @@ describe('TranslationService', () => {
     });
 
     test('will call the api http service', async () => {
-      expect(getMockedInstance(ApiHttpService).post).toBeCalledTimes(1);
-      expect(getMockedInstance(ApiHttpService).post).toBeCalledWith(
+      expect(getMockedInstance(ApiHttpService).postJson).toBeCalledTimes(1);
+      expect(getMockedInstance(ApiHttpService).postJson).toBeCalledWith(
         'v2/projects/translations',
         dummyTranslationData
       );
