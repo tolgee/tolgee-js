@@ -29,6 +29,7 @@ describe('CoreHandler', () => {
       TRANSLATION_CHANGED: mockedTranslationChanged,
       LANGUAGE_CHANGED: mockedLanguageChanged,
       LANGUAGE_LOADED: null,
+      ELEMENT_REGISTERED: null,
     } as EventService;
   });
 

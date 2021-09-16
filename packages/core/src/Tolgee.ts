@@ -84,6 +84,7 @@ export class Tolgee {
     }
 
     await this.translationService.loadTranslations();
+    await this.dependencyStore.pluginManager.run();
 
     if (this.properties.config.preloadFallback) {
       await this.translationService.loadTranslations(
