@@ -13,6 +13,19 @@ test('it selects the key', async (done) => {
       getFromCacheOrFallback: jest.fn(() => 'Translated key'),
     } as any as TranslationService,
     eventService: {} as any,
+    apiHttpService: {} as any,
+    mouseEventHandler: {} as any,
+    textService: {} as any,
+    textHandler: {} as any,
+    highlightFunctionInitializer: {} as any,
+    translationHighlighter: {} as any,
+    elementRegistrar: {} as any,
+    attributeHandler: {} as any,
+    wrappedHandler: {} as any,
+    coreHandler: {} as any,
+    observer: {} as any,
+    messages: {} as any,
+    pluginManager: {} as any,
   });
 
   const mouseEvent = new MouseEvent('click');

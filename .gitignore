@@ -25,3 +25,4 @@ testapps/next/.next
 testapps/next/dist
 **/.vscode
 .gradle
+e2e/extension

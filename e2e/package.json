@@ -3,17 +3,20 @@
   "version": "1.0.0-alpha.8",
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {
-    "cy:run": "cypress run",
-    "cy:open": "cypress open"
+    "cy:run": "cypress run --browser chrome --headed",
+    "cy:open": "cypress open --browser chrome",
+    "download-extension": "sh download_tolgee_extension.sh"
   },
   "author": "Jan Cizmar",
   "license": "BSD",
   "devDependencies": {
     "cypress": "^8.3.1",
+    "cypress-browser-extension-plugin": "^0.1.0",
     "cypress-dotenv": "^1.2.2",
     "cypress-file-upload": "^4.1.1",
     "cypress-xpath": "^1.6.1",
     "dotenv": "^8.2.0",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "download-github-release": "^0.3.2"
   }
 }

@@ -21,6 +21,17 @@ context('Next development', () => {
       .trigger('mouseover')
       .click();
     cy.contains('Translate text');
-    cy.contains('Save');
+    cy.contains('Update');
+  });
+
+  it('make screenshot', () => {
+    cy.contains('Hello world!')
+      .trigger('keydown', { key: 'Alt' })
+      .trigger('mouseover')
+      .click();
+    cy.contains('Take screenshot').should('be.visible').click();
+    cy.contains('Captured screenshot').should('be.visible');
+    cy.contains('Upload').click();
+    cy.contains('Translate text').should('be.visible');
   });
 });

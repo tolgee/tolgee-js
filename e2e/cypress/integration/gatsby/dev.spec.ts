@@ -20,6 +20,6 @@ context('Gatsby development', () => {
       .trigger('mouseover')
       .click();
     cy.contains('Translate text');
-    cy.contains('Save');
+    cy.contains('Update');
   });
 });

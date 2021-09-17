@@ -21,6 +21,7 @@ export type DialogContextType = {
   selectedLanguages: Set<string>;
   onSelectedLanguagesChange: (val: Set<string>) => void;
   editDisabled: boolean;
+  screenshotDisabled: boolean;
   onTranslationInputChange: (
     abbr
   ) => (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -166,6 +167,9 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const editDisabled =
       loading || !coreService.isAuthorizedTo('translations.edit');
 
+    const screenshotDisabled =
+      loading || !coreService.isAuthorizedTo('screenshots.upload');
+
     const [availableLanguages, setAvailableLanguages] = useState(undefined);
 
     const [selectedLanguages, setSelectedLanguages] = useState(
@@ -191,6 +195,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       selectedLanguages,
       onSelectedLanguagesChange,
       editDisabled,
+      screenshotDisabled,
       onTranslationInputChange,
       translations,
       onSave,

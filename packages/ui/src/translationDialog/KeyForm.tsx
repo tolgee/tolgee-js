@@ -80,7 +80,7 @@ export const KeyForm = () => {
           Cancel
         </Button>
         <div style={{ display: 'flex' }}>
-          {context.pluginAvailable && (
+          {context.pluginAvailable && !context.screenshotDisabled && (
             <Button
               onClick={() => handleTakeScreenshot()}
               style={{ marginLeft: '10px' }}

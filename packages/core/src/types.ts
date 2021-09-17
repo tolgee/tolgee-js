@@ -68,6 +68,10 @@ export type NodeLock = {
   locked?: boolean;
 };
 
-export type Scope = 'translations.edit' | 'translations.view' | 'keys.edit';
+export type Scope =
+  | 'translations.edit'
+  | 'translations.view'
+  | 'keys.edit'
+  | 'screenshots.upload';
 
 export type Mode = 'development' | 'production';
