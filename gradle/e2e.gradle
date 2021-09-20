@@ -44,8 +44,14 @@ task installE2eDeps(type: Exec, group: "e2e") {
     workingDir E2E_DIR
 }
 
+task downloadExtension(type: Exec, group: "e2e") {
+    commandLine "npm", "run", "download-extension"
+    
+    workingDir E2E_DIR
+}
+
 task runE2e(type: Exec, group: "e2e") {
-    dependsOn "buildAll", "runDockerE2e", "installE2eDeps"
+    dependsOn "buildAll", "runDockerE2e", "installE2eDeps", "downloadExtension"
 
     commandLine "npm", "run", "cy:run"
 
@@ -55,7 +61,7 @@ task runE2e(type: Exec, group: "e2e") {
 }
 
 task openE2e(type: Exec, group: "e2e") {
-    dependsOn "buildAll", "runDockerE2e", "installE2eDeps"
+    dependsOn "buildAll", "runDockerE2e", "installE2eDeps", "downloadExtension"
 
     commandLine "npm", "run", "cy:open"
 

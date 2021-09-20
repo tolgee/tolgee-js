@@ -1,18 +1,10 @@
 import * as React from 'react';
-import { CoreService } from '@tolgee/core/lib/services/CoreService';
-import { TranslationService } from '@tolgee/core/lib/services/TranslationService';
-import { Properties } from '@tolgee/core/lib/Properties';
-import { EventService } from '@tolgee/core/lib/services/EventService';
 import { BodyEnd } from './common/BodyEnd';
 import { TranslationDialogContextProvider } from './translationDialog/TranslationDialogContextProvider';
 import { TranslationDialog } from './translationDialog/TranslationDialog';
+import { DependencyStore } from '@tolgee/core/lib/services/DependencyStore';
 
-export type ComponentDependencies = {
-  coreService: CoreService;
-  translationService: TranslationService;
-  properties: Properties;
-  eventService: EventService;
-};
+export type ComponentDependencies = DependencyStore;
 
 export type ViewerProps = {
   dependencies: ComponentDependencies;

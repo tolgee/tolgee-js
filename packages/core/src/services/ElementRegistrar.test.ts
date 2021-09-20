@@ -10,12 +10,18 @@ import { createElement } from '@testFixtures/createElement';
 import { Properties } from '../Properties';
 import { TOLGEE_ATTRIBUTE_NAME } from '../Constants/Global';
 import { DependencyStore } from './DependencyStore';
+import { EventEmitterImpl } from './EventEmitter';
+import { EventService } from './EventService';
 
 describe('ElementRegistrar', () => {
   let elementRegistrar: ElementRegistrar;
+  const mockElementRegisteredEmit = jest.fn();
 
   beforeEach(async () => {
     elementRegistrar = new DependencyStore().elementRegistrar;
+    (getMockedInstance(EventService).ELEMENT_REGISTERED as any) = {
+      emit: mockElementRegisteredEmit,
+    } as any as EventEmitterImpl<ElementWithMeta>;
     getMockedInstance(Properties).config.targetElement = document.body;
   });
 
@@ -39,6 +45,11 @@ describe('ElementRegistrar', () => {
       expect(getMockedInstance(TranslationHighlighter).listen).toBeCalledTimes(
         1
       );
+    });
+
+    test('will emit element registered event', () => {
+      expect(mockElementRegisteredEmit).toBeCalledTimes(1);
+      expect(mockElementRegisteredEmit).toBeCalledWith(element);
     });
   });
 

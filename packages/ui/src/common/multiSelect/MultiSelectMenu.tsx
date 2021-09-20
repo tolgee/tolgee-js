@@ -27,8 +27,7 @@ export const MultiSelectMenu = <Option,>(props: {
   onClose: () => void;
 }) => {
   const ref = useRef();
-  const getTop = () =>
-    props.anchorEl?.offsetTop + props.anchorEl?.clientHeight + 5 || undefined;
+  const getTop = () => props.anchorEl?.getBoundingClientRect().y;
 
   const [top, setTop] = useState(getTop());
 
@@ -64,8 +63,10 @@ export const MultiSelectMenu = <Option,>(props: {
     return null;
   }
 
-  const width = props.anchorEl.clientWidth;
-  const left = (props.anchorEl as HTMLElement).offsetLeft;
+  const coords = props.anchorEl?.getBoundingClientRect();
+
+  const width = coords?.width;
+  const left = coords?.x;
 
   return (
     <BodyEnd document={props.anchorEl.ownerDocument}>

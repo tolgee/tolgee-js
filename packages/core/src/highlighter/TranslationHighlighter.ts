@@ -1,30 +1,19 @@
-import { CoreService } from '../services/CoreService';
 import { ElementWithMeta } from '../types';
-import { Properties } from '../Properties';
-import { EventService } from '../services/EventService';
-import { TranslationService } from '../services/TranslationService';
-import { MouseEventHandler } from './MouseEventHandler';
+import { PluginManager } from '../toolsManager/PluginManager';
+import { DependencyStore } from '../services/DependencyStore';
 
 export class TranslationHighlighter {
-  constructor(
-    private service: CoreService,
-    private properties: Properties,
-    private eventService: EventService,
-    private translationService: TranslationService,
-    private mouseEventHandler: MouseEventHandler
-  ) {}
+  public pluginManager: PluginManager;
+  constructor(private dependencies: DependencyStore) {}
 
   private _renderer: any;
 
   private get renderer() {
     if (this._renderer === undefined) {
-      if (typeof this.properties.config.ui === 'function') {
-        this._renderer = new this.properties.config.ui({
-          coreService: this.service,
-          properties: this.properties,
-          eventService: this.eventService,
-          translationService: this.translationService,
-        });
+      if (typeof this.dependencies.properties.config.ui === 'function') {
+        this._renderer = new this.dependencies.properties.config.ui(
+          this.dependencies
+        );
       }
     }
     return this._renderer;
@@ -40,7 +29,8 @@ export class TranslationHighlighter {
   }
 
   listen(element: ElementWithMeta & ElementCSSInlineStyle) {
-    this.mouseEventHandler.handle(
+    this.dependencies.highlightFunctionInitializer.initFunctions(element);
+    this.dependencies.mouseEventHandler.handle(
       element,
       async (e) => await this.translationEdit(e, element)
     );

@@ -13,6 +13,9 @@ import { Observer } from '../Observer';
 import { CoreService } from './CoreService';
 import { TolgeeConfig } from '../TolgeeConfig';
 import { WrappedHandler } from '../handlers/WrappedHandler';
+import { PluginManager } from '../toolsManager/PluginManager';
+import { Messages } from '../toolsManager/Messages';
+import { HighlightFunctionsInitializer } from '../highlighter/HighlightFunctionsInitializer';
 
 export class DependencyStore {
   public properties: Properties = new Properties();
@@ -33,17 +36,19 @@ export class DependencyStore {
     this.properties,
     this.translationService
   );
-  public translationHighlighter = new TranslationHighlighter(
-    this.coreService,
-    this.properties,
-    this.eventService,
-    this.translationService,
-    this.mouseEventHandler
+
+  public highlightFunctionInitializer = new HighlightFunctionsInitializer(
+    this.properties
   );
+
+  public translationHighlighter = new TranslationHighlighter(this);
+
   public elementRegistrar: ElementRegistrar = new ElementRegistrar(
     this.properties,
-    this.translationHighlighter
+    this.translationHighlighter,
+    this.eventService
   );
+
   public textHandler = new TextHandler(
     this.properties,
     this.translationHighlighter,
@@ -81,8 +86,18 @@ export class DependencyStore {
     this.elementRegistrar
   );
 
+  public messages: Messages = new Messages();
+
+  public pluginManager: PluginManager = new PluginManager(
+    this.messages,
+    this.properties,
+    this.eventService,
+    this.elementRegistrar
+  );
+
   constructor(config: TolgeeConfig = new TolgeeConfig()) {
     this.properties.config = config;
     this.translationService.initStatic();
+    this.translationHighlighter.pluginManager = this.pluginManager;
   }
 }

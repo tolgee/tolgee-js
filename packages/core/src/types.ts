@@ -54,6 +54,9 @@ export type ElementMeta = {
   nodes: Set<NodeWithMeta>;
   listeningForHighlighting?: boolean;
   removeAllEventListeners?: () => void;
+  highlight?: () => void;
+  unhighlight?: () => void;
+  initialBackgroundColor?: string;
 };
 
 export type NodeMeta = {
@@ -65,6 +68,10 @@ export type NodeLock = {
   locked?: boolean;
 };
 
-export type Scope = 'translations.edit' | 'translations.view' | 'keys.edit';
+export type Scope =
+  | 'translations.edit'
+  | 'translations.view'
+  | 'keys.edit'
+  | 'screenshots.upload';
 
 export type Mode = 'development' | 'production';

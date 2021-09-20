@@ -27,6 +27,7 @@ const css = `
     background-color: rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(0, 0, 0, 0.23);
     color: rgba(0, 0, 0, 0.87);
+    cursor: default;
 }
 
 .tolgee-button:hover{

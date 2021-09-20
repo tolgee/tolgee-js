@@ -89,17 +89,13 @@ export class MouseEventHandler {
   }
 
   private highlight() {
-    this.highlightedInitialBackgroundColor =
-      this.getMouseOn().style.backgroundColor;
-    this.getMouseOn().style.backgroundColor =
-      this.properties.config.highlightColor;
+    this.getMouseOn()._tolgee.highlight();
     this.highlighted = this.getMouseOn();
   }
 
   private unhighlight() {
     if (this.highlighted) {
-      this.highlighted.style.backgroundColor =
-        this.highlightedInitialBackgroundColor;
+      this.highlighted._tolgee.unhighlight();
       this.highlighted = null;
     }
   }
