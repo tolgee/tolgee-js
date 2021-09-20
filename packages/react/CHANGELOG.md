@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2021-09-20)
+
+
+### Features
+
+* Chrome plugin for screenshot generation TG-281 ([70fb2ae](https://github.com/tolgee/tolgee-react/commit/70fb2aec66319fc42870ed216ce7a7b981465b4a))
+
+
+
+
+
 # 1.3.0 (2021-09-15)
 
 
