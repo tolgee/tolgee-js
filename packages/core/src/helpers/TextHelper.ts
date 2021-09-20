@@ -5,16 +5,26 @@ export class TextHelper {
   ): string[] {
     const result = [];
     let actual = '';
+    let escaped = false;
     for (let i = 0; i < string.length; i++) {
       const char = string[i];
-      if (char === delimiter && !this.isCharEscaped(i, string)) {
-        result.push(this.removeEscapes(actual));
+      if (char === '\\' && !escaped) {
+        escaped = true;
+        continue;
+      }
+      if (escaped) {
+        escaped = false;
+        actual += char;
+        continue;
+      }
+      if (char === delimiter) {
+        result.push(actual);
         actual = '';
         continue;
       }
-      actual += string[i];
+      actual += char;
     }
-    result.push(this.removeEscapes(actual));
+    result.push(actual);
     return result;
   }
 
@@ -27,12 +37,22 @@ export class TextHelper {
     return escapeCharsCount % 2 == 1;
   }
 
-  public static removeEscapes(text: string) {
-    return text.replace(/\\?\\?/g, (match) => {
-      if (match == '\\\\') {
-        return '\\';
+  public static removeEscapes(string: string) {
+    let result = '';
+    let escaped = false;
+    for (let i = 0; i < string.length; i++) {
+      const char = string[i];
+      if (char === '\\' && !escaped) {
+        escaped = true;
+        continue;
       }
-      return '';
-    });
+      if (escaped) {
+        escaped = false;
+        result += char;
+        continue;
+      }
+      result += char;
+    }
+    return result;
   }
 }
