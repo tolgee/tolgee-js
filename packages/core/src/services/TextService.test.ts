@@ -9,15 +9,26 @@ import { TranslationService } from './TranslationService';
 import { DependencyStore } from './DependencyStore';
 
 describe('TextService', () => {
-  const mockedTranslationReturn = 'Dummy translated text {param1} {param2}';
+  let mockedTranslationReturn = '';
   const params = { param1: 'Dummy param 1', param2: 'Dummy param 2' };
-  const expectedTranslated = mockedTranslationReturn
-    .replace('{param1}', params.param1)
-    .replace('{param2}', params.param2);
+  let expectedTranslated = '';
   let textService: TextService;
+
+  const getTranslationMock = jest.fn(async () => {
+    return mockedTranslationReturn;
+  });
+
+  const getFromCacheOrCallbackMock = jest.fn(() => {
+    return mockedTranslationReturn;
+  });
 
   beforeEach(async () => {
     textService = new DependencyStore().textService;
+    mockedTranslationReturn = 'Dummy translated text {param1} {param2}';
+    expectedTranslated = mockedTranslationReturn
+      .replace('{param1}', params.param1)
+      .replace('{param2}', params.param2);
+
     getMockedInstance(Properties).config = {
       inputPrefix: '{{',
       inputSuffix: '}}',
@@ -26,15 +37,10 @@ describe('TextService', () => {
         '*': ['aria-label'],
       },
     };
-    getMockedInstance(TranslationService).getTranslation = jest.fn(async () => {
-      return mockedTranslationReturn;
-    });
+    getMockedInstance(TranslationService).getTranslation = getTranslationMock;
 
-    getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(
-      () => {
-        return mockedTranslationReturn;
-      }
-    );
+    getMockedInstance(TranslationService).getFromCacheOrFallback =
+      getFromCacheOrCallbackMock;
   });
 
   afterEach(async () => {
@@ -45,14 +51,35 @@ describe('TextService', () => {
     test('it will translate asynchronously correctly', async () => {
       const translated = await textService.translate(
         mockedTranslationReturn,
-        params
+        params,
+        `en`,
+        true,
+        'Default'
       );
       expect(translated).toEqual(expectedTranslated);
+      expect(getTranslationMock).toBeCalledWith(
+        'Dummy translated text {param1} {param2}',
+        'en',
+        true,
+        'Default'
+      );
     });
 
     test('it will translate synchronously correctly', () => {
-      const translated = textService.instant(mockedTranslationReturn, params);
+      const translated = textService.instant(
+        mockedTranslationReturn,
+        params,
+        'en',
+        true,
+        'Default'
+      );
       expect(translated).toEqual(expectedTranslated);
+      expect(getFromCacheOrCallbackMock).toBeCalledWith(
+        'Dummy translated text {param1} {param2}',
+        'en',
+        true,
+        'Default'
+      );
     });
   });
 
@@ -76,6 +103,27 @@ describe('TextService', () => {
     );
   });
 
+  test("it doesn't affect not related backslashes", async () => {
+    const text =
+      '\\This is \\text: {{text:param1:aaaa,param2:aaaa}} \\{{text}}, see? \\';
+    const replaced = await textService.replace(text);
+    expect(replaced.text).toEqual(
+      '\\This is \\text: Dummy translated text aaaa aaaa {{text}}, see? \\'
+    );
+  });
+
+  test('correctly parses default value', async () => {
+    const text =
+      '\\This is \\text: {{text,This is my default value.\\:look!:param1:aaaa,param2:aaaa}} \\{{text}}, see? \\';
+    await textService.replace(text);
+    expect(getTranslationMock).toHaveBeenCalledWith(
+      'text',
+      undefined,
+      false,
+      'This is my default value.:look!'
+    );
+  });
+
   test('replace function does not translate when params have escaped , or :', async () => {
     const text =
       'This is text: {{text:param1:param 1 with\\,and \\:.,param2:hello \\:}}. Text continues';
@@ -92,6 +140,25 @@ describe('TextService', () => {
     expect(replaced.text).toEqual(
       'This is text: Dummy translated text param 1 with\\ and again \\ hello \\. Text continues'
     );
+  });
+
+  test('replace function works with new lines in key', async () => {
+    mockedTranslationReturn = 'yep';
+    const text = 'This is text: {{text\nwith\nnew\nlines}}. Text continues';
+    await textService.replace(text);
+    expect(getTranslationMock).toHaveBeenCalledWith(
+      'text\nwith\nnew\nlines',
+      undefined,
+      false,
+      undefined
+    );
+  });
+
+  test('works with escaped strings in params', async () => {
+    const text = 'Text: {{text\nwith\nnew\nlines:hello:w\\,or\\:ld}}.';
+    mockedTranslationReturn = 'translated {hello}';
+    const result = await textService.replace(text);
+    expect(result.keys[0].params['hello']).toEqual('w,or:ld');
   });
 
   describe('Different key occurrences', () => {
@@ -151,7 +218,7 @@ describe('TextService', () => {
     test('will translate when the text begins with escaped escape character, what is escaped', async () => {
       const text = '\\\\\\{{text}}, text continues {{other text}}';
       const replaced = await textService.replace(text);
-      expect(replaced.text).toEqual('\\{{text}}, text continues translated');
+      expect(replaced.text).toEqual('\\\\{{text}}, text continues translated');
     });
   });
 
@@ -224,6 +291,28 @@ describe('TextService', () => {
       const wrapped = textService.wrap('key', { param1: 1, param2: 145.5 });
       expect((await textService.replace(wrapped)).text).toEqual(
         'xxx 1 145.5 xxx'
+      );
+    });
+
+    test('correctly wraps default value', async () => {
+      const wrapped = textService.wrap(
+        'key',
+        { param1: 1, param2: 'Yes,yes,yes:yes' },
+        'Look: What a beautiful default\nvalue,' +
+          ' translating will be such an experience.'
+      );
+      expect(wrapped).toEqual(
+        '{{key,Look\\: What a beautiful default\n' +
+          'value\\, translating will be such an experience.' +
+          ':param1:1,param2:Yes\\,yes\\,yes\\:yes}}'
+      );
+
+      await textService.replace(wrapped);
+      expect(getTranslationMock).toBeCalledWith(
+        'key',
+        undefined,
+        false,
+        'Look: What a beautiful default\nvalue, translating will be such an experience.'
       );
     });
 

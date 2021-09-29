@@ -25,10 +25,15 @@ export class TranslationService {
   private static translationByValue(
     message: string,
     key: string,
-    orEmpty: boolean
+    orEmpty: boolean,
+    defaultValue?: string
   ) {
     if (message) {
       return message;
+    }
+
+    if (defaultValue) {
+      return defaultValue;
     }
 
     if (orEmpty) {
@@ -71,7 +76,8 @@ export class TranslationService {
   async getTranslation(
     key: string,
     lang: string = this.properties.currentLanguage,
-    orEmpty = false
+    orEmpty = false,
+    defaultValue?: string
   ): Promise<string> {
     let message = this.getFromCache(key, lang);
 
@@ -93,7 +99,12 @@ export class TranslationService {
       }
     }
 
-    return TranslationService.translationByValue(message, key, orEmpty);
+    return TranslationService.translationByValue(
+      message,
+      key,
+      orEmpty,
+      defaultValue
+    );
   }
 
   async setTranslations(translationData: TranslationData) {
@@ -149,12 +160,18 @@ export class TranslationService {
   getFromCacheOrFallback(
     key: string,
     lang: string = this.properties.currentLanguage,
-    orEmpty = false
+    orEmpty = false,
+    defaultValue?: string
   ): string {
     const message =
       this.getFromCache(key, lang) ||
       this.getFromCache(key, this.properties.config.fallbackLanguage);
-    return TranslationService.translationByValue(message, key, orEmpty);
+    return TranslationService.translationByValue(
+      message,
+      key,
+      orEmpty,
+      defaultValue
+    );
   }
 
   getTranslationsOfKey = async (

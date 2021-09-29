@@ -274,10 +274,42 @@ describe('TranslationService', () => {
     ).toEqual('Just en.');
   });
 
+  test('getFromCacheOrCallback will return default when provided', async () => {
+    expect(
+      await translationService.getFromCacheOrFallback(
+        'this_key_is_not_in_cache',
+        'de',
+        false,
+        'Default'
+      )
+    ).toEqual('Default');
+  });
+
+  test('getFromCacheOrCallback will return empty when onEmpty is true', async () => {
+    expect(
+      await translationService.getFromCacheOrFallback(
+        'this_key_is_not_in_cache',
+        'de',
+        true
+      )
+    ).toEqual('');
+  });
+
   test('will return last chunk of key path when no translation found', async () => {
     expect(
       await translationService.getTranslation('test\\.key.this\\.is\\.it', 'en')
     ).toEqual('this.is.it');
+  });
+
+  test('returns default when provided', async () => {
+    expect(
+      await translationService.getTranslation(
+        'youaaaahihahihh',
+        'en',
+        undefined,
+        'This is default'
+      )
+    ).toEqual('This is default');
   });
 
   test('will return proper text without any dot', async () => {

@@ -1,5 +1,5 @@
 import { TolgeeConfig } from './TolgeeConfig';
-import { TranslationParams } from './types';
+import { InstantProps, TranslateProps, TranslationParams } from './types';
 import { NodeHelper } from './helpers/NodeHelper';
 import { EventEmitterImpl } from './services/EventEmitter';
 import { DependencyStore } from './services/DependencyStore';
@@ -105,35 +105,85 @@ export class Tolgee {
     );
   }
 
-  translate = async (
+  async translate(props: TranslateProps): Promise<string>;
+  async translate(
     key: string,
+    params: TranslationParams,
+    noWrap?: boolean,
+    defaultValue?: string
+  ): Promise<string>;
+
+  async translate(
+    keyOrProps: string | TranslateProps,
     params: TranslationParams = {},
-    noWrap = false
-  ): Promise<string> => {
+    noWrap = false,
+    defaultValue: string | undefined = undefined
+  ): Promise<string> {
+    const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
+    if (typeof keyOrProps === 'object') {
+      const props = keyOrProps as TranslateProps;
+      // if values are not provided in props object, get them from function
+      // params defaults
+      params = props.params !== undefined ? props.params : params;
+      noWrap = props.noWrap !== undefined ? props.noWrap : noWrap;
+      defaultValue =
+        props.defaultValue !== undefined ? props.defaultValue : defaultValue;
+    }
+
     if (this.properties.config.mode === 'development' && !noWrap) {
       await this.loadScopes();
       await this.translationService.loadTranslations();
-      return this.dependencyStore.textService.wrap(key, params);
+      return this.dependencyStore.textService.wrap(key, params, defaultValue);
     }
-    return this.dependencyStore.textService.translate(key, params);
-  };
+    return this.dependencyStore.textService.translate(
+      key,
+      params,
+      undefined,
+      undefined,
+      defaultValue
+    );
+  }
 
-  instant = (
+  instant(
     key: string,
+    params?: TranslationParams,
+    noWrap?: boolean,
+    orEmpty?: boolean,
+    defaultValue?: string
+  ): string;
+
+  instant(props: InstantProps): string;
+
+  instant(
+    keyOrProps: string | InstantProps,
     params: TranslationParams = {},
     noWrap = false,
-    orEmpty?: boolean
-  ): string => {
+    orEmpty?: boolean,
+    defaultValue?: string
+  ): string {
+    const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
+    if (typeof keyOrProps === 'object') {
+      const props = keyOrProps as InstantProps;
+      // if values are not provided in props object, get them from function
+      // params defaults
+      params = props.params !== undefined ? props.params : params;
+      noWrap = props.noWrap !== undefined ? props.noWrap : noWrap;
+      defaultValue =
+        props.defaultValue !== undefined ? props.defaultValue : defaultValue;
+      orEmpty = props.orEmpty !== undefined ? props.orEmpty : orEmpty;
+    }
+
     if (this.properties.config.mode === 'development' && !noWrap) {
-      return this.dependencyStore.textService.wrap(key, params);
+      return this.dependencyStore.textService.wrap(key, params, defaultValue);
     }
     return this.dependencyStore.textService.instant(
       key,
       params,
       undefined,
-      orEmpty
+      orEmpty,
+      defaultValue
     );
-  };
+  }
 
   public stop = () => {
     this.dependencyStore.observer.stopObserving();

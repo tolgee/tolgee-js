@@ -48,20 +48,38 @@ export class TranslateService implements OnDestroy {
     this.tolgee.lang = lang;
   }
 
-  public get(input: string, params = {}): Observable<string> {
-    return from(this.translate(input, params));
+  public get(
+    input: string,
+    params = {},
+    defaultValue?: string
+  ): Observable<string> {
+    return from(this.translate(input, params, false, defaultValue));
   }
 
-  public getSafe(input: string, params = {}): Observable<string> {
-    return from(this.translate(input, params, true));
+  public getSafe(
+    input: string,
+    params = {},
+    defaultValue?: string
+  ): Observable<string> {
+    return from(this.translate(input, params, true, defaultValue));
   }
 
-  public instant(input: string, params = {}): string {
-    return this.tolgee.instant(input, params);
+  public instant(input: string, params = {}, defaultValue?: string): string {
+    return this.tolgee.instant(
+      input,
+      params,
+      undefined,
+      undefined,
+      defaultValue
+    );
   }
 
-  public instantSafe(input: string, params = {}): string {
-    return this.tolgee.instant(input, params, true);
+  public instantSafe(
+    input: string,
+    params = {},
+    defaultValue?: string
+  ): string {
+    return this.tolgee.instant(input, params, true, undefined, defaultValue);
   }
 
   public getCurrentLang(): string {
@@ -76,10 +94,11 @@ export class TranslateService implements OnDestroy {
   private async translate(
     input: string,
     params = {},
-    noWrap = false
+    noWrap = false,
+    defaultValue: string
   ): Promise<string> {
     //wait for start before translating
     await this.start(this.config);
-    return await this.tolgee.translate(input, params, noWrap);
+    return await this.tolgee.translate(input, params, noWrap, defaultValue);
   }
 }

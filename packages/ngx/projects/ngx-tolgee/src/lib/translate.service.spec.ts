@@ -114,28 +114,30 @@ describe('Translate service', function () {
   });
 
   it('getSafe works ', (done) => {
-    const observable = service.getSafe('test', { key: 'value' });
+    const observable = service.getSafe('test', { key: 'value' }, 'Default');
     runResolve();
     observable.subscribe((r) => {
       expect(r).toEqual('translated');
       expect(translateMock).toHaveBeenCalledWith(
         'test',
         { key: 'value' },
-        true
+        true,
+        'Default'
       );
       done();
     });
   });
 
   it('get works ', (done) => {
-    const observable = service.get('test', { key: 'value' });
+    const observable = service.get('test', { key: 'value' }, 'Default');
     runResolve();
     observable.subscribe((r) => {
       expect(r).toEqual('translated');
       expect(translateMock).toHaveBeenCalledWith(
         'test',
         { key: 'value' },
-        false
+        false,
+        'Default'
       );
       done();
     });
@@ -144,16 +146,28 @@ describe('Translate service', function () {
   it('instant works ', () => {
     service.start({});
     runResolve();
-    const r = service.instant('test', { key: 'value' });
+    const r = service.instant('test', { key: 'value' }, 'Default');
     expect(r).toEqual('translated instant');
-    expect(instantMock).toHaveBeenCalledWith('test', { key: 'value' });
+    expect(instantMock).toHaveBeenCalledWith(
+      'test',
+      { key: 'value' },
+      undefined,
+      undefined,
+      'Default'
+    );
   });
 
   it('instantSage works ', () => {
     service.start({});
     runResolve();
-    const r = service.instantSafe('test', { key: 'value' });
+    const r = service.instantSafe('test', { key: 'value' }, 'Default');
     expect(r).toEqual('translated instant');
-    expect(instantMock).toHaveBeenCalledWith('test', { key: 'value' }, true);
+    expect(instantMock).toHaveBeenCalledWith(
+      'test',
+      { key: 'value' },
+      true,
+      undefined,
+      'Default'
+    );
   });
 });

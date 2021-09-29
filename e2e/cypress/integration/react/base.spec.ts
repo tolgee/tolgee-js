@@ -11,4 +11,12 @@ context('Base test', () => {
     cy.get('select').select('de');
     cy.contains('Hallo Welt!');
   });
+
+  it('shows default value when provided ', () => {
+    cy.contains('This is default').should('be.visible');
+  });
+
+  it('shows key as default when default not provided ', () => {
+    cy.contains('unknown key').should('be.visible');
+  });
 });

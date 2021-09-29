@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ContentChild,
+  ElementRef,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
@@ -9,8 +16,9 @@ import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
 })
 export class TComponent implements OnInit, OnDestroy {
   value: string;
-  @Input() params: Record<string, any>;
+  @Input() params?: Record<string, any>;
   @Input() key: string;
+  @Input() default?: string;
   onLangChangeSubscription: Subscription;
   onTranslationChangeSubscription: Subscription;
 
@@ -19,30 +27,34 @@ export class TComponent implements OnInit, OnDestroy {
     private translateService: TranslateService
   ) {}
 
-  protected get resultProvider(): (input, params) => Observable<string> {
-    return (input, params) => this.translateService.getSafe(input, params);
+  protected get resultProvider(): (
+    key,
+    params,
+    defaultValue: string
+  ) => Observable<string> {
+    return (key, params, defaultValue) =>
+      this.translateService.getSafe(key, params, defaultValue);
   }
 
   ngOnInit(): void {
-    this.ref.nativeElement.setAttribute(
-      TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
-      this.key
-    );
+    const element = this.ref.nativeElement as HTMLElement;
+
+    element.setAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE, this.key);
 
     //update value when language changed
     this.onLangChangeSubscription =
       this.translateService.onLangChange.subscribe(() => {
-        this.translate(this.key, this.params);
+        this.translate(this.key, this.params, this.default);
       });
 
     //update value when translation changed
     this.onTranslationChangeSubscription =
       this.translateService.onTranslationChange.subscribe((data) => {
         if (data.key == this.key) {
-          this.translate(this.key, this.params);
+          this.translate(this.key, this.params, this.default);
         }
       });
-    this.translate(this.key, this.params);
+    this.translate(this.key, this.params, this.default);
   }
 
   ngOnDestroy(): void {
@@ -50,8 +62,8 @@ export class TComponent implements OnInit, OnDestroy {
     this.onTranslationChangeSubscription?.unsubscribe();
   }
 
-  private translate(input, params) {
-    this.resultProvider(input, params).subscribe((r) => {
+  private translate(key, params, defaultValue: string) {
+    this.resultProvider(key, params, defaultValue).subscribe((r) => {
       this.ref.nativeElement.innerHTML = r;
     });
   }

@@ -26,17 +26,78 @@ export class TextService {
     return `(\\\\?)(${escapedPrefix}(.*?)${escapedSuffix})`;
   }
 
-  private static parseUnwrapped(unWrappedString: string): KeyAndParams {
-    const strings = unWrappedString.match(/(?:[^\\,:\n]|\\.)+/g);
-    const result = {
-      key: TextHelper.removeEscapes(strings.shift()),
-      params: {},
-    };
+  private static parseUnwrapped(unwrappedString: string): KeyAndParams {
+    let escaped = false;
+    let actual = '';
+    let paramName = '';
+    let readingState: 'KEY' | 'DEFAULT_VALUE' | 'PARAM_NAME' | 'PARAM_VALUE' =
+      'KEY';
 
-    while (strings.length) {
-      const [name, value] = strings.splice(0, 2);
-      result.params[name] = value;
+    const result = {
+      key: '',
+      params: {},
+      defaultValue: undefined as string | undefined,
+    } as KeyAndParams;
+
+    for (const char of unwrappedString) {
+      if (char === '\\' && !escaped) {
+        escaped = true;
+        continue;
+      }
+      if (escaped) {
+        escaped = false;
+        actual += char;
+        continue;
+      }
+      if (readingState === 'KEY' && char === ',') {
+        readingState = 'DEFAULT_VALUE';
+        result.key = actual;
+        actual = '';
+        continue;
+      }
+
+      if (readingState === 'KEY' && char === ':') {
+        readingState = 'PARAM_NAME';
+        result.key = actual;
+        actual = '';
+        continue;
+      }
+
+      if (readingState === 'DEFAULT_VALUE' && char === ':') {
+        readingState = 'PARAM_NAME';
+        result.defaultValue = actual;
+        actual = '';
+        continue;
+      }
+
+      if (readingState === 'PARAM_NAME' && char === ':') {
+        readingState = 'PARAM_VALUE';
+        paramName = actual;
+        actual = '';
+        continue;
+      }
+
+      if (readingState === 'PARAM_VALUE' && char === ',') {
+        readingState = 'PARAM_NAME';
+        result.params[paramName] = actual;
+        actual = '';
+        continue;
+      }
+      actual += char;
     }
+
+    if (readingState === 'KEY') {
+      result.key = actual;
+    }
+
+    if (readingState === 'DEFAULT_VALUE') {
+      result.defaultValue = actual;
+    }
+
+    if (readingState === 'PARAM_VALUE') {
+      result.params[paramName] = actual;
+    }
+
     return result;
   }
 
@@ -44,10 +105,16 @@ export class TextService {
     key: string,
     params: TranslationParams,
     lang = this.properties.currentLanguage,
-    orEmpty?
+    orEmpty?: boolean,
+    defaultValue?: string
   ) {
     return this.format(
-      await this.translationService.getTranslation(key, lang, orEmpty),
+      await this.translationService.getTranslation(
+        key,
+        lang,
+        orEmpty,
+        defaultValue
+      ),
       params
     );
   }
@@ -56,10 +123,16 @@ export class TextService {
     key: string,
     params: TranslationParams,
     lang = this.properties.currentLanguage,
-    orEmpty?
+    orEmpty?,
+    defaultValue?: string
   ) {
     return this.format(
-      this.translationService.getFromCacheOrFallback(key, lang, orEmpty),
+      this.translationService.getFromCacheOrFallback(
+        key,
+        lang,
+        orEmpty,
+        defaultValue
+      ),
       params
     );
   }
@@ -75,7 +148,8 @@ export class TextService {
     let start = 0;
     let result = '';
     while ((match = matchRegexp.exec(text)) !== null) {
-      const [fullMatch, pre, wrapped, unwrapped] = match as [
+      let pre = match[1] as string;
+      const [fullMatch, _, wrapped, unwrapped] = match as [
         string,
         string,
         string,
@@ -84,28 +158,37 @@ export class TextService {
       const { index, input } = match;
       result += input.substr(start, index - start);
       start = index + fullMatch.length;
-      if (pre === '\\' && !TextHelper.isCharEscaped(index, text)) {
-        result += wrapped;
-        continue;
+      if (pre === '\\') {
+        if (!TextHelper.isCharEscaped(index, text)) {
+          result += wrapped;
+          continue;
+        }
+        pre = '';
       }
       const translated = await this.getTranslatedWithMetadata(unwrapped);
-      keysAndParams.push({ key: translated.key, params: translated.params });
+      keysAndParams.push({
+        key: translated.key,
+        params: translated.params,
+        defaultValue: translated.defaultValue,
+      });
       matched = true;
       result += pre + translated.translated;
     }
 
     result += text.substring(start);
 
-    const withoutEscapes = TextHelper.removeEscapes(result);
-
     if (matched) {
-      return { text: withoutEscapes, keys: keysAndParams };
+      return { text: result, keys: keysAndParams };
     }
 
     return undefined;
   }
 
-  public wrap(key: string, params: TranslationParams = {}): string {
+  public wrap(
+    key: string,
+    params: TranslationParams = {},
+    defaultValue: string | undefined = undefined
+  ): string {
     let paramString = Object.entries(params)
       .map(
         ([name, value]) =>
@@ -113,17 +196,27 @@ export class TextService {
       )
       .join(',');
     paramString = paramString.length ? `:${paramString}` : '';
+
+    const defaultString =
+      defaultValue !== undefined ? `,${this.escapeParam(defaultValue)}` : '';
+
     return `${this.properties.config.inputPrefix}${this.escapeParam(
       key
-    )}${paramString}${this.properties.config.inputSuffix}`;
+    )}${defaultString}${paramString}${this.properties.config.inputSuffix}`;
   }
 
   private async getTranslatedWithMetadata(
     text: string
   ): Promise<TranslatedWithMetadata> {
-    const { key, params } = TextService.parseUnwrapped(text);
-    const translated = await this.translate(key, params, undefined, false);
-    return { translated, key: key, params };
+    const { key, params, defaultValue } = TextService.parseUnwrapped(text);
+    const translated = await this.translate(
+      key,
+      params,
+      undefined,
+      false,
+      defaultValue
+    );
+    return { translated, key, params, defaultValue };
   }
 
   private readonly format = (

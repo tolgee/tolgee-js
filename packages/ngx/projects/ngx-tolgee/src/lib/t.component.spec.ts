@@ -24,9 +24,12 @@ describe('T component', function () {
   let translationChangeSubscribeMock = jest.fn(() => ({
     unsubscribe: translationChangeUnsubscribeMock,
   }));
-
-  beforeEach(async () => {
-    jest.clearAllMocks();
+  let getSafeMock = jest.fn(() => ({
+    subscribe: jest.fn((resolve) => {
+      resolve('translated');
+    }),
+  }));
+  const getFixture = async (html: string) => {
     translateSer = createMock(TranslateService);
     (translateSer as any).onLangChange = {
       subscribe: langChangeSubscribeMock,
@@ -34,13 +37,9 @@ describe('T component', function () {
     (translateSer as any).onTranslationChange = {
       subscribe: translationChangeSubscribeMock,
     };
-    (translateSer as any).getSafe = jest.fn(() => ({
-      subscribe: jest.fn((resolve) => {
-        resolve('translated');
-      }),
-    }));
+    (translateSer as any).getSafe = getSafeMock;
 
-    fixture = await render('<div t [key]="key" [params]="params" ></div>', {
+    fixture = await render(html, {
       declarations: [TComponent],
       componentProperties: {
         key: 'hello',
@@ -56,27 +55,45 @@ describe('T component', function () {
     await waitFor(() => {
       element = screen.getByText('translated');
     });
+    return fixture;
+  };
+
+  describe('without default', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      fixture = await getFixture('<div t [key]="key" [params]="params"></div>');
+    });
+
+    it('adds data attribute', async () => {
+      expect(element.getAttribute('data-tolgee-key-only')).toEqual('hello');
+    });
+
+    it('subscribes for translation change', async () => {
+      expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('subscribes for lang change', async () => {
+      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('unsubscribes from translation change', async () => {
+      fixture.fixture.destroy();
+      expect(translationChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('unsubscribes from lang change', async () => {
+      fixture.fixture.destroy();
+      expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('adds data attribute', async () => {
-    expect(element.getAttribute('data-tolgee-key-only')).toEqual('hello');
-  });
-
-  it('subscribes for translation change', async () => {
-    expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('subscribes for lang change', async () => {
-    expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('unsubscribes from translation change', async () => {
-    fixture.fixture.destroy();
-    expect(translationChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('unsubscribes from lang change', async () => {
-    fixture.fixture.destroy();
-    expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+  describe('with default', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+    });
+    it('passes default value correctly', async () => {
+      await getFixture('<div t [key]="key" default="Yaaaaai!"></div>');
+      expect(getSafeMock).toHaveBeenCalledWith('hello', undefined, 'Yaaaaai!');
+    });
   });
 });

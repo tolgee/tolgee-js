@@ -69,6 +69,18 @@ export const Page: FunctionComponent = () => {
         <h3>ELEMENT_WRAP strategy</h3>
         <T strategy="ELEMENT_WRAP">sampleApp.hello_world!</T>
       </div>
+
+      <div>
+        <h3>Default value</h3>
+        <T strategy="ELEMENT_WRAP" keyName="unknown key">
+          This is default!
+        </T>
+      </div>
+
+      <div>
+        <h3>Key is default value</h3>
+        <T strategy="ELEMENT_WRAP">unknown key</T>
+      </div>
     </div>
   );
 };
