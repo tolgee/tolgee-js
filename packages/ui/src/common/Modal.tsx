@@ -8,7 +8,7 @@ interface DialogProps {
 }
 
 const backdropStyle: React.CSSProperties = {
-  position: 'absolute',
+  position: 'fixed',
   width: '100vw',
   height: '100vh',
   top: 0,
