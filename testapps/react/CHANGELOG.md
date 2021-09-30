@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.6.1 (2021-09-30)
+
+
+### Bug Fixes
+
+* **js sdk:** Dialog position fixed TG-320 ([#452](https://github.com/tolgee/tolgee-js/issues/452)) ([c065951](https://github.com/tolgee/tolgee-js/commit/c065951740fdd2e01e7943256dc04c8eff12b263))
+
+
+
+
+
 # 1.6.0 (2021-09-30)
 
 
