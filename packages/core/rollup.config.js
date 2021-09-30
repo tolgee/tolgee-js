@@ -22,6 +22,13 @@ export default {
       format: 'umd',
       sourcemap: true,
     },
+    {
+      name: '@tolgee/core',
+      file: 'dist/tolgee.umd.min.js',
+      format: 'umd',
+      sourcemap: true,
+      plugins: [terser()],
+    },
   ],
   plugins: [
     typescript({

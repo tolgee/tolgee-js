@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
+import replace from 'rollup-plugin-replace';
 import react from 'react';
 import reactDom from 'react-dom';
 
@@ -28,6 +29,16 @@ export default {
         '@tolgee/core': '@tolgee/core',
       },
     },
+    {
+      name: '@tolgee/ui',
+      file: 'dist/tolgee-ui.umd.min.js',
+      format: 'umd',
+      sourcemap: true,
+      globals: {
+        '@tolgee/core': '@tolgee/core',
+      },
+      plugins: [terser()],
+    },
   ],
   external: ['@tolgee/core'],
   plugins: [
@@ -41,6 +52,9 @@ export default {
         react: Object.keys(react),
         'react-dom': Object.keys(reactDom),
       },
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
   ],
 };
