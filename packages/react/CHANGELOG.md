@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.5.1 (2021-09-30)
+
+
+### Bug Fixes
+
+* Fix umd packages TG-340 ([#450](https://github.com/tolgee/tolgee-react/issues/450)) ([dc5f59a](https://github.com/tolgee/tolgee-react/commit/dc5f59a2120a4c118b686330ddeb3107448b82da))
+
+
+
+
+
 # 1.5.0 (2021-09-30)
 
 
