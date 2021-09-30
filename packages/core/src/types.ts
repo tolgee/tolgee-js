@@ -26,7 +26,11 @@ export interface TextInputElementData {
   placeholderInputs: string[];
 }
 
-export type Translations = { [key: string]: string | Translations };
+export type TreeTranslationsData = {
+  [key: string]: string | TreeTranslationsData;
+};
+
+export type Translations = Record<string, string>;
 export type TranslationParams = { [key: string]: string | number | bigint };
 
 export type TranslateProps = {

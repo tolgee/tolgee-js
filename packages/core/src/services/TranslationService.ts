@@ -1,9 +1,8 @@
-import { Translations } from '../types';
+import { Translations, TreeTranslationsData } from '../types';
 import { TranslationData } from '../DTOs/TranslationData';
 import { Properties } from '../Properties';
 import { CoreService } from './CoreService';
 import { ApiHttpService } from './ApiHttpService';
-import { TextHelper } from '../helpers/TextHelper';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
 import { EventEmitterImpl } from './EventEmitter';
@@ -40,8 +39,7 @@ export class TranslationService {
       return '';
     }
 
-    const path = TextHelper.splitOnNonEscapedDelimiter(key, '.');
-    return path[path.length - 1];
+    return key;
   }
 
   initStatic() {
@@ -53,7 +51,7 @@ export class TranslationService {
         ([language, data]) => {
           //if not provider or promise then it is raw data
           if (typeof data !== 'function') {
-            this.translationsCache.set(language, data);
+            this.setLanguageData(language, data);
           }
         }
       );
@@ -119,24 +117,9 @@ export class TranslationService {
     );
 
     Object.keys(translationData.translations).forEach((lang) => {
-      if (this.translationsCache.get(lang)) {
-        // if the language is not loaded, then ignore the change
-        const path = TextHelper.splitOnNonEscapedDelimiter(
-          translationData.key,
-          '.'
-        );
-        let root: string | Translations = this.translationsCache.get(lang);
-        for (let i = 0; i < path.length; i++) {
-          const item = path[i];
-          if (root[item] === undefined) {
-            root[item] = {};
-          }
-          if (i === path.length - 1) {
-            root[item] = translationData.translations[lang];
-            return;
-          }
-          root = root[item];
-        }
+      const data = this.translationsCache.get(lang);
+      if (data) {
+        data[translationData.key] = translationData.translations[lang];
       }
     });
     return result;
@@ -196,11 +179,8 @@ export class TranslationService {
       );
 
       const firstItem = data._embedded?.keys?.[0];
-
-      const fetchedData = firstItem?.translations;
-
-      if (fetchedData) {
-        Object.entries(data._embedded?.keys?.[0]?.translations).forEach(
+      if (firstItem?.translations) {
+        Object.entries(firstItem.translations).forEach(
           ([language, translation]) =>
             (translationData[language] = (translation as any).text)
         );
@@ -213,7 +193,8 @@ export class TranslationService {
         e.response.status === 404 &&
         e.code === 'language_not_found'
       ) {
-        //only possible reason for this error is, that languages definition is changed, but the old value is stored in preferred languages
+        // only possible reason for this error is, that languages definition
+        // is changed, but the old value is stored in preferred languages
         this.properties.preferredLanguages =
           await this.coreService.getLanguages();
         // eslint-disable-next-line no-console
@@ -237,10 +218,10 @@ export class TranslationService {
 
     if (typeof langStaticData === 'function') {
       const data = await langStaticData();
-      this.translationsCache.set(language, data);
+      this.setLanguageData(language, data);
       return;
     } else if (langStaticData !== undefined) {
-      this.translationsCache.set(language, langStaticData);
+      this.setLanguageData(language, langStaticData);
       return;
     }
 
@@ -255,12 +236,12 @@ export class TranslationService {
         console.error(
           'Server responded with error status while loading localization data.'
         );
-        this.translationsCache.set(language, {});
+        this.setLanguageData(language, {});
         return;
       }
       try {
         const data = await result.json();
-        this.translationsCache.set(language, data);
+        this.setLanguageData(language, data);
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(`Error parsing json retrieved from ${url}.`);
@@ -279,7 +260,7 @@ export class TranslationService {
       const data = await this.apiHttpService.fetchJson(
         `v2/projects/translations/${language}`
       );
-      this.translationsCache.set(language, data[language] || {});
+      this.setLanguageData(language, data[language] || {});
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while fetching localization data from API.', e);
@@ -292,29 +273,36 @@ export class TranslationService {
     this.translationsCache.set(language, {});
   }
 
+  private setLanguageData(language: string, data: TreeTranslationsData) {
+    // recursively walk the tree and make it flat, when tree data are provided
+    const makeFlat = (data: TreeTranslationsData): Record<string, string> => {
+      const result: Record<string, string> = {};
+      Object.entries(data).forEach(([key, value]) => {
+        if (typeof value === 'object') {
+          Object.entries(makeFlat(value)).forEach(([flatKey, flatValue]) => {
+            result[key + '.' + flatKey] = flatValue;
+          });
+          return;
+        }
+        result[key] = value;
+      });
+      return result;
+    };
+
+    this.translationsCache.set(language, makeFlat(data));
+  }
+
   private getFromCache(
     key: string,
     lang: string = this.properties.currentLanguage
   ): string {
-    const path = TextHelper.splitOnNonEscapedDelimiter(key, '.');
-    let root: string | Translations = this.translationsCache.get(lang);
+    const root: string | Translations = this.translationsCache.get(lang);
 
     //if lang is not downloaded or does not exist at all
     if (root === undefined) {
       return undefined;
     }
 
-    //if data contains key directly, just return it
-    if (typeof root[key] === 'string') {
-      return root[key] as string;
-    }
-
-    for (const item of path) {
-      if (root[item] === undefined) {
-        return undefined;
-      }
-      root = root[item];
-    }
-    return root as string;
+    return root[key] as string;
   }
 }
