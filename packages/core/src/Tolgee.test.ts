@@ -154,7 +154,7 @@ describe('Tolgee', () => {
         propertiesMock.mock.instances[0].config.mode = 'development';
         const translated = await tolgee.translate(dummyKey, dummyParams);
 
-        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams);
+        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, undefined);
         expect(mockedTranslate).not.toBeCalled();
         expect(translated).toEqual(wrappedDummyText);
       });
@@ -165,7 +165,13 @@ describe('Tolgee', () => {
 
         expect(translated).toEqual(translatedDummyText);
         expect(mockedWrap).not.toBeCalled();
-        expect(mockedTranslate).toBeCalledWith(dummyKey, dummyParams);
+        expect(mockedTranslate).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          undefined,
+          undefined
+        );
       });
 
       test('will not wrap when development is on, but noWrap is true', async () => {
@@ -181,6 +187,41 @@ describe('Tolgee', () => {
         await tolgee.translate(dummyKey, dummyParams);
         expect(mockedLoadTranslations).toBeCalled();
       });
+
+      test('passes default value to wrap fn', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        await tolgee.translate(dummyKey, dummyParams, false, 'Default');
+        expect(mockedWrap).toBeCalledWith('dummyText', {}, 'Default');
+      });
+
+      test('passes default value to translate fn', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        await tolgee.translate(dummyKey, dummyParams, true, 'Default');
+        expect(mockedTranslate).toBeCalledWith(
+          'dummyText',
+          {},
+          undefined,
+          undefined,
+          'Default'
+        );
+      });
+
+      test('props object works correctly', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        await tolgee.translate({
+          key: dummyKey,
+          params: dummyParams,
+          noWrap: true,
+          defaultValue: 'Default',
+        });
+        expect(mockedTranslate).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          undefined,
+          'Default'
+        );
+      });
     });
 
     describe('sync instant', () => {
@@ -189,7 +230,7 @@ describe('Tolgee', () => {
         const dummyParams = {};
         const translated = tolgee.instant(dummyKey, dummyParams);
 
-        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams);
+        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, undefined);
         expect(mockedInstant).not.toBeCalled();
         expect(translated).toEqual(wrappedDummyText);
       });
@@ -204,6 +245,7 @@ describe('Tolgee', () => {
           dummyKey,
           dummyParams,
           undefined,
+          undefined,
           undefined
         );
       });
@@ -214,7 +256,8 @@ describe('Tolgee', () => {
           dummyKey,
           dummyParams,
           undefined,
-          true
+          true,
+          undefined
         );
       });
 
@@ -232,9 +275,50 @@ describe('Tolgee', () => {
           dummyKey,
           dummyParams,
           undefined,
-          true
+          true,
+          undefined
         );
       });
+
+      test('passes default value to wrap fn', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        const dummyParams = {};
+        tolgee.instant(dummyKey, dummyParams, false, false, 'Default');
+
+        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, 'Default');
+      });
+
+      test('props object works correctly', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        await tolgee.instant({
+          key: dummyKey,
+          params: dummyParams,
+          orEmpty: false,
+          noWrap: true,
+          defaultValue: 'Default',
+        });
+        expect(mockedInstant).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          false,
+          'Default'
+        );
+      });
+    });
+
+    test('passes default value to instant fn', async () => {
+      propertiesMock.mock.instances[0].config.mode = 'development';
+      const dummyParams = {};
+      tolgee.instant(dummyKey, dummyParams, true, false, 'Default');
+
+      expect(mockedInstant).toBeCalledWith(
+        dummyKey,
+        dummyParams,
+        undefined,
+        false,
+        'Default'
+      );
     });
   });
 

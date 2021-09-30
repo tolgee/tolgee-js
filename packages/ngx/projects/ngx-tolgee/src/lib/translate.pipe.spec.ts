@@ -1,7 +1,6 @@
 jest.dontMock('./translate.pipe');
 import {
   getMock,
-  getSafeMock,
   langChangeSubscribeMock,
   langChangeUnsubscribeMock,
   translateSer,
@@ -19,10 +18,8 @@ describe('Translate pipe', function () {
   let fixture: RenderResult<any>;
   let element;
 
-  beforeEach(async () => {
-    jest.clearAllMocks();
-
-    fixture = await render("<div>{{ 'test' | translate:params }}</div>", {
+  const getFixture = async (template: string) => {
+    const fixture = await render(template, {
       declarations: [TranslatePipe],
       componentProperties: {
         params: { key: 'value' },
@@ -37,23 +34,49 @@ describe('Translate pipe', function () {
     await waitFor(() => {
       element = screen.getByText('translated');
     });
+    return fixture;
+  };
+
+  describe('without default', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      fixture = await getFixture("<div>{{ 'test' | translate:params }}</div>");
+    });
+
+    test('translates', () => {
+      screen.getByText('translated');
+    });
+
+    it('subscribes for lang change', async () => {
+      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('unsubscribes from lang change', async () => {
+      fixture.fixture.destroy();
+      expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('calls the get function with proper params', async () => {
+      expect(getMock).toHaveBeenCalledTimes(1);
+      expect(getMock).toHaveBeenCalledWith('test', { key: 'value' }, undefined);
+    });
   });
 
-  test('translates', () => {
-    screen.getByText('translated');
-  });
+  describe('with default', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+      fixture = await getFixture(
+        "<div>{{ 'test' | translate:'What a beautiful default':params }}</div>"
+      );
+    });
 
-  it('subscribes for lang change', async () => {
-    expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('unsubscribes from lang change', async () => {
-    fixture.fixture.destroy();
-    expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls the get function with proper params', async () => {
-    expect(getMock).toHaveBeenCalledTimes(1);
-    expect(getMock).toHaveBeenCalledWith('test', { key: 'value' });
+    it('calls the get function with proper params', async () => {
+      expect(getMock).toHaveBeenCalledTimes(1);
+      expect(getMock).toHaveBeenCalledWith(
+        'test',
+        { key: 'value' },
+        'What a beautiful default'
+      );
+    });
   });
 });

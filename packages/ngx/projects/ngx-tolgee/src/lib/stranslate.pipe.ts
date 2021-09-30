@@ -12,7 +12,12 @@ export class STranslatePipe extends TranslatePipe {
     super(translateService);
   }
 
-  protected get resultProvider(): (input, params) => Observable<string> {
-    return (input, params) => this.translateService.getSafe(input, params);
+  protected get resultProvider(): (
+    input,
+    params,
+    defaultValue
+  ) => Observable<string> {
+    return (input, params, defaultValue) =>
+      this.translateService.getSafe(input, params, defaultValue);
   }
 }

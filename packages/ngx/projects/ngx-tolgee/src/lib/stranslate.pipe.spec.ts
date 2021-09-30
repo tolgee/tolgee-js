@@ -56,6 +56,10 @@ describe('Safe Translate pipe', function () {
 
   it('calls the getSafe function with proper params', async () => {
     expect(getSafeMock).toHaveBeenCalledTimes(1);
-    expect(getSafeMock).toHaveBeenCalledWith('test', { key: 'value' });
+    expect(getSafeMock).toHaveBeenCalledWith(
+      'test',
+      { key: 'value' },
+      undefined
+    );
   });
 });

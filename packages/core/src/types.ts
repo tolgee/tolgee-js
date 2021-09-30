@@ -29,11 +29,31 @@ export interface TextInputElementData {
 export type Translations = { [key: string]: string | Translations };
 export type TranslationParams = { [key: string]: string | number | bigint };
 
-export type KeyAndParams = { key: string; params: TranslationParams };
+export type TranslateProps = {
+  key: string;
+  defaultValue?: string;
+  params?: TranslationParams;
+  noWrap?: boolean;
+};
+
+export type InstantProps = {
+  key: string;
+  defaultValue?: string;
+  params?: TranslationParams;
+  noWrap?: boolean;
+  orEmpty?: boolean;
+};
+
+export type KeyAndParams = {
+  key: string;
+  params: TranslationParams;
+  defaultValue?: string;
+};
 export type TranslatedWithMetadata = {
   translated: string;
   key: string;
   params: TranslationParams;
+  defaultValue: string | undefined;
 };
 
 export type NodeWithMeta = Node & {

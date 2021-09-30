@@ -12,6 +12,7 @@ type TProps = {
    */
   noWrap?: boolean;
   strategy?: 'ELEMENT_WRAP' | 'TEXT_WRAP' | 'NO_WRAP';
+  keyName?: string;
 };
 
 export const T: FunctionComponent<TProps> = (props: TProps) => {
@@ -20,6 +21,9 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
 
   const context = useTolgeeContext();
 
+  const key = props.keyName || props.children;
+  const defaultValue = props.keyName ? props.children : undefined;
+
   const translateFnNoWrap =
     typeof window !== 'undefined'
       ? strategy === 'ELEMENT_WRAP' || strategy === 'NO_WRAP'
@@ -27,16 +31,22 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
 
   const [translated, setTranslated] = useState(
     context.tolgee.instant(
-      props.children,
+      key,
       props.parameters,
       translateFnNoWrap,
-      true
+      true,
+      defaultValue
     )
   );
 
   const translate = () =>
     context.tolgee
-      .translate(props.children, props.parameters, translateFnNoWrap)
+      .translate({
+        key,
+        params: props.parameters,
+        noWrap: translateFnNoWrap,
+        defaultValue,
+      })
       .then((t) => {
         setTranslated(t);
       });
@@ -57,7 +67,7 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
     if (strategy === 'ELEMENT_WRAP' || strategy === 'NO_WRAP') {
       const translationChangeSubscription =
         context.tolgee.onTranslationChange.subscribe((data) => {
-          if (data.key === props.children) {
+          if (data.key === key) {
             translate();
           }
         });
@@ -71,7 +81,7 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
   if (strategy === 'ELEMENT_WRAP') {
     return (
       <span
-        {...{ [TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE]: props.children }}
+        {...{ [TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE]: key }}
         dangerouslySetInnerHTML={{ __html: translated }}
       />
     );

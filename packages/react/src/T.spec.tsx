@@ -74,7 +74,12 @@ describe('T component', function () {
     });
 
     test('translate fn is called with proper params', async () => {
-      expect(translateMock).toBeCalledWith('hello', undefined, false);
+      expect(translateMock).toBeCalledWith({
+        defaultValue: undefined,
+        key: 'hello',
+        noWrap: false,
+        params: undefined,
+      });
     });
 
     test('it is not wrapped by span with data attribute', async () => {
@@ -133,7 +138,12 @@ describe('T component', function () {
     });
 
     test('translate fn is called with proper params', async () => {
-      expect(translateMock).toBeCalledWith('hello', undefined, true);
+      expect(translateMock).toBeCalledWith({
+        defaultValue: undefined,
+        key: 'hello',
+        noWrap: true,
+        params: undefined,
+      });
     });
 
     test('it is not wrapped by span with data attribute', async () => {
@@ -152,7 +162,12 @@ describe('T component', function () {
     });
 
     test('translate fn is called with proper params', async () => {
-      expect(translateMock).toBeCalledWith('hello', undefined, true);
+      expect(translateMock).toBeCalledWith({
+        defaultValue: undefined,
+        key: 'hello',
+        noWrap: true,
+        params: undefined,
+      });
     });
 
     test('it is wrapped by span with data attribute', async () => {
@@ -171,15 +186,54 @@ describe('T component', function () {
     });
 
     test('instant fn is called with proper params', async () => {
-      expect(instantMock).toBeCalledWith('hello', undefined, true, true);
+      expect(instantMock).toBeCalledWith(
+        'hello',
+        undefined,
+        true,
+        true,
+        undefined
+      );
     });
 
     test('translate fn is called with proper params', async () => {
-      expect(translateMock).toBeCalledWith('hello', undefined, true);
+      expect(translateMock).toBeCalledWith({
+        defaultValue: undefined,
+        key: 'hello',
+        noWrap: true,
+        params: undefined,
+      });
     });
 
     test('it is not wrapped by span with data attribute', async () => {
       expect(translated.getAttribute('data-tolgee-key-only')).toEqual(null);
+    });
+  });
+
+  describe('works fine with keyName prop and default value as children', () => {
+    beforeEach(async () => {
+      render(<T keyName="what a key">hello</T>);
+      await waitFor(() => {
+        screen.getByText('translated');
+      });
+    });
+
+    test('instant fn is called with proper params', async () => {
+      expect(instantMock).toBeCalledWith(
+        'what a key',
+        undefined,
+        true,
+        true,
+        'hello'
+      );
+    });
+
+    test('translate fn is called with proper params', async () => {
+      expect(translateMock).toBeCalledWith({
+        defaultValue: 'hello',
+        key: 'what a key',
+        noWrap: true,
+        params: undefined,
+      });
     });
   });
 });

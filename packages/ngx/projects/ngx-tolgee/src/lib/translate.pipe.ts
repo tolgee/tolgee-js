@@ -13,17 +13,42 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
   constructor(protected translateService: TranslateService) {}
 
-  protected get resultProvider(): (input, params) => Observable<string> {
-    return (input, params) => this.translateService.get(input, params);
+  protected get resultProvider(): (
+    key,
+    params,
+    defaultValue: string
+  ) => Observable<string> {
+    return (input, params, defaultValue) =>
+      this.translateService.get(input, params, defaultValue);
   }
 
   ngOnDestroy(): void {
     this.langChangeSubscription.unsubscribe();
   }
 
-  transform(input: any, params = {}): any {
+  transform(input: any, params?: Record<string, any>): string;
+  transform(
+    input: any,
+    defaultValue?: string,
+    params?: Record<string, any>
+  ): string;
+
+  transform(
+    input: any,
+    paramsOrDefaultValue?: Record<string, any> | string,
+    params?: Record<string, any>
+  ): string {
     if (!input || input.length === 0) {
       return input;
+    }
+
+    const defaultValue =
+      typeof paramsOrDefaultValue !== 'object'
+        ? paramsOrDefaultValue
+        : undefined;
+
+    if (typeof paramsOrDefaultValue === 'object') {
+      params = paramsOrDefaultValue;
     }
 
     const newHash = this.getHash(
@@ -39,11 +64,11 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.langChangeSubscription?.unsubscribe();
     this.langChangeSubscription = this.translateService.onLangChange.subscribe(
       () => {
-        this.onLangChange(input, params);
+        this.onLangChange(input, params, defaultValue);
       }
     );
 
-    this.onLangChange(input, params);
+    this.onLangChange(input, params, defaultValue);
 
     this.lastHash = newHash;
 
@@ -54,8 +79,8 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     return JSON.stringify({ input, params, language });
   }
 
-  private onLangChange(input, params) {
-    this.resultProvider(input, params).subscribe((r) => {
+  private onLangChange(input, params, defaultValue) {
+    this.resultProvider(input, params, defaultValue).subscribe((r) => {
       this.value = r;
     });
   }
