@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.6.0 (2021-09-30)
+
+
+### Features
+
+* **js sdk:** Remove key structuring TG-333 ([#451](https://github.com/tolgee/tolgee-react/issues/451)) ([710b148](https://github.com/tolgee/tolgee-react/commit/710b148948913afbbab693b14a86a3995e5645b8))
+
+
+
+
+
 ## 1.5.1 (2021-09-30)
 
 

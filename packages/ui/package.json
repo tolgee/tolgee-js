@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ui",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
   "module": "./dist/tolgee-ui.umd.js",
@@ -23,7 +23,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "^1.5.1",
+    "@tolgee/core": "^1.6.0",
     "@types/react": "^17.0.1"
   },
   "devDependencies": {
