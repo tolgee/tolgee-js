@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.5.0 (2021-09-30)
+
+
+### Features
+
+* Enable default value providing TG-335 ([#445](https://github.com/tolgee/tolgee-js/issues/445)) ([cc0d838](https://github.com/tolgee/tolgee-js/commit/cc0d83842ca806775eceffd875514c5408f6ad46))
+
+
+
+
+
 # 1.4.0 (2021-09-20)
 
 
