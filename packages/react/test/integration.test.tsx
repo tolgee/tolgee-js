@@ -34,7 +34,7 @@ describe('integration', () => {
     });
 
     test('Will not translate string, what is not found', async () => {
-      await waitFor(() => screen.getByText('not_found'));
+      await waitFor(() => screen.getByText('sampleApp.not_found'));
     });
   });
 });

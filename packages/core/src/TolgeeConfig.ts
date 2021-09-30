@@ -1,4 +1,4 @@
-import { Mode, Translations } from './types';
+import { Mode, TreeTranslationsData } from './types';
 import { NodeHelper } from './helpers/NodeHelper';
 import { ModifierKey } from './Constants/ModifierKey';
 
@@ -36,7 +36,7 @@ export class TolgeeConfig {
   highlightColor?: string = 'rgb(224 240 255)';
   /** localization data to use in production mode */
   staticData?: {
-    [key: string]: Translations | (() => Promise<Translations>);
+    [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
   };
 
   /**
