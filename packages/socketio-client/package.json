@@ -24,7 +24,7 @@
   "author": "Jan Cizmar",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.2",
     "@types/socket.io-client": "^1.4.36",
     "jest": "^26.5.2",
     "socket.io-client": "^4.2.0",
