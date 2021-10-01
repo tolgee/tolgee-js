@@ -26,7 +26,7 @@
     "@types/react": "^17.0.1"
   },
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "13.0.4",
+    "@rollup/plugin-node-resolve": "13.0.5",
     "@rollup/plugin-typescript": "8.2.5",
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
