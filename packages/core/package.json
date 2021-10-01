@@ -41,7 +41,7 @@
     "@types/intl-messageformat": "^3.0.0",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.14.22",
-    "concurrently": "6.2.1",
+    "concurrently": "6.2.2",
     "intl-messageformat": "^9.9.1",
     "jest": "^26.5.2",
     "jest-fetch-mock": "^3.0.3",
@@ -49,7 +49,7 @@
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^26.4.1",
     "tslib": "^2.3.1",
-    "typescript": "4.3.5"
+    "typescript": "4.4.3"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "publishConfig": {
