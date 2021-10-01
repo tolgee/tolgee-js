@@ -39,7 +39,7 @@
     "@testing-library/dom": "^8.7.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@types/intl-messageformat": "^3.0.0",
-    "@types/jest": "^26.0.14",
+    "@types/jest": "^27.0.2",
     "@types/node": "^14.14.22",
     "concurrently": "6.2.2",
     "intl-messageformat": "^9.9.1",
