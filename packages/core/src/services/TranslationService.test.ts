@@ -48,11 +48,15 @@ global.fetch = jest.fn(async (url: string) => {
 describe('TranslationService', () => {
   let translationService: TranslationService;
   const languageLoadedEmitMock = jest.fn();
+  const translationChangedEmitMock = jest.fn();
 
   beforeEach(async () => {
     translationService = new DependencyStore().translationService;
     (getMockedInstance(EventService) as any).LANGUAGE_LOADED = {
       emit: languageLoadedEmitMock,
+    };
+    (getMockedInstance(EventService) as any).TRANSLATION_CHANGED = {
+      emit: translationChangedEmitMock,
     };
     getMockedInstance(ApiHttpService).fetchJson = jest.fn(
       async () => mockedTranslations
@@ -196,6 +200,11 @@ describe('TranslationService', () => {
 
     test('will check the scopes', async () => {
       expect(getMockedInstance(CoreService).checkScope).toBeCalledTimes(1);
+    });
+
+    test('emits translation changed event', async () => {
+      expect(translationChangedEmitMock).toBeCalledTimes(1);
+      expect(translationChangedEmitMock).toBeCalledWith(dummyTranslationData);
     });
 
     test('will update the data', async () => {
