@@ -21,6 +21,12 @@ jobs:
       - name: Build (build & test)
         run: ./gradlew build
 
+      - run: cat packages/ui/node_modules/typescript/package.json | grep version
+        if: failure()
+
+      - run: cat packages/ui/node_modules/tslib/package.json | grep version
+        if: failure()
+
       - uses: actions/upload-artifact@v2
         if: failure()
         with:

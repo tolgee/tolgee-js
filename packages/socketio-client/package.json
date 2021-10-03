@@ -24,10 +24,10 @@
   "author": "Jan Cizmar",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.2",
     "@types/socket.io-client": "^1.4.36",
     "jest": "^26.5.2",
-    "socket.io-client": "^2.2.0",
+    "socket.io-client": "^2.4.0",
     "ts-jest": "^26.4.1",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",

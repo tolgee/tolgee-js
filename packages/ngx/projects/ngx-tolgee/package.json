@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ngx",
-  "description": "Angular implementation of tolgee translation framework",
+  "description": "Angular integration of Tolgee localization tool",
   "version": "1.6.1",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
