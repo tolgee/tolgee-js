@@ -13,8 +13,8 @@ export default {
     {
       file: 'dist/tolgee.cjs.min.js',
       format: 'cjs',
-      sourcemap: true,
       plugins: [terser()],
+      sourcemap: true,
     },
     {
       name: '@tolgee/core',
@@ -26,13 +26,14 @@ export default {
       name: '@tolgee/core',
       file: 'dist/tolgee.umd.min.js',
       format: 'umd',
-      sourcemap: true,
       plugins: [terser()],
+      sourcemap: true,
     },
   ],
   plugins: [
     typescript({
       outDir: './',
+      sourceMap: false,
     }),
     nodeResolve(),
   ],

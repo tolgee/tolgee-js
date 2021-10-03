@@ -5,7 +5,7 @@ import UI from '../src';
 import { NodeHelper } from '@tolgee/core/lib/helpers/NodeHelper';
 import { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 
-test('it selects the key', async (done) => {
+test('it selects the key', (done) => {
   const ui = new UI({
     coreService: {} as any,
     properties: {} as any,
