@@ -15,6 +15,10 @@ jobs:
         with:
           node-version: '12.x'
 
+      - run: npm install -g npm@7
+      - run: npm -v
+      - run: node -v
+
       - name: Npm ci
         run: npm ci
 

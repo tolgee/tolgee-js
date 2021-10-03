@@ -44,6 +44,7 @@ export default {
   plugins: [
     typescript({
       outDir: './',
+      sourceMap: false,
     }),
     nodeResolve(),
     commonjs({

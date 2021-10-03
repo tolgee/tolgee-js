@@ -19,12 +19,6 @@
     "downlevelIteration": true,
     "baseUrl": "src",
     "paths": {
-      "tolgee/ui": [
-        "./ui"
-      ],
-      "tolgee/core": [
-        "./core"
-      ],
       "@testFixtures/*": [
         "./__testFixtures/*"
       ]
