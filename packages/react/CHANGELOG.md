@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.7.0 (2021-10-04)
+
+
+### Features
+
+* Add method to change translation for screenshot taking ([#496](https://github.com/tolgee/tolgee-react/issues/496)) ([40ddbe9](https://github.com/tolgee/tolgee-react/commit/40ddbe9d4afdd1b0ab2bfa09274d7d3787b86880))
+
+
+
+
+
 ## 1.6.1 (2021-09-30)
 
 
