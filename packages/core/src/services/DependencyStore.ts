@@ -92,7 +92,8 @@ export class DependencyStore {
     this.messages,
     this.properties,
     this.eventService,
-    this.elementRegistrar
+    this.elementRegistrar,
+    this.translationService
   );
 
   constructor(config: TolgeeConfig = new TolgeeConfig()) {

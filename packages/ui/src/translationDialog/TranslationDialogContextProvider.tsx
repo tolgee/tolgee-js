@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
 import { TranslationData } from '@tolgee/core/lib/DTOs/TranslationData';
-import { EventEmitterImpl } from '@tolgee/core/lib/services/EventEmitter';
 
 import { ComponentDependencies } from '../TolgeeViewer';
 import { sleep } from '../tools/sleep';
@@ -33,7 +32,7 @@ export type DialogContextType = {
   setUseBrowserWindow: (value: boolean) => void;
   pluginAvailable: boolean;
   takingScreenshot: boolean;
-  handleTakeScreenshot: (key: string) => Promise<any>;
+  handleTakeScreenshot: () => Promise<void>;
   lastScreenshot?: string;
   removeLastScreenshot: () => void;
   onScreenshotUpload: () => Promise<void>;
@@ -120,10 +119,6 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       try {
         setSaving(true);
         await translationService.setTranslations(translations);
-        await (
-          props.dependencies.eventService
-            .TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
-        ).emit(translations);
         setSuccess(true);
         await sleep(200);
         setError(null);
@@ -151,17 +146,11 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
 
     const handleTakeScreenshot = async () => {
       setTakingScreenshot(true);
-      props.dependencies.elementRegistrar
-        .findAllByKey(props.input)
-        .forEach((el) => el._tolgee.highlight());
-      await sleep(100);
-      const data = await props.dependencies.pluginManager.takeScreenshot();
-      props.dependencies.elementRegistrar
-        .findAllByKey(props.input)
-        .forEach((el) => el._tolgee.unhighlight());
+      const data = await props.dependencies.pluginManager.takeScreenshot(
+        translations
+      );
       setTakingScreenshot(false);
       setLastScreenshot(data as string);
-      return data;
     };
 
     const editDisabled =

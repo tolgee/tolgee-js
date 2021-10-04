@@ -122,7 +122,58 @@ export class TranslationService {
         data[translationData.key] = translationData.translations[lang];
       }
     });
+
+    await (
+      this.eventService.TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
+    ).emit(translationData);
+
     return result;
+  }
+
+  /**
+   * Change translations of some keys to some value temporarily.
+   * For screenshot taking with provided values, before actually saving
+   * the values
+   *
+   * @return Returns callback changing affected translations back
+   */
+  async changeTranslations({
+    key,
+    translations,
+  }: TranslationData): Promise<() => void> {
+    const old: Record<string, string> = {};
+
+    Object.entries(translations).forEach(([language, value]) => {
+      const data = this.translationsCache.get(language);
+      if (data) {
+        old[language] = value;
+        data[key] = value;
+      }
+    });
+
+    await (
+      this.eventService.TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
+    ).emit({
+      key,
+      translations,
+    });
+
+    // callback to revert the operation
+    return async () => {
+      Object.entries(old).forEach(([language, value]) => {
+        const data = this.translationsCache.get(language);
+        if (data) {
+          data[key] = value;
+        }
+      });
+      await (
+        this.eventService
+          .TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
+      ).emit({
+        key,
+        translations: old,
+      });
+    };
   }
 
   async uploadScreenshot(key, data) {
