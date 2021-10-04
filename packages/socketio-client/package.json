@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/socket.io-client": "^1.4.36",
-    "jest": "^26.5.2",
+    "jest": "^27.2.4",
     "socket.io-client": "^2.4.0",
     "ts-jest": "^26.4.1",
     "ts-loader": "^9.2.3",
