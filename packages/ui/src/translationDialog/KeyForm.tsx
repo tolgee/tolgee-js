@@ -11,7 +11,7 @@ import { Button } from '../common/Button';
 
 export const KeyForm = () => {
   const handleTakeScreenshot = () => {
-    context.handleTakeScreenshot('asdf');
+    context.handleTakeScreenshot();
   };
 
   const context = useTranslationDialogContext();

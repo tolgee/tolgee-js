@@ -8,17 +8,16 @@ type Message = {
   type: string;
 };
 
-type PgEvent = {
+type TolgeeEvent = {
   data: Message;
 } & MessageEvent;
 
 export class Messages {
   private listeners: Listener[] = [];
-  private listenersPopup: Listener[] = [];
   private _stopListening: () => void;
 
   readonly startListening = () => {
-    const receiveMessage = (event: PgEvent) => {
+    const receiveMessage = (event: TolgeeEvent) => {
       if (event.source != window) {
         return;
       }
@@ -35,30 +34,19 @@ export class Messages {
     this._stopListening = () => {
       window.removeEventListener('message', receiveMessage, false);
     };
-
-    this.startPopupListening();
   };
 
   public stopListening() {
     this._stopListening();
   }
 
-  readonly startPopupListening = () => {
-    this.listen('POPUP_TO_LIB', (data: Message) => {
-      this.listenersPopup.forEach((listener) => {
-        if (data.type == listener.type) {
-          listener.callback(data.data);
-        }
-      });
-    });
-  };
-
-  readonly listenPopup = (type: string, callback: (data) => void) => {
-    this.listenersPopup.push({ type, callback });
-  };
-
   readonly listen = (type: string, callback: (data) => void) => {
-    this.listeners.push({ type, callback });
+    const listenerInfo = { type, callback };
+    this.listeners.push(listenerInfo);
+    // return callback to remove the listener
+    return () => {
+      this.listeners.splice(this.listeners.indexOf(listenerInfo), 1);
+    };
   };
 
   readonly send = (type: string, data?: any) => {
@@ -66,7 +54,7 @@ export class Messages {
       window.postMessage({ type, data }, window.origin);
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.warn('Can not send message.', e);
+      console.warn('Cannot send message.', e);
     }
   };
 }
