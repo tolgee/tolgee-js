@@ -1,14 +1,14 @@
 {
   "name": "@tolgee/testapps-react",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "dependencies": {
     "@material-ui/core": "4.12.3",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^12.1.1",
     "@testing-library/user-event": "^7.2.1",
-    "@tolgee/react": "^1.7.0",
-    "@tolgee/ui": "^1.7.0",
+    "@tolgee/react": "^1.7.1",
+    "@tolgee/ui": "^1.7.1",
     "@types/jest": "^24.9.1",
     "@types/node": "^16.10.2",
     "@types/react": "17.0.26",
