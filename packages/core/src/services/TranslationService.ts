@@ -146,7 +146,7 @@ export class TranslationService {
     Object.entries(translations).forEach(([language, value]) => {
       const data = this.translationsCache.get(language);
       if (data) {
-        old[language] = value;
+        old[language] = data[key];
         data[key] = value;
       }
     });
