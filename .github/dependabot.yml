@@ -3,53 +3,53 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/packages/core/"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ui/"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/packages/react/"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ngx/"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/packages/socketio-client/"
     schedule:
-      interval: monthly
+      interval: weekly
     ignored_updates:
       - match:
           dependency_name: "@types/socket.io-client"
       - match:
           dependency_name: "socket.io-client"
-    target-branch: develop
+    target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/ngx"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/core"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/react"
     schedule:
-      interval: monthly
-    target-branch: develop
+      interval: weekly
+    target-branch: main
     ignore:
       - dependency-name: "react"
       - dependency-name: "react-dom"
