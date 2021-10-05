@@ -7,7 +7,9 @@ import { IconButton } from './IconButton';
 import { TranslationFields } from './TranslationFields';
 import { OpenInNew } from '../common/icons';
 import { LanguageSelect } from '../LanguageSelect';
-import { Button } from '../common/Button';
+import { Button } from '@mui/material';
+import { ScreenshotPreview } from '../screenshots/ScreenshotPreview';
+import { LoadingButton } from 'common/LoadingButton';
 
 export const KeyForm = () => {
   const handleTakeScreenshot = () => {
@@ -61,12 +63,18 @@ export const KeyForm = () => {
       <div style={{ marginTop: '20px' }}>
         <TranslationFields />
       </div>
-      {context.editDisabled && !context.loading && (
-        <>
-          "Modification is restricted due to missing translations.edit scope in
-          current api key settings."
-        </>
-      )}
+
+      <div>
+        {context.newScreenshots.map((screenshot) => (
+          <ScreenshotPreview url={screenshot} />
+        ))}
+      </div>
+
+      {context.editDisabled &&
+        !context.loading &&
+        `Modification is restricted due to missing ${
+          context.translations?.id ? 'translations.edit' : 'keys.edit'
+        } scope in current api key settings.`}
 
       {context.error && <div style={{ color: 'red' }}>{context.error}</div>}
       <div
@@ -74,9 +82,10 @@ export const KeyForm = () => {
           display: 'flex',
           justifyContent: 'space-between',
           marginTop: '10px',
+          minHeight: 36,
         }}
       >
-        <Button onClick={context.onClose} color="default">
+        <Button onClick={context.onClose} color="secondary" variant="outlined">
           Cancel
         </Button>
         <div style={{ display: 'flex' }}>
@@ -84,25 +93,27 @@ export const KeyForm = () => {
             <Button
               onClick={() => handleTakeScreenshot()}
               style={{ marginLeft: '10px' }}
+              disabled={context.editDisabled}
+              variant="outlined"
             >
               Take screenshot
             </Button>
           )}
 
-          <Button
+          <LoadingButton
+            loading={context.saving}
             disabled={context.saving || context.editDisabled}
             onClick={context.onSave}
             color="primary"
             style={{ marginLeft: '10px' }}
+            variant="outlined"
           >
             {context.success
               ? 'Saved! ✓'
-              : context.saving
-              ? 'Saving...'
               : !context.translations?.id
               ? 'Create'
               : 'Update'}
-          </Button>
+          </LoadingButton>
         </div>
       </div>
     </div>

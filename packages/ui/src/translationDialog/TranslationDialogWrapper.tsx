@@ -22,7 +22,6 @@ export const TranslationDialogWrapper: React.FC<{
               aria-labelledby="form-dialog-title"
               style={{
                 width: 700,
-                height: context.lastScreenshot ? '80vh' : undefined,
               }}
             >
               {props.children}

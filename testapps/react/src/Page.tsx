@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FunctionComponent, useState } from 'react';
 import { T, useTranslate } from '@tolgee/react';
 import { ChooseLanguage } from './ChooseLanguage';
-import { Dialog, DialogContent } from '@material-ui/core';
+import { Dialog, DialogContent } from '@mui/material';
 
 export const Page: FunctionComponent = () => {
   const [disappeared, setDisappeared] = useState(false);
