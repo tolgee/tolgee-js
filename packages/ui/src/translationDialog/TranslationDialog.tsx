@@ -1,7 +1,6 @@
 import React from 'react';
 import { TranslationDialogWrapper } from './TranslationDialogWrapper';
 import { useTranslationDialogContext } from './useTranslationDialogContext';
-import { ScreenshotPreview } from './ScreenshotPreview';
 import { KeyForm } from './KeyForm';
 
 export const TranslationDialog = () => {
@@ -9,7 +8,7 @@ export const TranslationDialog = () => {
 
   return (
     <TranslationDialogWrapper context={context}>
-      {context.lastScreenshot ? <ScreenshotPreview /> : <KeyForm />}
+      <KeyForm />
     </TranslationDialogWrapper>
   );
 };

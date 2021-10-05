@@ -58,14 +58,14 @@ export const TranslationFields: FunctionComponent = () => {
       {context.loading ? (
         <Loading />
       ) : (
-        Object.keys(context.translations.translations).map((key) => (
+        Object.keys(context.translationsForm.translations).map((key) => (
           <textarea
             style={style}
             disabled={context.editDisabled}
             key={key}
             lang={key}
             placeholder={key}
-            value={context.translations.translations[key] || ''}
+            value={context.translationsForm.translations[key] || ''}
             onChange={context.onTranslationInputChange(key)}
           />
         ))

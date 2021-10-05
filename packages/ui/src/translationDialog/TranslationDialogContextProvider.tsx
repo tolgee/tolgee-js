@@ -25,6 +25,7 @@ export type DialogContextType = {
     abbr
   ) => (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   translations: TranslationData;
+  translationsForm: TranslationData;
   onSave: () => void;
   container: Element | undefined;
   setContainer: (el: Element) => void;
@@ -33,9 +34,8 @@ export type DialogContextType = {
   pluginAvailable: boolean;
   takingScreenshot: boolean;
   handleTakeScreenshot: () => Promise<void>;
-  lastScreenshot?: string;
-  removeLastScreenshot: () => void;
-  onScreenshotUpload: () => Promise<void>;
+  newScreenshots?: string[];
+  removeScreenshot: (index: number) => void;
 } & DialogProps;
 
 export const TranslationDialogContext =
@@ -49,27 +49,33 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const [error, setError] = useState<string>(null);
     const [takingScreenshot, setTakingScreenshot] = useState<boolean>(false);
     const [translations, setTranslations] = useState<TranslationData>(null);
+    const [translationsForm, setTranslationsForm] =
+      useState<TranslationData>(null);
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
     const translationService = props.dependencies.translationService;
+    const screenshotService = props.dependencies.screenshotService;
     const [container, setContainer] = useState(
       undefined as Element | undefined
     );
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
-    const [lastScreenshot, setLastScreenshot] = useState<string>();
+    const [newScreenshots, setNewScreenshots] = useState<string[]>([]);
 
     const onTranslationInputChange =
       (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSuccess(false);
         translations.translations[abbr] = event.target.value;
-        setTranslations({ ...translations });
+        setTranslationsForm({ ...translations });
       };
 
-    const loadTranslations = (languages?: Set<string>) => {
+    const loadTranslations = (languages?: Set<string>, reinitiliaze = true) => {
       translationService
         .getTranslationsOfKey(props.input, languages)
         .then((result) => {
           setTranslations(result);
+          if (!translationsForm || reinitiliaze) {
+            setTranslationsForm(result);
+          }
           setLoading(false);
         });
     };
@@ -77,19 +83,13 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const onClose = () => {
       props.onClose();
       setUseBrowserWindow(false);
-      setLastScreenshot(undefined);
+      setNewScreenshots([]);
     };
-
-    const removeLastScreenshot = () => setLastScreenshot(undefined);
 
     useEffect(() => {
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
-          if (lastScreenshot) {
-            removeLastScreenshot();
-          } else {
-            onClose();
-          }
+          onClose();
         }
       };
       if (!useBrowserWindow) {
@@ -98,7 +98,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
           window.removeEventListener('keydown', onKeyDown);
         };
       }
-    }, [useBrowserWindow, lastScreenshot]);
+    }, [useBrowserWindow]);
 
     useEffect(() => {
       if (props.open) {
@@ -132,17 +132,17 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       }
     };
 
-    const onScreenshotUpload = async () => {
-      let id = translations?.id;
-      if (!id) {
-        const newEntry = await translationService.setTranslations(
-          new TranslationData(props.input, {})
-        );
-        id = newEntry.keyId;
-      }
-      await translationService.uploadScreenshot(id, lastScreenshot);
-      loadTranslations(properties.preferredLanguages);
-    };
+    // const onScreenshotUpload = async () => {
+    //   let id = translations?.id;
+    //   if (!id) {
+    //     const newEntry = await translationService.setTranslations(
+    //       new TranslationData(props.input, {})
+    //     );
+    //     id = newEntry.keyId;
+    //   }
+    //   await screenshotService.uploadScreenshot(id, lastScreenshot);
+    //   loadTranslations(properties.preferredLanguages, false);
+    // };
 
     const handleTakeScreenshot = async () => {
       setTakingScreenshot(true);
@@ -150,11 +150,17 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         translations
       );
       setTakingScreenshot(false);
-      setLastScreenshot(data as string);
+      setNewScreenshots([...newScreenshots, data as string]);
+    };
+
+    const removeScreenshot = (index: number) => {
+      setNewScreenshots(newScreenshots.filter((_, i) => i !== index));
     };
 
     const editDisabled =
-      loading || !coreService.isAuthorizedTo('translations.edit');
+      loading ||
+      !coreService.isAuthorizedTo('translations.edit') ||
+      (!translations.id && !coreService.isAuthorizedTo('keys.edit'));
 
     const screenshotDisabled =
       loading || !coreService.isAuthorizedTo('screenshots.upload');
@@ -187,6 +193,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       screenshotDisabled,
       onTranslationInputChange,
       translations,
+      translationsForm,
       onSave,
       container,
       setContainer,
@@ -195,9 +202,8 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       pluginAvailable: props.dependencies.pluginManager.handshakeSucceed,
       takingScreenshot,
       handleTakeScreenshot,
-      lastScreenshot,
-      removeLastScreenshot,
-      onScreenshotUpload,
+      newScreenshots,
+      removeScreenshot,
     };
 
     return (

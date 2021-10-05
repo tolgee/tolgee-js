@@ -106,8 +106,6 @@ export class TranslationService {
   }
 
   async setTranslations(translationData: TranslationData) {
-    this.coreService.checkScope('translations.edit');
-
     const result = await this.apiHttpService.postJson(
       'v2/projects/translations',
       {
@@ -174,21 +172,6 @@ export class TranslationService {
         translations: old,
       });
     };
-  }
-
-  async uploadScreenshot(key, data) {
-    this.coreService.checkScope('translations.edit');
-
-    const formData = new FormData();
-
-    const blob = await fetch(data).then((r) => r.blob());
-    formData.append('screenshot', blob);
-
-    return this.apiHttpService.post(
-      `v2/projects/keys/${key}/screenshots`,
-      undefined,
-      { headers: {}, body: formData }
-    );
   }
 
   getFromCacheOrFallback(

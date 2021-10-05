@@ -16,6 +16,7 @@ import { WrappedHandler } from '../handlers/WrappedHandler';
 import { PluginManager } from '../toolsManager/PluginManager';
 import { Messages } from '../toolsManager/Messages';
 import { HighlightFunctionsInitializer } from '../highlighter/HighlightFunctionsInitializer';
+import { ScreenshotService } from './ScreenshotService';
 
 export class DependencyStore {
   public properties: Properties = new Properties();
@@ -24,6 +25,10 @@ export class DependencyStore {
   public mouseEventHandler = new MouseEventHandler(this.properties);
   public coreService: CoreService = new CoreService(
     this.properties,
+    this.apiHttpService
+  );
+  public screenshotService = new ScreenshotService(
+    this.coreService,
     this.apiHttpService
   );
   public translationService: TranslationService = new TranslationService(
