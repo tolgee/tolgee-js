@@ -6,10 +6,10 @@ import { useTranslationDialogContext } from './useTranslationDialogContext';
 import { IconButton } from './IconButton';
 import { TranslationFields } from './TranslationFields';
 import { OpenInNew } from '../common/icons';
-import { LanguageSelect } from '../LanguageSelect';
+import { LanguageSelect } from '../common/LanguageSelect';
 import { Button } from '@mui/material';
 import { ScreenshotPreview } from '../screenshots/ScreenshotPreview';
-import { LoadingButton } from 'common/LoadingButton';
+import { LoadingButton } from '../common/LoadingButton';
 
 export const KeyForm = () => {
   const handleTakeScreenshot = () => {

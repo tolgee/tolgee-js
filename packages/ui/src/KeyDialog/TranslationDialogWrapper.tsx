@@ -1,8 +1,9 @@
-import * as React from 'react';
+import React from 'react';
+
 import { DialogContextType } from './TranslationDialogContextProvider';
 import { NewWindow } from '../common/NewWindow';
-import { Modal } from '../common/Modal';
 import { StylesContextProvider } from '../common/styles/StylesContextProvider';
+import { Modal } from '../common/Modal';
 
 export const TranslationDialogWrapper: React.FC<{
   context: DialogContextType;
@@ -17,12 +18,10 @@ export const TranslationDialogWrapper: React.FC<{
         ) : (
           !context.takingScreenshot && (
             <Modal
+              style={{ width: 700 }}
               open={context.open}
               onClose={context.onClose}
               aria-labelledby="form-dialog-title"
-              style={{
-                width: 700,
-              }}
             >
               {props.children}
             </Modal>

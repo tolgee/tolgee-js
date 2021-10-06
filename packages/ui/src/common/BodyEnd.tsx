@@ -1,3 +1,4 @@
+import { DEVTOOLS_ID } from '../constants';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -8,9 +9,14 @@ export class BodyEnd extends React.PureComponent<{ document?: Document }> {
     return this.props.document || document;
   }
 
+  get devTools() {
+    return this.document.getElementById(DEVTOOLS_ID) || this.document.body;
+  }
+
   componentDidMount() {
     this._popup = this.document.createElement('div');
-    this.document.body.appendChild(this._popup);
+
+    this.devTools.appendChild(this._popup);
     this._render();
   }
 
@@ -20,7 +26,7 @@ export class BodyEnd extends React.PureComponent<{ document?: Document }> {
 
   componentWillUnmount() {
     ReactDOM.unmountComponentAtNode(this._popup);
-    this.document.body.removeChild(this._popup);
+    this.devTools.removeChild(this._popup);
   }
 
   _render() {

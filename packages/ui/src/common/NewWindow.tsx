@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useTranslationDialogContext } from '../translationDialog/useTranslationDialogContext';
+import { useTranslationDialogContext } from '../KeyDialog/useTranslationDialogContext';
 import { StylesContextProvider } from './styles/StylesContextProvider';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';

@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { FunctionComponent } from 'react';
-import { CircularLoading } from './common/CircularLoading';
-import { MultiSelect } from './common/multiSelect/MultiSelect';
-import { useTranslationDialogContext } from './translationDialog/useTranslationDialogContext';
+import { CircularLoading } from './CircularLoading';
+import { MultiSelect } from './multiSelect/MultiSelect';
+import { useTranslationDialogContext } from '../KeyDialog/useTranslationDialogContext';
 
 export const LanguageSelect: FunctionComponent = () => {
   const context = useTranslationDialogContext();
