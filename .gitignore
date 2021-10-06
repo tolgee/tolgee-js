@@ -11,6 +11,7 @@ testapps/*/node_modules
 testapps/*/build
 testapps/*/.cache
 testapps/react/.env.development.local
+testapps/next/.env.development.local
 **/packahe.json.lerna_backup
 **/node_modules
 packages/**/dist

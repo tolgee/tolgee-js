@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { FunctionComponent } from 'react';
+import React from 'react';
+import { Paper } from '@mui/material';
 
 interface DialogProps {
   open: boolean;
@@ -28,9 +28,10 @@ const dialogStyle: React.CSSProperties = {
   position: 'relative',
 };
 
-export const Modal: FunctionComponent<DialogProps> = (props) => {
-  function onKeyDown(key: string) {
-    if (key === 'Escape') {
+export const Modal: React.FC<DialogProps> = (props) => {
+  function onKeyDown(e: React.KeyboardEvent) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
       props.onClose();
     }
   }
@@ -41,9 +42,9 @@ export const Modal: FunctionComponent<DialogProps> = (props) => {
         <div
           style={backdropStyle}
           onClick={props.onClose}
-          onKeyDown={(e) => onKeyDown(e.key)}
+          onKeyDown={(e) => onKeyDown(e)}
         >
-          <div
+          <Paper
             style={{ ...dialogStyle, ...props.style }}
             onClick={(e) => {
               e.stopPropagation();
@@ -51,7 +52,7 @@ export const Modal: FunctionComponent<DialogProps> = (props) => {
             }}
           >
             {props.children}
-          </div>
+          </Paper>
         </div>
       )}
     </>

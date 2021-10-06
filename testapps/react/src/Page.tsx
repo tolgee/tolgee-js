@@ -37,8 +37,8 @@ export const Page: FunctionComponent = () => {
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogContent>
-          <T>text_in_dialog</T>
-          <T>text_in_dialog2</T>
+          <T strategy="TEXT_WRAP">text_in_dialog</T>
+          <T strategy="TEXT_WRAP">text_in_dialog2</T>
         </DialogContent>
       </Dialog>
 

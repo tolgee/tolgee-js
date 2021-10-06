@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BodyEnd } from './common/BodyEnd';
-import { TranslationDialogContextProvider } from './translationDialog/TranslationDialogContextProvider';
-import { TranslationDialog } from './translationDialog/TranslationDialog';
+import { TranslationDialogContextProvider } from './KeyDialog/TranslationDialogContextProvider';
+import { TranslationDialog } from './KeyDialog/TranslationDialog';
 import { DependencyStore } from '@tolgee/core/lib/services/DependencyStore';
 
 export type ComponentDependencies = DependencyStore;

@@ -1,18 +1,23 @@
 import { ComponentDependencies, TolgeeViewer } from './TolgeeViewer';
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
-import { KeyContextMenu } from './KeyContextMenu';
+import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
+import { DEVTOOLS_ID } from './constants';
 
 export class UI {
   private viewerComponent: TolgeeViewer;
   private keyContextMenu: KeyContextMenu;
 
   constructor(private dependencies: ComponentDependencies) {
+    const devTools = document.createElement('div');
+    devTools.id = DEVTOOLS_ID;
+    document.body.append(devTools);
+
     const tolgeeModalContainer = document.createElement('div');
-    document.body.append(tolgeeModalContainer);
+    devTools.append(tolgeeModalContainer);
 
     const contextMenuContainer = document.createElement('div');
-    document.body.append(contextMenuContainer);
+    devTools.append(contextMenuContainer);
 
     const viewerElement = createElement(TolgeeViewer, {
       dependencies: this.dependencies,
