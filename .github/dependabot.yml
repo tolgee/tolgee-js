@@ -29,11 +29,9 @@ updates:
     directory: "/packages/socketio-client/"
     schedule:
       interval: weekly
-    ignored_updates:
-      - match:
-          dependency_name: "@types/socket.io-client"
-      - match:
-          dependency_name: "socket.io-client"
+    ignore:
+      - dependency-name: "@types/socket.io-client"
+      - dependency-name: "socket.io-client"
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/ngx"
