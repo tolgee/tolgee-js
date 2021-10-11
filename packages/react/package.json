@@ -40,7 +40,7 @@
     "@rollup/plugin-typescript": "8.2.5",
     "@testing-library/dom": "^7.24.5",
     "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.1",
+    "@testing-library/react": "^12.1.2",
     "@tolgee/ui": "^1.7.4",
     "@types/jest": "^27.0.2",
     "@types/node": "^13.9.2",
