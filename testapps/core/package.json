@@ -18,7 +18,7 @@
     "html-webpack-plugin": "^4.5.1",
     "serve": "^11.3.2",
     "source-map-loader": "^2.0.1",
-    "webpack": "^5.13.0",
+    "webpack": "^5.58.1",
     "webpack-cli": "^4.3.1"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
