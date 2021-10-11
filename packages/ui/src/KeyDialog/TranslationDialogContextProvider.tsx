@@ -1,8 +1,25 @@
 import React, { FunctionComponent, useEffect, useState } from 'react';
-import { TranslationData } from '@tolgee/core/lib/DTOs/TranslationData';
+import { KeyWithTranslationsModel, LanguageModel } from '@tolgee/core';
 
-import { ComponentDependencies } from '../TolgeeViewer';
+import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
+
+export interface ScreenshotInterface {
+  id: number;
+  filename: string;
+  fileUrl: string;
+  createdAt?: string;
+  // is it screenshot or only uploaded image
+  justUploaded: boolean;
+}
+
+type FormTranslations = {
+  [key: string]: string;
+};
+
+interface TranslationInterface {
+  text?: string;
+}
 
 type DialogProps = {
   input: string;
@@ -11,21 +28,32 @@ type DialogProps = {
   dependencies: ComponentDependencies;
 };
 
+const responseToTranslationData = (
+  data: Record<string, TranslationInterface> | undefined
+): FormTranslations => {
+  const translations: Record<string, string> = {};
+  if (data) {
+    Object.entries(data).forEach(
+      ([language, translation]) => (translations[language] = translation.text)
+    );
+  }
+  return translations;
+};
+
 export type DialogContextType = {
   loading: boolean;
   saving: boolean;
   error: string;
   success: boolean;
-  availableLanguages: Set<string>;
+  availableLanguages: LanguageModel[];
   selectedLanguages: Set<string>;
   onSelectedLanguagesChange: (val: Set<string>) => void;
   editDisabled: boolean;
-  screenshotDisabled: boolean;
   onTranslationInputChange: (
     abbr
   ) => (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  translations: TranslationData;
-  translationsForm: TranslationData;
+  translations: KeyWithTranslationsModel;
+  translationsForm: FormTranslations;
   onSave: () => void;
   container: Element | undefined;
   setContainer: (el: Element) => void;
@@ -34,8 +62,10 @@ export type DialogContextType = {
   pluginAvailable: boolean;
   takingScreenshot: boolean;
   handleTakeScreenshot: () => Promise<void>;
-  newScreenshots?: string[];
-  removeScreenshot: (index: number) => void;
+  handleUploadImages: (files: File[]) => Promise<any>;
+  screenshotsUploading: boolean;
+  screenshots?: ScreenshotInterface[];
+  removeScreenshot: (id: number) => void;
 } & DialogProps;
 
 export const TranslationDialogContext =
@@ -48,9 +78,10 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
     const [takingScreenshot, setTakingScreenshot] = useState<boolean>(false);
-    const [translations, setTranslations] = useState<TranslationData>(null);
+    const [translations, setTranslations] =
+      useState<KeyWithTranslationsModel>(null);
     const [translationsForm, setTranslationsForm] =
-      useState<TranslationData>(null);
+      useState<FormTranslations>(null);
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
     const translationService = props.dependencies.translationService;
@@ -59,22 +90,45 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       undefined as Element | undefined
     );
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
-    const [newScreenshots, setNewScreenshots] = useState<string[]>([]);
+    const [screenshots, setScreenshots] = useState<ScreenshotInterface[]>([]);
+    const [screenshotsUploading, setScreenshotsUploading] = useState(false);
 
     const onTranslationInputChange =
       (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSuccess(false);
-        translations.translations[abbr] = event.target.value;
-        setTranslationsForm({ ...translations });
+        translationsForm[abbr] = event.target.value;
+        setTranslationsForm({ ...translationsForm });
       };
 
     const loadTranslations = (languages?: Set<string>, reinitiliaze = true) => {
       translationService
         .getTranslationsOfKey(props.input, languages)
-        .then((result) => {
-          setTranslations(result);
+        .then(([result, languages]) => {
+          setTranslations(
+            result || {
+              keyId: undefined,
+              translations: {},
+              screenshots: [],
+              keyName: props.input,
+              keyTags: [],
+              screenshotCount: 0,
+            }
+          );
+
+          if (!selectedLanguages?.size) {
+            setSelectedLanguages(new Set(languages));
+          }
+
           if (!translationsForm || reinitiliaze) {
-            setTranslationsForm(result);
+            setTranslationsForm(
+              responseToTranslationData(result?.translations)
+            );
+            setScreenshots(
+              result?.screenshots?.map((sc) => ({
+                ...sc,
+                justUploaded: false,
+              })) || []
+            );
           }
           setLoading(false);
         });
@@ -83,7 +137,11 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const onClose = () => {
       props.onClose();
       setUseBrowserWindow(false);
-      setNewScreenshots([]);
+      const uploadedScreenshots = getJustUploadedScreenshots();
+      if (uploadedScreenshots.length) {
+        screenshotService.deleteImages(uploadedScreenshots);
+      }
+      setScreenshots([]);
     };
 
     useEffect(() => {
@@ -107,18 +165,41 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         setError(null);
         loadTranslations(properties.preferredLanguages);
         if (availableLanguages === undefined) {
-          coreService.getLanguages().then((l) => {
+          coreService.getLanguagesFull().then((l) => {
             setAvailableLanguages(l);
           });
         }
       }
     }, [props.open, useBrowserWindow, props.input]);
 
+    const getJustUploadedScreenshots = () => {
+      return screenshots.filter((sc) => sc.justUploaded).map((sc) => sc.id);
+    };
+
+    const getRemovedScreenshots = () => {
+      return translations.screenshots
+        .map((sc) => sc.id)
+        .filter((scId) => !screenshots.find((sc) => sc.id === scId));
+    };
+
     const onSave = async () => {
       setSaving(true);
       try {
         setSaving(true);
-        await translationService.setTranslations(translations);
+        if (translations.keyId === undefined) {
+          await translationService.createKey({
+            name: props.input,
+            translations: translationsForm,
+            screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
+          });
+        } else {
+          await translationService.updateKeyComplex(translations.keyId, {
+            name: props.input,
+            translations: translationsForm,
+            screenshotIdsToDelete: getRemovedScreenshots(),
+            screenshotUploadedImageIds: getJustUploadedScreenshots(),
+          });
+        }
         setSuccess(true);
         await sleep(200);
         setError(null);
@@ -132,40 +213,57 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       }
     };
 
-    // const onScreenshotUpload = async () => {
-    //   let id = translations?.id;
-    //   if (!id) {
-    //     const newEntry = await translationService.setTranslations(
-    //       new TranslationData(props.input, {})
-    //     );
-    //     id = newEntry.keyId;
-    //   }
-    //   await screenshotService.uploadScreenshot(id, lastScreenshot);
-    //   loadTranslations(properties.preferredLanguages, false);
-    // };
+    const uploadImage = async (file: Blob) => {
+      await screenshotService
+        .uploadImage(file)
+        .then((data) =>
+          setScreenshots((screenshots) => [
+            ...screenshots,
+            { ...data, justUploaded: true },
+          ])
+        )
+        .catch((e) => {
+          setError(e.code || e.message);
+        });
+    };
+
+    const handleUploadImages = async (files: File[]) => {
+      setScreenshotsUploading(true);
+      await Promise.all(files.map(uploadImage));
+      setScreenshotsUploading(false);
+    };
 
     const handleTakeScreenshot = async () => {
       setTakingScreenshot(true);
-      const data = await props.dependencies.pluginManager.takeScreenshot(
-        translations
-      );
+      const data = await props.dependencies.pluginManager.takeScreenshot({
+        key: props.input,
+        translations: translationsForm,
+      });
+
       setTakingScreenshot(false);
-      setNewScreenshots([...newScreenshots, data as string]);
+      setScreenshotsUploading(true);
+
+      const blob = await fetch(data).then((r) => r.blob());
+
+      await uploadImage(blob);
+      setScreenshotsUploading(false);
     };
 
-    const removeScreenshot = (index: number) => {
-      setNewScreenshots(newScreenshots.filter((_, i) => i !== index));
+    const removeScreenshot = async (id: number) => {
+      const screenshot = screenshots.find((sc) => sc.id === id);
+      if (screenshot.justUploaded) {
+        screenshotService.deleteImages([screenshot.id]);
+      }
+      setScreenshots(screenshots.filter((sc) => sc.id !== id));
     };
 
     const editDisabled =
       loading ||
       !coreService.isAuthorizedTo('translations.edit') ||
-      (!translations.id && !coreService.isAuthorizedTo('keys.edit'));
+      (!translations.keyId && !coreService.isAuthorizedTo('keys.edit'));
 
-    const screenshotDisabled =
-      loading || !coreService.isAuthorizedTo('screenshots.upload');
-
-    const [availableLanguages, setAvailableLanguages] = useState(undefined);
+    const [availableLanguages, setAvailableLanguages] =
+      useState<LanguageModel[]>(undefined);
 
     const [selectedLanguages, setSelectedLanguages] = useState(
       properties.preferredLanguages || new Set([properties.currentLanguage])
@@ -190,7 +288,6 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       selectedLanguages,
       onSelectedLanguagesChange,
       editDisabled,
-      screenshotDisabled,
       onTranslationInputChange,
       translations,
       translationsForm,
@@ -202,7 +299,9 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       pluginAvailable: props.dependencies.pluginManager.handshakeSucceed,
       takingScreenshot,
       handleTakeScreenshot,
-      newScreenshots,
+      handleUploadImages,
+      screenshotsUploading,
+      screenshots,
       removeScreenshot,
     };
 

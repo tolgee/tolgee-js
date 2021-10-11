@@ -1,3 +1,4 @@
+import { UploadedImageModel } from 'index';
 import { ApiHttpService } from './ApiHttpService';
 import { CoreService } from './CoreService';
 
@@ -7,18 +8,24 @@ export class ScreenshotService {
     private apiHttpService: ApiHttpService
   ) {}
 
-  async uploadScreenshot(key: number, data: string) {
-    this.coreService.checkScope('screenshots.upload');
-
+  async uploadImage(blob: Blob) {
     const formData = new FormData();
 
-    const blob = await fetch(data).then((r) => r.blob());
-    formData.append('screenshot', blob);
+    formData.append('image', blob);
 
+    return this.apiHttpService.postJson('v2/image-upload', undefined, {
+      headers: {},
+      body: formData,
+    }) as Promise<UploadedImageModel>;
+  }
+
+  async deleteImages(ids: number[]) {
     return this.apiHttpService.post(
-      `v2/projects/keys/${key}/screenshots`,
+      `v2/image-upload/${ids.join(',')}`,
       undefined,
-      { headers: {}, body: formData }
-    );
+      {
+        method: 'delete',
+      }
+    ) as Promise<Response>;
   }
 }

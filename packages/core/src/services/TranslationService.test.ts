@@ -1,6 +1,6 @@
 jest.dontMock('./TranslationService');
 jest.dontMock('../helpers/TextHelper');
-jest.dontMock('../DTOs/TranslationData');
+jest.dontMock('../types/DTOs');
 jest.dontMock('../Errors/ApiHttpError');
 jest.dontMock('./DependencyStore');
 
@@ -9,7 +9,7 @@ import { getMockedInstance } from '@testFixtures/mocked';
 import { ApiHttpService } from './ApiHttpService';
 import { Properties } from '../Properties';
 import { CoreService } from './CoreService';
-import { TranslationData } from '../DTOs/TranslationData';
+import { TranslationData } from '../types/DTOs';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
 import { DependencyStore } from './DependencyStore';
@@ -135,13 +135,15 @@ describe('TranslationService', () => {
           ],
         },
       }));
-      const translationData = await translationService.getTranslationsOfKey(
+      const [translationData] = await translationService.getTranslationsOfKey(
         'key',
         new Set<string>(['en', 'de'])
       );
       expect(translationData).toEqual({
-        key: 'key',
-        translations: { en: 'translated', de: 'übersetzen' },
+        translations: {
+          en: { text: 'translated' },
+          de: { text: 'übersetzen' },
+        },
       });
     });
 
@@ -187,6 +189,17 @@ describe('TranslationService', () => {
     } as TranslationData;
 
     beforeEach(async () => {
+      getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+        return {
+          keyId: undefined,
+          keyName: 'test key',
+          translations: {
+            en: {
+              text: 'translation',
+            },
+          },
+        };
+      });
       await translationService.setTranslations(dummyTranslationData);
     });
 
@@ -221,6 +234,17 @@ describe('TranslationService', () => {
       key: 'test.key',
       translations: { en: 'translation' },
     } as TranslationData;
+    getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+      return {
+        keyId: undefined,
+        keyName: 'test.key',
+        translations: {
+          en: {
+            text: 'translation',
+          },
+        },
+      };
+    });
     await translationService.loadTranslations('en');
     await translationService.setTranslations(dummyTranslationData);
     expect(
@@ -233,6 +257,17 @@ describe('TranslationService', () => {
       key: 'test\\.key',
       translations: { en: 'translation' },
     } as TranslationData;
+    getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+      return {
+        keyId: undefined,
+        keyName: 'test\\.key',
+        translations: {
+          en: {
+            text: 'translation',
+          },
+        },
+      };
+    });
     await translationService.loadTranslations('en');
     await translationService.setTranslations(dummyTranslationData);
     expect(

@@ -19,7 +19,7 @@ context('Gatsby development', () => {
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
-    cy.contains('Translate text');
+    cy.contains('Quick translation');
     cy.contains('Update');
   });
 });

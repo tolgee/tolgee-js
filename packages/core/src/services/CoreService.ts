@@ -1,18 +1,10 @@
 import { Properties } from '../Properties';
 import { ApiHttpService } from './ApiHttpService';
 import { Scope } from '../types';
+import { LanguageModel, PagedModelLanguageModel } from '../types/DTOs';
 
 export class CoreService {
-  private languagePromise: Promise<{
-    _embedded: {
-      languages: {
-        tag: string;
-        name: string;
-        originalName: string;
-        flagEmoji: string;
-      }[];
-    };
-  }>;
+  private languagePromise: Promise<PagedModelLanguageModel>;
 
   constructor(
     private properties: Properties,
@@ -35,6 +27,12 @@ export class CoreService {
       )
     );
     return languages;
+  }
+
+  async getLanguagesFull(): Promise<LanguageModel[]> {
+    this.getLanguages();
+    const languages = await this.languagePromise;
+    return languages._embedded.languages;
   }
 
   async getScopes() {

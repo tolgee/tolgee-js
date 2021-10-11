@@ -26,17 +26,19 @@ test('it selects the key', (done) => {
     observer: {} as any,
     messages: {} as any,
     pluginManager: {} as any,
+    screenshotService: {} as any,
   });
 
   const mouseEvent = new MouseEvent('click');
-
   const keys = ['key 1', 'key 2'];
 
+  // open context menu and wait for select
   ui.getKey({ openEvent: mouseEvent, keys: new Set(keys) }).then((key) => {
     expect(key).toEqual('key 2');
     done();
   });
 
+  // check if keys and translations are in dom
   for (const key of keys) {
     const element = NodeHelper.evaluateToSingle(
       `//*[contains(text(), '${key}')]`,
@@ -44,17 +46,16 @@ test('it selects the key', (done) => {
     );
     expect(element).toBeInTheDocument();
   }
-
   const translatedKeys = NodeHelper.evaluate(
     `//*[contains(text(), 'Translated key')]`,
     document.body
   );
-
   expect(translatedKeys).toHaveLength(2);
 
+  // get key 2 and click it
   const element = NodeHelper.evaluateToSingle(
     `//*[contains(text(), 'key 2')]`,
     document.body
   );
-  element.parentElement.parentElement.click();
+  element.parentElement.click();
 });

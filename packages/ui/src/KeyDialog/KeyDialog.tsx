@@ -1,22 +1,22 @@
 import * as React from 'react';
-import { BodyEnd } from './common/BodyEnd';
-import { TranslationDialogContextProvider } from './KeyDialog/TranslationDialogContextProvider';
-import { TranslationDialog } from './KeyDialog/TranslationDialog';
+import { BodyEnd } from '../common/BodyEnd';
+import { TranslationDialogContextProvider } from './TranslationDialogContextProvider';
+import { TranslationDialog } from './TranslationDialog';
 import { DependencyStore } from '@tolgee/core/lib/services/DependencyStore';
 
 export type ComponentDependencies = DependencyStore;
 
-export type ViewerProps = {
+export type Props = {
   dependencies: ComponentDependencies;
 };
 
-export class TolgeeViewer extends React.Component<ViewerProps> {
+export class KeyDialog extends React.Component<Props> {
   state = {
     translationInput: null,
     dialogOpened: false,
   };
 
-  constructor(props: ViewerProps) {
+  constructor(props: Props) {
     super(props);
   }
 

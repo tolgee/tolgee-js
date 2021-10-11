@@ -1,11 +1,12 @@
-import { ComponentDependencies, TolgeeViewer } from './TolgeeViewer';
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
+
+import { ComponentDependencies, KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { DEVTOOLS_ID } from './constants';
 
 export class UI {
-  private viewerComponent: TolgeeViewer;
+  private viewerComponent: KeyDialog;
   private keyContextMenu: KeyContextMenu;
 
   constructor(private dependencies: ComponentDependencies) {
@@ -19,7 +20,7 @@ export class UI {
     const contextMenuContainer = document.createElement('div');
     devTools.append(contextMenuContainer);
 
-    const viewerElement = createElement(TolgeeViewer, {
+    const viewerElement = createElement(KeyDialog, {
       dependencies: this.dependencies,
     });
 

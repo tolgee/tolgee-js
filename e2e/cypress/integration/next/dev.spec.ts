@@ -20,7 +20,7 @@ context('Next development', () => {
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
-    cy.contains('Translate text');
+    cy.contains('Quick translation');
     cy.contains('Update');
   });
 
@@ -29,9 +29,7 @@ context('Next development', () => {
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
-    cy.contains('Take screenshot').should('be.visible').click();
-    cy.contains('Captured screenshot').should('be.visible');
-    cy.contains('Upload').click();
-    cy.contains('Translate text').should('be.visible');
+    cy.get('*[aria-label="Take screenshot"]').should('be.visible').click();
+    cy.get('*[aria-label="Screenshot"]').should('be.visible');
   });
 });
