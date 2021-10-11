@@ -25,9 +25,11 @@
   "dependencies": {  
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.2",
     "@tolgee/core": "^1.7.6",
-    "@types/react": "^17.0.1"
+    "@types/react": "^17.0.1",
+    "react-dropzone": "^11.4.2"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.0",

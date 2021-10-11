@@ -1,5 +1,5 @@
 import { EventEmitter, EventEmitterImpl } from './EventEmitter';
-import { TranslationData } from '../DTOs/TranslationData';
+import { TranslationData } from '../types/DTOs';
 import { ElementWithMeta } from '../types';
 
 export class EventService {

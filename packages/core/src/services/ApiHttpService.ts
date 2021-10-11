@@ -33,18 +33,18 @@ export class ApiHttpService {
 
   async fetch(...args: ArgumentTypes<typeof fetch>) {
     if (typeof args[0] === 'object') {
-      return await fetch({ ...args[0], url: this.getUrl(args[0].url) }).then(
-        (r) => ApiHttpService.handleErrors(r)
+      return fetch({ ...args[0], url: this.getUrl(args[0].url) }).then((r) =>
+        ApiHttpService.handleErrors(r)
       );
     }
     const [url, ...rest] = args;
-    return await fetch(this.getUrl(url), ...rest).then((r) =>
+    return fetch(this.getUrl(url), ...rest).then((r) =>
       ApiHttpService.handleErrors(r)
     );
   }
 
   async fetchJson(...args: ArgumentTypes<typeof fetch>) {
-    return await this.fetch(...args).then((res) => {
+    return this.fetch(...args).then((res) => {
       return res.json();
     });
   }
@@ -55,7 +55,7 @@ export class ApiHttpService {
     init: FetchArgumentTypes[1] = {},
     ...rest: Tail<Tail<FetchArgumentTypes>>
   ) {
-    return await this.fetch(
+    return this.fetch(
       url,
       {
         body: JSON.stringify(body),
@@ -75,7 +75,7 @@ export class ApiHttpService {
     init: FetchArgumentTypes[1] = {},
     ...rest: Tail<Tail<FetchArgumentTypes>>
   ) {
-    return await this.post(url, body, init, ...rest).then((res) => res.json());
+    return this.post(url, body, init, ...rest).then((res) => res.json());
   }
 
   private getUrl(path: string) {

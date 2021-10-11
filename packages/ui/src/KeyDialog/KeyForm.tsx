@@ -1,121 +1,150 @@
 import React from 'react';
 import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core/lib/Constants/Global';
 import { TextHelper } from '@tolgee/core/lib/helpers/TextHelper';
+import { styled, IconButton, Button } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
 
 import { useTranslationDialogContext } from './useTranslationDialogContext';
-import { IconButton } from './IconButton';
 import { TranslationFields } from './TranslationFields';
-import { OpenInNew } from '../common/icons';
-import { LanguageSelect } from '../common/LanguageSelect';
-import { Button } from '@mui/material';
-import { ScreenshotPreview } from '../screenshots/ScreenshotPreview';
+import { LanguageSelect } from './LanguageSelect';
 import { LoadingButton } from '../common/LoadingButton';
+import { ScreenshotGallery } from './ScreenshotGallery/ScreenshotGallery';
+import { ScFieldTitle } from '../common/FieldTitle';
+
+const ScContainer = styled('div')`
+  font-family: Rubik, Roboto, Arial;
+  padding: 20px;
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ScHeading = styled('div')`
+  display: flex;
+  align-items: center;
+`;
+
+const ScHeadingTitle = styled('h3')`
+  display: flex;
+  margin: 0px;
+  margin-right: 5px;
+`;
+
+const ScHeadingRight = styled('div')`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-grow: 1;
+`;
+
+const ScKey = styled('p')`
+  margin: 0px;
+`;
+
+const ScKeyHint = styled('span')`
+  color: grey;
+`;
+
+const ScFieldsWrapper = styled('div')`
+  margin-top: 20px;
+`;
+
+const ScGalleryWrapper = styled('div')`
+  margin-top: 10px;
+`;
+
+const ScControls = styled('div')`
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  min-height: 36px;
+`;
+
+const ScButtonGroup = styled('div')`
+  display: flex;
+`;
+
+const ScError = styled('div')`
+  color: red;
+`;
 
 export const KeyForm = () => {
-  const handleTakeScreenshot = () => {
-    context.handleTakeScreenshot();
-  };
-
   const context = useTranslationDialogContext();
+  const screenshotsView =
+    context.dependencies.coreService.isAuthorizedTo('screenshots.view');
 
   return (
-    <div
-      style={{
-        fontFamily: 'Rubik, Roboto, Arial',
-        padding: 10,
-        boxSizing: 'border-box',
-        maxWidth: '100%',
-      }}
-      {...{ [RESTRICTED_ASCENDANT_ATTRIBUTE]: 'true' }}
-    >
-      <div style={{ display: 'flex' }}>
-        <div>
-          <h3 style={{ marginTop: 0 }}>Translate text</h3>
-        </div>
+    <ScContainer {...{ [RESTRICTED_ASCENDANT_ATTRIBUTE]: 'true' }}>
+      <ScHeading>
+        <ScHeadingTitle>Quick translation</ScHeadingTitle>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            flexGrow: 1,
-          }}
-        >
-          <span>
-            {!context.useBrowserWindow && (
-              <IconButton
-                title="Open in new window"
-                onClick={() => context.setUseBrowserWindow(true)}
-              >
-                <OpenInNew />
-              </IconButton>
-            )}
-          </span>
-        </div>
-      </div>
-      <p style={{ marginTop: 0, marginBottom: '20px' }}>
+        {!context.useBrowserWindow && (
+          <IconButton
+            title="Open in new window"
+            onClick={() => context.setUseBrowserWindow(true)}
+            color="inherit"
+            size="small"
+          >
+            <OpenInNew fontSize="small" />
+          </IconButton>
+        )}
+
+        <ScHeadingRight>
+          <LanguageSelect />
+        </ScHeadingRight>
+      </ScHeading>
+
+      <ScFieldTitle>Key</ScFieldTitle>
+      <ScKey>
         {context.input && TextHelper.removeEscapes(context.input)}
-        <span style={{ color: 'grey' }}>
-          {!context.translations?.id && " (key doesn't exist yet)"}
-        </span>
-      </p>
-      <LanguageSelect />
+        <ScKeyHint>
+          {context.translations?.keyId === undefined &&
+            " (key doesn't exist yet)"}
+        </ScKeyHint>
+      </ScKey>
 
-      <div style={{ marginTop: '20px' }}>
+      <ScFieldsWrapper>
         <TranslationFields />
-      </div>
+      </ScFieldsWrapper>
 
-      <div>
-        {context.newScreenshots.map((screenshot) => (
-          <ScreenshotPreview url={screenshot} />
-        ))}
-      </div>
+      {screenshotsView && (
+        <ScGalleryWrapper>
+          <ScreenshotGallery />
+        </ScGalleryWrapper>
+      )}
 
       {context.editDisabled &&
         !context.loading &&
         `Modification is restricted due to missing ${
-          context.translations?.id ? 'translations.edit' : 'keys.edit'
+          context.translations?.keyId !== undefined
+            ? 'translations.edit'
+            : 'keys.edit'
         } scope in current api key settings.`}
 
-      {context.error && <div style={{ color: 'red' }}>{context.error}</div>}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginTop: '10px',
-          minHeight: 36,
-        }}
-      >
-        <Button onClick={context.onClose} color="secondary" variant="outlined">
+      {context.error && <ScError>{context.error}</ScError>}
+      <ScControls>
+        <Button onClick={context.onClose} color="secondary">
           Cancel
         </Button>
-        <div style={{ display: 'flex' }}>
-          {context.pluginAvailable && !context.screenshotDisabled && (
-            <Button
-              onClick={() => handleTakeScreenshot()}
-              style={{ marginLeft: '10px' }}
-              disabled={context.editDisabled}
-              variant="outlined"
-            >
-              Take screenshot
-            </Button>
-          )}
-
+        <ScButtonGroup>
           <LoadingButton
             loading={context.saving}
             disabled={context.saving || context.editDisabled}
             onClick={context.onSave}
             color="primary"
+            variant="contained"
             style={{ marginLeft: '10px' }}
-            variant="outlined"
           >
             {context.success
               ? 'Saved! ✓'
-              : !context.translations?.id
+              : context.translations?.keyId === undefined
               ? 'Create'
               : 'Update'}
           </LoadingButton>
-        </div>
-      </div>
-    </div>
+        </ScButtonGroup>
+      </ScControls>
+    </ScContainer>
   );
 };

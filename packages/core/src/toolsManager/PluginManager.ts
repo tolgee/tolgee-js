@@ -4,7 +4,7 @@ import { EventService } from '../services/EventService';
 import { ElementRegistrar } from '../services/ElementRegistrar';
 import { TolgeeConfig } from '../TolgeeConfig';
 import { TranslationService } from '../services/TranslationService';
-import { TranslationData } from '../DTOs/TranslationData';
+import { TranslationData } from '../types/DTOs';
 import { sleep } from '../helpers/sleep';
 
 export class PluginManager {
@@ -36,7 +36,9 @@ export class PluginManager {
     this.messages.stopListening();
   }
 
-  public readonly takeScreenshot = (translationData: TranslationData) => {
+  public readonly takeScreenshot = (
+    translationData: TranslationData
+  ): Promise<string> => {
     return new Promise((resolve, reject) => {
       this.translationService
         .changeTranslations(translationData)

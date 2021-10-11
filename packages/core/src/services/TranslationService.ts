@@ -1,11 +1,29 @@
 import { Translations, TreeTranslationsData } from '../types';
-import { TranslationData } from '../DTOs/TranslationData';
 import { Properties } from '../Properties';
 import { CoreService } from './CoreService';
 import { ApiHttpService } from './ApiHttpService';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
 import { EventEmitterImpl } from './EventEmitter';
+import {
+  ComplexEditKeyDto,
+  CreateKeyDto,
+  KeyWithDataModel,
+  SetTranslationsResponseModel,
+  SetTranslationsWithKeyDto,
+  TranslationData,
+  KeyWithTranslationsModel,
+} from '../types/DTOs';
+
+interface TranslationInterface {
+  text?: string;
+}
+
+interface Key {
+  id?: number;
+  name: string;
+  translations: Record<string, TranslationInterface>;
+}
 
 export class TranslationService {
   private translationsCache: Map<string, Translations> = new Map<
@@ -58,6 +76,20 @@ export class TranslationService {
     }
   }
 
+  updateTranslationInCache = async (data: Key) => {
+    const result: Record<string, string> = {};
+    Object.entries(data.translations).forEach(([lang, translation]) => {
+      const cachedData = this.translationsCache.get(lang);
+      if (cachedData) {
+        cachedData[data.name] = translation.text;
+      }
+      result[lang] = translation.text;
+    });
+    await (
+      this.eventService.TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
+    ).emit(new TranslationData(data.name, result, data.id));
+  };
+
   async loadTranslations(lang: string = this.properties.currentLanguage) {
     if (this.translationsCache.get(lang) == undefined) {
       if (!(this.fetchPromises[lang] instanceof Promise)) {
@@ -105,25 +137,61 @@ export class TranslationService {
     );
   }
 
-  async setTranslations(translationData: TranslationData) {
-    const result = await this.apiHttpService.postJson(
-      'v2/projects/translations',
+  async updateKeyComplex(
+    id: number,
+    data: ComplexEditKeyDto
+  ): Promise<KeyWithDataModel> {
+    this.coreService.checkScope('translations.edit');
+    const result = (await this.apiHttpService.postJson(
+      `v2/projects/keys/${id}/complex-update`,
       {
-        key: translationData.key,
-        translations: translationData.translations,
-      }
-    );
+        ...data,
+        screenshotUploadedImageIds: data.screenshotUploadedImageIds?.length
+          ? data.screenshotUploadedImageIds
+          : undefined,
+        screenshotIdsToDelete: data.screenshotIdsToDelete?.length
+          ? data.screenshotIdsToDelete
+          : undefined,
+      },
+      { method: 'put' }
+    )) as KeyWithDataModel;
 
-    Object.keys(translationData.translations).forEach((lang) => {
-      const data = this.translationsCache.get(lang);
-      if (data) {
-        data[translationData.key] = translationData.translations[lang];
+    await this.updateTranslationInCache(result);
+
+    return result;
+  }
+
+  async createKey(data: CreateKeyDto): Promise<KeyWithDataModel> {
+    this.coreService.checkScope('keys.edit');
+    const result = (await this.apiHttpService.postJson(
+      `v2/projects/keys/create`,
+      {
+        ...data,
+        screenshotUploadedImageIds: data.screenshotUploadedImageIds?.length
+          ? data.screenshotUploadedImageIds
+          : undefined,
       }
+    )) as KeyWithDataModel;
+
+    await this.updateTranslationInCache(result);
+
+    return result;
+  }
+
+  async setTranslations(
+    translationData: SetTranslationsWithKeyDto
+  ): Promise<SetTranslationsResponseModel> {
+    this.coreService.checkScope('translations.edit');
+    const result = (await this.apiHttpService.postJson(
+      'v2/projects/translations',
+      translationData
+    )) as SetTranslationsResponseModel;
+
+    await this.updateTranslationInCache({
+      id: result.keyId,
+      name: result.keyName,
+      translations: result.translations,
     });
-
-    await (
-      this.eventService.TRANSLATION_CHANGED as EventEmitterImpl<TranslationData>
-    ).emit(translationData);
 
     return result;
   }
@@ -194,7 +262,7 @@ export class TranslationService {
   getTranslationsOfKey = async (
     key: string,
     languages: Set<string> = new Set([this.properties.currentLanguage])
-  ): Promise<TranslationData> => {
+  ) => {
     this.coreService.checkScope('translations.view');
     try {
       const languagesArray = [...languages];
@@ -212,7 +280,10 @@ export class TranslationService {
         {}
       );
 
-      const firstItem = data._embedded?.keys?.[0];
+      const firstItem = data._embedded?.keys?.[0] as
+        | KeyWithTranslationsModel
+        | undefined;
+
       if (firstItem?.translations) {
         Object.entries(firstItem.translations).forEach(
           ([language, translation]) =>
@@ -220,7 +291,9 @@ export class TranslationService {
         );
       }
 
-      return new TranslationData(key, translationData, firstItem?.keyId);
+      const langs = data.selectedLanguages?.map((l) => l.tag) as string[];
+
+      return [firstItem, langs] as const;
     } catch (e) {
       if (
         e instanceof ApiHttpError &&

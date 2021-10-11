@@ -3,8 +3,9 @@ import {
   ThemeProvider as MuiThemeProvider,
   createTheme,
 } from '@mui/material/styles';
+import { DEVTOOLS_Z_INDEX } from './constants';
 
-const theme = createTheme({
+let theme = createTheme({
   typography: {
     fontFamily:
       '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
@@ -23,9 +24,30 @@ const theme = createTheme({
       default: 'rgb(255, 255, 255)',
     },
   },
-  mixins: {
-    toolbar: {
-      minHeight: 52,
+  zIndex: {
+    modal: DEVTOOLS_Z_INDEX,
+  },
+});
+
+theme = createTheme(theme, {
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          whiteSpace: 'nowrap',
+        },
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          fontSize: 12,
+          boxShadow: '1px 1px 6px rgba(0, 0, 0, 0.25)',
+          borderRadius: '11px',
+          color: 'black',
+          backgroundColor: 'white',
+        },
+      },
     },
   },
 });

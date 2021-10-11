@@ -96,6 +96,8 @@ export type Scope =
   | 'translations.edit'
   | 'translations.view'
   | 'keys.edit'
-  | 'screenshots.upload';
+  | 'screenshots.upload'
+  | 'screenshots.view'
+  | 'screenshots.delete';
 
 export type Mode = 'development' | 'production';

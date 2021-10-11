@@ -7,31 +7,23 @@
     "declaration": true,
     "rootDir": "src",
     "outDir": "lib",
-    "lib": [
-      "es2015",
-      "es2018",
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2015", "es2018", "es2020", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
     "baseUrl": "src",
+    "esModuleInterop": true,
     "paths": {
-      "@testFixtures/*": [
-        "./__testFixtures/*"
-      ]
+      "tolgee/ui": ["./ui"],
+      "tolgee/core": ["./core"],
+      "@testFixtures/*": ["./__testFixtures/*"]
     }
   },
-  "include": [
-    "src",
-    "typings"
-  ],
+  "include": ["src", "typings"],
   "exclude": [
     "../../../node_modules",
     "**/*.spec.ts",
-    "**/*.test.ts",
     "**/__testFixtures/*",
     "**/__mocks__/*",
     "@testFixtures/*"

@@ -1,45 +1,44 @@
-import * as React from 'react';
+import React from 'react';
 import { FunctionComponent, useContext } from 'react';
-import { useWithStyles } from '../common/styles/useWithStyles';
 import { TranslationDialogContext } from './TranslationDialogContextProvider';
+import { styled, TextField } from '@mui/material';
+import { keyframes } from '@mui/styled-engine';
+import { ScFieldTitle } from '../common/FieldTitle';
+
+const inputLoading = keyframes`
+  0%   { background-position: 0%; }
+  100% { background-position: 100%; }
+`;
+
+const ScTextField = styled(TextField)`
+  margin: 0px;
+`;
+
+const LoadingTextArea = styled('div')`
+  margin-top: 10px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  width: 100%;
+  border-radius: 5px;
+  font-style: inherit;
+  font-family: inherit;
+  box-sizing: border-box;
+  display: block;
+  height: 42px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0),
+    rgba(0, 0, 0, 0)
+  );
+  background-size: 500% 500%;
+  animation: ${inputLoading} 1.5s linear infinite alternate;
+`;
 
 export const TranslationFields: FunctionComponent = () => {
   const context = useContext(TranslationDialogContext);
-
-  const style: React.CSSProperties = {
-    margin: '10px 0 0 0',
-    padding: '5px',
-    border: '1px solid #ccc',
-    width: '100%',
-    borderRadius: '5px',
-    fontStyle: 'inherit',
-    fontFamily: 'inherit',
-    boxSizing: 'border-box',
-    display: 'block',
-  };
-
-  useWithStyles(`
-        .tolgee-translation-input-loading{
-            background: linear-gradient(90deg, rgba(0,0,0,0), rgba(0,0,0,0), rgba(0,0,0,0.1), rgba(0,0,0,0), rgba(0,0,0,0));
-            background-size: 500% 500%;
-            animation: tolgee-translation-input-loading 1.5s linear infinite alternate;
-        }
-        
-        @keyframes tolgee-translation-input-loading {
-            0%   {background-position: 0%;}
-            100% {background-position: 100%;}
-        }        
-    `);
-
-  const LoadingTextArea = () => (
-    <div
-      className="tolgee-translation-input-loading"
-      style={{
-        ...style,
-        height: '42px',
-      }}
-    />
-  );
 
   const Loading = () => (
     <>
@@ -58,17 +57,27 @@ export const TranslationFields: FunctionComponent = () => {
       {context.loading ? (
         <Loading />
       ) : (
-        Object.keys(context.translationsForm.translations).map((key) => (
-          <textarea
-            style={style}
-            disabled={context.editDisabled}
-            key={key}
-            lang={key}
-            placeholder={key}
-            value={context.translationsForm.translations[key] || ''}
-            onChange={context.onTranslationInputChange(key)}
-          />
-        ))
+        [...context.selectedLanguages].map((key) => {
+          const lang = context.availableLanguages?.find((l) => l.tag === key);
+
+          return (
+            <React.Fragment key={key}>
+              <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
+              <ScTextField
+                size="small"
+                disabled={context.editDisabled}
+                key={key}
+                lang={key}
+                minRows={2}
+                maxRows={Infinity}
+                multiline
+                fullWidth
+                value={context.translationsForm[key] || ''}
+                onChange={context.onTranslationInputChange(key)}
+              />
+            </React.Fragment>
+          );
+        })
       )}
     </>
   );

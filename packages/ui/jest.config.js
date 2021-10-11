@@ -12,4 +12,6 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  roots: ['src', 'test'],
+  //transformIgnorePatterns: ['node_modules/(?!(@tolgee))'],
 };

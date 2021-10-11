@@ -3,6 +3,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/__testFixtures/setupAfterEnv.ts'],
+  roots: ['src', 'test'],
   unmockedModulePathPatterns: [
     '<rootDir>/src/__testFixtures/*',
     '/node_modules/*',

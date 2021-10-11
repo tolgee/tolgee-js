@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslationDialogContext } from '../KeyDialog/useTranslationDialogContext';
-import { StylesContextProvider } from './styles/StylesContextProvider';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 
@@ -23,7 +22,7 @@ export const NewWindow: FC = (props) => {
     // When container is ready
     if (container) {
       // Create window
-      const win = window.open('', '', 'width=600,height=400,left=200,top=200');
+      const win = window.open('', '', 'width=600,height=600,left=200,top=200');
       win.document.title = 'Tolgee - Translate Text';
       if (!win.document) {
         alert('Please allow popups to open new window.');
@@ -79,13 +78,7 @@ export const NewWindow: FC = (props) => {
 
   return container
     ? createPortal(
-        <StylesContextProvider
-          insertionPoint={
-            container.ownerDocument.getElementsByTagName('head')[0]
-          }
-        >
-          <CacheProvider value={styleCache}>{props.children}</CacheProvider>
-        </StylesContextProvider>,
+        <CacheProvider value={styleCache}>{props.children}</CacheProvider>,
         container
       )
     : null;

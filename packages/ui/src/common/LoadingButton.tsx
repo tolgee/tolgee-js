@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, ButtonProps, CircularProgress } from '@mui/material';
-import styled from '@emotion/styled';
+import { styled } from '@mui/material';
 
 const StyledButton = styled(Button)`
   position: 'relative';
 `;
 
-const LoadingWrapper = styled.div`
+const LoadingWrapper = styled('div')`
   position: absolute;
   top: 0;
   bottom: 0;
