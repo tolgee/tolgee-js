@@ -81,6 +81,11 @@ export const Page: FunctionComponent = () => {
         <h3>Key is default value</h3>
         <T strategy="ELEMENT_WRAP">unknown key</T>
       </div>
+
+      <div>
+        {t('hey', undefined, true)}
+        {t('hey', undefined, false)}
+      </div>
     </div>
   );
 };

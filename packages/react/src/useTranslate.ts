@@ -1,6 +1,6 @@
 import { useTolgeeContext } from './useTolgeeContext';
 import { TranslationParameters } from './types';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type UseTranslateResultFnProps = {
   key: string;
@@ -21,11 +21,19 @@ type ReturnFnType = {
 
 export const useTranslate: () => ReturnFnType = () => {
   const context = useTolgeeContext();
-  const [translated, setTranslated] = useState(
-    {} as Record<string, Record<string, string>>
-  );
-  const [wasInstant, setWasInstant] = useState(false);
 
+  // dummy state to enable re-rendering
+  const [_, setDummyValue] = useState(0 as number);
+
+  const forceRerender = () => {
+    setDummyValue((v) => v + 1);
+  };
+
+  // cache of translations translated with this useTranslate
+  const translatedRef = useRef<Record<string, Record<string, string>>>({});
+  const translated = translatedRef.current;
+
+  // Parses key of the translation cache
   const parseJsonHash = (
     jsonKey
   ): {
@@ -35,6 +43,8 @@ export const useTranslate: () => ReturnFnType = () => {
   } => {
     return JSON.parse(jsonKey);
   };
+
+  // Generates key to store in translations cache
   const getJsonHash = (
     parameters: TranslationParameters,
     noWrap: boolean,
@@ -43,6 +53,10 @@ export const useTranslate: () => ReturnFnType = () => {
     return JSON.stringify({ parameters, noWrap, defaultValue });
   };
 
+  // Returns the translation from cache.
+  //
+  // If not found, instant value is returned
+  // and async translateAll method is executed
   const translationFromState = (
     key: string,
     parameters: TranslationParameters,
@@ -63,20 +77,14 @@ export const useTranslate: () => ReturnFnType = () => {
         orEmpty: true,
         defaultValue,
       });
-      setTranslated({ ...translated });
-      setWasInstant(true);
+      translateAll();
     }
 
     return translated[key][jsonHash];
   };
 
-  useEffect(() => {
-    if (wasInstant) {
-      translateAll();
-    }
-    setWasInstant(false);
-  }, [wasInstant]);
-
+  // Refreshes all translations in cache
+  // and forces rerender
   const translateAll = () => {
     const translationPromises = Object.entries(translated).flatMap(
       ([key, data]) => {
@@ -94,19 +102,10 @@ export const useTranslate: () => ReturnFnType = () => {
     );
 
     Promise.all(translationPromises).then((result) => {
-      const newTranslated = result.reduce(
-        (newTranslated: Record<string, Record<string, string>>, current) => {
-          return {
-            ...newTranslated,
-            [current.key]: {
-              ...newTranslated[current.key],
-              [current.jsonHash]: current.translated,
-            },
-          };
-        },
-        {}
-      ) as Record<string, Record<string, string>>;
-      setTranslated((translated) => ({ ...translated, ...newTranslated }));
+      result.forEach((item) => {
+        translated[item.key][item.jsonHash] = item.translated;
+      });
+      forceRerender();
     });
   };
 
@@ -127,16 +126,13 @@ export const useTranslate: () => ReturnFnType = () => {
           if (key === changeData.key) {
             return Object.keys(data).map(async (jsonHash) => {
               const params = parseJsonHash(jsonHash);
-              const newTranslated = await context.tolgee.translate(
+              translated[key][jsonHash] = await context.tolgee.translate(
                 key,
                 params.parameters,
                 params.noWrap,
                 params.defaultValue
               );
-              setTranslated((oldTranslated) => ({
-                ...oldTranslated,
-                [key]: { ...oldTranslated[key], [jsonHash]: newTranslated },
-              }));
+              forceRerender();
             });
           }
         });

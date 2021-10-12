@@ -41,7 +41,7 @@ export default {
   plugins: [
     typescript({
       outDir: './',
-      sourceMap: false,
+      sourceMap: true,
     }),
   ],
 };
