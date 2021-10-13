@@ -10,7 +10,7 @@
     "serve": "serve -p 8101 ./dist"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@tolgee/core": "^1.7.4",
     "@tolgee/ui": "^1.7.4",

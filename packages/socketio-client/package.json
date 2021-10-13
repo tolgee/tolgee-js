@@ -22,7 +22,7 @@
     "dist": "dist"
   },
   "author": "Jan Cizmar",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^27.0.2",
     "@types/socket.io-client": "^1.4.36",
