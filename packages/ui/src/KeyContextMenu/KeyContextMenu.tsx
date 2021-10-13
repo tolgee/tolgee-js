@@ -6,7 +6,7 @@ import { styled } from '@mui/material';
 import { ThemeProvider } from '../ThemeProvider';
 import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
 
-const SCMenuItem = styled(MenuItem)`
+const ScMenuItem = styled(MenuItem)`
   display: flex;
   flex-direction: column;
   height: 50px;
@@ -14,12 +14,12 @@ const SCMenuItem = styled(MenuItem)`
   align-items: flex-start;
 `;
 
-const SCTranslation = styled('div')`
+const ScTranslation = styled('div')`
   display: flex;
   padding: 3px;
 `;
 
-const SCKey = styled('div')`
+const ScKey = styled('div')`
   display: flex;
   margin-top: 10px;
   padding: 3px;
@@ -95,7 +95,7 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
             {Array.from(this.state.keys).map((key, index) => (
-              <SCMenuItem
+              <ScMenuItem
                 onClick={() => {
                   this.state.onSelect(key);
                   setTimeout(() => {
@@ -104,13 +104,13 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
                 }}
                 key={index}
               >
-                <SCTranslation>
+                <ScTranslation>
                   {this.props.dependencies.translationService.getFromCacheOrFallback(
                     key
                   )}
-                </SCTranslation>
-                <SCKey>{key}</SCKey>
-              </SCMenuItem>
+                </ScTranslation>
+                <ScKey>{key}</ScKey>
+              </ScMenuItem>
             ))}
           </Menu>
         )}

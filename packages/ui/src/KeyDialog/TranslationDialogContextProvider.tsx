@@ -48,7 +48,7 @@ export type DialogContextType = {
   availableLanguages: LanguageModel[];
   selectedLanguages: Set<string>;
   onSelectedLanguagesChange: (val: Set<string>) => void;
-  editDisabled: boolean;
+  formDisabled: boolean;
   onTranslationInputChange: (
     abbr
   ) => (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -257,10 +257,11 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       setScreenshots(screenshots.filter((sc) => sc.id !== id));
     };
 
-    const editDisabled =
+    const formDisabled =
       loading ||
-      !coreService.isAuthorizedTo('translations.edit') ||
-      (!translations.keyId && !coreService.isAuthorizedTo('keys.edit'));
+      (translations.keyId
+        ? !coreService.isAuthorizedTo('translations.edit')
+        : !coreService.isAuthorizedTo('keys.edit'));
 
     const [availableLanguages, setAvailableLanguages] =
       useState<LanguageModel[]>(undefined);
@@ -287,7 +288,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       availableLanguages,
       selectedLanguages,
       onSelectedLanguagesChange,
-      editDisabled,
+      formDisabled,
       onTranslationInputChange,
       translations,
       translationsForm,

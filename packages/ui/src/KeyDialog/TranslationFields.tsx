@@ -12,6 +12,9 @@ const inputLoading = keyframes`
 
 const ScTextField = styled(TextField)`
   margin: 0px;
+  & .Mui-disabled {
+    background: ${({ theme }) => theme.palette.grey[200]};
+  }
 `;
 
 const LoadingTextArea = styled('div')`
@@ -65,7 +68,7 @@ export const TranslationFields: FunctionComponent = () => {
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <ScTextField
                 size="small"
-                disabled={context.editDisabled}
+                disabled={context.formDisabled}
                 key={key}
                 lang={key}
                 minRows={2}
