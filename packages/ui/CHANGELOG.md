@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.6](https://github.com/tolgee/tolgee-js/compare/v1.7.5...v1.7.6) (2021-10-13)
+
+
+### Bug Fixes
+
+* **js sdk:** Fix package.json licences TG-355 ([008f2de](https://github.com/tolgee/tolgee-js/commit/008f2deb3edcc29054ecf69d9a32b03d7ef1a212))
+
+
+
+
+
 ## 1.7.4 (2021-10-06)
 
 **Note:** Version bump only for package @tolgee/ui
