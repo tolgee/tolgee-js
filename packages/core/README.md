@@ -1,6 +1,12 @@
+![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
+![@tolgee/core version](https://img.shields.io/npm/v/@tolgee/core?label=%40tolgee%2Fcore)
+![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
+![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)
+[![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
+
 # Tolgee core library
 
-[<img src="https://raw.githubusercontent.com/tolgee/documentation/cca5778bcb8f57d28a03065d1927fcea31d0b089/tolgee_logo_text.svg" alt="Tolgee Toolkit" />](https://toolkit.tolgee.io)
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
 Core library of Tolgee localization toolkit. For more information about Tolgee Toolkit, visit our documentation website
 [toolkit.tolgee.io](https://toolkit.tolgee.io).

@@ -1,3 +1,9 @@
+![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
+![@tolgee/ngx version](https://img.shields.io/npm/v/@tolgee/ngx?label=%40tolgee%2Fngx)
+![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
+![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)
+[![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
+
 # Angular
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.

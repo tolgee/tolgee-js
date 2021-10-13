@@ -1,5 +1,7 @@
 # Socket IO client for Tolgee Server
 
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
+
 Simple client for Socket.io server embedded in Tolgee server to listen for data modification events live.
 
 ## Usage
