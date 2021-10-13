@@ -9,6 +9,7 @@ import { dataTransferItemsToArray } from './utils';
 
 export interface ScreenshotDropzoneProps {
   validateAndUpload: (files: File[]) => void;
+  enabled: boolean;
 }
 
 const ScContainer = styled('div')`
@@ -63,13 +64,13 @@ const ScInvalidIcon = styled(HighlightOff)`
 
 export const ScreenshotDropzone: FunctionComponent<ScreenshotDropzoneProps> = ({
   validateAndUpload,
+  enabled,
   ...props
 }) => {
   const [dragOver, setDragOver] = useState(null as null | 'valid' | 'invalid');
   const [dragEnterTarget, setDragEnterTarget] = useState(
     null as EventTarget | null
   );
-  // const projectPermissions = useProjectPermissions();
 
   const onDragEnter = (e: React.DragEvent) => {
     e.stopPropagation();
@@ -108,9 +109,15 @@ export const ScreenshotDropzone: FunctionComponent<ScreenshotDropzoneProps> = ({
     setDragOver(null);
   };
 
-  // if (projectPermissions.satisfiesPermission(ProjectPermissionType.TRANSLATE)) {
-  const dropZoneAllowedProps = { onDrop, onDragEnter, onDragLeave, onDragOver };
-  // }
+  let dropZoneAllowedProps = {} as any;
+  if (enabled) {
+    dropZoneAllowedProps = {
+      onDrop,
+      onDragEnter,
+      onDragLeave,
+      onDragOver,
+    };
+  }
 
   return (
     <>

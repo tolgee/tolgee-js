@@ -84,11 +84,11 @@ describe('CoreService', () => {
     });
 
     test('will return value from http service', async () => {
-      const mockedReturn = ['translations.view', 'translations.edit'];
-      mocked(mockedFetchJson).mockImplementation(
-        async () => mockedReturn as Scope[]
-      );
-      expect(await coreService.getScopes()).toEqual(mockedReturn);
+      const mockedReturn = {
+        scopes: ['translations.view', 'translations.edit'],
+      };
+      mocked(mockedFetchJson).mockImplementation(async () => mockedReturn);
+      expect(await coreService.getScopes()).toEqual(mockedReturn.scopes);
     });
   });
 

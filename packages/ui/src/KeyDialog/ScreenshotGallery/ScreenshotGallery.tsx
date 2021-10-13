@@ -19,7 +19,6 @@ const ScPlaceholder = styled('div')`
   align-items: center;
   justify-content: center;
   text-align: center;
-  cursor: pointer;
   flex-grow: 1;
   border: 1px dashed lightgrey;
 `;
@@ -60,12 +59,15 @@ export const ScreenshotGallery: React.FC = () => {
     screenshotsUploading,
     pluginAvailable,
     dependencies,
+    formDisabled,
   } = useTranslationDialogContext();
 
-  const screenshotUpload =
-    dependencies.coreService.isAuthorizedTo('screenshots.upload');
-  const screenshotDelete =
-    dependencies.coreService.isAuthorizedTo('screenshots.delete');
+  const uploadEnabled =
+    dependencies.coreService.isAuthorizedTo('screenshots.upload') &&
+    !formDisabled;
+  const deleteEnabled =
+    dependencies.coreService.isAuthorizedTo('screenshots.delete') &&
+    !formDisabled;
 
   function onFileSelected(e: React.SyntheticEvent) {
     const files = (e.target as HTMLInputElement).files;
@@ -110,7 +112,7 @@ export const ScreenshotGallery: React.FC = () => {
     fileRef.current?.dispatchEvent(new MouseEvent('click'));
   };
 
-  const ableToTakeScreenshot = pluginAvailable && screenshotUpload;
+  const ableToTakeScreenshot = pluginAvailable && uploadEnabled;
 
   return (
     <>
@@ -139,7 +141,7 @@ export const ScreenshotGallery: React.FC = () => {
               </IconButton>
             </Tooltip>
           )}
-          {screenshotUpload && (
+          {uploadEnabled && (
             <Tooltip
               title="Add image"
               PopperProps={{
@@ -155,14 +157,21 @@ export const ScreenshotGallery: React.FC = () => {
         </ScControls>
       </ScHeading>
 
-      <ScreenshotDropzone validateAndUpload={validateAndUpload}>
+      <ScreenshotDropzone
+        validateAndUpload={validateAndUpload}
+        enabled={uploadEnabled}
+      >
         {screenshots.length
           ? screenshots.map((ss) => (
               <ScreenshotThumbnail
                 key={ss.id}
                 data={ss}
                 onClick={() => setDetail(ss)}
-                onDelete={screenshotDelete ? removeScreenshot : undefined}
+                onDelete={
+                  deleteEnabled || ss.justUploaded
+                    ? removeScreenshot
+                    : undefined
+                }
               />
             ))
           : null}
@@ -172,12 +181,15 @@ export const ScreenshotGallery: React.FC = () => {
           </ScScreenshotDummy>
         )}
         {!screenshots.length && !screenshotsUploading && (
-          <ScPlaceholder onClick={screenshotUpload ? onFileSelect : undefined}>
+          <ScPlaceholder
+            style={{ cursor: uploadEnabled ? 'pointer' : 'default' }}
+            onClick={uploadEnabled ? onFileSelect : undefined}
+          >
             <ScText>
               There are no screenshots.
               {ableToTakeScreenshot && ' Take screenshot by camera icon.'}
             </ScText>
-            {screenshotUpload && (
+            {uploadEnabled && (
               <ScText>Add some by dropping or clicking on plus.</ScText>
             )}
           </ScPlaceholder>

@@ -37,7 +37,8 @@ export class CoreService {
 
   async getScopes() {
     try {
-      return await this.apiHttpService.fetchJson(`api/apiKeys/scopes`);
+      return (await this.apiHttpService.fetchJson(`v2/api-keys/current`))
+        .scopes;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

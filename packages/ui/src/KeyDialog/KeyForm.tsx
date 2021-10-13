@@ -66,6 +66,11 @@ const ScButtonGroup = styled('div')`
   display: flex;
 `;
 
+const ScRestriction = styled('div')`
+  margin-top: 8px;
+  color: ${({ theme }) => theme.palette.text.secondary};
+`;
+
 const ScError = styled('div')`
   color: red;
 `;
@@ -115,13 +120,13 @@ export const KeyForm = () => {
         </ScGalleryWrapper>
       )}
 
-      {context.editDisabled &&
-        !context.loading &&
-        `Modification is restricted due to missing ${
+      {context.formDisabled && !context.loading && (
+        <ScRestriction>{`Modification is restricted due to missing ${
           context.translations?.keyId !== undefined
             ? 'translations.edit'
             : 'keys.edit'
-        } scope in current api key settings.`}
+        } scope in current api key settings.`}</ScRestriction>
+      )}
 
       {context.error && <ScError>{context.error}</ScError>}
       <ScControls>
@@ -131,7 +136,7 @@ export const KeyForm = () => {
         <ScButtonGroup>
           <LoadingButton
             loading={context.saving}
-            disabled={context.saving || context.editDisabled}
+            disabled={context.saving || context.formDisabled}
             onClick={context.onSave}
             color="primary"
             variant="contained"
