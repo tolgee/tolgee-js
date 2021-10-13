@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react",
-  "version": "1.7.4",
+  "version": "1.7.5",
   "description": "React implementation for tolgee localization framework",
   "main": "index.js",
   "types": "lib/index.d.ts",

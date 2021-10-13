@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.7.5](https://github.com/tolgee/tolgee-js/compare/v1.7.4...v1.7.5) (2021-10-13)
+
+
+### Bug Fixes
+
+* **react sdk:** sets state while rendering TG-344 ([c06f606](https://github.com/tolgee/tolgee-js/commit/c06f606e4ac77b4d97f0ee6b1f14d459b51afb9b))
+
+
+
+
+
 ## 1.7.4 (2021-10-06)
 
 **Note:** Version bump only for package @tolgee/testapps-react
