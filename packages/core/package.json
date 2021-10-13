@@ -28,7 +28,7 @@
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" "
   },
   "author": "JanCizmar",
-  "license": "ISC",
+  "license": "MIT",
   "files": [
     "index.js",
     "lib/**/*",
