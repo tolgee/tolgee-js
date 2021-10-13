@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.8.0](https://github.com/tolgee/tolgee-js/compare/v1.7.6...v1.8.0) (2021-10-13)
+
+
+### Features
+
+* Improve tolgee library UI TG-300 ([eee7a86](https://github.com/tolgee/tolgee-js/commit/eee7a86a3814eab61853b3aa118eb925e843c3f4))
+* Try integrating jss into tolgee-js TG-300 ([813cd36](https://github.com/tolgee/tolgee-js/commit/813cd36f645a5be39818ba0c9d0f846361b35d2a))
+
+
+
+
+
 ## [1.7.6](https://github.com/tolgee/tolgee-js/compare/v1.7.5...v1.7.6) (2021-10-13)
 
 

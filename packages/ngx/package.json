@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/ngx-workspace",
   "private": true,
-  "version": "1.7.6",
+  "version": "1.8.0",
   "keywords": [
     "localization",
     "internationalization",
@@ -27,7 +27,7 @@
     "@angular/platform-browser": "~12.2.8",
     "@angular/platform-browser-dynamic": "~12.2.8",
     "@angular/router": "~12.2.9",
-    "@tolgee/core": "^1.7.6",
+    "@tolgee/core": "^1.8.0",
     "rxjs": "~7.4.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.3"
