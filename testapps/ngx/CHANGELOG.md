@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.1](https://github.com/tolgee/tolgee-js/compare/v1.8.0...v1.8.1) (2021-10-14)
+
+**Note:** Version bump only for package angular
+
+
+
+
+
 # [1.8.0](https://github.com/tolgee/tolgee-js/compare/v1.7.6...v1.8.0) (2021-10-13)
 
 **Note:** Version bump only for package angular
