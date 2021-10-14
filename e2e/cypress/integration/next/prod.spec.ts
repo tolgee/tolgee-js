@@ -1,6 +1,6 @@
 context('Next Production', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:8107/');
+    cy.visit('http://localhost:8107');
   });
 
   it('Is translated in english', () => {
