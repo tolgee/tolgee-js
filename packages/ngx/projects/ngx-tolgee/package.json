@@ -1,6 +1,10 @@
 {
   "name": "@tolgee/ngx",
   "description": "Angular integration of Tolgee localization tool",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tolgee/tolgee-js"
+  },
   "version": "1.7.6",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",

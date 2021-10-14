@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
   },
+  "homepage": "https://tolgee.io",
   "keywords": [
     "localization",
     "internationalization",
@@ -26,7 +27,8 @@
     "build": "rollup -c rollup.config.js && tsc",
     "test": "jest --config ./jest.config.js",
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" ",
-    "schema": "openapi-typescript http://localhost:8080/v3/api-docs/All%20Internal%20-%20for%20Tolgee%20Web%20application --output ./src/types/apiSchema.generated.ts"
+    "schema": "openapi-typescript http://localhost:8080/v3/api-docs/All%20Internal%20-%20for%20Tolgee%20Web%20application --output ./src/types/apiSchema.generated.ts",
+    "typedoc": "typedoc --entryPointStrategy expand --out docs src/index.ts src/Tolgee.ts src/types.ts src/services/EventEmitter.ts  src/services/Subscription.ts"
   },
   "author": "JanCizmar",
   "license": "MIT",
@@ -52,6 +54,8 @@
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^27.0.5",
     "tslib": "^2.3.1",
+    "typedoc": "0.22.5",
+    "typedoc-plugin-markdown": "3.11.3",
     "typescript": "4.4.3"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",

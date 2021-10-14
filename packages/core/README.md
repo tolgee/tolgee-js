@@ -34,4 +34,11 @@ Then, use it to translate your strings.
         document.title = tg.translate("hello_world");
     });
 
+## Features
+- All in One localization solution for your JS application 🙌
+- Out of box in-context localization 🎉
+- Automated screenshot generation 📷
+- Translation management platform 🎈
+- Open-source 🔥
+
 To learn more, check [Hello World example](https://toolkit.tolgee.io/docs/web/get_started/hello_world).
