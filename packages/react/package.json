@@ -4,7 +4,8 @@
   "description": "React implementation for tolgee localization framework",
   "main": "index.js",
   "types": "lib/index.d.ts",
-  "repository": "https://github.com/tolgee/tolgee-react",
+  "repository": "https://github.com/tolgee/tolgee-js",
+  "homepage": "https://tolgee.io",
   "keywords": [
     "localization",
     "internationalization",

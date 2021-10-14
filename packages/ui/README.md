@@ -8,8 +8,8 @@
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/cca5778bcb8f57d28a03065d1927fcea31d0b089/tolgee_logo_text.svg" alt="Tolgee Toolkit" />](https://toolkit.tolgee.io)
 
-UI library of Tolgee localization toolkit. For more information about Tolgee, visit our documentation website
-[https://toolkit.tolgee.io](toolkit.tolgee.io).
+UI library of Tolgee localization tool. For more information about Tolgee, visit our documentation website
+[https://tolgee.io](tolgee.io).
 
 ## Installation
 
@@ -24,7 +24,6 @@ First, create a Tolgee instance and provide **UI** constructor.
         apiKey: "your_api_key",
         apiUrl: "https://app.tolgee.io",
         ui: UI
-
     })
 
     tg.run();

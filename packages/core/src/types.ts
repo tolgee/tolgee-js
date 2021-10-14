@@ -1,23 +1,3 @@
-export interface TolgeeTextInputElement extends HTMLElement {
-  __tolgee: TextInputElementData;
-  selectionStart: number;
-  value: string;
-}
-
-export interface TolgeeTextAreaElement
-  extends TolgeeTextInputElement,
-    HTMLTextAreaElement {
-  addEventListener: any;
-  removeEventListener: any;
-}
-
-export interface TolgeeInputElement
-  extends TolgeeTextInputElement,
-    HTMLInputElement {
-  addEventListener: any;
-  removeEventListener: any;
-}
-
 export interface TextInputElementData {
   oldValue: string;
   valueInputs: string[];
