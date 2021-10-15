@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/ngx-workspace",
   "private": true,
-  "version": "1.8.2",
+  "version": "1.8.3",
   "keywords": [
     "localization",
     "internationalization",
