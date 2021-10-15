@@ -74,6 +74,13 @@ this.translateService
   .subscribe((r) => (this.helloWorld = r));
 ```
 
+### Element with t attribute
+
+```html
+<h1 t key="providing_default_values"></h1>
+<p t key="Peter has n dogs" [params]="params"></p>
+```
+
 ## Prerequisites
 
 1. You have some React based project
