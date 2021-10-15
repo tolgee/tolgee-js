@@ -26,10 +26,11 @@ const ScHeading = styled('div')`
   align-items: center;
 `;
 
-const ScHeadingTitle = styled('h3')`
+const ScHeadingTitle = styled('div')`
   display: flex;
   margin: 0px;
   margin-right: 5px;
+  font-size: 19px;
 `;
 
 const ScHeadingRight = styled('div')`
@@ -60,10 +61,6 @@ const ScControls = styled('div')`
   justify-content: flex-end;
   margin-top: 20px;
   min-height: 36px;
-`;
-
-const ScButtonGroup = styled('div')`
-  display: flex;
 `;
 
 const ScRestriction = styled('div')`
@@ -133,22 +130,20 @@ export const KeyForm = () => {
         <Button onClick={context.onClose} color="secondary">
           Cancel
         </Button>
-        <ScButtonGroup>
-          <LoadingButton
-            loading={context.saving}
-            disabled={context.saving || context.formDisabled}
-            onClick={context.onSave}
-            color="primary"
-            variant="contained"
-            style={{ marginLeft: '10px' }}
-          >
-            {context.success
-              ? 'Saved! ✓'
-              : context.translations?.keyId === undefined
-              ? 'Create'
-              : 'Update'}
-          </LoadingButton>
-        </ScButtonGroup>
+        <LoadingButton
+          loading={context.saving}
+          disabled={context.saving || context.formDisabled}
+          onClick={context.onSave}
+          color="primary"
+          variant="contained"
+          style={{ marginLeft: '10px' }}
+        >
+          {context.success
+            ? 'Saved! ✓'
+            : context.translations?.keyId === undefined
+            ? 'Create'
+            : 'Update'}
+        </LoadingButton>
       </ScControls>
     </ScContainer>
   );

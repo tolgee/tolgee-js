@@ -104,7 +104,7 @@ context('UI Dialog', () => {
     cy.contains('Update').click();
 
     openUI();
-    getByAriaLabel('Screenshot').should('be.visible').trigger('mouseover');
+    getByAriaLabel('Screenshot').trigger('mouseover');
     getByAriaLabel('Delete').should('be.visible').click();
     cy.contains('Update').click();
 
@@ -119,6 +119,7 @@ context('UI Dialog', () => {
       .trigger('mouseover')
       .click();
     cy.get('textarea').contains(translation).should('be.visible');
+    cy.wait(100);
   };
 
   const removeScreenshots = () => {

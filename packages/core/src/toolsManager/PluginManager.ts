@@ -93,10 +93,33 @@ export class PluginManager {
         ui: undefined,
       } as any as TolgeeConfig,
     };
-    this.messages.send('TOLGEE_READY', sharedConfiguration);
+
+    let timer: NodeJS.Timer = null;
+
+    const ping = () => {
+      this.messages.send('TOLGEE_READY', sharedConfiguration);
+    };
+    const finish = () => {
+      clearInterval(timer);
+    };
+
     this.messages.listen('TOLGEE_PLUGIN_READY', () => {
       this.handshakeSucceed = true;
       this.messages.send('TOLGEE_READY', sharedConfiguration);
+      finish();
     });
+
+    ping();
+
+    // try ping 5 times as sometimes extension doesn't respond right away
+    let counter = 0;
+    timer = setInterval(() => {
+      if (!this.handshakeSucceed && counter < 5) {
+        ping();
+        counter += 1;
+      } else {
+        finish();
+      }
+    }, 200);
   };
 }
