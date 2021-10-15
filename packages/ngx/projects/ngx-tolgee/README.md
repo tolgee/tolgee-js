@@ -30,7 +30,7 @@ First, install the package.
 Then import `NgxTolgeeModule` in your app.
 
 ```typescript
-import { NgxTolgeeModule } from "../clients/js/packages/ngx/dist/ngx-tolgee/tolgee-ngx";
+import { NgxTolgeeModule } from "@tolgee/ngx";
 import { UI } from "@tolgee/ui";
 import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
