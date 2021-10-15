@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ThemeProvider as MuiThemeProvider,
-  createTheme,
-} from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material';
 import { DEVTOOLS_Z_INDEX } from './constants';
 
 let theme = createTheme({

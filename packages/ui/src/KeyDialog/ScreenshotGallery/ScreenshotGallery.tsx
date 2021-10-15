@@ -10,6 +10,7 @@ import { DEVTOOLS_Z_INDEX } from '../../constants';
 import { ScreenshotInterface } from '../TranslationDialogContextProvider';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
+import { ExtensionPrompt } from './ExtensionPrompt';
 
 const ScPlaceholder = styled('div')`
   display: flex;
@@ -62,6 +63,8 @@ export const ScreenshotGallery: React.FC = () => {
     formDisabled,
   } = useTranslationDialogContext();
 
+  const [extensionPrompt, setExtensionPrompt] = useState(false);
+
   const uploadEnabled =
     dependencies.coreService.isAuthorizedTo('screenshots.upload') &&
     !formDisabled;
@@ -112,7 +115,10 @@ export const ScreenshotGallery: React.FC = () => {
     fileRef.current?.dispatchEvent(new MouseEvent('click'));
   };
 
-  const ableToTakeScreenshot = pluginAvailable && uploadEnabled;
+  const ableToTakeScreenshot = pluginAvailable;
+
+  // @ts-ignore
+  const isChrome = Boolean(window.chrome);
 
   return (
     <>
@@ -128,31 +134,40 @@ export const ScreenshotGallery: React.FC = () => {
       <ScHeading>
         <ScFieldTitle>Screenshots</ScFieldTitle>
         <ScControls>
-          {ableToTakeScreenshot && (
-            <Tooltip
-              title="Take screenshot"
-              PopperProps={{
-                disablePortal: true,
-                style: { zIndex: DEVTOOLS_Z_INDEX },
-              }}
-            >
-              <IconButton onClick={handleTakeScreenshot}>
-                <CameraAlt />
-              </IconButton>
-            </Tooltip>
-          )}
           {uploadEnabled && (
-            <Tooltip
-              title="Add image"
-              PopperProps={{
-                disablePortal: true,
-                style: { zIndex: DEVTOOLS_Z_INDEX },
-              }}
-            >
-              <IconButton onClick={onFileSelect}>
-                <AddCircleOutline />
-              </IconButton>
-            </Tooltip>
+            <>
+              {(isChrome || ableToTakeScreenshot) && (
+                <Tooltip
+                  title="Take screenshot"
+                  PopperProps={{
+                    disablePortal: true,
+                    style: { zIndex: DEVTOOLS_Z_INDEX },
+                  }}
+                >
+                  <IconButton
+                    onClick={
+                      ableToTakeScreenshot
+                        ? handleTakeScreenshot
+                        : () => setExtensionPrompt(true)
+                    }
+                  >
+                    <CameraAlt />
+                  </IconButton>
+                </Tooltip>
+              )}
+
+              <Tooltip
+                title="Add image"
+                PopperProps={{
+                  disablePortal: true,
+                  style: { zIndex: DEVTOOLS_Z_INDEX },
+                }}
+              >
+                <IconButton onClick={onFileSelect}>
+                  <AddCircleOutline />
+                </IconButton>
+              </Tooltip>
+            </>
           )}
         </ScControls>
       </ScHeading>
@@ -197,6 +212,9 @@ export const ScreenshotGallery: React.FC = () => {
       </ScreenshotDropzone>
       {detail && (
         <ScreenshotDetail screenshot={detail} onClose={() => setDetail(null)} />
+      )}
+      {extensionPrompt && (
+        <ExtensionPrompt onClose={() => setExtensionPrompt(false)} />
       )}
     </>
   );
