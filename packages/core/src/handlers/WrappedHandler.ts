@@ -25,6 +25,8 @@ export class WrappedHandler extends AbstractHandler {
       elementWithMeta._tolgee.wrappedWithElementOnlyKey = element.getAttribute(
         TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
       );
+      elementWithMeta._tolgee.wrappedWithElementOnlyDefaultHtml =
+        element.innerHTML;
       this.elementRegistrar.register(elementWithMeta);
     });
   }

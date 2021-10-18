@@ -83,8 +83,33 @@ export const Page: FunctionComponent = () => {
       </div>
 
       <div>
-        {t('hey', undefined, true)}
-        {t('hey', undefined, false)}
+        <h3>Keys with defaults</h3>
+        <p>
+          <T keyName="with_default">This is default</T>
+        </p>
+        <p>{t({ key: 'key', defaultValue: 'This is default value!' })}</p>
+      </div>
+
+      <div>
+        <h3>Same key multiplied in same element</h3>
+        <div className="same-key-multiple">
+          {t({ key: 'key', defaultValue: 'First one' })}
+          <br />
+          {t({ key: 'key', defaultValue: 'Second one' })}
+        </div>
+      </div>
+
+      <div>
+        <h3>Multiple keys in same element</h3>
+        <div className="multiple-keys">
+          {t({ key: 'key', defaultValue: 'First one' })}
+          <br />
+          {t({ key: 'key 2', defaultValue: 'Second one' })}
+          <br />
+          {t({ key: 'key 3', defaultValue: 'Third one' })}
+          <br />
+          {t({ key: 'key 3', defaultValue: 'Third one again' })}
+        </div>
       </div>
     </div>
   );

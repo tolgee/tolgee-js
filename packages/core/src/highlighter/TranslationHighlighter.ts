@@ -2,8 +2,11 @@ import { ElementWithMeta } from '../types';
 import { PluginManager } from '../toolsManager/PluginManager';
 import { DependencyStore } from '../services/DependencyStore';
 
+type KeyWithDefault = { key: string; defaultValue?: string };
+
 export class TranslationHighlighter {
   public pluginManager: PluginManager;
+
   constructor(private dependencies: DependencyStore) {}
 
   private _renderer: any;
@@ -19,13 +22,18 @@ export class TranslationHighlighter {
     return this._renderer;
   }
 
-  private static getKeyOptions(node: ElementWithMeta): Set<string> {
+  private static getKeyOptions(node: ElementWithMeta): KeyWithDefault[] {
     const nodes = Array.from(node._tolgee.nodes);
-    const keys = nodes.reduce(
-      (acc, curr) => [...acc, ...curr._tolgee.keys.map((k) => k.key)],
+    return nodes.reduce(
+      (acc, curr) => [
+        ...acc,
+        ...curr._tolgee.keys.map((k) => ({
+          key: k.key,
+          defaultValue: k.defaultValue,
+        })),
+      ],
       []
     );
-    return new Set(keys);
   }
 
   listen(element: ElementWithMeta & ElementCSSInlineStyle) {
@@ -36,19 +44,36 @@ export class TranslationHighlighter {
     );
   }
 
-  private async getKey(
+  private async getKeyAndDefault(
     mouseEvent: MouseEvent,
     element: ElementWithMeta
-  ): Promise<string> {
+  ): Promise<KeyWithDefault> {
     if (element._tolgee.wrappedWithElementOnlyKey) {
-      return element._tolgee.wrappedWithElementOnlyKey;
+      return {
+        key: element._tolgee.wrappedWithElementOnlyKey,
+        defaultValue: element._tolgee.wrappedWithElementOnlyDefaultHtml,
+      };
     }
-    const keys = TranslationHighlighter.getKeyOptions(element);
-    if (keys.size > 1) {
-      return await this.renderer.getKey({ keys: keys, openEvent: mouseEvent });
+    const keysWithDefaults = TranslationHighlighter.getKeyOptions(element);
+
+    // create Set to remove duplicated key values
+    const keySet = new Set(
+      keysWithDefaults.map((keyWithDefault) => keyWithDefault.key)
+    );
+    if (keySet.size > 1) {
+      // this opens the popover where user chooses the key
+      const selectedKey = await this.renderer.getKey({
+        keys: keySet,
+        openEvent: mouseEvent,
+      });
+      // get the key with default
+      const found = keysWithDefaults.find((kwd) => kwd.key === selectedKey);
+      if (found) {
+        return found;
+      }
     }
-    if (keys.size === 1) {
-      return Array.from(keys)[0];
+    if (keySet.size === 1) {
+      return keysWithDefaults[0];
     }
     // eslint-disable-next-line no-console
     console.error('No key to translate. This seems like a bug in tolgee.');
@@ -56,9 +81,9 @@ export class TranslationHighlighter {
 
   private translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
     if (typeof this.renderer === 'object') {
-      const key = await this.getKey(e, element);
+      const key = await this.getKeyAndDefault(e, element);
       if (key) {
-        this.renderer.renderViewer(key);
+        this.renderer.renderViewer(key.key, key.defaultValue);
         return;
       }
       return;

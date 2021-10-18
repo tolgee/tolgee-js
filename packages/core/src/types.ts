@@ -55,6 +55,7 @@ export type ElementWithMeta = Element &
 
 export type ElementMeta = {
   wrappedWithElementOnlyKey?: string;
+  wrappedWithElementOnlyDefaultHtml?: string;
   nodes: Set<NodeWithMeta>;
   listeningForHighlighting?: boolean;
   removeAllEventListeners?: () => void;

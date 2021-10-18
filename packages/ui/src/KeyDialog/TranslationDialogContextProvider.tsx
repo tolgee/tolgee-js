@@ -23,6 +23,7 @@ interface TranslationInterface {
 
 type DialogProps = {
   input: string;
+  defaultValue: string;
   open: boolean;
   onClose: () => void;
   dependencies: ComponentDependencies;
@@ -100,7 +101,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         setTranslationsForm({ ...translationsForm });
       };
 
-    const loadTranslations = (languages?: Set<string>, reinitiliaze = true) => {
+    const loadTranslations = (languages?: Set<string>, reinitialize = true) => {
       translationService
         .getTranslationsOfKey(props.input, languages)
         .then(([result, languages]) => {
@@ -119,10 +120,12 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
             setSelectedLanguages(new Set(languages));
           }
 
-          if (!translationsForm || reinitiliaze) {
-            setTranslationsForm(
-              responseToTranslationData(result?.translations)
+          if (!translationsForm || reinitialize) {
+            const translationsData = responseToTranslationData(
+              result?.translations
             );
+            setTranslationsForm(translationsData);
+
             setScreenshots(
               result?.screenshots?.map((sc) => ({
                 ...sc,
@@ -269,6 +272,34 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const [selectedLanguages, setSelectedLanguages] = useState(
       properties.preferredLanguages || new Set([properties.currentLanguage])
     );
+
+    // sets the default value for base language if is not stored already
+    useEffect(() => {
+      if (
+        props.defaultValue &&
+        availableLanguages &&
+        selectedLanguages &&
+        translationsForm
+      ) {
+        const baseLanguageDefinition = availableLanguages.find((l) => l.base);
+        if (
+          baseLanguageDefinition &&
+          selectedLanguages.has(baseLanguageDefinition.tag)
+        ) {
+          if (!translationsForm[baseLanguageDefinition.tag]) {
+            setTranslationsForm({
+              ...translationsForm,
+              [baseLanguageDefinition.tag]: props.defaultValue,
+            });
+          }
+        }
+      }
+    }, [
+      availableLanguages,
+      translationsForm,
+      selectedLanguages,
+      props.defaultValue,
+    ]);
 
     const onSelectedLanguagesChange = (value: Set<string>) => {
       if (value.size) {

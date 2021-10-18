@@ -43,7 +43,7 @@ describe('TranslationHighlighter', () => {
       await savedCallback(openEvent);
 
       expect(rendererViewerMock).toBeCalledTimes(1);
-      expect(rendererViewerMock).toBeCalledWith('key');
+      expect(rendererViewerMock).toBeCalledWith('key', 'default value');
     });
 
     test('will open translation dialog when single key multiplied', async () => {
@@ -52,7 +52,7 @@ describe('TranslationHighlighter', () => {
       await savedCallback(openEvent);
 
       expect(rendererViewerMock).toBeCalledTimes(1);
-      expect(rendererViewerMock).toBeCalledWith('key');
+      expect(rendererViewerMock).toBeCalledWith('key', 'default value');
     });
   });
 

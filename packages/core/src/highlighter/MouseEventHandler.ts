@@ -7,7 +7,6 @@ export class MouseEventHandler {
   private keysDown = new Set<ModifierKey>();
   private mouseOn: Set<ElementWithMeta> = new Set();
   private highlighted: ElementWithMeta;
-  private highlightedInitialBackgroundColor: string;
   private mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
   private keysChanged: EventEmitterImpl<boolean> =
     new EventEmitterImpl<boolean>();
