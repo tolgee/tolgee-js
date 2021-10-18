@@ -20,6 +20,7 @@ export const createElement = (
       keys.push({
         key: `key${sameKeys ? `` : ` ${keyNum++}`}`,
         params: { a: 'aaa' },
+        defaultValue: 'default value',
       });
     }
     node._tolgee = {

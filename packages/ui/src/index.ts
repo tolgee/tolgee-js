@@ -36,8 +36,8 @@ export class UI {
     );
   }
 
-  public renderViewer(key: string) {
-    this.viewerComponent.translationEdit(key);
+  public renderViewer(key: string, defaultValue?: string) {
+    this.viewerComponent.translationEdit(key, defaultValue);
   }
 
   public async getKey(props: {

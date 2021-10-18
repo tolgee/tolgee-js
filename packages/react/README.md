@@ -2,7 +2,7 @@
 ![@tolgee/react version](https://img.shields.io/npm/v/@tolgee/react?label=%40tolgee%2Freact)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 ![licence](https://img.shields.io/github/license/tolgee/tolgee-js)
-![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)
+[![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
 
 # Tolgee for React

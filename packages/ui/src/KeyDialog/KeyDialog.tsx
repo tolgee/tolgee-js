@@ -12,7 +12,8 @@ export type Props = {
 
 export class KeyDialog extends React.Component<Props> {
   state = {
-    translationInput: null,
+    key: null,
+    defaultValue: undefined,
     dialogOpened: false,
   };
 
@@ -20,11 +21,12 @@ export class KeyDialog extends React.Component<Props> {
     super(props);
   }
 
-  public translationEdit(input) {
+  public translationEdit(key: string, defaultValue?: string) {
     this.setState({
       ...this.state,
       dialogOpened: true,
-      translationInput: input,
+      defaultValue: defaultValue,
+      key: key,
     });
   }
 
@@ -33,8 +35,9 @@ export class KeyDialog extends React.Component<Props> {
       <BodyEnd>
         <TranslationDialogContextProvider
           dependencies={this.props.dependencies}
+          defaultValue={this.state.defaultValue}
           open={this.state.dialogOpened}
-          input={this.state.translationInput}
+          input={this.state.key}
           onClose={this.onClose}
         >
           <TranslationDialog />
