@@ -180,19 +180,82 @@ describe('TranslationService', () => {
       expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(1, 'en');
       expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(2, 'de');
     });
-  });
 
-  describe('set translation', () => {
-    const dummyTranslationData = {
-      key: 'test key',
-      translations: { en: 'translation' },
-    } as TranslationData;
+    test("won't throw exception when there is null in translation data", async () => {
+      getMockedInstance(Properties).config.mode = 'development';
+      getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => ({
+        en: {
+          hello: null,
+          yep: 'Load was successfull.',
+        },
+      }));
+      window.console.error = jest.fn();
+      await translationService.loadTranslations('en');
+      expect(window.console.error).toHaveBeenCalledTimes(0);
+      expect(translationService.getFromCacheOrFallback('yep')).toEqual(
+        'Load was successfull.'
+      );
+    });
 
-    beforeEach(async () => {
+    describe('set translation', () => {
+      const dummyTranslationData = {
+        key: 'test key',
+        translations: { en: 'translation' },
+      } as TranslationData;
+
+      beforeEach(async () => {
+        getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+          return {
+            keyId: undefined,
+            keyName: 'test key',
+            translations: {
+              en: {
+                text: 'translation',
+              },
+            },
+          };
+        });
+        await translationService.setTranslations(dummyTranslationData);
+      });
+
+      test('will call the api http service', async () => {
+        expect(getMockedInstance(ApiHttpService).postJson).toBeCalledTimes(1);
+        expect(getMockedInstance(ApiHttpService).postJson).toBeCalledWith(
+          'v2/projects/translations',
+          dummyTranslationData
+        );
+      });
+
+      test('will check the scopes', async () => {
+        expect(getMockedInstance(CoreService).checkScope).toBeCalledTimes(1);
+      });
+
+      test('emits translation changed event', async () => {
+        expect(translationChangedEmitMock).toBeCalledTimes(1);
+        expect(translationChangedEmitMock).toBeCalledWith(dummyTranslationData);
+      });
+
+      test('will update the data', async () => {
+        await translationService.loadTranslations('en');
+        await translationService.setTranslations(dummyTranslationData);
+        expect(
+          await translationService.getTranslation(
+            dummyTranslationData.key,
+            'en'
+          )
+        ).toEqual(dummyTranslationData.translations.en);
+      });
+    });
+
+    test('will update the data when the key contains .', async () => {
+      const dummyTranslationData = {
+        key: 'test.key',
+        translations: { en: 'translation' },
+      } as TranslationData;
       getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
         return {
           keyId: undefined,
-          keyName: 'test key',
+          keyName: 'test.key',
           translations: {
             en: {
               text: 'translation',
@@ -200,182 +263,141 @@ describe('TranslationService', () => {
           },
         };
       });
-      await translationService.setTranslations(dummyTranslationData);
-    });
-
-    test('will call the api http service', async () => {
-      expect(getMockedInstance(ApiHttpService).postJson).toBeCalledTimes(1);
-      expect(getMockedInstance(ApiHttpService).postJson).toBeCalledWith(
-        'v2/projects/translations',
-        dummyTranslationData
-      );
-    });
-
-    test('will check the scopes', async () => {
-      expect(getMockedInstance(CoreService).checkScope).toBeCalledTimes(1);
-    });
-
-    test('emits translation changed event', async () => {
-      expect(translationChangedEmitMock).toBeCalledTimes(1);
-      expect(translationChangedEmitMock).toBeCalledWith(dummyTranslationData);
-    });
-
-    test('will update the data', async () => {
       await translationService.loadTranslations('en');
       await translationService.setTranslations(dummyTranslationData);
       expect(
         await translationService.getTranslation(dummyTranslationData.key, 'en')
       ).toEqual(dummyTranslationData.translations.en);
     });
-  });
 
-  test('will update the data when the key contains .', async () => {
-    const dummyTranslationData = {
-      key: 'test.key',
-      translations: { en: 'translation' },
-    } as TranslationData;
-    getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
-      return {
-        keyId: undefined,
-        keyName: 'test.key',
-        translations: {
-          en: {
-            text: 'translation',
+    test('will update the data when the key contains \\.', async () => {
+      const dummyTranslationData = {
+        key: 'test\\.key',
+        translations: { en: 'translation' },
+      } as TranslationData;
+      getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
+        return {
+          keyId: undefined,
+          keyName: 'test\\.key',
+          translations: {
+            en: {
+              text: 'translation',
+            },
           },
-        },
-      };
+        };
+      });
+      await translationService.loadTranslations('en');
+      await translationService.setTranslations(dummyTranslationData);
+      expect(
+        await translationService.getTranslation(dummyTranslationData.key, 'en')
+      ).toEqual(dummyTranslationData.translations.en);
     });
-    await translationService.loadTranslations('en');
-    await translationService.setTranslations(dummyTranslationData);
-    expect(
-      await translationService.getTranslation(dummyTranslationData.key, 'en')
-    ).toEqual(dummyTranslationData.translations.en);
-  });
 
-  test('will update the data when the key contains \\.', async () => {
-    const dummyTranslationData = {
-      key: 'test\\.key',
-      translations: { en: 'translation' },
-    } as TranslationData;
-    getMockedInstance(ApiHttpService).postJson = jest.fn(async () => {
-      return {
-        keyId: undefined,
-        keyName: 'test\\.key',
-        translations: {
-          en: {
-            text: 'translation',
-          },
-        },
-      };
+    test('will call load of fallback language on missing translation', async () => {
+      translationService.loadTranslations = jest.fn();
+      getMockedInstance(Properties).config.fallbackLanguage = 'en';
+      expect(await translationService.getTranslation('aaa', 'cs'));
+      expect(translationService.loadTranslations).toBeCalledTimes(2);
+      expect(translationService.loadTranslations).toBeCalledWith('cs');
+      expect(translationService.loadTranslations).toBeCalledWith('en');
     });
-    await translationService.loadTranslations('en');
-    await translationService.setTranslations(dummyTranslationData);
-    expect(
-      await translationService.getTranslation(dummyTranslationData.key, 'en')
-    ).toEqual(dummyTranslationData.translations.en);
-  });
 
-  test('will call load of fallback language on missing translation', async () => {
-    translationService.loadTranslations = jest.fn();
-    getMockedInstance(Properties).config.fallbackLanguage = 'en';
-    expect(await translationService.getTranslation('aaa', 'cs'));
-    expect(translationService.loadTranslations).toBeCalledTimes(2);
-    expect(translationService.loadTranslations).toBeCalledWith('cs');
-    expect(translationService.loadTranslations).toBeCalledWith('en');
-  });
+    test('will use fallback language on missing translation', async () => {
+      getMockedInstance(Properties).config.fallbackLanguage = 'en';
+      expect(
+        await translationService.getTranslation('translation.with.dots', 'de')
+      ).toEqual('Translation with dots');
+    });
 
-  test('will use fallback language on missing translation', async () => {
-    getMockedInstance(Properties).config.fallbackLanguage = 'en';
-    expect(
-      await translationService.getTranslation('translation.with.dots', 'de')
-    ).toEqual('Translation with dots');
-  });
+    test('getTranslation will return fallback when message is empty string', async () => {
+      getMockedInstance(Properties).config.fallbackLanguage = 'en';
+      expect(await translationService.getTranslation('just_en', 'de')).toEqual(
+        'Just en.'
+      );
+    });
 
-  test('getTranslation will return fallback when message is empty string', async () => {
-    getMockedInstance(Properties).config.fallbackLanguage = 'en';
-    expect(await translationService.getTranslation('just_en', 'de')).toEqual(
-      'Just en.'
-    );
-  });
+    test('getFromCacheOrCallback will return fallback when message is empty string', async () => {
+      getMockedInstance(Properties).config.fallbackLanguage = 'en';
+      (translationService as any).setLanguageData('en', mockedTranslations.en);
+      (translationService as any).setLanguageData('de', mockedTranslations.de);
+      expect(
+        await translationService.getFromCacheOrFallback('just_en', 'de')
+      ).toEqual('Just en.');
+    });
 
-  test('getFromCacheOrCallback will return fallback when message is empty string', async () => {
-    getMockedInstance(Properties).config.fallbackLanguage = 'en';
-    (translationService as any).setLanguageData('en', mockedTranslations.en);
-    (translationService as any).setLanguageData('de', mockedTranslations.de);
-    expect(
-      await translationService.getFromCacheOrFallback('just_en', 'de')
-    ).toEqual('Just en.');
-  });
+    test('getFromCacheOrCallback will return default when provided', async () => {
+      expect(
+        await translationService.getFromCacheOrFallback(
+          'this_key_is_not_in_cache',
+          'de',
+          false,
+          'Default'
+        )
+      ).toEqual('Default');
+    });
 
-  test('getFromCacheOrCallback will return default when provided', async () => {
-    expect(
-      await translationService.getFromCacheOrFallback(
-        'this_key_is_not_in_cache',
-        'de',
-        false,
-        'Default'
-      )
-    ).toEqual('Default');
-  });
+    test('getFromCacheOrCallback will return empty when onEmpty is true', async () => {
+      expect(
+        await translationService.getFromCacheOrFallback(
+          'this_key_is_not_in_cache',
+          'de',
+          true
+        )
+      ).toEqual('');
+    });
 
-  test('getFromCacheOrCallback will return empty when onEmpty is true', async () => {
-    expect(
-      await translationService.getFromCacheOrFallback(
-        'this_key_is_not_in_cache',
-        'de',
-        true
-      )
-    ).toEqual('');
-  });
+    test('will return key when no translation found', async () => {
+      expect(
+        await translationService.getTranslation(
+          'test\\.key.this\\.is\\.it',
+          'en'
+        )
+      ).toEqual('test\\.key.this\\.is\\.it');
+    });
 
-  test('will return key when no translation found', async () => {
-    expect(
-      await translationService.getTranslation('test\\.key.this\\.is\\.it', 'en')
-    ).toEqual('test\\.key.this\\.is\\.it');
-  });
+    test('returns default when provided', async () => {
+      expect(
+        await translationService.getTranslation(
+          'youaaaahihahihh',
+          'en',
+          undefined,
+          'This is default'
+        )
+      ).toEqual('This is default');
+    });
 
-  test('returns default when provided', async () => {
-    expect(
-      await translationService.getTranslation(
-        'youaaaahihahihh',
-        'en',
-        undefined,
-        'This is default'
-      )
-    ).toEqual('This is default');
-  });
+    test('will return proper text without any dot', async () => {
+      expect(
+        await translationService.getTranslation('text without any dot', 'en')
+      ).toEqual('text without any dot');
+    });
 
-  test('will return proper text without any dot', async () => {
-    expect(
-      await translationService.getTranslation('text without any dot', 'en')
-    ).toEqual('text without any dot');
-  });
+    test('uses provided static data', async () => {
+      getMockedInstance(Properties).config.staticData = {
+        en: { test: 'Test test' },
+      };
+      translationService.initStatic();
+      expect(await translationService.getTranslation('test', 'en')).toEqual(
+        'Test test'
+      );
+    });
 
-  test('uses provided static data', async () => {
-    getMockedInstance(Properties).config.staticData = {
-      en: { test: 'Test test' },
-    };
-    translationService.initStatic();
-    expect(await translationService.getTranslation('test', 'en')).toEqual(
-      'Test test'
-    );
-  });
+    test('uses provided promise data', async () => {
+      getMockedInstance(Properties).config.staticData = {
+        en: () => new Promise((resolve) => resolve({ test: 'Test test' })),
+      };
+      expect(await translationService.getTranslation('test', 'en')).toEqual(
+        'Test test'
+      );
+    });
 
-  test('uses provided promise data', async () => {
-    getMockedInstance(Properties).config.staticData = {
-      en: () => new Promise((resolve) => resolve({ test: 'Test test' })),
-    };
-    expect(await translationService.getTranslation('test', 'en')).toEqual(
-      'Test test'
-    );
-  });
-
-  test('uses provided data without init static (when mode is changed dynamically)', async () => {
-    getMockedInstance(Properties).config.staticData = {
-      en: { test: 'Test test' },
-    };
-    expect(await translationService.getTranslation('test', 'en')).toEqual(
-      'Test test'
-    );
+    test('uses provided data without init static (when mode is changed dynamically)', async () => {
+      getMockedInstance(Properties).config.staticData = {
+        en: { test: 'Test test' },
+      };
+      expect(await translationService.getTranslation('test', 'en')).toEqual(
+        'Test test'
+      );
+    });
   });
 });

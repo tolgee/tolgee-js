@@ -9,10 +9,10 @@ import {
   ComplexEditKeyDto,
   CreateKeyDto,
   KeyWithDataModel,
+  KeyWithTranslationsModel,
   SetTranslationsResponseModel,
   SetTranslationsWithKeyDto,
   TranslationData,
-  KeyWithTranslationsModel,
 } from '../types/DTOs';
 
 interface TranslationInterface {
@@ -385,13 +385,17 @@ export class TranslationService {
     const makeFlat = (data: TreeTranslationsData): Record<string, string> => {
       const result: Record<string, string> = {};
       Object.entries(data).forEach(([key, value]) => {
+        // ignore falsy values
+        if (!value) {
+          return;
+        }
         if (typeof value === 'object') {
           Object.entries(makeFlat(value)).forEach(([flatKey, flatValue]) => {
             result[key + '.' + flatKey] = flatValue;
           });
           return;
         }
-        result[key] = value;
+        result[key] = value as string;
       });
       return result;
     };
