@@ -36,7 +36,7 @@
     "@angular-devkit/build-angular": "^12.2.8",
     "@angular/cli": "~12.2.9",
     "@angular/compiler-cli": "~12.2.9",
-    "@angular/language-service": "~12.2.8",
+    "@angular/language-service": "~12.2.10",
     "@testing-library/angular": "^10.11.0",
     "@testing-library/jest-dom": "5.14.1",
     "@types/jasmine": "~3.6.0",
