@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.4](https://github.com/tolgee/tolgee-js/compare/v1.8.3...v1.8.4) (2021-10-19)
+
+
+### Bug Fixes
+
+* Error when translation is null from API TG-367 ([205983b](https://github.com/tolgee/tolgee-js/commit/205983bcc0a3c59201e650eb6b98ef32158a702f))
+
+
+
+
+
 ## [1.8.1](https://github.com/tolgee/tolgee-js/compare/v1.8.0...v1.8.1) (2021-10-14)
 
 **Note:** Version bump only for package @tolgee/core

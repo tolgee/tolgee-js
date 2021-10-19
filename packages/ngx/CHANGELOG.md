@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.8.4](https://github.com/tolgee/tolgee-js/compare/v1.8.3...v1.8.4) (2021-10-19)
+
+**Note:** Version bump only for package @tolgee/ngx-workspace
+
+
+
+
+
 ## [1.8.3](https://github.com/tolgee/tolgee-js/compare/v1.8.2...v1.8.3) (2021-10-15)
 
 **Note:** Version bump only for package @tolgee/ngx-workspace
