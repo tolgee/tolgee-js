@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.9.0](https://github.com/tolgee/tolgee-js/compare/v1.8.4...v1.9.0) (2021-10-19)
+
+
+### Features
+
+* Add prompt to install chrome extension TG-366 ([3cc8482](https://github.com/tolgee/tolgee-js/commit/3cc84821ff17670f080e2e2bb928840dee455c36))
+
+
+
+
+
 ## [1.8.4](https://github.com/tolgee/tolgee-js/compare/v1.8.3...v1.8.4) (2021-10-19)
 
 
