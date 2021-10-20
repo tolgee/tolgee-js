@@ -1,11 +1,4 @@
-import {
-  Component,
-  ContentChild,
-  ElementRef,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
@@ -64,7 +57,7 @@ export class TComponent implements OnInit, OnDestroy {
 
   private translate(key, params, defaultValue: string) {
     this.resultProvider(key, params, defaultValue).subscribe((r) => {
-      this.ref.nativeElement.innerHTML = r;
+      this.ref.nativeElement.textContent = r;
     });
   }
 }
