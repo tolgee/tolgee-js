@@ -108,7 +108,7 @@ export class TextService {
     orEmpty?: boolean,
     defaultValue?: string
   ) {
-    return this.format(
+    const result = this.format(
       await this.translationService.getTranslation(
         key,
         lang,
@@ -117,6 +117,10 @@ export class TextService {
       ),
       params
     );
+    if (result !== undefined) {
+      return result;
+    }
+    return key;
   }
 
   instant(
@@ -126,7 +130,7 @@ export class TextService {
     orEmpty?,
     defaultValue?: string
   ) {
-    return this.format(
+    const result = this.format(
       this.translationService.getFromCacheOrFallback(
         key,
         lang,
@@ -135,6 +139,10 @@ export class TextService {
       ),
       params
     );
+    if (result !== undefined) {
+      return result;
+    }
+    return key;
   }
 
   async replace(text: string): Promise<ReplacedType> {
@@ -224,20 +232,15 @@ export class TextService {
     params: TranslationParams
   ): string => {
     try {
+      //try to format the text
       return new IntlMessageFormat(
         translation,
-        this.properties.currentLanguage,
-        undefined,
-        {
-          ignoreTag: true,
-        }
+        this.properties.currentLanguage
       ).format(params) as string;
     } catch (e) {
-      if (e.code === 'MISSING_VALUE') {
-        // eslint-disable-next-line no-console
-        console.warn(e.message);
-        return translation;
-      }
+      // if string cannot be formatted, throw error
+      // eslint-disable-next-line no-console
+      console.error(e);
     }
   };
 

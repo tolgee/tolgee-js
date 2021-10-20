@@ -68,6 +68,10 @@ describe('T component', function () {
       expect(element.getAttribute('data-tolgee-key-only')).toEqual('hello');
     });
 
+    it('sets inner text', async () => {
+      expect(element.textContent).toEqual('translated');
+    });
+
     it('subscribes for translation change', async () => {
       expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(1);
     });

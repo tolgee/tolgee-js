@@ -67,7 +67,12 @@ export const Page: FunctionComponent = () => {
 
       <div>
         <h3>ELEMENT_WRAP strategy</h3>
-        <T strategy="ELEMENT_WRAP">sampleApp.hello_world!</T>
+        <T
+          strategy="ELEMENT_WRAP"
+          parameters={{ name: `<img onerror='alert("hou")'/>` }}
+        >
+          sampleApp.hello_world!
+        </T>
       </div>
 
       <div>

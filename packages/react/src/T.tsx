@@ -80,10 +80,9 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
 
   if (strategy === 'ELEMENT_WRAP') {
     return (
-      <span
-        {...{ [TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE]: key }}
-        dangerouslySetInnerHTML={{ __html: translated }}
-      />
+      <span {...{ [TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE]: key }}>
+        {translated}
+      </span>
     );
   }
 
