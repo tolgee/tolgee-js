@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/tolgee/tolgee-js/compare/v1.9.0...v2.0.0) (2021-10-20)
+
+**Note:** Version bump only for package @tolgee/socketio-client
+
+
+
+
+
 ## [1.7.6](https://github.com/tolgee/tolgee-js/compare/v1.7.5...v1.7.6) (2021-10-13)
 
 

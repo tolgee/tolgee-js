@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.0.0](https://github.com/tolgee/tolgee-js/compare/v1.9.0...v2.0.0) (2021-10-20)
+
+
+### Bug Fixes
+
+* Remove ignoreTag setting TG-369 ([1562403](https://github.com/tolgee/tolgee-js/commit/1562403d5f19f9d9624f3b28e2893d7d0b980f65))
+
+
+### BREAKING CHANGES
+
+* HTML is currently not ignored by Core Message Formatter and React T component and Angular t attribute will not render HTML to DOM.
+
+
+
+
+
 ## [1.8.3](https://github.com/tolgee/tolgee-js/compare/v1.8.2...v1.8.3) (2021-10-15)
 
 **Note:** Version bump only for package @tolgee/ngx
