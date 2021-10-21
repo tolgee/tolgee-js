@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ui",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
   "module": "./dist/tolgee-ui.umd.js",

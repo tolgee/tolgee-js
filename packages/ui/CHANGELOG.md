@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/tolgee/tolgee-js/compare/v2.0.0...v2.0.1) (2021-10-21)
+
+
+### Bug Fixes
+
+* Chrome extension reload after install TG-370 ([ac977e6](https://github.com/tolgee/tolgee-js/commit/ac977e6ce8df690a19ec294045fa6a9f2b151d91))
+
+
+
+
+
 # [2.0.0](https://github.com/tolgee/tolgee-js/compare/v1.9.0...v2.0.0) (2021-10-20)
 
 **Note:** Version bump only for package @tolgee/ui
