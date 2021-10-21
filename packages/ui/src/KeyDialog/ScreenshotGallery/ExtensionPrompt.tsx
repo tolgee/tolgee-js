@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogContent, styled } from '@mui/material';
 
 import { DEVTOOLS_Z_INDEX, CHROME_EXTENSION_LINK } from '../../constants';
@@ -25,6 +25,21 @@ const ScControls = styled('div')`
 `;
 
 export const ExtensionPrompt: React.FC<Props> = ({ onClose }) => {
+  const [installClicked, setInstallClicked] = useState(false);
+
+  const onReload = () => {
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    const handler = () => {
+      setInstallClicked(true);
+    };
+    // act like extension was installed after user returns to this window
+    window.addEventListener('focus', handler);
+    return () => window.removeEventListener('focus', handler);
+  }, []);
+
   return (
     <Dialog
       open={true}
@@ -33,28 +48,47 @@ export const ExtensionPrompt: React.FC<Props> = ({ onClose }) => {
       style={{ zIndex: DEVTOOLS_Z_INDEX }}
       onClose={onClose}
     >
-      <DialogContent>
-        <ScTitle>Browser extension required</ScTitle>
-        <ScText>
-          To make automatic screenshots please install Tolgee browser extension.
-        </ScText>
-      </DialogContent>
-      <ScControls>
-        <Button onClick={onClose} color="secondary">
-          Cancel
-        </Button>
-        <Button
-          LinkComponent="a"
-          href={CHROME_EXTENSION_LINK}
-          target="_blank"
-          rel="noreferrer noopener"
-          variant="contained"
-          type="primary"
-          style={{ marginLeft: '10px' }}
-        >
-          Install
-        </Button>
-      </ScControls>
+      {installClicked ? (
+        <>
+          <DialogContent>
+            <ScTitle>Browser extension required</ScTitle>
+            <ScText>
+              After installing the extension, you need to reload this page.
+            </ScText>
+          </DialogContent>
+          <ScControls>
+            <Button onClick={onReload} color="primary" variant="contained">
+              Reload
+            </Button>
+          </ScControls>
+        </>
+      ) : (
+        <>
+          <DialogContent>
+            <ScTitle>Browser extension required</ScTitle>
+            <ScText>
+              To make automatic screenshots please install Tolgee browser
+              extension.
+            </ScText>
+          </DialogContent>
+          <ScControls>
+            <Button onClick={onClose} color="secondary">
+              Cancel
+            </Button>
+            <Button
+              component="a"
+              color="primary"
+              variant="contained"
+              style={{ marginLeft: 10 }}
+              href={CHROME_EXTENSION_LINK}
+              rel="noreferrer noopener"
+              target="_blank"
+            >
+              Install
+            </Button>
+          </ScControls>
+        </>
+      )}
     </Dialog>
   );
 };

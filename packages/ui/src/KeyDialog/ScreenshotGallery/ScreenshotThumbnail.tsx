@@ -17,9 +17,11 @@ const Screenshot = styled('img')`
 `;
 
 const ScreenshotBox = styled('div')`
+  border: 1px solid ${({ theme }) => theme.palette.grey[300]};
   position: relative;
-  width: 100px;
-  height: 100px;
+  box-sizing: border-box;
+  width: 98px;
+  height: 98px;
   align-items: center;
   justify-content: center;
   display: flex;
