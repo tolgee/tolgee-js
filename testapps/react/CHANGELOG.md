@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.1.0](https://github.com/tolgee/tolgee-js/compare/v2.0.1...v2.1.0) (2021-10-26)
+
+
+### Features
+
+* Set base language input to default value TG-368 ([5f66114](https://github.com/tolgee/tolgee-js/commit/5f6611414395782facb76ec71f04a061cc9cdf17))
+
+
+
+
+
 ## [2.0.1](https://github.com/tolgee/tolgee-js/compare/v2.0.0...v2.0.1) (2021-10-21)
 
 **Note:** Version bump only for package @tolgee/testapps-react
