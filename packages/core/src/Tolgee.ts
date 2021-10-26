@@ -108,7 +108,7 @@ export class Tolgee {
   async translate(props: TranslateProps): Promise<string>;
   async translate(
     key: string,
-    params: TranslationParams,
+    params?: TranslationParams,
     noWrap?: boolean,
     defaultValue?: string
   ): Promise<string>;
