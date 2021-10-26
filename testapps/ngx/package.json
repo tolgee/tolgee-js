@@ -1,6 +1,6 @@
 {
   "name": "angular",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,9 +19,9 @@
     "@angular/platform-browser": "~12.2.8",
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.8",
-    "@tolgee/core": "^2.1.0",
+    "@tolgee/core": "^2.1.1",
     "@tolgee/ngx": "^2.1.0",
-    "@tolgee/ui": "^2.1.0",
+    "@tolgee/ui": "^2.1.1",
     "@types/react": "^17.0.32",
     "rxjs": "~7.4.0",
     "serve": "^12.0.1",

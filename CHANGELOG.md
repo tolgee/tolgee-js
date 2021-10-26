@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.1](https://github.com/tolgee/tolgee-js/compare/v2.1.0...v2.1.1) (2021-10-26)
+
+
+### Bug Fixes
+
+* Tolgee translate fn params type is not optional ([2dbfde2](https://github.com/tolgee/tolgee-js/commit/2dbfde22925b30a6d1740e987db800f86faf0c46))
+
+
+
+
+
 # [2.1.0](https://github.com/tolgee/tolgee-js/compare/v2.0.1...v2.1.0) (2021-10-26)
 
 
