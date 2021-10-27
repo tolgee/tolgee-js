@@ -83,6 +83,8 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       useState<KeyWithTranslationsModel>(null);
     const [translationsForm, setTranslationsForm] =
       useState<FormTranslations>(null);
+    const [translationsFormTouched, setTranslationsFormTouched] =
+      useState(false);
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
     const translationService = props.dependencies.translationService;
@@ -98,6 +100,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setSuccess(false);
         translationsForm[abbr] = event.target.value;
+        setTranslationsFormTouched(true);
         setTranslationsForm({ ...translationsForm });
       };
 
@@ -166,6 +169,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         setLoading(true);
         setSuccess(false);
         setError(null);
+        setTranslationsFormTouched(false);
         loadTranslations(properties.preferredLanguages);
         if (availableLanguages === undefined) {
           coreService.getLanguagesFull().then((l) => {
@@ -284,9 +288,16 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         const baseLanguageDefinition = availableLanguages.find((l) => l.base);
         if (
           baseLanguageDefinition &&
-          selectedLanguages.has(baseLanguageDefinition.tag)
+          selectedLanguages.has(baseLanguageDefinition.tag) &&
+          !translationsFormTouched
         ) {
-          if (!translationsForm[baseLanguageDefinition.tag]) {
+          const wasBaseTranslationProvided =
+            translations.translations[baseLanguageDefinition.tag] !== undefined;
+
+          if (
+            !translationsForm[baseLanguageDefinition.tag] &&
+            !wasBaseTranslationProvided
+          ) {
             setTranslationsForm({
               ...translationsForm,
               [baseLanguageDefinition.tag]: props.defaultValue,
