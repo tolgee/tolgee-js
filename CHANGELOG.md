@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.1.2](https://github.com/tolgee/tolgee-js/compare/v2.1.1...v2.1.2) (2021-10-27)
+
+
+### Bug Fixes
+
+* Fix cannot clear translations dialog TG-379 ([19a6a9c](https://github.com/tolgee/tolgee-js/commit/19a6a9c5e9055a9b792c582f12b412e232e3814e))
+
+
+
+
+
 ## [2.1.1](https://github.com/tolgee/tolgee-js/compare/v2.1.0...v2.1.1) (2021-10-26)
 
 
