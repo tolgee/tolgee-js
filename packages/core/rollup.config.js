@@ -17,6 +17,17 @@ export default {
       sourcemap: true,
     },
     {
+      file: 'dist/tolgee.esm.js',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/tolgee.esm.js',
+      format: 'esm',
+      plugins: [terser()],
+      sourcemap: true,
+    },
+    {
       name: '@tolgee/core',
       file: 'dist/tolgee.umd.js',
       format: 'umd',

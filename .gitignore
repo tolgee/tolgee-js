@@ -27,3 +27,10 @@ testapps/next/dist
 **/.vscode
 .gradle
 e2e/extension
+testapps/**/build
+testapps/svelte-kit/.svelte-kit
+testapps/svelte-kit/package
+testapps/svelte/.env.local
+testapps/svelte/.env.production.local
+testapps/svelte/.env.development.local
+testapps/svelte/build-dev

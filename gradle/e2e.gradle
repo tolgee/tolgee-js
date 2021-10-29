@@ -4,7 +4,7 @@ ext.E2E_DIR = "${project.projectDir}/e2e"
 
 def waitForDockerComposeOutput(String output) {
     while (true) {
-        def pb = new ProcessBuilder("docker-compose", "logs", "-f")
+        def pb = new ProcessBuilder("docker", "compose", "logs", "-f")
         pb.directory(new File(E2E_DIR))
         def proc = pb.start()
         BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()))
@@ -46,7 +46,7 @@ task installE2eDeps(type: Exec, group: "e2e") {
 
 task downloadExtension(type: Exec, group: "e2e") {
     commandLine "npm", "run", "download-extension"
-    
+
     workingDir E2E_DIR
 }
 
@@ -70,19 +70,30 @@ task openE2e(type: Exec, group: "e2e") {
     finalizedBy "stopDockerE2e", "cleanupDockerE2e"
 }
 
+task openE2eDev(type: Exec, group: "e2e") {
+    commandLine "npm", "run", "cy:open"
+    workingDir E2E_DIR
+}
+
 task runDockerE2e(type: Exec, group: "e2e") {
-    commandLine "docker-compose", "up", "-d"
+    commandLine "docker", "compose", "up", "-d"
     workingDir E2E_DIR
     finalizedBy "waitForRunningServer"
     finalizedBy "waitForRunningGatsbyDev"
 }
 
+task runDockerE2eDevSvelte(type: Exec, group: "e2e") {
+    commandLine "docker", "compose", "up", "-d", "e2e_app_svelte_dev", "e2e_app_svelte_prod", "app"
+    workingDir E2E_DIR
+    finalizedBy "waitForRunningServer"
+}
+
 task stopDockerE2e(type: Exec, group: "e2e") {
-    commandLine "docker-compose", "stop"
+    commandLine "docker", "compose", "stop"
     workingDir E2E_DIR
 }
 
 task cleanupDockerE2e(type: Exec, group: "e2e") {
-    commandLine "docker-compose", "rm", "-f"
+    commandLine "docker", "compose", "rm", "-f", "-v"
     workingDir E2E_DIR
 }
