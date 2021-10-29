@@ -97,6 +97,13 @@ task buildReact(type: Exec) {
     mustRunAfter "buildCore", "buildUi"
 }
 
+task buildVue(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/vue"
+    mustRunAfter "buildCore", "buildUi"
+}
+
 task buildNgx(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
@@ -135,6 +142,13 @@ task buildReactTestapps(type: Exec) {
     mustRunAfter "buildCore", "buildUi"
 }
 
+task buildVueTestapps(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/vue"
+    mustRunAfter "buildCore", "buildUi"
+}
+
 task buildNgxTestapps(type: Exec) {
     dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildNgx"
     commandLine "npm", "run", "build"
@@ -159,13 +173,17 @@ task buildNextTestapps(type: Exec) {
 }
 
 task buildAll(type: Task) {
-    dependsOn "buildCore", "buildUi", "buildReact", "buildNgx", "buildSocketIoClient",
-            "buildCoreTestapps", "buildReactTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps"
+    dependsOn "buildCore", "buildUi", "buildReact", "buildVue", "buildNgx", "buildSocketIoClient",
+            "buildCoreTestapps", "buildReactTestapps", "buildVueTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps"
 }
 
 task developAll(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
     commandLine "lerna", "run", "--parallel", "develop"
+}
+
+task developAllNoBuild(type: Exec) {
+    commandLine "lerna", "run", "--parallel", "--include-dependencies", "develop"
 }
 
 task developReactNoBuild(type: Exec) {
@@ -197,6 +215,11 @@ task testSocketIoClient(type: Exec) {
     workingDir "packages/socketio-client"
 }
 
+task testVue(type: Exec) {
+    commandLine "npm", "run", "test"
+    workingDir "packages/vue"
+}
+
 task build(type: Task) {
-    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSocketIoClient", "runE2e"
+    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSocketIoClient", "testVue", "runE2e"
 }
