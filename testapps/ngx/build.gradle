@@ -1,5 +1,3 @@
-import io.tolgee.node.TolgeeNodePlugin
-
 idea {
     module {
         excludeDirs += file('node_modules')
