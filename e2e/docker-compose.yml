@@ -15,7 +15,12 @@ services:
       - tolgee.authentication.registrations-allowed=true
       - tolgee.internal.fake-emails-sent=true
       - tolgee.authentication.initialPassword=admin
+      - tolgee.import.dir=/data/import-data
+      - tolgee.import.create-implicit-api-key=true
+      - spring.jpa.show-sql=true
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=*:8091,server=y,suspend=n
+    volumes:
+      - ./import-data:/data/import-data
   e2e_app_core:
     container_name: tolgee_js_e2e_serve_testapps_core
     build: ../docker
@@ -23,7 +28,7 @@ services:
       - '../testapps/core:/data'
     ports:
       - 8101:8101
-    command: ['npm', 'run', 'serve']
+    command: [ 'npm', 'run', 'serve' ]
     working_dir: /data
   e2e_app_react:
     container_name: tolgee_js_e2e_serve_testapps_react
@@ -32,7 +37,7 @@ services:
       - '../:/data'
     ports:
       - 8102:8101
-    command: ['npm', 'run', 'serve']
+    command: [ 'npm', 'run', 'serve' ]
     working_dir: /data/testapps/react
   e2e_app_angular:
     container_name: tolgee_js_e2e_serve_testapps_ngx
@@ -41,7 +46,7 @@ services:
       - '../:/data'
     ports:
       - 8103:8101
-    command: ['npm', 'run', 'serve']
+    command: [ 'npm', 'run', 'serve' ]
     working_dir: /data/testapps/ngx
   e2e_app_gatsby_dev:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
@@ -50,7 +55,7 @@ services:
       - '../:/data'
     ports:
       - 8104:8000
-    command: ['npm', 'run', 'start', '--', '--host=0.0.0.0']
+    command: [ 'npm', 'run', 'start', '--', '--host=0.0.0.0' ]
     environment:
       GATSBY_TOLGEE_API_URL: http://localhost:8202
       GATSBY_TOLGEE_API_KEY: this_is_dummy_api_key
@@ -62,7 +67,7 @@ services:
       - '../:/data'
     ports:
       - 8105:9000
-    command: ['npm', 'run', 'serve', '--', '--host=0.0.0.0']
+    command: [ 'npm', 'run', 'serve', '--', '--host=0.0.0.0' ]
     working_dir: /data/testapps/gatsby
   e2e_app_next_dev:
     container_name: tolgee_js_e2e_serve_testapps_next_dev
@@ -71,7 +76,7 @@ services:
       - '../:/data'
     ports:
       - 8106:3000
-    command: ['npm', 'run', 'dev']
+    command: [ 'npm', 'run', 'dev' ]
     environment:
       NEXT_PUBLIC_TOLGEE_API_URL: http://localhost:8202
       NEXT_PUBLIC_TOLGEE_API_KEY: this_is_dummy_api_key
@@ -83,10 +88,31 @@ services:
       - '../:/data'
     ports:
       - 8107:3000
-    command: ['npm', 'run', 'start']
+    command: [ 'npm', 'run', 'start' ]
     environment:
       NEXT_BUILD_DIR: dist
     working_dir: /data/testapps/next
+  e2e_app_svelte_prod:
+    container_name: tolgee_js_e2e_serve_testapps_svelte_prod
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8109:5000
+    command: [ 'npm', 'run', 'serve' ]
+    working_dir: /data/testapps/svelte
+  e2e_app_svelte_dev:
+    container_name: tolgee_js_e2e_serve_testapps_svelte_dev
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8110:5000
+    command: npm run serve-dev
+    environment:
+      VITE_TOLGEE_API_URL: http://localhost:8202
+      VITE_TOLGEE_API_KEY: examples-admin-imported-project-implicit
+    working_dir: /data/testapps/svelte
   e2e_app_vue:
     container_name: tolgee_js_e2e_serve_testapps_vue
     build: ../docker
@@ -94,5 +120,5 @@ services:
       - '../:/data'
     ports:
       - 8108:3002
-    command: ['npm', 'run', 'serve']
+    command: [ 'npm', 'run', 'serve' ]
     working_dir: /data/testapps/vue

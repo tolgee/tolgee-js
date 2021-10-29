@@ -3,7 +3,7 @@
   "version": "2.2.0",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
-  "module": "./dist/tolgee-ui.umd.js",
+  "module": "./dist/tolgee-ui.esm.js",
   "types": "lib/index.d.ts",
   "declaration": true,
   "directories": {

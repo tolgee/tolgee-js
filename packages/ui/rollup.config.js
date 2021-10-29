@@ -19,6 +19,17 @@ export default {
       plugins: [terser()],
     },
     {
+      file: 'dist/tolgee-ui.esm.js',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/tolgee-ui.esm.min.js',
+      format: 'esm',
+      sourcemap: true,
+      plugins: [terser()],
+    },
+    {
       name: '@tolgee/ui',
       file: 'dist/tolgee-ui.umd.js',
       format: 'umd',

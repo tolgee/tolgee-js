@@ -104,6 +104,13 @@ task buildVue(type: Exec) {
     mustRunAfter "buildCore", "buildUi"
 }
 
+task buildSvelte(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/svelte"
+    mustRunAfter "buildCore", "buildUi"
+}
+
 task buildNgx(type: Exec) {
     dependsOn "lernaBootstrap"
     commandLine "npm", "run", "build"
@@ -172,10 +179,31 @@ task buildNextTestapps(type: Exec) {
     mustRunAfter "buildCore", "buildReact", "buildUi"
 }
 
-task buildAll(type: Task) {
-    dependsOn "buildCore", "buildUi", "buildReact", "buildVue", "buildNgx", "buildSocketIoClient",
-            "buildCoreTestapps", "buildReactTestapps", "buildVueTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps"
+task buildSvelteTestApps() {
+    dependsOn "buildSvelteProdTestApp", "buildSvelteDevTestApp"
 }
+
+task buildSvelteProdTestApp(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/svelte"
+    mustRunAfter "buildCore", "buildUi", "buildSvelte"
+}
+
+task buildSvelteDevTestApp(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/svelte"
+    mustRunAfter "buildCore", "buildUi", "buildSvelte"
+    environment 'SVELTE_TESTAPP_DIST_DIR': './build-dev',
+                'VITE_TOLGEE_API_URL'    : 'http://localhost:8202',
+                'VITE_TOLGEE_API_KEY'    : 'examples-admin-imported-project-implicit'
+}
+
+task buildAll(type: Task) {
+    dependsOn "buildCore", "buildUi", "buildReact", "buildVue", "buildSvelte", "buildNgx", "buildSocketIoClient",
+            "buildCoreTestapps", "buildReactTestapps", "buildVueTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps", "buildSvelteTestApps"
+    }
 
 task developAll(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
@@ -205,6 +233,16 @@ task testReact(type: Exec) {
     workingDir "packages/react"
 }
 
+task testSvelte(type: Exec) {
+    commandLine "npm", "run", "test"
+    workingDir "packages/svelte"
+}
+
+task testNgx(type: Exec) {
+    commandLine "npm", "run", "test"
+    workingDir "packages/ngx"
+}
+
 task testUi(type: Exec) {
     commandLine "npm", "run", "test"
     workingDir "packages/ui"
@@ -221,5 +259,5 @@ task testVue(type: Exec) {
 }
 
 task build(type: Task) {
-    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSocketIoClient", "testVue", "runE2e"
+    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSvelte", "testNgx", "testSocketIoClient", "testVue", "runE2e"
 }

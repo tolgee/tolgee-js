@@ -1,0 +1,42 @@
+name: Publish examples
+
+on:
+  workflow_run:
+    workflows: [ "Test" ]
+    branches: [ "main" ]
+    types:
+      - completed
+jobs:
+  main:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: root
+
+      - run: mkdir -p testapps/svelte
+
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          repository: tolgee/svelte-example
+          path: testapps/svelte
+
+      - run: |
+          rsync -av --progress root/testapps/svelte/* \
+          testapps/svelte/ \
+          --exclude node_modules \
+          --exclude .svelte-kit \
+          --exclude build \
+          --exclude build-dev \
+          --exclude dist
+
+      - name: Commit & Push files
+        run: |
+          git add .
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Automation Machine"
+          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git push
+        working-directory: testapps/svelte

@@ -6,3 +6,6 @@
 
 **/*.generated.*
 **/*.md
+testapps/gatsby/public
+testapps/gatsby/.cache
+testapps/next/.next

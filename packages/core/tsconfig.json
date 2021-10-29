@@ -24,6 +24,7 @@
   "exclude": [
     "../../../node_modules",
     "**/*.spec.ts",
+    "**/*.test.ts",
     "**/__testFixtures/*",
     "**/__mocks__/*",
     "@testFixtures/*"
