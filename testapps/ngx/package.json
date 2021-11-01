@@ -31,7 +31,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~12.2.11",
     "@angular/cli": "~12.2.11",
-    "@angular/compiler-cli": "~12.2.8",
+    "@angular/compiler-cli": "~12.2.12",
     "@angular/language-service": "~12.2.8",
     "@types/node": "^16.11.4",
     "codelyzer": "^6.0.0",
