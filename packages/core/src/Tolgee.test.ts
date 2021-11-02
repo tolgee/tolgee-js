@@ -222,6 +222,23 @@ describe('Tolgee', () => {
           'Default'
         );
       });
+
+      test('passes orEmpty correctly', async () => {
+        propertiesMock.mock.instances[0].config.mode = 'development';
+        await tolgee.translate({
+          key: dummyKey,
+          params: dummyParams,
+          noWrap: true,
+          orEmpty: true,
+        });
+        expect(mockedTranslate).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          true,
+          undefined
+        );
+      });
     });
 
     describe('sync instant', () => {

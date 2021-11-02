@@ -120,6 +120,7 @@ export class Tolgee {
     defaultValue: string | undefined = undefined
   ): Promise<string> {
     const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
+    let orEmpty = undefined;
     if (typeof keyOrProps === 'object') {
       const props = keyOrProps as TranslateProps;
       // if values are not provided in props object, get them from function
@@ -128,6 +129,7 @@ export class Tolgee {
       noWrap = props.noWrap !== undefined ? props.noWrap : noWrap;
       defaultValue =
         props.defaultValue !== undefined ? props.defaultValue : defaultValue;
+      orEmpty = props.orEmpty;
     }
 
     if (this.properties.config.mode === 'development' && !noWrap) {
@@ -139,7 +141,7 @@ export class Tolgee {
       key,
       params,
       undefined,
-      undefined,
+      orEmpty,
       defaultValue
     );
   }
