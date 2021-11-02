@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.2.0](https://github.com/tolgee/tolgee-js/compare/v2.1.2...v2.2.0) (2021-11-02)
+
+
+### Features
+
+* translate method support orEmpty option ([304687a](https://github.com/tolgee/tolgee-js/commit/304687a3872124c9c26b3c8f210de1b7d78e5c2b))
+
+
+
+
+
 ## [2.1.1](https://github.com/tolgee/tolgee-js/compare/v2.1.0...v2.1.1) (2021-10-26)
 
 
