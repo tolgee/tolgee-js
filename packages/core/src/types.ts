@@ -18,6 +18,7 @@ export type TranslateProps = {
   defaultValue?: string;
   params?: TranslationParams;
   noWrap?: boolean;
+  orEmpty?: boolean;
 };
 
 export type InstantProps = {
