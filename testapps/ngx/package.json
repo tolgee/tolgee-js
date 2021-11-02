@@ -16,7 +16,7 @@
     "@angular/compiler": "~12.2.8",
     "@angular/core": "~12.2.11",
     "@angular/forms": "~12.2.11",
-    "@angular/platform-browser": "~12.2.8",
+    "@angular/platform-browser": "~12.2.12",
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.8",
     "@tolgee/core": "^2.2.0",
