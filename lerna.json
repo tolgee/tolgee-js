@@ -4,7 +4,7 @@
     "testapps/*",
     "packages/ngx/projects/ngx-tolgee"
   ],
-  "version": "2.2.0",
+  "version": "2.3.0",
   "command": {
     "publish": {
       "conventionalCommits": true
