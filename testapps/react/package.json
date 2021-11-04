@@ -6,7 +6,7 @@
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/material": "^5.0.4",
-    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.1",
     "@testing-library/user-event": "^13.3.0",
     "@tolgee/react": "^2.3.0",
