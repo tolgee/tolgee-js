@@ -23,7 +23,7 @@
     "@angular/common": "~13.0.0",
     "@angular/compiler": "~12.2.8",
     "@angular/core": "~12.2.8",
-    "@angular/forms": "~12.2.8",
+    "@angular/forms": "~13.0.0",
     "@angular/platform-browser": "~12.2.8",
     "@angular/platform-browser-dynamic": "~12.2.11",
     "@angular/router": "~12.2.9",
