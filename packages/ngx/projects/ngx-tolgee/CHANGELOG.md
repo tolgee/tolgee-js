@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.2](https://github.com/tolgee/tolgee-js/compare/v2.3.1...v2.3.2) (2021-11-08)
+
+**Note:** Version bump only for package @tolgee/ngx
+
+
+
+
+
 # [2.1.0](https://github.com/tolgee/tolgee-js/compare/v2.0.1...v2.1.0) (2021-10-26)
 
 
