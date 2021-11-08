@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.3.1](https://github.com/tolgee/tolgee-js/compare/v2.3.0...v2.3.1) (2021-11-08)
+
+
+### Bug Fixes
+
+* Remove unnecessary check ([8f8d4bf](https://github.com/tolgee/tolgee-js/commit/8f8d4bfbb3cf4d3a1a5ca60f554cc3670a776384))
+
+
+
+
+
 # [2.3.0](https://github.com/tolgee/tolgee-js/compare/v2.2.0...v2.3.0) (2021-11-04)
 
 
