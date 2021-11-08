@@ -105,10 +105,7 @@ export const TolgeeMixin = defineComponent({
         tolgeeContext.tolgee
           .translate({ key: key, params: parameters, noWrap, defaultValue })
           .then((value) => {
-            if (
-              value !== translation &&
-              this.$options._tolgee.subscribed_keys.includes(key)
-            ) {
+            if (value !== translation) {
               this.$forceUpdate();
             }
           });
