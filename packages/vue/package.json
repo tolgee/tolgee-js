@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue",
-  "version": "2.3.1",
+  "version": "2.4.0",
   "description": "Vue implementation for tolgee localization framework",
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
@@ -36,12 +36,12 @@
     "vue": "^3.0.0"
   },
   "dependencies": {
-    "@tolgee/core": "^2.1.1"
+    "@tolgee/core": "^2.4.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.2.5",
     "@testing-library/vue": "^6.4.2",
-    "@tolgee/ui": "^2.1.2",
+    "@tolgee/ui": "^2.4.0",
     "@types/jest": "^27.0.2",
     "@vue/vue3-jest": "^27.0.0-alpha.3",
     "concurrently": "6.3.0",
