@@ -2,7 +2,7 @@ name: Publish examples
 
 on:
   workflow_run:
-    workflows: [ "Test" ]
+    workflows: [ "Release" ]
     branches: [ "main" ]
     types:
       - completed
