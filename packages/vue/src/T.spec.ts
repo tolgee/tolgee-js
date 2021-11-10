@@ -208,4 +208,38 @@ describe('T component', function () {
       });
     });
   });
+
+  describe('works fine with keyName defaultValue prop', () => {
+    let renderrer: ReturnType<typeof prepareRender>;
+    beforeEach(async () => {
+      renderrer = prepareRender();
+
+      renderrer.render({
+        tComponentProps: { keyName: 'what a key', defaultValue: 'hello' },
+      });
+      await waitFor(() => {
+        screen.getByText('translated');
+      });
+    });
+
+    test('instant fn is called with proper params', async () => {
+      expect(renderrer.instantMock).toBeCalledWith({
+        key: 'what a key',
+        noWrap: true,
+        orEmpty: true,
+        params: undefined,
+        defaultValue: 'hello',
+      });
+    });
+
+    test('translate fn is called with proper params', async () => {
+      expect(renderrer.translateMock).toBeCalledWith({
+        orEmpty: true,
+        key: 'what a key',
+        noWrap: true,
+        params: undefined,
+        defaultValue: 'hello',
+      });
+    });
+  });
 });

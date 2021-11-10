@@ -7,6 +7,7 @@ export const T = defineComponent({
   props: {
     keyName: { type: String, required: true },
     parameters: Object as PropType<{ [key: string]: string }>,
+    defaultValue: String as PropType<string>,
     strategy: {
       type: String as PropType<'ELEMENT_WRAP' | 'NO_WRAP'>,
       default: 'ELEMENT_WRAP',
@@ -23,6 +24,7 @@ export const T = defineComponent({
             noWrap: true,
             params: this.$props.parameters,
             orEmpty: true,
+            defaultValue: this.$props.defaultValue,
           })) ||
         ('' as string),
       translationSubscription: null as Subscription | null,
@@ -39,6 +41,7 @@ export const T = defineComponent({
           noWrap: true,
           params: this.$props.parameters,
           orEmpty: true,
+          defaultValue: this.$props.defaultValue,
         })
         .then((t) => {
           this.$data.translation = t;
