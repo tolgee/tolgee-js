@@ -24,7 +24,7 @@ jobs:
           path: testapps/svelte
 
       - run: |
-          rsync -av --progress root/testapps/svelte/* \
+          rsync -av --progress root/testapps/svelte/ \
           testapps/svelte/ \
           --exclude node_modules \
           --exclude .svelte-kit \
