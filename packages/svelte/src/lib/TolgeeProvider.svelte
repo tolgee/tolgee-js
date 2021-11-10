@@ -9,13 +9,12 @@
 
   let tolgeeRunPromise: Promise<void>;
 
-  onMount(() => tolgeeRunPromise = tolgee.run());
-
   setContext("tolgeeContext", {
     tolgee
   } as TolgeeContext);
 
   if (typeof window !== "undefined") {
+    onMount(() => tolgeeRunPromise = tolgee.run());
     onDestroy(tolgee.stop);
   }
 </script>
