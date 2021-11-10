@@ -2,12 +2,12 @@ name: Publish examples
 
 on:
   workflow_run:
-    workflows: [ "Release" ]
-    branches: [ "main" ]
+    workflows: ['Release']
+    branches: ['main']
     types:
       - completed
 jobs:
-  main:
+  svelte:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
@@ -40,3 +40,131 @@ jobs:
           git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
           git push
         working-directory: testapps/svelte
+
+  vue:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: root
+
+      - run: mkdir -p testapps/vue
+
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          repository: tolgee/vue-example
+          path: testapps/vue
+
+      - run: |
+          rsync -av --progress root/testapps/vue/ \
+          testapps/vue/ \
+          --exclude node_modules \
+          --exclude lib \
+          --exclude dist
+
+      - name: Commit & Push files
+        run: |
+          git add .
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Automation Machine"
+          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git push
+        working-directory: testapps/vue
+
+  react:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: root
+
+      - run: mkdir -p testapps/react
+
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          repository: tolgee/react-example
+          path: testapps/react
+
+      - run: |
+          rsync -av --progress root/testapps/react/ \
+          testapps/react/ \
+          --exclude node_modules \
+          --exclude build \
+          --exclude build-dev
+
+      - name: Commit & Push files
+        run: |
+          git add .
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Automation Machine"
+          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git push
+        working-directory: testapps/react
+
+  next:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: root
+
+      - run: mkdir -p testapps/next
+
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          repository: tolgee/next-example
+          path: testapps/next
+
+      - run: |
+          rsync -av --progress root/testapps/next/ \
+          testapps/next/ \
+          --exclude node_modules \
+          --exclude build \
+          --exclude build-dev
+
+      - name: Commit & Push files
+        run: |
+          git add .
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Automation Machine"
+          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git push
+        working-directory: testapps/next
+
+  gatsby:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: root
+
+      - run: mkdir -p testapps/gatsby
+
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          repository: tolgee/gatsby-example
+          path: testapps/gatsby
+
+      - run: |
+          rsync -av --progress root/testapps/gatsby/ \
+          testapps/gatsby/ \
+          --exclude node_modules \
+          --exclude .cache \
+          --exclude public
+
+      - name: Commit & Push files
+        run: |
+          git add .
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Automation Machine"
+          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git push
+        working-directory: testapps/gatsby

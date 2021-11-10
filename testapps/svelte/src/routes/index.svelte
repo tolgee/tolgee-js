@@ -1,39 +1,48 @@
 <script lang="ts">
-  import { getTranslate, T } from "@tolgee/svelte";
-  import Navbar from "../component/Navbar.svelte";
+  import { T, getTranslate } from '@tolgee/svelte';
+  import Navbar from '../component/Navbar.svelte';
 
   const t = getTranslate();
 
   let items: string[] = [];
   let newItemValue: string;
   try {
-    items = JSON.parse(localStorage.getItem("tolgee-example-app-items")) || ["Flame-thrower", "Horse", "My favourite toothbrush"];
+    items = JSON.parse(localStorage.getItem('tolgee-example-app-items')) || [
+      'Flame-thrower',
+      'Horse',
+      'My favourite toothbrush'
+    ];
   } catch (e) {
     // when local storage is not set due to SSR, don't pring any error
-    if (typeof localStorage !== "undefined") {
-      console.error("Something went wrong while parsing stored items. Items are reset.");
-      localStorage.removeItem("tolgee-example-app-items");
+    if (typeof localStorage !== 'undefined') {
+      console.error('Something went wrong while parsing stored items. Items are reset.');
+      localStorage.removeItem('tolgee-example-app-items');
     }
   }
   const onAdd = () => {
     if (newItemValue) {
       items = [...items, newItemValue];
       updateLocalStorage();
-      newItemValue = "";
+      newItemValue = '';
     }
   };
 
-  const updateLocalStorage = () => localStorage.setItem("tolgee-example-app-items", JSON.stringify(items));
+  const updateLocalStorage = () =>
+    localStorage.setItem('tolgee-example-app-items', JSON.stringify(items));
 
-  const onDelete = index => {
+  const onDelete = (index) => {
     items.splice(index, 1);
     items = [...items];
     updateLocalStorage();
   };
+
+  const onAction = (action: string) => () => {
+    alert('action: ' + action);
+  };
 </script>
+
 <div class="background-wrapper">
   <div class="example">
-
     <Navbar>
       <div slot="menu-items">
         <a href="/translation-methods">
@@ -52,8 +61,10 @@
     </header>
     <section class="items">
       <div class="items__new-item">
-        <input bind:value={newItemValue}
-               placeholder={$t({key: 'add-item-input-placeholder', defaultValue: 'New list item'})} />
+        <input
+          bind:value={newItemValue}
+          placeholder={$t({ key: 'add-item-input-placeholder', defaultValue: 'New list item' })}
+        />
         <button on:click={onAdd} disabled={!newItemValue} class="button">
           <T keyName="add-item-add-button">Add</T>
         </button>
@@ -69,10 +80,10 @@
         {/each}
       </div>
       <div class="items__buttons">
-        <button class="button">
+        <button class="button" on:click={onAction('share')}>
           <T keyName="share-button">Share</T>
         </button>
-        <button class="button button--secondary">
+        <button class="button button--secondary" on:click={onAction('email')}>
           <T keyName="send-via-email">Send via e-mail</T>
         </button>
       </div>

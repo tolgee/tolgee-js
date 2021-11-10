@@ -6,7 +6,7 @@ import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
 
 type TProps = {
   parameters?: TranslationParameters;
-  children: string;
+  children?: string;
   /**
    * @deprecated Use strategy 'NO_WRAP' instead
    */
@@ -22,6 +22,10 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
   const context = useTolgeeContext();
 
   const key = props.keyName || props.children;
+  if (!key) {
+    // eslint-disable-next-line no-console
+    console.error('T component: keyName not defined');
+  }
   const defaultValue = props.keyName ? props.children : undefined;
 
   const translateFnNoWrap =

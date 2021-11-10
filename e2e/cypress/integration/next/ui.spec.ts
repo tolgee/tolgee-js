@@ -19,7 +19,13 @@ context('UI Dialog', () => {
   });
 
   it('it opens UI', () => {
-    cy.visit('http://localhost:8106');
+    visitWithApiKey([
+      'translations.view',
+      'keys.edit',
+      'translations.edit',
+      'screenshots.view',
+      'screenshots.upload',
+    ]);
     cy.contains('Hello world!')
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
@@ -29,7 +35,13 @@ context('UI Dialog', () => {
   });
 
   it('make screenshot', () => {
-    cy.visit('http://localhost:8106');
+    visitWithApiKey([
+      'translations.view',
+      'keys.edit',
+      'translations.edit',
+      'screenshots.view',
+      'screenshots.upload',
+    ]);
     cy.contains('Hello world!')
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
@@ -133,7 +145,7 @@ context('UI Dialog', () => {
 
   const visitWithApiKey = (scopes: Scope[]) => {
     createApiKey({ projectId: 1, scopes }).then((data) => {
-      cy.visit(`http://localhost:8106/?api_key=${data.key}`);
+      cy.visit(`http://localhost:8114/?api_key=${data.key}`);
     });
   };
 });

@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "serve -p 8101 ./build"
+    "serve": "serve -p 8101 -s build",
+    "serve-dev": "serve -p 8101 -s build-dev"
   },
   "browserslist": {
     "production": [
