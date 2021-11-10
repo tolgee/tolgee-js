@@ -17,7 +17,9 @@
   "dependencies": {
     "@tolgee/core": "^2.5.1",
     "@tolgee/react": "^2.5.1",
+    "@tolgee/ui": "^2.5.1",
     "gatsby": "^3.13.0",
+    "gatsby-plugin-intl": "^0.3.3",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }

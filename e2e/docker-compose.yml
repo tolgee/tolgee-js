@@ -28,16 +28,25 @@ services:
       - '../testapps/core:/data'
     ports:
       - 8101:8101
-    command: [ 'npm', 'run', 'serve' ]
+    command: ['npm', 'run', 'serve']
     working_dir: /data
-  e2e_app_react:
-    container_name: tolgee_js_e2e_serve_testapps_react
+  e2e_app_react_prod:
+    container_name: tolgee_js_e2e_serve_testapps_react_prod
     build: ../docker
     volumes:
       - '../:/data'
     ports:
       - 8102:8101
-    command: [ 'npm', 'run', 'serve' ]
+    command: ['npm', 'run', 'serve']
+    working_dir: /data/testapps/react
+  e2e_app_react_dev:
+    container_name: tolgee_js_e2e_serve_testapps_react_dev
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8113:8101
+    command: ['npm', 'run', 'serve-dev']
     working_dir: /data/testapps/react
   e2e_app_angular:
     container_name: tolgee_js_e2e_serve_testapps_ngx
@@ -46,7 +55,7 @@ services:
       - '../:/data'
     ports:
       - 8103:8101
-    command: [ 'npm', 'run', 'serve' ]
+    command: ['npm', 'run', 'serve']
     working_dir: /data/testapps/ngx
   e2e_app_gatsby_dev:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
@@ -55,10 +64,10 @@ services:
       - '../:/data'
     ports:
       - 8104:8000
-    command: [ 'npm', 'run', 'start', '--', '--host=0.0.0.0' ]
+    command: ['npm', 'run', 'start', '--', '--host=0.0.0.0']
     environment:
       GATSBY_TOLGEE_API_URL: http://localhost:8202
-      GATSBY_TOLGEE_API_KEY: this_is_dummy_api_key
+      GATSBY_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/gatsby
   e2e_app_gatsby_prod:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_prod
@@ -67,7 +76,7 @@ services:
       - '../:/data'
     ports:
       - 8105:9000
-    command: [ 'npm', 'run', 'serve', '--', '--host=0.0.0.0' ]
+    command: ['npm', 'run', 'serve', '--', '--host=0.0.0.0']
     working_dir: /data/testapps/gatsby
   e2e_app_next_dev:
     container_name: tolgee_js_e2e_serve_testapps_next_dev
@@ -76,10 +85,10 @@ services:
       - '../:/data'
     ports:
       - 8106:3000
-    command: [ 'npm', 'run', 'dev' ]
+    command: ['npm', 'run', 'dev']
     environment:
       NEXT_PUBLIC_TOLGEE_API_URL: http://localhost:8202
-      NEXT_PUBLIC_TOLGEE_API_KEY: this_is_dummy_api_key
+      NEXT_PUBLIC_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/next
   e2e_app_next_prod:
     container_name: tolgee_js_e2e_serve_testapps_next_prod
@@ -88,10 +97,21 @@ services:
       - '../:/data'
     ports:
       - 8107:3000
-    command: [ 'npm', 'run', 'start' ]
+    command: ['npm', 'run', 'start']
     environment:
       NEXT_BUILD_DIR: dist
     working_dir: /data/testapps/next
+  e2e_app_next_internal:
+    container_name: tolgee_js_e2e_serve_testapps_next_internal
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8114:3000
+    command: ['npm', 'run', 'dev']
+    environment:
+      NEXT_PUBLIC_TOLGEE_API_URL: http://localhost:8202
+    working_dir: /data/testapps/next-internal
   e2e_app_svelte_prod:
     container_name: tolgee_js_e2e_serve_testapps_svelte_prod
     build: ../docker
@@ -99,7 +119,7 @@ services:
       - '../:/data'
     ports:
       - 8109:5000
-    command: [ 'npm', 'run', 'serve' ]
+    command: ['npm', 'run', 'serve']
     working_dir: /data/testapps/svelte
   e2e_app_svelte_dev:
     container_name: tolgee_js_e2e_serve_testapps_svelte_dev
@@ -113,12 +133,21 @@ services:
       VITE_TOLGEE_API_URL: http://localhost:8202
       VITE_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/svelte
-  e2e_app_vue:
-    container_name: tolgee_js_e2e_serve_testapps_vue
+  e2e_app_vue_prod:
+    container_name: tolgee_js_e2e_serve_testapps_vue_prod
     build: ../docker
     volumes:
       - '../:/data'
     ports:
-      - 8108:3002
-    command: [ 'npm', 'run', 'serve' ]
+      - 8111:3002
+    command: ['npm', 'run', 'serve']
+    working_dir: /data/testapps/vue
+  e2e_app_vue_dev:
+    container_name: tolgee_js_e2e_serve_testapps_vue_dev
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8112:3002
+    command: ['npm', 'run', 'serve-dev']
     working_dir: /data/testapps/vue

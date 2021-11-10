@@ -6,7 +6,8 @@
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "lint": "vue-cli-service lint",
-    "serve": "serve -p 3002 ./dist"
+    "serve": "serve -p 3002 -s dist",
+    "serve-dev": "serve -p 3002 -s dist-dev"
   },
   "dependencies": {
     "@tolgee/core": "^2.5.1",

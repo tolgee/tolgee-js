@@ -1,7 +1,7 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Svelte app in dev mode', () => {
+context('Svelte app in prod mode', () => {
   const url = 'http://localhost:8109/';
 
   exampleAppTest(url);

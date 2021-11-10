@@ -142,18 +142,47 @@ task buildCoreTestapps(type: Exec) {
     workingDir "testapps/core"
 }
 
-task buildReactTestapps(type: Exec) {
+task buildReactProdTestApp(type: Exec) {
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/react"
     mustRunAfter "buildCore", "buildUi"
 }
 
-task buildVueTestapps(type: Exec) {
+task buildReactDevTestApp(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/react"
+    mustRunAfter "buildCore", "buildUi"
+    environment 'BUILD_PATH'                  : './build-dev',
+                'REACT_APP_TOLGEE_API_URL'    : 'http://localhost:8202',
+                'REACT_APP_TOLGEE_API_KEY'    : 'examples-admin-imported-project-implicit'
+
+}
+
+task buildReactTestapps() {
+    dependsOn "buildReactProdTestApp", "buildReactDevTestApp"
+}
+
+task buildVueProdTestApp(type: Exec) {
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
     workingDir "testapps/vue"
     mustRunAfter "buildCore", "buildUi"
+}
+
+task buildVueDevTestApp(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi"
+    commandLine "npm", "run", "build", "--", "--dest", "dist-dev"
+    workingDir "testapps/vue"
+    mustRunAfter "buildCore", "buildUi"
+    environment 'VUE_APP_TOLGEE_API_URL'    : 'http://localhost:8202',
+                'VUE_APP_TOLGEE_API_KEY'    : 'examples-admin-imported-project-implicit'
+
+}
+
+task buildVueTestapps() {
+    dependsOn "buildVueProdTestApp", "buildVueDevTestApp"
 }
 
 task buildNgxTestapps(type: Exec) {

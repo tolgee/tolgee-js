@@ -7,5 +7,15 @@ module.exports = {
     siteUrl: 'https://www.yourdomain.tld',
     title: 'Tolgee Gatsby TestApp',
   },
-  plugins: [],
+  plugins: [
+    {
+      resolve: `gatsby-plugin-intl`,
+      options: {
+        path: `${__dirname}/src/i18n`,
+        languages: [`en`, `de`, `cs`, `fr`],
+        defaultLanguage: `en`,
+        redirect: true,
+      },
+    },
+  ],
 };
