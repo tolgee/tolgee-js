@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, getTranslate } from "@tolgee/svelte";
+  import { getTranslate, T } from "@tolgee/svelte";
   import Navbar from "../component/Navbar.svelte";
 
   const t = getTranslate();
@@ -9,8 +9,9 @@
   try {
     items = JSON.parse(localStorage.getItem("tolgee-example-app-items")) || ["Flame-thrower", "Horse", "My favourite toothbrush"];
   } catch (e) {
-    console.error("Something went wrong while parsing stored items. Items are reset.");
+    // when local storage is not set due to SSR, don't pring any error
     if (typeof localStorage !== "undefined") {
+      console.error("Something went wrong while parsing stored items. Items are reset.");
       localStorage.removeItem("tolgee-example-app-items");
     }
   }
