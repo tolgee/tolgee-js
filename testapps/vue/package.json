@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/testapps-vue",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -11,7 +11,7 @@
   "dependencies": {
     "@tolgee/core": "^2.4.0",
     "@tolgee/ui": "^2.4.0",
-    "@tolgee/vue": "^2.4.0",
+    "@tolgee/vue": "^2.5.0",
     "core-js": "^3.6.5",
     "vue": "^3.0.0"
   },
