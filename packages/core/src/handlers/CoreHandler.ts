@@ -18,8 +18,10 @@ export class CoreHandler {
     private textService: TextService,
     private wrappedHandler: WrappedHandler
   ) {
-    eventService.LANGUAGE_CHANGED.subscribe(this.refresh.bind(this));
-    eventService.TRANSLATION_CHANGED.subscribe(this.refresh.bind(this));
+    if (typeof window !== 'undefined') {
+      eventService.LANGUAGE_CHANGED.subscribe(this.refresh.bind(this));
+      eventService.TRANSLATION_CHANGED.subscribe(this.refresh.bind(this));
+    }
   }
 
   public async handleSubtree(target: Element) {
