@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.1](https://github.com/tolgee/tolgee-js/compare/v2.5.0...v2.5.1) (2021-11-11)
+
+
+### Bug Fixes
+
+* Svelte integration TG-380 - fix document not defined error ([ffabdf8](https://github.com/tolgee/tolgee-js/commit/ffabdf859d50439729e5ac770f836e224cdd9b99))
+
+
+
+
+
 ## [2.4.1](https://github.com/tolgee/tolgee-js/compare/v2.4.0...v2.4.1) (2021-11-10)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react",
-  "version": "2.4.0",
+  "version": "2.5.1",
   "description": "React implementation for tolgee localization framework",
   "main": "index.js",
   "types": "lib/index.d.ts",
@@ -35,14 +35,14 @@
     "react": "^16.14.0 || ^17.0.1"
   },
   "dependencies": {
-    "@tolgee/core": "^2.4.0"
+    "@tolgee/core": "^2.5.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.0",
     "@testing-library/dom": "^8.7.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.2",
-    "@tolgee/ui": "^2.4.0",
+    "@tolgee/ui": "^2.5.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.4",
     "@types/react": "^17.0.1",

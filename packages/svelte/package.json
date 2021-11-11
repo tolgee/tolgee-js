@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "2.4.1",
+  "version": "2.5.1",
   "scripts": {
     "develop": "svelte-kit dev",
     "build": "svelte-kit package",
@@ -12,7 +12,7 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "dependencies": {
-    "@tolgee/core": "^2.4.0"
+    "@tolgee/core": "^2.5.1"
   },
   "devDependencies": {
     "@sveltejs/kit": "next",
