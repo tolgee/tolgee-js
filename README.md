@@ -7,6 +7,7 @@
 ![licence](https://img.shields.io/github/license/tolgee/tolgee-js)
 [![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
+[![discord](https://img.shields.io/discord/887646957043064872?logo=discord&label=Discord)](https://discord.com/channels/887646957043064872)
 
 # Tolgee JS
 
