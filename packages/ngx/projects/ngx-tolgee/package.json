@@ -5,6 +5,9 @@
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
   },
+  "dependencies": {
+    "@tolgee/core": "^2.5.1"
+  },
   "version": "2.3.2",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
