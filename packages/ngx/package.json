@@ -35,7 +35,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^13.0.1",
     "@angular/cli": "~13.0.1",
-    "@angular/compiler-cli": "~13.0.0",
+    "@angular/compiler-cli": "~13.0.1",
     "@angular/language-service": "~13.0.0",
     "@testing-library/angular": "^10.11.0",
     "@testing-library/jest-dom": "5.15.0",
