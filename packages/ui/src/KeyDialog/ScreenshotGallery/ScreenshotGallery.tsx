@@ -202,7 +202,9 @@ export const ScreenshotGallery: React.FC = () => {
           >
             <ScText>
               There are no screenshots.
-              {ableToTakeScreenshot && ' Take screenshot by camera icon.'}
+              {ableToTakeScreenshot &&
+                uploadEnabled &&
+                ' Take screenshot by camera icon.'}
             </ScText>
             {uploadEnabled && (
               <ScText>Add some by dropping or clicking on plus.</ScText>
