@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/tolgee/tolgee-js/compare/v2.5.3...v2.6.0) (2021-11-16)
+
+
+### Features
+
+* vue app sync with documentation ([a9efcaa](https://github.com/tolgee/tolgee-js/commit/a9efcaa5b6598e6ba324edc563d250d23e9d619f))
+
+
+
+
+
 ## [2.5.3](https://github.com/tolgee/tolgee-js/compare/v2.5.2...v2.5.3) (2021-11-16)
 
 

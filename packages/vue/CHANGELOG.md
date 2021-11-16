@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.6.0](https://github.com/tolgee/tolgee-js/compare/v2.5.3...v2.6.0) (2021-11-16)
+
+
+### Bug Fixes
+
+* Throw nicer error when using T outside provider ([8f5594b](https://github.com/tolgee/tolgee-js/commit/8f5594be08b6cdc071a2d439f2043b862e818a4a))
+
+
+
+
+
 ## [2.5.3](https://github.com/tolgee/tolgee-js/compare/v2.5.2...v2.5.3) (2021-11-16)
 
 **Note:** Version bump only for package @tolgee/vue
