@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { Navbar } from '../components/Navbar';
 import { T, useTranslate } from '@tolgee/react';
-import { Link } from 'gatsby-plugin-intl';
+import { Link } from 'gatsby-plugin-react-intl';
 
 const getInitialItems = () => {
   let items: string[] | undefined = undefined;

@@ -9,7 +9,7 @@ module.exports = {
   },
   plugins: [
     {
-      resolve: `gatsby-plugin-intl`,
+      resolve: `gatsby-plugin-react-intl`,
       options: {
         path: `${__dirname}/src/i18n`,
         languages: [`en`, `de`, `cs`, `fr`],

@@ -16,10 +16,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { defineComponent } from 'vue';
 import { TolgeeProvider } from '@tolgee/vue';
+import { TolgeeConfig } from '@tolgee/core';
 
 import Todos from './Todos.vue';
 import TranslationMethods from './TranslationMethods.vue';
-import { TolgeeConfig } from '../../../packages/vue/node_modules/@tolgee/core/lib';
 import en from '../i18n/en.json';
 import de from '../i18n/de.json';
 import cs from '../i18n/cs.json';
