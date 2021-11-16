@@ -19,7 +19,7 @@
     "@tolgee/react": "^2.5.2",
     "@tolgee/ui": "^2.5.2",
     "gatsby": "^3.13.0",
-    "gatsby-plugin-intl": "^0.3.3",
+    "gatsby-plugin-react-intl": "^3.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }

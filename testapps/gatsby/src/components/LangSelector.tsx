@@ -1,6 +1,6 @@
 import React from 'react';
 import { useCurrentLanguage } from '@tolgee/react';
-import { changeLocale } from 'gatsby-plugin-intl';
+import { changeLocale } from 'gatsby-plugin-react-intl';
 
 export const LangSelector: React.FC = () => {
   const getLang = useCurrentLanguage();

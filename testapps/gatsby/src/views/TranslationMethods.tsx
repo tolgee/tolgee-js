@@ -1,6 +1,6 @@
 import React from 'react';
 import { T, useTranslate } from '@tolgee/react';
-import { Link } from 'gatsby-plugin-intl';
+import { Link } from 'gatsby-plugin-react-intl';
 
 import { Navbar } from '../components/Navbar';
 

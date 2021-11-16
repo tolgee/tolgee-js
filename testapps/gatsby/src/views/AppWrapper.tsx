@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import { TolgeeProvider } from '@tolgee/react';
-import { useIntl } from 'gatsby-plugin-intl';
+import { useIntl } from 'gatsby-plugin-react-intl';
 import '../style/style.css';
 
 import * as translationsEn from '../i18n/en.json';
