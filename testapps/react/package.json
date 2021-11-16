@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/testapps-react",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.5.0",
@@ -9,8 +9,8 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^12.1.1",
     "@testing-library/user-event": "^13.3.0",
-    "@tolgee/react": "^2.5.1",
-    "@tolgee/ui": "^2.5.1",
+    "@tolgee/react": "^2.5.2",
+    "@tolgee/ui": "^2.5.2",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.7",
     "@types/react": "17.0.34",

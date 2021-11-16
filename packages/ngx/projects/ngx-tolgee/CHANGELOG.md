@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.2](https://github.com/tolgee/tolgee-js/compare/v2.5.1...v2.5.2) (2021-11-16)
+
+
+### Bug Fixes
+
+* Fix core exported types (remove @types/react deps) TG-360 ([5847519](https://github.com/tolgee/tolgee-js/commit/58475192c1de5965177d06ef5b3f4dc2dbe469e0))
+
+
+
+
+
 ## [2.3.2](https://github.com/tolgee/tolgee-js/compare/v2.3.1...v2.3.2) (2021-11-08)
 
 **Note:** Version bump only for package @tolgee/ngx

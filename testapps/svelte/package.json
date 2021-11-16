@@ -1,6 +1,6 @@
 {
   "name": "svelte",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "private": true,
   "scripts": {
     "dev": "svelte-kit dev",
@@ -18,7 +18,7 @@
     "@sveltejs/kit": "next",
     "@tolgee/core": "^2.5.1",
     "@tolgee/svelte": "^2.5.1",
-    "@tolgee/ui": "^2.5.1",
+    "@tolgee/ui": "^2.5.2",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
     "eslint": "^7.32.0",

@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ui",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
   "module": "./dist/tolgee-ui.esm.js",

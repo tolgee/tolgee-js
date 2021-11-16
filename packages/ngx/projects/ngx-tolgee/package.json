@@ -8,7 +8,7 @@
   "dependencies": {
     "@tolgee/core": "^2.5.1"
   },
-  "version": "2.3.2",
+  "version": "2.5.2",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
     "access": "public"
