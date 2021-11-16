@@ -20,10 +20,6 @@ import { TolgeeConfig } from '@tolgee/core';
 
 import Todos from './Todos.vue';
 import TranslationMethods from './TranslationMethods.vue';
-import en from '../i18n/en.json';
-import de from '../i18n/de.json';
-import cs from '../i18n/cs.json';
-import fr from '../i18n/fr.json';
 
 export default defineComponent({
   name: 'App',
@@ -31,7 +27,13 @@ export default defineComponent({
   data() {
     return {
       config: {
-        staticData: { en, de, cs, fr },
+        staticData: {
+          en: () => import('../i18n/en.json'),
+          de: () => import('../i18n/de.json'),
+          fr: () => import('../i18n/fr.json'),
+          cs: () => import('../i18n/cs.json'),
+        },
+        availableLanguages: ['en', 'de', 'cs', 'fr'],
         apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
         apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
         ui: process.env.VUE_APP_TOLGEE_API_KEY
