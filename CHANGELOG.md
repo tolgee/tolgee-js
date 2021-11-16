@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.5.3](https://github.com/tolgee/tolgee-js/compare/v2.5.2...v2.5.3) (2021-11-16)
+
+
+### Bug Fixes
+
+* Fix tolgee UI bug TG-401 ([0cef726](https://github.com/tolgee/tolgee-js/commit/0cef726999556b18b904ea046741db3067d62796))
+* Packages publish fix ([4a21b52](https://github.com/tolgee/tolgee-js/commit/4a21b5250417e1f083503fc9cdc21f67633c9c71))
+
+
+
+
+
 ## [2.5.2](https://github.com/tolgee/tolgee-js/compare/v2.5.1...v2.5.2) (2021-11-16)
 
 
