@@ -16,6 +16,9 @@ export const T = defineComponent({
   inject: ['tolgeeContext'],
   data() {
     const tolgeeContext = this.tolgeeContext as unknown as TolgeeContext;
+    if (!tolgeeContext) {
+      throw new Error('T component used outside of TolgeeProvider');
+    }
     return {
       translation:
         (this.$props.keyName &&
