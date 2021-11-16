@@ -185,7 +185,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
 
     const getRemovedScreenshots = () => {
       return translations.screenshots
-        .map((sc) => sc.id)
+        ?.map((sc) => sc.id)
         .filter((scId) => !screenshots.find((sc) => sc.id === scId));
     };
 
