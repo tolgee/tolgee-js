@@ -1,10 +1,9 @@
+# Tolgee JS UI library
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/ui version](https://img.shields.io/npm/v/@tolgee/ui?label=%40tolgee%2Fui)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 [![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
-
-# Tolgee JS UI library
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/cca5778bcb8f57d28a03065d1927fcea31d0b089/tolgee_logo_text.svg" alt="Tolgee Toolkit" />](https://toolkit.tolgee.io)
 

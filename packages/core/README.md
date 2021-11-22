@@ -1,10 +1,11 @@
+# Tolgee core library
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/core version](https://img.shields.io/npm/v/@tolgee/core?label=%40tolgee%2Fcore)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 [![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
 
-# Tolgee core library
+
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
