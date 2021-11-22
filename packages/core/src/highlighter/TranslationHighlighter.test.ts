@@ -19,6 +19,7 @@ describe('TranslationHighlighter', () => {
 
   afterEach(async () => {
     jest.clearAllMocks();
+    window['@tolgee/ui'] = undefined;
   });
 
   test('will start to using mouseEventHandler', () => {
@@ -26,6 +27,39 @@ describe('TranslationHighlighter', () => {
     const mockedElement = document.createElement('e') as Element;
     translationHighlighter.listen(mockedElement as ElementWithMeta);
     expect(getMockedInstance(MouseEventHandler).handle).toBeCalledTimes(1);
+  });
+
+  describe('passing UI', () => {
+    const checkIt = async () => {
+      const mockedElement = createElement(20, 20, true);
+      translationHighlighter.listen(mockedElement);
+      await savedCallback(openEvent);
+      expect(rendererViewerMock).toBeCalledTimes(1);
+    };
+
+    test('Works when UI is provided using promise provider', async () => {
+      getMockedInstance(Properties).config.ui = getUiClassMock();
+      await checkIt();
+    });
+
+    test('Works when UI is provided using promise provider', async () => {
+      getMockedInstance(Properties).config.ui = () =>
+        new Promise((resolve) => resolve(getUiClassMock()));
+      await checkIt();
+    });
+
+    test('works when UI is provided using window provider', async () => {
+      getMockedInstance(Properties).config.ui = undefined;
+      window['@tolgee/ui'] = () =>
+        new Promise((resolve) => resolve(getUiClassMock()));
+      await checkIt();
+    });
+
+    test('works when UI is provided using window constructor', async () => {
+      getMockedInstance(Properties).config.ui = undefined;
+      window['@tolgee/ui'] = getUiClassMock();
+      await checkIt();
+    });
   });
 
   describe('key rendering', () => {
@@ -83,7 +117,7 @@ describe('TranslationHighlighter', () => {
       expect(console.error).toBeCalledTimes(1);
     });
 
-    test('will print error on no key', async () => {
+    test('will print warning when UI not provided', async () => {
       // eslint-disable-next-line no-console
       console.warn = jest.fn();
 
@@ -109,16 +143,7 @@ describe('TranslationHighlighter', () => {
     });
 
     rendererViewerMock = jest.fn();
-
-    getMockedInstance(Properties).config.ui = classMock<any>(
-      () => ({
-        getKey: rendererGetKeyMock,
-        renderViewer: rendererViewerMock,
-      }),
-      function () {
-        return {};
-      } as any
-    );
+    getMockedInstance(Properties).config.ui = getUiClassMock();
 
     getMockedInstance(MouseEventHandler).handle = (element, callback) => {
       savedCallback = callback;
@@ -130,7 +155,7 @@ describe('TranslationHighlighter', () => {
   const testNodeCounts = async (nodeCount, keyCount) => {
     const mockedElement = createElement(nodeCount, keyCount);
     translationHighlighter.listen(mockedElement);
-    savedCallback(openEvent);
+    await savedCallback(openEvent);
     expect(rendererGetKeyMock).toBeCalledTimes(1);
 
     const keySet = new Set();
@@ -145,4 +170,15 @@ describe('TranslationHighlighter', () => {
       openEvent,
     });
   };
+
+  const getUiClassMock = () =>
+    classMock<any>(
+      () => ({
+        getKey: rendererGetKeyMock,
+        renderViewer: rendererViewerMock,
+      }),
+      function () {
+        return {};
+      } as any
+    );
 });
