@@ -6,21 +6,9 @@ type KeyWithDefault = { key: string; defaultValue?: string };
 
 export class TranslationHighlighter {
   public pluginManager: PluginManager;
-
-  constructor(private dependencies: DependencyStore) {}
-
   private _renderer: any;
 
-  private get renderer() {
-    if (this._renderer === undefined) {
-      if (typeof this.dependencies.properties.config.ui === 'function') {
-        this._renderer = new this.dependencies.properties.config.ui(
-          this.dependencies
-        );
-      }
-    }
-    return this._renderer;
-  }
+  constructor(private dependencies: DependencyStore) {}
 
   private static getKeyOptions(node: ElementWithMeta): KeyWithDefault[] {
     const nodes = Array.from(node._tolgee.nodes);
@@ -44,6 +32,40 @@ export class TranslationHighlighter {
     );
   }
 
+  private async getRenderer() {
+    if (this._renderer === undefined) {
+      const possibleProviders = [
+        this.dependencies.properties.config.ui,
+        window['@tolgee/ui'],
+      ];
+      for (const possibleProvider of possibleProviders) {
+        if (typeof possibleProvider === 'function') {
+          try {
+            // try to get constructor from promise provider
+            // This is used when UI passed using dynamic import
+            const constructorProvider = possibleProvider as () => Promise<
+              new (...args) => any
+            >;
+            const constructor = await constructorProvider();
+            this._renderer = new constructor(this.dependencies);
+          } catch (e) {
+            // If not passed using dynamic import it's passed as standard constructor
+            const constructor = possibleProvider as new (...arg) => any;
+            this._renderer = new constructor(this.dependencies);
+          }
+        }
+      }
+      if (this._renderer === undefined) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          'Tolgee UI is not provided. To translate interactively provide tolgee ui constructor to "ui" configuration property. ' +
+            'To disable highlighting use production mode.'
+        );
+      }
+    }
+    return this._renderer;
+  }
+
   private async getKeyAndDefault(
     mouseEvent: MouseEvent,
     element: ElementWithMeta
@@ -61,8 +83,9 @@ export class TranslationHighlighter {
       keysWithDefaults.map((keyWithDefault) => keyWithDefault.key)
     );
     if (keySet.size > 1) {
+      const renderer = await this.getRenderer();
       // this opens the popover where user chooses the key
-      const selectedKey = await this.renderer.getKey({
+      const selectedKey = await renderer.getKey({
         keys: keySet,
         openEvent: mouseEvent,
       });
@@ -80,18 +103,14 @@ export class TranslationHighlighter {
   }
 
   private translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
-    if (typeof this.renderer === 'object') {
+    const renderer = await this.getRenderer();
+    if (typeof renderer === 'object') {
       const key = await this.getKeyAndDefault(e, element);
       if (key) {
-        this.renderer.renderViewer(key.key, key.defaultValue);
+        renderer.renderViewer(key.key, key.defaultValue);
         return;
       }
       return;
     }
-    // eslint-disable-next-line no-console
-    console.warn(
-      'Tolgee UI is not provided. To translate interactively provide tolgee ui constructor to "ui" configuration property. ' +
-        'To disable highlighting use production mode.'
-    );
   };
 }

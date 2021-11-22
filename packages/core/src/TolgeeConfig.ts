@@ -20,7 +20,7 @@ export class TolgeeConfig {
   fallbackLanguage?: string;
   filesUrlPrefix?: string = 'i18n/';
   watch?: boolean;
-  ui?: new (...args) => any;
+  ui?: (new (...args) => any) | (() => Promise<new (...args) => any>);
   targetElement?: Element;
   tagAttributes?: { [key: string]: string[] } = {
     textarea: ['placeholder'],
