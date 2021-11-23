@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/tolgee/tolgee-js/compare/v2.6.0...v2.7.0) (2021-11-23)
+
+
+### Bug Fixes
+
+* **js:** Dependabot automerge TG-416 ([7a05b3b](https://github.com/tolgee/tolgee-js/commit/7a05b3b581c8b916c4a007f885ba4751a1403b95))
+* **js:** Fix readmes TG-415 ([856539f](https://github.com/tolgee/tolgee-js/commit/856539fe5d3de82a07317915d2b1222cd0785dcc))
+
+
+### Features
+
+* **js sdk:** Allow dynamic import of UI TG-378 ([69c7bf2](https://github.com/tolgee/tolgee-js/commit/69c7bf2489d2d2bb229a6c6a7534e45623c3d2aa))
+
+
+
+
+
 # [2.6.0](https://github.com/tolgee/tolgee-js/compare/v2.5.3...v2.6.0) (2021-11-16)
 
 

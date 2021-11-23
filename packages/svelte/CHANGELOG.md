@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.7.0](https://github.com/tolgee/tolgee-js/compare/v2.6.0...v2.7.0) (2021-11-23)
+
+
+### Bug Fixes
+
+* **js:** Fix readmes TG-415 ([856539f](https://github.com/tolgee/tolgee-js/commit/856539fe5d3de82a07317915d2b1222cd0785dcc))
+
+
+
+
+
 ## [2.5.1](https://github.com/tolgee/tolgee-js/compare/v2.5.0...v2.5.1) (2021-11-11)
 
 
