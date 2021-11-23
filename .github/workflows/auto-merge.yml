@@ -11,4 +11,4 @@ jobs:
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           target: minor
-          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          github-token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
