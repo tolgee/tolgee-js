@@ -57,8 +57,9 @@ export class MouseEventHandler {
         onclick(e);
       }
     };
+
     element.addEventListener('mouseover', onMouseOver);
-    element.addEventListener('click', onClick);
+    element.addEventListener('click', onClick, { capture: true });
 
     const onMouseDownOrUp = (e: MouseEvent) => {
       if (this.areKeysDown()) {
@@ -75,7 +76,7 @@ export class MouseEventHandler {
       element.removeEventListener('mousedown', onMouseDownOrUp);
       element.removeEventListener('mouseup', onMouseDownOrUp);
       element.removeEventListener('mouseover', onMouseOver);
-      element.removeEventListener('click', onClick);
+      element.removeEventListener('click', onClick, { capture: true });
       element.removeEventListener('mouseout', onMouseOut);
     };
   }
