@@ -10,6 +10,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
+          config: 'dummy-config'
           botName: tolgee
           approve: true
           target: minor
