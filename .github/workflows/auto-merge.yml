@@ -1,20 +1,16 @@
-name: Automerge Deps!
+name: auto-merge
 
-on:
-  workflow_run:
-    types:
-      - completed
-    workflows:
-      - 'Test'
+on: [ pull_request_target ]
 
 jobs:
-  merge-me:
-    name: Merge it!
+  auto-merge:
     runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
     steps:
-      - if: ${{ github.event.workflow_run.conclusion == 'success' }}
-        name: Merge it!
-        uses: ridedott/merge-me-action@v2
+      - uses: actions/checkout@v2
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
-          PRESET: DEPENDABOT_MINOR
-          GITHUB_TOKEN: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          botName: tolgee
+          approve: true
+          target: minor
+          github-token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
