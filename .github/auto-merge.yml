@@ -1,0 +1,6 @@
+minApprovals:
+  MEMBER: 1
+requiredLabels:
+  - dependencies
+updateBranch: true
+mergeMethod: rebase
