@@ -3,8 +3,7 @@ jest.dontMock('./translate.pipe');
 
 import {
   getSafeMock,
-  langChangeSubscribeMock,
-  langChangeUnsubscribeMock,
+  getSafeObservableUnsubscribeMock,
   translateSer,
 } from '../__mocks/translate.service.mock';
 
@@ -45,13 +44,13 @@ describe('Safe Translate pipe', function () {
     screen.getByText('translated');
   });
 
-  it('subscribes for lang change', async () => {
-    expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
+  it('subscribes to observable', async () => {
+    expect(translateSer.getSafe).toHaveBeenCalledTimes(1);
   });
 
-  it('unsubscribes from lang change', async () => {
+  it('unsubscribes from observable', async () => {
     fixture.fixture.destroy();
-    expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+    expect(getSafeObservableUnsubscribeMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls the getSafe function with proper params', async () => {

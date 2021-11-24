@@ -28,7 +28,9 @@
               "projects/sampleapp/src/favicon.ico",
               "projects/sampleapp/src/assets"
             ],
-            "styles": ["projects/sampleapp/src/styles.scss"],
+            "styles": [
+              "projects/sampleapp/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -58,6 +60,34 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "stage": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/sampleapp/src/environments/environment.ts",
+                  "with": "projects/sampleapp/src/environments/environment.stage.ts"
+                }
+              ]
+            },
+            "e2e": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "projects/sampleapp/src/environments/environment.ts",
+                  "with": "projects/sampleapp/src/environments/environment.e2e.ts"
+                }
+              ]
             }
           }
         },
@@ -69,6 +99,12 @@
           "configurations": {
             "production": {
               "browserTarget": "sampleapp:build:production"
+            },
+            "stage": {
+              "browserTarget": "sampleapp:build:stage"
+            },
+            "e2e": {
+              "browserTarget": "sampleapp:build:e2e"
             }
           }
         },
@@ -89,7 +125,9 @@
               "projects/sampleapp/src/favicon.ico",
               "projects/sampleapp/src/assets"
             ],
-            "styles": ["projects/sampleapp/src/styles.scss"],
+            "styles": [
+              "projects/sampleapp/src/styles.scss"
+            ],
             "scripts": []
           }
         },
@@ -101,19 +139,9 @@
               "projects/sampleapp/tsconfig.spec.json",
               "projects/sampleapp/e2e/tsconfig.json"
             ],
-            "exclude": ["**/node_modules/**"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/sampleapp/e2e/protractor.conf.js",
-            "devServerTarget": "sampleapp:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "sampleapp:serve:production"
-            }
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }

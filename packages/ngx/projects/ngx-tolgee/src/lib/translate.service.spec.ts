@@ -1,5 +1,8 @@
 jest.dontMock('./translate.service');
 
+import { TolgeeConfig } from '@tolgee/core';
+import { TranslateService } from './translate.service';
+
 let runResolve;
 let initialLoading;
 const stopMock = jest.fn();
@@ -51,9 +54,6 @@ jest.mock('@tolgee/core', () => ({
     instant: instantMock,
   })),
 }));
-
-import { TolgeeConfig } from '@tolgee/core';
-import { TranslateService } from './translate.service';
 
 describe('Translate service', function () {
   let service: TranslateService;
@@ -115,7 +115,6 @@ describe('Translate service', function () {
 
   it('getSafe works ', (done) => {
     const observable = service.getSafe('test', { key: 'value' }, 'Default');
-    runResolve();
     observable.subscribe((r) => {
       expect(r).toEqual('translated');
       expect(translateMock).toHaveBeenCalledWith(
@@ -126,11 +125,62 @@ describe('Translate service', function () {
       );
       done();
     });
+    runResolve();
+  });
+
+  it('getSafe subscribes for events', (done) => {
+    const observable = service.getSafe('test', { key: 'value' }, 'Default');
+    observable.subscribe(() => {
+      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(2);
+      expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(2);
+
+      done();
+    });
+    runResolve();
+  });
+
+  it('getSafe unsubscribes from events', (done) => {
+    const observable = service.getSafe('test', { key: 'value' }, 'Default');
+    const subscription = observable.subscribe(() => {
+      expect(langChangeUnsubscribe).toHaveBeenCalledTimes(0);
+      expect(translationChangeUnsubscribe).toHaveBeenCalledTimes(0);
+      subscription.unsubscribe();
+      expect(langChangeUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(translationChangeUnsubscribe).toHaveBeenCalledTimes(1);
+
+      done();
+    });
+
+    runResolve();
+  });
+
+  it('get subscribes for events', (done) => {
+    const observable = service.get('test', { key: 'value' }, 'Default');
+    observable.subscribe(() => {
+      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(2); // one for start, one for the actual observable
+      expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(2); //one for start, one for the actual observable
+
+      done();
+    });
+    runResolve();
+  });
+
+  it('get unsubscribes from events', (done) => {
+    const observable = service.get('test', { key: 'value' }, 'Default');
+    const subscription = observable.subscribe(() => {
+      expect(langChangeUnsubscribe).toHaveBeenCalledTimes(0);
+      expect(translationChangeUnsubscribe).toHaveBeenCalledTimes(0);
+      subscription.unsubscribe();
+      expect(langChangeUnsubscribe).toHaveBeenCalledTimes(1);
+      expect(translationChangeUnsubscribe).toHaveBeenCalledTimes(1);
+
+      done();
+    });
+    runResolve();
   });
 
   it('get works ', (done) => {
     const observable = service.get('test', { key: 'value' }, 'Default');
-    runResolve();
     observable.subscribe((r) => {
       expect(r).toEqual('translated');
       expect(translateMock).toHaveBeenCalledWith(
@@ -141,6 +191,7 @@ describe('Translate service', function () {
       );
       done();
     });
+    runResolve();
   });
 
   it('instant works ', () => {

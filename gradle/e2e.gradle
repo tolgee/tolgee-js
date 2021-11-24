@@ -82,6 +82,12 @@ task runDockerE2e(type: Exec, group: "e2e") {
     finalizedBy "waitForRunningGatsbyDev"
 }
 
+task runDockerE2eDevAngular(type: Exec, group: "e2e") {
+    commandLine "docker", "compose", "up", "-d", "e2e_app_angular_dev", "e2e_app_angular_prod", "app"
+    workingDir E2E_DIR
+    finalizedBy "waitForRunningServer"
+}
+
 task runDockerE2eDevSvelte(type: Exec, group: "e2e") {
     commandLine "docker", "compose", "up", "-d", "e2e_app_svelte_dev", "e2e_app_svelte_prod", "app"
     workingDir E2E_DIR

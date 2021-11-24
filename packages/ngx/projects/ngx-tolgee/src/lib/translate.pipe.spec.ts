@@ -1,8 +1,7 @@
 jest.dontMock('./translate.pipe');
 import {
   getMock,
-  langChangeSubscribeMock,
-  langChangeUnsubscribeMock,
+  getObservableUnsubscribeMock,
   translateSer,
 } from '../__mocks/translate.service.mock';
 import { TranslatePipe } from './translate.pipe';
@@ -47,13 +46,13 @@ describe('Translate pipe', function () {
       screen.getByText('translated');
     });
 
-    it('subscribes for lang change', async () => {
-      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    it('subscribes to observable', async () => {
+      expect(translateSer.get).toHaveBeenCalledTimes(1);
     });
 
-    it('unsubscribes from lang change', async () => {
+    it('unsubscribes from observable', async () => {
       fixture.fixture.destroy();
-      expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+      expect(getObservableUnsubscribeMock).toHaveBeenCalledTimes(1);
     });
 
     it('calls the get function with proper params', async () => {

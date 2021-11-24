@@ -19,9 +19,20 @@ export const translateSer = createMock(TranslateService);
   subscribe: translationChangeSubscribeMock,
 };
 
+export const getObservableUnsubscribeMock = jest.fn();
+export const getObservableSubscribeMock = jest.fn(() => ({
+  unsubscribe: getObservableUnsubscribeMock,
+}));
+
+export const getSafeObservableUnsubscribeMock = jest.fn();
+export const getSafeObservableSubscribeMock = jest.fn(() => ({
+  unsubscribe: getSafeObservableUnsubscribeMock,
+}));
+
 export const getSafeMock = jest.fn(() => ({
   subscribe: jest.fn((resolve) => {
     resolve('translated');
+    return getSafeObservableSubscribeMock();
   }),
 }));
 (translateSer as any).getSafe = getSafeMock;
@@ -29,6 +40,7 @@ export const getSafeMock = jest.fn(() => ({
 export const getMock = jest.fn(() => ({
   subscribe: jest.fn((resolve) => {
     resolve('translated');
+    return getObservableSubscribeMock();
   }),
 }));
 (translateSer as any).get = getMock;

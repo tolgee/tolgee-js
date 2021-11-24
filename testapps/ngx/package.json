@@ -3,11 +3,12 @@
   "version": "2.7.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "start": "ng serve --configuration=stage",
+    "startE2e": "ng serve --configuration=e2e --host 0.0.0.0",
+    "build": "ng build --configuration=production",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "serve -p 8101 ./dist/sampleapp"
+    "serve": "serve -s -p 8101 ./dist/sampleapp"
   },
   "private": true,
   "dependencies": {

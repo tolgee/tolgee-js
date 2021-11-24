@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Tolgee, TranslationData } from '@tolgee/core';
 import { TolgeeConfig } from './tolgeeConfig';
 
@@ -21,10 +21,14 @@ export class TranslateService implements OnDestroy {
     return this._tolgee;
   }
 
+  /**
+   * Starts Tolgee if not started and subscribes for languageChange and translationChange events
+   */
   public async start(config: TolgeeConfig): Promise<void> {
     if (!this.runPromise) {
       this._tolgee = new Tolgee(config);
       this.runPromise = this.tolgee.run();
+      // unsubscribe first, if it is subscribed for some reason
       this.unsubscribeCoreListeners();
       this.onTranslationChangeCoreSubscription =
         this._tolgee.onTranslationChange.subscribe((data) => {
@@ -40,40 +44,99 @@ export class TranslateService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // stop it!
     this.tolgee.stop();
+    // unsubscribe listeners
     this.unsubscribeCoreListeners();
   }
 
+  /**
+   * Changes the current language
+   * @param lang The new current language (e.g. en, en-US)
+   */
   public setLang(lang: string) {
     this.tolgee.lang = lang;
   }
 
+  /**
+   * Returns the current language
+   */
+  public getCurrentLang(): string {
+    return this.tolgee.lang;
+  }
+
+  /**
+   * Returns Observable providing current translated value
+   * Tne observable is subscribed to translation change and language change events of Tolgee
+   *
+   * In development mode, it returns string wrapped with configured
+   * prefix and suffix to be handled in browser by MutationObserver.
+   *
+   * You should use unsubscribe method when you are done!
+   *
+   * in onInit: this.subscription = translateService.get('aa')
+   * in onDestroy: this.subscription.unsubscribe()
+   *
+   * @param key The key to translate (e.g. what-a-key)
+   * @param params The parameters to interpolate (e.g. {name: "John"})
+   * @param defaultValue Value, which will be rendered, when no translated value is provided
+   */
   public get(
-    input: string,
+    key: string,
     params = {},
     defaultValue?: string
   ): Observable<string> {
-    return from(this.translate(input, params, false, defaultValue));
+    return this.translate(key, params, false, defaultValue);
   }
 
+  /**
+   * Returns Observable providing current translated value
+   * Tne observable is subscribed to translation change and language change events of Tolgee
+   *
+   * In development mode, it returns the translated string,
+   * so in-context localization is not going to work.
+   *
+   * You should use unsubscribe method when you are done!
+   *
+   * in onInit: this.subscription = translateService.get('aa')
+   * in onDestroy: this.subscription.unsubscribe()
+   *
+   * @param key The key to translate (e.g. what-a-key)
+   * @param params The parameters to interpolate (e.g. {name: "John"})
+   * @param defaultValue Value, which will be rendered, when no translated value is provided
+   */
   public getSafe(
-    input: string,
+    key: string,
     params = {},
     defaultValue?: string
   ): Observable<string> {
-    return from(this.translate(input, params, true, defaultValue));
+    return this.translate(key, params, true, defaultValue);
   }
 
-  public instant(input: string, params = {}, defaultValue?: string): string {
-    return this.tolgee.instant(
-      input,
-      params,
-      undefined,
-      undefined,
-      defaultValue
-    );
+  /**
+   * Returns the translation value synchronously
+   *
+   * In development mode, it returns string wrapped with configured
+   * prefix and suffix to be handled in browser by MutationObserver.
+   *
+   * @param key The key to translate (e.g. what-a-key)
+   * @param params The parameters to interpolate (e.g. {name: "John"})
+   * @param defaultValue Value, which will be rendered, when no translated value is provided
+   */
+  public instant(key: string, params = {}, defaultValue?: string): string {
+    return this.tolgee.instant(key, params, undefined, undefined, defaultValue);
   }
 
+  /**
+   * Returns the translation value synchronously
+   *
+   * In development mode, it returns the translated string,
+   * so in-context localization is not going to work.
+   *
+   * @param key The key to translate (e.g. what-a-key)
+   * @param params The parameters to interpolate (e.g. {name: "John"})
+   * @param defaultValue Value, which will be rendered, when no translated value is provided
+   */
   public instantSafe(
     input: string,
     params = {},
@@ -82,23 +145,50 @@ export class TranslateService implements OnDestroy {
     return this.tolgee.instant(input, params, true, undefined, defaultValue);
   }
 
-  public getCurrentLang(): string {
-    return this.tolgee.lang;
-  }
-
   private unsubscribeCoreListeners() {
     this.onTranslationChangeCoreSubscription?.unsubscribe();
     this.onLangChangeCoreSubscription?.unsubscribe();
   }
 
-  private async translate(
-    input: string,
+  private translate(
+    key: string,
     params = {},
     noWrap = false,
     defaultValue: string
-  ): Promise<string> {
-    //wait for start before translating
-    await this.start(this.config);
-    return await this.tolgee.translate(input, params, noWrap, defaultValue);
+  ): Observable<string> {
+    return new Observable((subscriber) => {
+      const translate = async () => {
+        // start if not started
+        await this.start(this.config);
+        const translated = await this.tolgee.translate(
+          key,
+          params,
+          noWrap,
+          defaultValue
+        );
+
+        subscriber.next(translated);
+      };
+
+      translate();
+
+      const onTranslationChangeSubscription =
+        this.tolgee.onTranslationChange.subscribe((data) => {
+          if (data.key === key) {
+            translate();
+          }
+        });
+
+      const onLanguageChangeSubscription = this.tolgee.onLangChange.subscribe(
+        () => {
+          translate();
+        }
+      );
+
+      return () => {
+        onTranslationChangeSubscription.unsubscribe();
+        onLanguageChangeSubscription.unsubscribe();
+      };
+    });
   }
 }
