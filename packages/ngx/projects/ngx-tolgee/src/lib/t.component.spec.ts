@@ -16,27 +16,19 @@ describe('T component', function () {
   let translateSer;
   let fixture: RenderResult<any>;
   let element;
-  let langChangeUnsubscribeMock = jest.fn();
-  let langChangeSubscribeMock = jest.fn(() => ({
-    unsubscribe: langChangeUnsubscribeMock,
+  let observableUnsubscribeMock = jest.fn();
+  let observableSubscribeMock = jest.fn(() => ({
+    unsubscribe: observableUnsubscribeMock,
   }));
-  let translationChangeUnsubscribeMock = jest.fn();
-  let translationChangeSubscribeMock = jest.fn(() => ({
-    unsubscribe: translationChangeUnsubscribeMock,
-  }));
+
   let getSafeMock = jest.fn(() => ({
     subscribe: jest.fn((resolve) => {
       resolve('translated');
+      return observableSubscribeMock();
     }),
   }));
   const getFixture = async (html: string) => {
     translateSer = createMock(TranslateService);
-    (translateSer as any).onLangChange = {
-      subscribe: langChangeSubscribeMock,
-    };
-    (translateSer as any).onTranslationChange = {
-      subscribe: translationChangeSubscribeMock,
-    };
     (translateSer as any).getSafe = getSafeMock;
 
     fixture = await render(html, {
@@ -72,22 +64,23 @@ describe('T component', function () {
       expect(element.textContent).toEqual('translated');
     });
 
-    it('subscribes for translation change', async () => {
-      expect(translationChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    it('subscribes for observable change', async () => {
+      expect(observableSubscribeMock).toHaveBeenCalledTimes(1);
     });
 
-    it('subscribes for lang change', async () => {
-      expect(langChangeSubscribeMock).toHaveBeenCalledTimes(1);
+    it('calls getSafe method', async () => {
+      expect(getSafeMock).toHaveBeenCalledWith(
+        'hello',
+        { key: 'value' },
+        undefined
+      );
+      expect(getSafeMock).toHaveBeenCalledTimes(1);
     });
 
-    it('unsubscribes from translation change', async () => {
+    it('unsubscribes on destroy', async () => {
+      expect(observableUnsubscribeMock).toHaveBeenCalledTimes(0);
       fixture.fixture.destroy();
-      expect(translationChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
-    });
-
-    it('unsubscribes from lang change', async () => {
-      fixture.fixture.destroy();
-      expect(langChangeUnsubscribeMock).toHaveBeenCalledTimes(1);
+      expect(observableUnsubscribeMock).toHaveBeenCalledTimes(1);
     });
   });
 

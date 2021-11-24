@@ -8,8 +8,11 @@ import { Observable, Subscription } from 'rxjs';
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
   value = '';
-  lastHash: string;
-  private langChangeSubscription: Subscription;
+  key: string;
+  params: Record<string, any>;
+  defaultValue: string;
+  private;
+  private subscription: Subscription;
 
   constructor(protected translateService: TranslateService) {}
 
@@ -18,28 +21,29 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     params,
     defaultValue: string
   ) => Observable<string> {
-    return (input, params, defaultValue) =>
-      this.translateService.get(input, params, defaultValue);
+    return (key, params, defaultValue) =>
+      this.translateService.get(key, params, defaultValue);
   }
 
   ngOnDestroy(): void {
-    this.langChangeSubscription.unsubscribe();
+    this.unsubscribe();
   }
 
-  transform(input: any, params?: Record<string, any>): string;
+  transform(key: any, params?: Record<string, any>): string;
+
   transform(
-    input: any,
+    key: any,
     defaultValue?: string,
     params?: Record<string, any>
   ): string;
 
   transform(
-    input: any,
+    key: any,
     paramsOrDefaultValue?: Record<string, any> | string,
     params?: Record<string, any>
   ): string {
-    if (!input || input.length === 0) {
-      return input;
+    if (!key || key.length === 0) {
+      return key;
     }
 
     const defaultValue =
@@ -51,36 +55,35 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
       params = paramsOrDefaultValue;
     }
 
-    const newHash = this.getHash(
-      input,
-      params,
-      this.translateService.getCurrentLang()
-    );
-
-    if (newHash === this.lastHash) {
+    if (
+      this.key === key &&
+      JSON.stringify(this.params) === JSON.stringify(params) &&
+      this.defaultValue === defaultValue
+    ) {
       return this.value;
     }
 
-    this.langChangeSubscription?.unsubscribe();
-    this.langChangeSubscription = this.translateService.onLangChange.subscribe(
-      () => {
-        this.onLangChange(input, params, defaultValue);
-      }
-    );
+    this.key = key;
+    this.params = params;
+    this.defaultValue = defaultValue;
 
-    this.onLangChange(input, params, defaultValue);
+    // unsubscribe first
+    this.unsubscribe();
 
-    this.lastHash = newHash;
+    // asynchronously translate and assign subscription
+    this.subscription = this.translate(key, params, defaultValue);
 
     return this.value;
   }
 
-  private getHash(input: string, params: object, language: string): string {
-    return JSON.stringify({ input, params, language });
+  private unsubscribe() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  private onLangChange(input, params, defaultValue) {
-    this.resultProvider(input, params, defaultValue).subscribe((r) => {
+  private translate(key, params, defaultValue) {
+    return this.resultProvider(key, params, defaultValue).subscribe((r) => {
       this.value = r;
     });
   }
