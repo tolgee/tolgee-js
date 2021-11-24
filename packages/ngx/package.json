@@ -33,7 +33,7 @@
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^13.0.1",
+    "@angular-devkit/build-angular": "^13.0.3",
     "@angular/cli": "~13.0.1",
     "@angular/compiler-cli": "~13.0.0",
     "@angular/language-service": "~13.0.2",
@@ -46,7 +46,7 @@
     "codelyzer": "^6.0.0",
     "jest": "27.3.1",
     "jest-preset-angular": "11.0.1",
-    "ng-packagr": "^13.0.6",
+    "ng-packagr": "^13.0.8",
     "protractor": "~7.0.0",
     "ts-jest": "^27.0.5",
     "ts-node": "~10.4.0",
