@@ -3,37 +3,37 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/core/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ui/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/react/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ngx/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/svelte/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/socketio-client/"
     schedule:
-      interval: weekly
+      interval: daily
     ignore:
       - dependency-name: "@types/socket.io-client"
       - dependency-name: "socket.io-client"
@@ -41,23 +41,33 @@ updates:
   - package-ecosystem: npm
     directory: "/testapps/ngx"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/core"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/svelte"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/react"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: main
     ignore:
       - dependency-name: "react"
       - dependency-name: "react-dom"
+  - package-ecosystem: npm
+    directory: "/packages/vue"
+    schedule:
+      interval: daily
+    target-branch: main
+  - package-ecosystem: npm
+    directory: "/testapps/vue"
+    schedule:
+      interval: daily
+    target-branch: main
