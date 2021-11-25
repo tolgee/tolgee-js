@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/tolgee/tolgee-js/compare/v2.7.0...v2.8.0) (2021-11-25)
+
+
+### Features
+
+* Angular improvements & testapp TG-418 ([02b8f49](https://github.com/tolgee/tolgee-js/commit/02b8f49eeaf1434e258e961c369d4293b0b20a6e))
+
+
+
+
+
 # [2.7.0](https://github.com/tolgee/tolgee-js/compare/v2.6.0...v2.7.0) (2021-11-23)
 
 

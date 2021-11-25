@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/tolgee/tolgee-js/compare/v2.7.0...v2.8.0) (2021-11-25)
+
+
+### Bug Fixes
+
+* Fix core event capturing TG-419 ([1b6efe8](https://github.com/tolgee/tolgee-js/commit/1b6efe8ee018358c93e4ac510d61be4f7dee6ef8))
+
+
+
+
+
 # [2.7.0](https://github.com/tolgee/tolgee-js/compare/v2.6.0...v2.7.0) (2021-11-23)
 
 

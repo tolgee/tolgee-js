@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [2.8.0](https://github.com/tolgee/tolgee-js/compare/v2.7.0...v2.8.0) (2021-11-25)
+
+
+### Bug Fixes
+
+* Fix core event capturing TG-419 ([1b6efe8](https://github.com/tolgee/tolgee-js/commit/1b6efe8ee018358c93e4ac510d61be4f7dee6ef8))
+
+
+### Features
+
+* Angular improvements & testapp TG-418 ([02b8f49](https://github.com/tolgee/tolgee-js/commit/02b8f49eeaf1434e258e961c369d4293b0b20a6e))
+* Angular improvements & testapp TG-418 ([56be3a9](https://github.com/tolgee/tolgee-js/commit/56be3a965c9491b06d697853970e2aca87ced566))
+* Angular improvements & testapp TG-418 ([e5b58f2](https://github.com/tolgee/tolgee-js/commit/e5b58f2da08c2277c1e144464137a45743d1223c))
+* Angular improvements & testapp TG-418 ([b1a8c3f](https://github.com/tolgee/tolgee-js/commit/b1a8c3fcd89633fe5a2c4daf4b844b3be75d7f66))
+
+
+
+
+
 # [2.7.0](https://github.com/tolgee/tolgee-js/compare/v2.6.0...v2.7.0) (2021-11-23)
 
 
