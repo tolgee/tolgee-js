@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: ['react', 'next', 'gatsby', 'vue', 'svelte']
+        project: ['react', 'next', 'gatsby', 'vue', 'svelte', 'ngx']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -53,6 +53,6 @@ jobs:
           git add .
           git config --local user.email "machine@tolgee.io"
           git config --local user.name "Tolgee Automation Machine"
-          git commit -m "chore: Publishing example from release: ${{ github.event.head_commit.message }}" -a || true
+          git commit -m "chore: Publishing example: ${{ github.event.commits[0].message }}" -a || true
           git push
         working-directory: testapps/${{ matrix.project }}
