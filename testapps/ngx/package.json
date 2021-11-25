@@ -33,7 +33,7 @@
     "@angular/cli": "~13.0.3",
     "@angular/compiler-cli": "~13.0.0",
     "@angular/language-service": "~13.0.2",
-    "@types/node": "^16.11.7",
+    "@types/node": "^16.11.10",
     "codelyzer": "^6.0.0",
     "ng-packagr": "^13.0.8",
     "protractor": "~7.0.0",
