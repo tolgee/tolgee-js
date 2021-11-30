@@ -6,7 +6,7 @@ import { TextService } from './TextService';
 import { MouseEventHandler } from '../highlighter/MouseEventHandler';
 import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { ElementRegistrar } from './ElementRegistrar';
-import { TextHandler } from '../handlers/TextHandler';
+import { InvisibleTextHandler } from '../handlers/InvisibleTextHandler';
 import { AttributeHandler } from '../handlers/AttributeHandler';
 import { CoreHandler } from '../handlers/CoreHandler';
 import { Observer } from '../Observer';
@@ -17,6 +17,7 @@ import { PluginManager } from '../toolsManager/PluginManager';
 import { Messages } from '../toolsManager/Messages';
 import { HighlightFunctionsInitializer } from '../highlighter/HighlightFunctionsInitializer';
 import { ScreenshotService } from './ScreenshotService';
+import { InvisibleTextService } from './InvisibleTextService';
 
 export class DependencyStore {
   public properties: Properties = new Properties();
@@ -54,10 +55,16 @@ export class DependencyStore {
     this.eventService
   );
 
-  public textHandler = new TextHandler(
+  public invisibleTextService = new InvisibleTextService(
+    this.properties,
+    this.translationService
+  );
+
+  public textHandler = new InvisibleTextHandler(
     this.properties,
     this.translationHighlighter,
     this.textService,
+    this.invisibleTextService,
     this.elementRegistrar
   );
   public attributeHandler = new AttributeHandler(

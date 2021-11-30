@@ -86,7 +86,7 @@ export abstract class AbstractHandler {
     return node as Node as NodeWithMeta;
   }
 
-  private lockNode(node: Node | Attr): NodeWithLock {
+  protected lockNode(node: Node | Attr): NodeWithLock {
     if (node[TOLGEE_ATTRIBUTE_NAME] === undefined) {
       node[TOLGEE_ATTRIBUTE_NAME] = {} as NodeLock;
     }
@@ -99,13 +99,13 @@ export abstract class AbstractHandler {
     return node as NodeWithLock;
   }
 
-  private unlockNode(node: Node | Attr) {
+  protected unlockNode(node: Node | Attr) {
     if (node[TOLGEE_ATTRIBUTE_NAME]) {
       node[TOLGEE_ATTRIBUTE_NAME].locked = false;
     }
   }
 
-  private getParentElement(node: Node) {
+  protected getParentElement(node: Node) {
     const parent = this.getSuitableParent(node);
     return AbstractHandler.initParentElement(parent);
   }
