@@ -1,6 +1,6 @@
 import { NodeHelper } from '../helpers/NodeHelper';
 import { CoreService } from '../services/CoreService';
-import { TextHandler } from './TextHandler';
+import { InvisibleTextHandler } from './InvisibleTextHandler';
 import { EventService } from '../services/EventService';
 import { Properties } from '../Properties';
 import { AttributeHandler } from './AttributeHandler';
@@ -11,7 +11,7 @@ import { WrappedHandler } from './WrappedHandler';
 export class CoreHandler {
   constructor(
     private service: CoreService,
-    private textHandler: TextHandler,
+    private textHandler: InvisibleTextHandler,
     private eventService: EventService,
     private properties: Properties,
     private attributeHandler: AttributeHandler,
