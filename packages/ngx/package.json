@@ -44,7 +44,7 @@
     "@types/jest": "27.0.3",
     "@types/node": "^16.11.11",
     "codelyzer": "^6.0.0",
-    "jest": "27.4.2",
+    "jest": "27.4.3",
     "jest-preset-angular": "11.0.1",
     "ng-packagr": "^13.0.8",
     "protractor": "~7.0.0",
