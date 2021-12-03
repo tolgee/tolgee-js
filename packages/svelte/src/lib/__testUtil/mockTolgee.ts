@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import type { Tolgee } from '@tolgee/core';
 import type { Subscription } from '@tolgee/core/lib/services/Subscription';
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const mockTolgee = () => {
   const runMock = {
     run: jest.fn(
@@ -14,14 +16,18 @@ export const mockTolgee = () => {
   };
 
   const stopMock = jest.fn();
+  let translationValue = 'translated';
+
+  const changeTranslationValue = (value: string) => {
+    translationValue = value;
+  };
 
   const instantMock = jest.fn(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    (..._: Parameters<Tolgee['instant']> | unknown[]) => 'translated'
+    (..._: Parameters<Tolgee['instant']> | unknown[]) => translationValue
   );
   const translateMock = jest.fn(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async (..._: Parameters<Tolgee['translate']> | unknown[]) => 'translated'
+    async (..._: Parameters<Tolgee['translate']> | unknown[]) =>
+      translationValue
   );
   const subscriptionCallbacks = {
     onTranslationChange: null,
@@ -52,6 +58,28 @@ export const mockTolgee = () => {
   const getLangMock = jest.fn(() => 'mocked-lang');
   const setLangMock = jest.fn();
 
+  const tolgee = {
+    init: () => tolgee as Tolgee,
+    use: () => tolgee as Tolgee,
+    run: runMock.run,
+    stop: stopMock,
+    get lang() {
+      return getLangMock();
+    },
+    set lang(lang: string) {
+      setLangMock(lang);
+    },
+    instant: instantMock,
+    translate: translateMock,
+    onTranslationChange: onTranslationChangeMock,
+    onLangChange: onLangChangeMock,
+    initialLoading: true,
+  } as Partial<Tolgee>;
+
+  const tolgeeClass = jest.fn().mockImplementation(() => tolgee);
+  (tolgeeClass as any).init = () => tolgee;
+  (tolgeeClass as any).use = () => tolgee;
+
   return {
     runMock,
     stopMock,
@@ -64,19 +92,8 @@ export const mockTolgee = () => {
     onLangChangeUnsubscribeMock,
     getLangMock,
     setLangMock,
-    tolgee: {
-      run: runMock.run,
-      stop: stopMock,
-      get lang() {
-        return getLangMock();
-      },
-      set lang(lang: string) {
-        setLangMock(lang);
-      },
-      instant: instantMock,
-      translate: translateMock,
-      onTranslationChange: onTranslationChangeMock,
-      onLangChange: onLangChangeMock,
-    } as Partial<Tolgee>,
+    changeTranslationValue,
+    tolgeeClass,
+    tolgee,
   };
 };

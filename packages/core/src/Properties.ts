@@ -18,7 +18,12 @@ export class Properties {
     }
 
     if (typeof localStorage !== 'undefined') {
-      result = localStorage.getItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY);
+      const storedLanguage = localStorage.getItem(
+        CURRENT_LANGUAGE_LOCAL_STORAGE_KEY
+      );
+      if (storedLanguage) {
+        result = storedLanguage;
+      }
 
       if (this.config.availableLanguages) {
         const isSavedLanguageAvailable =
@@ -39,7 +44,10 @@ export class Properties {
   }
 
   set currentLanguage(language: string) {
-    if (typeof localStorage == 'undefined') {
+    if (!language) {
+      throw new Error(`Setting invalid language value ${language}`);
+    }
+    if (typeof localStorage === 'undefined') {
       this._currentLanguage = language;
       return;
     }

@@ -2,14 +2,14 @@ jest.dontMock('./MouseEventHandler');
 jest.dontMock('../Constants/ModifierKey');
 jest.dontMock('../services/EventEmitter');
 jest.dontMock('../services/Subscription');
-jest.dontMock('../services/DependencyStore');
+jest.dontMock('../services/DependencyService');
 
 import { MouseEventHandler } from './MouseEventHandler';
 import { ElementMeta, ElementWithMeta } from '../types';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from '../Properties';
 import { ModifierKey } from '../Constants/ModifierKey';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 
 describe('MouseEventHandler', () => {
   let mouseEventHandler: MouseEventHandler;
@@ -34,7 +34,10 @@ describe('MouseEventHandler', () => {
   };
 
   beforeEach(async () => {
-    mouseEventHandler = new DependencyStore().mouseEventHandler;
+    const dependencyService = new DependencyService();
+    dependencyService.init({});
+    dependencyService.run();
+    mouseEventHandler = dependencyService.mouseEventHandler;
     mockedElement = withMeta(document.createElement('div'));
     mouseEventHandler.handle(mockedElement, mockedCallback);
     getMockedInstance(Properties).config.highlightKeys = [ModifierKey[key]];

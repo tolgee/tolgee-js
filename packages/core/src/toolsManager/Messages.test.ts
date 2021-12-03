@@ -1,8 +1,8 @@
 jest.dontMock('./Messages');
-jest.dontMock('../services/DependencyStore');
+jest.dontMock('../services/DependencyService');
 
 import { Messages } from './Messages';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 
 describe('Messages', () => {
   let messages: Messages;
@@ -10,7 +10,7 @@ describe('Messages', () => {
   let windowRemoveEventListenerSpy;
 
   beforeEach(async () => {
-    messages = new DependencyStore().messages;
+    messages = new DependencyService().messages;
     windowAddEventListenerSpy = jest.spyOn(window, 'addEventListener');
     windowRemoveEventListenerSpy = jest.spyOn(window, 'removeEventListener');
     messages.startListening();

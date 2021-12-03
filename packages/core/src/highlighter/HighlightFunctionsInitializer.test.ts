@@ -1,11 +1,11 @@
 jest.dontMock('./HighlightFunctionsInitializer');
-jest.dontMock('../services/DependencyStore');
+jest.dontMock('../services/DependencyService');
 
 import { HighlightFunctionsInitializer } from './HighlightFunctionsInitializer';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from '../Properties';
 import { ElementWithMeta } from '../types';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 
 describe('HighlightFunctionsInitializer', () => {
   let highlightFunctionInitializer: HighlightFunctionsInitializer;
@@ -14,8 +14,10 @@ describe('HighlightFunctionsInitializer', () => {
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    highlightFunctionInitializer = new DependencyStore()
-      .highlightFunctionInitializer;
+    const dependencyService = new DependencyService();
+    dependencyService.init({});
+    highlightFunctionInitializer =
+      dependencyService.highlightFunctionInitializer;
     mockedElement = document.createElement('div') as Element as ElementWithMeta;
     getMockedInstance(Properties).config.highlightColor = mockedColor;
     (mockedElement._tolgee as any) = {};

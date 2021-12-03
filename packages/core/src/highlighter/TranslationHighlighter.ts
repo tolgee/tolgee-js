@@ -1,6 +1,6 @@
 import { ElementWithMeta } from '../types';
 import { PluginManager } from '../toolsManager/PluginManager';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 
 type KeyWithDefault = { key: string; defaultValue?: string };
 
@@ -8,7 +8,7 @@ export class TranslationHighlighter {
   public pluginManager: PluginManager;
   private _renderer: any;
 
-  constructor(private dependencies: DependencyStore) {}
+  constructor(private dependencies: DependencyService) {}
 
   private static getKeyOptions(node: ElementWithMeta): KeyWithDefault[] {
     const nodes = Array.from(node._tolgee.nodes);

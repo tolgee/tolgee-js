@@ -1,22 +1,5 @@
-import { render } from '@testing-library/svelte';
-import { TolgeeProvider } from '$lib/index';
-import TolgeeProviderSlotTest from '$lib/__testUtil/TolgeeProviderSlotTest.svelte';
-import { mockTolgee } from '$lib/__testUtil/mockTolgee';
-
-const setContextMock = jest.fn();
-const tolgeeMock = mockTolgee();
-
-let onMountCallback;
-let onDestroyCallback;
-
-jest.mock('@tolgee/core', () => ({
-  Tolgee: function () {
-    return tolgeeMock.tolgee;
-  },
-  TolgeeConfig: function () {
-    jest.fn();
-  },
-}));
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+jest.mock('@tolgee/core');
 jest.mock('svelte', () => {
   return {
     ...(jest.requireActual('svelte') as Record<string, unknown>),
@@ -25,6 +8,26 @@ jest.mock('svelte', () => {
     onDestroy: (callback) => (onDestroyCallback = callback),
   };
 });
+
+import { mockTolgee } from '$lib/__testUtil/mockTolgee';
+import * as tolgee from '@tolgee/core';
+
+const setContextMock = jest.fn();
+const tolgeeMock = mockTolgee();
+
+// @ts-ignore Mock tolgee class, so Tolgee.init and Tolgee.use is mocked also
+tolgee.Tolgee = tolgeeMock.tolgeeClass;
+// @ts-ignore
+tolgee.TolgeeConfig = function () {
+  jest.fn();
+};
+
+import { render } from '@testing-library/svelte';
+import { TolgeeProvider } from '$lib/index';
+import TolgeeProviderSlotTest from '$lib/__testUtil/TolgeeProviderSlotTest.svelte';
+
+let onMountCallback;
+let onDestroyCallback;
 
 describe('TolgeeProvider', () => {
   describe('on start', () => {

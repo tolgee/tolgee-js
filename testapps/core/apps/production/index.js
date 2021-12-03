@@ -1,4 +1,4 @@
-import { Tolgee } from '@tolgee/core';
+import { IcuFormatter, Tolgee } from '@tolgee/core';
 
 document.body = document.createElement('body');
 const htmlElement = document.createElement('div');
@@ -9,7 +9,7 @@ initialTextsToTranslate.innerHTML =
   '<p>{{test}}</p><p>{{test}}</p><p>{{test_param:param:value}}</p><p>{{test}}</p><p>{{this_is_mentioned_just_in_english}}</p>';
 document.body.append(initialTextsToTranslate);
 
-const tolgee = new Tolgee({
+const tolgee = Tolgee.use(IcuFormatter).init({
   watch: true,
   inputPrefix: '{{',
   inputSuffix: '}}',

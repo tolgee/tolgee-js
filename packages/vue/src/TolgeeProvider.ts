@@ -1,5 +1,5 @@
 import { defineComponent, PropType } from 'vue';
-import { Tolgee, TolgeeConfig } from '@tolgee/core';
+import { Tolgee, TolgeeConfig, IcuFormatter } from '@tolgee/core';
 import { TolgeeContext } from './types';
 
 export const TolgeeProvider = defineComponent({
@@ -11,7 +11,7 @@ export const TolgeeProvider = defineComponent({
     },
   },
   created() {
-    const tolgee = new Tolgee({ ...this.$props.config });
+    const tolgee = Tolgee.use(IcuFormatter).init({ ...this.$props.config });
 
     this.tolgeeContext.tolgee = tolgee;
     this.tolgeeContext.language = tolgee.lang;

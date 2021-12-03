@@ -136,6 +136,13 @@ task buildSocketIoClient(type: Exec) {
     workingDir "packages/socketio-client"
 }
 
+task buildI18next(type: Exec) {
+    dependsOn "lernaBootstrap"
+    commandLine "npm", "run", "build"
+    workingDir "packages/i18next"
+    mustRunAfter "buildCore", "buildUi"
+}
+
 task buildCoreTestapps(type: Exec) {
     dependsOn "lernaBootstrap", "buildCore", "buildUi"
     commandLine "npm", "run", "build"
@@ -162,6 +169,28 @@ task buildReactDevTestApp(type: Exec) {
 
 task buildReactTestapps() {
     dependsOn "buildReactProdTestApp", "buildReactDevTestApp"
+}
+
+
+task buildReactI18nextProdTestApp(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildI18next"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/react-i18next"
+    mustRunAfter "buildCore", "buildUi"
+}
+
+task buildReactI18nextDevTestApp(type: Exec) {
+    dependsOn "lernaBootstrap", "buildCore", "buildUi", "buildI18next"
+    commandLine "npm", "run", "build"
+    workingDir "testapps/react-i18next"
+    mustRunAfter "buildCore", "buildUi"
+    environment 'BUILD_PATH'                  : './build-dev',
+                'REACT_APP_TOLGEE_API_URL'    : 'http://localhost:8202',
+                'REACT_APP_TOLGEE_API_KEY'    : 'examples-admin-imported-project-implicit'
+}
+
+task buildReactI18nextTestapps() {
+    dependsOn "buildReactI18nextProdTestApp", "buildReactI18nextDevTestApp"
 }
 
 task buildVueProdTestApp(type: Exec) {
@@ -230,9 +259,10 @@ task buildSvelteDevTestApp(type: Exec) {
 }
 
 task buildAll(type: Task) {
-    dependsOn "buildCore", "buildUi", "buildReact", "buildVue", "buildSvelte", "buildNgx", "buildSocketIoClient",
-            "buildCoreTestapps", "buildReactTestapps", "buildVueTestapps", "buildNgxTestapps", "buildGatsbyTestapps", "buildNextTestapps", "buildSvelteTestApps"
-    }
+    dependsOn "buildCore", "buildUi", "buildReact", "buildVue", "buildSvelte", "buildNgx", "buildSocketIoClient", "buildI18next",
+            "buildCoreTestapps", "buildReactTestapps", "buildVueTestapps", "buildNgxTestapps", "buildGatsbyTestapps",
+            "buildNextTestapps", "buildSvelteTestApps", "buildReactI18nextTestapps"
+}
 
 task developAll(type: Exec) {
     dependsOn "lernaBootstrap", "buildAll"
@@ -287,6 +317,10 @@ task testVue(type: Exec) {
     workingDir "packages/vue"
 }
 
+task testAll(type: Task) {
+    dependsOn "testUi", "testCore", "testReact", "testSvelte", "testNgx", "testSocketIoClient", "testVue"
+}
+
 task build(type: Task) {
-    dependsOn "buildAll", "testUi", "testCore", "testReact", "testSvelte", "testNgx", "testSocketIoClient", "testVue", "runE2e"
+    dependsOn "buildAll", "testAll", "runE2e"
 }

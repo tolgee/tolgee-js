@@ -38,6 +38,7 @@ export class TolgeeConfig {
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
   };
+  wrapperMode?: 'text' | 'invisible' = 'text';
 
   /**
    * When true, fallback language will be preloaded on Tolgee.run

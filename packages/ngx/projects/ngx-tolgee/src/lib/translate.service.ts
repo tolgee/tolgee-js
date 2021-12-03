@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Tolgee, TranslationData } from '@tolgee/core';
+import { IcuFormatter, Tolgee, TranslationData } from '@tolgee/core';
 import { TolgeeConfig } from './tolgeeConfig';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class TranslateService implements OnDestroy {
    */
   public async start(config: TolgeeConfig): Promise<void> {
     if (!this.runPromise) {
-      this._tolgee = new Tolgee(config);
+      this._tolgee = Tolgee.use(IcuFormatter).init(config);
       this.runPromise = this.tolgee.run();
       // unsubscribe first, if it is subscribed for some reason
       this.unsubscribeCoreListeners();

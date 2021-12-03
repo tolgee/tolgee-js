@@ -79,4 +79,12 @@ export class NodeHelper {
       yield node as T;
     }
   }
+
+  static getNodeText(node: Node) {
+    return node.textContent;
+  }
+
+  static setNodeText(node: Node, text: string) {
+    node.textContent = text;
+  }
 }

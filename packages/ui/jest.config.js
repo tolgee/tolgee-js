@@ -7,11 +7,6 @@ module.exports = {
   moduleNameMapper: {
     '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
-  },
-  roots: ['src', 'test'],
+  roots: ['src'],
   //transformIgnorePatterns: ['node_modules/(?!(@tolgee))'],
 };

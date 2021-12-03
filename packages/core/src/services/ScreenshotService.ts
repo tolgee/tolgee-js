@@ -1,4 +1,4 @@
-import { UploadedImageModel } from 'index';
+import { UploadedImageModel } from '..';
 import { ApiHttpService } from './ApiHttpService';
 import { CoreService } from './CoreService';
 

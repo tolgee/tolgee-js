@@ -8,24 +8,13 @@
     "outDir": "./lib",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "lib": [
-      "es2018",
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2018", "es2020", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "emitDeclarationOnly": true,
     "jsx": "react",
     "downlevelIteration": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

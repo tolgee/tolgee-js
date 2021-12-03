@@ -1,24 +1,25 @@
 jest.dontMock('./Observer');
-jest.dontMock('./services/DependencyStore');
+jest.dontMock('./services/DependencyService');
 
-import { DependencyStore } from './services/DependencyStore';
+import { DependencyService } from './services/DependencyService';
 import '@testing-library/jest-dom/extend-expect';
 import 'regenerator-runtime/runtime.js';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from './Properties';
-import { CoreHandler } from './handlers/CoreHandler';
 import { waitFor } from '@testing-library/dom';
-import { TextHandler } from './handlers/TextHandler';
-import { AttributeHandler } from './handlers/AttributeHandler';
 import { Observer } from './Observer';
 import { ElementRegistrar } from './services/ElementRegistrar';
+import { TextWrapper } from './wrappers/text/TextWrapper';
 
 describe('Observer', () => {
   let observer: Observer;
   let properties: Properties;
 
   beforeEach(async () => {
-    observer = new DependencyStore().observer;
+    const dependencyService = new DependencyService();
+    dependencyService.init({ wrapperMode: 'text' });
+    dependencyService.run();
+    observer = dependencyService.observer;
     properties = getMockedInstance(Properties);
     document.body = document.createElement('body');
     properties.config.targetElement = document.body;
@@ -40,7 +41,7 @@ describe('Observer', () => {
       text.textContent = 'Dummy text node modified';
 
       await waitFor(() => {
-        const onNewNodesMock = getMockedInstance(TextHandler).handle;
+        const onNewNodesMock = getMockedInstance(TextWrapper).handleText;
         expect(onNewNodesMock).toBeCalledTimes(1);
         expect(onNewNodesMock).toBeCalledWith(text);
       });
@@ -52,7 +53,7 @@ describe('Observer', () => {
       document.body.append(text);
 
       await waitFor(() => {
-        const handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
+        const handleSubtree = getMockedInstance(TextWrapper).handleSubtree;
 
         expect(handleSubtree).toBeCalledTimes(1);
         expect(handleSubtree).toBeCalledWith(document.body);
@@ -68,7 +69,8 @@ describe('Observer', () => {
       span.setAttribute(attributeName, 'modified');
 
       await waitFor(() => {
-        const handleAttributeMock = getMockedInstance(AttributeHandler).handle;
+        const handleAttributeMock =
+          getMockedInstance(TextWrapper).handleAttribute;
         expect(handleAttributeMock).toBeCalledTimes(1);
         expect(handleAttributeMock).toBeCalledWith(span);
       });
@@ -84,7 +86,7 @@ describe('Observer', () => {
 
       await waitFor(() => {
         const handleAttributeMock =
-          getMockedInstance(CoreHandler).handleSubtree;
+          getMockedInstance(TextWrapper).handleSubtree;
 
         expect(handleAttributeMock).toBeCalledTimes(1);
         expect(handleAttributeMock).toBeCalledWith(innerDiv);
@@ -98,7 +100,7 @@ describe('Observer', () => {
       document.body.textContent = 'Nothing';
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      const handleSubtree = getMockedInstance(CoreHandler).handleSubtree;
+      const handleSubtree = getMockedInstance(TextWrapper).handleSubtree;
       expect(handleSubtree).not.toBeCalledTimes(1);
     });
   });

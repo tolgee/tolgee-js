@@ -1,9 +1,9 @@
-import { Tolgee } from '@tolgee/core';
+import { IcuFormatter, Tolgee } from '@tolgee/core';
 
 const HOST = 'localhost';
 const PORT = 8202;
 
-const tolgee = new Tolgee({
+const tolgee = Tolgee.use(IcuFormatter).init({
   watch: true,
   targetElement: document.body,
   apiUrl: 'http://' + HOST + ':' + PORT,

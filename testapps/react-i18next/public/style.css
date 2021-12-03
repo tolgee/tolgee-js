@@ -1,0 +1,252 @@
+@import url('https://fonts.googleapis.com/css?family=EB+Garamond');
+@import url('https://fonts.googleapis.com/css?family=Cairo');
+
+:root * {
+  box-sizing: border-box;
+}
+
+.background-wrapper {
+  height: 100%;
+  position: relative;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+.background-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  background-image: url('/img/background.jpg');
+  background-size: cover;
+}
+
+.example {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 100%;
+}
+
+:root {
+  font-family: 'Cairo';
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f6f6f6;
+}
+
+.button {
+  min-width: 130px;
+  color: #ffffff;
+  cursor: pointer;
+  border: 0;
+  padding: 16px 30px;
+  font-size: 18px;
+  background: #785438;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  font-weight: 200;
+}
+
+.button--secondary {
+  background-color: #392718;
+}
+
+button:hover {
+  background: rgba(120, 84, 56, 0.87);
+}
+
+button[disabled],
+.items__new-item button[disabled]:hover {
+  background: #e1ccbb;
+  box-shadow: none;
+  color: #fef3e8;
+  cursor: initial;
+  opacity: 0.8;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+  background: rgba(255, 255, 255, 0.51);
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.navbar a:hover {
+}
+
+header {
+  display: inline-block;
+  background: #f0e5da;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 20px 100px;
+  margin: 20px 0 0;
+  position: relative;
+}
+
+header::before,
+header:after {
+  content: '';
+  width: 100px;
+  height: 17px;
+  position: absolute;
+  transform: rotate(47deg);
+  background: #57463c;
+}
+
+header::before {
+  bottom: 12px;
+  left: -32px;
+}
+
+header::after {
+  top: 12px;
+  right: -32px;
+}
+
+header h1,
+header h2 {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 50px;
+  font-family: 'EG Garamond';
+  font-weight: 300;
+}
+
+header h2 {
+  font-size: 20px;
+}
+
+.items {
+  font-weight: 300;
+  margin-top: 60px;
+  min-height: 500px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 235, 0.92) 0%,
+    rgba(206, 163, 122, 0.92) 100%
+  );
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.items__new-item {
+  display: flex;
+  padding: 32px;
+  gap: 20px;
+}
+
+.items__new-item input {
+  flex-grow: 1;
+  background: #fff8f2;
+  border: 1px solid #785438;
+  box-sizing: border-box;
+  border-radius: 6px;
+  padding: 16px;
+  font-size: 18px;
+}
+
+.items__list {
+  margin: 32px;
+  flex-grow: 1;
+}
+
+.item {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #baa595;
+}
+
+.item__text {
+  font-size: 18px;
+  flex-grow: 1;
+}
+
+.item button {
+  font-size: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.items__buttons {
+  align-self: flex-end;
+  margin: 32px;
+  display: flex;
+  gap: 20px;
+}
+
+.translation-methods {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.translation-methods .tiles {
+  margin: 50px auto 0;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.translation-methods .tiles > div {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 1px 5px rgba(94, 94, 94, 0.47);
+  padding: 20px;
+  border-radius: 5px;
+  min-height: 120px;
+}
+
+.translation-methods .tiles > div > div {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.translation-methods h1 {
+  padding: 0;
+  margin: 0;
+  color: #691036;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.lang-selector {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  border-radius: 0 0 10px 10px;
+  font-size: 20px;
+  border: none;
+  background: rgba(255, 255, 255, 0.51);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  cursor: pointer;
+}

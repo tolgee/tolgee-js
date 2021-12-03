@@ -18,7 +18,7 @@ describe('Tolgee Provider Component', function () {
   beforeEach(async () => {
     mockedTolgee = mockTolgee();
     // @ts-ignore
-    tolgee.Tolgee = jest.fn().mockImplementation(() => mockedTolgee.tolgee);
+    tolgee.Tolgee = mockedTolgee.tolgeeClass;
     jest.clearAllMocks();
   });
 

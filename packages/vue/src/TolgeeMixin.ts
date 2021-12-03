@@ -47,10 +47,7 @@ export const TolgeeMixin = defineComponent({
   watch: {
     // user setting language in component
     tolgeeLanguage: function (value: string) {
-      const tolgeeContext = this.tolgeeContext as TolgeeContext;
-      if (value !== tolgeeContext.tolgee.lang) {
-        this.tolgeeContext.tolgee.lang = value;
-      }
+      this.tolgeeContext.tolgee.lang = value;
     },
   },
   methods: {

@@ -2,7 +2,7 @@ jest.dontMock('./TranslationService');
 jest.dontMock('../helpers/TextHelper');
 jest.dontMock('../types/DTOs');
 jest.dontMock('../Errors/ApiHttpError');
-jest.dontMock('./DependencyStore');
+jest.dontMock('./DependencyService');
 
 import { TranslationService } from './TranslationService';
 import { getMockedInstance } from '@testFixtures/mocked';
@@ -12,7 +12,7 @@ import { CoreService } from './CoreService';
 import { TranslationData } from '../types/DTOs';
 import { ApiHttpError } from '../Errors/ApiHttpError';
 import { EventService } from './EventService';
-import { DependencyStore } from './DependencyStore';
+import { DependencyService } from './DependencyService';
 
 const mockedTranslations = {
   en: {
@@ -51,7 +51,9 @@ describe('TranslationService', () => {
   const translationChangedEmitMock = jest.fn();
 
   beforeEach(async () => {
-    translationService = new DependencyStore().translationService;
+    const dependencyService = new DependencyService();
+    dependencyService.init({});
+    translationService = dependencyService.translationService;
     (getMockedInstance(EventService) as any).LANGUAGE_LOADED = {
       emit: languageLoadedEmitMock,
     };
@@ -323,53 +325,6 @@ describe('TranslationService', () => {
       expect(
         await translationService.getFromCacheOrFallback('just_en', 'de')
       ).toEqual('Just en.');
-    });
-
-    test('getFromCacheOrCallback will return default when provided', async () => {
-      expect(
-        await translationService.getFromCacheOrFallback(
-          'this_key_is_not_in_cache',
-          'de',
-          false,
-          'Default'
-        )
-      ).toEqual('Default');
-    });
-
-    test('getFromCacheOrCallback will return empty when onEmpty is true', async () => {
-      expect(
-        await translationService.getFromCacheOrFallback(
-          'this_key_is_not_in_cache',
-          'de',
-          true
-        )
-      ).toEqual('');
-    });
-
-    test('will return key when no translation found', async () => {
-      expect(
-        await translationService.getTranslation(
-          'test\\.key.this\\.is\\.it',
-          'en'
-        )
-      ).toEqual('test\\.key.this\\.is\\.it');
-    });
-
-    test('returns default when provided', async () => {
-      expect(
-        await translationService.getTranslation(
-          'youaaaahihahihh',
-          'en',
-          undefined,
-          'This is default'
-        )
-      ).toEqual('This is default');
-    });
-
-    test('will return proper text without any dot', async () => {
-      expect(
-        await translationService.getTranslation('text without any dot', 'en')
-      ).toEqual('text without any dot');
     });
 
     test('uses provided static data', async () => {

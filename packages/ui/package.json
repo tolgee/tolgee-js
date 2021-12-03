@@ -11,9 +11,9 @@
     "test": "test"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js && tsc",
+    "build": "rollup -c rollup.config.js && tsc --project tsconfig.prod.json",
     "test": "jest --config ./jest.config.js",
-    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" "
+    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --project tsconfig.prod.json\" "
   },
   "author": "JanCizmar",
   "license": "BSD-3-Clause",

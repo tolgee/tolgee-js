@@ -1,5 +1,5 @@
 jest.dontMock('./CoreService');
-jest.dontMock('./DependencyStore');
+jest.dontMock('./DependencyService');
 
 import '@testing-library/jest-dom/extend-expect';
 import { CoreService } from './CoreService';
@@ -8,14 +8,14 @@ import { ApiHttpService } from './ApiHttpService';
 import { mocked } from 'ts-jest/utils';
 import { Properties } from '../Properties';
 import { Scope } from '../types';
-import { DependencyStore } from './DependencyStore';
+import { DependencyService } from './DependencyService';
 
 describe('CoreService', () => {
   let coreService: CoreService;
   let mockedFetchJson;
 
   beforeEach(() => {
-    coreService = new DependencyStore().coreService;
+    coreService = new DependencyService().coreService;
     getMockedInstance(Properties).preferredLanguages = new Set<string>();
     getMockedInstance(Properties).config = {
       inputPrefix: '{{',

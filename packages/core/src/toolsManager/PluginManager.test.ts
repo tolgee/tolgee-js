@@ -1,11 +1,11 @@
 jest.dontMock('./PluginManager');
-jest.dontMock('../services/DependencyStore');
+jest.dontMock('../services/DependencyService');
 
 import { ElementWithMeta } from '../types';
 import { ElementRegistrar } from '../services/ElementRegistrar';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { PluginManager } from './PluginManager';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 import { TranslationService } from '../services/TranslationService';
 import { Messages } from './Messages';
 
@@ -13,7 +13,7 @@ describe('PluginManager', () => {
   let pluginManager: PluginManager;
 
   beforeEach(async () => {
-    pluginManager = new DependencyStore().pluginManager;
+    pluginManager = new DependencyService().pluginManager;
   });
 
   afterEach(() => {

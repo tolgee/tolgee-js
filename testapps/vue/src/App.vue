@@ -33,7 +33,6 @@ export default defineComponent({
           fr: () => import('../i18n/fr.json'),
           cs: () => import('../i18n/cs.json'),
         },
-        availableLanguages: ['en', 'de', 'cs', 'fr'],
         apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
         apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
         ui: process.env.VUE_APP_TOLGEE_API_KEY

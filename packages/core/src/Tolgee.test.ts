@@ -1,10 +1,10 @@
 jest.dontMock('./Tolgee');
-jest.dontMock('./services/DependencyStore');
+jest.dontMock('./services/DependencyService');
 
 import '@testing-library/jest-dom/extend-expect';
 import { mocked } from 'ts-jest/utils';
 import { CoreService } from './services/CoreService';
-import Tolgee from './Tolgee';
+import { Tolgee } from './Tolgee';
 import {
   configMock,
   coreServiceMock,
@@ -19,7 +19,7 @@ import {
 import { EventEmitterImpl } from './services/EventEmitter';
 import { Scope } from './types';
 import { TextService } from './services/TextService';
-import { CoreHandler } from './handlers/CoreHandler';
+import { TextWrapper } from './wrappers/text/TextWrapper';
 import { ElementRegistrar } from './services/ElementRegistrar';
 import { NodeHelper } from './helpers/NodeHelper';
 import { TOLGEE_TARGET_ATTRIBUTE } from './Constants/Global';
@@ -30,7 +30,7 @@ describe('Tolgee', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    tolgee = new Tolgee({});
+    tolgee = Tolgee.init({});
   });
 
   test('can be created', () => {
@@ -118,7 +118,7 @@ describe('Tolgee', () => {
     const htmlElement = document.createElement('dummyElement');
     propertiesMock.mock.instances[0].config.targetElement = htmlElement;
     await tolgee.run();
-    expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(
+    expect(getMockedInstance(TextWrapper).handleSubtree).toBeCalledWith(
       htmlElement
     );
   });
@@ -126,8 +126,9 @@ describe('Tolgee', () => {
   test('will refresh translations using observer on refresh', async () => {
     const htmlElement = document.createElement('dummyElement');
     propertiesMock.mock.instances[0].config.targetElement = htmlElement;
+    await tolgee.run();
     await tolgee.refresh();
-    expect(getMockedInstance(CoreHandler).handleSubtree).toBeCalledWith(
+    expect(getMockedInstance(TextWrapper).handleSubtree).toBeCalledWith(
       htmlElement
     );
   });
@@ -148,9 +149,10 @@ describe('Tolgee', () => {
     const dummyParams = {};
 
     beforeEach(() => {
+      tolgee.run();
       mockedTranslate = mocked(textServiceMock.mock.instances[0].translate);
       mockedInstant = mocked(textServiceMock.mock.instances[0].instant);
-      mockedWrap = mocked(textServiceMock.mock.instances[0].wrap);
+      mockedWrap = getMockedInstance(TextWrapper).wrap;
       mockedLoadTranslations = mocked(
         translationServiceMock.mock.instances[0].loadTranslations
       );
@@ -164,8 +166,12 @@ describe('Tolgee', () => {
         propertiesMock.mock.instances[0].config.mode = 'development';
         const translated = await tolgee.translate(dummyKey, dummyParams);
 
-        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, undefined);
-        expect(mockedTranslate).not.toBeCalled();
+        expect(mockedWrap).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          'translatedDummyText'
+        );
         expect(translated).toEqual(wrappedDummyText);
       });
 
@@ -201,7 +207,12 @@ describe('Tolgee', () => {
       test('passes default value to wrap fn', async () => {
         propertiesMock.mock.instances[0].config.mode = 'development';
         await tolgee.translate(dummyKey, dummyParams, false, 'Default');
-        expect(mockedWrap).toBeCalledWith('dummyText', {}, 'Default');
+        expect(mockedWrap).toBeCalledWith(
+          'dummyText',
+          {},
+          'Default',
+          'translatedDummyText'
+        );
       });
 
       test('passes default value to translate fn', async () => {
@@ -257,8 +268,12 @@ describe('Tolgee', () => {
         const dummyParams = {};
         const translated = tolgee.instant(dummyKey, dummyParams);
 
-        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, undefined);
-        expect(mockedInstant).not.toBeCalled();
+        expect(mockedWrap).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          undefined,
+          'translatedDummyText'
+        );
         expect(translated).toEqual(wrappedDummyText);
       });
 
@@ -312,7 +327,12 @@ describe('Tolgee', () => {
         const dummyParams = {};
         tolgee.instant(dummyKey, dummyParams, false, false, 'Default');
 
-        expect(mockedWrap).toBeCalledWith(dummyKey, dummyParams, 'Default');
+        expect(mockedWrap).toBeCalledWith(
+          dummyKey,
+          dummyParams,
+          'Default',
+          'translatedDummyText'
+        );
       });
 
       test('props object works correctly', async () => {
