@@ -2,9 +2,9 @@ import * as React from 'react';
 import { BodyEnd } from '../common/BodyEnd';
 import { TranslationDialogContextProvider } from './TranslationDialogContextProvider';
 import { TranslationDialog } from './TranslationDialog';
-import { DependencyStore } from '@tolgee/core/lib/services/DependencyStore';
+import { DependencyService } from '@tolgee/core/lib/services/DependencyService';
 
-export type ComponentDependencies = DependencyStore;
+export type ComponentDependencies = DependencyService;
 
 export type Props = {
   dependencies: ComponentDependencies;

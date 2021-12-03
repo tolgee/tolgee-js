@@ -1,9 +1,9 @@
-import { Encoder, Decoder } from './encoder';
+import { Encoder, Decoder } from './encoderPolyfill';
 
 export const INVISIBLE_CHARACTERS = ['\u200C', '\u200D'];
 
 export const INVISIBLE_REGEX = RegExp(
-  `([${INVISIBLE_CHARACTERS.join('')}]+)`,
+  `([${INVISIBLE_CHARACTERS.join('')}]{9})+`,
   'gu'
 );
 
@@ -53,4 +53,16 @@ export const decodeFromText = (text: string) => {
     .match(INVISIBLE_REGEX)
     ?.filter((m) => m.length > 8);
   return invisibleMessages?.map(decodeMessage) || [];
+};
+
+export const removeSecrets = (text: string) => {
+  return text.replace(INVISIBLE_REGEX, '');
+};
+
+export const stringToCodePoints = (text: string) => {
+  const result: number[] = [];
+  for (const codePoint of text) {
+    result.push(codePoint.codePointAt(0));
+  }
+  return result;
 };

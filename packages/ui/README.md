@@ -1,4 +1,5 @@
 # Tolgee JS UI library
+
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/ui version](https://img.shields.io/npm/v/@tolgee/ui?label=%40tolgee%2Fui)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
@@ -19,7 +20,7 @@ First, create a Tolgee instance and provide **UI** constructor.
     import {Tolgee} from "@tolgee/core";
     import {UI} from "@tolgee/ui";
 
-    const tg = new Tolgee({
+    const tg = Tolgee.init({
         apiKey: "your_api_key",
         apiUrl: "https://app.tolgee.io",
         ui: UI

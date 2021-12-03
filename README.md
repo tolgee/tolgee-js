@@ -27,13 +27,14 @@ To learn more visit [https://tolgee.io](https://tolgee.io)
 
 ## Packages
 
-| Package                                                                                               | Version                                                                                                                         |
-| -----------                                                                                           | -----------                                                                                                                     |
-| [@tolgee/core](https://github.com/tolgee/tolgee-js/tree/main/packages/core)                           | [![@tolgee/core version](https://img.shields.io/npm/v/@tolgee/core?label=npm)](https://www.npmjs.com/package/@tolgee/core)      |
-| [@tolgee/react](https://github.com/tolgee/tolgee-js/tree/main/packages/react)                         | [![@tolgee/react version](https://img.shields.io/npm/v/@tolgee/react?label=npm)](https://www.npmjs.com/package/@tolgee/react)   |
-| [@tolgee/ngx](https://github.com/tolgee/tolgee-js/tree/main/packages/ngx/projects/ngx-tolgee)         | [![@tolgee/react version](https://img.shields.io/npm/v/@tolgee/ngx?label=npm)](https://www.npmjs.com/package/@tolgee/ngx)       |
-| [@tolgee/vue](https://github.com/tolgee/tolgee-js/tree/main/packages/vue)                             | [![@tolgee/vue version](https://img.shields.io/npm/v/@tolgee/vue?label=npm)](https://www.npmjs.com/package/@tolgee/vue)         |
-| [@tolgee/svelte](https://github.com/tolgee/tolgee-js/tree/main/packages/svelte)                       | [![@tolgee/svelte version](https://img.shields.io/npm/v/@tolgee/svelte?label=npm)](https://www.npmjs.com/package/@tolgee/svelte)|
+| Package                                                                                               | Version                                                                                                                            |
+| -----------                                                                                           | -----------                                                                                                                        |
+| [@tolgee/core](https://github.com/tolgee/tolgee-js/tree/main/packages/core)                           | [![@tolgee/core version](https://img.shields.io/npm/v/@tolgee/core?label=npm)](https://www.npmjs.com/package/@tolgee/core)         |
+| [@tolgee/react](https://github.com/tolgee/tolgee-js/tree/main/packages/react)                         | [![@tolgee/react version](https://img.shields.io/npm/v/@tolgee/react?label=npm)](https://www.npmjs.com/package/@tolgee/react)      |
+| [@tolgee/ngx](https://github.com/tolgee/tolgee-js/tree/main/packages/ngx/projects/ngx-tolgee)         | [![@tolgee/react version](https://img.shields.io/npm/v/@tolgee/ngx?label=npm)](https://www.npmjs.com/package/@tolgee/ngx)          |
+| [@tolgee/vue](https://github.com/tolgee/tolgee-js/tree/main/packages/vue)                             | [![@tolgee/vue version](https://img.shields.io/npm/v/@tolgee/vue?label=npm)](https://www.npmjs.com/package/@tolgee/vue)            |
+| [@tolgee/svelte](https://github.com/tolgee/tolgee-js/tree/main/packages/svelte)                       | [![@tolgee/svelte version](https://img.shields.io/npm/v/@tolgee/svelte?label=npm)](https://www.npmjs.com/package/@tolgee/svelte)   |
+| [@tolgee/i18next](https://github.com/tolgee/tolgee-js/tree/main/packages/i18next)                     | [![@tolgee/i18next version](https://img.shields.io/npm/v/@tolgee/i18next?label=npm)](https://www.npmjs.com/package/@tolgee/i18next)|
 
 ## Preview
 ![react-infinite](https://user-images.githubusercontent.com/18496315/137308502-844f5ccf-1895-414d-bf40-6707cb691853.gif)

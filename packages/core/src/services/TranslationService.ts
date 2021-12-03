@@ -39,12 +39,7 @@ export class TranslationService {
     private eventService: EventService
   ) {}
 
-  private static translationByValue(
-    message: string,
-    key: string,
-    orEmpty: boolean,
-    defaultValue?: string
-  ) {
+  private static translationByValue(message: string, defaultValue?: string) {
     if (message) {
       return message;
     }
@@ -53,11 +48,7 @@ export class TranslationService {
       return defaultValue;
     }
 
-    if (orEmpty) {
-      return '';
-    }
-
-    return key;
+    return undefined;
   }
 
   initStatic() {
@@ -74,6 +65,10 @@ export class TranslationService {
         }
       );
     }
+  }
+
+  getChachedTranslations() {
+    return this.translationsCache;
   }
 
   updateTranslationInCache = async (data: Key) => {
@@ -106,7 +101,6 @@ export class TranslationService {
   async getTranslation(
     key: string,
     lang: string = this.properties.currentLanguage,
-    orEmpty = false,
     defaultValue?: string
   ): Promise<string> {
     let message = this.getFromCache(key, lang);
@@ -129,12 +123,7 @@ export class TranslationService {
       }
     }
 
-    return TranslationService.translationByValue(
-      message,
-      key,
-      orEmpty,
-      defaultValue
-    );
+    return TranslationService.translationByValue(message, defaultValue);
   }
 
   async updateKeyComplex(
@@ -245,18 +234,12 @@ export class TranslationService {
   getFromCacheOrFallback(
     key: string,
     lang: string = this.properties.currentLanguage,
-    orEmpty = false,
     defaultValue?: string
   ): string {
     const message =
       this.getFromCache(key, lang) ||
       this.getFromCache(key, this.properties.config.fallbackLanguage);
-    return TranslationService.translationByValue(
-      message,
-      key,
-      orEmpty,
-      defaultValue
-    );
+    return TranslationService.translationByValue(message, defaultValue);
   }
 
   getTranslationsOfKey = async (

@@ -1,20 +1,9 @@
 jest.dontMock('./TolgeeProvider');
-let runResolve;
-let initialLoading;
-const stopMock = jest.fn();
-const runMock = jest.fn(
-  () =>
-    new Promise((resolve) => {
-      runResolve = resolve;
-    })
-);
-jest.mock('@tolgee/core', () => ({
-  Tolgee: jest.fn().mockImplementation(() => ({
-    run: runMock,
-    stop: stopMock,
-    initialLoading: initialLoading,
-  })),
-}));
+jest.dontMock('./mocks/mockTolgee');
+
+import { mockTolgee } from './mocks/mockTolgee';
+import * as tolgee from '@tolgee/core';
+
 import '@testing-library/jest-dom/extend-expect';
 import * as React from 'react';
 import { ComponentProps, useContext } from 'react';
@@ -25,6 +14,7 @@ import { mocked } from 'ts-jest/utils';
 
 describe('Tolgee Provider Component', function () {
   const componentUsingContextRendered = jest.fn();
+  let mockedTolgee: ReturnType<typeof mockTolgee>;
 
   const ComponentUsingContext = () => {
     const context = useContext(TolgeeProviderContext);
@@ -42,14 +32,16 @@ describe('Tolgee Provider Component', function () {
   };
 
   beforeEach(async () => {
-    initialLoading = true;
+    mockedTolgee = mockTolgee();
+    // @ts-ignore
+    tolgee.Tolgee = mockedTolgee.tolgeeClass;
     jest.clearAllMocks();
   });
 
   test('provides context', async () => {
     await render(<TestComponent />);
     act(() => {
-      runResolve();
+      mockedTolgee.runMock.resolveRunPromise();
     });
     await waitFor(() => {
       screen.getByText("It's rendered!");
@@ -67,16 +59,16 @@ describe('Tolgee Provider Component', function () {
     await waitFor(() => {
       screen.getByText('loading');
     });
-    expect(runMock).toHaveBeenCalledTimes(1);
-    act(() => {
-      runResolve();
+    expect(mockedTolgee.runMock.run).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      await mockedTolgee.runMock.resolveRunPromise();
     });
   });
 
   test('stops tolgee', () => {
     const { unmount } = render(<TestComponent />);
     unmount();
-    expect(stopMock).toHaveBeenCalledTimes(1);
+    expect(mockedTolgee.stopMock).toHaveBeenCalledTimes(1);
   });
 
   test('renders loadingFallback', async () => {
@@ -89,7 +81,8 @@ describe('Tolgee Provider Component', function () {
   });
 
   test("doesn't render loadingFallback when initialLoading is false", async () => {
-    initialLoading = false;
+    // @ts-ignore
+    mockedTolgee.tolgee.initialLoading = false;
     act(() => {
       render(<TestComponent loadingFallback={<>loading</>} />);
     });

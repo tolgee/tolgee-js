@@ -1,5 +1,5 @@
 jest.dontMock('./ElementRegistrar');
-jest.dontMock('./DependencyStore');
+jest.dontMock('./DependencyService');
 
 import '@testing-library/jest-dom/extend-expect';
 import { ElementRegistrar } from './ElementRegistrar';
@@ -9,7 +9,7 @@ import { TranslationHighlighter } from '../highlighter/TranslationHighlighter';
 import { createElement } from '@testFixtures/createElement';
 import { Properties } from '../Properties';
 import { TOLGEE_ATTRIBUTE_NAME } from '../Constants/Global';
-import { DependencyStore } from './DependencyStore';
+import { DependencyService } from './DependencyService';
 import { EventEmitterImpl } from './EventEmitter';
 import { EventService } from './EventService';
 
@@ -18,7 +18,9 @@ describe('ElementRegistrar', () => {
   const mockElementRegisteredEmit = jest.fn();
 
   beforeEach(async () => {
-    elementRegistrar = new DependencyStore().elementRegistrar;
+    const dependencyStore = new DependencyService();
+    dependencyStore.init({});
+    elementRegistrar = dependencyStore.elementRegistrar;
     (getMockedInstance(EventService).ELEMENT_REGISTERED as any) = {
       emit: mockElementRegisteredEmit,
     } as any as EventEmitterImpl<ElementWithMeta>;

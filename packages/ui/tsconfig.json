@@ -19,12 +19,6 @@
       "@testFixtures/*": ["./__testFixtures/*"]
     }
   },
-  "include": ["src", "typings"],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts",
-    "**/__testFixtures/*",
-    "**/__mocks__/*",
-    "@testFixtures/*"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

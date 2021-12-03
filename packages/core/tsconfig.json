@@ -12,12 +12,11 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "baseUrl": "src",
     "esModuleInterop": true,
     "paths": {
       "tolgee/ui": ["./ui"],
       "tolgee/core": ["./core"],
-      "@testFixtures/*": ["./__testFixtures/*"]
+      "@testFixtures/*": ["./src/__testFixtures/*"]
     }
   },
   "include": ["src"],

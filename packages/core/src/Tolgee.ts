@@ -2,30 +2,49 @@ import { TolgeeConfig } from './TolgeeConfig';
 import {
   InstantProps,
   Scope,
+  TolgeeModule,
   TranslateProps,
   TranslationParams,
 } from './types';
-import { NodeHelper } from './helpers/NodeHelper';
+
 import { EventEmitterImpl } from './services/EventEmitter';
-import { DependencyStore } from './services/DependencyStore';
+import { DependencyService } from './services/DependencyService';
 
 export class Tolgee {
-  private dependencyStore: DependencyStore;
+  private dependencyService: DependencyService;
 
-  constructor(config: TolgeeConfig) {
-    this.dependencyStore = new DependencyStore(new TolgeeConfig(config));
+  static use(module: TolgeeModule) {
+    return new Tolgee().use(module);
+  }
+
+  static init(config: TolgeeConfig) {
+    return new Tolgee().init(config);
+  }
+
+  private constructor() {
+    this.dependencyService = new DependencyService();
+  }
+
+  use(module: TolgeeModule) {
+    this.dependencyService.moduleService.addModule(module);
+    return this;
+  }
+
+  init(config: TolgeeConfig) {
+    this.dependencyService.init(config);
+    return this;
   }
 
   get properties() {
-    return this.dependencyStore.properties;
+    return this.dependencyService.properties;
   }
 
   get translationService() {
-    return this.dependencyStore.translationService;
+    return this.dependencyService.translationService;
   }
 
   get coreService() {
-    return this.dependencyStore.coreService;
+    return this.dependencyService.coreService;
   }
 
   public get lang() {
@@ -35,7 +54,7 @@ export class Tolgee {
   public set lang(value) {
     this.properties.currentLanguage = value;
     (
-      this.dependencyStore.eventService
+      this.dependencyService.eventService
         .LANGUAGE_CHANGED as EventEmitterImpl<any>
     ).emit(value);
   }
@@ -45,15 +64,15 @@ export class Tolgee {
   }
 
   public get onLangChange() {
-    return this.dependencyStore.eventService.LANGUAGE_CHANGED;
+    return this.dependencyService.eventService.LANGUAGE_CHANGED;
   }
 
   public get onTranslationChange() {
-    return this.dependencyStore.eventService.TRANSLATION_CHANGED;
+    return this.dependencyService.eventService.TRANSLATION_CHANGED;
   }
 
   public get onLangLoaded() {
-    return this.dependencyStore.eventService.LANGUAGE_LOADED;
+    return this.dependencyService.eventService.LANGUAGE_LOADED;
   }
 
   /**
@@ -84,12 +103,13 @@ export class Tolgee {
   }
 
   public async run(): Promise<void> {
+    this.dependencyService.run();
     if (this.properties.config.mode === 'development') {
       await this.loadApiKeyDetails();
     }
 
     await this.translationService.loadTranslations();
-    await this.dependencyStore.pluginManager.run();
+    await this.dependencyService.pluginManager.run();
 
     if (this.properties.config.preloadFallback) {
       await this.translationService.loadTranslations(
@@ -100,12 +120,12 @@ export class Tolgee {
     await this.refresh();
 
     if (this.properties.config.watch) {
-      this.dependencyStore.observer.observe();
+      this.dependencyService.observer.observe();
     }
   }
 
   public async refresh() {
-    return this.dependencyStore.coreHandler.handleSubtree(
+    return this.dependencyService.wrapper.handleSubtree(
       this.properties.config.targetElement
     );
   }
@@ -140,15 +160,45 @@ export class Tolgee {
     if (this.properties.config.mode === 'development' && !noWrap) {
       await this.loadApiKeyDetails();
       await this.translationService.loadTranslations();
-      return this.dependencyStore.textService.wrap(key, params, defaultValue);
+      const translation = await this.dependencyService.textService.translate(
+        key,
+        params,
+        undefined,
+        orEmpty,
+        defaultValue
+      );
+      return this.dependencyService.wrapper.wrap(
+        key,
+        params,
+        defaultValue,
+        translation
+      );
     }
-    return this.dependencyStore.textService.translate(
+    return this.dependencyService.textService.translate(
       key,
       params,
       undefined,
       orEmpty,
       defaultValue
     );
+  }
+
+  wrap(
+    key: string,
+    params?: TranslationParams,
+    defaultValue?: string | undefined,
+    translation?: string
+  ): string {
+    if (this.properties.config.mode === 'development') {
+      return this.dependencyService.wrapper.wrap(
+        key,
+        params,
+        defaultValue,
+        translation
+      );
+    } else {
+      return translation || defaultValue;
+    }
   }
 
   instant(
@@ -180,33 +230,35 @@ export class Tolgee {
       orEmpty = props.orEmpty !== undefined ? props.orEmpty : orEmpty;
     }
 
-    if (this.properties.config.mode === 'development' && !noWrap) {
-      return this.dependencyStore.textService.wrap(key, params, defaultValue);
-    }
-    return this.dependencyStore.textService.instant(
+    const translation = this.dependencyService.textService.instant(
       key,
       params,
       undefined,
       orEmpty,
       defaultValue
     );
+
+    if (this.properties.config.mode === 'development' && !noWrap) {
+      return this.dependencyService.wrapper.wrap(
+        key,
+        params,
+        defaultValue,
+        translation
+      );
+    }
+    return translation;
   }
 
   public stop = () => {
-    this.dependencyStore.observer.stopObserving();
-    this.dependencyStore.elementRegistrar.cleanAll();
-    NodeHelper.unmarkElementAsTargetElement(
-      this.properties.config.targetElement
-    );
+    this.dependencyService.stop();
   };
 
   private async loadApiKeyDetails() {
     if (this.properties.scopes === undefined) {
-      const details = await this.dependencyStore.coreService.getApiKeyDetails();
+      const details =
+        await this.dependencyService.coreService.getApiKeyDetails();
       this.properties.scopes = details.scopes as Scope[];
       this.properties.projectId = details.projectId;
     }
   }
 }
-
-export default Tolgee;

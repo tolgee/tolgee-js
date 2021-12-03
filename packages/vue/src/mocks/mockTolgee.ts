@@ -55,6 +55,29 @@ export const mockTolgee = () => {
   const getLangMock = jest.fn(() => 'mocked-lang');
   const setLangMock = jest.fn();
 
+  const tolgee = {
+    init: () => tolgee as Tolgee,
+    use: () => tolgee as Tolgee,
+    run: runMock.run,
+    stop: stopMock,
+    get lang() {
+      return getLangMock();
+    },
+    set lang(lang: string) {
+      setLangMock(lang);
+    },
+    instant: instantMock,
+    translate: translateMock,
+    onTranslationChange: onTranslationChangeMock,
+    onLangChange: onLangChangeMock,
+  } as Partial<Tolgee>;
+
+  const tolgeeClass = jest.fn().mockImplementation(() => tolgee);
+  // @ts-ignore
+  tolgeeClass.init = () => tolgee;
+  // @ts-ignore
+  tolgeeClass.use = () => tolgee;
+
   return {
     runMock,
     stopMock,
@@ -68,19 +91,7 @@ export const mockTolgee = () => {
     getLangMock,
     setLangMock,
     changeTranslationValue,
-    tolgee: {
-      run: runMock.run,
-      stop: stopMock,
-      get lang() {
-        return getLangMock();
-      },
-      set lang(lang: string) {
-        setLangMock(lang);
-      },
-      instant: instantMock,
-      translate: translateMock,
-      onTranslationChange: onTranslationChangeMock,
-      onLangChange: onLangChangeMock,
-    } as Partial<Tolgee>,
+    tolgeeClass,
+    tolgee,
   };
 };

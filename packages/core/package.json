@@ -24,11 +24,12 @@
     "dist": "dist"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js && tsc",
+    "build": "rollup -c rollup.config.js && tsc --project tsconfig.prod.json",
     "test": "jest --config ./jest.config.js",
-    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch\" ",
+    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --project tsconfig.prod.json\" ",
     "schema": "openapi-typescript http://localhost:8080/v3/api-docs/All%20Internal%20-%20for%20Tolgee%20Web%20application --output ./src/types/apiSchema.generated.ts",
-    "typedoc": "typedoc --entryPointStrategy expand --out docs src/index.ts src/Tolgee.ts src/types.ts src/services/EventEmitter.ts  src/services/Subscription.ts"
+    "typedoc": "typedoc --entryPointStrategy expand --out docs src/index.ts src/Tolgee.ts src/types.ts src/services/EventEmitter.ts  src/services/Subscription.ts",
+    "tsc": "tsc --noEmit"
   },
   "author": "JanCizmar",
   "license": "MIT",

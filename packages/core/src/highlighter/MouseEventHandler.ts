@@ -11,7 +11,9 @@ export class MouseEventHandler {
   private keysChanged: EventEmitterImpl<boolean> =
     new EventEmitterImpl<boolean>();
 
-  constructor(private properties: Properties) {
+  constructor(private properties: Properties) {}
+
+  run() {
     if (typeof window !== 'undefined') {
       this.initKeyListener();
       return;
@@ -81,38 +83,40 @@ export class MouseEventHandler {
     };
   }
 
-  private onConditionsChanged() {
+  private readonly onConditionsChanged = () => {
     this.unhighlight();
     if (this.areKeysDown() && this.getMouseOn()) {
       this.highlight();
     }
-  }
+  };
 
-  private highlight() {
+  private readonly highlight = () => {
     this.getMouseOn()._tolgee.highlight();
     this.highlighted = this.getMouseOn();
-  }
+  };
 
-  private unhighlight() {
+  private readonly unhighlight = () => {
     if (this.highlighted) {
       this.highlighted._tolgee.unhighlight();
       this.highlighted = null;
     }
-  }
+  };
 
-  private onMouseOut(element) {
+  private readonly onMouseOut = (element) => {
     element._tolgee.preventClean = false;
     this.mouseOn.delete(element);
     this.mouseOnChanged.emit(this.getMouseOn());
-  }
+  };
 
-  private onMouseOver(element: ElementWithMeta & ElementCSSInlineStyle) {
+  private readonly onMouseOver = (
+    element: ElementWithMeta & ElementCSSInlineStyle
+  ) => {
     this.filterMouseOn();
     element._tolgee.preventClean = true;
     this.mouseOn.delete(element); //to get in to last place
     this.mouseOn.add(element);
     this.mouseOnChanged.emit(this.getMouseOn());
-  }
+  };
 
   private getMouseOn() {
     const mouseOnArray = Array.from(this.mouseOn);

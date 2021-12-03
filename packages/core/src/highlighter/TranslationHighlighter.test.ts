@@ -1,5 +1,5 @@
 jest.dontMock('./TranslationHighlighter');
-jest.dontMock('../services/DependencyStore');
+jest.dontMock('../services/DependencyService');
 
 import { TranslationHighlighter } from './TranslationHighlighter';
 import classMock from '@testFixtures/classMock';
@@ -8,13 +8,15 @@ import { getMockedInstance } from '@testFixtures/mocked';
 import { ElementWithMeta } from '../types';
 import { Properties } from '../Properties';
 import { createElement } from '@testFixtures/createElement';
-import { DependencyStore } from '../services/DependencyStore';
+import { DependencyService } from '../services/DependencyService';
 
 describe('TranslationHighlighter', () => {
   let translationHighlighter: TranslationHighlighter;
 
   beforeEach(async () => {
-    translationHighlighter = new DependencyStore().translationHighlighter;
+    const dependencyService = new DependencyService();
+    dependencyService.init({});
+    translationHighlighter = dependencyService.translationHighlighter;
   });
 
   afterEach(async () => {

@@ -1,15 +1,11 @@
-import { CoreHandler } from './handlers/CoreHandler';
 import { Properties } from './Properties';
-import { InvisibleTextHandler } from './handlers/InvisibleTextHandler';
-import { AttributeHandler } from './handlers/AttributeHandler';
 import { ElementRegistrar } from './services/ElementRegistrar';
+import { AbstractWrapper } from './wrappers/AbstractWrapper';
 
 export class Observer {
   constructor(
     private properties: Properties,
-    private coreHandler: CoreHandler,
-    private basicTextHandler: InvisibleTextHandler,
-    private attributeHandler: AttributeHandler,
+    private textWrapper: AbstractWrapper,
     private nodeRegistrar: ElementRegistrar
   ) {}
 
@@ -21,15 +17,17 @@ export class Observer {
         async (mutationsList: MutationRecord[]) => {
           for (const mutation of mutationsList) {
             if (mutation.type === 'characterData') {
-              await this.basicTextHandler.handle(mutation.target as Element);
+              await this.textWrapper.handleText(mutation.target as Element);
               continue;
             }
             if (mutation.type === 'childList') {
-              await this.coreHandler.handleSubtree(mutation.target as Element);
+              await this.textWrapper.handleSubtree(mutation.target as Element);
               continue;
             }
             if (mutation.type === 'attributes') {
-              await this.attributeHandler.handle(mutation.target as Element);
+              await this.textWrapper.handleAttribute(
+                mutation.target as Element
+              );
             }
           }
           this.nodeRegistrar.refreshAll();

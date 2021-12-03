@@ -1,6 +1,6 @@
-import { Tolgee } from '@tolgee/core';
+import { IcuFormatter, Tolgee } from '@tolgee/core';
 
-const tolgee = new Tolgee({
+const tolgee = Tolgee.use(IcuFormatter).init({
   watch: true,
   targetElement: document.body,
   highlightColor: 'yellow',

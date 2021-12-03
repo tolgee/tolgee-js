@@ -36,24 +36,35 @@ let setLangMock = jest.fn();
 let translateMock = jest.fn().mockResolvedValue('translated');
 let instantMock = jest.fn(() => 'translated instant');
 
-jest.mock('@tolgee/core', () => ({
-  Tolgee: jest.fn().mockImplementation(() => ({
-    run: runMock,
-    stop: stopMock,
-    initialLoading: initialLoading,
-    onLangChange: {
-      subscribe: langChangeSubscribeMock,
-    },
-    onTranslationChange: {
-      subscribe: translationChangeSubscribeMock,
-    },
-    set lang(lang: string) {
-      setLangMock(lang);
-    },
-    translate: translateMock,
-    instant: instantMock,
-  })),
-}));
+jest.mock('@tolgee/core', () => {
+  const Tolgee = jest.fn().mockImplementation(() => {
+    const tolgee = {
+      use: () => tolgee,
+      init: () => tolgee,
+      run: runMock,
+      stop: stopMock,
+      initialLoading: initialLoading,
+      onLangChange: {
+        subscribe: langChangeSubscribeMock,
+      },
+      onTranslationChange: {
+        subscribe: translationChangeSubscribeMock,
+      },
+      set lang(lang: string) {
+        setLangMock(lang);
+      },
+      translate: translateMock,
+      instant: instantMock,
+    };
+    return tolgee;
+  });
+  // @ts-ignore
+  Tolgee.use = jest.fn().mockImplementation(() => new Tolgee());
+
+  return {
+    Tolgee,
+  };
+});
 
 describe('Translate service', function () {
   let service: TranslateService;
@@ -66,7 +77,7 @@ describe('Translate service', function () {
   describe('start method', () => {
     beforeEach(() => {
       service.start({}).then(() => {});
-      runResolve();
+      runResolve?.();
     });
 
     it('starts tolgee', async () => {

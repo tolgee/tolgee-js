@@ -94,3 +94,22 @@ export type Scope =
   | 'screenshots.delete';
 
 export type Mode = 'development' | 'production';
+
+export type Unwrapped = { text: string; keys: KeyAndParams[] };
+
+export interface Formatter {
+  format: FormatFunction;
+}
+
+interface FormatterStatic {
+  type: 'formatter';
+  new (): Formatter;
+}
+
+export type TolgeeModule = FormatterStatic;
+
+export type FormatFunction = (props: {
+  translation: string;
+  params: Record<string, any>;
+  language: string;
+}) => string;
