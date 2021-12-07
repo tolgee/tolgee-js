@@ -64,6 +64,22 @@ describe('MouseEventHandler', () => {
       expect(mockedHighlight).toBeCalledTimes(0);
     });
 
+    test('Will prevent clean on mouseover', async () => {
+      mockedElement.dispatchEvent(mockedMouseOut);
+      window.dispatchEvent(mockedKeyup);
+      mockedHighlight = jest.fn();
+      mockedElement.dispatchEvent(mockedMouseOver);
+      expect(mockedElement._tolgee.preventClean).toBeTruthy();
+    });
+
+    test('Will remove prevent clean on mouseout', async () => {
+      mockedElement.dispatchEvent(mockedMouseOut);
+      window.dispatchEvent(mockedKeyup);
+      mockedElement._tolgee.preventClean = true;
+      mockedElement.dispatchEvent(mockedMouseOut);
+      expect(mockedElement._tolgee.preventClean).toBeFalsy();
+    });
+
     test('Will not highlight just on keydown', async () => {
       window.dispatchEvent(mockedKeyup);
       mockedElement.dispatchEvent(mockedMouseOut);

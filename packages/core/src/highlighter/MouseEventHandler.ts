@@ -101,12 +101,14 @@ export class MouseEventHandler {
   }
 
   private onMouseOut(element) {
+    element._tolgee.preventClean = false;
     this.mouseOn.delete(element);
     this.mouseOnChanged.emit(this.getMouseOn());
   }
 
   private onMouseOver(element: ElementWithMeta & ElementCSSInlineStyle) {
     this.filterMouseOn();
+    element._tolgee.preventClean = true;
     this.mouseOn.delete(element); //to get in to last place
     this.mouseOn.add(element);
     this.mouseOnChanged.emit(this.getMouseOn());

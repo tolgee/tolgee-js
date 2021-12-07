@@ -63,6 +63,17 @@ export type ElementMeta = {
   highlight?: () => void;
   unhighlight?: () => void;
   initialBackgroundColor?: string;
+  /**
+   * Stops removing of element's inactive nodes and
+   * unregistering from ElementRegistrar.
+   *
+   * It's used when user has mouse on the element, so there is
+   * potential, that element highlight will be triggered.
+   *
+   * Triggering highlight needs the metadata stored on element, so
+   * we need the ability to prevent clean.
+   */
+  preventClean?: boolean;
 };
 
 export type NodeMeta = {

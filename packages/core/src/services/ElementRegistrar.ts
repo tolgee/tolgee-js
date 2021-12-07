@@ -37,12 +37,14 @@ export class ElementRegistrar {
 
   refreshAll() {
     for (const element of this.registeredElements) {
-      this.cleanElementInactiveNodes(element);
-      if (
-        element._tolgee.nodes.size === 0 &&
-        !element._tolgee.wrappedWithElementOnlyKey
-      ) {
-        this.cleanElement(element);
+      if (!element._tolgee.preventClean) {
+        this.cleanElementInactiveNodes(element);
+        if (
+          element._tolgee.nodes.size === 0 &&
+          !element._tolgee.wrappedWithElementOnlyKey
+        ) {
+          this.cleanElement(element);
+        }
       }
     }
   }
@@ -82,12 +84,14 @@ export class ElementRegistrar {
   }
 
   private cleanElement(element: ElementWithMeta) {
-    if (typeof element._tolgee.removeAllEventListeners === 'function') {
-      element._tolgee.removeAllEventListeners();
+    if (!element._tolgee.preventClean) {
+      if (typeof element._tolgee.removeAllEventListeners === 'function') {
+        element._tolgee.removeAllEventListeners();
+      }
+      element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
+      delete element._tolgee;
+      this.registeredElements.delete(element);
     }
-    element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
-    delete element._tolgee;
-    this.registeredElements.delete(element);
   }
 
   private *getActiveNodes(element: ElementWithMeta) {

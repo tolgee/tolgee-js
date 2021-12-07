@@ -104,6 +104,23 @@ describe('ElementRegistrar', () => {
         expect(mockedElement._tolgee).not.toBeDefined();
       }
     });
+
+    test("clean all doesn't clean elements with preventClean", () => {
+      mockedElements[1]._tolgee.preventClean = true;
+      const node = mockedElements[1]._tolgee.nodes.values().next().value;
+      node.parentElement.removeChild(node);
+      elementRegistrar.refreshAll();
+      expect(mockedElements[1]._tolgee).toBeDefined();
+      expect(mockedElements[1]).toHaveAttribute(TOLGEE_ATTRIBUTE_NAME);
+    });
+
+    test("refresh all doesn't delete nodes on elements wih preventClean", () => {
+      mockedElements[1]._tolgee.preventClean = true;
+      const node = mockedElements[1]._tolgee.nodes.values().next().value;
+      node.parentElement.removeChild(node);
+      elementRegistrar.refreshAll();
+      expect(mockedElements[1]._tolgee).toBeDefined();
+    });
   });
 
   test('will register attribute node', () => {
