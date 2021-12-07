@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.1](https://github.com/tolgee/tolgee-js/compare/v2.8.0...v2.8.1) (2021-12-07)
+
+**Note:** Version bump only for package svelte
+
+
+
+
+
 # [2.8.0](https://github.com/tolgee/tolgee-js/compare/v2.7.0...v2.8.0) (2021-11-25)
 
 **Note:** Version bump only for package svelte

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.1](https://github.com/tolgee/tolgee-js/compare/v2.8.0...v2.8.1) (2021-12-07)
+
+
+### Bug Fixes
+
+* Removing attribute when mouseover node causes error TG-440 ([dde937f](https://github.com/tolgee/tolgee-js/commit/dde937f3b77893dd511c582814c0cc9aab170e5d))
+
+
+
+
+
 # [2.8.0](https://github.com/tolgee/tolgee-js/compare/v2.7.0...v2.8.0) (2021-11-25)
 
 
