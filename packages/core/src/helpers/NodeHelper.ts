@@ -2,22 +2,6 @@ import { ArgumentTypes } from './commonTypes';
 import { TOLGEE_TARGET_ATTRIBUTE } from '../Constants/Global';
 
 export class NodeHelper {
-  private static *evaluateGenerator<T extends Node>(
-    expression: string,
-    targetNode: Node
-  ): Generator<T> {
-    let node: Node;
-    const evaluated = document.evaluate(
-      expression,
-      targetNode,
-      undefined,
-      XPathResult.ANY_TYPE
-    );
-    while ((node = evaluated.iterateNext()) !== null) {
-      yield node as T;
-    }
-  }
-
   static evaluate<T extends Node>(
     ...args: ArgumentTypes<typeof NodeHelper.evaluateGenerator>
   ): T[] {
@@ -71,11 +55,28 @@ export class NodeHelper {
     }
     if (node instanceof Attr) {
       const ownerContainsAttr =
+        node.ownerElement &&
         Object.values(node.ownerElement.attributes).indexOf(node) > -1;
       if (descendant.contains(node.ownerElement) && ownerContainsAttr) {
         return true;
       }
     }
     return false;
+  }
+
+  private static *evaluateGenerator<T extends Node>(
+    expression: string,
+    targetNode: Node
+  ): Generator<T> {
+    let node: Node;
+    const evaluated = document.evaluate(
+      expression,
+      targetNode,
+      undefined,
+      XPathResult.ANY_TYPE
+    );
+    while ((node = evaluated.iterateNext()) !== null) {
+      yield node as T;
+    }
   }
 }
