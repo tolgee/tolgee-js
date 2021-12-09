@@ -36,7 +36,7 @@
     "@angular/language-service": "~13.0.3",
     "@types/node": "^16.11.12",
     "codelyzer": "^6.0.0",
-    "ng-packagr": "^13.0.8",
+    "ng-packagr": "^13.1.1",
     "protractor": "~7.0.0",
     "ts-node": "~10.4.0",
     "tslint": "~6.1.0",
