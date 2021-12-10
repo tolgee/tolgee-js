@@ -56,7 +56,7 @@
     "tslib": "^2.3.1",
     "typedoc": "0.22.10",
     "typedoc-plugin-markdown": "3.11.7",
-    "typescript": "4.4.4"
+    "typescript": "4.5.3"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "publishConfig": {
