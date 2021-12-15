@@ -1,6 +1,6 @@
 {
   "name": "svelte",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "private": true,
   "scripts": {
     "dev": "svelte-kit dev",
@@ -16,9 +16,9 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
-    "@tolgee/core": "^2.8.1",
-    "@tolgee/svelte": "^2.8.1",
-    "@tolgee/ui": "^2.8.1",
+    "@tolgee/core": "^2.8.2",
+    "@tolgee/svelte": "^2.8.2",
+    "@tolgee/ui": "^2.8.2",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
     "eslint": "^8.4.1",

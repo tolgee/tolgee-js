@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.8.2](https://github.com/tolgee/tolgee-js/compare/v2.8.1...v2.8.2) (2021-12-15)
+
+
+### Bug Fixes
+
+* Tolgee ui - add link to tolgee app TG-377 ([e45efdf](https://github.com/tolgee/tolgee-js/commit/e45efdf94c786d25b842a50296b73d5253f62eda))
+
+
+
+
+
 ## [2.8.1](https://github.com/tolgee/tolgee-js/compare/v2.8.0...v2.8.1) (2021-12-07)
 
 **Note:** Version bump only for package @tolgee/ui
