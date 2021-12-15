@@ -7,6 +7,7 @@ const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = '__tolgee_currentLanguage';
 export class Properties {
   config: TolgeeConfig;
   scopes?: Scope[];
+  projectId?: number;
   _currentLanguage?: string;
 
   get currentLanguage(): string {

@@ -24,3 +24,11 @@ expect.extend({
     };
   },
 } as any);
+
+declare global {
+  namespace jest {
+    interface Matchers<R> {
+      toBeFoundIn(contextNode: Node): R;
+    }
+  }
+}

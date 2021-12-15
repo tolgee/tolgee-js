@@ -55,7 +55,9 @@ describe('Tolgee', () => {
   test('will set properties.scopes on run in development mode', async () => {
     propertiesMock.mock.instances[0].config.mode = 'development';
     await tolgee.run();
-    expect(coreServiceMock.mock.instances[0].getScopes).toBeCalledTimes(1);
+    expect(coreServiceMock.mock.instances[0].getApiKeyDetails).toBeCalledTimes(
+      1
+    );
     expect(propertiesMock.mock.instances[0].scopes).toContain(
       'translations.edit' as Scope
     );
@@ -64,10 +66,18 @@ describe('Tolgee', () => {
     );
   });
 
+  test('will set properties.projectId on run in development mode', async () => {
+    propertiesMock.mock.instances[0].config.mode = 'development';
+    await tolgee.run();
+    expect(propertiesMock.mock.instances[0].projectId).toEqual(0);
+  });
+
   test('will not set properties.scopes on run in production mode', async () => {
     propertiesMock.mock.instances[0].config.mode = 'production';
     await tolgee.run();
-    expect(coreServiceMock.mock.instances[0].getScopes).toBeCalledTimes(0);
+    expect(coreServiceMock.mock.instances[0].getApiKeyDetails).toBeCalledTimes(
+      0
+    );
     expect(propertiesMock.mock.instances[0].scopes).toBeUndefined();
   });
 
