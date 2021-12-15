@@ -2,6 +2,9 @@ import { Properties } from '../Properties';
 import { ApiHttpService } from './ApiHttpService';
 import { Scope } from '../types';
 import { LanguageModel, PagedModelLanguageModel } from '../types/DTOs';
+import { components } from '../types/apiSchema.generated';
+
+export type ApiKeyModel = components['schemas']['ApiKeyModel'];
 
 export class CoreService {
   private languagePromise: Promise<PagedModelLanguageModel>;
@@ -35,10 +38,9 @@ export class CoreService {
     return languages._embedded.languages;
   }
 
-  async getScopes() {
+  async getApiKeyDetails(): Promise<ApiKeyModel> {
     try {
-      return (await this.apiHttpService.fetchJson(`v2/api-keys/current`))
-        .scopes;
+      return await this.apiHttpService.fetchJson(`v2/api-keys/current`);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

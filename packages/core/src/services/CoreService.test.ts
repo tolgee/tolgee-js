@@ -8,7 +8,6 @@ import { ApiHttpService } from './ApiHttpService';
 import { mocked } from 'ts-jest/utils';
 import { Properties } from '../Properties';
 import { Scope } from '../types';
-import { ApiHttpError } from '../Errors/ApiHttpError';
 import { DependencyStore } from './DependencyStore';
 
 describe('CoreService', () => {
@@ -75,9 +74,9 @@ describe('CoreService', () => {
 
     test('will switch to production mode on error', async () => {
       mocked(mockedFetchJson).mockImplementation(async () => {
-        throw new ApiHttpError(new Response());
+        throw new Error();
       });
-      await coreService.getScopes();
+      await coreService.getApiKeyDetails();
       expect(getMockedInstance(Properties).config.mode).toEqual('production');
       // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(2);
@@ -88,7 +87,7 @@ describe('CoreService', () => {
         scopes: ['translations.view', 'translations.edit'],
       };
       mocked(mockedFetchJson).mockImplementation(async () => mockedReturn);
-      expect(await coreService.getScopes()).toEqual(mockedReturn.scopes);
+      expect(await coreService.getApiKeyDetails()).toEqual(mockedReturn);
     });
   });
 

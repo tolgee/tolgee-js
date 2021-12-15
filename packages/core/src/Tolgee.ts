@@ -1,5 +1,10 @@
 import { TolgeeConfig } from './TolgeeConfig';
-import { InstantProps, TranslateProps, TranslationParams } from './types';
+import {
+  InstantProps,
+  Scope,
+  TranslateProps,
+  TranslationParams,
+} from './types';
 import { NodeHelper } from './helpers/NodeHelper';
 import { EventEmitterImpl } from './services/EventEmitter';
 import { DependencyStore } from './services/DependencyStore';
@@ -80,7 +85,7 @@ export class Tolgee {
 
   public async run(): Promise<void> {
     if (this.properties.config.mode === 'development') {
-      await this.loadScopes();
+      await this.loadApiKeyDetails();
     }
 
     await this.translationService.loadTranslations();
@@ -133,7 +138,7 @@ export class Tolgee {
     }
 
     if (this.properties.config.mode === 'development' && !noWrap) {
-      await this.loadScopes();
+      await this.loadApiKeyDetails();
       await this.translationService.loadTranslations();
       return this.dependencyStore.textService.wrap(key, params, defaultValue);
     }
@@ -195,10 +200,11 @@ export class Tolgee {
     );
   };
 
-  private async loadScopes() {
+  private async loadApiKeyDetails() {
     if (this.properties.scopes === undefined) {
-      this.properties.scopes =
-        await this.dependencyStore.coreService.getScopes();
+      const details = await this.dependencyStore.coreService.getApiKeyDetails();
+      this.properties.scopes = details.scopes as Scope[];
+      this.properties.projectId = details.projectId;
     }
   }
 }

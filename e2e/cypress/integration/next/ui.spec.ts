@@ -32,6 +32,47 @@ context('UI Dialog', () => {
       .click();
     cy.contains('Quick translation');
     cy.contains('Update');
+    cy.get('#_tolgee_platform_link')
+      .invoke('attr', 'href')
+      .should(
+        'contain',
+        '/projects/1/translations/single?key=sampleApp.hello_world!'
+      );
+  });
+
+  it('updates translation properly', () => {
+    visitWithApiKey([
+      'translations.view',
+      'keys.edit',
+      'translations.edit',
+      'screenshots.view',
+      'screenshots.upload',
+      'screenshots.delete',
+    ]);
+    openUI();
+    cy.get('textarea').contains('Hello world!').click();
+    cy.focused().clear().type('Hello Czechia!');
+    cy.intercept({ path: '/v2/projects/keys/**', method: 'put' }, (req) => {
+      req.reply({
+        body: {
+          id: 1000000201,
+          name: 'sampleApp.hello_world!',
+          translations: {
+            en: {
+              id: 1000000301,
+              text: 'Hello Czechia!',
+              state: 'TRANSLATED',
+            },
+            de: { id: 1000000302, text: 'Hallo Welt!', state: 'TRANSLATED' },
+          },
+          tags: [],
+          screenshots: [],
+        },
+      });
+    }).as('updateTranslation');
+    cy.contains('Update').click();
+    cy.wait('@updateTranslation');
+    cy.get('span').contains('Hello Czechia!').should('be.visible');
   });
 
   it('make screenshot', () => {

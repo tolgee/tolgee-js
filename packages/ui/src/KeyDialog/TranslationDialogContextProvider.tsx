@@ -67,6 +67,7 @@ export type DialogContextType = {
   screenshotsUploading: boolean;
   screenshots?: ScreenshotInterface[];
   removeScreenshot: (id: number) => void;
+  linkToPlatform: string | undefined;
 } & DialogProps;
 
 export const TranslationDialogContext =
@@ -87,6 +88,11 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       useState(false);
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
+    const linkToPlatform =
+      properties.projectId !== undefined
+        ? `${properties.config.apiUrl}/projects/${properties.projectId}/translations/single?key=${props.input}`
+        : undefined;
+
     const translationService = props.dependencies.translationService;
     const screenshotService = props.dependencies.screenshotService;
     const [container, setContainer] = useState(
@@ -346,6 +352,7 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       screenshotsUploading,
       screenshots,
       removeScreenshot,
+      linkToPlatform,
     };
 
     return (
