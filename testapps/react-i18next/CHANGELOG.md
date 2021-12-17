@@ -6,6 +6,11 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 # [3.0.0](https://github.com/tolgee/tolgee-js/compare/v2.8.2...v3.0.0) (2021-12-17)
 
 
+### Features
+
+* Experiment with i18next integration TG-430 ([dc90766](https://github.com/tolgee/tolgee-js/commit/dc90766aea7aa1002c6ceed85cb6662dcca796cd))
+
+
 ### Performance Improvements
 
 * modularize core ([fe5abca](https://github.com/tolgee/tolgee-js/commit/fe5abca13987c34d27c39fb6ca162336106d9efc))
