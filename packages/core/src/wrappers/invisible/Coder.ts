@@ -11,7 +11,7 @@ export class Coder {
   private keyMemory = new ValueMemory();
   private defaultMemory = new ValueMemory();
 
-  async unwrap(text: string): Promise<Unwrapped> {
+  unwrap(text: string): Unwrapped {
     const keysAndParams = [] as KeyAndParams[];
     const messages = decodeFromText(text);
 

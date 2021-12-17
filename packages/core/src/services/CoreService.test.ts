@@ -91,6 +91,31 @@ describe('CoreService', () => {
     });
   });
 
+  describe('loadApiKeyDetails', () => {
+    beforeEach(() => {
+      const mockedReturn = {
+        scopes: ['translations.edit'],
+        projectId: 0,
+      };
+      mocked(mockedFetchJson).mockImplementation(async () => mockedReturn);
+    });
+
+    test('will set properties.scopes on run in development mode', async () => {
+      const propertiesMock = getMockedInstance(Properties);
+      propertiesMock.config.mode = 'development';
+      await coreService.loadApiKeyDetails();
+      expect(propertiesMock.scopes).toContain('translations.edit' as Scope);
+      expect(propertiesMock.scopes).not.toContain('translations.view' as Scope);
+    });
+
+    test('will set properties.projectId on run in development mode', async () => {
+      const propertiesMock = getMockedInstance(Properties);
+      propertiesMock.config.mode = 'development';
+      await coreService.loadApiKeyDetails();
+      expect(propertiesMock.projectId).toEqual(0);
+    });
+  });
+
   describe('Authorization', () => {
     test('will return proper value on isAuthorizedTo', () => {
       getMockedInstance(Properties).scopes = [

@@ -345,6 +345,7 @@ export class TranslationService {
   }
 
   private async fetchTranslationsDevelopment(language: string) {
+    await this.coreService.loadApiKeyDetails();
     this.coreService.checkScope('translations.view');
     try {
       const data = await this.apiHttpService.fetchJson(

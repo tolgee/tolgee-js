@@ -6,7 +6,5 @@ import { useTolgeeContext } from './useTolgeeContext';
  */
 export const useSetLanguage = () => {
   const context = useTolgeeContext();
-  return (language: string) => {
-    context.tolgee.lang = language;
-  };
+  return (language: string) => context.tolgee.changeLanguage(language);
 };

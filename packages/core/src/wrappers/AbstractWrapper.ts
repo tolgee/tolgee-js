@@ -10,5 +10,5 @@ export interface AbstractWrapper {
     defaultValue?: string | undefined,
     translation?: string
   ): string;
-  unwrap(text: string): Promise<Unwrapped>;
+  unwrap(text: string): Unwrapped;
 }

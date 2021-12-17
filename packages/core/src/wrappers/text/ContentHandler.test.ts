@@ -53,8 +53,7 @@ describe('TextHandler', () => {
       passToParent: ['option'],
     };
     c = createTestDom(document);
-    getMockedInstance(Coder).unwrap = async (...args) =>
-      mockedTranslate(...args);
+    getMockedInstance(Coder).unwrap = (...args) => mockedTranslate(...args);
   });
 
   afterEach(async () => {
@@ -116,22 +115,6 @@ describe('TextHandler', () => {
       test('will have proper first key', () => {
         expect(node._tolgee.keys).toEqual(mockedKeys);
       });
-    });
-
-    test('will lock the node', async () => {
-      c = createTestDom(document);
-      const node = NodeHelper.evaluateToSingle(
-        `./text()[contains(., ${gv(c.keyInRoot)})]`,
-        document.body
-      ) as NodeWithMeta;
-      let resolve;
-      getMockedInstance(Coder).unwrap = () => new Promise((r) => (resolve = r));
-      const promise = textHandler.handle(node);
-      await new Promise((r) => setTimeout(r));
-      expect(node._tolgee.locked).toEqual(true);
-      resolve();
-      await promise;
-      expect(node._tolgee.locked).toEqual(false);
     });
 
     describe("Parent element's _tolgee property and attribute", () => {

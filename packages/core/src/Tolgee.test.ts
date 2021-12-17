@@ -3,12 +3,10 @@ jest.dontMock('./services/DependencyService');
 
 import '@testing-library/jest-dom/extend-expect';
 import { mocked } from 'ts-jest/utils';
-import { CoreService } from './services/CoreService';
 import { Tolgee } from './Tolgee';
 import {
   configMock,
   coreServiceMock,
-  eventEmitterMock,
   eventServiceMock,
   getMockedInstance,
   observerMock,
@@ -17,13 +15,13 @@ import {
   translationServiceMock,
 } from '@testFixtures/mocked';
 import { EventEmitterImpl } from './services/EventEmitter';
-import { Scope } from './types';
 import { TextService } from './services/TextService';
 import { TextWrapper } from './wrappers/text/TextWrapper';
 import { ElementRegistrar } from './services/ElementRegistrar';
 import { NodeHelper } from './helpers/NodeHelper';
 import { TOLGEE_TARGET_ATTRIBUTE } from './Constants/Global';
 import { Properties } from './Properties';
+import { waitFor } from '@testing-library/dom';
 
 describe('Tolgee', () => {
   let tolgee: Tolgee;
@@ -48,28 +46,15 @@ describe('Tolgee', () => {
     expect(tolgee.lang).toEqual('currentLang');
   });
 
-  test('returns instance of tolgee service', () => {
-    expect(tolgee.coreService instanceof CoreService).toBeTruthy();
-  });
-
-  test('will set properties.scopes on run in development mode', async () => {
+  test('will load api key details', async () => {
     propertiesMock.mock.instances[0].config.mode = 'development';
     await tolgee.run();
-    expect(coreServiceMock.mock.instances[0].getApiKeyDetails).toBeCalledTimes(
-      1
-    );
-    expect(propertiesMock.mock.instances[0].scopes).toContain(
-      'translations.edit' as Scope
-    );
-    expect(propertiesMock.mock.instances[0].scopes).not.toContain(
-      'translations.view' as Scope
-    );
-  });
-
-  test('will set properties.projectId on run in development mode', async () => {
-    propertiesMock.mock.instances[0].config.mode = 'development';
-    await tolgee.run();
-    expect(propertiesMock.mock.instances[0].projectId).toEqual(0);
+    expect(
+      coreServiceMock.mock.instances[0].loadApiKeyDetails
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      coreServiceMock.mock.instances[0].loadApiKeyDetails
+    ).toHaveBeenCalledWith();
   });
 
   test('will not set properties.scopes on run in production mode', async () => {
@@ -405,10 +390,22 @@ describe('Tolgee', () => {
 
   describe('lang setter', () => {
     const dummyLang = 'dummyLang';
+    let loadTranslationsResolve: () => void;
+    let languageChangedEmitter;
 
     beforeEach(() => {
-      (eventServiceMock.mock.instances[0] as any).LANGUAGE_CHANGED =
-        new EventEmitterImpl();
+      languageChangedEmitter = (
+        eventServiceMock.mock.instances[0] as any
+      ).LANGUAGE_CHANGED = {
+        emit: jest.fn(),
+      };
+
+      translationServiceMock.mock.instances[0].loadTranslations = jest.fn(
+        async () =>
+          new Promise((resolve) => {
+            loadTranslationsResolve = resolve;
+          })
+      );
       tolgee.lang = dummyLang;
     });
 
@@ -418,8 +415,58 @@ describe('Tolgee', () => {
       );
     });
 
-    test('will change the language', () => {
-      expect(eventEmitterMock.mock.instances[0].emit).toBeCalledTimes(1);
+    test('emits the changed event', async () => {
+      expect(languageChangedEmitter.emit).toBeCalledTimes(0);
+      loadTranslationsResolve();
+      await waitFor(() => {
+        expect(languageChangedEmitter.emit).toBeCalledTimes(1);
+        expect(languageChangedEmitter.emit).toBeCalledWith(dummyLang);
+      });
+    });
+  });
+
+  describe('changeLanguage method', () => {
+    const dummyLang = 'dummyLang';
+    let loadTranslationsResolve: () => void;
+    let languageChanged;
+    let changeLanguagePromise: Promise<void>;
+
+    beforeEach(() => {
+      languageChanged = (
+        eventServiceMock.mock.instances[0] as any
+      ).LANGUAGE_CHANGED = {
+        emit: jest.fn(),
+      };
+
+      translationServiceMock.mock.instances[0].loadTranslations = jest.fn(
+        async () =>
+          new Promise((resolve) => {
+            loadTranslationsResolve = resolve;
+          })
+      );
+      changeLanguagePromise = tolgee.changeLanguage(dummyLang);
+    });
+
+    test('will change the language', (done) => {
+      expect(propertiesMock.mock.instances[0].currentLanguage).not.toEqual(
+        dummyLang
+      );
+      changeLanguagePromise.then(() => {
+        expect(propertiesMock.mock.instances[0].currentLanguage).toEqual(
+          dummyLang
+        );
+        done();
+      });
+      loadTranslationsResolve();
+    });
+
+    test('emits the change and loaded event', (done) => {
+      expect(languageChanged.emit).toBeCalledTimes(0);
+      changeLanguagePromise.then(() => {
+        expect(languageChanged.emit).toBeCalledTimes(1);
+        done();
+      });
+      loadTranslationsResolve();
     });
   });
 });

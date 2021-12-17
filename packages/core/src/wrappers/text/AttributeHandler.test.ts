@@ -53,8 +53,7 @@ describe('AttributeHandler', () => {
       passToParent: ['option'],
     };
 
-    getMockedInstance(Coder).unwrap = async (...args) =>
-      mockedTranslate(...args);
+    getMockedInstance(Coder).unwrap = (...args) => mockedTranslate(...args);
   });
 
   afterEach(async () => {

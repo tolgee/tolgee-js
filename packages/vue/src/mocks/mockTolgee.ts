@@ -53,7 +53,7 @@ export const mockTolgee = () => {
   };
 
   const getLangMock = jest.fn(() => 'mocked-lang');
-  const setLangMock = jest.fn();
+  const changeLanguageMock = jest.fn();
 
   const tolgee = {
     init: () => tolgee as Tolgee,
@@ -63,8 +63,8 @@ export const mockTolgee = () => {
     get lang() {
       return getLangMock();
     },
-    set lang(lang: string) {
-      setLangMock(lang);
+    async changeLanguage(lang: string) {
+      changeLanguageMock(lang);
     },
     instant: instantMock,
     translate: translateMock,
@@ -89,7 +89,7 @@ export const mockTolgee = () => {
     onTranslationChangeUnsubscribeMock,
     onLangChangeUnsubscribeMock,
     getLangMock,
-    setLangMock,
+    setLangMock: changeLanguageMock,
     changeTranslationValue,
     tolgeeClass,
     tolgee,
