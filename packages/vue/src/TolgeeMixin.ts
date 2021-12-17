@@ -1,7 +1,10 @@
 import { defineComponent } from 'vue';
 import { Subscription } from '@tolgee/core/lib/services/Subscription';
-import { TranslationParameters, TranslateFnProps } from './types';
-import { TolgeeContext } from './types';
+import {
+  TolgeeContext,
+  TranslateFnProps,
+  TranslationParameters,
+} from './types';
 
 export const TolgeeMixin = defineComponent({
   inject: ['tolgeeContext'],
@@ -47,7 +50,7 @@ export const TolgeeMixin = defineComponent({
   watch: {
     // user setting language in component
     tolgeeLanguage: function (value: string) {
-      this.tolgeeContext.tolgee.lang = value;
+      this.tolgeeContext.tolgee.changeLanguage(value);
     },
   },
   methods: {
@@ -129,13 +132,15 @@ export const TolgeeMixin = defineComponent({
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
+    togleeLanguage: string;
+
     $t(
       key: string,
       parameters?: TranslationParameters,
       noWrap?: boolean,
       defaultValue?: string
     ): string;
+
     $t(props: TranslateFnProps): string;
-    togleeLanguage: string;
   }
 }

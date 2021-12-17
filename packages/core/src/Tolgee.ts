@@ -1,7 +1,6 @@
 import { TolgeeConfig } from './TolgeeConfig';
 import {
   InstantProps,
-  Scope,
   TolgeeModule,
   TranslateProps,
   TranslationParams,
@@ -13,26 +12,8 @@ import { DependencyService } from './services/DependencyService';
 export class Tolgee {
   private dependencyService: DependencyService;
 
-  static use(module: TolgeeModule) {
-    return new Tolgee().use(module);
-  }
-
-  static init(config: TolgeeConfig) {
-    return new Tolgee().init(config);
-  }
-
   private constructor() {
     this.dependencyService = new DependencyService();
-  }
-
-  use(module: TolgeeModule) {
-    this.dependencyService.moduleService.addModule(module);
-    return this;
-  }
-
-  init(config: TolgeeConfig) {
-    this.dependencyService.init(config);
-    return this;
   }
 
   get properties() {
@@ -43,20 +24,24 @@ export class Tolgee {
     return this.dependencyService.translationService;
   }
 
-  get coreService() {
-    return this.dependencyService.coreService;
-  }
-
   public get lang() {
     return this.properties.currentLanguage;
   }
 
-  public set lang(value) {
-    this.properties.currentLanguage = value;
-    (
-      this.dependencyService.eventService
-        .LANGUAGE_CHANGED as EventEmitterImpl<any>
-    ).emit(value);
+  /**
+   * This sets a new language.
+   *
+   * Using this setter can behave buggy when you change languages
+   * too fast, since it changes the language property before
+   * translations are actually loaded.
+   * @Deprecated use asynchronous changeLanguage method.
+   */
+  public set lang(newLanguage) {
+    this.properties.currentLanguage = newLanguage;
+
+    this.translationService.loadTranslations(newLanguage).then(() => {
+      this.emitLangChangeEvent(newLanguage);
+    });
   }
 
   public get defaultLanguage() {
@@ -71,6 +56,10 @@ export class Tolgee {
     return this.dependencyService.eventService.TRANSLATION_CHANGED;
   }
 
+  /**
+   * Is emitted when language translations are loaded for the first time.
+   * It is not emitted when language is changed and translations were loaded before.
+   */
   public get onLangLoaded() {
     return this.dependencyService.eventService.LANGUAGE_LOADED;
   }
@@ -102,10 +91,46 @@ export class Tolgee {
     );
   }
 
+  private get coreService() {
+    return this.dependencyService.coreService;
+  }
+
+  static use(module: TolgeeModule) {
+    return new Tolgee().use(module);
+  }
+
+  static init(config: TolgeeConfig) {
+    return new Tolgee().init(config);
+  }
+
+  /**
+   * Sets the new language.
+   *
+   * Emits the onLangChange and onLangChangeAndLoad events after
+   * the translations are loaded.
+   *
+   * @return Promise<void> Resolves when translations are loaded
+   */
+  public async changeLanguage(newLanguage: string): Promise<void> {
+    await this.translationService.loadTranslations(newLanguage);
+    this.properties.currentLanguage = newLanguage;
+    this.emitLangChangeEvent(newLanguage);
+  }
+
+  use(module: TolgeeModule) {
+    this.dependencyService.moduleService.addModule(module);
+    return this;
+  }
+
+  init(config: TolgeeConfig) {
+    this.dependencyService.init(config);
+    return this;
+  }
+
   public async run(): Promise<void> {
     this.dependencyService.run();
     if (this.properties.config.mode === 'development') {
-      await this.loadApiKeyDetails();
+      await this.coreService.loadApiKeyDetails();
     }
 
     await this.translationService.loadTranslations();
@@ -131,6 +156,7 @@ export class Tolgee {
   }
 
   async translate(props: TranslateProps): Promise<string>;
+
   async translate(
     key: string,
     params?: TranslationParams,
@@ -157,16 +183,16 @@ export class Tolgee {
       orEmpty = props.orEmpty;
     }
 
+    const translation = await this.dependencyService.textService.translate(
+      key,
+      params,
+      undefined,
+      orEmpty,
+      defaultValue
+    );
+
     if (this.properties.config.mode === 'development' && !noWrap) {
-      await this.loadApiKeyDetails();
-      await this.translationService.loadTranslations();
-      const translation = await this.dependencyService.textService.translate(
-        key,
-        params,
-        undefined,
-        orEmpty,
-        defaultValue
-      );
+      await this.coreService.loadApiKeyDetails();
       return this.dependencyService.wrapper.wrap(
         key,
         params,
@@ -174,13 +200,8 @@ export class Tolgee {
         translation
       );
     }
-    return this.dependencyService.textService.translate(
-      key,
-      params,
-      undefined,
-      orEmpty,
-      defaultValue
-    );
+
+    return translation;
   }
 
   wrap(
@@ -253,12 +274,8 @@ export class Tolgee {
     this.dependencyService.stop();
   };
 
-  private async loadApiKeyDetails() {
-    if (this.properties.scopes === undefined) {
-      const details =
-        await this.dependencyService.coreService.getApiKeyDetails();
-      this.properties.scopes = details.scopes as Scope[];
-      this.properties.projectId = details.projectId;
-    }
+  private emitLangChangeEvent(value: string) {
+    const langChangedEmitter = this.onLangChange as EventEmitterImpl<any>;
+    langChangedEmitter.emit(value);
   }
 }

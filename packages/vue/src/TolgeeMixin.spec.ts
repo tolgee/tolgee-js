@@ -42,16 +42,16 @@ export const prepareRender = () => {
   };
 };
 
-describe('useTranslate hook', function () {
+describe('TolgeeMixin', function () {
   describe('basics', () => {
     let elements;
-    let renderrer: ReturnType<typeof prepareRender>;
+    let renderer: ReturnType<typeof prepareRender>;
 
     beforeEach(async () => {
       jest.clearAllMocks();
       translatedValue = 'translated';
-      renderrer = prepareRender();
-      renderrer.render({
+      renderer = prepareRender();
+      renderer.render({
         component: MixinComponent,
       });
       await waitFor(() => {
@@ -64,23 +64,23 @@ describe('useTranslate hook', function () {
     });
 
     test('calls instant function', async () => {
-      expect(renderrer.instantMock).toBeCalledTimes(3);
+      expect(renderer.instantMock).toBeCalledTimes(3);
     });
 
     test('calls instant function with proper params', async () => {
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
+      expect(renderer.instantMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello',
         noWrap: undefined,
         params: undefined,
       });
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
+      expect(renderer.instantMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello2',
         noWrap: undefined,
         params: { name: 'test' },
       });
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
+      expect(renderer.instantMock).toHaveBeenCalledWith({
         defaultValue: 'Default',
         key: 'hello3',
         noWrap: true,
@@ -89,19 +89,19 @@ describe('useTranslate hook', function () {
     });
 
     test('calls translate function with proper params', async () => {
-      expect(renderrer.translateMock).toHaveBeenCalledWith({
+      expect(renderer.translateMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello',
         noWrap: undefined,
         params: undefined,
       });
-      expect(renderrer.translateMock).toHaveBeenCalledWith({
+      expect(renderer.translateMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello2',
         noWrap: undefined,
         params: { name: 'test' },
       });
-      expect(renderrer.translateMock).toHaveBeenCalledWith({
+      expect(renderer.translateMock).toHaveBeenCalledWith({
         defaultValue: 'Default',
         key: 'hello3',
         noWrap: true,
@@ -112,20 +112,20 @@ describe('useTranslate hook', function () {
     test('listens to language change', async () => {
       jest.clearAllMocks();
       const newTranslatedValue = 'translated in new lang';
-      renderrer.changeTranslationValue(newTranslatedValue);
+      renderer.changeTranslationValue(newTranslatedValue);
       await waitFor(() => {
         elements = screen.getAllByText(translatedValue);
       });
-      renderrer.subscriptionCallbacks.onLangChange();
+      renderer.subscriptionCallbacks.onLangChange();
       await waitFor(() => {
         elements = screen.getAllByText(newTranslatedValue);
       });
       // Mixin calls translate only once and then causes forceUptdate
       // which gets new translations from cache
-      expect(renderrer.translateMock).toBeCalledTimes(1);
-      expect(renderrer.instantMock).toBeCalledTimes(3);
+      expect(renderer.translateMock).toBeCalledTimes(1);
+      expect(renderer.instantMock).toBeCalledTimes(3);
       expect(elements).toHaveLength(3);
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
+      expect(renderer.instantMock).toHaveBeenCalledWith({
         key: 'hello3',
         params: undefined,
         noWrap: true,
@@ -136,15 +136,15 @@ describe('useTranslate hook', function () {
     test('listens to translation change', async () => {
       jest.clearAllMocks();
       const newTranslatedValue = 'translated changed';
-      renderrer.changeTranslationValue(newTranslatedValue);
+      renderer.changeTranslationValue(newTranslatedValue);
       // this causes forceUpdate, so we expect all translations to be new
-      renderrer.subscriptionCallbacks.onTranslationChange({ key: 'hello2' });
+      renderer.subscriptionCallbacks.onTranslationChange({ key: 'hello2' });
       await waitFor(() => {
         elements = screen.getAllByText(newTranslatedValue);
       });
-      expect(renderrer.instantMock).toBeCalledTimes(3);
+      expect(renderer.instantMock).toBeCalledTimes(3);
       expect(elements).toHaveLength(3);
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
+      expect(renderer.instantMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello2',
         noWrap: undefined,

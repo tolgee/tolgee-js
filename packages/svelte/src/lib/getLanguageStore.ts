@@ -11,7 +11,7 @@ export const getLanguageStore = (): Writable<string> => {
   });
 
   store.subscribe((lang) => {
-    context.tolgee.lang = lang;
+    context.tolgee.changeLanguage(lang);
   });
 
   return store;

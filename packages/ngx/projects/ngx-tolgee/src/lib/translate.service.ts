@@ -53,9 +53,11 @@ export class TranslateService implements OnDestroy {
   /**
    * Changes the current language
    * @param lang The new current language (e.g. en, en-US)
+   * @return Promise<void> Resolves when translations
+   * for given language are loaded
    */
   public setLang(lang: string) {
-    this.tolgee.lang = lang;
+    return this.tolgee.changeLanguage(lang);
   }
 
   /**

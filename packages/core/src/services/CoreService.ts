@@ -63,4 +63,12 @@ export class CoreService {
       );
     }
   }
+
+  async loadApiKeyDetails() {
+    if (this.properties.scopes === undefined) {
+      const details = await this.getApiKeyDetails();
+      this.properties.scopes = details.scopes as Scope[];
+      this.properties.projectId = details.projectId;
+    }
+  }
 }

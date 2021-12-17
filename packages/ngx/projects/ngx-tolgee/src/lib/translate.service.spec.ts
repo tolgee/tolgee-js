@@ -50,7 +50,7 @@ jest.mock('@tolgee/core', () => {
       onTranslationChange: {
         subscribe: translationChangeSubscribeMock,
       },
-      set lang(lang: string) {
+      async changeLanguage(lang: string) {
         setLangMock(lang);
       },
       translate: translateMock,

@@ -86,7 +86,7 @@ describe('Coder', () => {
     const text =
       '\\This is \\text: {{text,This is my default value.\\:look!:param1:aaaa,param2:aaaa}} \\{{text}}, see? \\';
     await coder.unwrap(text);
-    expect(getTranslationMock).toHaveBeenCalledWith(
+    expect(getFromCacheOrCallbackMock).toHaveBeenCalledWith(
       'text',
       undefined,
       'This is my default value.:look!'
@@ -115,7 +115,7 @@ describe('Coder', () => {
     mockedTranslationReturn = 'yep';
     const text = 'This is text: {{text\nwith\nnew\nlines}}. Text continues';
     await coder.unwrap(text);
-    expect(getTranslationMock).toHaveBeenCalledWith(
+    expect(getFromCacheOrCallbackMock).toHaveBeenCalledWith(
       'text\nwith\nnew\nlines',
       undefined,
       undefined
@@ -131,8 +131,8 @@ describe('Coder', () => {
 
   describe('Different key occurrences', () => {
     beforeEach(() => {
-      getMockedInstance(TranslationService).getTranslation = jest.fn(
-        async () => {
+      getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(
+        () => {
           return 'translated';
         }
       );
@@ -228,8 +228,8 @@ describe('Coder', () => {
     });
 
     test('it will correctly replace wrapped text', async () => {
-      getMockedInstance(TranslationService).getTranslation = jest.fn(
-        async () => {
+      getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(
+        () => {
           return 'xxx {param1} {param2} xxx';
         }
       );
@@ -250,8 +250,8 @@ describe('Coder', () => {
     });
 
     test('will correctly replace number parameters', async () => {
-      getMockedInstance(TranslationService).getTranslation = jest.fn(
-        async () => {
+      getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(
+        () => {
           return 'xxx {param1, number} {param2, number} xxx';
         }
       );
@@ -274,7 +274,7 @@ describe('Coder', () => {
       );
 
       await coder.unwrap(wrapped);
-      expect(getTranslationMock).toBeCalledWith(
+      expect(getFromCacheOrCallbackMock).toBeCalledWith(
         'key',
         undefined,
         'Look: What a beautiful default\nvalue, translating will be such an experience.'
@@ -282,8 +282,8 @@ describe('Coder', () => {
     });
 
     test('will correctly replace bigint parameter', async () => {
-      getMockedInstance(TranslationService).getTranslation = jest.fn(
-        async () => {
+      getMockedInstance(TranslationService).getFromCacheOrFallback = jest.fn(
+        () => {
           return 'xxx {param1, number} {param2, number} xxx';
         }
       );

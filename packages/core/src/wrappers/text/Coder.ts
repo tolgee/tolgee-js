@@ -99,7 +99,7 @@ export class Coder {
     return result;
   }
 
-  async unwrap(text: string): Promise<Unwrapped> {
+  unwrap(text: string): Unwrapped {
     const matchRegexp = new RegExp(this.rawUnWrapRegex, 'gs');
 
     const keysAndParams: KeyAndParams[] = [];
@@ -127,7 +127,7 @@ export class Coder {
         }
         pre = '';
       }
-      const translated = await this.getTranslatedWithMetadata(unwrapped);
+      const translated = this.getTranslatedWithMetadata(unwrapped);
       keysAndParams.push({
         key: translated.key,
         params: translated.params,
@@ -167,11 +167,9 @@ export class Coder {
     )}${defaultString}${paramString}${this.properties.config.inputSuffix}`;
   }
 
-  private async getTranslatedWithMetadata(
-    text: string
-  ): Promise<TranslatedWithMetadata> {
+  private getTranslatedWithMetadata(text: string): TranslatedWithMetadata {
     const { key, params, defaultValue } = Coder.parseUnwrapped(text);
-    const translated = await this.textService.translate(
+    const translated = this.textService.instant(
       key,
       params,
       undefined,

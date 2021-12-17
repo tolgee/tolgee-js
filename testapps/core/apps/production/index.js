@@ -17,7 +17,7 @@ const tolgee = Tolgee.use(IcuFormatter).init({
   fallbackLanguage: 'en',
 });
 tolgee.lang = 'cs';
-tolgee.onLangLoaded.subscribe(() => {
+tolgee.onLangChange.subscribe(() => {
   refresh();
 });
 
