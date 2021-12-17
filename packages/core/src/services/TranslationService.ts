@@ -67,7 +67,7 @@ export class TranslationService {
     }
   }
 
-  getChachedTranslations() {
+  getCachedTranslations() {
     return this.translationsCache;
   }
 

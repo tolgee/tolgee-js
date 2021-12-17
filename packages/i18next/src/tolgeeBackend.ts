@@ -14,7 +14,7 @@ export const tolgeeBackend = (tolgee: Tolgee): Module => {
         .translate('random')
         .then(() => {
           const translations = tolgee.translationService
-            .getChachedTranslations()
+            .getCachedTranslations()
             .get(language);
           callback(null, translations);
         })
