@@ -4,7 +4,7 @@ import { i18n } from 'i18next';
 export const tolgeeApply = (tolgee: Tolgee, i18n: i18n) => {
   const updateTranslations = () => {
     tolgee.translationService
-      .getChachedTranslations()
+      .getCachedTranslations()
       .forEach((translations, lang) => {
         i18n.removeResourceBundle(lang, 'translation');
         i18n.addResources(lang, 'translation', translations);
