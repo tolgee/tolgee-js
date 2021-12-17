@@ -19,10 +19,10 @@
     "lint": "ng lint"
   },
   "dependencies": {
-    "@angular/animations": "~13.0.0",
+    "@angular/animations": "~13.1.1",
     "@angular/common": "~13.0.3",
     "@angular/compiler": "~13.0.3",
-    "@angular/core": "~13.0.0",
+    "@angular/core": "~13.1.1",
     "@angular/forms": "~13.0.3",
     "@angular/platform-browser": "~13.0.3",
     "@angular/platform-browser-dynamic": "~13.0.3",
@@ -48,7 +48,7 @@
     "jest-preset-angular": "11.0.1",
     "ng-packagr": "^13.1.2",
     "protractor": "~7.0.0",
-    "ts-jest": "^27.1.1",
+    "ts-jest": "^27.1.2",
     "ts-node": "~10.4.0",
     "tslint": "~6.1.0",
     "typescript": "~4.4.4"
