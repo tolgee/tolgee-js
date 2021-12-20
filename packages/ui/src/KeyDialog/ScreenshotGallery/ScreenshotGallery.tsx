@@ -5,9 +5,12 @@ import { CameraAlt, AddCircleOutline } from '@mui/icons-material';
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
 import { MAX_FILE_COUNT } from './utils';
-import { useTranslationDialogContext } from '../useTranslationDialogContext';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
-import { ScreenshotInterface } from '../TranslationDialogContextProvider';
+import {
+  ScreenshotInterface,
+  useDialogContext,
+  useDialogDispatch,
+} from '../TranslationDialogContextProvider';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
 import { ExtensionPrompt } from './ExtensionPrompt';
@@ -52,16 +55,25 @@ const ALLOWED_UPLOAD_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 export const ScreenshotGallery: React.FC = () => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [detail, setDetail] = useState<ScreenshotInterface | null>(null);
-  const {
-    handleUploadImages,
-    screenshots,
-    handleTakeScreenshot,
-    removeScreenshot,
-    screenshotsUploading,
-    pluginAvailable,
-    dependencies,
-    formDisabled,
-  } = useTranslationDialogContext();
+  const dispatch = useDialogDispatch();
+
+  const screenshots = useDialogContext((c) => c.screenshots);
+  const pluginAvailable = useDialogContext((c) => c.pluginAvailable);
+  const dependencies = useDialogContext((c) => c.dependencies);
+  const formDisabled = useDialogContext((c) => c.formDisabled);
+  const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
+
+  const uploadImages = (files: File[]) => {
+    dispatch({ type: 'HANDLE_UPLOAD_IMAGES', payload: { files } });
+  };
+
+  const removeScreenshot = (id: number) => {
+    dispatch({ type: 'HANDLE_REMOVE_SCREENSHOT', payload: { id } });
+  };
+
+  const takeScreenshot = () => {
+    dispatch({ type: 'HANDLE_TAKE_SCREENSHOT' });
+  };
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
@@ -107,7 +119,7 @@ export const ScreenshotGallery: React.FC = () => {
   const validateAndUpload = (files: File[]) => {
     const { valid } = validate(files);
     if (valid) {
-      handleUploadImages(files);
+      uploadImages(files);
     }
   };
 
@@ -147,7 +159,7 @@ export const ScreenshotGallery: React.FC = () => {
                   <IconButton
                     onClick={
                       ableToTakeScreenshot
-                        ? handleTakeScreenshot
+                        ? takeScreenshot
                         : () => setExtensionPrompt(true)
                     }
                   >

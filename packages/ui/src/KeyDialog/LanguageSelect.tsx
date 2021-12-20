@@ -10,36 +10,43 @@ import {
   styled,
 } from '@mui/material';
 
-import { useTranslationDialogContext } from './useTranslationDialogContext';
 import { DEVTOOLS_Z_INDEX } from '../constants';
+import {
+  useDialogContext,
+  useDialogDispatch,
+} from './TranslationDialogContextProvider';
 
 const ScFormControl = styled(FormControl)`
   min-width: 200px;
 `;
 
 export const LanguageSelect: React.FC = () => {
-  const context = useTranslationDialogContext();
+  const dispatch = useDialogDispatch();
+  const availableLanguages = useDialogContext((c) => c.availableLanguages);
+  const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
 
-  const options = context.availableLanguages
-    ? [...context.availableLanguages].map((lang) => ({
+  const options = availableLanguages
+    ? [...availableLanguages].map((lang) => ({
         label: lang.name,
         value: lang.tag,
       }))
     : [];
 
-  const selected = options.filter((o) =>
-    context.selectedLanguages.has(o.value)
-  );
+  const selected = options.filter((o) => selectedLanguages.has(o.value));
   const onChange = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
-    context.onSelectedLanguagesChange(
-      new Set(typeof value === 'string' ? value.split(',') : value)
+    const languages = new Set(
+      typeof value === 'string' ? value.split(',') : value
     );
+    dispatch({
+      type: 'ON_SELECTED_LANGUAGES_CHANGE',
+      payload: { languages },
+    });
   };
 
   return (
     <>
-      {context.availableLanguages && (
+      {availableLanguages && (
         <ScFormControl variant="outlined" size="small">
           <Select
             multiple

@@ -1,6 +1,9 @@
 import React from 'react';
-import { FunctionComponent, useContext } from 'react';
-import { TranslationDialogContext } from './TranslationDialogContextProvider';
+import { FunctionComponent } from 'react';
+import {
+  useDialogContext,
+  useDialogDispatch,
+} from './TranslationDialogContextProvider';
 import { styled, TextField } from '@mui/material';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
@@ -41,14 +44,25 @@ const LoadingTextArea = styled('div')`
 `;
 
 export const TranslationFields: FunctionComponent = () => {
-  const context = useContext(TranslationDialogContext);
+  const dispatch = useDialogDispatch();
+
+  const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
+  const availableLanguages = useDialogContext((c) => c.availableLanguages);
+  const translationsForm = useDialogContext((c) => c.translationsForm);
+  const formDisabled = useDialogContext((c) => c.formDisabled);
+  const loading = useDialogContext((c) => c.loading);
+
+  const onChange = (key: string) => (e: any) => {
+    dispatch({
+      type: 'ON_INPUT_CHANGE',
+      payload: { key, value: e.target.value },
+    });
+  };
 
   const Loading = () => (
     <>
-      {context.selectedLanguages ? (
-        [...context.selectedLanguages].map((lang) => (
-          <LoadingTextArea key={lang} />
-        ))
+      {selectedLanguages ? (
+        [...selectedLanguages].map((lang) => <LoadingTextArea key={lang} />)
       ) : (
         <LoadingTextArea />
       )}
@@ -57,26 +71,26 @@ export const TranslationFields: FunctionComponent = () => {
 
   return (
     <>
-      {context.loading ? (
+      {loading ? (
         <Loading />
       ) : (
-        [...context.selectedLanguages].map((key) => {
-          const lang = context.availableLanguages?.find((l) => l.tag === key);
+        [...selectedLanguages].map((key) => {
+          const lang = availableLanguages?.find((l) => l.tag === key);
 
           return (
             <React.Fragment key={key}>
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <ScTextField
                 size="small"
-                disabled={context.formDisabled}
+                disabled={formDisabled}
                 key={key}
                 lang={key}
                 minRows={2}
                 maxRows={Infinity}
                 multiline
                 fullWidth
-                value={context.translationsForm[key] || ''}
-                onChange={context.onTranslationInputChange(key)}
+                value={translationsForm[key] || ''}
+                onChange={onChange(key)}
               />
             </React.Fragment>
           );
