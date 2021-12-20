@@ -1,13 +1,24 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { useTranslationDialogContext } from '../KeyDialog/useTranslationDialogContext';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import {
+  useDialogContext,
+  useDialogDispatch,
+} from './TranslationDialogContextProvider';
 
 export const NewWindow: FC = (props) => {
   const newWindow = useRef(null);
-  const { container, setContainer, onClose } = useTranslationDialogContext();
   const [popup, setPopup] = useState<Window>(null);
+  const dispatch = useDialogDispatch();
+  const container = useDialogContext((c) => c.container);
+
+  const setContainer = (el: Element) => {
+    dispatch({ type: 'SET_CONTAINER', payload: el });
+  };
+  const onClose = () => {
+    dispatch({ type: 'ON_CLOSE' });
+  };
 
   useEffect(() => {
     // Create container element on client-side

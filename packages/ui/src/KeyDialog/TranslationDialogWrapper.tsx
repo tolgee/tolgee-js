@@ -1,31 +1,41 @@
 import React from 'react';
 import { Dialog } from '@mui/material';
 
-import { DialogContextType } from './TranslationDialogContextProvider';
-import { NewWindow } from '../common/NewWindow';
+import {
+  useDialogContext,
+  useDialogDispatch,
+} from './TranslationDialogContextProvider';
+import { NewWindow } from './NewWindow';
 import { DEVTOOLS_Z_INDEX } from '../constants';
 
-export const TranslationDialogWrapper: React.FC<{
-  context: DialogContextType;
-}> = ({ context, ...props }) => {
+export const TranslationDialogWrapper: React.FC = ({ children }) => {
+  const dispatch = useDialogDispatch();
+  const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
+  const open = useDialogContext((c) => c.open);
+  const takingScreenshot = useDialogContext((c) => c.takingScreenshot);
+
+  const onClose = () => {
+    dispatch({ type: 'ON_CLOSE' });
+  };
+
   return (
     <>
-      {context.useBrowserWindow ? (
-        context.open ? (
-          <NewWindow>{props.children}</NewWindow>
+      {useBrowserWindow ? (
+        open ? (
+          <NewWindow>{children}</NewWindow>
         ) : null
       ) : (
-        !context.takingScreenshot && (
+        !takingScreenshot && (
           <Dialog
             disablePortal
             disableEnforceFocus
-            open={context.open}
-            onClose={context.onClose}
+            open={open}
+            onClose={onClose}
             aria-labelledby="form-dialog-title"
             maxWidth="lg"
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
-            <>{props.children}</>
+            <>{children}</>
           </Dialog>
         )
       )}

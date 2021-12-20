@@ -1,8 +1,9 @@
-import React, { FunctionComponent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KeyWithTranslationsModel, LanguageModel } from '@tolgee/core';
 
 import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
+import { createProvider } from '../tools/createProvider';
 
 export interface ScreenshotInterface {
   id: number;
@@ -41,40 +42,26 @@ const responseToTranslationData = (
   return translations;
 };
 
-export type DialogContextType = {
-  loading: boolean;
-  saving: boolean;
-  error: string;
-  success: boolean;
-  availableLanguages: LanguageModel[];
-  selectedLanguages: Set<string>;
-  onSelectedLanguagesChange: (val: Set<string>) => void;
-  formDisabled: boolean;
-  onTranslationInputChange: (
-    abbr
-  ) => (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  translations: KeyWithTranslationsModel;
-  translationsForm: FormTranslations;
-  onSave: () => void;
-  container: Element | undefined;
-  setContainer: (el: Element) => void;
-  useBrowserWindow: boolean;
-  setUseBrowserWindow: (value: boolean) => void;
-  pluginAvailable: boolean;
-  takingScreenshot: boolean;
-  handleTakeScreenshot: () => Promise<void>;
-  handleUploadImages: (files: File[]) => Promise<any>;
-  screenshotsUploading: boolean;
-  screenshots?: ScreenshotInterface[];
-  removeScreenshot: (id: number) => void;
-  linkToPlatform: string | undefined;
-} & DialogProps;
+type State =
+  | { type: 'ON_INPUT_CHANGE'; payload: { key: string; value: string } }
+  | {
+      type: 'ON_SELECTED_LANGUAGES_CHANGE';
+      payload: { languages: Set<string> };
+    }
+  | {
+      type: 'LOAD_TRANSLATIONS';
+      payload: { reinitialize?: boolean; languages: Set<string> };
+    }
+  | { type: 'HANDLE_UPLOAD_IMAGES'; payload: { files: File[] } }
+  | { type: 'HANDLE_TAKE_SCREENSHOT' }
+  | { type: 'HANDLE_REMOVE_SCREENSHOT'; payload: { id: number } }
+  | { type: 'ON_SAVE' }
+  | { type: 'ON_CLOSE' }
+  | { type: 'SET_USE_BROWSER_WINDOW'; payload: boolean }
+  | { type: 'SET_CONTAINER'; payload: Element };
 
-export const TranslationDialogContext =
-  React.createContext<DialogContextType>(undefined);
-
-export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
-  (props) => {
+export const [DialogProvider, useDialogDispatch, useDialogContext] =
+  createProvider((props: DialogProps) => {
     const [loading, setLoading] = useState<boolean>(true);
     const [saving, setSaving] = useState<boolean>(false);
     const [success, setSuccess] = useState<boolean>(false);
@@ -102,64 +89,165 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
     const [screenshots, setScreenshots] = useState<ScreenshotInterface[]>([]);
     const [screenshotsUploading, setScreenshotsUploading] = useState(false);
 
-    const onTranslationInputChange =
-      (abbr) => (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setSuccess(false);
-        translationsForm[abbr] = event.target.value;
-        setTranslationsFormTouched(true);
-        setTranslationsForm({ ...translationsForm });
-      };
+    const dispatch = async (action: State) => {
+      switch (action.type) {
+        case 'ON_INPUT_CHANGE':
+          setSuccess(false);
+          setTranslationsFormTouched(true);
+          setTranslationsForm({
+            ...translationsForm,
+            [action.payload.key]: action.payload.value,
+          });
+          break;
 
-    const loadTranslations = (languages?: Set<string>, reinitialize = true) => {
-      translationService
-        .getTranslationsOfKey(props.input, languages)
-        .then(([result, languages]) => {
-          setTranslations(
-            result || {
-              keyId: undefined,
-              translations: {},
-              screenshots: [],
-              keyName: props.input,
-              keyTags: [],
-              screenshotCount: 0,
+        case 'LOAD_TRANSLATIONS': {
+          const { reinitialize = true, languages } = action.payload;
+          translationService
+            .getTranslationsOfKey(props.input, languages)
+            .then(([result, languages]) => {
+              setTranslations(
+                result || {
+                  keyId: undefined,
+                  translations: {},
+                  screenshots: [],
+                  keyName: props.input,
+                  keyTags: [],
+                  screenshotCount: 0,
+                }
+              );
+
+              if (!selectedLanguages?.size) {
+                setSelectedLanguages(new Set(languages));
+              }
+
+              const translationsData = responseToTranslationData(
+                result?.translations
+              );
+              if (!translationsForm || reinitialize) {
+                // reset form
+                setTranslationsForm(translationsData);
+
+                setScreenshots(
+                  result?.screenshots?.map((sc) => ({
+                    ...sc,
+                    justUploaded: false,
+                  })) || []
+                );
+              } else {
+                // update form
+                const result: FormTranslations = {};
+                languages.forEach((lng) => {
+                  result[lng] = translationsForm[lng] || translationsData[lng];
+                });
+                setTranslationsForm(result);
+              }
+              setLoading(false);
+            });
+          break;
+        }
+
+        case 'HANDLE_UPLOAD_IMAGES':
+          setScreenshotsUploading(true);
+          await Promise.all(action.payload.files.map(uploadImage));
+          setScreenshotsUploading(false);
+          break;
+
+        case 'HANDLE_TAKE_SCREENSHOT': {
+          setTakingScreenshot(true);
+          const data = await props.dependencies.pluginManager.takeScreenshot({
+            key: props.input,
+            translations: translationsForm,
+          });
+
+          setTakingScreenshot(false);
+          setScreenshotsUploading(true);
+
+          const blob = await fetch(data).then((r) => r.blob());
+
+          await uploadImage(blob);
+          setScreenshotsUploading(false);
+          break;
+        }
+
+        case 'HANDLE_REMOVE_SCREENSHOT': {
+          const { id } = action.payload;
+          const screenshot = screenshots.find((sc) => sc.id === id);
+          if (screenshot.justUploaded) {
+            screenshotService.deleteImages([screenshot.id]);
+          }
+          setScreenshots(screenshots.filter((sc) => sc.id !== id));
+          break;
+        }
+
+        case 'ON_SAVE': {
+          setSaving(true);
+          try {
+            if (translations.keyId === undefined) {
+              await translationService.createKey({
+                name: props.input,
+                translations: translationsForm,
+                screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
+              });
+            } else {
+              await translationService.updateKeyComplex(translations.keyId, {
+                name: props.input,
+                translations: translationsForm,
+                screenshotIdsToDelete: getRemovedScreenshots(),
+                screenshotUploadedImageIds: getJustUploadedScreenshots(),
+              });
             }
-          );
-
-          if (!selectedLanguages?.size) {
-            setSelectedLanguages(new Set(languages));
+            setSuccess(true);
+            await sleep(200);
+            setError(null);
+            props.onClose();
+          } catch (e) {
+            setError('Unexpected error occurred :(');
+            // eslint-disable-next-line no-console
+            console.error(e);
+          } finally {
+            setSaving(false);
           }
+          break;
+        }
 
-          if (!translationsForm || reinitialize) {
-            const translationsData = responseToTranslationData(
-              result?.translations
-            );
-            setTranslationsForm(translationsData);
-
-            setScreenshots(
-              result?.screenshots?.map((sc) => ({
-                ...sc,
-                justUploaded: false,
-              })) || []
-            );
+        case 'ON_CLOSE': {
+          props.onClose();
+          setUseBrowserWindow(false);
+          const uploadedScreenshots = getJustUploadedScreenshots();
+          if (uploadedScreenshots.length) {
+            screenshotService.deleteImages(uploadedScreenshots);
           }
-          setLoading(false);
-        });
-    };
+          setScreenshots([]);
+          break;
+        }
 
-    const onClose = () => {
-      props.onClose();
-      setUseBrowserWindow(false);
-      const uploadedScreenshots = getJustUploadedScreenshots();
-      if (uploadedScreenshots.length) {
-        screenshotService.deleteImages(uploadedScreenshots);
+        case 'ON_SELECTED_LANGUAGES_CHANGE': {
+          const { languages } = action.payload;
+          if (languages.size) {
+            setSelectedLanguages(languages);
+            properties.preferredLanguages = languages;
+            dispatch({
+              type: 'LOAD_TRANSLATIONS',
+              payload: { languages, reinitialize: false },
+            });
+          }
+          break;
+        }
+
+        case 'SET_CONTAINER':
+          setContainer(action.payload);
+          break;
+
+        case 'SET_USE_BROWSER_WINDOW':
+          setUseBrowserWindow(action.payload);
+          break;
       }
-      setScreenshots([]);
     };
 
     useEffect(() => {
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
-          onClose();
+          dispatch({ type: 'ON_CLOSE' });
         }
       };
       if (!useBrowserWindow) {
@@ -176,7 +264,10 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         setSuccess(false);
         setError(null);
         setTranslationsFormTouched(false);
-        loadTranslations(properties.preferredLanguages);
+        dispatch({
+          type: 'LOAD_TRANSLATIONS',
+          payload: { languages: properties.preferredLanguages },
+        });
         if (availableLanguages === undefined) {
           coreService.getLanguagesFull().then((l) => {
             setAvailableLanguages(l);
@@ -195,37 +286,6 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         .filter((scId) => !screenshots.find((sc) => sc.id === scId));
     };
 
-    const onSave = async () => {
-      setSaving(true);
-      try {
-        setSaving(true);
-        if (translations.keyId === undefined) {
-          await translationService.createKey({
-            name: props.input,
-            translations: translationsForm,
-            screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
-          });
-        } else {
-          await translationService.updateKeyComplex(translations.keyId, {
-            name: props.input,
-            translations: translationsForm,
-            screenshotIdsToDelete: getRemovedScreenshots(),
-            screenshotUploadedImageIds: getJustUploadedScreenshots(),
-          });
-        }
-        setSuccess(true);
-        await sleep(200);
-        setError(null);
-        props.onClose();
-      } catch (e) {
-        setError('Unexpected error occurred :(');
-        // eslint-disable-next-line no-console
-        console.error(e);
-      } finally {
-        setSaving(false);
-      }
-    };
-
     const uploadImage = async (file: Blob) => {
       await screenshotService
         .uploadImage(file)
@@ -238,36 +298,6 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
         .catch((e) => {
           setError(e.code || e.message);
         });
-    };
-
-    const handleUploadImages = async (files: File[]) => {
-      setScreenshotsUploading(true);
-      await Promise.all(files.map(uploadImage));
-      setScreenshotsUploading(false);
-    };
-
-    const handleTakeScreenshot = async () => {
-      setTakingScreenshot(true);
-      const data = await props.dependencies.pluginManager.takeScreenshot({
-        key: props.input,
-        translations: translationsForm,
-      });
-
-      setTakingScreenshot(false);
-      setScreenshotsUploading(true);
-
-      const blob = await fetch(data).then((r) => r.blob());
-
-      await uploadImage(blob);
-      setScreenshotsUploading(false);
-    };
-
-    const removeScreenshot = async (id: number) => {
-      const screenshot = screenshots.find((sc) => sc.id === id);
-      if (screenshot.justUploaded) {
-        screenshotService.deleteImages([screenshot.id]);
-      }
-      setScreenshots(screenshots.filter((sc) => sc.id !== id));
     };
 
     const formDisabled =
@@ -318,46 +348,27 @@ export const TranslationDialogContextProvider: FunctionComponent<DialogProps> =
       props.defaultValue,
     ]);
 
-    const onSelectedLanguagesChange = (value: Set<string>) => {
-      if (value.size) {
-        setSelectedLanguages(value);
-        properties.preferredLanguages = value;
-        loadTranslations(value);
-      }
-    };
-
-    const contextValue: DialogContextType = {
-      ...props,
-      onClose,
+    const contextValue = {
+      input: props.input,
+      dependencies: props.dependencies,
+      open: props.open,
       loading,
       saving,
       success,
       error,
       availableLanguages,
       selectedLanguages,
-      onSelectedLanguagesChange,
       formDisabled,
-      onTranslationInputChange,
       translations,
       translationsForm,
-      onSave,
       container,
-      setContainer,
       useBrowserWindow,
-      setUseBrowserWindow,
       pluginAvailable: props.dependencies.pluginManager.handshakeSucceed,
       takingScreenshot,
-      handleTakeScreenshot,
-      handleUploadImages,
       screenshotsUploading,
       screenshots,
-      removeScreenshot,
       linkToPlatform,
     };
 
-    return (
-      <TranslationDialogContext.Provider value={contextValue}>
-        {props.children}
-      </TranslationDialogContext.Provider>
-    );
-  };
+    return [contextValue, dispatch];
+  });

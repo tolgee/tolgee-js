@@ -14,7 +14,7 @@
     "emitDecoratorMetadata": true,
     "jsx": "react",
     "downlevelIteration": true,
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
       "@testFixtures/*": ["./__testFixtures/*"]
     }

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BodyEnd } from '../common/BodyEnd';
-import { TranslationDialogContextProvider } from './TranslationDialogContextProvider';
+import { DialogProvider } from './TranslationDialogContextProvider';
 import { TranslationDialog } from './TranslationDialog';
 import { DependencyService } from '@tolgee/core/lib/services/DependencyService';
 
@@ -33,7 +33,7 @@ export class KeyDialog extends React.Component<Props> {
   public render = () => (
     <>
       <BodyEnd>
-        <TranslationDialogContextProvider
+        <DialogProvider
           dependencies={this.props.dependencies}
           defaultValue={this.state.defaultValue}
           open={this.state.dialogOpened}
@@ -41,7 +41,7 @@ export class KeyDialog extends React.Component<Props> {
           onClose={this.onClose}
         >
           <TranslationDialog />
-        </TranslationDialogContextProvider>
+        </DialogProvider>
       </BodyEnd>
     </>
   );

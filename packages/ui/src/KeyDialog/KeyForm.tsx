@@ -4,12 +4,15 @@ import { TextHelper } from '@tolgee/core/lib/helpers/TextHelper';
 import { styled, IconButton, Button } from '@mui/material';
 import { OpenInNew } from '@mui/icons-material';
 
-import { useTranslationDialogContext } from './useTranslationDialogContext';
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';
 import { LoadingButton } from '../common/LoadingButton';
 import { ScreenshotGallery } from './ScreenshotGallery/ScreenshotGallery';
 import { ScFieldTitle } from '../common/FieldTitle';
+import {
+  useDialogContext,
+  useDialogDispatch,
+} from './TranslationDialogContextProvider';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -73,15 +76,39 @@ const ScError = styled('div')`
 `;
 
 export const KeyForm = () => {
-  const context = useTranslationDialogContext();
+  const dispatch = useDialogDispatch();
+
+  const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
+  const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
+  const dependencies = useDialogContext((c) => c.dependencies);
+  const input = useDialogContext((c) => c.input);
+  const translations = useDialogContext((c) => c.translations);
+  const formDisabled = useDialogContext((c) => c.formDisabled);
+  const loading = useDialogContext((c) => c.loading);
+  const error = useDialogContext((c) => c.error);
+  const saving = useDialogContext((c) => c.saving);
+  const success = useDialogContext((c) => c.success);
+
   const screenshotsView =
-    context.dependencies.coreService.isAuthorizedTo('screenshots.view');
+    dependencies.coreService.isAuthorizedTo('screenshots.view');
+
+  const setUseBrowserWindow = (value: boolean) => {
+    dispatch({ type: 'SET_USE_BROWSER_WINDOW', payload: value });
+  };
+
+  const onClose = () => {
+    dispatch({ type: 'ON_CLOSE' });
+  };
+
+  const onSave = () => {
+    dispatch({ type: 'ON_SAVE' });
+  };
 
   return (
     <ScContainer {...{ [RESTRICTED_ASCENDANT_ATTRIBUTE]: 'true' }}>
       <ScHeading>
         <a
-          href={context.linkToPlatform}
+          href={linkToPlatform}
           target="_blank"
           rel="noreferrer noopener"
           id="_tolgee_platform_link"
@@ -107,10 +134,10 @@ export const KeyForm = () => {
 
         <ScHeadingTitle>Quick translation</ScHeadingTitle>
 
-        {!context.useBrowserWindow && (
+        {!useBrowserWindow && (
           <IconButton
             title="Open in new window"
-            onClick={() => context.setUseBrowserWindow(true)}
+            onClick={() => setUseBrowserWindow(true)}
             color="inherit"
             size="small"
           >
@@ -125,10 +152,9 @@ export const KeyForm = () => {
 
       <ScFieldTitle>Key</ScFieldTitle>
       <ScKey>
-        {context.input && TextHelper.removeEscapes(context.input)}
+        {input && TextHelper.removeEscapes(input)}
         <ScKeyHint>
-          {context.translations?.keyId === undefined &&
-            " (key doesn't exist yet)"}
+          {translations?.keyId === undefined && " (key doesn't exist yet)"}
         </ScKeyHint>
       </ScKey>
 
@@ -142,30 +168,28 @@ export const KeyForm = () => {
         </ScGalleryWrapper>
       )}
 
-      {context.formDisabled && !context.loading && (
+      {formDisabled && !loading && (
         <ScRestriction>{`Modification is restricted due to missing ${
-          context.translations?.keyId !== undefined
-            ? 'translations.edit'
-            : 'keys.edit'
+          translations?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
         } scope in current api key settings.`}</ScRestriction>
       )}
 
-      {context.error && <ScError>{context.error}</ScError>}
+      {error && <ScError>{error}</ScError>}
       <ScControls>
-        <Button onClick={context.onClose} color="secondary">
+        <Button onClick={onClose} color="secondary">
           Cancel
         </Button>
         <LoadingButton
-          loading={context.saving}
-          disabled={context.saving || context.formDisabled}
-          onClick={context.onSave}
+          loading={saving}
+          disabled={saving || formDisabled}
+          onClick={onSave}
           color="primary"
           variant="contained"
           style={{ marginLeft: '10px' }}
         >
-          {context.success
+          {success
             ? 'Saved! ✓'
-            : context.translations?.keyId === undefined
+            : translations?.keyId === undefined
             ? 'Create'
             : 'Update'}
         </LoadingButton>
