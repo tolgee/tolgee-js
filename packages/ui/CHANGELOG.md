@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.0.2](https://github.com/tolgee/tolgee-js/compare/v3.0.1...v3.0.2) (2021-12-20)
+
+
+### Bug Fixes
+
+* Refactor tolgee-ui context TG-422 ([73384be](https://github.com/tolgee/tolgee-js/commit/73384bee8e255fb7d5fb9ee57ccbcaabb238a1e0))
+
+
+
+
+
 ## [3.0.1](https://github.com/tolgee/tolgee-js/compare/v3.0.0...v3.0.1) (2021-12-18)
 
 **Note:** Version bump only for package @tolgee/ui
