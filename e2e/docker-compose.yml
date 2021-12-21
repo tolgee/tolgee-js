@@ -178,3 +178,21 @@ services:
       - 8118:8101
     command: ['npm', 'run', 'serve-dev']
     working_dir: /data/testapps/react-i18next
+  e2e_app_vue_i18next_prod:
+    container_name: tolgee_js_e2e_serve_testapps_vue_i18next_prod
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8119:3002
+    command: ['npm', 'run', 'serve']
+    working_dir: /data/testapps/vue-i18next
+  e2e_app_vue_i18next_dev:
+    container_name: tolgee_js_e2e_serve_testapps_vue_i18next_dev
+    build: ../docker
+    volumes:
+      - '../:/data'
+    ports:
+      - 8120:3002
+    command: ['npm', 'run', 'serve-dev']
+    working_dir: /data/testapps/vue-i18next
