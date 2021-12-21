@@ -4,36 +4,43 @@ updates:
     directory: "/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/core/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ui/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/react/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/ngx/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/svelte/"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/packages/socketio-client/"
     schedule:
       interval: daily
+      time: "01:00"
     ignore:
       - dependency-name: "@types/socket.io-client"
       - dependency-name: "socket.io-client"
@@ -42,21 +49,25 @@ updates:
     directory: "/testapps/ngx"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/core"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/svelte"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/react"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
     ignore:
       - dependency-name: "react"
@@ -65,9 +76,11 @@ updates:
     directory: "/packages/vue"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
   - package-ecosystem: npm
     directory: "/testapps/vue"
     schedule:
       interval: daily
+      time: "01:00"
     target-branch: main
