@@ -1,0 +1,35 @@
+{
+  "name": "tolgee-vue-i18next-example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
+    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
+    "lint": "vue-cli-service lint",
+    "serve": "serve -p 3002 -s dist",
+    "serve-dev": "serve -p 3002 -s dist-dev"
+  },
+  "dependencies": {
+    "@panter/vue-i18next": "^0.15.2",
+    "@tolgee/core": "^3.0.1",
+    "@tolgee/i18next": "^3.0.1",
+    "@tolgee/ui": "^3.0.2",
+    "core-js": "^3.6.5",
+    "i18next": "^21.6.3",
+    "i18next-icu": "^2.0.3",
+    "vue": "^2.6.11"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "babel-eslint": "^10.1.0",
+    "serve": "^13.0.2",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -13,7 +13,16 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          ['react', 'next', 'gatsby', 'vue', 'svelte', 'ngx', 'react-i18next']
+          [
+            'react',
+            'next',
+            'gatsby',
+            'vue',
+            'svelte',
+            'ngx',
+            'react-i18next',
+            'vue-i18next',
+          ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
