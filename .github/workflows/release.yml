@@ -44,6 +44,9 @@ jobs:
       - name: Rebuild ngx package with correct version and without Ivy
         run: ./gradlew buildNgxForPublish
 
+      - name: Rebuild Svelte with new package version
+        run: ./gradlew buildNgxForPublish
+
       - name: Publish
         run: npm run lerna-publish
 
