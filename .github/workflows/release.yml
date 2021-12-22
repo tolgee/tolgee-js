@@ -45,7 +45,7 @@ jobs:
         run: ./gradlew buildNgxForPublish
 
       - name: Rebuild Svelte with new package version
-        run: ./gradlew buildNgxForPublish
+        run: ./gradlew buildSvelte
 
       - name: Publish
         run: npm run lerna-publish
