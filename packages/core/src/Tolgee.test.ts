@@ -22,6 +22,7 @@ import { NodeHelper } from './helpers/NodeHelper';
 import { TOLGEE_TARGET_ATTRIBUTE } from './Constants/Global';
 import { Properties } from './Properties';
 import { waitFor } from '@testing-library/dom';
+import { Translations } from './types';
 
 describe('Tolgee', () => {
   let tolgee: Tolgee;
@@ -390,7 +391,7 @@ describe('Tolgee', () => {
 
   describe('lang setter', () => {
     const dummyLang = 'dummyLang';
-    let loadTranslationsResolve: () => void;
+    let loadTranslationsResolve: (value: Translations) => void;
     let languageChangedEmitter;
 
     beforeEach(() => {
@@ -417,7 +418,7 @@ describe('Tolgee', () => {
 
     test('emits the changed event', async () => {
       expect(languageChangedEmitter.emit).toBeCalledTimes(0);
-      loadTranslationsResolve();
+      loadTranslationsResolve({});
       await waitFor(() => {
         expect(languageChangedEmitter.emit).toBeCalledTimes(1);
         expect(languageChangedEmitter.emit).toBeCalledWith(dummyLang);
@@ -427,7 +428,7 @@ describe('Tolgee', () => {
 
   describe('changeLanguage method', () => {
     const dummyLang = 'dummyLang';
-    let loadTranslationsResolve: () => void;
+    let loadTranslationsResolve: (value: Translations) => void;
     let languageChanged;
     let changeLanguagePromise: Promise<void>;
 
@@ -457,7 +458,7 @@ describe('Tolgee', () => {
         );
         done();
       });
-      loadTranslationsResolve();
+      loadTranslationsResolve({});
     });
 
     test('emits the change and loaded event', (done) => {
@@ -466,7 +467,7 @@ describe('Tolgee', () => {
         expect(languageChanged.emit).toBeCalledTimes(1);
         done();
       });
-      loadTranslationsResolve();
+      loadTranslationsResolve({});
     });
   });
 });
