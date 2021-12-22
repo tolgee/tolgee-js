@@ -1,27 +1,35 @@
-# Angular
+# Example application of using Angular with Tolgee
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.24.
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
 
-## Development server
+To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## To run the app in dev mode
 
-## Code scaffolding
+To install dependencies, run:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+    npm install
 
-## Build
+To run the app in dev mode with in-context translating mode:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. Create a project on [Tolgee Cloud](https://app.tolgee.io) or use
+   self-hosted [Tolgee Server](https://github.com/tolgee/server).
+2. Generate an API-KEY
+3. Copy file `projects/sampleapp/src/environments/environment.ts` to `projects/sampleapp/src/environments/environment.stage.ts`
+4. Set `apiKey` to API key obtained in previous step
+5. Run `npm run start`
+6. Have fun
 
-## Running unit tests
+## To run the app in production mode
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+To build the app for production run:
 
-## Running end-to-end tests
+    npm run build
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Static website will be generated. To start local server with build app, run:
 
-## Further help
+    npm run serve
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+---
+
+This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).

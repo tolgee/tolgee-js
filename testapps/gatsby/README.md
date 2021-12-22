@@ -1,54 +1,35 @@
-<p align="center">
-  <a href="https://www.gatsbyjs.com/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter">
-    <img alt="Gatsby" src="https://www.gatsbyjs.com/Gatsby-Monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby minimal starter
-</h1>
+# Example application of using Gatsby with Tolgee
 
-## 🚀 Quick start
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
 
-1.  **Create a Gatsby site.**
+To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
-    Use the Gatsby CLI to create a new site, specifying the minimal starter.
+## To run the app in dev mode
 
-    ```shell
-    # create a new Gatsby site using the minimal starter
-    npm init gatsby
-    ```
+To install dependencies, run:
 
-2.  **Start developing.**
+    npm install
 
-    Navigate into your new site’s directory and start it up.
+To run the app in dev mode with in-context translating mode:
 
-    ```shell
-    cd my-gatsby-site/
-    npm run develop
-    ```
+1. Create a project on [Tolgee Cloud](https://app.tolgee.io) or use
+   self-hosted [Tolgee Server](https://github.com/tolgee/server).
+2. Generate an API-KEY
+3. Copy file `.env` to `.env.development.local`
+4. Set `GATSBY_TOLGEE_API_KEY` to API key obtained in previous step
+5. Run `npm run start`
+6. Have fun
 
-3.  **Open the code and start customizing!**
+## To run the app in production mode
 
-    Your site is now running at http://localhost:8000!
+To build the app for production run:
 
-    Edit `src/pages/index.js` to see your site update in real-time!
+    npm run build
 
-4.  **Learn more**
+Static website will be generated. To start local server with build app, run:
 
-    - [Documentation](https://www.gatsbyjs.com/docs/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+    npm run serve
 
-    - [Tutorials](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
+---
 
-    - [Guides](https://www.gatsbyjs.com/tutorial/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [API Reference](https://www.gatsbyjs.com/docs/api-reference/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Plugin Library](https://www.gatsbyjs.com/plugins?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-    - [Cheat Sheet](https://www.gatsbyjs.com/docs/cheat-sheet/?utm_source=starter&utm_medium=readme&utm_campaign=minimal-starter)
-
-## 🚀 Quick start (Gatsby Cloud)
-
-Deploy this starter with one click on [Gatsby Cloud](https://www.gatsbyjs.com/cloud/):
-
-[<img src="https://www.gatsbyjs.com/deploynow.svg" alt="Deploy to Gatsby Cloud">](https://www.gatsbyjs.com/dashboard/deploynow?url=https://github.com/gatsbyjs/gatsby-starter-minimal)
+This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).
