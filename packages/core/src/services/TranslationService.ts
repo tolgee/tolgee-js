@@ -96,6 +96,7 @@ export class TranslationService {
       );
     }
     this.fetchPromises[lang] = undefined;
+    return this.translationsCache.get(lang);
   }
 
   async getTranslation(

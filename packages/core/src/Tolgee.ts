@@ -20,10 +20,6 @@ export class Tolgee {
     return this.dependencyService.properties;
   }
 
-  get translationService() {
-    return this.dependencyService.translationService;
-  }
-
   public get lang() {
     return this.properties.currentLanguage;
   }
@@ -34,14 +30,16 @@ export class Tolgee {
    * Using this setter can behave buggy when you change languages
    * too fast, since it changes the language property before
    * translations are actually loaded.
-   * @Deprecated use asynchronous changeLanguage method.
+   * @deprecated use asynchronous changeLanguage method.
    */
   public set lang(newLanguage) {
     this.properties.currentLanguage = newLanguage;
 
-    this.translationService.loadTranslations(newLanguage).then(() => {
-      this.emitLangChangeEvent(newLanguage);
-    });
+    this.dependencyService.translationService
+      .loadTranslations(newLanguage)
+      .then(() => {
+        this.emitLangChangeEvent(newLanguage);
+      });
   }
 
   public get defaultLanguage() {
@@ -112,7 +110,9 @@ export class Tolgee {
    * @return Promise<void> Resolves when translations are loaded
    */
   public async changeLanguage(newLanguage: string): Promise<void> {
-    await this.translationService.loadTranslations(newLanguage);
+    await this.dependencyService.translationService.loadTranslations(
+      newLanguage
+    );
     this.properties.currentLanguage = newLanguage;
     this.emitLangChangeEvent(newLanguage);
   }
@@ -133,11 +133,11 @@ export class Tolgee {
       await this.coreService.loadApiKeyDetails();
     }
 
-    await this.translationService.loadTranslations();
+    await this.dependencyService.translationService.loadTranslations();
     await this.dependencyService.pluginManager.run();
 
     if (this.properties.config.preloadFallback) {
-      await this.translationService.loadTranslations(
+      await this.dependencyService.translationService.loadTranslations(
         this.properties.config.fallbackLanguage
       );
     }
@@ -268,6 +268,21 @@ export class Tolgee {
       );
     }
     return translation;
+  }
+
+  /**
+   * Get currently cached translations for all languages
+   */
+  public getCachedTranslations() {
+    return this.dependencyService.translationService.getCachedTranslations();
+  }
+
+  /**
+   * Loads translations for given language or returns them from cache
+   * @returns Loaded translations
+   */
+  public loadTranslations(lang: string) {
+    return this.dependencyService.translationService.loadTranslations(lang);
   }
 
   public stop = () => {

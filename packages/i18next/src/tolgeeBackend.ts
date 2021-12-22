@@ -6,19 +6,13 @@ export const tolgeeBackend = (tolgee: Tolgee): Module => {
     type: 'backend',
     name: 'TolgeeBackend',
     init() {},
-    read: function (language: string, ns: string, callback: any) {
-      if (language !== tolgee.lang) {
-        tolgee.lang = language;
+    read: async function (language: string, ns: string, callback: any) {
+      try {
+        const translations = await tolgee.loadTranslations(language);
+        callback(null, translations);
+      } catch {
+        callback(true);
       }
-      tolgee
-        .translate('random')
-        .then(() => {
-          const translations = tolgee.translationService
-            .getCachedTranslations()
-            .get(language);
-          callback(null, translations);
-        })
-        .catch(() => callback(true));
     },
   } as unknown as Module;
 };
