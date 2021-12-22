@@ -13,7 +13,7 @@
   "license": "MIT",
   "devDependencies": {
     "@tolgee/core": "^3.1.1",
-    "@tolgee/ui": "^3.1.1",
+    "@tolgee/ui": "^3.0.2",
     "copy-webpack-plugin": "^10.2.0",
     "html-webpack-plugin": "^5.5.0",
     "serve": "^13.0.2",
