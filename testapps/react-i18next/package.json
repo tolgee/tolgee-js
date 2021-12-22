@@ -1,14 +1,14 @@
 {
   "name": "test",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@tolgee/core": "^3.1.1",
-    "@tolgee/i18next": "^3.1.1",
-    "@tolgee/ui": "^3.1.1",
+    "@tolgee/core": "^3.1.2",
+    "@tolgee/i18next": "^3.1.2",
+    "@tolgee/ui": "^3.1.2",
     "concurrently": "^6.4.0",
     "i18next": "^21.5.4",
     "i18next-icu": "^2.0.3",

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.2](https://github.com/tolgee/tolgee-js/compare/v3.1.1...v3.1.2) (2021-12-22)
+
+
+### Bug Fixes
+
+* Refactor tolgee-js API TG-455 ([e5518ff](https://github.com/tolgee/tolgee-js/commit/e5518ff7b242a9f80cd67ce0bbb2f42f4b560c11))
+
+
+
+
+
 ## [3.1.1](https://github.com/tolgee/tolgee-js/compare/v3.1.0...v3.1.1) (2021-12-22)
 
 
