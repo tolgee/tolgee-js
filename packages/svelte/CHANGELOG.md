@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.1](https://github.com/tolgee/tolgee-js/compare/v3.1.0...v3.1.1) (2021-12-22)
+
+
+### Bug Fixes
+
+* **js sdk:** Synchronous replacing TG-454 ([77fa921](https://github.com/tolgee/tolgee-js/commit/77fa9215fdc5d1470e4a24b9a9c1f2575985ed1b))
+
+
+
+
+
 ## [3.0.1](https://github.com/tolgee/tolgee-js/compare/v3.0.0...v3.0.1) (2021-12-18)
 
 **Note:** Version bump only for package @tolgee/svelte
