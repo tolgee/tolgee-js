@@ -1,8 +1,8 @@
-# Example application of using react-i18next with Tolgee
+# Example application of using Next with Tolgee
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
 
-This application is using Create React App. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
+This application is using Create Next App. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
 ## To run the app in dev mode
 
@@ -16,8 +16,8 @@ To run the app in dev mode with in-context translating mode:
    self-hosted [Tolgee Server](https://github.com/tolgee/server).
 2. Generate an API-KEY
 3. Copy file `.env` to `.env.development.local`
-4. Set `REACT_APP_TOLGEE_API_KEY` to API key obtained in previous step
-5. Run `npm run start`
+4. Set `NEXT_PUBLIC_TOLGEE_API_KEY` to API key obtained in previous step
+5. Run `npm run dev`
 6. Have fun
 
 ## To run the app in production mode
@@ -26,9 +26,9 @@ To build the app for production run:
 
     npm run build
 
-Static website will be generated. To start local server with build app, run:
+To start local server with build app, run:
 
-    npm run serve
+    npm run start
 
 ---
 

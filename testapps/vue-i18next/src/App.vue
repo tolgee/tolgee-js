@@ -9,7 +9,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Todos from './Todos.vue';
 import TranslationMethods from './TranslationMethods.vue';
 
