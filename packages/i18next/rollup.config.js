@@ -47,6 +47,9 @@ export default {
       sourcemap: true,
     },
   ],
+  watch: {
+    clearScreen: false,
+  },
   external: ['@tolgee/core'],
   plugins: [
     typescript({

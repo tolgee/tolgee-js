@@ -1,11 +1,12 @@
 {
-  "name": "angular",
+  "name": "@tolgee/ngx-testapp",
   "version": "3.1.2",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --configuration=stage",
+    "develop": "ng serve --configuration=stage",
     "startE2e": "ng serve --configuration=e2e --host 0.0.0.0",
     "build": "ng build --configuration=production",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib .angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "serve": "serve -s -p 8101 ./dist/sampleapp"

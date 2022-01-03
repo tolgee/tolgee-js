@@ -1,3 +1,5 @@
+#!/bin/sh
+
 rm -rf extension
 mkdir extension
 cd extension

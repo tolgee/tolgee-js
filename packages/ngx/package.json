@@ -14,7 +14,8 @@
     "ng": "ng",
     "develop": "ng build --watch",
     "build": "ng build",
-    "buildProd": "ng build --prod",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib .angular",
+    "rebuild-prod": "ng build --prod",
     "test": "jest --config ./projects/ngx-tolgee/jest.config.js",
     "lint": "ng lint"
   },

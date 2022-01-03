@@ -1,13 +1,16 @@
 {
-  "name": "tolgee-vue-i18next-example",
+  "name": "@tolgee/vue-i18next-testapp",
   "version": "3.1.2",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
+    "develop": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
+    "build:e2e": "VUE_APP_TOLGEE_API_URL=http://localhost:8202 VUE_APP_TOLGEE_API_KEY=examples-admin-imported-project-implicit vue-cli-service build --skip-plugins @vue/cli-plugin-eslint --dest dist-e2e",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "lint": "vue-cli-service lint",
     "serve": "serve -p 3002 -s dist",
-    "serve-dev": "serve -p 3002 -s dist-dev"
+    "serve:dev": "serve -p 3002 -s dist-e2e"
   },
   "dependencies": {
     "@panter/vue-i18next": "^0.15.2",

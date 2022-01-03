@@ -1,0 +1,5 @@
+cypress/screenshots
+cypress/videos
+node_modules
+testapps/dist
+extension

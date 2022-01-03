@@ -1,0 +1,5 @@
+{
+  "verbose": false,
+  "ignore": [".svelte-kit/*", ".turbo/*", "node_modules/*", "package/*"],
+  "ext": "svelte,ts"
+}

@@ -49,6 +49,9 @@ export default {
       plugins: [terser()],
     },
   ],
+  watch: {
+    clearScreen: false,
+  },
   external: ['@tolgee/core'],
   plugins: [
     typescript({
@@ -57,7 +60,7 @@ export default {
     }),
     nodeResolve(),
     commonjs({
-      include: 'node_modules/**',
+      include: ['node_modules/**'],
     }),
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),

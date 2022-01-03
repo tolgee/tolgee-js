@@ -2,11 +2,11 @@ name: Test
 
 on:
   push:
-    branches-ignore:
-      "main"
+    branches-ignore: 'main'
 
 jobs:
-  main:
+  test:
+    name: 'Test'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,11 +17,185 @@ jobs:
 
       - run: npm install -g npm@7
 
-      - name: Npm ci
-        run: npm ci
+      - name: Cache .npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-test-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            npm-test-${{ runner.os }}-
 
-      - name: Build (build & test)
-        run: ./gradlew build
+      - name: Cache packages node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'packages/*/node_modules'
+          key: packages-node-modules-${{ runner.os }}-${{ hashFiles('packages/*/package-lock.json') }}
+
+      - name: Cache testapps node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'testapps/*/node_modules'
+          key: testapps-node-modules-${{ runner.os }}-${{ hashFiles('testapps/*/package-lock.json') }}
+
+      - name: Cache turborepo
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/.cache/turbo
+          key: turbo-test-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-test-${{ runner.os }}-
+
+      - name: Check turbo cache
+        run: npm run check-cache
+
+      - name: Install
+        run: npm run bootstrap
+
+      - name: Build all packages
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+  cypress-prepare:
+    name: 'Cypress prepare'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - run: npm install -g npm@7
+
+      - name: Cache .npm
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: npm-cypress-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            npm-cypress-${{ runner.os }}-
+
+      - name: Cache root node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'node_modules'
+          key: root-node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache packages node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'packages/*/node_modules'
+          key: packages-node-modules-${{ runner.os }}-${{ hashFiles('packages/*/package-lock.json') }}
+
+      - name: Cache testapps node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'testapps/*/node_modules'
+          key: testapps-node-modules-${{ runner.os }}-${{ hashFiles('testapps/*/package-lock.json') }}
+
+      - name: Cache e2e node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            'e2e/node_modules'
+            '~/.cache/Cypress'
+          key: e2e-node-modules-${{ runner.os }}-${{ hashFiles('e2e/package-lock.json') }}
+
+      - name: Cache turborepo
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/.cache/turbo
+          key: turbo-cypress-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-${{ runner.os }}-
+
+      - name: Check turbo cache
+        run: npm run check-cache
+
+      - name: Install
+        run: npm run bootstrap && npm run install:e2e
+
+      - name: Build
+        run: npm run build:e2e
+
+      - id: set-dirs
+        run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
+        working-directory: e2e/cypress/integration
+
+    outputs:
+      dirs: ${{ steps.set-dirs.outputs.dirs }}
+
+  cypress:
+    name: 'Cypress'
+    # cypress-prepare will install and build everything into cache
+    needs: cypress-prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - run: npm install -g npm@7
+
+      - name: Cache root node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'node_modules'
+          key: root-node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Cache packages node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'packages/*/node_modules'
+          key: packages-node-modules-${{ runner.os }}-${{ hashFiles('packages/*/package-lock.json') }}
+
+      - name: Cache testapps node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'testapps/*/node_modules'
+          key: testapps-node-modules-${{ runner.os }}-${{ hashFiles('testapps/*/package-lock.json') }}
+
+      - name: Cache e2e node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            'e2e/node_modules'
+            '~/.cache/Cypress'
+          key: e2e-node-modules-${{ runner.os }}-${{ hashFiles('e2e/package-lock.json') }}
+
+      - name: Cache turborepo
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/.cache/turbo
+          key: turbo-cypress-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-${{ runner.os }}-
+
+      # Should be fully cached
+      - name: Install
+        run: npm run bootstrap && npm --prefix=e2e install
+
+      # Should be FULL TURBO
+      - name: Build
+        run: npm run build:e2e
+
+      - name: Cypress
+        run: npm --prefix=e2e run start
+        env:
+          E2E_APP: ${{matrix.app}}
+
+      - name: Cypress cleanup
+        if: always()
+        run: npm --prefix=e2e run services:stop
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -30,25 +204,29 @@ jobs:
           path: |
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*
+
   code-checks:
     name: Eslint 🪲
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '12.x'
+          node-version: '14.x'
 
-      - name: Cache node modules
+      - name: Cache .npm
         uses: actions/cache@v2
         with:
           path: ~/.npm
-          key: cache-node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: npm-${{ github.job }}-${{ github.sha }}
+          restore-keys: |
+            npm-${{ github.job }}-
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm install -g npm@7
+
+      - name: Install
+        run: npm run install:root
         working-directory: ./
 
       - name: Eslint

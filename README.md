@@ -42,3 +42,20 @@ To learn more visit [https://tolgee.io](https://tolgee.io)
 To learn more visit [https://tolgee.io](https://tolgee.io)
 
 Let us know what you think! #feedbackwanted ❤️
+
+## Local setup
+
+To install dependencies and bootstrap packages (don't use npm install):
+
+```
+npm run init
+```
+
+To start developing package:
+
+```
+npm run develop:<package>
+```
+
+Which will start development mode for testapp, package and dependencies.
+

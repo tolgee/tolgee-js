@@ -31,6 +31,9 @@ export default {
     },
   ],
   external: ['vue', '@tolgee/core'],
+  watch: {
+    clearScreen: false,
+  },
   plugins: [
     typescript({
       outDir: './',

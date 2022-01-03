@@ -3,7 +3,7 @@ node_modules
 /build
 /.svelte-kit
 /package
-build-dev
+build-e2e
 .env.development.local
 .env.local
 .env.production.local

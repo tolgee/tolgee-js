@@ -23,11 +23,24 @@ jobs:
 
       - run: npm install -g npm@7
 
-      - name: Npm ci
-        run: npm ci
+      - name: Install
+        run: npm run init
 
-      - name: Build (build & test)
-        run: ./gradlew build
+      - name: Build all packages
+        run: npm run build
+
+      - name: Test
+        run: npm run test
+
+      - name: Build for cypress
+        run: npm run build:e2e
+
+      - name: Cypress
+        run: npm --prefix=e2e run start
+
+      - name: Cypress cleanup
+        if: always()
+        run: npm --prefix=e2e run services:stop
 
       - name: Set git globals
         run: |
@@ -41,14 +54,11 @@ jobs:
       - name: Update version
         run: lerna version --yes
 
-      - name: Rebuild ngx package with correct version and without Ivy
-        run: ./gradlew buildNgxForPublish
-
-      - name: Rebuild Svelte with new package version
-        run: ./gradlew buildSvelte
+      - name: Some packages need to be rebuilt after version change
+        run: npm run rebuild-prod
 
       - name: Publish
-        run: npm run lerna-publish
+        run: npm run lerna:publish
 
       - uses: actions/upload-artifact@v2
         if: always()

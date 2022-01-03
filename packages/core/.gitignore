@@ -1,16 +1,12 @@
 .DS_Store
 node_modules
 /dist
-/build
-/build-e2e
-.cache
-public
+/lib
 
 
 # local env files
 .env.local
 .env.*.local
-.env.*
 
 # Log files
 npm-debug.log*

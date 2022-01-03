@@ -3,9 +3,14 @@
   "version": "1.0.0-alpha.8",
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {
-    "cy:run": "cypress run --browser chrome --headed",
+    "start": "npm run services:start && npm run download-extension && npm run services:wait-for-start && npm run cy:run",
+    "cy:run": "sh scripts/startCypress.sh",
     "cy:open": "cypress open --browser chrome",
-    "download-extension": "sh download_tolgee_extension.sh"
+    "cy:folders-json": "node scripts/listTests.js",
+    "download-extension": "sh scripts/downloadTolgeeExtension.sh",
+    "services:start": "sh scripts/startServices.sh",
+    "services:wait-for-start": "node scripts/waitForServices.js",
+    "services:stop": "docker compose stop; docker compose rm -f -v"
   },
   "author": "Jan Cizmar",
   "license": "BSD",

@@ -1,11 +1,12 @@
 {
-  "name": "@tolgee/testapps-core",
+  "name": "@tolgee/core-testapp",
   "version": "3.1.2",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
   "scripts": {
     "build": "webpack",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "develop": "webpack --watch",
     "serve": "serve -p 8101 ./dist"
   },
