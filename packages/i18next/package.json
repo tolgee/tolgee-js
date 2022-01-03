@@ -25,8 +25,9 @@
   },
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --project tsconfig.prod.json",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "test": "jest --config ./jest.config.js",
-    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --project tsconfig.prod.json\" ",
+    "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --preserveWatchOutput --project tsconfig.prod.json\" ",
     "schema": "openapi-typescript http://localhost:8080/v3/api-docs/All%20Internal%20-%20for%20Tolgee%20Web%20application --output ./src/types/apiSchema.generated.ts",
     "typedoc": "typedoc --entryPointStrategy expand --out docs src/index.ts src/Tolgee.ts src/types.ts src/services/EventEmitter.ts  src/services/Subscription.ts"
   },

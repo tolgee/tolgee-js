@@ -37,6 +37,9 @@ export default {
       plugins: [terser()],
     },
   ],
+  watch: {
+    clearScreen: false,
+  },
   external: ['react', '@tolgee/core'],
   plugins: [
     typescript({

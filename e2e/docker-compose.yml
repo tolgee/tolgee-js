@@ -30,6 +30,7 @@ services:
       - 8101:8101
     command: ['npm', 'run', 'serve']
     working_dir: /data
+
   e2e_app_react_prod:
     container_name: tolgee_js_e2e_serve_testapps_react_prod
     build: ../docker
@@ -46,7 +47,7 @@ services:
       - '../:/data'
     ports:
       - 8113:8101
-    command: ['npm', 'run', 'serve-dev']
+    command: ['npm', 'run', 'serve:dev']
     working_dir: /data/testapps/react
   e2e_app_gatsby_dev:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
@@ -90,9 +91,9 @@ services:
       - 8107:3000
     command: ['npm', 'run', 'start']
     environment:
-      NEXT_BUILD_DIR: dist
+      NEXT_BUILD_DIR: dist-e2e
     working_dir: /data/testapps/next
-  e2e_app_next_internal:
+  e2e_app_next-internal:
     container_name: tolgee_js_e2e_serve_testapps_next_internal
     build: ../docker
     volumes:
@@ -119,7 +120,7 @@ services:
       - '../:/data'
     ports:
       - 8110:5000
-    command: npm run serve-dev
+    command: npm run serve:e2e
     environment:
       VITE_TOLGEE_API_URL: http://localhost:8202
       VITE_TOLGEE_API_KEY: examples-admin-imported-project-implicit
@@ -140,9 +141,9 @@ services:
       - '../:/data'
     ports:
       - 8112:3002
-    command: ['npm', 'run', 'serve-dev']
+    command: ['npm', 'run', 'serve:dev']
     working_dir: /data/testapps/vue
-  e2e_app_angular_prod:
+  e2e_app_ngx_prod:
     container_name: tolgee_js_e2e_serve_testapps_ngx_prod
     build: ../docker
     volumes:
@@ -151,7 +152,7 @@ services:
       - 8115:8101
     command: ['npm', 'run', 'serve']
     working_dir: /data/testapps/ngx
-  e2e_app_angular_dev:
+  e2e_app_ngx_dev:
     container_name: tolgee_js_e2e_serve_testapps_ngx_dev
     build: ../docker
     volumes:
@@ -160,7 +161,7 @@ services:
       - 8116:4200
     command: ['npm', 'run', 'startE2e']
     working_dir: /data/testapps/ngx
-  e2e_app_react_i18next_prod:
+  e2e_app_react-i18next_prod:
     container_name: tolgee_js_e2e_serve_testapps_react_i18next_prod
     build: ../docker
     volumes:
@@ -169,16 +170,16 @@ services:
       - 8117:8101
     command: ['npm', 'run', 'serve']
     working_dir: /data/testapps/react-i18next
-  e2e_app_react_i18next_dev:
+  e2e_app_react-i18next_dev:
     container_name: tolgee_js_e2e_serve_testapps_react_i18next_dev
     build: ../docker
     volumes:
       - '../:/data'
     ports:
       - 8118:8101
-    command: ['npm', 'run', 'serve-dev']
+    command: ['npm', 'run', 'serve:dev']
     working_dir: /data/testapps/react-i18next
-  e2e_app_vue_i18next_prod:
+  e2e_app_vue-i18next_prod:
     container_name: tolgee_js_e2e_serve_testapps_vue_i18next_prod
     build: ../docker
     volumes:
@@ -187,12 +188,12 @@ services:
       - 8119:3002
     command: ['npm', 'run', 'serve']
     working_dir: /data/testapps/vue-i18next
-  e2e_app_vue_i18next_dev:
+  e2e_app_vue-i18next_dev:
     container_name: tolgee_js_e2e_serve_testapps_vue_i18next_dev
     build: ../docker
     volumes:
       - '../:/data'
     ports:
       - 8120:3002
-    command: ['npm', 'run', 'serve-dev']
+    command: ['npm', 'run', 'serve:dev']
     working_dir: /data/testapps/vue-i18next

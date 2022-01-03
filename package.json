@@ -1,12 +1,46 @@
 {
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/ngx/projects/ngx-tolgee",
+      "testapps/*"
+    ]
+  },
   "name": "root",
   "private": true,
   "scripts": {
-    "lerna-bootstrap": "lerna bootstrap",
-    "lerna-publish": "lerna publish from-package --yes",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "init": "npm run bootstrap && npm run install:e2e",
+    "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
+    "develop": "turbo run develop --parallel --include-dependencies",
+    "develop:core": "npm run develop -- --scope=@tolgee/core-testapp",
+    "develop:react": "npm run develop -- --scope=@tolgee/react-testapp",
+    "develop:vue": "npm run develop -- --scope=@tolgee/vue-testapp",
+    "develop:svelte": "npm run develop -- --scope=@tolgee/svelte-testapp",
+    "develop:ngx": "npm run develop -- --scope=@tolgee/ngx-testapp --scope=@tolgee/ngx-workspace",
+    "develop:next": "npm run develop -- --scope=@tolgee/next-testapp",
+    "develop:next-internal": "npm run develop -- --scope=@tolgee/next-internal-testapp",
+    "develop:gatsby": "npm run develop -- --scope=@tolgee/gatsby-testapp",
+    "develop:react-i18next": "npm run develop -- --scope=@tolgee/react-i18next-testapp",
+    "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
+    "build:e2e": "turbo run build:e2e",
+    "test:e2e": "npm run build:e2e && npm --prefix e2e run start",
+    "clean": "turbo run clean",
+    "clean:all": "npm run clean && npm run clean:turbo && npm run clean:installation",
+    "clean:installation": "node scripts/cleanNodeModules.js",
+    "clean:turbo": "node scripts/cleanTurbo.js",
+    "lerna:bootstrap": "lerna bootstrap",
+    "lerna:publish": "lerna publish from-package --yes",
+    "bootstrap": "npm run install:root && npm run lerna:bootstrap && npm run link-react",
+    "install:root": "node scripts/workspacesRemove.js && npm install; node scripts/workspacesRestore.js",
+    "install:packages": "npm run install:root && npx lerna exec -- npm install",
+    "install:e2e": "npm --prefix=e2e install",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "prettier": "prettier --write ./packages ./testapps ./e2e",
-    "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 --report-unused-disable-directives ."
+    "link-react": "node scripts/linkReact.js",
+    "rebuild-prod": "turbo run rebuild-prod",
+    "check-cache": "node scripts/checkCacheSize.js",
+    "preinstall": "node scripts/checkCorrectInstall.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.0.1",
@@ -23,11 +57,69 @@
     "lerna": "^4.0.0",
     "prettier": "^2.3.1",
     "prettier-plugin-svelte": "2.4.0",
+    "turbo": "1.0.26",
     "typescript": "^4.3.5"
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "turbo": {
+    "baseBranch": "origin/main",
+    "npmClient": "npm",
+    "globalDependencies": [".env*"],
+    "pipeline": {
+      "build-gatsby": {
+        "dependsOn": ["^build"],
+        "outputs": ["public/**", ".cache/**"]
+      },
+      "build": {
+        "dependsOn": [
+          "^build",
+          "build-gatsby"
+        ],
+        "outputs": [
+          "dist/**",
+          "lib/**",
+          "package/**",
+          "build/**",
+          ".next/**",
+          ".angular/**",
+          ".svelte-kit/**"
+        ]
+      },
+      "build:e2e": {
+        "dependsOn": [
+          "build"
+        ],
+        "outputs": [
+          "dist/**",
+          "lib/**",
+          "package/**",
+          "build/**",
+          ".next/**",
+          ".angular/**",
+          ".svelte-kit/**",
+          "dist-e2e/**",
+          "build-e2e/**"
+        ]
+      },
+      "test": {
+        "dependsOn": ["build"]
+      },
+      "develop": {
+        "dependsOn": ["^develop"],
+        "cache": false
+      },
+      "rebuild-prod": {
+        "dependsOn": [],
+        "cache": false
+      },
+      "clean": {
+        "dependsOn": [],
+        "cache": false
+      }
+    }
   }
 }

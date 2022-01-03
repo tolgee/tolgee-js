@@ -2,7 +2,7 @@
 node_modules
 /dist
 /build
-/build-dev
+/build-e2e
 
 
 # local env files

@@ -1,5 +1,5 @@
 {
-  "name": "tolgee-gatsby-test-app",
+  "name": "@tolgee/gatsby-testapp",
   "version": "3.1.2",
   "private": true,
   "description": "Tolgee Gatsby TestApp",
@@ -10,7 +10,7 @@
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
-    "build": "gatsby build",
+    "build-gatsby": "gatsby build",
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },

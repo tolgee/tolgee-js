@@ -1,10 +1,13 @@
 {
-  "name": "tolgee-next-example",
+  "name": "@tolgee/next-testapp",
   "version": "3.1.2",
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "develop": "next dev",
     "build": "next build",
+    "build:e2e": "NEXT_BUILD_DIR=dist-e2e next build",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib .next",
     "start": "next start",
     "lint": "next lint"
   },

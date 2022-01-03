@@ -41,6 +41,9 @@ export default {
       sourcemap: true,
     },
   ],
+  watch: {
+    clearScreen: false,
+  },
   plugins: [
     typescript({
       outDir: './',
