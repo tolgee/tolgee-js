@@ -39,7 +39,7 @@
     "@angular/language-service": "~13.1.1",
     "@testing-library/angular": "^10.11.1",
     "@testing-library/jest-dom": "5.16.1",
-    "@types/jasmine": "~3.10.2",
+    "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "~2.0.3",
     "@types/jest": "27.0.3",
     "@types/node": "^16.11.13",
