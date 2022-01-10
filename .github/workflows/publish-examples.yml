@@ -63,6 +63,6 @@ jobs:
           git add .
           git config --local user.email "machine@tolgee.io"
           git config --local user.name "Tolgee Automation Machine"
-          git commit -m "chore: Publishing example: ${{ github.event.commits[0].message }}" -a || true
+          git commit -m "chore: Publishing example: $(git show -s --format=%s)" -a || true
           git push
         working-directory: testapps/${{ matrix.project }}
