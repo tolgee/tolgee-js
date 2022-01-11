@@ -39,6 +39,7 @@ jobs:
       - name: Read last commit
         id: get-commit-message
         run: echo "::set-output name=COMMIT::$(git show -s --format=%s)"
+        working-directory: root
 
       - run: mkdir -p testapps/${{ matrix.project }}
 
