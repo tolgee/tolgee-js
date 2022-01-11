@@ -36,6 +36,10 @@ jobs:
 
       - run: npm install -g npm@7
 
+      - name: Read last commit
+        id: get-commit-message
+        run: echo "::set-output name=COMMIT::$(git show -s --format=%s)"
+
       - run: mkdir -p testapps/${{ matrix.project }}
 
       - uses: actions/checkout@v2
@@ -63,6 +67,6 @@ jobs:
           git add .
           git config --local user.email "machine@tolgee.io"
           git config --local user.name "Tolgee Automation Machine"
-          git commit -m "chore: Publishing example: $(git show -s --format=%s)" -a || true
+          git commit -m "${{ steps.get-commit-message.outputs.COMMIT }} (published from monorepo)" -a || true
           git push
         working-directory: testapps/${{ matrix.project }}
