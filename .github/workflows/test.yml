@@ -25,6 +25,12 @@ jobs:
           restore-keys: |
             npm-test-${{ runner.os }}-
 
+      - name: Cache root node_modules
+        uses: actions/cache@v2
+        with:
+          path: 'node_modules'
+          key: root-node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - name: Cache packages node_modules
         uses: actions/cache@v2
         with:
@@ -37,25 +43,14 @@ jobs:
           path: 'testapps/*/node_modules'
           key: testapps-node-modules-${{ runner.os }}-${{ hashFiles('testapps/*/package-lock.json') }}
 
-      - name: Cache turborepo
-        uses: actions/cache@v2
-        with:
-          path: ./node_modules/.cache/turbo
-          key: turbo-test-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            turbo-test-${{ runner.os }}-
-
-      - name: Check turbo cache
-        run: npm run check-cache
-
       - name: Install
-        run: npm run bootstrap
+        run: npm run ci:install:root && npm run bootstrap
 
       - name: Build all packages
-        run: npm run build
+        run: npm run ci:build
 
       - name: Test
-        run: npm run test
+        run: npm run ci:test
 
   cypress-prepare:
     name: 'Cypress prepare'
@@ -103,22 +98,30 @@ jobs:
             '~/.cache/Cypress'
           key: e2e-node-modules-${{ runner.os }}-${{ hashFiles('e2e/package-lock.json') }}
 
-      - name: Cache turborepo
+      - name: Cache build results
         uses: actions/cache@v2
         with:
-          path: ./node_modules/.cache/turbo
-          key: turbo-cypress-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            turbo-cypress-${{ runner.os }}-
-
-      - name: Check turbo cache
-        run: npm run check-cache
+          path: |
+            */*/dist
+            */*/lib
+            */*/package
+            */*/build
+            */*/.next
+            */*/.angular
+            */*/.svelte-kit
+            */*/dist-e2e
+            */*/build-e2e
+            testapps/gatsby/public
+          key: e2e-build-${{ runner.os }}-${{ github.sha }}
 
       - name: Install
-        run: npm run bootstrap && npm run install:e2e
+        run: npm run ci:init
 
       - name: Build
-        run: npm run build:e2e
+        run: npm run ci:build
+
+      - name: Build e2e
+        run: npm run ci:build:e2e
 
       - id: set-dirs
         run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
@@ -172,21 +175,24 @@ jobs:
             '~/.cache/Cypress'
           key: e2e-node-modules-${{ runner.os }}-${{ hashFiles('e2e/package-lock.json') }}
 
-      - name: Cache turborepo
+      - name: Cache build results
         uses: actions/cache@v2
         with:
-          path: ./node_modules/.cache/turbo
-          key: turbo-cypress-${{ runner.os }}-${{ github.sha }}
-          restore-keys: |
-            turbo-cypress-${{ runner.os }}-
+          path: |
+            */*/dist
+            */*/lib
+            */*/package
+            */*/build
+            */*/.next
+            */*/.angular
+            */*/.svelte-kit
+            */*/dist-e2e
+            */*/build-e2e
+            testapps/gatsby/public
+          key: e2e-build-${{ runner.os }}-${{ github.sha }}
 
-      # Should be fully cached
       - name: Install
-        run: npm run bootstrap && npm --prefix=e2e install
-
-      # Should be FULL TURBO
-      - name: Build
-        run: npm run build:e2e
+        run: npm run ci:init
 
       - name: Cypress
         run: npm --prefix=e2e run start
@@ -226,7 +232,7 @@ jobs:
       - run: npm install -g npm@7
 
       - name: Install
-        run: npm run install:root
+        run: npm run ci:install:root
         working-directory: ./
 
       - name: Eslint

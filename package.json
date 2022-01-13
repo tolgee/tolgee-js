@@ -11,7 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "test": "turbo run test",
-    "init": "npm run bootstrap && npm run install:e2e",
+    "init": "npm run install:root && npm run bootstrap && npm run install:e2e",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "develop": "turbo run develop --parallel --include-dependencies",
     "develop:core": "npm run develop -- --scope=@tolgee/core-testapp",
@@ -26,19 +26,25 @@
     "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
     "build:e2e": "turbo run build:e2e",
     "test:e2e": "npm run build:e2e && npm --prefix e2e run start",
+    "ci:build": "lerna run build && lerna run build-gatsby",
+    "ci:test": "lerna run test",
+    "ci:build:e2e": "lerna run build:e2e",
+    "ci:rebuild-prod": "lerna run rebuild-prod",
+    "ci:install:root": "node scripts/workspacesRemove.js && npm ci; node scripts/workspacesRestore.js",
+    "ci:install:e2e": "npm --prefix=e2e ci",
+    "ci:init": "npm run ci:install:root && npm run bootstrap && npm run ci:install:e2e",
     "clean": "turbo run clean",
     "clean:all": "npm run clean && npm run clean:turbo && npm run clean:installation",
     "clean:installation": "node scripts/cleanNodeModules.js",
     "clean:turbo": "node scripts/cleanTurbo.js",
     "lerna:bootstrap": "lerna bootstrap",
     "lerna:publish": "lerna publish from-package --yes",
-    "bootstrap": "npm run install:root && npm run lerna:bootstrap && npm run link-react",
+    "bootstrap": "npm run lerna:bootstrap && npm run link-react",
     "install:root": "node scripts/workspacesRemove.js && npm install; node scripts/workspacesRestore.js",
     "install:packages": "npm run install:root && npx lerna exec -- npm install",
     "install:e2e": "npm --prefix=e2e install",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "link-react": "node scripts/linkReact.js",
-    "rebuild-prod": "turbo run rebuild-prod",
     "check-cache": "node scripts/checkCacheSize.js",
     "preinstall": "node scripts/checkCorrectInstall.js"
   },
@@ -110,10 +116,6 @@
       },
       "develop": {
         "dependsOn": ["^develop"],
-        "cache": false
-      },
-      "rebuild-prod": {
-        "dependsOn": [],
         "cache": false
       },
       "clean": {
