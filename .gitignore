@@ -6,3 +6,4 @@ node_modules
 .gradle
 .idea
 **/.turbo
+**/.npmrc

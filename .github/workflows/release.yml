@@ -24,16 +24,16 @@ jobs:
       - run: npm install -g npm@7
 
       - name: Install
-        run: npm run init
+        run: npm run ci:init
 
       - name: Build all packages
-        run: npm run build
+        run: npm run ci:build
 
       - name: Test
-        run: npm run test
+        run: npm run ci:test
 
       - name: Build for cypress
-        run: npm run build:e2e
+        run: npm run ci:build:e2e
 
       - name: Cypress
         run: npm --prefix=e2e run start
@@ -55,7 +55,7 @@ jobs:
         run: lerna version --yes
 
       - name: Some packages need to be rebuilt after version change
-        run: npm run rebuild-prod
+        run: npm run ci:rebuild-prod
 
       - name: Publish
         run: npm run lerna:publish
