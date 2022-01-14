@@ -29,7 +29,7 @@
     "jest": "27.4.7",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
-    "prettier-plugin-svelte": "^2.5.1",
+    "prettier-plugin-svelte": "^2.6.0",
     "svelte": "^3.46.1",
     "svelte-check": "^2.2.12",
     "svelte-jester": "2.1.5",
