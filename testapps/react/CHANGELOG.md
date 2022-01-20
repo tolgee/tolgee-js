@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.1.4](https://github.com/tolgee/tolgee-js/compare/v3.1.3...v3.1.4) (2022-01-20)
+
+
+### Bug Fixes
+
+* React example app favicon TG-469 ([997e561](https://github.com/tolgee/tolgee-js/commit/997e561d826877be56ec8b63e7f9057b30163bbc))
+
+
+
+
+
 ## [3.1.3](https://github.com/tolgee/tolgee-js/compare/v3.1.2...v3.1.3) (2022-01-13)
 
 **Note:** Version bump only for package @tolgee/react-testapp
