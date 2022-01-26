@@ -27,6 +27,6 @@
     "@vue/compiler-sfc": "^3.2.29",
     "prettier": "^2.5.1",
     "serve": "^13.0.2",
-    "typescript": "~4.5.4"
+    "typescript": "~4.5.5"
   }
 }
