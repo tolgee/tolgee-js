@@ -30,7 +30,7 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.6.0",
-    "svelte": "^3.46.2",
+    "svelte": "^3.46.3",
     "svelte-check": "^2.3.0",
     "svelte-jester": "2.1.5",
     "svelte-preprocess": "^4.10.2",
