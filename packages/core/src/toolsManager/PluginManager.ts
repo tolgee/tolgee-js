@@ -82,6 +82,8 @@ export class PluginManager {
   private readonly handshake = () => {
     const sharedConfiguration: Partial<Properties> & {
       config: Partial<TolgeeConfig>;
+      uiPresent: boolean;
+      uiVersion: string | undefined;
     } = {
       ...this.properties,
       config: {
@@ -92,6 +94,8 @@ export class PluginManager {
         _targetElement: undefined,
         ui: undefined,
       } as any as TolgeeConfig,
+      uiPresent: Boolean(this.properties.config.ui),
+      uiVersion: process.env.TOLGEE_UI_VERSION,
     };
 
     let timer: NodeJS.Timer = null;

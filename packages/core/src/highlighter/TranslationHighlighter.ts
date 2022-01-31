@@ -36,7 +36,7 @@ export class TranslationHighlighter {
     if (this._renderer === undefined) {
       const possibleProviders = [
         this.dependencies.properties.config.ui,
-        window['@tolgee/ui'],
+        window['@tolgee/ui']?.UI,
       ];
       for (const possibleProvider of possibleProviders) {
         if (typeof possibleProvider === 'function') {
