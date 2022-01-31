@@ -1,9 +1,9 @@
-name: Release
+name: Prerelease
 
 on:
-  push:
-    branches:
-      - 'main'
+  create:
+    tags:
+      - 'prerelease-*'
 
 jobs:
   main:
@@ -27,7 +27,7 @@ jobs:
         run: npm run ci:init
 
       - name: Update version locally
-        run: lerna version --yes --no-push
+        run: lerna version --no-push --conventional-commits --conventional-prerelease --no-changelog --preid $(git rev-parse HEAD)
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
@@ -36,30 +36,9 @@ jobs:
       - name: Build all packages
         run: npm run ci:build
 
-      - name: Test
-        run: npm run ci:test
-
-      - name: Build for cypress
-        run: npm run ci:build:e2e
-
-      - name: Cypress
-        run: npm --prefix=e2e run start
-
-      - name: Cypress cleanup
-        if: always()
-        run: npm --prefix=e2e run services:stop
-
-      - name: Set git globals
-        run: |
-          git config --local user.email "machine@tolgee.io"
-          git config --local user.name "Tolgee Machine"
-
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Push to git
-        run: git push --follow-tags
 
       - name: Publish
         run: lerna publish from-package --yes
