@@ -4,7 +4,6 @@
   "scripts": {
     "build": "svelte-kit package",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
-    "rebuild-prod": "npm run build",
     "preview": "svelte-kit preview",
     "develop": "nodemon --exec svelte-kit build",
     "test": "jest src",
