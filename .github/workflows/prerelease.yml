@@ -1,0 +1,62 @@
+name: Prerelease
+
+on:
+  push:
+    tags:
+      - 'prerelease'
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+
+      - name: Create branch
+        run: | 
+          git checkout -b prerelease-$(git rev-parse --short HEAD)
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - run: npm install -g npm@7
+
+      - name: Install
+        run: npm run ci:init
+
+      - name: Update version locally
+        run: |
+          lerna version --yes --conventional-commits --conventional-prerelease --preid prerelease-$(git rev-parse --short HEAD) \
+            --no-push --no-git-tag-version
+
+      # Set TOLGEE_UI_VERSION for @tolgee/core build
+      - name: Set env
+        run: echo "TOLGEE_UI_VERSION=$(npm run --silent ui-version)" >> $GITHUB_ENV
+
+      - name: Build all packages
+        run: npm run ci:build
+
+      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Recreate release with push
+        run: |
+          git stash &&  \
+          git stash drop && \
+          git push --follow-tags -u origin $(git rev-parse --abbrev-ref HEAD) && \
+          lerna version --yes --conventional-commits --conventional-prerelease --preid prerelease-$(git rev-parse --short HEAD) \
+            --create-release github
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish
+        run: lerna publish from-package --yes --dist-tag prerelease

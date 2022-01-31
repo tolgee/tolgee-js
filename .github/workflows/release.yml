@@ -23,8 +23,20 @@ jobs:
 
       - run: npm install -g npm@7
 
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
       - name: Install
         run: npm run ci:init
+
+      - name: Update version locally
+        run: lerna version --yes --no-push --no-git-tag-version --conventional-commits
+
+      # Set TOLGEE_UI_VERSION for @tolgee/core build
+      - name: Set env
+        run: echo "TOLGEE_UI_VERSION=$(npm run --silent ui-version)" >> $GITHUB_ENV
 
       - name: Build all packages
         run: npm run ci:build
@@ -42,23 +54,15 @@ jobs:
         if: always()
         run: npm --prefix=e2e run services:stop
 
-      - name: Set git globals
-        run: |
-          git config --local user.email "machine@tolgee.io"
-          git config --local user.name "Tolgee Machine"
-
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Update version
-        run: lerna version --yes
-
-      - name: Some packages need to be rebuilt after version change
-        run: npm run ci:rebuild-prod
+      - name: Recreate release and push
+        run: git stash && git stash drop && lerna version --yes --conventional-commits
 
       - name: Publish
-        run: npm run lerna:publish
+        run: lerna publish from-package --yes
 
       - uses: actions/upload-artifact@v2
         if: always()

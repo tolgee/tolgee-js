@@ -52,14 +52,15 @@ describe('TranslationHighlighter', () => {
 
     test('works when UI is provided using window provider', async () => {
       getMockedInstance(Properties).config.ui = undefined;
-      window['@tolgee/ui'] = () =>
-        new Promise((resolve) => resolve(getUiClassMock()));
+      window['@tolgee/ui'] = {
+        UI: () => new Promise((resolve) => resolve(getUiClassMock())),
+      };
       await checkIt();
     });
 
     test('works when UI is provided using window constructor', async () => {
       getMockedInstance(Properties).config.ui = undefined;
-      window['@tolgee/ui'] = getUiClassMock();
+      window['@tolgee/ui'] = { UI: getUiClassMock() };
       await checkIt();
     });
   });
