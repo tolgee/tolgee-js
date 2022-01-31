@@ -2,7 +2,9 @@ name: Test
 
 on:
   push:
-    branches-ignore: 'main'
+    branches-ignore:
+      - 'main'
+      - 'rc-*'
 
 jobs:
   test:
