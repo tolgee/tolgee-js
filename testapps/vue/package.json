@@ -16,7 +16,7 @@
     "@tolgee/core": "^3.1.3",
     "@tolgee/ui": "^3.1.3",
     "@tolgee/vue": "^3.1.3",
-    "core-js": "^3.20.3",
+    "core-js": "^3.21.0",
     "vue": "^3.0.0"
   },
   "devDependencies": {
