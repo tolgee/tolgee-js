@@ -8,8 +8,8 @@
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
-Lokalize (translate) your Angular app to multiple languages with Tolgee. For more information about using Tolgee with
-angular, visit our [documentation website](https://toolkit.tolgee.io/docs/web/using_with_angular/installation).
+Localize (translate) your Angular app to multiple languages with Tolgee. For more information about using Tolgee with
+Angular, visit our [documentation website](https://toolkit.tolgee.io/docs/web/using_with_angular/installation).
 Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
 ## Features
@@ -82,7 +82,7 @@ this.translateService
 
 ## Prerequisites
 
-1. You have some React based project
+1. You have some Angular based project
 2. You have generated API key from [Tolgee Cloud](https://app.tolgee.io) or self-hosted Tolgee instance.
 
 ## Quick integration guide
