@@ -7,7 +7,10 @@ import { Link } from 'gatsby-plugin-react-intl';
 const getInitialItems = () => {
   let items: string[] | undefined = undefined;
   try {
-    items = JSON.parse(localStorage.getItem('tolgee-example-app-items') || '');
+    items =
+      (typeof localStorage !== 'undefined' &&
+        JSON.parse(localStorage.getItem('tolgee-example-app-items') || '[]')) ||
+      [];
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(

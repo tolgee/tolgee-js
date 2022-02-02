@@ -1,22 +1,18 @@
 <script lang="ts">
-  import { TolgeeProvider } from "@tolgee/svelte";
-  import UI from "@tolgee/ui";
-  import type { TolgeeConfig } from "@tolgee/core";
-  import enLang from "../i18n/en.json"
-  import deLang from "../i18n/de.json"
-  import csLang from "../i18n/cs.json"
-  import frLang from "../i18n/fr.json"
+  import { TolgeeProvider } from '@tolgee/svelte';
+  import UI from '@tolgee/ui';
+  import type { TolgeeConfig } from '@tolgee/core';
 
   const tolgeeConfig = {
     preloadFallback: true,
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
-    ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
+    ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,
     staticData: {
-      en: enLang,
-      cs: csLang,
-      de: deLang,
-      fr: frLang
+      en: () => import('../i18n/en.json').then((m) => m.default),
+      de: () => import('../i18n/de.json').then((m) => m.default),
+      cs: () => import('../i18n/cs.json').then((m) => m.default),
+      fr: () => import('../i18n/fr.json').then((m) => m.default)
     },
     availableLanguages: ['en', 'de', 'cs', 'fr']
   } as TolgeeConfig;

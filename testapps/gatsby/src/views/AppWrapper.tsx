@@ -4,24 +4,23 @@ import { TolgeeProvider } from '@tolgee/react';
 import { useIntl } from 'gatsby-plugin-react-intl';
 import '../style/style.css';
 
-import * as translationsEn from '../i18n/en.json';
-import * as translationsDe from '../i18n/de.json';
-import * as translationsCs from '../i18n/cs.json';
-import * as translationsFr from '../i18n/fr.json';
-
 export const AppWrapper: React.FC = ({ children }) => {
-  const intl = useIntl();
+  const { locale, messages } = useIntl();
 
   return (
     <TolgeeProvider
-      forceLanguage={intl.locale}
+      forceLanguage={locale}
       apiKey={process.env.GATSBY_TOLGEE_API_KEY}
       apiUrl={process.env.GATSBY_TOLGEE_API_URL}
+      wrapperMode="invisible"
+      fallbackLanguage="en"
       staticData={{
-        en: translationsEn,
-        de: translationsDe,
-        cs: translationsCs,
-        fr: translationsFr,
+        de: () => import('../i18n/de.json'),
+        cs: () => import('../i18n/cs.json'),
+        fr: () => import('../i18n/fr.json'),
+        en: () => import(`../i18n/en.json`),
+        // translations provided by intl plugin
+        [locale]: messages as Record<string, string>,
       }}
       loadingFallback={<div>Loading...</div>}
       ui={
