@@ -8,7 +8,9 @@ const getInitialItems = () => {
   let items: string[] | undefined = undefined;
 
   try {
-    items = JSON.parse(localStorage.getItem('tolgee-example-app-items') || '');
+    items = JSON.parse(
+      localStorage.getItem('tolgee-example-app-items') || '[]'
+    );
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(
@@ -60,17 +62,17 @@ export const Todos = () => {
         <Navbar>
           <Link href="/translation-methods">
             <a>
-              <T keyName="menu-item-translation-methods">Translation methods</T>
+              <T keyName="menu-item-translation-methods" />
             </a>
           </Link>
         </Navbar>
 
         <header>
           <h1 className="header__title">
-            <T keyName="on-the-road-title">On the road</T>
+            <T keyName="on-the-road-title" />
           </h1>
           <h2 className="header__subtitle">
-            <T keyName="on-the-road-subtitle">what to pack for the trip</T>
+            <T keyName="on-the-road-subtitle" />
           </h2>
         </header>
         <section className="items">
@@ -80,7 +82,6 @@ export const Todos = () => {
               onChange={(e) => setNewItemValue(e.target.value)}
               placeholder={t({
                 key: 'add-item-input-placeholder',
-                defaultValue: 'New list item',
               })}
             />
             <button onClick={onAdd} disabled={!newItemValue} className="button">

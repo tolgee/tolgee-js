@@ -32,6 +32,10 @@ export class TranslationService {
   >();
   private fetchPromises: { [key: string]: Promise<any> } = {};
 
+  // we need to distinguish which languages are in cache initially
+  // because we need to refetch them in dev mode
+  private fetchedDev: { [key: string]: boolean } = {};
+
   constructor(
     private properties: Properties,
     private coreService: CoreService,
@@ -52,10 +56,7 @@ export class TranslationService {
   }
 
   initStatic() {
-    if (
-      this.properties.config.mode === 'production' &&
-      typeof this.properties.config?.staticData === 'object'
-    ) {
+    if (typeof this.properties.config?.staticData === 'object') {
       Object.entries(this.properties.config.staticData).forEach(
         ([language, data]) => {
           //if not provider or promise then it is raw data
@@ -86,7 +87,7 @@ export class TranslationService {
   };
 
   async loadTranslations(lang: string = this.properties.currentLanguage) {
-    if (this.translationsCache.get(lang) == undefined) {
+    if (this.isFetchNeeded(lang)) {
       if (!(this.fetchPromises[lang] instanceof Promise)) {
         this.fetchPromises[lang] = this.fetchTranslations(lang);
       }
@@ -104,24 +105,18 @@ export class TranslationService {
     lang: string = this.properties.currentLanguage,
     defaultValue?: string
   ): Promise<string> {
+    if (this.isFetchNeeded(lang)) {
+      await this.loadTranslations(lang);
+    }
     let message = this.getFromCache(key, lang);
 
     if (!message) {
-      await this.loadTranslations(lang);
-      message = this.getFromCache(key, lang);
-      if (!message) {
-        message = this.getFromCache(
-          key,
-          this.properties.config.fallbackLanguage
-        );
-        if (!message) {
-          await this.loadTranslations(this.properties.config.fallbackLanguage);
-          message = this.getFromCache(
-            key,
-            this.properties.config.fallbackLanguage
-          );
-        }
+      // try to get translation from fallback language
+      const fallbackLang = this.properties.config.fallbackLanguage;
+      if (this.isFetchNeeded(fallbackLang)) {
+        await this.loadTranslations(this.properties.config.fallbackLanguage);
       }
+      message = this.getFromCache(key, this.properties.config.fallbackLanguage);
     }
 
     return TranslationService.translationByValue(message, defaultValue);
@@ -297,11 +292,20 @@ export class TranslationService {
     }
   };
 
+  private isFetchNeeded(lang: string) {
+    const isDevMode = this.properties.config.mode === 'development';
+    const dataPresent = this.translationsCache.get(lang) !== undefined;
+    const devFetched = Boolean(this.fetchedDev[lang]);
+    return (isDevMode && !devFetched) || !dataPresent;
+  }
+
   private async fetchTranslations(lang: string) {
-    if (this.properties.config.mode === 'development') {
+    const isDevMode = this.properties.config.mode === 'development';
+    if (isDevMode) {
       return await this.fetchTranslationsDevelopment(lang);
+    } else {
+      return await this.fetchTranslationsProduction(lang);
     }
-    return await this.fetchTranslationsProduction(lang);
   }
 
   private async fetchTranslationsProduction(language: string) {
@@ -352,6 +356,7 @@ export class TranslationService {
       const data = await this.apiHttpService.fetchJson(
         `v2/projects/translations/${language}`
       );
+      this.fetchedDev[language] = true;
       this.setLanguageData(language, data[language] || {});
     } catch (e) {
       // eslint-disable-next-line no-console

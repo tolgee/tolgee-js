@@ -386,7 +386,7 @@ describe('Tolgee', () => {
     tolgee.properties.config.staticData.en = {};
     expect(tolgee.initialLoading).toEqual(false);
     tolgee.properties.config.mode = 'development';
-    expect(tolgee.initialLoading).toEqual(true);
+    expect(tolgee.initialLoading).toEqual(false);
   });
 
   describe('lang setter', () => {

@@ -27,5 +27,5 @@ context('React app in dev mode', () => {
     ],
   });
 
-  exampleAppDevTest(url);
+  exampleAppDevTest(url, { noLoading: true });
 });

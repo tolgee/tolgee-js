@@ -188,5 +188,6 @@ context('UI Dialog', () => {
     createApiKey({ projectId: 1, scopes }).then((data) => {
       cy.visit(`http://localhost:8114/?api_key=${data.key}`);
     });
+    cy.contains('Hello world!').invoke('attr', '_tolgee').should('exist');
   };
 });
