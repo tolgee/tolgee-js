@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@sveltejs/kit": "next",
-    "@testing-library/jest-dom": "5.16.1",
+    "@testing-library/jest-dom": "5.16.2",
     "@testing-library/svelte": "3.0.3",
     "@types/jest": "27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.10.2",
