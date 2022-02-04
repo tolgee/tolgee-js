@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.2.0](https://github.com/tolgee/tolgee-js/compare/v3.1.5...v3.2.0) (2022-02-04)
+
+
+### Features
+
+* Improve ssr (and next.js example) TG-497 ([2d8e6d5](https://github.com/tolgee/tolgee-js/commit/2d8e6d58b3373cf1552605220182076178f04927))
+
+
+
+
+
 ## [3.1.3](https://github.com/tolgee/tolgee-js/compare/v3.1.2...v3.1.3) (2022-01-13)
 
 **Note:** Version bump only for package @tolgee/gatsby-testapp
