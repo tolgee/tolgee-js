@@ -27,13 +27,13 @@ jobs:
         run: npm run ci:init
 
       - name: Build all packages
-        run: npm run ci:build
+        run: npm run build
 
       - name: Test
-        run: npm run ci:test
+        run: npm run test
 
       - name: Build for cypress
-        run: npm run ci:build:e2e
+        run: npm run build:e2e
 
       - name: Cypress
         run: npm --prefix=e2e run start

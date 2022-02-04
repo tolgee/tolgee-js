@@ -1,0 +1,76 @@
+{
+  "baseBranch": "origin/main",
+  "npmClient": "npm",
+  "globalDependencies": [
+    ".env*"
+  ],
+  "pipeline": {
+    "build-gatsby": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "public/**",
+        ".cache/**"
+      ]
+    },
+    "build": {
+      "dependsOn": [
+        "^build",
+        "build-gatsby"
+      ],
+      "outputs": [
+        "dist/**",
+        "lib/**",
+        "package/**",
+        "build/**",
+        ".next/**",
+        ".angular/**",
+        ".svelte-kit/**"
+      ]
+    },
+    "build:e2e": {
+      "dependsOn": [
+        "build"
+      ],
+      "outputs": [
+        "dist/**",
+        "lib/**",
+        "package/**",
+        "build/**",
+        ".next/**",
+        ".angular/**",
+        ".svelte-kit/**",
+        "dist-e2e/**",
+        "build-e2e/**"
+      ]
+    },
+    "rebuild-prod": {
+      "dependsOn": ["^rebuild-prod"],
+      "outputs": [
+        "dist/**",
+        "lib/**",
+        "package/**",
+        "build/**",
+        ".next/**",
+        ".angular/**",
+        ".svelte-kit/**"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "develop": {
+      "dependsOn": [
+        "^develop"
+      ],
+      "cache": false
+    },
+    "clean": {
+      "dependsOn": [],
+      "cache": false
+    }
+  }
+}

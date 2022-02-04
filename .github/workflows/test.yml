@@ -43,14 +43,25 @@ jobs:
           path: 'testapps/*/node_modules'
           key: testapps-node-modules-${{ runner.os }}-${{ hashFiles('testapps/*/package-lock.json') }}
 
+      - name: Cache turborepo
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/.cache/turbo
+          key: turbo-test-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-test-${{ runner.os }}-
+
+      - name: Check turbo cache
+        run: npm run check-cache
+
       - name: Install
-        run: npm run ci:install:root && npm run bootstrap
+        run: npm run ci:init
 
       - name: Build all packages
-        run: npm run ci:build
+        run: npm run build
 
       - name: Test
-        run: npm run ci:test
+        run: npm run test
 
   cypress-prepare:
     name: 'Cypress prepare'
@@ -114,14 +125,25 @@ jobs:
             testapps/gatsby/public
           key: e2e-build-${{ runner.os }}-${{ github.sha }}
 
+      - name: Cache turborepo
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules/.cache/turbo
+          key: turbo-cypress-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-${{ runner.os }}-
+
+      - name: Check turbo cache
+        run: npm run check-cache
+
       - name: Install
         run: npm run ci:init
 
       - name: Build
-        run: npm run ci:build
+        run: npm run build
 
       - name: Build e2e
-        run: npm run ci:build:e2e
+        run: npm run build:e2e
 
       - id: set-dirs
         run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
