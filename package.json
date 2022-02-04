@@ -26,9 +26,9 @@
     "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
     "build:e2e": "turbo run build:e2e",
     "test:e2e": "npm run build:e2e && npm --prefix e2e run start",
-    "ci:build": "lerna run build && lerna run build-gatsby",
-    "ci:test": "lerna run test",
-    "ci:build:e2e": "lerna run build:e2e",
+    "ci:build": "turbo run build build-gatsby --cache-dir='.turbo'",
+    "ci:build:e2e": "turbo run build:e2e --cache-dir='.turbo'",
+    "ci:test": "turbo run test --cache-dir='.turbo'",
     "ci:rebuild-prod": "lerna run rebuild-prod",
     "ci:install:root": "node scripts/workspacesRemove.js && npm ci; node scripts/workspacesRestore.js",
     "ci:install:e2e": "npm --prefix=e2e ci",
@@ -63,7 +63,7 @@
     "lerna": "^4.0.0",
     "prettier": "^2.3.1",
     "prettier-plugin-svelte": "2.4.0",
-    "turbo": "1.0.26",
+    "turbo": "1.1.2",
     "typescript": "^4.3.5"
   },
   "commitlint": {
@@ -71,57 +71,5 @@
       "@commitlint/config-conventional"
     ]
   },
-  "turbo": {
-    "baseBranch": "origin/main",
-    "npmClient": "npm",
-    "globalDependencies": [".env*"],
-    "pipeline": {
-      "build-gatsby": {
-        "dependsOn": ["^build"],
-        "outputs": ["public/**", ".cache/**"]
-      },
-      "build": {
-        "dependsOn": [
-          "^build",
-          "build-gatsby"
-        ],
-        "outputs": [
-          "dist/**",
-          "lib/**",
-          "package/**",
-          "build/**",
-          ".next/**",
-          ".angular/**",
-          ".svelte-kit/**"
-        ]
-      },
-      "build:e2e": {
-        "dependsOn": [
-          "build"
-        ],
-        "outputs": [
-          "dist/**",
-          "lib/**",
-          "package/**",
-          "build/**",
-          ".next/**",
-          ".angular/**",
-          ".svelte-kit/**",
-          "dist-e2e/**",
-          "build-e2e/**"
-        ]
-      },
-      "test": {
-        "dependsOn": ["build"]
-      },
-      "develop": {
-        "dependsOn": ["^develop"],
-        "cache": false
-      },
-      "clean": {
-        "dependsOn": [],
-        "cache": false
-      }
-    }
-  }
+  "packageManager": "npm@8.1.0"
 }
