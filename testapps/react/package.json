@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-testapp",
-  "version": "3.2.0",
+  "version": "3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -9,8 +9,8 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.1",
     "@testing-library/user-event": "^13.3.0",
-    "@tolgee/react": "^3.2.0",
-    "@tolgee/ui": "^3.2.0",
+    "@tolgee/react": "^3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
+    "@tolgee/ui": "^3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.15",
     "@types/react": "17.0.39",

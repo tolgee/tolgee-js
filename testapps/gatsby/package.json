@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/gatsby-testapp",
-  "version": "3.2.0",
+  "version": "3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
   "private": true,
   "description": "Tolgee Gatsby TestApp",
   "author": "Jan Cizmar",
@@ -15,9 +15,9 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@tolgee/core": "^3.2.0",
-    "@tolgee/react": "^3.2.0",
-    "@tolgee/ui": "^3.2.0",
+    "@tolgee/core": "^3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
+    "@tolgee/react": "^3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
+    "@tolgee/ui": "^3.3.0-prerelease-e8f9afe6a3a656fda722c8e9a5857ce2554a82d5.0",
     "gatsby": "^3.13.0",
     "gatsby-plugin-react-intl": "^3.0.2",
     "react": "^17.0.1",
