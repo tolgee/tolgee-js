@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 3.3.0-rc.4b434d2.0 (2022-02-11)
+
+
+### Features
+
+* In-context translating on production TG-459 ([4b434d2](https://github.com/tolgee/tolgee-js/commit/4b434d2ad4c8d724e460d4e9a15dd714465af0ac))
+
+
+
+
+
 # [3.0.0](https://github.com/tolgee/tolgee-js/compare/v2.8.2...v3.0.0) (2021-12-17)
 
 **Note:** Version bump only for package @tolgee/socketio-client
