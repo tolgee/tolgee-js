@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 3.3.0-prerelease-a220912.0 (2022-02-11)
+
+
+### Features
+
+* In-context translating on production TG-459 ([a220912](https://github.com/tolgee/tolgee-js/commit/a220912ad53c25793d898dde496418ae8812b675))
+
+
+
+
+
 # [3.2.0](https://github.com/tolgee/tolgee-js/compare/v3.1.5...v3.2.0) (2022-02-04)
 
 **Note:** Version bump only for package @tolgee/ngx
