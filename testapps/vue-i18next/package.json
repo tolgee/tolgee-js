@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-i18next-testapp",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -14,9 +14,9 @@
   },
   "dependencies": {
     "@panter/vue-i18next": "^0.15.2",
-    "@tolgee/core": "^3.2.0",
-    "@tolgee/i18next": "^3.2.0",
-    "@tolgee/ui": "^3.2.0",
+    "@tolgee/core": "^3.3.0",
+    "@tolgee/i18next": "^3.3.0",
+    "@tolgee/ui": "^3.3.0",
     "core-js": "^3.6.5",
     "i18next": "^21.6.3",
     "i18next-icu": "^2.0.3",
