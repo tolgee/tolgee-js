@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [3.3.1](https://github.com/tolgee/tolgee-js/compare/v3.3.0...v3.3.1) (2022-02-15)
+
+
+### Bug Fixes
+
+* UI translation lang property ([bfc4f3a](https://github.com/tolgee/tolgee-js/commit/bfc4f3a91c15a422a08d3a2d2fedb52947d4771f))
+
+
+
+
+
 # [3.3.0](https://github.com/tolgee/tolgee-js/compare/v3.2.0...v3.3.0) (2022-02-11)
 
 
