@@ -84,7 +84,9 @@ export const TranslationFields: FunctionComponent = () => {
                 size="small"
                 disabled={formDisabled}
                 key={key}
-                lang={key}
+                inputProps={{
+                  lang: key,
+                }}
                 minRows={2}
                 maxRows={Infinity}
                 multiline
