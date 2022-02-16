@@ -58,7 +58,10 @@ type State =
   | { type: 'ON_SAVE' }
   | { type: 'ON_CLOSE' }
   | { type: 'SET_USE_BROWSER_WINDOW'; payload: boolean }
-  | { type: 'SET_CONTAINER'; payload: Element };
+  | { type: 'SET_CONTAINER'; payload: Element }
+  | { type: 'OPEN_SCREENSHOT_DETAIL'; payload: ScreenshotInterface }
+  | { type: 'CLOSE_SCREENSHOT_DETAIL' }
+  | { type: 'ON_ESCAPE' };
 
 export const [DialogProvider, useDialogDispatch, useDialogContext] =
   createProvider((props: DialogProps) => {
@@ -88,6 +91,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
     const [screenshots, setScreenshots] = useState<ScreenshotInterface[]>([]);
     const [screenshotsUploading, setScreenshotsUploading] = useState(false);
+    const [screenshotDetail, setScreenshotDetail] =
+      useState<ScreenshotInterface | null>(null);
 
     const dispatch = async (action: State) => {
       switch (action.type) {
@@ -196,10 +201,16 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 screenshotUploadedImageIds: getJustUploadedScreenshots(),
               });
             }
-            setSuccess(true);
             await sleep(200);
+            setSuccess(true);
             setError(null);
-            props.onClose();
+            if (useBrowserWindow) {
+              setSaving(false);
+              await sleep(2000);
+              setSuccess(false);
+            } else {
+              props.onClose();
+            }
           } catch (e) {
             setError('Unexpected error occurred :(');
             // eslint-disable-next-line no-console
@@ -211,13 +222,17 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         }
 
         case 'ON_CLOSE': {
-          props.onClose();
-          setUseBrowserWindow(false);
-          const uploadedScreenshots = getJustUploadedScreenshots();
-          if (uploadedScreenshots.length) {
-            screenshotService.deleteImages(uploadedScreenshots);
+          if (screenshotDetail) {
+            setScreenshotDetail(null);
+          } else {
+            props.onClose();
+            setUseBrowserWindow(false);
+            const uploadedScreenshots = getJustUploadedScreenshots();
+            if (uploadedScreenshots.length) {
+              screenshotService.deleteImages(uploadedScreenshots);
+            }
+            setScreenshots([]);
           }
-          setScreenshots([]);
           break;
         }
 
@@ -241,13 +256,21 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         case 'SET_USE_BROWSER_WINDOW':
           setUseBrowserWindow(action.payload);
           break;
+
+        case 'OPEN_SCREENSHOT_DETAIL':
+          setScreenshotDetail(action.payload);
+          break;
+
+        case 'CLOSE_SCREENSHOT_DETAIL':
+          setScreenshotDetail(null);
+          break;
       }
     };
 
     useEffect(() => {
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
-          dispatch({ type: 'ON_CLOSE' });
+          dispatch({ type: 'ON_ESCAPE' });
         }
       };
       if (!useBrowserWindow) {
@@ -367,6 +390,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       takingScreenshot,
       screenshotsUploading,
       screenshots,
+      screenshotDetail,
       linkToPlatform,
     };
 

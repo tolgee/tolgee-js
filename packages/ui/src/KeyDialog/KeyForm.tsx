@@ -114,8 +114,6 @@ export const KeyForm = () => {
           id="_tolgee_platform_link"
         >
           <svg
-            width="100%"
-            height="100%"
             viewBox="0 0 200 200"
             xmlns="http://www.w3.org/2000/svg"
             opacity="0.99"
@@ -177,7 +175,7 @@ export const KeyForm = () => {
       {error && <ScError>{error}</ScError>}
       <ScControls>
         <Button onClick={onClose} color="secondary">
-          Cancel
+          {useBrowserWindow ? 'Close' : 'Cancel'}
         </Button>
         <LoadingButton
           loading={saving}

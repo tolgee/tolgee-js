@@ -7,7 +7,6 @@ import { ScreenshotThumbnail } from './ScreenshotThumbnail';
 import { MAX_FILE_COUNT } from './utils';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
 import {
-  ScreenshotInterface,
   useDialogContext,
   useDialogDispatch,
 } from '../TranslationDialogContextProvider';
@@ -54,10 +53,10 @@ const ALLOWED_UPLOAD_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
 export const ScreenshotGallery: React.FC = () => {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [detail, setDetail] = useState<ScreenshotInterface | null>(null);
   const dispatch = useDialogDispatch();
 
   const screenshots = useDialogContext((c) => c.screenshots);
+  const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const pluginAvailable = useDialogContext((c) => c.pluginAvailable);
   const dependencies = useDialogContext((c) => c.dependencies);
   const formDisabled = useDialogContext((c) => c.formDisabled);
@@ -193,7 +192,9 @@ export const ScreenshotGallery: React.FC = () => {
               <ScreenshotThumbnail
                 key={ss.id}
                 data={ss}
-                onClick={() => setDetail(ss)}
+                onClick={() =>
+                  dispatch({ type: 'OPEN_SCREENSHOT_DETAIL', payload: ss })
+                }
                 onDelete={
                   deleteEnabled || ss.justUploaded
                     ? removeScreenshot
@@ -224,8 +225,11 @@ export const ScreenshotGallery: React.FC = () => {
           </ScPlaceholder>
         )}
       </ScreenshotDropzone>
-      {detail && (
-        <ScreenshotDetail screenshot={detail} onClose={() => setDetail(null)} />
+      {screenshotDetails && (
+        <ScreenshotDetail
+          screenshot={screenshotDetails}
+          onClose={() => dispatch({ type: 'CLOSE_SCREENSHOT_DETAIL' })}
+        />
       )}
       {extensionPrompt && (
         <ExtensionPrompt onClose={() => setExtensionPrompt(false)} />
