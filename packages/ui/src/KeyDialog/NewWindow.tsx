@@ -56,7 +56,7 @@ export const NewWindow: FC = (props) => {
 
       const onKeyDown = (e) => {
         if (e.key === 'Escape') {
-          onExit();
+          dispatch({ type: 'ON_CLOSE' });
         }
       };
 
@@ -77,6 +77,10 @@ export const NewWindow: FC = (props) => {
       };
     }
   }, [container]);
+
+  useEffect(() => {
+    popup?.focus();
+  });
 
   const styleCache = React.useMemo(() => {
     // styles insertion point in popup head

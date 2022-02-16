@@ -21,9 +21,7 @@ export const TranslationDialogWrapper: React.FC = ({ children }) => {
   return (
     <>
       {useBrowserWindow ? (
-        open ? (
-          <NewWindow>{children}</NewWindow>
-        ) : null
+        <NewWindow>{children}</NewWindow>
       ) : (
         !takingScreenshot && (
           <Dialog
