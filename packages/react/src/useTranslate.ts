@@ -1,161 +1,157 @@
-import { useTolgeeContext } from './useTolgeeContext';
-import { TranslationParameters } from './types';
-import { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { TranslationTags, TranslationParams } from '@tolgee/core';
 
-type UseTranslateResultFnProps = {
+import { useTolgeeContext } from './useTolgeeContext';
+import { addReactKeys, wrapTagHandlers } from './tagsTools';
+import { ParamsTags } from './types';
+
+type UseTranslateResultFnProps<T extends TranslationParams | ParamsTags> = {
   key: string;
-  parameters?: TranslationParameters;
+  parameters?: T;
   noWrap?: boolean;
   defaultValue?: string;
 };
 
 type ReturnFnType = {
-  (props: UseTranslateResultFnProps): string;
-  (
+  <T extends TranslationParams | ParamsTags = TranslationParams>(
+    props: UseTranslateResultFnProps<T>
+  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
+
+  (key: string, defaultValue?: string, noWrap?: boolean): string;
+
+  <T extends TranslationParams | ParamsTags = TranslationParams>(
     key: string,
-    parameters?: TranslationParameters,
+    defaultValue?: string,
+    parameters?: T
+  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
+
+  <T extends TranslationParams | ParamsTags = TranslationParams>(
+    key: string,
+    parameters?: T,
+    defaultValue?: string
+  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
+
+  <T extends TranslationParams | ParamsTags = TranslationParams>(
+    key: string,
+    parameters?: T,
     noWrap?: boolean,
     defaultValue?: string
-  ): string;
+  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
 };
 
 export const useTranslate: () => ReturnFnType = () => {
-  const context = useTolgeeContext();
+  const { tolgee } = useTolgeeContext();
 
   // dummy state to enable re-rendering
-  const [_, setDummyValue] = useState(0 as number);
+  const [instance, setInstance] = useState(0);
 
   const forceRerender = () => {
-    setDummyValue((v) => v + 1);
+    setInstance((v) => v + 1);
   };
 
   // cache of translations translated with this useTranslate
-  const translatedRef = useRef<Record<string, Record<string, string>>>({});
-  const translated = translatedRef.current;
+  const keysRef = useRef<string[]>([]);
+  const keysReadyRef = useRef<string[]>([]);
 
-  // Parses key of the translation cache
-  const parseJsonHash = (
-    jsonKey
-  ): {
-    parameters: TranslationParameters | undefined;
-    noWrap: boolean | undefined;
-    defaultValue: string | undefined;
-  } => {
-    return JSON.parse(jsonKey);
+  const resetMemory = (key?: string) => {
+    keysRef.current = key ? keysRef.current.filter((k) => k !== key) : [];
+    keysReadyRef.current = key
+      ? keysReadyRef.current.filter((k) => k !== key)
+      : [];
   };
 
-  // Generates key to store in translations cache
-  const getJsonHash = (
-    parameters: TranslationParameters,
-    noWrap: boolean,
-    defaultValue: string | undefined
-  ) => {
-    return JSON.stringify({ parameters, noWrap, defaultValue });
-  };
-
-  // Returns the translation from cache.
-  //
-  // If not found, instant value is returned
-  // and async translateAll method is executed
-  const translationFromState = (
-    key: string,
-    parameters: TranslationParameters,
-    noWrap: boolean,
-    defaultValue: string | undefined
-  ) => {
-    const jsonHash = getJsonHash(parameters, noWrap, defaultValue);
-
-    if (translated[key] === undefined) {
-      translated[key] = {};
-    }
-
-    if (translated[key][jsonHash] === undefined) {
-      translated[key][jsonHash] = context.tolgee.instant({
-        key,
-        params: parameters,
-        noWrap,
-        orEmpty: true,
-        defaultValue,
-      });
-      translateAll();
-    }
-
-    return translated[key][jsonHash];
-  };
-
-  // Refreshes all translations in cache
-  // and forces rerender
-  const translateAll = () => {
-    const translationPromises = Object.entries(translated).flatMap(
-      ([key, data]) => {
-        return Object.keys(data).map((jsonHash) => {
-          const { parameters, noWrap, defaultValue } = parseJsonHash(jsonHash);
-          return new Promise((resolve) => {
-            context.tolgee
-              .translate(key, parameters, noWrap, defaultValue)
-              .then((translated) =>
-                resolve({ key: key, jsonHash, translated })
-              );
-          }) as Promise<{ key: string; jsonHash: string; translated: string }>;
-        });
+  useEffect(() => {
+    const subscription = tolgee.onTranslationChange.subscribe(({ key }) => {
+      if (keysRef.current.includes(key)) {
+        resetMemory(key);
+        forceRerender();
       }
-    );
-
-    Promise.all(translationPromises).then((result) => {
-      result.forEach((item) => {
-        translated[item.key][item.jsonHash] = item.translated;
-      });
-      forceRerender();
     });
-  };
-
-  useEffect(() => {
-    translateAll();
-
-    const subscription = context.tolgee.onLangChange.subscribe(() =>
-      translateAll()
-    );
-
     return () => subscription.unsubscribe();
-  }, []);
+  }, [tolgee]);
 
   useEffect(() => {
-    const subscription = context.tolgee.onTranslationChange.subscribe(
-      (changeData) => {
-        Object.entries(translated).map(([key, data]) => {
-          if (key === changeData.key) {
-            return Object.keys(data).map(async (jsonHash) => {
-              const params = parseJsonHash(jsonHash);
-              translated[key][jsonHash] = await context.tolgee.translate(
-                key,
-                params.parameters,
-                params.noWrap,
-                params.defaultValue
-              );
+    const subscription = tolgee.onLangChange.subscribe(() => {
+      if (keysRef.current.length) {
+        resetMemory();
+        forceRerender();
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [tolgee]);
+
+  const getTranslation = useCallback(
+    (
+      key: string,
+      params?: ParamsTags,
+      noWrap?: boolean,
+      defaultValue?: string
+    ) => {
+      const firstRender = !keysRef.current.includes(key);
+      const ready = keysReadyRef.current.includes(key);
+      const translation = tolgee.instant({
+        key,
+        params: wrapTagHandlers(params),
+        noWrap,
+        defaultValue: !ready ? undefined : defaultValue,
+        orEmpty: !ready,
+      });
+
+      if (firstRender) {
+        keysRef.current.push(key);
+        tolgee
+          .translate({
+            key,
+            params: wrapTagHandlers(params),
+            noWrap,
+            defaultValue,
+          })
+          .then((value) => {
+            keysReadyRef.current.push(key);
+            if (value !== translation) {
               forceRerender();
-            });
+            }
+          });
+      }
+
+      return translation;
+    },
+    [tolgee, keysRef]
+  );
+
+  const t: ReturnFnType = useCallback(
+    (keyOrProps, ...params: (ParamsTags | boolean | string)[]) => {
+      let parameters: ParamsTags = undefined;
+      let noWrap: boolean = undefined;
+      let defaultValue = undefined;
+      // allow user to pass object of params and make the code cleaner
+      const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
+      if (typeof keyOrProps === 'object') {
+        parameters = keyOrProps.parameters;
+        noWrap = keyOrProps.noWrap;
+        defaultValue = keyOrProps.defaultValue;
+      } else {
+        params.forEach((param) => {
+          switch (typeof param) {
+            case 'object':
+              parameters = param;
+              break;
+            case 'boolean':
+              noWrap = param;
+              break;
+            case 'string':
+              defaultValue = param;
           }
         });
       }
-    );
 
-    return () => subscription.unsubscribe();
-  }, []);
+      return addReactKeys(
+        getTranslation(key, parameters, noWrap, defaultValue)
+      ) as any;
+    },
+    [getTranslation, instance]
+  );
 
-  return (
-    keyOrProps: string | UseTranslateResultFnProps,
-    parameters?: TranslationParameters,
-    noWrap?: boolean,
-    defaultValue?: string
-  ) => {
-    // allow user to pass object of params and make the code cleaner
-    const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
-    if (typeof keyOrProps === 'object') {
-      parameters = keyOrProps.parameters;
-      noWrap = keyOrProps.noWrap;
-      defaultValue = keyOrProps.defaultValue;
-    }
-
-    return translationFromState(key, parameters, noWrap, defaultValue);
-  };
+  return t;
 };

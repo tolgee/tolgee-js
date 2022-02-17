@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { FunctionComponent, useEffect, useState } from 'react';
-import { useTolgeeContext } from './useTolgeeContext';
-import { TranslationParameters } from './types';
+import { FunctionComponent } from 'react';
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
+import { ParamsTags } from './types';
+import { useTranslate } from './useTranslate';
 
 type TProps = {
-  parameters?: TranslationParameters;
+  parameters?: ParamsTags;
   children?: string;
   /**
    * @deprecated Use strategy 'NO_WRAP' instead
@@ -19,8 +19,6 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
   const strategy =
     props.noWrap === true ? 'NO_WRAP' : props.strategy || 'ELEMENT_WRAP';
 
-  const context = useTolgeeContext();
-
   const key = props.keyName || props.children;
   if (!key) {
     // eslint-disable-next-line no-console
@@ -29,66 +27,24 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
   const defaultValue = props.keyName ? props.children : undefined;
 
   const translateFnNoWrap =
-    typeof window !== 'undefined'
-      ? strategy === 'ELEMENT_WRAP' || strategy === 'NO_WRAP'
-      : true;
+    strategy === 'ELEMENT_WRAP' || strategy === 'NO_WRAP';
 
-  const [translated, setTranslated] = useState(
-    context.tolgee.instant(
-      key,
-      props.parameters,
-      translateFnNoWrap,
-      true,
-      defaultValue
-    )
-  );
+  const t = useTranslate();
 
-  const translate = () =>
-    context.tolgee
-      .translate({
-        key,
-        params: props.parameters,
-        noWrap: translateFnNoWrap,
-        defaultValue,
-      })
-      .then((t) => {
-        setTranslated(t);
-      });
-
-  useEffect(() => {
-    translate();
-
-    const langChangeSubscription = context.tolgee.onLangChange.subscribe(() => {
-      translate();
-    });
-
-    return () => {
-      langChangeSubscription.unsubscribe();
-    };
-  }, [props]);
-
-  useEffect(() => {
-    if (strategy === 'ELEMENT_WRAP' || strategy === 'NO_WRAP') {
-      const translationChangeSubscription =
-        context.tolgee.onTranslationChange.subscribe((data) => {
-          if (data.key === key) {
-            translate();
-          }
-        });
-
-      return () => {
-        translationChangeSubscription.unsubscribe();
-      };
-    }
+  const translation = t({
+    key,
+    parameters: props.parameters,
+    defaultValue,
+    noWrap: translateFnNoWrap,
   });
 
   if (strategy === 'ELEMENT_WRAP') {
     return (
       <span {...{ [TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE]: key }}>
-        {translated}
+        {translation}
       </span>
     );
   }
 
-  return <>{translated}</>;
+  return <>{translation}</>;
 };

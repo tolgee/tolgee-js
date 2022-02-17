@@ -3,7 +3,8 @@ import { Properties } from '../../Properties';
 import { TextService } from '../../services/TextService';
 import {
   KeyAndParams,
-  TranslatedWithMetadata,
+  KeyAndParamsTags,
+  TranslatedWithMetadataTags,
   TranslationParams,
   Unwrapped,
 } from '../../types';
@@ -102,7 +103,7 @@ export class Coder {
   unwrap(text: string): Unwrapped {
     const matchRegexp = new RegExp(this.rawUnWrapRegex, 'gs');
 
-    const keysAndParams: KeyAndParams[] = [];
+    const keysAndParams: KeyAndParamsTags<any>[] = [];
 
     let matched = false;
 
@@ -167,7 +168,9 @@ export class Coder {
     )}${defaultString}${paramString}${this.properties.config.inputSuffix}`;
   }
 
-  private getTranslatedWithMetadata(text: string): TranslatedWithMetadata {
+  private getTranslatedWithMetadata(
+    text: string
+  ): TranslatedWithMetadataTags<any> {
     const { key, params, defaultValue } = Coder.parseUnwrapped(text);
     const translated = this.textService.instant(
       key,
@@ -191,10 +194,8 @@ export class Coder {
       return param.toString();
     }
     // eslint-disable-next-line no-console
-    console.warn(param);
-    // eslint-disable-next-line no-console
     console.warn(
-      'Unsupported value type of above param. Consider converting to string.'
+      `Parameters of type "${typeof param}" are not supported in "text" wrapper mode.`
     );
     return param;
   };

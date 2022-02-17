@@ -14,7 +14,9 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   delete config.children;
   delete config.loadingFallback;
 
-  const [tolgee] = useState(Tolgee.use(IcuFormatter).init(config));
+  const [tolgee] = useState(
+    Tolgee.use(IcuFormatter).init({ wrapperMode: 'invisible', ...config })
+  );
 
   const [loading, setLoading] = useState(tolgee.initialLoading);
 
