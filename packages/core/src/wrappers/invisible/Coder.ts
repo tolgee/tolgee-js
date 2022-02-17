@@ -4,7 +4,12 @@ import {
   removeSecrets,
   stringToCodePoints,
 } from '../../helpers/secret';
-import { KeyAndParams, TranslationParams, Unwrapped } from '../../types';
+import {
+  KeyAndParams,
+  TranslationTags,
+  TranslationParamsTags,
+  Unwrapped,
+} from '../../types';
 import { ValueMemory } from './ValueMemory';
 
 export class Coder {
@@ -39,18 +44,22 @@ export class Coder {
 
   public wrap(
     key: string,
-    _params: TranslationParams = {},
+    _params: TranslationParamsTags<any> = {},
     defaultValue: string | undefined = undefined,
-    translation: string | undefined = undefined
-  ): string {
+    translation: string | any[] | undefined = undefined
+  ): TranslationTags<any> {
     const codes = [this.keyMemory.valueToNumber(key)];
     if (defaultValue) {
       codes.push(this.defaultMemory.valueToNumber(defaultValue));
     }
 
-    return (
-      (translation || defaultValue || '') +
-      encodeMessage(String.fromCodePoint(...codes))
-    );
+    const value = translation || '';
+    const invisibleMark = encodeMessage(String.fromCodePoint(...codes));
+
+    return typeof value === 'string'
+      ? value + invisibleMark
+      : Array.isArray(value)
+      ? [...value, invisibleMark]
+      : [value, invisibleMark];
   }
 }

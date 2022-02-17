@@ -1,6 +1,10 @@
+const getElement = (text: string, testId?: string) => {
+  return testId ? cy.gcy(testId) : cy.xpath(`.//*[text() = '${text}']`);
+};
+
 export const translationMethodsTest = (
   url: string,
-  items: Record<string, { text: string; count: number }[]>
+  items: Record<string, { text: string; count: number; testId?: string }[]>
 ) =>
   describe('translation methods test', () => {
     before(() => {
@@ -17,16 +21,17 @@ export const translationMethodsTest = (
           before(() => {
             cy.get('.lang-selector').select(language);
             Object.values(texts).forEach((text) => {
-              cy.contains(text.text).should('be.visible');
+              getElement(text.text, text.testId).should('be.visible');
             });
           });
 
           texts.forEach((text) => {
             it(`contains "${text.text}" ${text.count} times`, () => {
-              cy.xpath(`.//*[text() = '${text.text}']`).should(
-                'have.length',
-                text.count
-              );
+              getElement(text.text, text.testId)
+                .should('have.length', text.count)
+                .each((el) => {
+                  expect(el.text()).equal(text.text);
+                });
             });
           });
         });

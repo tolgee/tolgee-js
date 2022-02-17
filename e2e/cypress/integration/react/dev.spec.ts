@@ -13,6 +13,11 @@ context('React app in dev mode', () => {
         count: 5,
       },
       { text: 'This is key with params value value2', count: 4 },
+      {
+        text: 'This is a key with tags bold value',
+        count: 2,
+        testId: 'translationWithTags',
+      },
     ],
     de: [
       { text: 'This is default', count: 2 },
@@ -24,8 +29,29 @@ context('React app in dev mode', () => {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
         count: 4,
       },
+      {
+        text: 'Dies ist ein Schlüssel mit den Tags bold value',
+        count: 2,
+        testId: 'translationWithTags',
+      },
     ],
   });
 
   exampleAppDevTest(url);
+
+  describe('translation in translation', () => {
+    beforeEach(() => {
+      cy.visit(url + '/translation-methods');
+    });
+
+    it('opens inner translation correctly', () => {
+      cy.gcy('translationInner').trigger('keydown', { key: 'Alt' }).click();
+      cy.contains('translation_inner').should('be.visible');
+    });
+
+    it('opens outer translation correctly', () => {
+      cy.gcy('translationOuter').trigger('keydown', { key: 'Alt' }).click();
+      cy.contains('translation_outer').should('be.visible');
+    });
+  });
 });

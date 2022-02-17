@@ -1,4 +1,4 @@
-import { TranslationParams } from '../types';
+import { TranslationTags, TranslationParamsTags } from '../types';
 import { TranslationService } from './TranslationService';
 import { Properties } from '../Properties';
 import { ModuleService } from './ModuleService';
@@ -12,7 +12,7 @@ export class TextService {
 
   async translate(
     key: string,
-    params: TranslationParams,
+    params: TranslationParamsTags<any>,
     lang = this.properties.currentLanguage,
     orEmpty?: boolean,
     defaultValue?: string
@@ -27,7 +27,7 @@ export class TextService {
 
   instant(
     key: string,
-    params: TranslationParams,
+    params: TranslationParamsTags<any>,
     lang = this.properties.currentLanguage,
     orEmpty?: boolean,
     defaultValue?: string
@@ -44,7 +44,7 @@ export class TextService {
   private formatTranslation(
     key: string,
     translation: string | undefined,
-    params: TranslationParams | undefined,
+    params: TranslationParamsTags<any> | undefined,
     lang: string | undefined,
     orEmpty: boolean | undefined
   ) {
@@ -59,12 +59,12 @@ export class TextService {
 
   private readonly format = (
     translation: string,
-    params: TranslationParams,
+    params: TranslationParamsTags<any>,
     lang: string | undefined
-  ): string => {
+  ): TranslationTags<any> => {
     try {
       // try to format the text
-      let result = translation;
+      let result: TranslationTags<any> = translation;
       if (this.moduleService.formatter) {
         result = this.moduleService.formatter.format({
           translation: result,
@@ -72,7 +72,7 @@ export class TextService {
           language: lang || this.properties.currentLanguage,
         });
       }
-      return result;
+      return result as TranslationTags<any>;
     } catch (e) {
       // if string cannot be formatted, throw error
       // eslint-disable-next-line no-console

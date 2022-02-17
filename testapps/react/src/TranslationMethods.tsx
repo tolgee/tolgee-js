@@ -1,3 +1,4 @@
+import React from 'react';
 import { T, useTranslate } from '@tolgee/react';
 import { Navbar } from './components/Navbar';
 
@@ -58,6 +59,22 @@ export const TranslationMethods = () => {
         </div>
 
         <div>
+          <h1>T component with interpolation</h1>
+          <div data-cy="translationWithTags">
+            <T
+              keyName="this_is_a_key_with_tags"
+              parameters={{
+                b: <b />,
+                i: <i />,
+                key: 'value',
+              }}
+            >
+              Hey
+            </T>
+          </div>
+        </div>
+
+        <div>
           <h1>t function without default</h1>
           <div>{t('this_is_a_key')}</div>
         </div>
@@ -99,6 +116,42 @@ export const TranslationMethods = () => {
               parameters: { key: 'value', key2: 'value2' },
               noWrap: true,
             })}
+          </div>
+        </div>
+
+        <div>
+          <h1>t function with interpolation</h1>
+          <div>
+            <div data-cy="translationWithTags">
+              {t({
+                key: 'this_is_a_key_with_tags',
+                parameters: {
+                  b: <b />,
+                  i: <i />,
+                  key: 'value',
+                },
+                defaultValue: 'Hey',
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h1>Translation in translation</h1>
+          <div>
+            <div data-cy="translationOuter">
+              {t({
+                key: 'translation_outer',
+                parameters: {
+                  b: () => (
+                    <b data-cy="translationInner">
+                      {t('translation_inner', 'Translation')}
+                    </b>
+                  ),
+                },
+                defaultValue: '<b>Translation</b> in translation',
+              })}
+            </div>
           </div>
         </div>
       </div>

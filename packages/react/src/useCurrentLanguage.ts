@@ -1,5 +1,5 @@
-import { useTolgeeContext } from './useTolgeeContext';
 import { useEffect, useState } from 'react';
+import { useTolgeeContext } from './useTolgeeContext';
 
 /**
  * Custom react hook
