@@ -1,6 +1,12 @@
+const getElement = (text: string, className?: string) => {
+  return className
+    ? cy.get(`.${className}`)
+    : cy.xpath(`.//*[text() = '${text}']`);
+};
+
 export const translationMethodsTest = (
   url: string,
-  items: Record<string, { text: string; count: number }[]>
+  items: Record<string, { text: string; count: number; className?: string }[]>
 ) =>
   describe('translation methods test', () => {
     before(() => {
@@ -17,16 +23,17 @@ export const translationMethodsTest = (
           before(() => {
             cy.get('.lang-selector').select(language);
             Object.values(texts).forEach((text) => {
-              cy.contains(text.text).should('be.visible');
+              getElement(text.text, text.className).should('be.visible');
             });
           });
 
           texts.forEach((text) => {
             it(`contains "${text.text}" ${text.count} times`, () => {
-              cy.xpath(`.//*[text() = '${text.text}']`).should(
-                'have.length',
-                text.count
-              );
+              getElement(text.text, text.className)
+                .should('have.length', text.count)
+                .each((el) => {
+                  expect(el.text()).equal(text.text);
+                });
             });
           });
         });

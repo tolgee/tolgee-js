@@ -60,21 +60,13 @@ export const TranslationMethods = () => {
 
         <div>
           <h1>T component with interpolation</h1>
-          <div>
+          <div className="translationWithTags">
             <T
-              keyName="this_is_a_key_with_interpolation"
+              keyName="this_is_a_key_with_tags"
               parameters={{
-                button: <button />,
-                link: (
-                  <a
-                    href="https://tolgee.io"
-                    title={t('yoyo', 'You you')}
-                    target="_blank"
-                  />
-                ),
-                p: <p />,
+                b: <b />,
                 i: <i />,
-                strong: <strong />,
+                key: 'value',
               }}
             >
               Hey
@@ -130,21 +122,13 @@ export const TranslationMethods = () => {
         <div>
           <h1>t function with interpolation</h1>
           <div>
-            <div>
+            <div className="translationWithTags">
               {t({
-                key: 'this_is_a_key_with_interpolation',
+                key: 'this_is_a_key_with_tags',
                 parameters: {
-                  button: <button />,
-                  link: (
-                    <a
-                      href="https://tolgee.io"
-                      title={t('yoyo', 'You you')}
-                      target="_blank"
-                    />
-                  ),
-                  p: <p />,
+                  b: <b />,
                   i: <i />,
-                  strong: <strong />,
+                  key: 'value',
                 },
                 defaultValue: 'Hey',
               })}

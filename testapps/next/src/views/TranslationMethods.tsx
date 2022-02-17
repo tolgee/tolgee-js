@@ -59,6 +59,22 @@ export const TranslationMethods = () => {
         </div>
 
         <div>
+          <h1>T component with interpolation</h1>
+          <div className="translationWithTags">
+            <T
+              keyName="this_is_a_key_with_tags"
+              parameters={{
+                b: <b />,
+                i: <i />,
+                key: 'value',
+              }}
+            >
+              Hey
+            </T>
+          </div>
+        </div>
+
+        <div>
           <h1>t function without default</h1>
           <div>{t('this_is_a_key')}</div>
         </div>
@@ -100,6 +116,23 @@ export const TranslationMethods = () => {
               parameters: { key: 'value', key2: 'value2' },
               noWrap: true,
             })}
+          </div>
+        </div>
+
+        <div>
+          <h1>t function with interpolation</h1>
+          <div>
+            <div className="translationWithTags">
+              {t({
+                key: 'this_is_a_key_with_tags',
+                parameters: {
+                  b: <b />,
+                  i: <i />,
+                  key: 'value',
+                },
+                defaultValue: 'Hey',
+              })}
+            </div>
           </div>
         </div>
       </div>
