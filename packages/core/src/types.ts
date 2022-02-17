@@ -11,12 +11,24 @@ export type TreeTranslationsData = {
 };
 
 export type Translations = Record<string, string>;
-export type TranslationParams = { [key: string]: string | number | bigint };
+export type TranslationParams = {
+  [key: string]: string | number | bigint;
+};
+export type TranslationParamsTags<T> = {
+  [key: string]: string | number | bigint | ((value: T | T[]) => T);
+};
 
 export type TranslateProps = {
   key: string;
   defaultValue?: string;
   params?: TranslationParams;
+  noWrap?: boolean;
+  orEmpty?: boolean;
+};
+export type TranslatePropsTags<T> = {
+  key: string;
+  defaultValue?: string;
+  params?: TranslationParamsTags<T>;
   noWrap?: boolean;
   orEmpty?: boolean;
 };
@@ -28,18 +40,39 @@ export type InstantProps = {
   noWrap?: boolean;
   orEmpty?: boolean;
 };
+export type InstantPropsTags<T> = {
+  key: string;
+  defaultValue?: string;
+  params?: TranslationParamsTags<T>;
+  noWrap?: boolean;
+  orEmpty?: boolean;
+};
 
 export type KeyAndParams = {
   key: string;
   params: TranslationParams;
   defaultValue?: string;
 };
+export type KeyAndParamsTags<T> = {
+  key: string;
+  params: TranslationParamsTags<T>;
+  defaultValue?: string;
+};
+
 export type TranslatedWithMetadata = {
   translated: string;
   key: string;
   params: TranslationParams;
   defaultValue: string | undefined;
 };
+export type TranslatedWithMetadataTags<T> = {
+  translated: TranslationTags<T>;
+  key: string;
+  params: TranslationParamsTags<T>;
+  defaultValue: string | undefined;
+};
+
+export type TranslationTags<T> = string | T[];
 
 export type NodeWithMeta = Node & {
   _tolgee: NodeMeta;
@@ -78,7 +111,7 @@ export type ElementMeta = {
 
 export type NodeMeta = {
   oldTextContent: string;
-  keys: KeyAndParams[];
+  keys: KeyAndParamsTags<any>[];
 } & NodeLock;
 
 export type NodeLock = {
@@ -95,7 +128,7 @@ export type Scope =
 
 export type Mode = 'development' | 'production';
 
-export type Unwrapped = { text: string; keys: KeyAndParams[] };
+export type Unwrapped = { text: string; keys: KeyAndParamsTags<any>[] };
 
 export interface Formatter {
   format: FormatFunction;
@@ -112,4 +145,4 @@ export type FormatFunction = (props: {
   translation: string;
   params: Record<string, any>;
   language: string;
-}) => string;
+}) => string | any[];

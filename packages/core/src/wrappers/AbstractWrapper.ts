@@ -1,14 +1,14 @@
-import { TranslationParams, Unwrapped } from '../types';
+import { TranslationTags, TranslationParamsTags, Unwrapped } from '../types';
 
 export interface AbstractWrapper {
   handleText(node: Element): Promise<void>;
   handleSubtree(node: Element): Promise<void>;
   handleAttribute(node: Element): Promise<void>;
-  wrap(
+  wrap: (
     key: string,
-    params?: TranslationParams,
+    params?: TranslationParamsTags<any>,
     defaultValue?: string | undefined,
-    translation?: string
-  ): string;
+    translation?: TranslationTags<any>
+  ) => TranslationTags<any>;
   unwrap(text: string): Unwrapped;
 }

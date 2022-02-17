@@ -12,6 +12,11 @@ context('React app in prod mode', () => {
         count: 5,
       },
       { text: 'This is key with params value value2', count: 4 },
+      {
+        text: 'This is a key with tags bold value',
+        count: 2,
+        testId: 'translationWithTags',
+      },
     ],
     de: [
       { text: 'This is default', count: 2 },
@@ -22,6 +27,11 @@ context('React app in prod mode', () => {
       {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
         count: 4,
+      },
+      {
+        text: 'Dies ist ein Schlüssel mit den Tags bold value',
+        count: 2,
+        testId: 'translationWithTags',
       },
     ],
   });

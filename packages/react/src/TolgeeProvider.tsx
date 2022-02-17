@@ -1,5 +1,9 @@
-import * as React from 'react';
-import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { IcuFormatter, Tolgee, TolgeeConfig } from '@tolgee/core';
 
 type ContextValueType = TolgeeConfig & { tolgee: Tolgee };
@@ -14,7 +18,9 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   delete config.children;
   delete config.loadingFallback;
 
-  const [tolgee] = useState(Tolgee.use(IcuFormatter).init(config));
+  const [tolgee] = useState(
+    Tolgee.use(IcuFormatter).init({ wrapperMode: 'invisible', ...config })
+  );
 
   const [loading, setLoading] = useState(tolgee.initialLoading);
 

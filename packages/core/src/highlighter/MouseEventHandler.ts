@@ -53,7 +53,7 @@ export class MouseEventHandler {
     const onMouseOver = () => this.onMouseOver(element);
     const onMouseOut = () => this.onMouseOut(element);
     const onClick = (e: MouseEvent) => {
-      if (this.areKeysDown()) {
+      if (this.areKeysDown() && this.highlighted === e.currentTarget) {
         e.stopPropagation();
         e.preventDefault();
         onclick(e);

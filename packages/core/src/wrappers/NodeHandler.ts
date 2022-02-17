@@ -3,7 +3,7 @@ import { Properties } from '../Properties';
 import {
   ElementMeta,
   ElementWithMeta,
-  KeyAndParams,
+  KeyAndParamsTags,
   NodeLock,
   NodeMeta,
   NodeWithLock,
@@ -71,7 +71,11 @@ export class NodeHandler {
     }
   }
 
-  translateChildNode(node: Text | Attr, newValue, keys: KeyAndParams[]) {
+  translateChildNode(
+    node: Text | Attr,
+    newValue,
+    keys: KeyAndParamsTags<any>[]
+  ) {
     node[TOLGEE_ATTRIBUTE_NAME] = {
       oldTextContent: NodeHelper.getNodeText(node),
       keys,

@@ -1,9 +1,13 @@
 import { TolgeeConfig } from './TolgeeConfig';
 import {
   InstantProps,
+  InstantPropsTags,
   TolgeeModule,
   TranslateProps,
+  TranslatePropsTags,
+  TranslationTags,
   TranslationParams,
+  TranslationParamsTags,
 } from './types';
 
 import { EventEmitterImpl } from './services/EventEmitter';
@@ -160,6 +164,7 @@ export class Tolgee {
   }
 
   async translate(props: TranslateProps): Promise<string>;
+  async translate<T>(props: TranslatePropsTags<T>): Promise<TranslationTags<T>>;
 
   async translate(
     key: string,
@@ -167,13 +172,19 @@ export class Tolgee {
     noWrap?: boolean,
     defaultValue?: string
   ): Promise<string>;
+  async translate<T>(
+    key: string,
+    params?: TranslationParamsTags<T>,
+    noWrap?: boolean,
+    defaultValue?: string
+  ): Promise<TranslationTags<T>>;
 
   async translate(
-    keyOrProps: string | TranslateProps,
-    params: TranslationParams = {},
+    keyOrProps: string | TranslatePropsTags<any>,
+    params: TranslationParamsTags<any> = {},
     noWrap = false,
     defaultValue: string | undefined = undefined
-  ): Promise<string> {
+  ): Promise<TranslationTags<any>> {
     const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
     let orEmpty = undefined;
     if (typeof keyOrProps === 'object') {
@@ -213,7 +224,20 @@ export class Tolgee {
     params?: TranslationParams,
     defaultValue?: string | undefined,
     translation?: string
-  ): string {
+  ): string;
+  wrap<T>(
+    key: string,
+    params?: TranslationTags<T>,
+    defaultValue?: string | undefined,
+    translation?: TranslationTags<T>
+  ): TranslationTags<T>;
+
+  wrap(
+    key: string,
+    params?: any,
+    defaultValue?: string | undefined,
+    translation?: TranslationTags<any>
+  ): TranslationTags<any> {
     if (this.properties.config.mode === 'development') {
       return this.dependencyService.wrapper.wrap(
         key,
@@ -233,16 +257,24 @@ export class Tolgee {
     orEmpty?: boolean,
     defaultValue?: string
   ): string;
+  instant<T>(
+    key: string,
+    params?: TranslationParamsTags<T>,
+    noWrap?: boolean,
+    orEmpty?: boolean,
+    defaultValue?: string
+  ): TranslationTags<T>;
 
   instant(props: InstantProps): string;
+  instant<T>(props: InstantPropsTags<T>): TranslationTags<T>;
 
   instant(
-    keyOrProps: string | InstantProps,
+    keyOrProps: string | InstantPropsTags<any>,
     params: TranslationParams = {},
     noWrap = false,
     orEmpty?: boolean,
     defaultValue?: string
-  ): string {
+  ) {
     const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
     if (typeof keyOrProps === 'object') {
       const props = keyOrProps as InstantProps;

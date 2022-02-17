@@ -1,7 +1,7 @@
-export type TranslationParameters = { [key: string]: string };
+import { TranslationParamsTags } from '@tolgee/core';
 
-export type TranslationsStateKey = {
-  source: string;
-  parameters: TranslationParameters;
-  noWrap: boolean;
+export type ParamsTags = {
+  [key: string]:
+    | TranslationParamsTags<React.ReactNode>['a']
+    | React.ReactElement;
 };
