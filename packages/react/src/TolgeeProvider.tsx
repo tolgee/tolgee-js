@@ -1,5 +1,9 @@
-import * as React from 'react';
-import { FunctionComponent, ReactNode, useEffect, useState } from 'react';
+import React, {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from 'react';
 import { IcuFormatter, Tolgee, TolgeeConfig } from '@tolgee/core';
 
 type ContextValueType = TolgeeConfig & { tolgee: Tolgee };

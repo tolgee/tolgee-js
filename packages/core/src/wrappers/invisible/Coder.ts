@@ -58,6 +58,8 @@ export class Coder {
 
     return typeof value === 'string'
       ? value + invisibleMark
-      : [...value, invisibleMark];
+      : Array.isArray(value)
+      ? [...value, invisibleMark]
+      : [value, invisibleMark];
   }
 }

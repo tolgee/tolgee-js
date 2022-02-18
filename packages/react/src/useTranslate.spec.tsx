@@ -2,9 +2,10 @@ jest.dontMock('./useTranslate');
 jest.dontMock('./tagsTools');
 jest.mock('@tolgee/core');
 
-import { useTranslate } from './useTranslate';
+import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import * as React from 'react';
+
+import { useTranslate } from './useTranslate';
 
 const defaultTranslations = {
   hello: 'translated',

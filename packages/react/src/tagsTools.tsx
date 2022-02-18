@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { TranslationParamsTags } from '@tolgee/core';
+
 import { ParamsTags } from './types';
 
 export const wrapTagHandlers = (params: ParamsTags) => {

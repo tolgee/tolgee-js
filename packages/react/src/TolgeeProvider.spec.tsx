@@ -5,7 +5,7 @@ import { mockTolgee } from './mocks/mockTolgee';
 import * as tolgee from '@tolgee/core';
 
 import '@testing-library/jest-dom/extend-expect';
-import * as React from 'react';
+import React from 'react';
 import { ComponentProps, useContext } from 'react';
 import { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
 

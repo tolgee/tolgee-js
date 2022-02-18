@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
+
 import { ParamsTags } from './types';
 import { useTranslate } from './useTranslate';
 
