@@ -6,9 +6,9 @@
     "url": "https://github.com/tolgee/tolgee-js"
   },
   "dependencies": {
-    "@tolgee/core": "^3.3.0"
+    "@tolgee/core": "^3.4.0-rc.335d537.0"
   },
-  "version": "3.3.0",
+  "version": "3.4.0-rc.335d537.0",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
     "access": "public"

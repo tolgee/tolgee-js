@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 3.4.0-rc.335d537.0 (2022-02-18)
+
+
+### Features
+
+* Update react integration tests ([335d537](https://github.com/tolgee/tolgee-js/commit/335d5373c381183dcd9df6e1367a585112af0db4))
+
+
+
+
+
 # [3.3.0](https://github.com/tolgee/tolgee-js/compare/v3.2.0...v3.3.0) (2022-02-11)
 
 **Note:** Version bump only for package @tolgee/i18next
