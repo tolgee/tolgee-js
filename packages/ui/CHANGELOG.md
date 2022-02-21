@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [3.4.0](https://github.com/tolgee/tolgee-js/compare/v3.3.1...v3.4.0) (2022-02-21)
+
+
+### Features
+
+* UI popup stop closing on save ([2f08494](https://github.com/tolgee/tolgee-js/commit/2f084941947de8f34d573fe2078acb1d6c6a1ee9))
+
+
+
+
+
 ## [3.3.1](https://github.com/tolgee/tolgee-js/compare/v3.3.0...v3.3.1) (2022-02-15)
 
 
