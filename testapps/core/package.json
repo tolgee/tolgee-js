@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/core-testapp",
-  "version": "3.4.0",
+  "version": "3.5.0",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
@@ -13,8 +13,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@tolgee/core": "^3.3.0",
-    "@tolgee/ui": "^3.4.0",
+    "@tolgee/core": "^3.5.0",
+    "@tolgee/ui": "^3.5.0",
     "copy-webpack-plugin": "^10.2.4",
     "html-webpack-plugin": "^5.5.0",
     "serve": "^13.0.2",
