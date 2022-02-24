@@ -89,5 +89,8 @@ export class TolgeeConfig {
     if (this.watch === undefined) {
       this.watch = this.mode === 'development';
     }
+    if (this.availableLanguages === undefined && this.staticData) {
+      this.availableLanguages = Object.keys(this.staticData);
+    }
   }
 }

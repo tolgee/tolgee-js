@@ -1,7 +1,9 @@
 jest.dontMock('./Properties');
+jest.dontMock('./TolgeeConfig');
 
 import '@testing-library/jest-dom/extend-expect';
 import { mocked } from 'ts-jest/utils';
+import { TolgeeConfig } from './TolgeeConfig';
 import { Properties } from './Properties';
 
 describe('Properties', () => {
@@ -64,6 +66,13 @@ describe('Properties', () => {
       const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
       languageGetter.mockReturnValue('cs');
       properties.config = { availableLanguages: ['en', 'cs'] };
+      expect(properties.currentLanguage).toEqual('cs');
+    });
+
+    test('available languages derrived from staticData', () => {
+      const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+      languageGetter.mockReturnValue('cs');
+      properties.config = new TolgeeConfig({ staticData: { en: {}, cs: {} } });
       expect(properties.currentLanguage).toEqual('cs');
     });
 
