@@ -19,7 +19,7 @@
     "@sveltejs/kit": "next",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/svelte": "3.0.3",
-    "@types/jest": "27.4.0",
+    "@types/jest": "27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "eslint": "^8.9.0",
