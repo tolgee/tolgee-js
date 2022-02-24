@@ -40,7 +40,7 @@
     "@tolgee/core": "^3.5.0"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "8.3.0",
+    "@rollup/plugin-typescript": "8.3.1",
     "@testing-library/vue": "^6.4.2",
     "@tolgee/ui": "^3.5.0",
     "@types/jest": "^27.0.2",
