@@ -40,7 +40,7 @@ const Home: NextPage = () => {
 
         <main className={styles.main}>
           <h1>
-            <T>sampleApp.hello_world!</T>
+            <T>on-the-road-title</T>
           </h1>
         </main>
       </div>

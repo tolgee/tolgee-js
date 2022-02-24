@@ -26,7 +26,7 @@ context('UI Dialog', () => {
       'screenshots.view',
       'screenshots.upload',
     ]);
-    cy.contains('Hello world!')
+    cy.contains('On the road')
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
@@ -36,7 +36,7 @@ context('UI Dialog', () => {
       .invoke('attr', 'href')
       .should(
         'contain',
-        '/projects/1/translations/single?key=sampleApp.hello_world!'
+        '/projects/1/translations/single?key=on-the-road-title'
       );
   });
 
@@ -50,20 +50,18 @@ context('UI Dialog', () => {
       'screenshots.delete',
     ]);
     openUI();
-    cy.get('textarea').contains('Hello world!').click();
-    cy.focused().clear().type('Hello Czechia!');
+    cy.get('textarea').contains('On the road').click();
+    cy.focused().clear().type('Hello world');
     cy.intercept({ path: '/v2/projects/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
-          id: 1000000201,
-          name: 'sampleApp.hello_world!',
+          id: 1000000706,
+          name: 'on-the-road-title',
           translations: {
-            en: {
-              id: 1000000301,
-              text: 'Hello Czechia!',
-              state: 'TRANSLATED',
-            },
-            de: { id: 1000000302, text: 'Hallo Welt!', state: 'TRANSLATED' },
+            de: { id: 1000000806, text: 'Auf dem Weg', state: 'TRANSLATED' },
+            en: { id: 1000000817, text: 'Hello world', state: 'TRANSLATED' },
+            fr: { id: 1000000828, text: 'Sur la route', state: 'TRANSLATED' },
+            cs: { id: 1000000839, text: 'Na cestu', state: 'TRANSLATED' },
           },
           tags: [],
           screenshots: [],
@@ -72,7 +70,7 @@ context('UI Dialog', () => {
     }).as('updateTranslation');
     cy.contains('Update').click();
     cy.wait('@updateTranslation');
-    cy.get('span').contains('Hello Czechia!').should('be.visible');
+    cy.get('span').contains('Hello world').should('be.visible');
   });
 
   it('make screenshot', () => {
@@ -83,7 +81,7 @@ context('UI Dialog', () => {
       'screenshots.view',
       'screenshots.upload',
     ]);
-    cy.contains('Hello world!')
+    cy.contains('On the road')
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
@@ -165,7 +163,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Screenshot').should('not.exist');
   });
 
-  const openUI = (translation = 'Hello world!') => {
+  const openUI = (translation = 'On the road') => {
     cy.contains(translation)
       .should('be.visible')
       .trigger('keydown', { key: 'Alt' })
@@ -176,18 +174,22 @@ context('UI Dialog', () => {
   };
 
   const removeScreenshots = () => {
-    getScreenshots(1, 1000000201).then((data) => {
+    getScreenshots(1, 1000000706).then((data) => {
       const screenshotIds = data._embedded?.screenshots.map((sc) => sc.id);
       if (screenshotIds) {
-        return deleteScreenshots(1, 1000000201, screenshotIds);
+        return deleteScreenshots(1, 1000000706, screenshotIds);
       }
     });
   };
 
   const visitWithApiKey = (scopes: Scope[]) => {
-    createApiKey({ projectId: 1, scopes }).then((data) => {
-      cy.visit(`http://localhost:8114/?api_key=${data.key}`);
-    });
-    cy.contains('Hello world!').invoke('attr', '_tolgee').should('exist');
+    createApiKey({ projectId: 1, scopes })
+      .then((data) => {
+        cy.visit(`http://localhost:8114/?api_key=${data.key}`);
+      })
+      .then(() =>
+        localStorage.setItem('__tolgee_preferredLanguages', '["en","de"]')
+      );
+    cy.contains('On the road').invoke('attr', '_tolgee').should('exist');
   };
 });
