@@ -1,4 +1,4 @@
-import { defineComponent, PropType, h } from 'vue';
+import { defineComponent, PropType } from 'vue';
 import { Subscription } from '@tolgee/core/lib/services/Subscription';
 import { TolgeeContext } from './types';
 
@@ -8,9 +8,14 @@ export const T = defineComponent({
     keyName: { type: String, required: true },
     parameters: Object as PropType<{ [key: string]: string }>,
     defaultValue: String as PropType<string>,
+    /** @deprecated */
     strategy: {
       type: String as PropType<'ELEMENT_WRAP' | 'NO_WRAP'>,
       default: 'ELEMENT_WRAP',
+    },
+    noWrap: {
+      type: Boolean,
+      default: false,
     },
   },
   inject: ['tolgeeContext'],
@@ -24,10 +29,9 @@ export const T = defineComponent({
         (this.$props.keyName &&
           tolgeeContext.tolgee.instant({
             key: this.$props.keyName || '',
-            noWrap: true,
+            noWrap: this.$props.noWrap,
             params: this.$props.parameters,
             orEmpty: true,
-            defaultValue: this.$props.defaultValue,
           })) ||
         ('' as string),
       translationSubscription: null as Subscription | null,
@@ -41,9 +45,8 @@ export const T = defineComponent({
       tolgeeContext.tolgee
         .translate({
           key: this.$props.keyName || '',
-          noWrap: true,
+          noWrap: this.$props.noWrap,
           params: this.$props.parameters,
-          orEmpty: true,
           defaultValue: this.$props.defaultValue,
         })
         .then((t) => {
@@ -78,21 +81,7 @@ export const T = defineComponent({
     this.unsubscribe();
   },
   render() {
-    const children = this.$slots.default?.();
-    // when there is no translation, use children as default or keyName
-    const content = this.$data.translation || children || this.$props.keyName;
-
-    switch (this.$props.strategy) {
-      case 'NO_WRAP':
-        return content;
-      case 'ELEMENT_WRAP':
-      default: {
-        return h(
-          'span',
-          { 'data-tolgee-key-only': this.$props.keyName },
-          content
-        );
-      }
-    }
+    const content = this.$data.translation;
+    return content;
   },
 });

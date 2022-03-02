@@ -4,7 +4,6 @@
   import type { TolgeeConfig } from '@tolgee/core';
 
   const tolgeeConfig = {
-    preloadFallback: true,
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
     ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,

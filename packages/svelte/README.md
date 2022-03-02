@@ -67,7 +67,7 @@ To translate texts using Tolgee Svelte integration, you can use `T` component or
 </script>
 
 
-<T keyName="key">This is default</T>
+<T keyName="key" defaultValue="This is default" />
 ```
 
 ### getTranslate function

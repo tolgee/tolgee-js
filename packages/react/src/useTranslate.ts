@@ -126,7 +126,7 @@ export const useTranslate: () => ReturnFnType = () => {
       let noWrap: boolean = undefined;
       let defaultValue = undefined;
       // allow user to pass object of params and make the code cleaner
-      const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
+      const key = typeof keyOrProps === 'object' ? keyOrProps.key : keyOrProps;
       if (typeof keyOrProps === 'object') {
         parameters = keyOrProps.parameters;
         noWrap = keyOrProps.noWrap;

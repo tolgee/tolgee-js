@@ -26,7 +26,10 @@ export class TranslateService implements OnDestroy {
    */
   public async start(config: TolgeeConfig): Promise<void> {
     if (!this.runPromise) {
-      this._tolgee = Tolgee.use(IcuFormatter).init(config);
+      this._tolgee = Tolgee.use(IcuFormatter).init({
+        wrapperMode: 'invisible',
+        ...config,
+      });
       this.runPromise = this.tolgee.run();
       // unsubscribe first, if it is subscribed for some reason
       this.unsubscribeCoreListeners();

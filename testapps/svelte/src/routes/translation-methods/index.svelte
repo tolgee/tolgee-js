@@ -1,6 +1,6 @@
 <script>
-  import { T, getTranslate } from "@tolgee/svelte";
-  import Navbar from "../../component/Navbar.svelte";
+  import { T, getTranslate } from '@tolgee/svelte';
+  import Navbar from '../../component/Navbar.svelte';
 
   const t = getTranslate();
 </script>
@@ -16,9 +16,17 @@
     <div>
       <h1>T component with default</h1>
       <div>
-        <T keyName="this_key_does_not_exist">This is default</T>
+        <T keyName="this_key_does_not_exist" defaultValue="This is default" />
       </div>
     </div>
+
+    <div>
+      <h1>T component with default</h1>
+      <div>
+        <T defaultValue="This is default" />
+      </div>
+    </div>
+
     <div>
       <h1>T component without default</h1>
       <div>
@@ -28,21 +36,18 @@
     <div>
       <h1>T component with params</h1>
       <div>
-        <T keyName="this_is_a_key_with_params" parameters={{key: "value", key2: "value2"}} />
+        <T keyName="this_is_a_key_with_params" parameters={{ key: 'value', key2: 'value2' }} />
       </div>
     </div>
 
     <div>
-      <h1>T component with NO_WRAP strategy</h1>
+      <h1>T component with noWrap</h1>
       <div>
-        <T keyName="this_is_a_key_with_params" parameters={{key: "value", key2: "value2"}} strategy="NO_WRAP" />
-      </div>
-    </div>
-
-    <div>
-      <h1>T component with TEXT_WRAP strategy</h1>
-      <div>
-        <T keyName="this_is_a_key_with_params" parameters={{key: "value", key2: "value2"}} strategy="TEXT_WRAP" />
+        <T
+          keyName="this_is_a_key_with_params"
+          parameters={{ key: 'value', key2: 'value2' }}
+          noWrap={true}
+        />
       </div>
     </div>
 
@@ -56,7 +61,7 @@
     <div>
       <h1>t function with params</h1>
       <div>
-        {$t('this_is_a_key_with_params', { key: "value", key2: "value2" })}
+        {$t('this_is_a_key_with_params', { key: 'value', key2: 'value2' })}
       </div>
     </div>
 
@@ -70,21 +75,21 @@
     <div>
       <h1>t function with default</h1>
       <div>
-        {$t('this_key_does_not_exist', undefined, false, 'This is default')}
+        {$t('this_key_does_not_exist', 'This is default')}
       </div>
     </div>
 
     <div>
       <h1>t function with props object</h1>
       <div>
-        {$t({ key: "this_is_a_key", parameters: { key: "value", key2: "value2" } })}
+        {$t('this_is_a_key', { key: 'value', key2: 'value2' })}
       </div>
     </div>
 
     <div>
       <h1>t function with props object noWrap is true</h1>
       <div>
-        {$t({ key: "this_is_a_key", parameters: { key: "value", key2: "value2" }, noWrap: true })}
+        {$t({ key: 'this_is_a_key', parameters: { key: 'value', key2: 'value2' }, noWrap: true })}
       </div>
     </div>
   </div>

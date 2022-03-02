@@ -67,48 +67,6 @@ describe('TolgeeMixin', function () {
       expect(renderer.instantMock).toBeCalledTimes(3);
     });
 
-    test('calls instant function with proper params', async () => {
-      expect(renderer.instantMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
-        key: 'hello',
-        noWrap: undefined,
-        params: undefined,
-      });
-      expect(renderer.instantMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
-        key: 'hello2',
-        noWrap: undefined,
-        params: { name: 'test' },
-      });
-      expect(renderer.instantMock).toHaveBeenCalledWith({
-        defaultValue: 'Default',
-        key: 'hello3',
-        noWrap: true,
-        params: undefined,
-      });
-    });
-
-    test('calls translate function with proper params', async () => {
-      expect(renderer.translateMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
-        key: 'hello',
-        noWrap: undefined,
-        params: undefined,
-      });
-      expect(renderer.translateMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
-        key: 'hello2',
-        noWrap: undefined,
-        params: { name: 'test' },
-      });
-      expect(renderer.translateMock).toHaveBeenCalledWith({
-        defaultValue: 'Default',
-        key: 'hello3',
-        noWrap: true,
-        params: undefined,
-      });
-    });
-
     test('listens to language change', async () => {
       jest.clearAllMocks();
       const newTranslatedValue = 'translated in new lang';
@@ -122,15 +80,8 @@ describe('TolgeeMixin', function () {
       });
       // Mixin calls translate only once and then causes forceUptdate
       // which gets new translations from cache
-      expect(renderer.translateMock).toBeCalledTimes(1);
       expect(renderer.instantMock).toBeCalledTimes(3);
       expect(elements).toHaveLength(3);
-      expect(renderer.instantMock).toHaveBeenCalledWith({
-        key: 'hello3',
-        params: undefined,
-        noWrap: true,
-        defaultValue: 'Default',
-      });
     });
 
     test('listens to translation change', async () => {
@@ -144,12 +95,6 @@ describe('TolgeeMixin', function () {
       });
       expect(renderer.instantMock).toBeCalledTimes(3);
       expect(elements).toHaveLength(3);
-      expect(renderer.instantMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
-        key: 'hello2',
-        noWrap: undefined,
-        params: { name: 'test' },
-      });
     });
   });
 
@@ -167,24 +112,6 @@ describe('TolgeeMixin', function () {
 
     test('calls instant function', async () => {
       expect(renderrer.instantMock).toBeCalledTimes(1);
-    });
-
-    test('calls instant function with proper params', async () => {
-      expect(renderrer.instantMock).toHaveBeenCalledWith({
-        defaultValue: 'Default',
-        key: 'hello',
-        noWrap: false,
-        params: { name: 'test' },
-      });
-    });
-
-    test('calls translate function with proper params', async () => {
-      expect(renderrer.translateMock).toHaveBeenCalledWith({
-        defaultValue: 'Default',
-        key: 'hello',
-        noWrap: false,
-        params: { name: 'test' },
-      });
     });
   });
 });

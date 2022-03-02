@@ -10,12 +10,17 @@ export class Observer {
   ) {}
 
   private _observer = undefined;
+  private _observing = false;
 
   private get observer(): MutationObserver | undefined {
     if (!this._observer && typeof window !== 'undefined') {
       this._observer = new MutationObserver(
         async (mutationsList: MutationRecord[]) => {
           for (const mutation of mutationsList) {
+            if (!this._observing) {
+              // make sure we don't touch the DOM after disconnect is called
+              return;
+            }
             if (mutation.type === 'characterData') {
               await this.textWrapper.handleText(mutation.target as Element);
               continue;
@@ -41,6 +46,10 @@ export class Observer {
     if (!this.observer) {
       return;
     }
+    if (this._observing) {
+      throw new Error('Tolgee: Observer is already running');
+    }
+    this._observing = true;
     this.observer.observe(this.properties.config.targetElement, {
       attributes: true,
       childList: true,
@@ -53,6 +62,7 @@ export class Observer {
     if (!this.observer) {
       return;
     }
+    this._observing = false;
     this.observer.disconnect();
   }
 }

@@ -81,7 +81,7 @@ Then use the library in your app:
 or with default value
 
 ```html
-<T keyName="translation_key">Default value</T>
+<T keyName="translation_key" defaultValue="Default value" />
 ```
 
 ## TolgeeMixin for imperative translations
