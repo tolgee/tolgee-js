@@ -37,23 +37,12 @@ export const TranslationMethods = () => {
         </div>
 
         <div>
-          <h1>T component with NO_WRAP strategy</h1>
+          <h1>T component with noWrap</h1>
           <div>
             <T
               keyName="this_is_a_key_with_params"
               parameters={{ key: 'value', key2: 'value2' }}
-              strategy="NO_WRAP"
-            />
-          </div>
-        </div>
-
-        <div>
-          <h1>T component with TEXT_WRAP strategy</h1>
-          <div>
-            <T
-              keyName="this_is_a_key_with_params"
-              parameters={{ key: 'value', key2: 'value2' }}
-              strategy="TEXT_WRAP"
+              noWrap
             />
           </div>
         </div>

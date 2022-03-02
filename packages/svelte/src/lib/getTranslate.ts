@@ -1,11 +1,8 @@
 import getTolgeeContext from './getTolgeeContext';
-import type {
-  TranslationParameters,
-  GetTranslateType,
-  GetTranslateResultFnProps,
-} from './types';
+import type { GetTranslateResultFnProps, GetTranslateType } from './types';
 import { derived, writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
+import type { TranslationParams } from '@tolgee/core';
 
 const getTranslate: GetTranslateType = () => {
   const context = getTolgeeContext();
@@ -22,7 +19,7 @@ const getTranslate: GetTranslateType = () => {
 
   const translate = (
     key: string,
-    parameters?: TranslationParameters,
+    parameters?: TranslationParams,
     noWrap?: boolean,
     defaultValue?: string
   ) => {
@@ -85,21 +82,37 @@ const getTranslate: GetTranslateType = () => {
     updateStore,
     () =>
       (
-        propsOrKey: GetTranslateResultFnProps | string,
-        parameters?: TranslationParameters,
-        noWrap?: boolean,
-        defaultValue?: string
+        keyOrProps: GetTranslateResultFnProps | string,
+        ...params: (TranslationParams | boolean | string)[]
       ) => {
-        if (typeof propsOrKey === 'string') {
-          return translate(propsOrKey, parameters, noWrap, defaultValue);
+        let parameters: TranslationParams = undefined;
+        let noWrap: boolean = undefined;
+        let defaultValue = undefined;
+
+        // allow user to pass object of params and make the code cleaner
+        const key =
+          typeof keyOrProps === 'object' ? keyOrProps.key : keyOrProps;
+
+        if (typeof keyOrProps === 'object') {
+          parameters = keyOrProps.parameters;
+          noWrap = keyOrProps.noWrap;
+          defaultValue = keyOrProps.defaultValue;
+        } else {
+          params.forEach((param) => {
+            switch (typeof param) {
+              case 'object':
+                parameters = param;
+                break;
+              case 'boolean':
+                noWrap = param;
+                break;
+              case 'string':
+                defaultValue = param;
+            }
+          });
         }
 
-        return translate(
-          propsOrKey.key,
-          propsOrKey.parameters,
-          propsOrKey.noWrap,
-          propsOrKey.defaultValue
-        );
+        return translate(key, parameters, noWrap, defaultValue);
       }
   );
 };

@@ -1,10 +1,8 @@
-import { Tolgee } from '@tolgee/core';
-
-export type TranslationParameters = { [key: string]: string };
+import { Tolgee, TranslationParams } from '@tolgee/core';
 
 export type TranslateFnProps = {
   key: string;
-  parameters?: TranslationParameters;
+  parameters?: TranslationParams;
   noWrap?: boolean;
   defaultValue?: string;
 };

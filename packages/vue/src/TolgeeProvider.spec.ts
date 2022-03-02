@@ -45,17 +45,6 @@ describe('Tolgee Provider Component', function () {
     expect(mockedTolgee.tolgee.stop).toHaveBeenCalledTimes(1);
   });
 
-  test('renders loadingFallback', async () => {
-    // @ts-ignore
-    mockedTolgee.tolgee.initialLoading = true;
-    render(ProviderComponent, {
-      props: { config: {}, loadingFallback: 'loading' },
-    });
-    await waitFor(() => {
-      screen.getByText('loading');
-    });
-  });
-
   test('renders loadingFallback with slot', async () => {
     // @ts-ignore
     mockedTolgee.tolgee.initialLoading = true;
