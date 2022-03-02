@@ -5,7 +5,10 @@
 
   export let config: TolgeeConfig;
 
-  const tolgee = Tolgee.use(IcuFormatter).init(config || new TolgeeConfig());
+  const tolgee = Tolgee.use(IcuFormatter).init({
+    wrapperMode: 'invisible',
+    ...(config || new TolgeeConfig()),
+  });
 
   let tolgeeRunPromise: Promise<void>;
 

@@ -13,28 +13,33 @@ import { render, screen, waitFor } from '@testing-library/react';
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
 
-let resolveEnglish;
-let resolveCzech;
+export const createFetchMock = () => {
+  let resolveCzech;
+  let resolveEnglish;
+  const czechPromise = new Promise((resolve) => {
+    resolveCzech = () => {
+      resolve(JSON.stringify({ cs: mockTranslations.cs }));
+    };
+  });
 
-const fetch = fetchMock.mockResponse(async (req) => {
-  if (req.url.includes('/v2/api-keys/current')) {
-    return JSON.stringify(testConfig);
-  } else if (req.url.includes('/v2/projects/translations/en')) {
-    return new Promise((resolve) => {
-      resolveEnglish = () => {
-        resolve(JSON.stringify({ en: mockTranslations.en }));
-      };
-    });
-  } else if (req.url.includes('/v2/projects/translations/cs')) {
-    return new Promise((resolve) => {
-      resolveCzech = () => {
-        resolve(JSON.stringify({ cs: mockTranslations.cs }));
-      };
-    });
-  }
+  const englishPromise = new Promise((resolve) => {
+    resolveEnglish = () => {
+      resolve(JSON.stringify({ en: mockTranslations.en }));
+    };
+  });
 
-  throw new Error('Invalid request');
-});
+  const fetch = fetchMock.mockResponse(async (req) => {
+    if (req.url.includes('/v2/api-keys/current')) {
+      return JSON.stringify(testConfig);
+    } else if (req.url.includes('/v2/projects/translations/en')) {
+      return englishPromise;
+    } else if (req.url.includes('/v2/projects/translations/cs')) {
+      return czechPromise;
+    }
+    throw new Error('Invalid request');
+  });
+  return { fetch, resolveCzech, resolveEnglish };
+};
 
 describe('TolgeeProvider integration', () => {
   const TestComponent = () => {
@@ -53,8 +58,14 @@ describe('TolgeeProvider integration', () => {
   };
 
   describe('regular settings', () => {
+    let resolveEnglish;
+    let resolveCzech;
+
     beforeEach(async () => {
-      fetch.enableMocks();
+      const fetchMock = createFetchMock();
+      resolveCzech = fetchMock.resolveCzech;
+      resolveEnglish = fetchMock.resolveEnglish;
+      fetchMock.fetch.enableMocks();
       act(() => {
         render(
           <TolgeeProvider
@@ -104,8 +115,14 @@ describe('TolgeeProvider integration', () => {
   });
 
   describe('with preloadFallback', () => {
+    let resolveEnglish;
+    let resolveCzech;
+
     beforeEach(async () => {
-      fetch.enableMocks();
+      const fetchMock = createFetchMock();
+      resolveCzech = fetchMock.resolveCzech;
+      resolveEnglish = fetchMock.resolveEnglish;
+      fetchMock.fetch.enableMocks();
       act(() => {
         render(
           <TolgeeProvider
