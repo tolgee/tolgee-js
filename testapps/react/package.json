@@ -50,7 +50,7 @@
     }
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "5.12.1",
+    "@typescript-eslint/parser": "5.13.0",
     "mutationobserver-shim": "^0.3.7"
   }
 }
