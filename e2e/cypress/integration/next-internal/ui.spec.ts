@@ -70,7 +70,7 @@ context('UI Dialog', () => {
     }).as('updateTranslation');
     cy.contains('Update').click();
     cy.wait('@updateTranslation');
-    cy.get('span').contains('Hello world').should('be.visible');
+    cy.contains('Hello world').should('be.visible');
   });
 
   it('make screenshot', () => {

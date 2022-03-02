@@ -11,7 +11,10 @@ export const TolgeeProvider = defineComponent({
     },
   },
   created() {
-    const tolgee = Tolgee.use(IcuFormatter).init({ ...this.$props.config });
+    const tolgee = Tolgee.use(IcuFormatter).init({
+      wrapperMode: 'invisible',
+      ...this.$props.config,
+    });
 
     this.tolgeeContext.tolgee = tolgee;
     this.tolgeeContext.language = tolgee.lang;

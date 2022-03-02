@@ -1,49 +1,39 @@
 <script lang="ts">
-  import getTolgeeContext from "./getTolgeeContext";
-  import { onDestroy } from "svelte";
+  import getTolgeeContext from './getTolgeeContext';
+  import { onDestroy } from 'svelte';
 
   export let keyName: string;
   export let parameters: Record<string, any> | undefined = undefined;
-  export let strategy: "ELEMENT_WRAP" | "TEXT_WRAP" | "NO_WRAP" =
-    "ELEMENT_WRAP";
+  export let noWrap: boolean = false;
+  export let defaultValue = undefined;
 
   if (!keyName) {
-    console.error("Missing keyName prop!");
-    // show the error in the DOM
-    keyName = "Tolgee: Missing key name prop!";
-    strategy = "NO_WRAP";
+    console.error('Missing keyName prop!');
   }
 
-  const translationFnNoWrap =
-    strategy === "NO_WRAP" || strategy === "ELEMENT_WRAP";
   const tolgeeContext = getTolgeeContext();
 
+  let translated = keyName
+    ? tolgeeContext.tolgee.instant(keyName, parameters, noWrap, true)
+    : '';
 
-  let translated = tolgeeContext.tolgee.instant(
-    keyName,
-    parameters,
-    translationFnNoWrap,
-    true
-  );
-
-  let spanWrapperRef: Element;
-
-  const translate = () =>
-    tolgeeContext.tolgee
-      .translate(
-        keyName,
-        parameters,
-        translationFnNoWrap,
-        spanWrapperRef?.textContent || undefined
-      )
-      .then((result) => {
-        translated = result;
-      })
-      .catch(() => {
-        console.error("Failed to resolve translation for key: ", keyName);
-      });
-
-  translate();
+  const translate = () => {
+    if (keyName) {
+      tolgeeContext.tolgee
+        .translate({
+          key: keyName,
+          params: parameters,
+          noWrap,
+          defaultValue,
+        })
+        .then((result) => {
+          translated = result;
+        })
+        .catch(() => {
+          console.error('Failed to resolve translation for key: ', keyName);
+        });
+    }
+  };
 
   const onTranslationChangeSubscription =
     tolgeeContext.tolgee.onTranslationChange.subscribe((changeData) => {
@@ -58,34 +48,14 @@
     }
   );
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     onDestroy(() => {
       onTranslationChangeSubscription.unsubscribe();
       onLangChangeSubscription.unsubscribe();
     });
   }
 
-  $: (spanWrapperRef && spanWrapperRef.textContent) && translate();
+  $: translate();
 </script>
 
-{#if strategy === 'ELEMENT_WRAP'}
-  <span data-tolgee-key-only={keyName} bind:this={spanWrapperRef}>
-    {#if !translated}
-      {#if $$slots.default}
-        <slot />
-      {:else}
-        {keyName}
-      {/if}
-    {:else}
-      {translated}
-    {/if}
-  </span>
-{:else if !translated}
-  {#if $$slots.default}
-    <slot />
-  {:else}
-    {keyName}
-  {/if}
-{:else}
-  {translated}
-{/if}
+{translated}

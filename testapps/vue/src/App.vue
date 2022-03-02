@@ -27,6 +27,7 @@ export default defineComponent({
   data() {
     return {
       config: {
+        defaultLanguage: 'en',
         staticData: {
           en: () => import('../i18n/en.json'),
           de: () => import('../i18n/de.json'),

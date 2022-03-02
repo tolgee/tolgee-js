@@ -12,7 +12,7 @@ context('Svelte app in dev mode', () => {
         text: 'This is a key',
         count: 5,
       },
-      { text: 'This is key with params value value2', count: 4 },
+      { text: 'This is key with params value value2', count: 3 },
     ],
     de: [
       { text: 'This is default', count: 2 },
@@ -22,7 +22,7 @@ context('Svelte app in dev mode', () => {
       },
       {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
-        count: 4,
+        count: 3,
       },
     ],
   });
