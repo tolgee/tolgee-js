@@ -91,6 +91,38 @@ describe('Properties', () => {
         defaultLanguage: 'en-US',
       };
       expect(properties.currentLanguage).toEqual('en-US');
+    });    
+
+    test('returns correct parent language ignoring dialect', () => {
+      const dummyReturn = 'en-US';
+      Storage.prototype.getItem = jest.fn();
+      mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
+      properties.config = {
+        availableLanguages: ['en']
+      };
+      expect(properties.currentLanguage).toEqual('en');
+    });  
+
+    test('returns correct parent language ignoring dialect and fallback', () => {
+      const dummyReturn = 'en-US';
+      Storage.prototype.getItem = jest.fn();
+      mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
+      properties.config = {
+        availableLanguages: ['en'],
+        fallbackLanguage: 'de'
+      };
+      expect(properties.currentLanguage).toEqual('en');
+    });
+
+    test('returns correct fallback language ignoring non-available dialect and parent', () => {
+      const dummyReturn = 'en-US';
+      Storage.prototype.getItem = jest.fn();
+      mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
+      properties.config = {
+        availableLanguages: ['de','it'],
+        fallbackLanguage: 'it'
+      };
+      expect(properties.currentLanguage).toEqual('it');
     });
 
     test('resets current language when missing in availableLanguages', () => {
