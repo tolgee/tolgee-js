@@ -120,7 +120,7 @@ describe('Properties', () => {
       mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
       properties.config = {
         availableLanguages: ['de','it'],
-        fallbackLanguage: 'it'
+        defaultLanguage: 'it'
       };
       expect(properties.currentLanguage).toEqual('it');
     });
