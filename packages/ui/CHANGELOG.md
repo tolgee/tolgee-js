@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.0.0-rc.69d2a92.0 (2022-03-09)
+
+
+### Features
+
+* Use invisible wrapping instead of span component ([69d2a92](https://github.com/tolgee/tolgee-js/commit/69d2a92aa1d58415166ba320f1eea8a472665ea6))
+
+
+### BREAKING CHANGES
+
+* default invisible mode, defaultValue
+
+
+
+
+
 # [3.6.0](https://github.com/tolgee/tolgee-js/compare/v3.5.0...v3.6.0) (2022-02-28)
 
 **Note:** Version bump only for package @tolgee/ui
