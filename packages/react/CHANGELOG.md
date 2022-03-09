@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 3.6.1-rc.fb16d2e.0 (2022-03-09)
+
+
+### Performance Improvements
+
+* Use invisible wrapping instead of span component ([fb16d2e](https://github.com/tolgee/tolgee-js/commit/fb16d2e04b4005f6867bdfc241f1510625c105aa))
+
+
+
+
+
 # [3.6.0](https://github.com/tolgee/tolgee-js/compare/v3.5.0...v3.6.0) (2022-02-28)
 
 **Note:** Version bump only for package @tolgee/react
