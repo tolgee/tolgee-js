@@ -7,6 +7,8 @@
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
     ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,
+    // remove this to enable language auto detection
+    languageDetect: false,
     staticData: {
       en: () => import('../i18n/en.json').then((m) => m.default),
       de: () => import('../i18n/de.json').then((m) => m.default),

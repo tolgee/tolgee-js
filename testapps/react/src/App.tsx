@@ -17,6 +17,8 @@ export const App = () => {
       apiUrl={process.env.REACT_APP_TOLGEE_API_URL}
       apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
       loadingFallback={<div>Loading...</div>}
+      // remove this to enable language auto detection
+      languageDetect={false}
       ui={
         process.env.REACT_APP_TOLGEE_API_KEY
           ? require('@tolgee/ui').UI

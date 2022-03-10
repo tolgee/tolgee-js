@@ -45,16 +45,41 @@ describe('Properties', () => {
   describe('current language', () => {
     test('getter returns from local storage', () => {
       const dummyReturn = 'cs';
-      properties.config = { availableLanguages: ['cs', 'en'] };
+      properties.config = new TolgeeConfig({
+        availableLanguages: ['cs', 'en'],
+      });
       Storage.prototype.getItem = jest.fn();
       mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
       expect(properties.currentLanguage).toEqual(dummyReturn);
       expect(localStorage.getItem).toBeCalledWith('__tolgee_currentLanguage');
     });
 
+    test('uses defaultLanguage without localStorage and language detection', () => {
+      const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+      Storage.prototype.getItem = jest.fn();
+      Storage.prototype.setItem = jest.fn();
+      const defaultLanguage = 'cs';
+      properties.config = new TolgeeConfig({
+        defaultLanguage,
+        languageStore: false,
+        languageDetect: false,
+      });
+      expect(properties.currentLanguage).toEqual(defaultLanguage);
+
+      properties.currentLanguage = 'de';
+      expect(properties.currentLanguage).toEqual('de');
+
+      expect(localStorage.setItem).not.toBeCalled();
+      expect(languageGetter).not.toBeCalledWith('__tolgee_currentLanguage');
+      expect(localStorage.getItem).not.toBeCalledWith(
+        '__tolgee_currentLanguage'
+      );
+    });
+
     test('setter sets local storage item', () => {
       const dummySet = 'dummyLang1';
       Storage.prototype.setItem = jest.fn();
+      properties.config = new TolgeeConfig();
       properties.currentLanguage = dummySet;
       expect(localStorage.setItem).toBeCalledWith(
         '__tolgee_currentLanguage',
@@ -65,7 +90,9 @@ describe('Properties', () => {
     test('returns correct lang by navigator', () => {
       const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
       languageGetter.mockReturnValue('cs');
-      properties.config = { availableLanguages: ['en', 'cs'] };
+      properties.config = new TolgeeConfig({
+        availableLanguages: ['en', 'cs'],
+      });
       expect(properties.currentLanguage).toEqual('cs');
     });
 
@@ -79,17 +106,20 @@ describe('Properties', () => {
     test('returns default lang if not available', () => {
       const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
       languageGetter.mockReturnValue('cs');
-      properties.config = { availableLanguages: ['en'], defaultLanguage: 'en' };
+      properties.config = new TolgeeConfig({
+        availableLanguages: ['en'],
+        defaultLanguage: 'en',
+      });
       expect(properties.currentLanguage).toEqual('en');
     });
 
     test('returns correct language ignoring dialect', () => {
       const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
       languageGetter.mockReturnValue('en-GB');
-      properties.config = {
+      properties.config = new TolgeeConfig({
         availableLanguages: ['en-US'],
         defaultLanguage: 'en-US',
-      };
+      });
       expect(properties.currentLanguage).toEqual('en-US');
     });
 
@@ -97,10 +127,10 @@ describe('Properties', () => {
       const dummyReturn = 'cs';
       Storage.prototype.getItem = jest.fn();
       mocked(localStorage.getItem).mockReturnValueOnce(dummyReturn);
-      properties.config = {
+      properties.config = new TolgeeConfig({
         availableLanguages: ['en', 'de'],
         defaultLanguage: 'en',
-      };
+      });
       expect(properties.currentLanguage).toEqual('en');
     });
   });

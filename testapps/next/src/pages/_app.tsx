@@ -21,6 +21,8 @@ function MyApp({ Component, pageProps, locales }: AppProps & { locales: any }) {
         fr: () => import('../i18n/fr.json'),
         ...locales,
       }}
+      // remove this to enable language auto detection
+      languageDetect={false}
       loadingFallback={<div>Loading...</div>}
       ui={apiKey ? require('@tolgee/ui').UI : undefined}
     >

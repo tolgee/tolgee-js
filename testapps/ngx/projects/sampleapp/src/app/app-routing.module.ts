@@ -35,6 +35,8 @@ const routes: Routes = [
         de: () => import('../i18n/de.json'),
         fr: () => import('../i18n/fr.json'),
       },
+      // remove this to enable language auto detection
+      languageDetect: false,
       preloadFallback: true,
       apiUrl: environment.tolgeeApiUrl,
       apiKey: environment.tolgeeApiKey,

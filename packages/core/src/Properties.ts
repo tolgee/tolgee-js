@@ -11,47 +11,40 @@ export class Properties {
   _currentLanguage?: string;
 
   get currentLanguage(): string {
-    let result;
-
-    if (this.config.forceLanguage) {
+    if (this.config?.forceLanguage) {
       return this.config.forceLanguage;
     }
 
-    if (typeof localStorage !== 'undefined') {
-      const storedLanguage = localStorage.getItem(
-        CURRENT_LANGUAGE_LOCAL_STORAGE_KEY
-      );
+    if (this._currentLanguage) {
+      return this._currentLanguage;
+    }
+
+    if (this.config.languageStore) {
+      const storedLanguage = this.getStoredLanguage();
       if (storedLanguage) {
-        result = storedLanguage;
+        return storedLanguage;
       }
-
-      if (this.config.availableLanguages) {
-        const isSavedLanguageAvailable =
-          this.config.availableLanguages.indexOf(result) > -1;
-        if (!isSavedLanguageAvailable) {
-          result = undefined;
-        }
-      }
-    } else {
-      result = this._currentLanguage;
     }
 
-    if (!result) {
-      result = this.getLanguageByNavigator();
-      this.currentLanguage = result;
+    if (this.config.languageDetect) {
+      const detectedLanguage = this.getLanguageByNavigator();
+      if (detectedLanguage) {
+        return detectedLanguage;
+      }
     }
-    return result;
+
+    return this.config.defaultLanguage;
   }
 
   set currentLanguage(language: string) {
     if (!language) {
       throw new Error(`Setting invalid language value ${language}`);
     }
-    if (typeof localStorage === 'undefined') {
-      this._currentLanguage = language;
-      return;
+    this._currentLanguage = language;
+
+    if (this.config?.languageStore && typeof localStorage !== 'undefined') {
+      localStorage.setItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY, language);
     }
-    localStorage.setItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY, language);
   }
 
   get preferredLanguages(): Set<string> {
@@ -65,6 +58,25 @@ export class Properties {
       PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
       JSON.stringify(Array.from(languages))
     );
+  }
+
+  private getStoredLanguage() {
+    if (typeof localStorage !== 'undefined') {
+      const storedLanguage = localStorage.getItem(
+        CURRENT_LANGUAGE_LOCAL_STORAGE_KEY
+      );
+
+      if (!this.config.availableLanguages) {
+        return storedLanguage;
+      }
+
+      const isSavedLanguageAvailable =
+        this.config.availableLanguages.indexOf(storedLanguage) > -1;
+
+      if (isSavedLanguageAvailable) {
+        return storedLanguage;
+      }
+    }
   }
 
   private getLanguageByNavigator() {
@@ -87,6 +99,5 @@ export class Properties {
         return twoLetterMatch;
       }
     }
-    return this.config.defaultLanguage;
   }
 }
