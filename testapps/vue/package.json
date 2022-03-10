@@ -22,7 +22,7 @@
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-plugin-typescript": "~4.5.0",
+    "@vue/cli-plugin-typescript": "~5.0.1",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.2.31",
     "prettier": "^2.5.1",
