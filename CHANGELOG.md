@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.1.0](https://github.com/tolgee/tolgee-js/compare/v4.0.0...v4.1.0) (2022-03-10)
+
+
+### Features
+
+* Allow language detection and localStorage disable ([b8e8f43](https://github.com/tolgee/tolgee-js/commit/b8e8f435bdc36eb1c029d5dbcc71bf09b7c77bb8))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 
