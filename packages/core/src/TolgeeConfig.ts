@@ -17,10 +17,31 @@ export class TolgeeConfig {
   apiKey?: string;
   inputPrefix?: string = '%-%tolgee:';
   inputSuffix?: string = '%-%';
+  /**
+   * Overrides all language settings
+   */
   forceLanguage?: string;
+  /**
+   * Used when auto detection is not available or is turned off
+   */
   defaultLanguage?: string = 'en';
+  /**
+   * Languages which can be used for language detection
+   * and also limits which values can be stored
+   */
   availableLanguages?: string[];
+  /**
+   * Language which is used when no translation is available for current one
+   */
   fallbackLanguage?: string;
+  /**
+   * Store user language in localStorage (default: true)
+   */
+  languageStore?: boolean = true;
+  /**
+   * Use auto language detection by browser locale (default: true)
+   */
+  languageDetect?: boolean = true;
   filesUrlPrefix?: string = 'i18n/';
   watch?: boolean;
   ui?: (new (...args) => any) | (() => Promise<new (...args) => any>);

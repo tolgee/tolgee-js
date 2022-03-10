@@ -14,6 +14,8 @@ export const AppWrapper: React.FC = ({ children }) => {
       apiUrl={process.env.GATSBY_TOLGEE_API_URL}
       wrapperMode="invisible"
       fallbackLanguage="en"
+      // remove this to enable language auto detection
+      languageDetect={false}
       staticData={{
         de: () => import('../i18n/de.json'),
         cs: () => import('../i18n/cs.json'),

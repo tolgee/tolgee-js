@@ -34,6 +34,8 @@ export default defineComponent({
           fr: () => import('../i18n/fr.json'),
           cs: () => import('../i18n/cs.json'),
         },
+        // remove this to enable language auto detection
+        languageDetect: false,
         apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
         apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
         ui: process.env.VUE_APP_TOLGEE_API_KEY
