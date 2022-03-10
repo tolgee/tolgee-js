@@ -31,6 +31,13 @@ describe('useTolgee integration', () => {
   const TestComponent = () => {
     const t = useTranslate();
     tolgee = useTolgeeContext().tolgee;
+
+    expect(typeof t('peter_dogs', { dogsCount: '5' })).toEqual('string');
+    expect(typeof t('non_existant', '<i>non_formatted</i>')).toEqual('string');
+    expect(
+      typeof t('non_existant', '<i>{parameter}</i>', { parameter: 'test' })
+    ).toEqual('string');
+
     return (
       <>
         <div data-testid="peter_dogs">
