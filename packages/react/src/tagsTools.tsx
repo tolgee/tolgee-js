@@ -31,5 +31,9 @@ export const wrapTagHandlers = (params: ParamsTags) => {
 export const addReactKeys = (
   val: React.ReactNode | React.ReactNode[] | undefined
 ) => {
-  return React.Children.toArray(val);
+  if (Array.isArray(val)) {
+    return React.Children.toArray(val);
+  } else {
+    return val;
+  }
 };
