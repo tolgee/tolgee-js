@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.1.1](https://github.com/tolgee/tolgee-js/compare/v4.1.0...v4.1.1) (2022-03-10)
+
+
+### Bug Fixes
+
+* t function returning array ([0136741](https://github.com/tolgee/tolgee-js/commit/01367411c0bf62bcbd11e5beaf405a0b3d9c811f))
+
+
+
+
+
 # [4.1.0](https://github.com/tolgee/tolgee-js/compare/v4.0.0...v4.1.0) (2022-03-10)
 
 
