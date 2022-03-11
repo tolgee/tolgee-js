@@ -3,7 +3,7 @@
   "version": "4.1.1",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.8.1",
+    "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.4.2",
     "@testing-library/jest-dom": "^5.16.2",
