@@ -8,8 +8,8 @@ import { tolgeeProcessor } from './tolgeeProcessor';
 export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
   const tolgee = Tolgee.init({
     wrapperMode: 'invisible',
-    languageDetect: false,
-    languageStore: false,
+    enableLanguageDetection: false,
+    enableLanguageStore: false,
     ...config,
   });
   i18n.use(tolgeeBackend(tolgee));

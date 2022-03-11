@@ -61,8 +61,8 @@ describe('Properties', () => {
       const defaultLanguage = 'cs';
       properties.config = new TolgeeConfig({
         defaultLanguage,
-        languageStore: false,
-        languageDetect: false,
+        enableLanguageStore: false,
+        enableLanguageDetection: false,
       });
       expect(properties.currentLanguage).toEqual(defaultLanguage);
 

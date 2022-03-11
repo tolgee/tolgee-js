@@ -15,7 +15,7 @@ export const AppWrapper: React.FC = ({ children }) => {
       wrapperMode="invisible"
       fallbackLanguage="en"
       // remove this to enable language auto detection
-      languageDetect={false}
+      enableLanguageDetection={false}
       staticData={{
         de: () => import('../i18n/de.json'),
         cs: () => import('../i18n/cs.json'),
