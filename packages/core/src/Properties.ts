@@ -19,21 +19,28 @@ export class Properties {
       return this._currentLanguage;
     }
 
+    let result: string | undefined;
+
     if (this.config.languageStore) {
       const storedLanguage = this.getStoredLanguage();
       if (storedLanguage) {
-        return storedLanguage;
+        result = storedLanguage;
       }
     }
 
-    if (this.config.languageDetect) {
+    if (this.config.languageDetect && !result) {
       const detectedLanguage = this.getLanguageByNavigator();
       if (detectedLanguage) {
-        return detectedLanguage;
+        result = detectedLanguage;
       }
     }
 
-    return this.config.defaultLanguage;
+    if (!result) {
+      result = this.config.defaultLanguage;
+    }
+
+    this._currentLanguage = result;
+    return result;
   }
 
   set currentLanguage(language: string) {

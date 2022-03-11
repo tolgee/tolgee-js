@@ -96,6 +96,19 @@ describe('Properties', () => {
       expect(properties.currentLanguage).toEqual('cs');
     });
 
+    test('language is stored locally and detected only once', () => {
+      const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
+      languageGetter.mockReturnValue('cs');
+      Storage.prototype.getItem = jest.fn();
+      properties.config = new TolgeeConfig({
+        availableLanguages: ['cs', 'en'],
+      });
+      expect(properties.currentLanguage).toEqual('cs');
+      expect(properties.currentLanguage).toEqual('cs');
+
+      expect(languageGetter).toBeCalledTimes(1);
+    });
+
     test('available languages derrived from staticData', () => {
       const languageGetter = jest.spyOn(window.navigator, 'language', 'get');
       languageGetter.mockReturnValue('cs');
