@@ -29,7 +29,7 @@ const Home: NextPage = () => {
         de: deLocale,
       }}
       // remove this to enable language auto detection
-      languageDetect={false}
+      enableLanguageDetection={false}
     >
       <div className={styles.container}>
         <Head>

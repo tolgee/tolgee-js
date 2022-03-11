@@ -19,14 +19,14 @@ export class Properties {
       return this._currentLanguage;
     }
 
-    if (this.config.languageStore) {
+    if (this.config.enableLanguageStore) {
       const storedLanguage = this.getStoredLanguage();
       if (storedLanguage) {
         return storedLanguage;
       }
     }
 
-    if (this.config.languageDetect) {
+    if (this.config.enableLanguageDetection) {
       const detectedLanguage = this.getLanguageByNavigator();
       if (detectedLanguage) {
         return detectedLanguage;
@@ -42,7 +42,10 @@ export class Properties {
     }
     this._currentLanguage = language;
 
-    if (this.config?.languageStore && typeof localStorage !== 'undefined') {
+    if (
+      this.config?.enableLanguageStore &&
+      typeof localStorage !== 'undefined'
+    ) {
       localStorage.setItem(CURRENT_LANGUAGE_LOCAL_STORAGE_KEY, language);
     }
   }

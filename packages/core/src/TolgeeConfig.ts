@@ -37,11 +37,11 @@ export class TolgeeConfig {
   /**
    * Store user language in localStorage (default: true)
    */
-  languageStore?: boolean = true;
+  enableLanguageStore?: boolean = true;
   /**
    * Use auto language detection by browser locale (default: true)
    */
-  languageDetect?: boolean = true;
+  enableLanguageDetection?: boolean = true;
   filesUrlPrefix?: string = 'i18n/';
   watch?: boolean;
   ui?: (new (...args) => any) | (() => Promise<new (...args) => any>);
