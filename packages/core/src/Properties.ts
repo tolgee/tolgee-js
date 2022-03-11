@@ -15,25 +15,11 @@ export class Properties {
       return this.config.forceLanguage;
     }
 
-    if (this._currentLanguage) {
-      return this._currentLanguage;
+    if (!this._currentLanguage) {
+      this._currentLanguage = this.getInitialLanguage();
     }
 
-    if (this.config.enableLanguageStore) {
-      const storedLanguage = this.getStoredLanguage();
-      if (storedLanguage) {
-        return storedLanguage;
-      }
-    }
-
-    if (this.config.enableLanguageDetection) {
-      const detectedLanguage = this.getLanguageByNavigator();
-      if (detectedLanguage) {
-        return detectedLanguage;
-      }
-    }
-
-    return this.config.defaultLanguage;
+    return this._currentLanguage;
   }
 
   set currentLanguage(language: string) {
@@ -61,6 +47,24 @@ export class Properties {
       PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
       JSON.stringify(Array.from(languages))
     );
+  }
+
+  private getInitialLanguage() {
+    if (this.config.enableLanguageStore) {
+      const storedLanguage = this.getStoredLanguage();
+      if (storedLanguage) {
+        return storedLanguage;
+      }
+    }
+
+    if (this.config.enableLanguageDetection) {
+      const detectedLanguage = this.getLanguageByNavigator();
+      if (detectedLanguage) {
+        return detectedLanguage;
+      }
+    }
+
+    return this.config.defaultLanguage;
   }
 
   private getStoredLanguage() {
