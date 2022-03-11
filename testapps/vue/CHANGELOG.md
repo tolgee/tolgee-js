@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.2.0](https://github.com/tolgee/tolgee-js/compare/v4.1.1...v4.2.0) (2022-03-11)
+
+
+### Features
+
+* Quick parameters rename as naming is confusing ([df62d9a](https://github.com/tolgee/tolgee-js/commit/df62d9ac13e3d258c4b7ef24645298a61f887fe3))
+
+
+
+
+
 # [4.1.0](https://github.com/tolgee/tolgee-js/compare/v4.0.0...v4.1.0) (2022-03-10)
 
 
