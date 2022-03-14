@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.2.0",
+  "version": "4.2.1",
   "scripts": {
     "build": "svelte-kit package",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
@@ -19,7 +19,7 @@
     "@sveltejs/kit": "next",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/svelte": "3.0.3",
-    "@tolgee/core": "^4.2.0",
+    "@tolgee/core": "^4.2.1",
     "@types/jest": "27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",

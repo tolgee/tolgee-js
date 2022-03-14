@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.2.1](https://github.com/tolgee/tolgee-js/compare/v4.2.0...v4.2.1) (2022-03-14)
+
+
+### Bug Fixes
+
+* Make language stable ([cd96ee8](https://github.com/tolgee/tolgee-js/commit/cd96ee8456194e4a9557151c63a8bdbbe691c258))
+
+
+
+
+
 # [4.2.0](https://github.com/tolgee/tolgee-js/compare/v4.1.1...v4.2.0) (2022-03-11)
 
 
