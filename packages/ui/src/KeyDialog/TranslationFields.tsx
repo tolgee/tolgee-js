@@ -7,6 +7,7 @@ import {
 import { styled, TextField } from '@mui/material';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
+import { languageIsPermitted } from 'tools/languageIsPermitted';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -51,6 +52,7 @@ export const TranslationFields: FunctionComponent = () => {
   const translationsForm = useDialogContext((c) => c.translationsForm);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
+  const properties = useDialogContext((c) => c.dependencies.properties);
 
   const onChange = (key: string) => (e: any) => {
     dispatch({
@@ -76,13 +78,17 @@ export const TranslationFields: FunctionComponent = () => {
       ) : (
         [...selectedLanguages].map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
+          const languageAuthorized = languageIsPermitted(
+            properties.permittedLanguages,
+            key
+          );
 
           return (
             <React.Fragment key={key}>
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <ScTextField
                 size="small"
-                disabled={formDisabled}
+                disabled={formDisabled || !languageAuthorized}
                 key={key}
                 inputProps={{
                   lang: key,

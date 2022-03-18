@@ -4,6 +4,7 @@ import { KeyWithTranslationsModel, LanguageModel } from '@tolgee/core';
 import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
+import { languageIsPermitted } from 'tools/languageIsPermitted';
 
 export interface ScreenshotInterface {
   id: number;
@@ -94,6 +95,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [screenshotsUploading, setScreenshotsUploading] = useState(false);
     const [screenshotDetail, setScreenshotDetail] =
       useState<ScreenshotInterface | null>(null);
+
+    const permittedLanguages = props.dependencies.properties.permittedLanguages;
 
     const dispatch = async (action: State) => {
       switch (action.type) {
@@ -188,16 +191,23 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         case 'ON_SAVE': {
           setSaving(true);
           try {
+            const newTranslations = {} as typeof translationsForm;
+            Object.entries(translationsForm).forEach(([language, value]) => {
+              if (languageIsPermitted(permittedLanguages, language)) {
+                newTranslations[language] = value;
+              }
+            });
+
             if (translations.keyId === undefined) {
               await translationService.createKey({
                 name: props.input,
-                translations: translationsForm,
+                translations: newTranslations,
                 screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
               });
             } else {
               await translationService.updateKeyComplex(translations.keyId, {
                 name: props.input,
-                translations: translationsForm,
+                translations: newTranslations,
                 screenshotIdsToDelete: getRemovedScreenshots(),
                 screenshotUploadedImageIds: getJustUploadedScreenshots(),
               });
@@ -393,6 +403,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       screenshots,
       screenshotDetail,
       linkToPlatform,
+      userHasAccessToLanguage: languageIsPermitted,
     };
 
     return [contextValue, dispatch];
