@@ -4,7 +4,8 @@ import { Scope } from '../types';
 import { LanguageModel, PagedModelLanguageModel } from '../types/DTOs';
 import { components } from '../types/apiSchema.generated';
 
-export type ApiKeyModel = components['schemas']['ApiKeyModel'];
+export type ApiKeyWithLanguagesModel =
+  components['schemas']['ApiKeyWithLanguagesModel'];
 
 export class CoreService {
   private languagePromise: Promise<PagedModelLanguageModel>;
@@ -38,7 +39,7 @@ export class CoreService {
     return languages._embedded.languages;
   }
 
-  async getApiKeyDetails(): Promise<ApiKeyModel> {
+  async getApiKeyDetails(): Promise<ApiKeyWithLanguagesModel> {
     try {
       return await this.apiHttpService.fetchJson(`v2/api-keys/current`);
     } catch (e) {
@@ -69,6 +70,7 @@ export class CoreService {
       const details = await this.getApiKeyDetails();
       this.properties.scopes = details.scopes as Scope[];
       this.properties.projectId = details.projectId;
+      this.properties.permittedLanguages = details.permittedLanguages;
     }
   }
 }
