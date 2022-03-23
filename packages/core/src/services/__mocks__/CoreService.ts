@@ -10,7 +10,7 @@ export const CoreService = classMock<Module.CoreService>(
       return {
         scopes: ['translations.edit', 'keys.edit'] as Scope[],
         projectId: 0,
-      } as Module.ApiKeyModel;
+      } as Module.ApiKeyWithLanguagesModel;
     }),
   }),
   (moduleMock as typeof Module).CoreService

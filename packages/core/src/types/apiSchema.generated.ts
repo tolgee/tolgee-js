@@ -497,11 +497,19 @@ export interface components {
        * @example MANAGE
        */
       directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      computedPermissions: components["schemas"]["UserPermissionModel"];
+    };
+    UserPermissionModel: {
       /**
-       * @description Actual current user's permissions on this project. You can not sort data by this column!
+       * @description List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
+       * @example 200001,200004
+       */
+      permittedLanguageIds?: number[];
+      /**
+       * @description The type of permission.
        * @example EDIT
        */
-      computedPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      type: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
     };
     MachineTranslationLanguagePropsDto: {
       /**
@@ -647,7 +655,7 @@ export interface components {
       id: number;
       code: string;
       type: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      languages?: components["schemas"]["LanguageModel"][];
+      permittedLanguageIds?: number[];
       /** Format: date-time */
       createdAt: string;
       invitedUserName?: string;
@@ -950,7 +958,6 @@ export interface components {
         | "NEEDS_REVIEW"
       )[];
       zip: boolean;
-      shouldContainUntranslated: boolean;
     };
     UploadedImageModel: {
       /** Format: int64 */
@@ -1045,11 +1052,7 @@ export interface components {
       organizationRole?: "MEMBER" | "OWNER";
       organizationBasePermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
       directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      /**
-       * @description Actual user's permissions on selected project. You can not sort data by this column!
-       * @example EDIT
-       */
-      computedPermissions: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      computedPermissions: components["schemas"]["UserPermissionModel"];
     };
     PagedModelTagModel: {
       _embedded?: {
@@ -1081,6 +1084,7 @@ export interface components {
       page?: components["schemas"]["PageMetadata"];
     };
     EntityModelImportFileIssueView: {
+      params: components["schemas"]["ImportFileIssueParamView"][];
       /** Format: int64 */
       id: number;
       type:
@@ -1092,7 +1096,6 @@ export interface components {
         | "PO_MSGCTXT_NOT_SUPPORTED"
         | "ID_ATTRIBUTE_NOT_PROVIDED"
         | "TARGET_NOT_PROVIDED";
-      params: components["schemas"]["ImportFileIssueParamView"][];
     };
     ImportFileIssueParamView: {
       value?: string;
@@ -1281,11 +1284,7 @@ export interface components {
        * @example MANAGE
        */
       directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      /**
-       * @description Actual current user's permissions on this project. You can not sort data by this column!
-       * @example EDIT
-       */
-      computedPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      computedPermissions: components["schemas"]["UserPermissionModel"];
       stats: components["schemas"]["ProjectStatistics"];
       languages: components["schemas"]["LanguageModel"][];
     };
@@ -1336,7 +1335,7 @@ export interface components {
        *
        * If null, all languages are permitted.
        */
-      permittedLanguages?: string[];
+      permittedLanguageIds?: number[];
     };
     UserResponseDTO: {
       /** Format: int64 */

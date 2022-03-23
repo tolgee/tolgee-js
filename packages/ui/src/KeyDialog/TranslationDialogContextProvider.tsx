@@ -4,7 +4,7 @@ import { KeyWithTranslationsModel, LanguageModel } from '@tolgee/core';
 import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
-import { languageIsPermitted } from 'tools/languageIsPermitted';
+import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 
 export interface ScreenshotInterface {
   id: number;
@@ -95,7 +95,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [screenshotDetail, setScreenshotDetail] =
       useState<ScreenshotInterface | null>(null);
 
-    const permittedLanguages = props.dependencies.properties.permittedLanguages;
+    const permittedLanguageIds =
+      props.dependencies.properties.permittedLanguageIds;
 
     const dispatch = async (action: State) => {
       switch (action.type) {
@@ -192,7 +193,13 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
           try {
             const newTranslations = {} as typeof translationsForm;
             Object.entries(translationsForm).forEach(([language, value]) => {
-              if (languageIsPermitted(permittedLanguages, language)) {
+              if (
+                isLanguagePermitted(
+                  language,
+                  permittedLanguageIds,
+                  availableLanguages
+                )
+              ) {
                 newTranslations[language] = value;
               }
             });
@@ -402,7 +409,6 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       screenshots,
       screenshotDetail,
       linkToPlatform,
-      userHasAccessToLanguage: languageIsPermitted,
     };
 
     return [contextValue, dispatch];

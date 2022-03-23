@@ -8,7 +8,7 @@ export class Properties {
   config: TolgeeConfig;
   scopes?: Scope[];
   projectId?: number;
-  permittedLanguages?: string[];
+  permittedLanguageIds?: number[];
   _currentLanguage?: string;
 
   get currentLanguage(): string {
