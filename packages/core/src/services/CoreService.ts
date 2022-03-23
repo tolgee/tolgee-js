@@ -70,7 +70,7 @@ export class CoreService {
       const details = await this.getApiKeyDetails();
       this.properties.scopes = details.scopes as Scope[];
       this.properties.projectId = details.projectId;
-      this.properties.permittedLanguages = details.permittedLanguages;
+      this.properties.permittedLanguageIds = details.permittedLanguageIds;
     }
   }
 }

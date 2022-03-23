@@ -7,7 +7,7 @@ import {
 import { styled, TextField } from '@mui/material';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
-import { languageIsPermitted } from 'tools/languageIsPermitted';
+import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -78,9 +78,10 @@ export const TranslationFields: FunctionComponent = () => {
       ) : (
         [...selectedLanguages].map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
-          const languageAuthorized = languageIsPermitted(
-            properties.permittedLanguages,
-            key
+          const languagePermitted = isLanguagePermitted(
+            key,
+            properties.permittedLanguageIds,
+            availableLanguages
           );
 
           return (
@@ -88,7 +89,7 @@ export const TranslationFields: FunctionComponent = () => {
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <ScTextField
                 size="small"
-                disabled={formDisabled || !languageAuthorized}
+                disabled={formDisabled || !languagePermitted}
                 key={key}
                 inputProps={{
                   lang: key,
