@@ -1,12 +1,10 @@
 <script lang="ts">
   import { TolgeeProvider } from '@tolgee/svelte';
-  import UI from '@tolgee/ui';
   import type { TolgeeConfig } from '@tolgee/core';
 
   const tolgeeConfig = {
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
-    ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,
     // remove this to enable language auto detection
     enableLanguageDetection: false,
     staticData: {

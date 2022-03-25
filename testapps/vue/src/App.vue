@@ -16,7 +16,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { defineComponent } from 'vue';
 import { TolgeeProvider } from '@tolgee/vue';
-import { TolgeeConfig } from '@tolgee/core';
 
 import Todos from './Todos.vue';
 import TranslationMethods from './TranslationMethods.vue';
@@ -38,10 +37,7 @@ export default defineComponent({
         enableLanguageDetection: false,
         apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
         apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
-        ui: process.env.VUE_APP_TOLGEE_API_KEY
-          ? require('@tolgee/ui').UI
-          : undefined,
-      } as TolgeeConfig,
+      },
       currentRoute: window.location.pathname,
     };
   },

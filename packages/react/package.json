@@ -36,7 +36,8 @@
     "react": "^16.14.0 || ^17.0.1"
   },
   "dependencies": {
-    "@tolgee/core": "^4.2.1"
+    "@tolgee/core": "^4.2.1",
+    "@tolgee/ui": "^4.2.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.1",
@@ -56,10 +57,15 @@
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "^0.13.3",
     "rollup": "2.70.1",
+    "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^27.0.5",
     "tslint": "~5.15.0",
     "typescript": "^4.4.4"
+  },
+  "exports": {
+    "require": "./dist/tolgee-react.cjs.js",
+    "import": "./dist/tolgee-react.esm.js"
   },
   "publishConfig": {
     "access": "public"

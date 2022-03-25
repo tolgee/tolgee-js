@@ -37,7 +37,8 @@
     "vue": "^3.0.0"
   },
   "dependencies": {
-    "@tolgee/core": "^4.2.1"
+    "@tolgee/core": "^4.2.1",
+    "@tolgee/ui": "^4.2.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.1",
@@ -55,6 +56,10 @@
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4",
     "vue": "^3.0.0"
+  },
+  "exports": {
+    "require": "./dist/tolgee-vue.cjs.js",
+    "import": "./dist/tolgee-vue.esm.js"
   },
   "publishConfig": {
     "access": "public"

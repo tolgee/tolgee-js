@@ -60,6 +60,10 @@
     "type": "git",
     "url": "git+https://github.com/tolgee/tolgee-js.git"
   },
+  "exports": {
+    "require": "./dist/tolgee-ui.cjs.js",
+    "import": "./dist/tolgee-ui.esm.js"
+  },
   "keywords": [
     "localization",
     "languages",

@@ -13,8 +13,6 @@
     "serve:dev": "serve -p 3002 -s dist-e2e"
   },
   "dependencies": {
-    "@tolgee/core": "^4.2.1",
-    "@tolgee/ui": "^4.2.1",
     "@tolgee/vue": "^4.2.1",
     "core-js": "^3.21.1",
     "vue": "^3.0.0"

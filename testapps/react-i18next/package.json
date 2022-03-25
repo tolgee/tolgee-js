@@ -8,7 +8,6 @@
     "@testing-library/user-event": "^12.1.10",
     "@tolgee/core": "^4.2.1",
     "@tolgee/i18next": "^4.2.1",
-    "@tolgee/ui": "^4.2.1",
     "concurrently": "^6.4.0",
     "i18next": "^21.5.4",
     "i18next-icu": "^2.0.3",

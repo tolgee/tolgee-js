@@ -36,9 +36,19 @@ export class TranslationHighlighter {
     if (this._renderer === undefined) {
       const possibleProviders = [
         this.dependencies.properties.config.ui,
-        window['@tolgee/ui']?.UI,
+        window['@tolgee/ui'],
       ];
-      for (const possibleProvider of possibleProviders) {
+      for (const funcOrPromise of possibleProviders) {
+        const objectOrProvider =
+          funcOrPromise instanceof Promise
+            ? await funcOrPromise
+            : funcOrPromise;
+
+        const possibleProvider =
+          typeof objectOrProvider === 'object'
+            ? objectOrProvider?.UI
+            : objectOrProvider;
+
         if (typeof possibleProvider === 'function') {
           try {
             // try to get constructor from promise provider

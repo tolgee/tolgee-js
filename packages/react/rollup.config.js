@@ -1,5 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default {
   input: 'src/index.ts',
@@ -36,15 +37,21 @@ export default {
       },
       plugins: [terser()],
     },
+    {
+      name: '@tolgee/react',
+      file: 'dist/tolgee-react.esm.js',
+      format: 'esm',
+      sourcemap: true,
+    },
   ],
   watch: {
     clearScreen: false,
   },
-  external: ['react', '@tolgee/core'],
+  external: ['react', '@tolgee/core', '@tolgee/ui'],
   plugins: [
     typescript({
-      outDir: './',
-      sourceMap: true,
+      outDir: './lib',
     }),
+    sourcemaps(),
   ],
 };

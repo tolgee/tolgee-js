@@ -17,9 +17,6 @@ withTolgee(i18n, {
   },
   apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
   apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
-  ui: process.env.REACT_APP_TOLGEE_API_KEY
-    ? require('@tolgee/ui').UI
-    : undefined,
 })
   .use(ICU)
   .use(initReactI18next)
