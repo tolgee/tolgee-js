@@ -6,4 +6,3 @@ export declare class UI {
   renderViewer(key: string, defaultValue?: string): void;
   getKey(props: { openEvent: MouseEvent; keys: Set<string> }): Promise<string>;
 }
-export default UI;

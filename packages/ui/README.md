@@ -18,12 +18,10 @@ UI library of Tolgee localization tool. For more information about Tolgee, visit
 First, create a Tolgee instance and provide **UI** constructor.
 
     import {Tolgee} from "@tolgee/core";
-    import {UI} from "@tolgee/ui";
 
     const tg = Tolgee.init({
         apiKey: "your_api_key",
         apiUrl: "https://app.tolgee.io",
-        ui: UI
     })
 
     tg.run();

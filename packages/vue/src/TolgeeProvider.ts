@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { defineComponent, PropType } from 'vue';
 import { Tolgee, TolgeeConfig, IcuFormatter } from '@tolgee/core';
 import { TolgeeContext } from './types';
@@ -13,6 +14,12 @@ export const TolgeeProvider = defineComponent({
   created() {
     const tolgee = Tolgee.use(IcuFormatter).init({
       wrapperMode: 'invisible',
+      ui:
+        process.env.NODE_ENV !== 'development'
+          ? undefined
+          : typeof require !== 'undefined'
+          ? require('@tolgee/ui')
+          : import('@tolgee/ui'),
       ...this.$props.config,
     });
 

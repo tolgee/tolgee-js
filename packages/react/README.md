@@ -8,7 +8,7 @@
 # Tolgee for React
 
 React integration library of Tolgee. For more information about using Tolgee with React, visit our
-[documentation website 📖](https://tolgee.io/docs/web/using_with_react/installation). 
+[documentation website 📖](https://tolgee.io/docs/web/using_with_react/installation).
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
@@ -16,30 +16,29 @@ Lokalize (translate) your CRA, Gatsby, Next.js or other React projects to multip
 Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
 ## Features
- - All in One localization solution for your JS application 🙌
- - Out of box in-context localization 🎉
- - Automated screenshot generation 📷
- - Translation management platform 🎈
- - Open-source 🔥
+
+- All in One localization solution for your JS application 🙌
+- Out of box in-context localization 🎉
+- Automated screenshot generation 📷
+- Translation management platform 🎈
+- Open-source 🔥
 
 ## Installation
 
 First, install the package.
 
-    npm install @tolgee/react --save
+    npm install @tolgee/react
 
 Then use the library in your app:
 
 ```typescript jsx
 import { TolgeeProvider } from "@tolgee/react";
-import { UI } from "@tolgee/ui";
 
 ...
 
 <TolgeeProvider
   apiUrl={process.env.REACT_APP_TOLGEE_API_URL}
   apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
-  ui={process.env.REACT_APP_TOLGEE_API_KEY === "true" && UI}
 >
   <Your app components>
 </TolgeeProvider>
@@ -90,4 +89,4 @@ t("key_to_translate")
 
 ![react-integrate-infinite](https://user-images.githubusercontent.com/18496315/137310546-d4addbe2-4825-4262-bd18-b731b1941bce.gif)
 
-Learn more at our [documentation website 📖](https://tolgee.io). 
+Learn more at our [documentation website 📖](https://tolgee.io).

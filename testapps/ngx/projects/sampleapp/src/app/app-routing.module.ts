@@ -7,7 +7,6 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 import { LangSelectorComponent } from './component/lang-selector/lang-selector.component';
 import { NgxTolgeeModule } from '@tolgee/ngx';
 import { environment } from '../environments/environment';
-import { UI } from '@tolgee/ui';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser'; // CLI imports router
 
@@ -40,7 +39,10 @@ const routes: Routes = [
       preloadFallback: true,
       apiUrl: environment.tolgeeApiUrl,
       apiKey: environment.tolgeeApiKey,
-      ui: UI,
+      ui:
+        process.env.NODE_ENV === 'development'
+          ? require('@tolgee/ui')
+          : undefined,
     }),
     RouterModule.forRoot(routes),
   ],

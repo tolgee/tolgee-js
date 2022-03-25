@@ -21,13 +21,6 @@
     </div>
 
     <div>
-      <h1>T component with default</h1>
-      <div>
-        <T defaultValue="This is default" />
-      </div>
-    </div>
-
-    <div>
       <h1>T component without default</h1>
       <div>
         <T keyName="this_is_a_key" />

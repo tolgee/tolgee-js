@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 import replace from 'rollup-plugin-replace';
 
 export default {
@@ -55,8 +56,8 @@ export default {
   external: ['@tolgee/core'],
   plugins: [
     typescript({
-      outDir: './',
-      sourceMap: false,
+      outDir: './lib',
+      sourceMap: true,
     }),
     nodeResolve(),
     commonjs({
@@ -65,5 +66,6 @@ export default {
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    sourcemaps(),
   ],
 };

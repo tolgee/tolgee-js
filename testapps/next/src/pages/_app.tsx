@@ -24,7 +24,6 @@ function MyApp({ Component, pageProps, locales }: AppProps & { locales: any }) {
       // remove this to enable language auto detection
       enableLanguageDetection={false}
       loadingFallback={<div>Loading...</div>}
-      ui={apiKey ? require('@tolgee/ui').UI : undefined}
     >
       <Component {...pageProps} />
     </TolgeeProvider>

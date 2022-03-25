@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import React, {
   FunctionComponent,
   ReactNode,
@@ -19,7 +20,16 @@ export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
   delete config.loadingFallback;
 
   const [tolgee] = useState(
-    Tolgee.use(IcuFormatter).init({ wrapperMode: 'invisible', ...config })
+    Tolgee.use(IcuFormatter).init({
+      wrapperMode: 'invisible',
+      ui:
+        process.env.NODE_ENV !== 'development'
+          ? undefined
+          : typeof require !== 'undefined'
+          ? require('@tolgee/ui')
+          : import('@tolgee/ui'),
+      ...config,
+    })
   );
 
   const [loading, setLoading] = useState(tolgee.initialLoading);

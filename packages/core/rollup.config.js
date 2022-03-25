@@ -50,10 +50,11 @@ export default {
       'process.env.TOLGEE_UI_VERSION': JSON.stringify(
         process.env.TOLGEE_UI_VERSION
       ),
+      preventAssignment: true,
     }),
     typescript({
-      outDir: './',
-      sourceMap: false,
+      outDir: './lib',
+      sourceMap: true,
     }),
     nodeResolve(),
   ],

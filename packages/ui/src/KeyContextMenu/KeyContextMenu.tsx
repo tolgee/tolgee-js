@@ -1,7 +1,7 @@
 import React from 'react';
-import { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 import { Menu, MenuItem } from '@mui/material';
 import { styled } from '@mui/material';
+import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 
 import { ThemeProvider } from '../ThemeProvider';
 import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
