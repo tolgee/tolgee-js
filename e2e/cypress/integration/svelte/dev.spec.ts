@@ -3,7 +3,7 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
 context('Svelte app in dev mode', () => {
-  const url = 'http://localhost:8110/';
+  const url = 'http://localhost:8110';
   exampleAppTest(url);
   translationMethodsTest(url, {
     en: [

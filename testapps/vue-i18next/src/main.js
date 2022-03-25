@@ -12,7 +12,6 @@ Vue.config.productionTip = false;
 withTolgee(i18next, {
   apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
   apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
-  ui: process.env.VUE_APP_TOLGEE_API_KEY ? require('@tolgee/ui').UI : undefined,
   staticData: {
     en: () => import('../i18n/en.json'),
     de: () => import('../i18n/de.json'),

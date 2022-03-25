@@ -10,7 +10,6 @@
     "@testing-library/react": "^12.1.4",
     "@testing-library/user-event": "^13.3.0",
     "@tolgee/react": "^4.2.1",
-    "@tolgee/ui": "^4.2.1",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.22",
     "@types/react": "17.0.42",
@@ -26,11 +25,9 @@
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "develop": "DISABLE_ESLINT_PLUGIN=true FORCE_COLOR=true react-scripts start | cat -",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "build:e2e": "DISABLE_ESLINT_PLUGIN=true BUILD_PATH=./build-e2e REACT_APP_TOLGEE_API_URL=http://localhost:8202 REACT_APP_TOLGEE_API_KEY=examples-admin-imported-project-implicit react-scripts build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "eject": "react-scripts eject",
-    "serve": "serve -p 8101 -s build",
-    "serve:dev": "serve -p 8101 -s build-e2e"
+    "serve": "serve -p 8101 -s build"
   },
   "browserslist": {
     "production": [

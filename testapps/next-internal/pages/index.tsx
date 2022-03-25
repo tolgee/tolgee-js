@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { T } from '@tolgee/react';
-import UI from '@tolgee/ui';
 import enLocale from '../i18n/en.json';
 import deLocale from '../i18n/de.json';
 import { useRouter } from 'next/router';
@@ -17,7 +16,6 @@ const Home: NextPage = () => {
 
   return router.isReady ? (
     <TolgeeProvider
-      ui={UI}
       forceLanguage={activeLocale}
       apiKey={
         (router.query.api_key as string) ||
