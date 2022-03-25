@@ -13,6 +13,7 @@
     "jsx": "react",
     "downlevelIteration": true,
     "esModuleInterop": true,
+    "emitDeclarationOnly": true,
     "paths": {
       "tolgee/ui": ["./ui"],
       "tolgee/core": ["./core"],

@@ -12,7 +12,6 @@ export const AppWrapper: React.FC = ({ children }) => {
       forceLanguage={locale}
       apiKey={process.env.GATSBY_TOLGEE_API_KEY}
       apiUrl={process.env.GATSBY_TOLGEE_API_URL}
-      wrapperMode="invisible"
       fallbackLanguage="en"
       // remove this to enable language auto detection
       enableLanguageDetection={false}
@@ -25,9 +24,6 @@ export const AppWrapper: React.FC = ({ children }) => {
         [locale]: messages as Record<string, string>,
       }}
       loadingFallback={<div>Loading...</div>}
-      ui={
-        process.env.GATSBY_TOLGEE_API_KEY ? require('@tolgee/ui').UI : undefined
-      }
     >
       {children}
     </TolgeeProvider>
