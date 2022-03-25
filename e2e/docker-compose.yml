@@ -45,8 +45,11 @@ services:
     volumes:
       - '../:/data'
     ports:
-      - 8113:8101
-    command: ['npm', 'run', 'serve:dev']
+      - 8113:3000
+    command: ['npm', 'run', 'develop']
+    environment:
+      REACT_APP_TOLGEE_API_URL: http://localhost:8202
+      REACT_APP_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/react
   e2e_app_gatsby_dev:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
@@ -78,6 +81,7 @@ services:
       - 8106:3000
     command: ['npm', 'run', 'dev']
     environment:
+      NEXT_BUILD_DIR: dist-e2e
       NEXT_PUBLIC_TOLGEE_API_URL: http://localhost:8202
       NEXT_PUBLIC_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/next
@@ -89,8 +93,6 @@ services:
     ports:
       - 8107:3000
     command: ['npm', 'run', 'start']
-    environment:
-      NEXT_BUILD_DIR: dist-e2e
     working_dir: /data/testapps/next
   e2e_app_next-internal:
     container_name: tolgee_js_e2e_serve_testapps_next_internal
@@ -139,8 +141,11 @@ services:
     volumes:
       - '../:/data'
     ports:
-      - 8112:3002
-    command: ['npm', 'run', 'serve:dev']
+      - 8112:8080
+    command: ['npm', 'run', 'develop']
+    environment:
+      VUE_APP_TOLGEE_API_URL: http://localhost:8202
+      VUE_APP_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/vue
   e2e_app_ngx_prod:
     container_name: tolgee_js_e2e_serve_testapps_ngx_prod
@@ -175,8 +180,11 @@ services:
     volumes:
       - '../:/data'
     ports:
-      - 8118:8101
-    command: ['npm', 'run', 'serve:dev']
+      - 8118:3000
+    command: ['npm', 'run', 'develop']
+    environment:
+      REACT_APP_TOLGEE_API_URL: http://localhost:8202
+      REACT_APP_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/react-i18next
   e2e_app_vue-i18next_prod:
     container_name: tolgee_js_e2e_serve_testapps_vue_i18next_prod
@@ -193,6 +201,9 @@ services:
     volumes:
       - '../:/data'
     ports:
-      - 8120:3002
-    command: ['npm', 'run', 'serve:dev']
+      - 8120:8080
+    command: ['npm', 'run', 'develop']
+    environment:
+      VUE_APP_TOLGEE_API_URL: http://localhost:8202
+      VUE_APP_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/vue-i18next

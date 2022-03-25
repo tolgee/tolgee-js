@@ -19,11 +19,6 @@ export const App = () => {
       loadingFallback={<div>Loading...</div>}
       // remove this to enable language auto detection
       enableLanguageDetection={false}
-      ui={
-        process.env.REACT_APP_TOLGEE_API_KEY
-          ? require('@tolgee/ui').UI
-          : undefined
-      }
     >
       {currentRoute === '/translation-methods' ? (
         <TranslationMethods />

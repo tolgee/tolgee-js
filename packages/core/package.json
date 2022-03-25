@@ -61,6 +61,10 @@
     "typedoc-plugin-markdown": "3.11.14",
     "typescript": "4.6.2"
   },
+  "exports": {
+    "require": "./dist/tolgee.cjs.js",
+    "import": "./dist/tolgee.esm.js"
+  },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "publishConfig": {
     "access": "public"

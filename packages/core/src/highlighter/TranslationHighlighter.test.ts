@@ -39,28 +39,31 @@ describe('TranslationHighlighter', () => {
       expect(rendererViewerMock).toBeCalledTimes(1);
     };
 
-    test('Works when UI is provided using promise provider', async () => {
+    test('Works when UI is provided using regular provider', async () => {
       getMockedInstance(Properties).config.ui = getUiClassMock();
       await checkIt();
     });
 
     test('Works when UI is provided using promise provider', async () => {
-      getMockedInstance(Properties).config.ui = () =>
-        new Promise((resolve) => resolve(getUiClassMock()));
+      // @ts-ignore
+      getMockedInstance(Properties).config.ui = new Promise((resolve) =>
+        resolve(getUiClassMock())
+      );
       await checkIt();
     });
 
     test('works when UI is provided using window provider', async () => {
       getMockedInstance(Properties).config.ui = undefined;
       window['@tolgee/ui'] = {
-        UI: () => new Promise((resolve) => resolve(getUiClassMock())),
+        UI: getUiClassMock(),
       };
+
       await checkIt();
     });
 
     test('works when UI is provided using window constructor', async () => {
       getMockedInstance(Properties).config.ui = undefined;
-      window['@tolgee/ui'] = { UI: getUiClassMock() };
+      window['@tolgee/ui'] = getUiClassMock();
       await checkIt();
     });
   });

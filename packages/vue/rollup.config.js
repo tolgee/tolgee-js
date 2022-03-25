@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import vue from 'rollup-plugin-vue';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default {
   input: 'src/index.ts',
@@ -30,15 +31,16 @@ export default {
       plugins: [terser()],
     },
   ],
-  external: ['vue', '@tolgee/core'],
+  external: ['vue', '@tolgee/core', '@tolgee/ui'],
   watch: {
     clearScreen: false,
   },
   plugins: [
     typescript({
-      outDir: './',
+      outDir: './lib',
       sourceMap: true,
     }),
     vue(),
+    sourcemaps(),
   ],
 };

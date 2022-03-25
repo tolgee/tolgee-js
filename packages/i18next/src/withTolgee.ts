@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { Tolgee, TolgeeConfig } from '@tolgee/core';
 import { Callback, i18n, InitOptions } from 'i18next';
 import { tolgeeApply } from './tolgeeApply';
@@ -10,6 +11,12 @@ export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
     wrapperMode: 'invisible',
     enableLanguageDetection: false,
     enableLanguageStore: false,
+    ui:
+      process.env.NODE_ENV !== 'development'
+        ? undefined
+        : typeof require !== 'undefined'
+        ? require('@tolgee/ui')
+        : import('@tolgee/ui'),
     ...config,
   });
   i18n.use(tolgeeBackend(tolgee));
