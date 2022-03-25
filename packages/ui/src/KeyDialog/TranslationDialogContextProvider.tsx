@@ -76,6 +76,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       useState<FormTranslations>(null);
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
+
     const coreService = props.dependencies.coreService;
     const properties = props.dependencies.properties;
     const linkToPlatform =

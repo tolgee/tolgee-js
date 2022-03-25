@@ -13,13 +13,13 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "dependencies": {
-    "jest-fetch-mock": "^3.0.3"
+    "@tolgee/core": "^4.2.1",
+    "@tolgee/ui": "^4.2.1"
   },
   "devDependencies": {
     "@sveltejs/kit": "next",
     "@testing-library/jest-dom": "5.16.2",
     "@testing-library/svelte": "3.0.3",
-    "@tolgee/core": "^4.2.1",
     "@types/jest": "27.4.1",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",
@@ -27,6 +27,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte3": "^3.4.1",
     "jest": "27.5.1",
+    "jest-fetch-mock": "^3.0.3",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.6.0",

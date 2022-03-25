@@ -11,6 +11,18 @@ const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => {
   }
 };
 
+type UiConstructor = new (...args) => any;
+
+interface UiLibInterface {
+  UI: UiConstructor;
+}
+
+type UiType =
+  | UiConstructor
+  | UiLibInterface
+  | Promise<UiConstructor>
+  | Promise<UiLibInterface>;
+
 export class TolgeeConfig {
   mode?: Mode;
   apiUrl?: string;
@@ -44,7 +56,7 @@ export class TolgeeConfig {
   enableLanguageDetection?: boolean = true;
   filesUrlPrefix?: string = 'i18n/';
   watch?: boolean;
-  ui?: (new (...args) => any) | (() => Promise<new (...args) => any>);
+  ui?: UiType;
   targetElement?: Element;
   tagAttributes?: { [key: string]: string[] } = {
     textarea: ['placeholder'],

@@ -1,6 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import sourcemaps from 'rollup-plugin-sourcemaps';
 
 export default {
   input: 'src/index.ts',
@@ -19,12 +19,6 @@ export default {
     {
       file: 'dist/tolgee-i18next.esm.js',
       format: 'esm',
-      sourcemap: true,
-    },
-    {
-      file: 'dist/tolgee-i18next.esm.js',
-      format: 'esm',
-      plugins: [terser()],
       sourcemap: true,
     },
     {
@@ -50,12 +44,12 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/core'],
+  external: ['@tolgee/core', '@tolgee/ui'],
   plugins: [
     typescript({
-      outDir: './',
-      sourceMap: false,
+      outDir: './lib',
+      sourceMap: true,
     }),
-    nodeResolve(),
+    sourcemaps(),
   ],
 };

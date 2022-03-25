@@ -1,8 +1,8 @@
 import React from 'react';
-import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core/lib/Constants/Global';
-import { TextHelper } from '@tolgee/core/lib/helpers/TextHelper';
+import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
 import { styled, IconButton, Button } from '@mui/material';
 import { OpenInNew } from '@mui/icons-material';
+import { TextHelper } from '@tolgee/core';
 
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';
