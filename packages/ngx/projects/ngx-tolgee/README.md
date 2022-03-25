@@ -1,4 +1,5 @@
 # Tolgee for Angular
+
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/ngx version](https://img.shields.io/npm/v/@tolgee/ngx?label=%40tolgee%2Fngx)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
@@ -30,7 +31,6 @@ Then import `NgxTolgeeModule` in your app.
 
 ```typescript
 import { NgxTolgeeModule } from "@tolgee/ngx";
-import { UI } from "@tolgee/ui";
 import { NgModule } from '@angular/core';
 import { environment } from '../environments/environment';
 
@@ -44,7 +44,10 @@ import { environment } from '../environments/environment';
   NgxTolgeeModule.forRoot({
     apiUrl: environment.tolgeeApiUrl,
     apiKey: environment.tolgeeApiKey,
-    ui: UI
+    ui:
+      process.env.NODE_ENV === 'development'
+        ? require('@tolgee/ui')
+        : undefined,
   }),
   ...,
 ],
@@ -89,4 +92,3 @@ this.translateService
 
 ![Integrate](https://user-images.githubusercontent.com/18496315/137345763-c318df07-2de0-4c35-a28d-bf1e93b42997.gif)
 Learn more at our [documentation website 📖](https://tolgee.io).
-

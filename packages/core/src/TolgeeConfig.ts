@@ -11,9 +11,7 @@ const DEFAULT_TARGET_ELEMENT_SUPPLIER = () => {
   }
 };
 
-type UiConstructor =
-  | (new (...args) => any)
-  | (() => Promise<new (...args) => any>);
+type UiConstructor = new (...args) => any;
 
 interface UiLibInterface {
   UI: UiConstructor;

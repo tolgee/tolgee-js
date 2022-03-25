@@ -47,7 +47,7 @@ export default {
   external: ['@tolgee/core', '@tolgee/ui'],
   plugins: [
     typescript({
-      outDir: './',
+      outDir: './lib',
       sourceMap: true,
     }),
     sourcemaps(),

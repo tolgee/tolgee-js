@@ -38,31 +38,22 @@ export class TranslationHighlighter {
         this.dependencies.properties.config.ui,
         window['@tolgee/ui'],
       ];
-      for (const funcOrPromise of possibleProviders) {
-        const objectOrProvider =
-          funcOrPromise instanceof Promise
-            ? await funcOrPromise
-            : funcOrPromise;
+      for (const possiblePromise of possibleProviders) {
+        // if dynamic import is used
+        const possibleObject =
+          possiblePromise instanceof Promise
+            ? await possiblePromise
+            : possiblePromise;
 
+        // extract .UI property
         const possibleProvider =
-          typeof objectOrProvider === 'object'
-            ? objectOrProvider?.UI
-            : objectOrProvider;
+          typeof possibleObject === 'object'
+            ? possibleObject?.UI
+            : possibleObject;
 
         if (typeof possibleProvider === 'function') {
-          try {
-            // try to get constructor from promise provider
-            // This is used when UI passed using dynamic import
-            const constructorProvider = possibleProvider as () => Promise<
-              new (...args) => any
-            >;
-            const constructor = await constructorProvider();
-            this._renderer = new constructor(this.dependencies);
-          } catch (e) {
-            // If not passed using dynamic import it's passed as standard constructor
-            const constructor = possibleProvider as new (...arg) => any;
-            this._renderer = new constructor(this.dependencies);
-          }
+          this._renderer = new possibleProvider(this.dependencies);
+          break;
         }
       }
       if (this._renderer === undefined) {

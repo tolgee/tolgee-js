@@ -24,6 +24,7 @@
     "develop:gatsby": "npm run develop -- --scope=@tolgee/gatsby-testapp",
     "develop:react-i18next": "npm run develop -- --scope=@tolgee/react-i18next-testapp",
     "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
+    "develop:react-vite": "npm run develop -- --scope=@tolgee/react-vite-testapp",
     "build:e2e": "turbo run build:e2e",
     "test:e2e": "npm run build:e2e && npm --prefix e2e run start",
     "ci:build": "turbo run build build-gatsby --cache-dir='.turbo'",

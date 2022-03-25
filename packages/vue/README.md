@@ -1,4 +1,5 @@
 # Tolgee for Vue
+
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/vue version](https://img.shields.io/npm/v/@tolgee/vue?label=%40tolgee%2Fvue)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
@@ -6,9 +7,9 @@
 ![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
 
-Vue integration library of Tolgee. 
+Vue integration library of Tolgee.
 
- > Currently we support vue v3 only
+> Currently we support vue v3 only
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
@@ -37,7 +38,6 @@ Then use the library in your app:
 
 <script>
   import { TolgeeProvider } from '@tolgee/vue';
-  import { UI } from '@tolgee/ui';
 
   ...
 
@@ -48,7 +48,6 @@ Then use the library in your app:
         config: {
           apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
           apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
-          ui: process.env.VUE_APP_TOLGEE_API_KEY ? UI : undefined,
         },
       };
     },

@@ -13,7 +13,8 @@
       cs: () => import('../i18n/cs.json').then((m) => m.default),
       fr: () => import('../i18n/fr.json').then((m) => m.default)
     },
-    availableLanguages: ['en', 'de', 'cs', 'fr']
+    availableLanguages: ['en', 'de', 'cs', 'fr'],
+    ui: import.meta.env.VITE_TOLGEE_API_KEY ? import('@tolgee/ui') : undefined
   } as TolgeeConfig;
 </script>
 

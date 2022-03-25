@@ -1,7 +1,7 @@
 jest.autoMockOff();
 
 import '@testing-library/jest-dom/extend-expect';
-import UI from '../index';
+import { UI } from '../index';
 import { NodeHelper } from '@tolgee/core';
 import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 

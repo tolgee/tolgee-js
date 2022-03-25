@@ -1,4 +1,5 @@
 # Tolgee for Svelte
+
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 ![@tolgee/svelte version](https://img.shields.io/npm/v/@tolgee/svelte?label=%40tolgee%2Fsvelte)
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
@@ -35,17 +36,14 @@ Then use the library in your app:
 
 <script lang="ts">
   import { TolgeeProvider } from "@tolgee/svelte";
-  import UI from "@tolgee/ui";
   import type { TolgeeConfig } from "@tolgee/core";
 
   const tolgeeConfig = {
     preloadFallback: true,
-    
+
     // when using SvelteKit and .env, otherwise you can set those params directly or use some dotenv library
     apiUrl: import.meta.env.VITE_TOLGEE_API_KEY,
-    //this can be omitted for production build
-    ui: import.meta.env.VITE_TOLGEE_API_KEY ? UI : undefined,
-    apiKey: import.meta.env.VITE_TOLGEE_API_KEY 
+    apiKey: import.meta.env.VITE_TOLGEE_API_KEY
   } as TolgeeConfig;
 </script>
 
@@ -60,6 +58,7 @@ Then use the library in your app:
 To translate texts using Tolgee Svelte integration, you can use `T` component or `getTranslate` function.
 
 ### T component
+
 ```sveltehtml
 
 <script>
@@ -71,7 +70,9 @@ To translate texts using Tolgee Svelte integration, you can use `T` component or
 ```
 
 ### getTranslate function
+
 The `getTranslate` function returns store containing the function, which actually translates your key.
+
 ```sveltehtml
 <script>
   import { getTranslate } from "@tolgee/svelte";
@@ -84,6 +85,7 @@ The `getTranslate` function returns store containing the function, which actuall
 ```
 
 ### Changing the language
+
 To change the current language, use `getLanguageStore` method. For example, you can bind it to select value.
 
 ```sveltehtml
@@ -108,4 +110,4 @@ To change the current language, use `getLanguageStore` method. For example, you 
 
 ## Quick integration guide
 
-Learn more at our [documentation website 📖](https://tolgee.io). 
+Learn more at our [documentation website 📖](https://tolgee.io).
