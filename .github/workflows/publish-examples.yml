@@ -22,7 +22,6 @@ jobs:
             'ngx',
             'react-i18next',
             'vue-i18next',
-            'react-vite',
           ]
     runs-on: ubuntu-latest
     steps:

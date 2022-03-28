@@ -28,7 +28,7 @@ Lokalize (translate) your Svelte projects to multiple languages with Tolgee. Int
 
 First, install the package.
 
-    npm install @tolgee/svelte @tolgee/ui --save
+    npm install @tolgee/svelte
 
 Then use the library in your app:
 

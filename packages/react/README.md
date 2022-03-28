@@ -27,7 +27,7 @@ Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫�
 
 First, install the package.
 
-    npm install @tolgee/react --save
+    npm install @tolgee/react
 
 Then use the library in your app:
 

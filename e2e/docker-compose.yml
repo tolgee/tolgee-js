@@ -81,6 +81,7 @@ services:
       - 8106:3000
     command: ['npm', 'run', 'dev']
     environment:
+      NEXT_BUILD_DIR: dist-e2e
       NEXT_PUBLIC_TOLGEE_API_URL: http://localhost:8202
       NEXT_PUBLIC_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/next
@@ -92,8 +93,6 @@ services:
     ports:
       - 8107:3000
     command: ['npm', 'run', 'start']
-    environment:
-      NEXT_BUILD_DIR: dist-e2e
     working_dir: /data/testapps/next
   e2e_app_next-internal:
     container_name: tolgee_js_e2e_serve_testapps_next_internal

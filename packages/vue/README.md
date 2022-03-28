@@ -25,7 +25,7 @@ Vue integration library of Tolgee.
 
 First, install the package.
 
-    npm install @tolgee/vue @tolgee/ui
+    npm install @tolgee/vue
 
 Then use the library in your app:
 
