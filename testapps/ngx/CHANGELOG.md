@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.3.0-rc.3106ab8.0 (2022-03-28)
+
+
+### Features
+
+* ui is now included automatically ([3106ab8](https://github.com/tolgee/tolgee-js/commit/3106ab8d8e7915b1fc7b72a776df9765a3280100))
+
+
+
+
+
 ## [4.2.1](https://github.com/tolgee/tolgee-js/compare/v4.2.0...v4.2.1) (2022-03-14)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
