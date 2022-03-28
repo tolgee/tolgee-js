@@ -1,13 +1,13 @@
 {
   "name": "@tolgee/react-i18next-testapp",
-  "version": "4.2.1",
+  "version": "4.3.0-rc.10eeecf.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@tolgee/core": "^4.2.1",
-    "@tolgee/i18next": "^4.2.1",
+    "@tolgee/core": "^4.3.0-rc.10eeecf.0",
+    "@tolgee/i18next": "^4.3.0-rc.10eeecf.0",
     "concurrently": "^6.4.0",
     "i18next": "^21.5.4",
     "i18next-icu": "^2.0.3",
