@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ui",
-  "version": "4.2.1",
+  "version": "4.3.0-rc.2874848.0",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
   "module": "./dist/tolgee-ui.esm.js",
@@ -25,7 +25,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "^4.2.1"
+    "@tolgee/core": "^4.3.0-rc.2874848.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.4.1",

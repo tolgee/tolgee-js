@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.3.0-rc.2874848.0 (2022-03-28)
+
+
+### Features
+
+* ui is now included automatically ([2874848](https://github.com/tolgee/tolgee-js/commit/2874848db3a48c4d7a92c489c233b225fdf355f3))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client
