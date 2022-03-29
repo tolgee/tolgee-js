@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.4.0](https://github.com/tolgee/tolgee-js/compare/v4.3.0...v4.4.0) (2022-03-29)
+
+
+### Features
+
+* permitted languages support ([99c3b33](https://github.com/tolgee/tolgee-js/commit/99c3b33cd8c6543e403e1fdceb8cc50c0ffdbd2d))
+* permitted languages support - adapt to API change ([f21550f](https://github.com/tolgee/tolgee-js/commit/f21550f72909e32e3259cef13b262b63686f1b59))
+
+
+
+
+
 # [4.3.0](https://github.com/tolgee/tolgee-js/compare/v4.2.1...v4.3.0) (2022-03-29)
 
 
