@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.3.0](https://github.com/tolgee/tolgee-js/compare/v4.2.1...v4.3.0) (2022-03-29)
+
+
+### Features
+
+* ui is now included automatically ([3fd8146](https://github.com/tolgee/tolgee-js/commit/3fd814688b7553b8f872b62d870ec3d2092d17c6))
+
+
+
+
+
 ## [4.2.1](https://github.com/tolgee/tolgee-js/compare/v4.2.0...v4.2.1) (2022-03-14)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
