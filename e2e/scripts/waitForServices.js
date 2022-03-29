@@ -32,4 +32,4 @@ ls.on('exit', function (code) {
 setTimeout(() => {
   console.log('timeout');
   exit(1);
-}, 120_000);
+}, 500_000);
