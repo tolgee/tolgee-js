@@ -24,7 +24,7 @@
     "@tolgee/core": "^4.4.0",
     "@tolgee/ngx": "^4.4.0",
     "@tolgee/ui": "^4.4.0",
-    "@types/react": "^17.0.43",
+    "@types/react": "^18.0.1",
     "rxjs": "~7.5.5",
     "serve": "^13.0.2",
     "tslib": "^2.0.0",
