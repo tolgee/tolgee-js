@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
+
+
+### Features
+
+* Make mode option deprecated ([7ecaf26](https://github.com/tolgee/tolgee-js/commit/7ecaf264c7884a76ca14338ca48b315e5b72ed1f))
+
+
+
+
+
 # [4.4.0](https://github.com/tolgee/tolgee-js/compare/v4.3.0...v4.4.0) (2022-03-29)
 
 
