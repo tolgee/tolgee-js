@@ -1,6 +1,7 @@
-import { Mode, TreeTranslationsData } from './types';
+import { TreeTranslationsData } from './types';
 import { NodeHelper } from './helpers/NodeHelper';
 import { ModifierKey } from './Constants/ModifierKey';
+import { Mode } from 'fs';
 
 const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
 const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
@@ -24,6 +25,10 @@ type UiType =
   | Promise<UiLibInterface>;
 
 export class TolgeeConfig {
+  /**
+   * @deprecated This option won't have any effect,
+   * because mode is now automatically detected when apiKey + apiUrl are set
+   */
   mode?: Mode;
   apiUrl?: string;
   apiKey?: string;
@@ -117,10 +122,9 @@ export class TolgeeConfig {
     if (this._targetElement === undefined) {
       this._targetElement = DEFAULT_TARGET_ELEMENT_SUPPLIER();
     }
-    this.mode = this.mode || (this.apiKey ? 'development' : 'production');
     this.fallbackLanguage = this.fallbackLanguage || this.defaultLanguage;
     if (this.watch === undefined) {
-      this.watch = this.mode === 'development';
+      this.watch = Boolean(this.apiKey && this.apiUrl);
     }
     if (this.availableLanguages === undefined && this.staticData) {
       this.availableLanguages = Object.keys(this.staticData);

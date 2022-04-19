@@ -35,7 +35,7 @@ describe('ElementRegistrar', () => {
     const element = createElement(1, 1);
 
     beforeEach(async () => {
-      getMockedInstance(Properties).config.mode = 'development';
+      getMockedInstance(Properties).mode = 'development';
       document.body.append(element);
       await elementRegistrar.register(element);
     });
@@ -57,7 +57,7 @@ describe('ElementRegistrar', () => {
 
   test('throws error on register element without any node', async () => {
     const element = createElement(0, 0);
-    getMockedInstance(Properties).config.mode = 'development';
+    getMockedInstance(Properties).mode = 'development';
     document.body.append(element);
     elementRegistrar.register(element);
     expect((elementRegistrar as any).registeredElements).toBeInstanceOf(Set);

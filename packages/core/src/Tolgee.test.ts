@@ -48,7 +48,7 @@ describe('Tolgee', () => {
   });
 
   test('will load api key details', async () => {
-    propertiesMock.mock.instances[0].config.mode = 'development';
+    propertiesMock.mock.instances[0].mode = 'development';
     await tolgee.run();
     expect(
       coreServiceMock.mock.instances[0].loadApiKeyDetails
@@ -59,7 +59,7 @@ describe('Tolgee', () => {
   });
 
   test('will not set properties.scopes on run in production mode', async () => {
-    propertiesMock.mock.instances[0].config.mode = 'production';
+    propertiesMock.mock.instances[0].mode = 'production';
     await tolgee.run();
     expect(coreServiceMock.mock.instances[0].getApiKeyDetails).toBeCalledTimes(
       0
@@ -149,7 +149,7 @@ describe('Tolgee', () => {
 
     describe('async translate', () => {
       test('will return wrapped string from text service in development mode', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         const translated = await tolgee.translate(dummyKey, dummyParams);
 
         expect(mockedWrap).toBeCalledWith(
@@ -162,7 +162,7 @@ describe('Tolgee', () => {
       });
 
       test('will return translated string from text service in production mode', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'production';
+        propertiesMock.mock.instances[0].mode = 'production';
         const translated = await tolgee.translate(dummyKey, dummyParams);
 
         expect(translated).toEqual(translatedDummyText);
@@ -177,7 +177,7 @@ describe('Tolgee', () => {
       });
 
       test('will not wrap when development is on, but noWrap is true', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         const translated = await tolgee.translate(dummyKey, dummyParams, true);
 
         expect(mockedWrap).not.toBeCalled();
@@ -185,13 +185,13 @@ describe('Tolgee', () => {
       });
 
       test('will wait for translations load before wrapping', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.translate(dummyKey, dummyParams);
         expect(mockedLoadTranslations).toBeCalled();
       });
 
       test('passes default value to wrap fn', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.translate(dummyKey, dummyParams, false, 'Default');
         expect(mockedWrap).toBeCalledWith(
           'dummyText',
@@ -202,7 +202,7 @@ describe('Tolgee', () => {
       });
 
       test('passes default value to translate fn', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.translate(dummyKey, dummyParams, true, 'Default');
         expect(mockedTranslate).toBeCalledWith(
           'dummyText',
@@ -214,7 +214,7 @@ describe('Tolgee', () => {
       });
 
       test('props object works correctly', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.translate({
           key: dummyKey,
           params: dummyParams,
@@ -231,7 +231,7 @@ describe('Tolgee', () => {
       });
 
       test('passes orEmpty correctly', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.translate({
           key: dummyKey,
           params: dummyParams,
@@ -250,7 +250,7 @@ describe('Tolgee', () => {
 
     describe('sync instant', () => {
       test('will return wrapped string from text service in development mode', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         const dummyParams = {};
         const translated = tolgee.instant(dummyKey, dummyParams);
 
@@ -264,7 +264,7 @@ describe('Tolgee', () => {
       });
 
       test('will return translated string from text service in production mode', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'production';
+        propertiesMock.mock.instances[0].mode = 'production';
         const translated = tolgee.instant(dummyKey, dummyParams);
 
         expect(translated).toEqual(translatedDummyText);
@@ -290,7 +290,7 @@ describe('Tolgee', () => {
       });
 
       test('will not wrap when development is on, but noWrap is true', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         const translated = tolgee.instant(dummyKey, dummyParams, true);
 
         expect(mockedWrap).not.toBeCalled();
@@ -309,7 +309,7 @@ describe('Tolgee', () => {
       });
 
       test('passes default value to wrap fn', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         const dummyParams = {};
         tolgee.instant(dummyKey, dummyParams, false, false, 'Default');
 
@@ -322,7 +322,7 @@ describe('Tolgee', () => {
       });
 
       test('props object works correctly', async () => {
-        propertiesMock.mock.instances[0].config.mode = 'development';
+        propertiesMock.mock.instances[0].mode = 'development';
         await tolgee.instant({
           key: dummyKey,
           params: dummyParams,
@@ -341,7 +341,7 @@ describe('Tolgee', () => {
     });
 
     test('passes default value to instant fn', async () => {
-      propertiesMock.mock.instances[0].config.mode = 'development';
+      propertiesMock.mock.instances[0].mode = 'development';
       const dummyParams = {};
       tolgee.instant(dummyKey, dummyParams, true, false, 'Default');
 
@@ -372,7 +372,7 @@ describe('Tolgee', () => {
   });
 
   test('will return proper initialLoading', () => {
-    tolgee.properties.config.mode = 'production';
+    tolgee.properties.mode = 'production';
     tolgee.properties.config.preloadFallback = true;
     tolgee.properties.currentLanguage = 'cs';
     tolgee.properties.config.staticData = {
@@ -385,7 +385,7 @@ describe('Tolgee', () => {
     tolgee.properties.config.preloadFallback = true;
     tolgee.properties.config.staticData.en = {};
     expect(tolgee.initialLoading).toEqual(false);
-    tolgee.properties.config.mode = 'development';
+    tolgee.properties.mode = 'development';
     expect(tolgee.initialLoading).toEqual(false);
   });
 

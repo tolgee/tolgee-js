@@ -79,7 +79,7 @@ describe('TranslationService', () => {
     });
 
     test('will load translations in development mode', async () => {
-      getMockedInstance(Properties).config.mode = 'development';
+      getMockedInstance(Properties).mode = 'development';
       await translationService.loadTranslations('en');
       expect(translationService.getFromCacheOrFallback('key', 'en')).toEqual(
         'translated'
@@ -184,7 +184,7 @@ describe('TranslationService', () => {
     });
 
     test("won't throw exception when there is null in translation data", async () => {
-      getMockedInstance(Properties).config.mode = 'development';
+      getMockedInstance(Properties).mode = 'development';
       getMockedInstance(ApiHttpService).fetchJson = jest.fn(async () => ({
         en: {
           hello: null,
