@@ -1,5 +1,5 @@
 import { TolgeeConfig } from './TolgeeConfig';
-import { Scope } from './types';
+import { Mode, Scope } from './types';
 
 const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY = '__tolgee_preferredLanguages';
 const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = '__tolgee_currentLanguage';
@@ -9,6 +9,7 @@ export class Properties {
   scopes?: Scope[];
   projectId?: number;
   permittedLanguageIds?: number[];
+  mode?: Mode;
   _currentLanguage?: string;
 
   get currentLanguage(): string {

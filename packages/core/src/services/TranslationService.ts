@@ -293,14 +293,14 @@ export class TranslationService {
   };
 
   private isFetchNeeded(lang: string) {
-    const isDevMode = this.properties.config.mode === 'development';
+    const isDevMode = this.properties.mode === 'development';
     const dataPresent = this.translationsCache.get(lang) !== undefined;
     const devFetched = Boolean(this.fetchedDev[lang]);
     return (isDevMode && !devFetched) || !dataPresent;
   }
 
   private async fetchTranslations(lang: string) {
-    const isDevMode = this.properties.config.mode === 'development';
+    const isDevMode = this.properties.mode === 'development';
     if (isDevMode) {
       return await this.fetchTranslationsDevelopment(lang);
     } else {

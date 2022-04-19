@@ -49,7 +49,7 @@ export class CoreService {
       console.error(
         'Error getting scopes. Trying to switch to production mode!'
       );
-      this.properties.config.mode = 'production';
+      this.properties.mode = 'production';
     }
   }
 

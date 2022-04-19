@@ -77,7 +77,7 @@ describe('CoreService', () => {
         throw new Error();
       });
       await coreService.getApiKeyDetails();
-      expect(getMockedInstance(Properties).config.mode).toEqual('production');
+      expect(getMockedInstance(Properties).mode).toEqual('production');
       // eslint-disable-next-line no-console
       expect(console.error).toBeCalledTimes(2);
     });
@@ -102,7 +102,7 @@ describe('CoreService', () => {
 
     test('will set properties.scopes on run in development mode', async () => {
       const propertiesMock = getMockedInstance(Properties);
-      propertiesMock.config.mode = 'development';
+      propertiesMock.mode = 'development';
       await coreService.loadApiKeyDetails();
       expect(propertiesMock.scopes).toContain('translations.edit' as Scope);
       expect(propertiesMock.scopes).not.toContain('translations.view' as Scope);
@@ -110,7 +110,7 @@ describe('CoreService', () => {
 
     test('will set properties.projectId on run in development mode', async () => {
       const propertiesMock = getMockedInstance(Properties);
-      propertiesMock.config.mode = 'development';
+      propertiesMock.mode = 'development';
       await coreService.loadApiKeyDetails();
       expect(propertiesMock.projectId).toEqual(0);
     });

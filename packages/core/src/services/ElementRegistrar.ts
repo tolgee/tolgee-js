@@ -24,7 +24,7 @@ export class ElementRegistrar {
       return;
     }
     if (
-      this.properties.config.mode === 'development' &&
+      this.properties.mode === 'development' &&
       !this.registeredElements.has(element)
     ) {
       this.translationHighlighter.listen(element);

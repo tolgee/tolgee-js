@@ -124,20 +124,24 @@ export class Tolgee {
 
   init(config: TolgeeConfig) {
     this.dependencyService.init(config);
+    const { apiKey, apiUrl } = this.dependencyService.properties.config;
+    this.dependencyService.properties.mode =
+      apiKey && apiUrl ? 'development' : 'production';
+
     return this;
   }
 
   public async run(): Promise<void> {
     this.dependencyService.run();
-    if (this.properties.config.mode === 'development') {
+    if (this.properties.mode === 'development') {
       try {
         await this.coreService.loadApiKeyDetails();
       } catch (e) {
         // eslint-disable-next-line no-console
-        console.error("Couldn't connect to tolgee");
+        console.error("Couldn't connect to Tolgee");
         // eslint-disable-next-line no-console
         console.error(e);
-        this.properties.config.mode = 'production';
+        this.properties.mode = 'production';
       }
     }
 
@@ -206,7 +210,7 @@ export class Tolgee {
       defaultValue
     );
 
-    if (this.properties.config.mode === 'development' && !noWrap) {
+    if (this.properties.mode === 'development' && !noWrap) {
       await this.coreService.loadApiKeyDetails();
       return this.dependencyService.wrapper.wrap(
         key,
@@ -238,7 +242,7 @@ export class Tolgee {
     defaultValue?: string | undefined,
     translation?: TranslationTags<any>
   ): TranslationTags<any> {
-    if (this.properties.config.mode === 'development') {
+    if (this.properties.mode === 'development') {
       return this.dependencyService.wrapper.wrap(
         key,
         params,
@@ -295,7 +299,7 @@ export class Tolgee {
       defaultValue
     );
 
-    if (this.properties.config.mode === 'development' && !noWrap) {
+    if (this.properties.mode === 'development' && !noWrap) {
       return this.dependencyService.wrapper.wrap(
         key,
         params,
