@@ -37,7 +37,7 @@
     "@tolgee/core": "^4.5.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.8",
-    "@types/react": "^17.0.30",
+    "@types/react": "^18.0.6",
     "@types/react-dom": "^17.0.1",
     "clsx": "^1.1.1",
     "concurrently": "7.1.0",
