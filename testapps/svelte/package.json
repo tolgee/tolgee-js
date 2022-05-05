@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "1.0.0-next.23",
-    "@sveltejs/kit": "1.0.0-next.206",
+    "@sveltejs/kit": "1.0.0-next.326",
     "@tolgee/core": "^4.5.0",
     "@tolgee/svelte": "^4.5.0",
     "@tolgee/ui": "^4.5.0",
