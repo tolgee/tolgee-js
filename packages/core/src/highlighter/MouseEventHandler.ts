@@ -1,17 +1,29 @@
 import { ElementMeta, ElementWithMeta } from '../types';
 import { ModifierKey } from '../Constants/ModifierKey';
-import { Properties } from '../Properties';
 import { EventEmitterImpl } from '../services/EventEmitter';
+import { DependencyService } from '../services/DependencyService';
+
+const eCapture = {
+  capture: true,
+};
+
+type Coordinates = {
+  x: number;
+  y: number;
+};
+
+type TolgeeElement = Element &
+  ElementCSSInlineStyle & { _tolgee?: ElementMeta };
 
 export class MouseEventHandler {
   private keysDown = new Set<ModifierKey>();
-  private mouseOn: Set<ElementWithMeta> = new Set();
   private highlighted: ElementWithMeta;
   private mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
   private keysChanged: EventEmitterImpl<boolean> =
     new EventEmitterImpl<boolean>();
+  private cursorPosition: Coordinates | undefined;
 
-  constructor(private properties: Properties) {}
+  constructor(private dependencies: DependencyService) {}
 
   run() {
     if (typeof window !== 'undefined') {
@@ -20,138 +32,138 @@ export class MouseEventHandler {
     }
   }
 
-  handle(
-    element: ElementWithMeta & ElementCSSInlineStyle,
-    onclick: (clickEvent: MouseEvent) => void
-  ) {
-    if (element._tolgee.listeningForHighlighting) {
-      // eslint-disable-next-line no-console
-      console.error(
-        'Element is already listening mouse events! This is probably bug in tolgee'
-      );
-      return;
-    }
-    element._tolgee.listeningForHighlighting = true;
-
-    this.initEventListeners(element, onclick);
-
-    this.mouseOnChanged.subscribe(() => {
-      if (this.highlighted !== this.getMouseOn()) {
-        this.onConditionsChanged();
+  private readonly highlight = (el: ElementWithMeta | undefined) => {
+    if (this.highlighted !== el) {
+      this.unhighlight();
+      if (el) {
+        el._tolgee.preventClean = true;
+        el._tolgee.highlight();
+        this.highlighted = el;
+        this.mouseOnChanged.emit(el);
       }
-    });
+    }
+  };
 
-    this.keysChanged.subscribe(() => {
-      this.onConditionsChanged();
-    });
+  private readonly unhighlight = () => {
+    if (this.highlighted) {
+      this.highlighted._tolgee.preventClean = false;
+      this.highlighted._tolgee.unhighlight();
+      this.highlighted = undefined;
+      this.mouseOnChanged.emit(this.highlighted);
+    }
+  };
+
+  private updateHighlight() {
+    const position = this.cursorPosition;
+
+    let newHighlighted: ElementWithMeta;
+    if (position && this.areKeysDown()) {
+      newHighlighted = this.getClosestTolgeeElement(
+        document.elementFromPoint(position.x, position.y)
+      );
+    }
+    this.highlight(newHighlighted);
   }
 
-  private initEventListeners(
-    element: Element & ElementCSSInlineStyle & { _tolgee: ElementMeta },
-    onclick: (clickEvent: MouseEvent) => void
-  ) {
-    const onMouseOver = () => this.onMouseOver(element);
-    const onMouseOut = () => this.onMouseOut(element);
-    const onClick = (e: MouseEvent) => {
-      if (this.areKeysDown() && this.highlighted === e.currentTarget) {
-        e.stopPropagation();
-        e.preventDefault();
-        onclick(e);
-      }
-    };
+  private updateCursorPosition(position: Coordinates) {
+    this.cursorPosition = position;
+    this.updateHighlight();
+  }
 
-    element.addEventListener('mouseover', onMouseOver);
-    element.addEventListener('click', onClick, { capture: true });
-
-    const onMouseDownOrUp = (e: MouseEvent) => {
+  private initKeyListener() {
+    const defaultEventBlock = (e: MouseEvent) => {
       if (this.areKeysDown()) {
         e.stopPropagation();
         e.preventDefault();
       }
     };
-
-    element.addEventListener('mousedown', onMouseDownOrUp);
-    element.addEventListener('mouseup', onMouseDownOrUp);
-    element.addEventListener('mouseout', onMouseOut);
-
-    element._tolgee.removeAllEventListeners = () => {
-      element.removeEventListener('mousedown', onMouseDownOrUp);
-      element.removeEventListener('mouseup', onMouseDownOrUp);
-      element.removeEventListener('mouseover', onMouseOver);
-      element.removeEventListener('click', onClick, { capture: true });
-      element.removeEventListener('mouseout', onMouseOut);
-    };
-  }
-
-  private readonly onConditionsChanged = () => {
-    this.unhighlight();
-    if (this.areKeysDown() && this.getMouseOn()) {
-      this.highlight();
-    }
-  };
-
-  private readonly highlight = () => {
-    this.getMouseOn()._tolgee.highlight();
-    this.highlighted = this.getMouseOn();
-  };
-
-  private readonly unhighlight = () => {
-    if (this.highlighted) {
-      this.highlighted._tolgee.unhighlight();
-      this.highlighted = null;
-    }
-  };
-
-  private readonly onMouseOut = (element) => {
-    element._tolgee.preventClean = false;
-    this.mouseOn.delete(element);
-    this.mouseOnChanged.emit(this.getMouseOn());
-  };
-
-  private readonly onMouseOver = (
-    element: ElementWithMeta & ElementCSSInlineStyle
-  ) => {
-    this.filterMouseOn();
-    element._tolgee.preventClean = true;
-    this.mouseOn.delete(element); //to get in to last place
-    this.mouseOn.add(element);
-    this.mouseOnChanged.emit(this.getMouseOn());
-  };
-
-  private getMouseOn() {
-    const mouseOnArray = Array.from(this.mouseOn);
-    return mouseOnArray.length ? mouseOnArray[0] : undefined;
-  }
-
-  private initKeyListener() {
-    window.addEventListener('blur', () => {
-      this.keysDown = new Set();
-      this.keysChanged.emit(this.areKeysDown());
-    });
-
-    window.addEventListener('keydown', (e) => {
-      const modifierKey = ModifierKey[e.key];
-      if (modifierKey !== undefined) {
-        this.keysDown.add(modifierKey);
+    document.addEventListener(
+      'blur',
+      () => {
+        this.keysDown = new Set();
         this.keysChanged.emit(this.areKeysDown());
-      }
-    });
-    window.addEventListener('keyup', (e) => {
-      this.keysDown.delete(ModifierKey[e.key]);
-      this.keysChanged.emit(this.areKeysDown());
-    });
+        this.updateHighlight();
+      },
+      eCapture
+    );
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+        const modifierKey = ModifierKey[e.key];
+        if (modifierKey !== undefined) {
+          this.keysDown.add(modifierKey);
+          this.keysChanged.emit(this.areKeysDown());
+        }
+        this.updateHighlight();
+      },
+      eCapture
+    );
+    document.addEventListener(
+      'keyup',
+      (e) => {
+        this.keysDown.delete(ModifierKey[e.key]);
+        this.keysChanged.emit(this.areKeysDown());
+        this.updateHighlight();
+      },
+      eCapture
+    );
+    document.addEventListener(
+      'mousemove',
+      (e) => {
+        defaultEventBlock(e);
+        this.updateCursorPosition({ x: e.clientX, y: e.clientY });
+      },
+      { passive: true, capture: true }
+    );
+    document.addEventListener('mouseenter', defaultEventBlock, eCapture);
+    document.addEventListener('mouseover', defaultEventBlock, eCapture);
+    document.addEventListener('mouseout', defaultEventBlock, eCapture);
+    document.addEventListener('mouseleave', defaultEventBlock, eCapture);
+    document.addEventListener('mousedown', defaultEventBlock, eCapture);
+    document.addEventListener('mouseup', defaultEventBlock, eCapture);
+    document.addEventListener(
+      'scroll',
+      () => {
+        this.highlighted?._tolgee.highlight();
+      },
+      { capture: true, passive: true }
+    );
+    document.addEventListener(
+      'click',
+      (e) => {
+        defaultEventBlock(e);
+        if (this.areKeysDown()) {
+          const element = this.getClosestTolgeeElement(
+            e.target as TolgeeElement
+          );
+          if (element && element === this.highlighted) {
+            this.dependencies.translationHighlighter.translationEdit(
+              e,
+              element
+            );
+            this.unhighlight();
+          }
+        }
+      },
+      eCapture
+    );
   }
 
-  private filterMouseOn() {
-    this.mouseOn.forEach((el) => {
-      if (!document.contains(el)) {
-        this.mouseOn.delete(el);
-      }
-    });
+  private getClosestTolgeeElement(
+    element: Element
+  ): ElementWithMeta | undefined {
+    if ((element as ElementWithMeta)?._tolgee) {
+      return element as ElementWithMeta;
+    }
+    if (element?.parentElement) {
+      return this.getClosestTolgeeElement(element.parentElement);
+    }
+    return undefined;
   }
 
   private areKeysDown() {
-    for (const key of this.properties.config.highlightKeys) {
+    for (const key of this.dependencies.properties.config.highlightKeys) {
       if (!this.keysDown.has(key)) {
         return false;
       }
