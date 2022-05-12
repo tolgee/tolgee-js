@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0-rc.6a7caf3.0 (2022-05-12)
+
+
+### Features
+
+* Improve highlighter ([6a7caf3](https://github.com/tolgee/tolgee-js/commit/6a7caf3d8db4e5abac1f4ececf19d95f92291927))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client

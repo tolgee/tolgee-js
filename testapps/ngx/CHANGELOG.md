@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0-rc.6a7caf3.0 (2022-05-12)
+
+
+### Features
+
+* Improve highlighter ([6a7caf3](https://github.com/tolgee/tolgee-js/commit/6a7caf3d8db4e5abac1f4ececf19d95f92291927))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
