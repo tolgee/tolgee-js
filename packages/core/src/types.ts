@@ -93,6 +93,7 @@ export type ElementMeta = {
   nodes: Set<NodeWithMeta>;
   listeningForHighlighting?: boolean;
   removeAllEventListeners?: () => void;
+  highlightEl?: HTMLDivElement;
   highlight?: () => void;
   unhighlight?: () => void;
   initialBackgroundColor?: string;

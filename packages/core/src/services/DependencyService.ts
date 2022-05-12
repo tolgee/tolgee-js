@@ -23,7 +23,7 @@ export class DependencyService {
   public properties: Properties = new Properties();
   public eventService: EventService = new EventService();
   public apiHttpService: ApiHttpService = new ApiHttpService(this.properties);
-  public mouseEventHandler = new MouseEventHandler(this.properties);
+  public mouseEventHandler = new MouseEventHandler(this);
   public moduleService = new ModuleService();
   public coreService: CoreService = new CoreService(
     this.properties,

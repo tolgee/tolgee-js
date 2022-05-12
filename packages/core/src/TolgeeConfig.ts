@@ -74,7 +74,7 @@ export class TolgeeConfig {
     | (keyof HTMLElementTagNameMap)[]
     | ((node: Element) => boolean) = ['option', 'optgroup'];
   restrictedElements?: string[] = ['script', 'style'];
-  highlightColor?: string = 'rgb(224 240 255)';
+  highlightColor?: string = 'rgb(255, 0, 0)';
   /** localization data to use in production mode */
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);

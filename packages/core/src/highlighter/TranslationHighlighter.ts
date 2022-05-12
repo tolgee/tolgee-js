@@ -26,10 +26,10 @@ export class TranslationHighlighter {
 
   listen(element: ElementWithMeta & ElementCSSInlineStyle) {
     this.dependencies.highlightFunctionInitializer.initFunctions(element);
-    this.dependencies.mouseEventHandler.handle(
-      element,
-      async (e) => await this.translationEdit(e, element)
-    );
+    // this.dependencies.mouseEventHandler.handle(
+    //   element,
+    //   async (e) => await this.translationEdit(e, element)
+    // );
   }
 
   private async getRenderer() {
@@ -103,7 +103,7 @@ export class TranslationHighlighter {
     console.error('No key to translate. This seems like a bug in tolgee.');
   }
 
-  private translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
+  public translationEdit = async (e: MouseEvent, element: ElementWithMeta) => {
     const renderer = await this.getRenderer();
     if (typeof renderer === 'object') {
       const key = await this.getKeyAndDefault(e, element);
