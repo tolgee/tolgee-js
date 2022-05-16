@@ -7,24 +7,8 @@ import { tolgeeOptions } from './tolgeeOptions';
 import { tolgeeProcessor } from './tolgeeProcessor';
 
 export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
-  const tolgee = Tolgee.init({
-    wrapperMode: 'invisible',
-    enableLanguageDetection: false,
-    enableLanguageStore: false,
-    ui:
-      process.env.NODE_ENV !== 'development'
-        ? undefined
-        : typeof require !== 'undefined'
-        ? require('@tolgee/ui')
-        : import('@tolgee/ui'),
-    ...config,
-  });
-  i18n.use(tolgeeBackend(tolgee));
-  i18n.use(tolgeeProcessor(tolgee));
-
   const originalInit = i18n.init;
   const newInit: typeof originalInit = (...params) => {
-    tolgeeApply(tolgee, i18n);
     let options: InitOptions = {};
     let callback: Callback | undefined = undefined;
 
@@ -34,7 +18,37 @@ export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
     } else {
       callback = params[0] as Callback;
     }
-    const newOptions = tolgeeOptions(tolgee, options);
+
+    const updatedOptions = {
+      defaultNS: 'root',
+      ns: ['root'],
+      ...options,
+    };
+
+    const tolgee = Tolgee.init({
+      wrapperMode: 'invisible',
+      enableLanguageDetection: false,
+      enableLanguageStore: false,
+      ns: updatedOptions.ns
+        ? Array.isArray(updatedOptions.ns)
+          ? updatedOptions.ns
+          : [updatedOptions.ns]
+        : undefined,
+      defaultNS: updatedOptions.defaultNS,
+      ui:
+        process.env.NODE_ENV !== 'development'
+          ? undefined
+          : typeof require !== 'undefined'
+          ? require('@tolgee/ui')
+          : import('@tolgee/ui'),
+      ...config,
+    });
+    i18n.use(tolgeeBackend(tolgee));
+    i18n.use(tolgeeProcessor(tolgee));
+
+    tolgeeApply(tolgee, i18n);
+
+    const newOptions = tolgeeOptions(tolgee, updatedOptions);
     const result = originalInit(newOptions, callback);
     const language = i18n.language || options.lng;
     if (language) {

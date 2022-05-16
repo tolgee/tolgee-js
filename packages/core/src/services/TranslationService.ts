@@ -19,6 +19,10 @@ interface TranslationInterface {
   text?: string;
 }
 
+type NamespaceMap<T = any> = {
+  [key: string]: T;
+};
+
 interface Key {
   id?: number;
   name: string;
@@ -30,11 +34,11 @@ export class TranslationService {
     string,
     Translations
   >();
-  private fetchPromises: { [key: string]: Promise<any> } = {};
+  private fetchPromises: NamespaceMap<Promise<void>> = {};
 
   // we need to distinguish which languages are in cache initially
   // because we need to refetch them in dev mode
-  private fetchedDev: { [key: string]: boolean } = {};
+  private fetchedDev: NamespaceMap<boolean> = {};
 
   constructor(
     private properties: Properties,
@@ -72,6 +76,28 @@ export class TranslationService {
     return this.translationsCache;
   }
 
+  private getNamespaceKey(lang: string, ns: string) {
+    const nsList = ns ? ns.split('.') : '';
+    return [lang, ...nsList].join('.');
+  }
+
+  private findByNamespace<T>(
+    lang: string,
+    ns: string,
+    namespaces: NamespaceMap<T>
+  ): T | undefined {
+    const nsList = ns ? ns.split('.') : [];
+    const parts = [lang, ...nsList];
+    let key = '';
+    for (const part of parts) {
+      key = (key ? key + '.' : '') + part;
+      if (namespaces[key] !== undefined) {
+        return namespaces[key];
+      }
+    }
+    return undefined;
+  }
+
   updateTranslationInCache = async (data: Key) => {
     const result: Record<string, string> = {};
     Object.entries(data.translations).forEach(([lang, translation]) => {
@@ -86,27 +112,44 @@ export class TranslationService {
     ).emit(new TranslationData(data.name, result, data.id));
   };
 
-  async loadTranslations(lang: string = this.properties.currentLanguage) {
-    if (this.isFetchNeeded(lang)) {
-      if (!(this.fetchPromises[lang] instanceof Promise)) {
-        this.fetchPromises[lang] = this.fetchTranslations(lang);
+  async loadTranslations(
+    lang: string = this.properties.currentLanguage,
+    ns = ''
+  ) {
+    if (this.isFetchNeeded(lang, ns)) {
+      const promise = this.findByNamespace(lang, ns, this.fetchPromises);
+      if (!promise) {
+        await this.fetchTranslations(lang, ns);
+      } else {
+        await promise;
       }
-      await this.fetchPromises[lang];
       (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(
         lang
       );
     }
-    this.fetchPromises[lang] = undefined;
-    return this.translationsCache.get(lang);
+    return this.getNamespaceTranslations(lang, ns);
+  }
+
+  private getNamespaceTranslations(lang: string, ns: string) {
+    const nsWithDot = ns ? ns + '.' : '';
+    const result: Translations = {};
+    Object.entries(this.translationsCache.get(lang)).forEach(([key, value]) => {
+      if (key.startsWith(nsWithDot)) {
+        const trimmedKey = key.substring(nsWithDot.length);
+        result[trimmedKey] = value;
+      }
+    });
+    return result;
   }
 
   async getTranslation(
     key: string,
     lang: string = this.properties.currentLanguage,
-    defaultValue?: string
+    defaultValue?: string,
+    ns?: string
   ): Promise<string> {
     if (this.isFetchNeeded(lang)) {
-      await this.loadTranslations(lang);
+      await this.loadTranslations(lang, ns);
     }
     let message = this.getFromCache(key, lang);
 
@@ -114,7 +157,10 @@ export class TranslationService {
       // try to get translation from fallback language
       const fallbackLang = this.properties.config.fallbackLanguage;
       if (this.isFetchNeeded(fallbackLang)) {
-        await this.loadTranslations(this.properties.config.fallbackLanguage);
+        await this.loadTranslations(
+          this.properties.config.fallbackLanguage,
+          ns
+        );
       }
       message = this.getFromCache(key, this.properties.config.fallbackLanguage);
     }
@@ -292,23 +338,29 @@ export class TranslationService {
     }
   };
 
-  private isFetchNeeded(lang: string) {
+  private isFetchNeeded(lang: string, ns?: string) {
     const isDevMode = this.properties.mode === 'development';
     const dataPresent = this.translationsCache.get(lang) !== undefined;
-    const devFetched = Boolean(this.fetchedDev[lang]);
+    const devFetched = Boolean(this.findByNamespace(lang, ns, this.fetchedDev));
     return (isDevMode && !devFetched) || !dataPresent;
   }
 
-  private async fetchTranslations(lang: string) {
+  private async fetchTranslations(lang: string, ns: string) {
     const isDevMode = this.properties.mode === 'development';
-    if (isDevMode) {
-      return await this.fetchTranslationsDevelopment(lang);
-    } else {
-      return await this.fetchTranslationsProduction(lang);
-    }
+    const namespaceKey = this.getNamespaceKey(lang, ns);
+    console.log(lang, ns, isDevMode);
+
+    this.fetchPromises[namespaceKey] = isDevMode
+      ? this.fetchTranslationsDevelopment(lang, ns)
+      : this.fetchTranslationsProduction(lang, ns);
+
+    return this.fetchPromises[namespaceKey];
   }
 
-  private async fetchTranslationsProduction(language: string) {
+  private async fetchTranslationsProduction(
+    language: string,
+    ns: string | undefined
+  ) {
     const langStaticData = this.properties.config?.staticData?.[language];
 
     if (typeof langStaticData === 'function') {
@@ -349,15 +401,19 @@ export class TranslationService {
     }
   }
 
-  private async fetchTranslationsDevelopment(language: string) {
+  private async fetchTranslationsDevelopment(
+    language: string,
+    ns: string | undefined
+  ) {
     await this.coreService.loadApiKeyDetails();
     this.coreService.checkScope('translations.view');
     try {
       const data = await this.apiHttpService.fetchJson(
         `v2/projects/translations/${language}`
       );
-      this.fetchedDev[language] = true;
-      this.setLanguageData(language, data[language] || {});
+      const namespaceKey = this.getNamespaceKey(language, ns);
+      this.fetchedDev[namespaceKey] = true;
+      this.setLanguageData(language, data[language]);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error while fetching localization data from API.', e);
@@ -390,7 +446,11 @@ export class TranslationService {
       return result;
     };
 
-    this.translationsCache.set(language, makeFlat(data));
+    const oldData = this.translationsCache.get(language);
+    const newData = makeFlat(data);
+    const result = { ...oldData, ...newData };
+
+    this.translationsCache.set(language, result);
   }
 
   private getFromCache(

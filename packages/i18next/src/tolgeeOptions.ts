@@ -11,8 +11,11 @@ export const tolgeeOptions = (tolgee: Tolgee, options?: InitOptions) => {
   } else {
     processors = [TOLGEE_PROCESSOR_NAME];
   }
+
   const newOptions = {
     ...options,
+    defaultNS: tolgee.properties.config.defaultNS || 'root',
+    ns: tolgee.properties.config.ns?.map((ns) => (ns === '' ? 'root' : ns)),
     postProcess: processors,
     i18nFormat: {
       ...options?.i18nFormat,

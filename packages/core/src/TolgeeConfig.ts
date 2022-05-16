@@ -79,6 +79,8 @@ export class TolgeeConfig {
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
   };
+  ns?: string[] = [''];
+  defaultNS?: string = '';
   wrapperMode?: 'text' | 'invisible' = 'text';
 
   /**

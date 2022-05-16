@@ -21,7 +21,7 @@ const getInitialItems = () => {
 };
 
 export const Todos = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('todos');
 
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<string[]>(getInitialItems());

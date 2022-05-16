@@ -8,7 +8,8 @@ export const tolgeeBackend = (tolgee: Tolgee): Module => {
     init() {},
     read: async function (language: string, ns: string, callback: any) {
       try {
-        const translations = await tolgee.loadTranslations(language);
+        const tolgeeNs = ns !== 'root' ? ns : undefined;
+        const translations = await tolgee.loadTranslations(language, tolgeeNs);
         callback(null, translations);
       } catch {
         callback(true);

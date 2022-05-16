@@ -9,6 +9,7 @@ export type ApiKeyWithLanguagesModel =
 
 export class CoreService {
   private languagePromise: Promise<PagedModelLanguageModel>;
+  private detailsPromise: Promise<ApiKeyWithLanguagesModel>;
 
   constructor(
     private properties: Properties,
@@ -41,7 +42,11 @@ export class CoreService {
 
   async getApiKeyDetails(): Promise<ApiKeyWithLanguagesModel> {
     try {
-      return await this.apiHttpService.fetchJson(`v2/api-keys/current`);
+      if (!this.detailsPromise) {
+        this.detailsPromise =
+          this.apiHttpService.fetchJson(`v2/api-keys/current`);
+      }
+      return await this.detailsPromise;
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);

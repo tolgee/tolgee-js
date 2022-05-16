@@ -15,6 +15,7 @@ import { DependencyService } from './services/DependencyService';
 
 export class Tolgee {
   private dependencyService: DependencyService;
+  private isRunning = false;
 
   private constructor() {
     this.dependencyService = new DependencyService();
@@ -39,11 +40,18 @@ export class Tolgee {
   public set lang(newLanguage) {
     this.properties.currentLanguage = newLanguage;
 
-    this.dependencyService.translationService
-      .loadTranslations(newLanguage)
-      .then(() => {
+    if (this.isRunning) {
+      Promise.all(
+        this.properties.config.ns!.map((namespace) =>
+          this.dependencyService.translationService.loadTranslations(
+            newLanguage,
+            namespace
+          )
+        )
+      ).then(() => {
         this.emitLangChangeEvent(newLanguage);
       });
+    }
   }
 
   public get defaultLanguage() {
@@ -110,9 +118,15 @@ export class Tolgee {
    * @return Promise<void> Resolves when translations are loaded
    */
   public async changeLanguage(newLanguage: string): Promise<void> {
-    await this.dependencyService.translationService.loadTranslations(
-      newLanguage
+    await Promise.all(
+      this.properties.config.ns!.map((namespace) =>
+        this.dependencyService.translationService.loadTranslations(
+          newLanguage,
+          namespace
+        )
+      )
     );
+
     this.properties.currentLanguage = newLanguage;
     this.emitLangChangeEvent(newLanguage);
   }
@@ -132,6 +146,7 @@ export class Tolgee {
   }
 
   public async run(): Promise<void> {
+    this.isRunning = true;
     this.dependencyService.run();
     if (this.properties.mode === 'development') {
       try {
@@ -145,12 +160,24 @@ export class Tolgee {
       }
     }
 
-    await this.dependencyService.translationService.loadTranslations();
+    await Promise.all(
+      this.properties.config.ns!.map((namespace) =>
+        this.dependencyService.translationService.loadTranslations(
+          this.properties.currentLanguage,
+          namespace
+        )
+      )
+    );
     await this.dependencyService.pluginManager.run();
 
     if (this.properties.config.preloadFallback) {
-      await this.dependencyService.translationService.loadTranslations(
-        this.properties.config.fallbackLanguage
+      await Promise.all(
+        this.properties.config.ns!.map((namespace) =>
+          this.dependencyService.translationService.loadTranslations(
+            this.properties.config.fallbackLanguage,
+            namespace
+          )
+        )
       );
     }
 
@@ -321,12 +348,13 @@ export class Tolgee {
    * Loads translations for given language or returns them from cache
    * @returns Loaded translations
    */
-  public loadTranslations(lang: string) {
-    return this.dependencyService.translationService.loadTranslations(lang);
+  public loadTranslations(lang: string, ns?: string) {
+    return this.dependencyService.translationService.loadTranslations(lang, ns);
   }
 
   public stop = () => {
     this.dependencyService.stop();
+    this.isRunning = false;
   };
 
   private emitLangChangeEvent(value: string) {
