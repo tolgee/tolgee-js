@@ -26,10 +26,6 @@ export class TranslationHighlighter {
 
   listen(element: ElementWithMeta & ElementCSSInlineStyle) {
     this.dependencies.highlightFunctionInitializer.initFunctions(element);
-    // this.dependencies.mouseEventHandler.handle(
-    //   element,
-    //   async (e) => await this.translationEdit(e, element)
-    // );
   }
 
   private async getRenderer() {
