@@ -91,12 +91,9 @@ export type ElementMeta = {
   wrappedWithElementOnlyKey?: string;
   wrappedWithElementOnlyDefaultHtml?: string;
   nodes: Set<NodeWithMeta>;
-  listeningForHighlighting?: boolean;
-  removeAllEventListeners?: () => void;
   highlightEl?: HTMLDivElement;
   highlight?: () => void;
   unhighlight?: () => void;
-  initialBackgroundColor?: string;
   /**
    * Stops removing of element's inactive nodes and
    * unregistering from ElementRegistrar.
