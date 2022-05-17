@@ -108,6 +108,7 @@ export class DependencyService {
   stop = () => {
     this.observer.stopObserving();
     this.elementRegistrar.cleanAll();
+    this.mouseEventHandler.stop();
     NodeHelper.unmarkElementAsTargetElement(
       this.properties.config.targetElement
     );
