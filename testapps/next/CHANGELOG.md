@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0-rc.03177a3.0 (2022-05-17)
+
+
+### Features
+
+* Improve highlighter - fix tests and cleanup ([03177a3](https://github.com/tolgee/tolgee-js/commit/03177a3409ccddc9661b301e41194e96a84eb000))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/next-testapp
