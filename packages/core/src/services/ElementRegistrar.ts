@@ -85,8 +85,8 @@ export class ElementRegistrar {
 
   private cleanElement(element: ElementWithMeta) {
     if (!element._tolgee.preventClean) {
-      if (typeof element._tolgee.removeAllEventListeners === 'function') {
-        element._tolgee.removeAllEventListeners();
+      if (element._tolgee.highlightEl) {
+        element._tolgee.unhighlight();
       }
       element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
       delete element._tolgee;

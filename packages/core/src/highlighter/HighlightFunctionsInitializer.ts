@@ -1,7 +1,17 @@
+import { TOLGEE_HIGHLIGHTER_CLASS } from '../Constants/Global';
 import { Properties } from '../Properties';
 import { ElementWithMeta } from '../types';
 
 const BORDER_WIDTH = 5;
+
+const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
+  pointerEvents: 'none',
+  position: 'fixed',
+  boxSizing: 'border-box',
+  zIndex: String(Number.MAX_SAFE_INTEGER),
+  contain: 'layout',
+  display: 'block',
+};
 
 export class HighlightFunctionsInitializer {
   constructor(private properties: Properties) {}
@@ -20,12 +30,11 @@ export class HighlightFunctionsInitializer {
       let highlightEl = element._tolgee.highlightEl;
       if (!highlightEl) {
         highlightEl = document.createElement('div');
-        highlightEl.style.pointerEvents = 'none';
+        highlightEl.classList.add(TOLGEE_HIGHLIGHTER_CLASS);
+        Object.entries(HIGHLIGHTER_BASE_STYLE).forEach(([key, value]) => {
+          highlightEl.style[key] = value;
+        });
         highlightEl.style.border = `${BORDER_WIDTH}px solid ${this.properties.config.highlightColor}`;
-        highlightEl.style.position = 'fixed';
-        highlightEl.style.boxSizing = 'border-box';
-        highlightEl.style.zIndex = String(Number.MAX_SAFE_INTEGER);
-        highlightEl.style.contain = 'layout';
 
         element._tolgee.highlightEl = highlightEl;
         document.body.appendChild(highlightEl);

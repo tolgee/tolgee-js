@@ -25,6 +25,7 @@ export const TranslationDialogWrapper: React.FC = ({ children }) => {
       ) : (
         !takingScreenshot && (
           <Dialog
+            disableRestoreFocus
             disablePortal
             disableEnforceFocus
             open={open}
