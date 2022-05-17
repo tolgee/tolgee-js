@@ -91,15 +91,6 @@ describe('ElementRegistrar', () => {
       expect(mockedElements[2]._tolgee.nodes.size).toEqual(2);
     });
 
-    test('removal will call remove all event listeners method', () => {
-      const mockedCallback = jest.fn();
-      mockedElements[1]._tolgee.removeAllEventListeners = mockedCallback;
-      const node = mockedElements[1]._tolgee.nodes.values().next().value;
-      node.parentElement.removeChild(node);
-      elementRegistrar.refreshAll();
-      expect(mockedCallback).toBeCalledTimes(1);
-    });
-
     test('clean all will clean all elements', () => {
       elementRegistrar.cleanAll();
       for (const mockedElement of mockedElements) {
