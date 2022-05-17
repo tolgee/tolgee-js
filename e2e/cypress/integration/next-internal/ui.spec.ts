@@ -28,10 +28,7 @@ context('UI Dialog', () => {
       'screenshots.view',
       'screenshots.upload',
     ]);
-    cy.contains('On the road')
-      .trigger('keydown', { key: 'Alt' })
-      .trigger('mouseover')
-      .click();
+    openUI();
     cy.contains('Quick translation');
     cy.contains('Update');
     cy.get('#_tolgee_platform_link')
@@ -75,7 +72,7 @@ context('UI Dialog', () => {
     cy.contains('Hello world').should('be.visible');
   });
 
-  it.only('updates translation properly when languages restricted', () => {
+  it('updates translation properly when languages restricted', () => {
     // simulating restricted languages in api key info (english only)
     cy.intercept({ path: '/v2/api-keys/current**', method: 'get' }, (req) => {
       req.reply(testApiKey);
@@ -121,10 +118,7 @@ context('UI Dialog', () => {
       'screenshots.view',
       'screenshots.upload',
     ]);
-    cy.contains('On the road')
-      .trigger('keydown', { key: 'Alt' })
-      .trigger('mouseover')
-      .click();
+    openUI();
     cy.get('*[aria-label="Take screenshot"]').should('be.visible').click();
     cy.get('*[aria-label="Screenshot"]').should('be.visible');
   });
@@ -209,6 +203,7 @@ context('UI Dialog', () => {
       .trigger('keydown', { key: 'Alt' })
       .trigger('mouseover')
       .click();
+    cy.window().trigger('keyup', { key: 'Alt' });
     cy.get('textarea').contains(translation).should('be.visible');
     cy.wait(300);
   };

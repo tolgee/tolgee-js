@@ -30,7 +30,7 @@
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --preserveWatchOutput --project tsconfig.prod.json\" ",
     "schema": "openapi-typescript http://localhost:8080/v3/api-docs/All%20Internal%20-%20for%20Tolgee%20Web%20application --output ./src/types/apiSchema.generated.ts",
     "typedoc": "typedoc --entryPointStrategy expand --out docs src/index.ts src/Tolgee.ts src/types.ts src/services/EventEmitter.ts  src/services/Subscription.ts",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit --emitDeclarationOnly false"
   },
   "author": "JanCizmar",
   "license": "MIT",
