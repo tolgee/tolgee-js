@@ -24,7 +24,6 @@ export const TolgeeProvider = defineComponent({
     });
 
     this.tolgeeContext.tolgee = tolgee;
-    this.tolgeeContext.language = tolgee.lang;
 
     this.loading = tolgee.initialLoading;
 

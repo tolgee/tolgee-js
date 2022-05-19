@@ -83,19 +83,17 @@ or with default value
 <T keyName="translation_key" defaultValue="Default value" />
 ```
 
-## TolgeeMixin for imperative translations
+## Composition API for imperative translations
 
 ```html
 <template>
-  <div title="$t('translation_key')">Hello</div>
+  <div title="t('translation_key')">Hello</div>
 </template>
 
-<script>
-  import { TolgeeMixin } from '@tolgee/vue';
+<script setup>
+  import { useTranslate } from '@tolgee/vue';
 
-  export default {
-    mixins: [TolgeeMixin],
-  };
+  const t = useTranslate();
 </script>
 ```
 
@@ -103,16 +101,16 @@ or for language switching
 
 ```html
 <template>
-  <select v-model="tolgeeLanguage">
+  <select v-model="language">
     <option value="en">en</option>
     <option value="de">de</option>
   </select>
 </template>
 
-<script>
-  export default {
-    mixins: [TolgeeMixin],
-  });
+<script setup>
+  import { useLanguage } from '@tolgee/vue';
+
+  const language = useLanguage();
 </script>
 ```
 

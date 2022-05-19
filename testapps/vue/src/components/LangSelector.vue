@@ -1,5 +1,5 @@
 <template>
-  <select v-model="tolgeeLanguage" class="lang-selector">
+  <select v-model="language" class="lang-selector">
     <option value="en">🇬🇧 English</option>
     <option value="cs">🇨🇿 Česky</option>
     <option value="fr">🇫🇷 Français</option>
@@ -7,12 +7,8 @@
   </select>
 </template>
 
-<script lang="ts">
-import { TolgeeMixin } from '@tolgee/vue';
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import { useLanguage } from '@tolgee/vue';
 
-export default defineComponent({
-  mixins: [TolgeeMixin],
-  name: 'LanguageSelect',
-});
+const language = useLanguage();
 </script>
