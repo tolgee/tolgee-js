@@ -59,8 +59,7 @@ export class Tolgee {
   }
 
   /**
-   * Is emitted when language translations are loaded for the first time.
-   * It is not emitted when language is changed and translations were loaded before.
+   * Is emitted when language is changed and loaded (including initial load)
    */
   public get onLangLoaded() {
     return this.dependencyService.eventService.LANGUAGE_LOADED;

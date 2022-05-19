@@ -92,10 +92,8 @@ export class TranslationService {
         this.fetchPromises[lang] = this.fetchTranslations(lang);
       }
       await this.fetchPromises[lang];
-      (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(
-        lang
-      );
     }
+    (this.eventService.LANGUAGE_LOADED as EventEmitterImpl<string>).emit(lang);
     this.fetchPromises[lang] = undefined;
     return this.translationsCache.get(lang);
   }
