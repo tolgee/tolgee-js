@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0-rc.30a9509.0 (2022-05-19)
+
+
+### Features
+
+* Improve highlighter - add rounded corners ([30a9509](https://github.com/tolgee/tolgee-js/commit/30a95092457759f12b40f9bf9e348c90601f0823))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/react-testapp
