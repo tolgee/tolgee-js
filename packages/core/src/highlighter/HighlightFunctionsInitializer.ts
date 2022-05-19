@@ -2,15 +2,15 @@ import { TOLGEE_HIGHLIGHTER_CLASS } from '../Constants/Global';
 import { Properties } from '../Properties';
 import { ElementWithMeta } from '../types';
 
-const BORDER_WIDTH = 5;
-
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
   pointerEvents: 'none',
   position: 'fixed',
-  boxSizing: 'border-box',
+  boxSizing: 'content-box',
   zIndex: String(Number.MAX_SAFE_INTEGER),
   contain: 'layout',
   display: 'block',
+  borderStyle: 'solid',
+  borderRadius: '4px',
 };
 
 export class HighlightFunctionsInitializer {
@@ -24,6 +24,8 @@ export class HighlightFunctionsInitializer {
   borderElement: HTMLDivElement | null;
   private initHighlightFunction(element: ElementWithMeta) {
     element._tolgee.highlight = () => {
+      const highlightColor = this.properties.config.highlightColor;
+      const highlightWidth = this.properties.config.highlightWidth;
       if (!element.isConnected) {
         return;
       }
@@ -34,7 +36,7 @@ export class HighlightFunctionsInitializer {
         Object.entries(HIGHLIGHTER_BASE_STYLE).forEach(([key, value]) => {
           highlightEl.style[key] = value;
         });
-        highlightEl.style.border = `${BORDER_WIDTH}px solid ${this.properties.config.highlightColor}`;
+        highlightEl.style.borderColor = highlightColor;
 
         element._tolgee.highlightEl = highlightEl;
         document.body.appendChild(highlightEl);
@@ -42,11 +44,11 @@ export class HighlightFunctionsInitializer {
 
       const shape = element.getBoundingClientRect();
 
-      highlightEl.style.top = shape.top - BORDER_WIDTH + 'px';
-      highlightEl.style.left = shape.left - BORDER_WIDTH + 'px';
-      highlightEl.style.width = shape.width + 2 * BORDER_WIDTH + 'px';
-      highlightEl.style.height = shape.height + 2 * BORDER_WIDTH + 'px';
-      highlightEl.style.display = 'block';
+      highlightEl.style.borderWidth = highlightWidth + 'px';
+      highlightEl.style.top = shape.top - highlightWidth + 'px';
+      highlightEl.style.left = shape.left - highlightWidth + 'px';
+      highlightEl.style.width = shape.width + 'px';
+      highlightEl.style.height = shape.height + 'px';
     };
   }
 
