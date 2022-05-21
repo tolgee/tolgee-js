@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0-rc.f5a646c.0 (2022-05-21)
+
+
+### Features
+
+* Improve highlighter - add rounded corners ([f5a646c](https://github.com/tolgee/tolgee-js/commit/f5a646c9f0f17f6044386c29d30f7ac0c5635d26))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/ui
