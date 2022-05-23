@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/tolgee/tolgee-js/compare/v4.5.0...v4.6.0) (2022-05-23)
+
+
+### Features
+
+* Improve highlighter - fix tests and cleanup ([6ea5d34](https://github.com/tolgee/tolgee-js/commit/6ea5d34b8913170494b447c9c2d6c98813daf1a1))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/ui

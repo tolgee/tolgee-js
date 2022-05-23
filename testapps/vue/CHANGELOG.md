@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/tolgee/tolgee-js/compare/v4.5.0...v4.6.0) (2022-05-23)
+
+
+### Features
+
+* Add and embrace Vue composition API ([acdd2a9](https://github.com/tolgee/tolgee-js/commit/acdd2a92df6552092f777e30f6ae5050b7571232))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 **Note:** Version bump only for package @tolgee/vue-testapp

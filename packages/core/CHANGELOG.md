@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.6.0](https://github.com/tolgee/tolgee-js/compare/v4.5.0...v4.6.0) (2022-05-23)
+
+
+### Features
+
+* Add and embrace Vue composition API ([acdd2a9](https://github.com/tolgee/tolgee-js/commit/acdd2a92df6552092f777e30f6ae5050b7571232))
+* Improve highlighter ([334738a](https://github.com/tolgee/tolgee-js/commit/334738a06fd47cd6c7d12f309310fa15eeda5b59))
+* Improve highlighter - add rounded corners ([2f27441](https://github.com/tolgee/tolgee-js/commit/2f274410764c208d6f6ecca9aebb72b417846ca2))
+* Improve highlighter - fix tests and cleanup ([6ea5d34](https://github.com/tolgee/tolgee-js/commit/6ea5d34b8913170494b447c9c2d6c98813daf1a1))
+
+
+
+
+
 # [4.5.0](https://github.com/tolgee/tolgee-js/compare/v4.4.0...v4.5.0) (2022-04-19)
 
 
