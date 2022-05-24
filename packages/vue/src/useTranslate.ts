@@ -5,6 +5,12 @@ import { TolgeeContext, TranslateFnProps } from './types';
 export const useTranslate = () => {
   const tolgeeContext = inject('tolgeeContext') as TolgeeContext;
 
+  let keysRef = [];
+
+  const resetMemory = () => {
+    keysRef = [];
+  };
+
   const createTFunction = () => {
     return (
       keyOrProps: string | TranslateFnProps,
@@ -40,6 +46,17 @@ export const useTranslate = () => {
         noWrap,
         defaultValue: defaultValue,
       });
+
+      const firstRender = !keysRef.includes(key);
+      if (firstRender) {
+        keysRef.push(key);
+        tolgeeContext?.tolgee.translate({
+          key,
+          params: parameters,
+          noWrap,
+          defaultValue,
+        });
+      }
       return result;
     };
   };
@@ -50,11 +67,16 @@ export const useTranslate = () => {
   let allTranslationsSub: any;
   onMounted(() => {
     const tolgee = tolgeeContext.tolgee;
-    translationSub = tolgee.onTranslationChange.subscribe(() => {
-      t.value = createTFunction();
+    translationSub = tolgee.onTranslationChange.subscribe(({ key }) => {
+      if (keysRef.includes(key)) {
+        t.value = createTFunction();
+      }
     });
     allTranslationsSub = tolgee.onLangLoaded.subscribe(() => {
-      t.value = createTFunction();
+      if (keysRef.length) {
+        resetMemory();
+        t.value = createTFunction();
+      }
     });
   });
 

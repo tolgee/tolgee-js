@@ -230,9 +230,13 @@ export class TranslationService {
     lang: string = this.properties.currentLanguage,
     defaultValue?: string
   ): string {
+    const fallbackLang = this.properties.config.fallbackLanguage;
     const message =
-      this.getFromCache(key, lang) ||
-      this.getFromCache(key, this.properties.config.fallbackLanguage);
+      this.getFromCache(key, lang) || this.getFromCache(key, fallbackLang);
+
+    if (!message && (!this.isLoaded(lang) || !this.isLoaded(fallbackLang))) {
+      return undefined;
+    }
     return TranslationService.translationByValue(message, defaultValue);
   }
 
@@ -295,6 +299,10 @@ export class TranslationService {
     const dataPresent = this.translationsCache.get(lang) !== undefined;
     const devFetched = Boolean(this.fetchedDev[lang]);
     return (isDevMode && !devFetched) || !dataPresent;
+  }
+
+  private isLoaded(lang: string) {
+    return this.translationsCache.get(lang) !== undefined;
   }
 
   private async fetchTranslations(lang: string) {

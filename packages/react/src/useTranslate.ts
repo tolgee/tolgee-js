@@ -52,19 +52,14 @@ export const useTranslate: () => ReturnFnType = () => {
 
   // cache of translations translated with this useTranslate
   const keysRef = useRef<string[]>([]);
-  const keysReadyRef = useRef<string[]>([]);
 
-  const resetMemory = (key?: string) => {
-    keysRef.current = key ? keysRef.current.filter((k) => k !== key) : [];
-    keysReadyRef.current = key
-      ? keysReadyRef.current.filter((k) => k !== key)
-      : [];
+  const resetMemory = () => {
+    keysRef.current = [];
   };
 
   useEffect(() => {
     const subscription = tolgee.onTranslationChange.subscribe(({ key }) => {
       if (keysRef.current.includes(key)) {
-        resetMemory(key);
         forceRerender();
       }
     });
@@ -72,7 +67,7 @@ export const useTranslate: () => ReturnFnType = () => {
   }, [tolgee]);
 
   useEffect(() => {
-    const subscription = tolgee.onLangChange.subscribe(() => {
+    const subscription = tolgee.onLangLoaded.subscribe(() => {
       if (keysRef.current.length) {
         resetMemory();
         forceRerender();
@@ -88,31 +83,22 @@ export const useTranslate: () => ReturnFnType = () => {
       noWrap?: boolean,
       defaultValue?: string
     ) => {
-      const firstRender = !keysRef.current.includes(key);
-      const ready = keysReadyRef.current.includes(key);
       const translation = tolgee.instant({
         key,
         params: wrapTagHandlers(params),
         noWrap,
-        defaultValue: !ready ? undefined : defaultValue,
-        orEmpty: !ready,
+        defaultValue: defaultValue,
       });
 
+      const firstRender = !keysRef.current.includes(key);
       if (firstRender) {
         keysRef.current.push(key);
-        tolgee
-          .translate({
-            key,
-            params: wrapTagHandlers(params),
-            noWrap,
-            defaultValue,
-          })
-          .then((value) => {
-            keysReadyRef.current.push(key);
-            if (value !== translation) {
-              forceRerender();
-            }
-          });
+        tolgee.translate({
+          key,
+          params: wrapTagHandlers(params),
+          noWrap,
+          defaultValue,
+        });
       }
 
       return translation;
