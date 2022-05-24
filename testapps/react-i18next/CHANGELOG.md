@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.6.1-rc.a5b97b8.0 (2022-05-24)
+
+
+### Bug Fixes
+
+* Fix useTranslate types, react warnings, core observer edge case error ([a5b97b8](https://github.com/tolgee/tolgee-js/commit/a5b97b8bf7951645ceee7f2bdf5871d5a0da81c0))
+
+
+
+
+
 # [4.6.0](https://github.com/tolgee/tolgee-js/compare/v4.5.0...v4.6.0) (2022-05-23)
 
 **Note:** Version bump only for package @tolgee/react-i18next-testapp
