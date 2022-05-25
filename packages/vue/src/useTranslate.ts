@@ -5,6 +5,12 @@ import { TolgeeContext, TranslateFnProps } from './types';
 export const useTranslate = () => {
   const tolgeeContext = inject('tolgeeContext') as TolgeeContext;
 
+  let keysRef = [];
+
+  const resetMemory = (key?: string) => {
+    keysRef = key ? keysRef.filter((k) => k !== key) : [];
+  };
+
   const createTFunction = () => {
     return (
       keyOrProps: string | TranslateFnProps,
@@ -38,8 +44,25 @@ export const useTranslate = () => {
         key: key,
         params: parameters,
         noWrap,
-        defaultValue: defaultValue,
+        defaultValue,
       });
+
+      const firstRender = !keysRef.includes(key);
+      if (firstRender) {
+        keysRef.push(key);
+        tolgeeContext?.tolgee
+          .translate({
+            key,
+            params: parameters,
+            noWrap,
+            defaultValue,
+          })
+          .then((value) => {
+            if (value !== result) {
+              t.value = createTFunction();
+            }
+          });
+      }
       return result;
     };
   };
@@ -50,11 +73,17 @@ export const useTranslate = () => {
   let allTranslationsSub: any;
   onMounted(() => {
     const tolgee = tolgeeContext.tolgee;
-    translationSub = tolgee.onTranslationChange.subscribe(() => {
-      t.value = createTFunction();
+    translationSub = tolgee.onTranslationChange.subscribe(({ key }) => {
+      if (keysRef.includes(key)) {
+        resetMemory(key);
+        t.value = createTFunction();
+      }
     });
-    allTranslationsSub = tolgee.onLangLoaded.subscribe(() => {
-      t.value = createTFunction();
+    allTranslationsSub = tolgee.onLangChange.subscribe(() => {
+      if (keysRef.length) {
+        resetMemory();
+        t.value = createTFunction();
+      }
     });
   });
 

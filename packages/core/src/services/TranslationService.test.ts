@@ -178,7 +178,7 @@ describe('TranslationService', () => {
       await translationService.loadTranslations('de');
       await translationService.loadTranslations('en');
 
-      expect(languageLoadedEmitMock).toBeCalledTimes(3);
+      expect(languageLoadedEmitMock).toBeCalledTimes(2);
       expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(1, 'en');
       expect(languageLoadedEmitMock).toHaveBeenNthCalledWith(2, 'de');
     });
