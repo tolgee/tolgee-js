@@ -51,7 +51,6 @@ export const Todos = () => {
             <T keyName="menu-item-translation-methods">Translation methods</T>
           </a>
         </Navbar>
-
         <header>
           <h1 className="header__title">
             <T keyName="on-the-road-title">On the road</T>
