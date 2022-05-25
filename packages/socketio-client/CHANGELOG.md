@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.6.1-rc.67b132a.0 (2022-05-25)
+
+
+### Bug Fixes
+
+* Fix useTranslate types, react warnings, core observer edge case error ([67b132a](https://github.com/tolgee/tolgee-js/commit/67b132ad086a1ddda6edc77bb7da602982fbdf71))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client
