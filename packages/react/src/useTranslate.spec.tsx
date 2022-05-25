@@ -90,21 +90,18 @@ describe('useTranslate hook', function () {
         defaultValue: undefined,
         key: 'hello',
         noWrap: undefined,
-        orEmpty: true,
         params: undefined,
       });
       expect(instantMock).toHaveBeenCalledWith({
         defaultValue: undefined,
         key: 'hello2',
         noWrap: undefined,
-        orEmpty: true,
         params: { name: 'test' },
       });
       expect(instantMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
+        defaultValue: 'Default',
         key: 'hello3',
         noWrap: true,
-        orEmpty: true,
         params: undefined,
       });
     });
@@ -209,10 +206,9 @@ describe('useTranslate hook', function () {
 
     test('calls instant function with proper params', async () => {
       expect(instantMock).toHaveBeenCalledWith({
-        defaultValue: undefined,
+        defaultValue: 'Default',
         key: 'hello',
         noWrap: false,
-        orEmpty: true,
         params: { name: 'test' },
       });
     });

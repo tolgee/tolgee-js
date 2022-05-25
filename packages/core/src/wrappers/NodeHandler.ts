@@ -38,6 +38,9 @@ export class NodeHandler {
     const restrictedElements = this.properties.config.restrictedElements;
     return nodes.filter((n) => {
       const e = NodeHelper.closestElement(n);
+      if (!e) {
+        return false;
+      }
       return (
         restrictedElements.indexOf(e.tagName.toLowerCase()) === -1 &&
         e.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}="true"]`) === null

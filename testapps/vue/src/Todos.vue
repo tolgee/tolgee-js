@@ -4,17 +4,23 @@
       <Navbar>
         <div>
           <a href="/translation-methods">
-            <T keyName="menu-item-translation-methods">Translation methods</T>
+            <T
+              keyName="menu-item-translation-methods"
+              defaultValue="Translation methods"
+            />
           </a>
         </div>
       </Navbar>
 
       <header>
         <h1 class="header__title">
-          <T keyName="on-the-road-title">On the road</T>
+          <T keyName="on-the-road-title" defaultValue="On the road" />
         </h1>
         <h2 class="header__subtitle">
-          <T keyName="on-the-road-subtitle">what to pack for the trip</T>
+          <T
+            keyName="on-the-road-subtitle"
+            defaultValue="what to pack for the trip"
+          />
         </h2>
       </header>
       <section class="items">
@@ -29,23 +35,23 @@
             "
           />
           <button @click="onAdd" :disabled="!newItemValue" class="button">
-            <T keyName="add-item-add-button">Add</T>
+            <T keyName="add-item-add-button" defaultValue="Add" />
           </button>
         </div>
         <div class="items__list">
           <div v-for="(item, i) in items" :key="i" class="item">
             <div class="item__text">{{ item }}</div>
             <button @click="onDelete(i)">
-              <T keyName="delete-item-button">Delete</T>
+              <T keyName="delete-item-button" defaultValue="Delete" />
             </button>
           </div>
         </div>
         <div class="items__buttons">
           <button class="button" @click="onAction('share')">
-            <T keyName="share-button">Share</T>
+            <T keyName="share-button" defaultValue="Share" />
           </button>
           <button class="button button--secondary" @click="onAction('email')">
-            <T keyName="send-via-email">Send via e-mail</T>
+            <T keyName="send-via-email" defaultValue="Send via e-mail" />
           </button>
         </div>
       </section>

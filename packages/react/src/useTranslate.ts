@@ -42,23 +42,29 @@ type ReturnFnType = {
 
 export const useTranslate: () => ReturnFnType = () => {
   const { tolgee } = useTolgeeContext();
+  const isMounted = useRef(false);
 
   // dummy state to enable re-rendering
   const [instance, setInstance] = useState(0);
 
-  const forceRerender = () => {
-    setInstance((v) => v + 1);
-  };
+  useEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+
+  const forceRerender = useCallback(() => {
+    if (isMounted.current) {
+      setInstance((v) => v + 1);
+    }
+  }, [setInstance, isMounted]);
 
   // cache of translations translated with this useTranslate
   const keysRef = useRef<string[]>([]);
-  const keysReadyRef = useRef<string[]>([]);
 
   const resetMemory = (key?: string) => {
     keysRef.current = key ? keysRef.current.filter((k) => k !== key) : [];
-    keysReadyRef.current = key
-      ? keysReadyRef.current.filter((k) => k !== key)
-      : [];
   };
 
   useEffect(() => {
@@ -89,13 +95,11 @@ export const useTranslate: () => ReturnFnType = () => {
       defaultValue?: string
     ) => {
       const firstRender = !keysRef.current.includes(key);
-      const ready = keysReadyRef.current.includes(key);
       const translation = tolgee.instant({
         key,
         params: wrapTagHandlers(params),
         noWrap,
-        defaultValue: !ready ? undefined : defaultValue,
-        orEmpty: !ready,
+        defaultValue: defaultValue,
       });
 
       if (firstRender) {
@@ -108,7 +112,6 @@ export const useTranslate: () => ReturnFnType = () => {
             defaultValue,
           })
           .then((value) => {
-            keysReadyRef.current.push(key);
             if (value !== translation) {
               forceRerender();
             }
