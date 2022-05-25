@@ -117,7 +117,9 @@ describe('mixin integration', () => {
     expect(screen.queryByTestId('non_existant').innerHTML).toContain(
       'Non existant'
     );
-    expect(screen.queryByTestId('non_existant')).toHaveProperty('_tolgee');
+    waitFor(() => {
+      expect(screen.queryByTestId('non_existant')).toHaveProperty('_tolgee');
+    });
   });
 
   describe('language switch', () => {

@@ -43,6 +43,11 @@ export const Todos = () => {
     alert('action: ' + action);
   };
 
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
+
   return (
     <div className="background-wrapper">
       <div className="example">
@@ -51,7 +56,6 @@ export const Todos = () => {
             <T keyName="menu-item-translation-methods">Translation methods</T>
           </a>
         </Navbar>
-
         <header>
           <h1 className="header__title">
             <T keyName="on-the-road-title">On the road</T>
@@ -96,6 +100,8 @@ export const Todos = () => {
             </button>
           </div>
         </section>
+        <div>{!loaded && <T keyName="unknown">Test</T>}</div>
+        <div>{loaded && <T keyName="test">Test</T>}</div>
       </div>
     </div>
   );
