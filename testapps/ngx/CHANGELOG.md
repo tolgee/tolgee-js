@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.7.0-rc.9928cac.0 (2022-05-30)
+
+
+### Features
+
+* add support for react 18 ([9928cac](https://github.com/tolgee/tolgee-js/commit/9928cac2f47d8df83aad49b1093864c2e4bef458))
+
+
+
+
+
 ## [4.6.1](https://github.com/tolgee/tolgee-js/compare/v4.6.0...v4.6.1) (2022-05-25)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
