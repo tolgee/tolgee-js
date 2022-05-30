@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React, {
   FunctionComponent,
+  PropsWithChildren,
   ReactNode,
   useEffect,
   useState,
@@ -12,9 +13,9 @@ export const TolgeeProviderContext =
   React.createContext<ContextValueType>(null);
 type TolgeeProviderProps = TolgeeConfig & { loadingFallback?: ReactNode };
 
-export const TolgeeProvider: FunctionComponent<TolgeeProviderProps> = (
-  props
-) => {
+export const TolgeeProvider: FunctionComponent<
+  PropsWithChildren<TolgeeProviderProps>
+> = (props) => {
   const config = { ...props };
   delete config.children;
   delete config.loadingFallback;
