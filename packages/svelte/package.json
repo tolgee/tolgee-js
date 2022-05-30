@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.6.1",
+  "version": "4.7.0",
   "scripts": {
     "build": "svelte-kit package",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
@@ -13,8 +13,8 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "dependencies": {
-    "@tolgee/core": "^4.6.1",
-    "@tolgee/ui": "^4.6.1"
+    "@tolgee/core": "^4.7.0",
+    "@tolgee/ui": "^4.7.0"
   },
   "devDependencies": {
     "@sveltejs/kit": "next",

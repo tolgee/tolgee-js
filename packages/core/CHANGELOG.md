@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.7.0](https://github.com/tolgee/tolgee-js/compare/v4.6.1...v4.7.0) (2022-05-30)
+
+
+### Features
+
+* add support for react 18 ([a5b60fb](https://github.com/tolgee/tolgee-js/commit/a5b60fbae0ac4c6fb28943547fafc95cfe139633))
+
+
+
+
+
 ## [4.6.1](https://github.com/tolgee/tolgee-js/compare/v4.6.0...v4.6.1) (2022-05-25)
 
 
