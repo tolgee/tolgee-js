@@ -25,6 +25,7 @@ function MyApp({ Component, pageProps, locales }: AppProps & { locales: any }) {
       enableLanguageDetection={false}
       loadingFallback={<div>Loading...</div>}
     >
+      {/* @ts-ignore */}
       <Component {...pageProps} />
     </TolgeeProvider>
   );
