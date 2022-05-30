@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.7.0-rc.8f81f5b.0 (2022-05-30)
+
+
+### Features
+
+* Add react 18 compatibility ([8f81f5b](https://github.com/tolgee/tolgee-js/commit/8f81f5bc23261170087b421fecdad4aef1f44df1))
+
+
+
+
+
 ## [4.6.1](https://github.com/tolgee/tolgee-js/compare/v4.6.0...v4.6.1) (2022-05-25)
 
 **Note:** Version bump only for package @tolgee/next-testapp
