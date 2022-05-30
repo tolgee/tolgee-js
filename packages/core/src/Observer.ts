@@ -47,7 +47,7 @@ export class Observer {
       return;
     }
     if (this._observing) {
-      throw new Error('Tolgee: Observer is already running');
+      return;
     }
     this._observing = true;
     this.observer.observe(this.properties.config.targetElement, {

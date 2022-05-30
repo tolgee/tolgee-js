@@ -33,7 +33,7 @@
     "dist/**/*"
   ],
   "peerDependencies": {
-    "react": "^16.14.0 || ^17.0.1"
+    "react": "^16.14.0 || ^17.0.1 || ^18.1.0"
   },
   "dependencies": {
     "@tolgee/core": "^4.6.1",
