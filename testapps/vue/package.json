@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@tolgee/vue": "^4.7.0",
-    "core-js": "^3.22.7",
+    "core-js": "^3.22.8",
     "vue": "^3.2.36"
   },
   "devDependencies": {
