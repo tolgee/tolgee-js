@@ -33,7 +33,6 @@ const getTranslate: GetTranslateType = () => {
       key: key,
       params: parameters,
       noWrap: noWrap,
-      orEmpty: true,
       defaultValue: defaultValue,
     });
 
