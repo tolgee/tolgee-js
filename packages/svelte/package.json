@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.7.0",
+  "version": "4.7.1",
   "scripts": {
     "build": "svelte-kit package",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",

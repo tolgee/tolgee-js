@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.7.1](https://github.com/tolgee/tolgee-js/compare/v4.7.0...v4.7.1) (2022-06-03)
+
+
+### Bug Fixes
+
+* loop of svelte getTranslate store ([e7d73af](https://github.com/tolgee/tolgee-js/commit/e7d73af97ce555f82f4a1abd00cc25491adb8043))
+
+
+### Reverts
+
+* Revert "fix loop of svelte getTranslate store" ([b591abe](https://github.com/tolgee/tolgee-js/commit/b591abec0e0772787668b5bac2452e3c711df359))
+
+
+
+
+
 # [4.7.0](https://github.com/tolgee/tolgee-js/compare/v4.6.1...v4.7.0) (2022-05-30)
 
 **Note:** Version bump only for package @tolgee/svelte
