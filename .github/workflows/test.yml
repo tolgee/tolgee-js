@@ -1,10 +1,7 @@
 name: Test
 
 on:
-  push:
-    branches-ignore:
-      - 'main'
-      - 'rc-*'
+  pull_request:
 
 jobs:
   test:

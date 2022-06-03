@@ -55,7 +55,6 @@ describe('getTranslate', () => {
         expect(tolgeeMock.instantMock).toHaveBeenCalledWith({
           ...restTProps,
           params: parameters,
-          orEmpty: true,
         });
       });
 
@@ -159,7 +158,6 @@ describe('getTranslate', () => {
     expect(tolgeeMock.translateMock).toHaveBeenCalledWith(tProps);
     expect(tolgeeMock.instantMock).toHaveBeenCalledWith({
       ...tProps,
-      orEmpty: true,
     });
   });
 });
