@@ -37,18 +37,16 @@ const getTranslate: GetTranslateType = () => {
       defaultValue: defaultValue,
     });
 
-    // if the language was not loaded yet, we have to run the translate method to get a reliable result
-    if (!tolgee.getCachedTranslations().has(tolgee.lang)) {
-      tolgee
-        .translate({ key: key, params: parameters, noWrap, defaultValue })
-        .then((translated) => {
-          // when the result value is different, we have to update the store and
-          // so return new translate function
-          if (instantTranslated !== translated) {
-            update();
-          }
-        });
-    }
+    // so we have to use also translate method, to get reliable result
+    tolgee
+      .translate({ key: key, params: parameters, noWrap, defaultValue })
+      .then((translated) => {
+        // when the result value is different, we have to update the store and
+        // so return new translate function
+        if (instantTranslated !== translated) {
+          update();
+        }
+      });
 
     return instantTranslated;
   };
