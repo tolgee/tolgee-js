@@ -13,7 +13,7 @@
   "dependencies": {
     "@tolgee/vue": "^4.7.0",
     "core-js": "^3.22.8",
-    "vue": "^3.2.36"
+    "vue": "^3.2.37"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
