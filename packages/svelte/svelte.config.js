@@ -9,14 +9,9 @@ const config = {
   plugins: [],
 
   kit: {
-    // hydrate the <div id="svelte"> element in src/app.html
-    target: '#svelte',
     package: {
       files: (filepath) => {
-        if (/^(.*\.(test.ts|spec.ts)|.*__.*)$/.test(filepath)) {
-          return false;
-        }
-        return true;
+        return !/^(.*\.(test.ts|spec.ts)|.*__.*)$/.test(filepath);
       },
     },
   },

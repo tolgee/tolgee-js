@@ -33,8 +33,8 @@ export class ApiHttpService {
 
   async fetch(...args: ArgumentTypes<typeof fetch>) {
     if (typeof args[0] === 'object') {
-      return fetch({ ...args[0], url: this.getUrl(args[0].url) }).then((r) =>
-        ApiHttpService.handleErrors(r)
+      return fetch({ ...args[0], url: this.getUrl((args[0] as any).url) }).then(
+        (r) => ApiHttpService.handleErrors(r)
       );
     }
     const [url, ...rest] = args;

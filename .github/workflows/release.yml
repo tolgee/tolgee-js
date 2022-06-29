@@ -19,9 +19,9 @@ jobs:
       - name: Build
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
-      - run: npm install -g npm@7
+      - run: npm install -g npm@7.1
 
       - name: Set git globals
         run: |

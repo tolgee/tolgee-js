@@ -12,9 +12,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
-      - run: npm install -g npm@7
+      - run: npm install -g npm@7.1
 
       - name: Cache .npm
         uses: actions/cache@v2
@@ -68,9 +68,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
-      - run: npm install -g npm@7
+      - run: npm install -g npm@7.1
 
       - name: Cache .npm
         uses: actions/cache@v2
@@ -162,9 +162,9 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
-      - run: npm install -g npm@7
+      - run: npm install -g npm@7.1
 
       - name: Cache root node_modules
         uses: actions/cache@v2
@@ -236,7 +236,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
       - name: Cache .npm
         uses: actions/cache@v2
@@ -246,7 +246,7 @@ jobs:
           restore-keys: |
             npm-${{ github.job }}-
 
-      - run: npm install -g npm@7
+      - run: npm install -g npm@7.1
 
       - name: Install
         run: npm run ci:install:root

@@ -6,8 +6,8 @@ import {
 } from '../../common/apiCalls';
 import { getByAriaLabel } from '../../common/selectors';
 import { Scope } from '../../common/types';
-import testApiKey from './testApiKey';
-import testLanguages from './testLanguages';
+import testApiKey from '../../common/testApiKey';
+import testLanguages from '../../common/testLanguages';
 
 context('UI Dialog', () => {
   beforeEach(() => {
@@ -209,10 +209,10 @@ context('UI Dialog', () => {
   };
 
   const removeScreenshots = () => {
-    getScreenshots(1, 1000000706).then((data) => {
+    getScreenshots(1, 1000007006).then((data) => {
       const screenshotIds = data._embedded?.screenshots.map((sc) => sc.id);
       if (screenshotIds) {
-        return deleteScreenshots(1, 1000000706, screenshotIds);
+        return deleteScreenshots(1, 1000007006, screenshotIds);
       }
     });
   };

@@ -1,8 +1,8 @@
-import getTolgeeContext from './getTolgeeContext';
 import type { GetTranslateResultFnProps, GetTranslateType } from './types';
 import { derived, writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 import type { TranslationParams } from '@tolgee/core';
+import { getTolgeeContext } from '$lib/index';
 
 const getTranslate: GetTranslateType = () => {
   const context = getTolgeeContext();
