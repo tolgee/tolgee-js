@@ -3,7 +3,7 @@
   "version": "4.7.0",
   "description": "Library providing ability to translate messages directly in context of developed application.",
   "main": "index.js",
-  "module": "./dist/tolgee.esm.js",
+  "module": "./dist/tolgee.esm.mjs",
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -56,14 +56,14 @@
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^27.0.5",
-    "tslib": "^2.3.1",
+    "tslib": "^2.4.0",
     "typedoc": "0.22.15",
     "typedoc-plugin-markdown": "3.12.1",
-    "typescript": "4.6.4"
+    "typescript": "4.7.4"
   },
   "exports": {
     "require": "./dist/tolgee.cjs.js",
-    "import": "./dist/tolgee.esm.js"
+    "import": "./dist/tolgee.esm.mjs"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "publishConfig": {

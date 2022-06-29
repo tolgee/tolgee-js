@@ -53,7 +53,10 @@ services:
     working_dir: /data/testapps/react
   e2e_app_gatsby_dev:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
-    build: ../docker
+    build:
+      context: ../docker
+      args:
+        nodever: 14
     volumes:
       - '../:/data'
     ports:
@@ -65,7 +68,10 @@ services:
     working_dir: /data/testapps/gatsby
   e2e_app_gatsby_prod:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_prod
-    build: ../docker
+    build:
+      context: ../docker
+      args:
+        nodever: 14
     volumes:
       - '../:/data'
     ports:
@@ -122,9 +128,6 @@ services:
     ports:
       - 8110:5000
     command: npm run serve:e2e
-    environment:
-      VITE_TOLGEE_API_URL: http://localhost:8202
-      VITE_TOLGEE_API_KEY: examples-admin-imported-project-implicit
     working_dir: /data/testapps/svelte
   e2e_app_vue_prod:
     container_name: tolgee_js_e2e_serve_testapps_vue_prod

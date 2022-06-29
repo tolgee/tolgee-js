@@ -18,12 +18,12 @@ export default {
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee.esm.js',
+      file: 'dist/tolgee.esm.mjs',
       format: 'esm',
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee.esm.js',
+      file: 'dist/tolgee.esm.min.mjs',
       format: 'esm',
       plugins: [terser()],
       sourcemap: true,
