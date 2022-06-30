@@ -31,7 +31,7 @@
     "@mui/material": "^5.0.3",
     "@rollup/plugin-commonjs": "^21.0.0",
     "@rollup/plugin-node-resolve": "13.3.0",
-    "@rollup/plugin-typescript": "8.3.1",
+    "@rollup/plugin-typescript": "8.3.3",
     "@testing-library/dom": "^8.7.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@tolgee/core": "^4.7.0",
