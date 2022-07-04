@@ -17,7 +17,7 @@ context('UI Dialog', () => {
     removeScreenshots();
   });
 
-  it.skip('makes screenshot', () => {
+  it('makes screenshot', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -30,7 +30,7 @@ context('UI Dialog', () => {
     cy.get('*[aria-label="Screenshot"]').should('be.visible');
   });
 
-  it.skip('screenshots not editable', () => {
+  it('screenshots not editable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -42,7 +42,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Take screenshot').should('not.exist');
   });
 
-  it.skip('screenshots editable', () => {
+  it('screenshots editable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -65,7 +65,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Delete').should('not.exist');
   });
 
-  it.skip('screenshots deletable', () => {
+  it('screenshots deletable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
