@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.7.2-rc.896ee06.0 (2022-07-04)
+
+
+### Bug Fixes
+
+* Core > Add ./src to published package ([896ee06](https://github.com/tolgee/tolgee-js/commit/896ee06753cab64f4bf18b949078df7227e3d10a))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client
