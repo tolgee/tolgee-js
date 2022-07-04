@@ -22,6 +22,7 @@
     "types/**/*",
     "lib/**/*",
     "dist/**/*",
+    "src/**/*",
     "index.js"
   ],
   "devDependencies": {
