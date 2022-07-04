@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.7.1",
+  "version": "4.7.2-rc.6a39b4d.0",
   "scripts": {
     "build": "svelte-kit package",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
@@ -13,8 +13,8 @@
     "format": "prettier --ignore-path .gitignore --write --plugin-search-dir=. ."
   },
   "dependencies": {
-    "@tolgee/core": "^4.7.0",
-    "@tolgee/ui": "^4.7.0"
+    "@tolgee/core": "^4.7.2-rc.6a39b4d.0",
+    "@tolgee/ui": "^4.7.2-rc.6a39b4d.0"
   },
   "devDependencies": {
     "@sveltejs/kit": "^1.0.0-next.357",
@@ -27,6 +27,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "jest": "^28.1.2",
+    "jest-environment-jsdom": "28.1.2",
     "jest-fetch-mock": "^3.0.3",
     "nodemon": "^2.0.18",
     "prettier": "^2.7.1",
@@ -38,8 +39,7 @@
     "svelte2tsx": "^0.5.11",
     "ts-jest": "^28.0.5",
     "tslib": "^2.4.0",
-    "typescript": "^4.7.4",
-    "jest-environment-jsdom": "28.1.2"
+    "typescript": "^4.7.4"
   },
   "type": "module",
   "publishConfig": {
