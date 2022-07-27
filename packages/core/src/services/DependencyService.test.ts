@@ -2,7 +2,7 @@ jest.dontMock('./DependencyService');
 jest.dontMock('../TolgeeConfig');
 
 import { getMockedInstance } from '@testFixtures/mocked';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { InvisibleWrapper } from '../wrappers/invisible/InvisibleWrapper';
 import { TextWrapper } from '../wrappers/text/TextWrapper';
 import { DependencyService } from './DependencyService';

@@ -18,7 +18,12 @@ jobs:
         with:
           node-version: '16.x'
 
-      - run: npm install -g npm@7.1
+      - uses: pnpm/action-setup@v2.0.1
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7
+          run_install: false
 
       - name: Create branch
         run: git checkout -b rc.$(git rev-parse --short HEAD)
@@ -29,7 +34,7 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - name: Install
-        run: npm run ci:init
+        run: pnpm i
 
       - name: Update version locally
         run: |
@@ -41,7 +46,7 @@ jobs:
         run: echo "TOLGEE_UI_VERSION=$(npm run --silent ui-version)" >> $GITHUB_ENV
 
       - name: Build all packages
-        run: npm run ci:build
+        run: pnpm build
 
       - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
         env:

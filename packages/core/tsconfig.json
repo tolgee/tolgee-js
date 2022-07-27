@@ -18,7 +18,8 @@
       "tolgee/ui": ["./ui"],
       "tolgee/core": ["./core"],
       "@testFixtures/*": ["./src/__testFixtures/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types"]
   },
   "include": ["src"],
   "exclude": ["node_modules"]

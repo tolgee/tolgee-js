@@ -1,0 +1,17 @@
+ARG nodever=16
+FROM node:${nodever}
+
+RUN npm install -g pnpm
+
+# Files required by pnpm install
+COPY .npmrc package.json pnpm-lock.yaml /data/
+
+WORKDIR /data
+
+RUN pnpm fetch
+
+COPY . /data
+
+RUN pnpm install
+
+RUN pnpm build

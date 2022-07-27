@@ -45,6 +45,7 @@ test('it selects the key', (done) => {
       `//*[contains(text(), '${key}')]`,
       document.body
     );
+    // @ts-ignore
     expect(element).toBeInTheDocument();
   }
   const translatedKeys = NodeHelper.evaluate(

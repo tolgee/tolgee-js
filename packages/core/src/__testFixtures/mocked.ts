@@ -2,7 +2,7 @@ import { TolgeeConfig } from '../TolgeeConfig';
 import { Properties } from '../Properties';
 import { CoreService } from '../services/CoreService';
 import { Observer } from '../Observer';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { TranslationService } from '../services/TranslationService';
 import { TextService } from '../services/TextService';
 import { EventService } from '../services/EventService';

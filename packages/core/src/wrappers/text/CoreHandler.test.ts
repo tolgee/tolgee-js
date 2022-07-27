@@ -10,7 +10,7 @@ import { ContentHandler } from './ContentHandler';
 import { AttributeHandler } from './AttributeHandler';
 import { EventService } from '../../services/EventService';
 import { EventEmitterImpl } from '../../services/EventEmitter';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 import { TranslationData } from '../../types/DTOs';
 import { Properties } from '../../Properties';
 import { ElementMeta, NodeMeta, NodeWithMeta, Unwrapped } from '../../types';
