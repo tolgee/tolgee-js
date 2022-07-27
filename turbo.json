@@ -1,6 +1,6 @@
 {
+  "$schema": "https://turborepo.org/schema.json",
   "baseBranch": "origin/main",
-  "npmClient": "npm",
   "globalDependencies": [
     ".env*"
   ],

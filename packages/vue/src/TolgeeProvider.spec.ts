@@ -37,14 +37,6 @@ describe('Tolgee Provider Component', function () {
     expect(mockedTolgee.tolgee.run).toHaveBeenCalledTimes(1);
   });
 
-  test('stops tolgee', () => {
-    const { unmount } = render(ProviderComponent, {
-      props: { config: {}, loadingFallback: 'loading' },
-    });
-    unmount();
-    expect(mockedTolgee.tolgee.stop).toHaveBeenCalledTimes(1);
-  });
-
   test('renders loadingFallback with slot', async () => {
     // @ts-ignore
     mockedTolgee.tolgee.initialLoading = true;

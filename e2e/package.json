@@ -1,5 +1,5 @@
 {
-  "name": "@tolgee/webapp",
+  "name": "@tolgee/e2e",
   "version": "1.0.0-alpha.8",
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {
@@ -21,7 +21,7 @@
     "cypress-file-upload": "^4.1.1",
     "cypress-xpath": "^1.6.1",
     "dotenv": "^8.2.0",
-    "typescript": "^3.9.7",
-    "download-github-release": "^0.3.2"
+    "download-github-release": "^0.3.2",
+    "typescript": "^3.9.7"
   }
 }

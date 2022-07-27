@@ -2,7 +2,7 @@ module.exports = {
   automock: true,
   preset: 'ts-jest',
   resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver.js',
-  transformIgnorePatterns: ['node_modules/(?!@angular)'],
+  transformIgnorePatterns: ['node_modules/.*/node_modules/(?!@angular)'],
   transform: {
     '^.+\\.(ts|js|mjs|html|svg)$': 'jest-preset-angular',
   },

@@ -10,7 +10,7 @@ import { ComponentProps, useContext } from 'react';
 import { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 describe('Tolgee Provider Component', function () {
   const componentUsingContextRendered = jest.fn();

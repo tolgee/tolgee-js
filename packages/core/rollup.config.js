@@ -5,6 +5,7 @@ import replace from '@rollup/plugin-replace';
 
 export default {
   input: 'src/index.ts',
+  preserveSymlinks: true,
   output: [
     {
       file: 'dist/tolgee.cjs.js',

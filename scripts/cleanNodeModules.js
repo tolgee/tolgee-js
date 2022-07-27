@@ -41,3 +41,10 @@ files.forEach((file) => {
   console.log('deleting', file);
   fs.rmSync(file, { recursive: true, force: true });
 });
+
+const packageLocks = searchRecursively('.', 'package-lock.json', [], 5);
+
+packageLocks.forEach((file) => {
+  console.log('deleting', file);
+  fs.rmSync(file);
+});

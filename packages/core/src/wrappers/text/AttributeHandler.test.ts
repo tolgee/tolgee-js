@@ -51,6 +51,7 @@ describe('AttributeHandler', () => {
         '*': ['aria-label'],
       },
       passToParent: ['option'],
+      wrapperMode: 'text',
     };
 
     getMockedInstance(Coder).unwrap = (...args) => mockedTranslate(...args);

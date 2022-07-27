@@ -10,13 +10,14 @@ export const createTestDom = (document: Document) => {
   };
 
   document.body = document.createElement('body');
-  document.body.innerHTML = `{{${c.keyInRoot}}}' +
-        '<div id="rootDiv">Some trash... {{${c.keyInRootDiv}}}' +
-        '   <div>Some other text to translate <span>{{${c.hereKey}}} and {{${c.hereTooKey}}}</span> text continues.'</div> +
-        '   <div id="multipleTextNodes">Before text</div>' +
-        '   <div aria-label="this is {{${c.ariaLabelKey}}} label"></div>' +
-        '   <select><option>{{${c.optionKey}}}</option></select>'+
-        '<div>`;
+  document.body.innerHTML =
+    `{{${c.keyInRoot}}}` +
+    `<div id="rootDiv">Some trash... {{${c.keyInRootDiv}}}` +
+    `   <div>Some other text to translate <span>{{${c.hereKey}}} and {{${c.hereTooKey}}}</span> text continues.</div>` +
+    `   <div id="multipleTextNodes">Before text</div>` +
+    `   <div aria-label="this is {{${c.ariaLabelKey}}} label"></div>` +
+    `   <select><option>{{${c.optionKey}}}</option></select>` +
+    `<div>`;
   document.getElementById('multipleTextNodes').append('some text node');
   document.getElementById('multipleTextNodes').append(`{{${c.appendedKey}}}`);
   document.getElementById('multipleTextNodes').append(` after text`);

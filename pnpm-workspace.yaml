@@ -1,0 +1,5 @@
+packages:
+  - 'packages/*'
+  - 'packages/ngx/projects/ngx-tolgee'
+  - 'testapps/*'
+  - 'e2e'

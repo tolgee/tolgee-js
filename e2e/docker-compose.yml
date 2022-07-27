@@ -24,11 +24,11 @@ services:
     container_name: tolgee_js_e2e_serve_testapps_core
     build: ../docker
     volumes:
-      - '../testapps/core:/data'
+      - '..:/data'
     ports:
       - 8101:8101
     command: ['npm', 'run', 'serve']
-    working_dir: /data
+    working_dir: /data/testapps/core
 
   e2e_app_react_prod:
     container_name: tolgee_js_e2e_serve_testapps_react_prod
@@ -55,8 +55,6 @@ services:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_dev
     build:
       context: ../docker
-      args:
-        nodever: 14
     volumes:
       - '../:/data'
     ports:
@@ -70,8 +68,6 @@ services:
     container_name: tolgee_js_e2e_serve_testapps_gatsby_prod
     build:
       context: ../docker
-      args:
-        nodever: 14
     volumes:
       - '../:/data'
     ports:

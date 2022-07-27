@@ -3,8 +3,10 @@
     "target": "es5",
     "module": "esnext",
     "sourceMap": true,
-    "rootDir": "src",
-    "declaration": true,
+    "rootDir": "./src",
+    "declaration": false,
+    "declarationMap": false,
+    "skipLibCheck": true,
     "allowJs": true,
     "outDir": "./lib",
     "lib": ["es2015", "es2018", "es2020", "dom"],
@@ -15,9 +17,11 @@
     "jsx": "react",
     "downlevelIteration": true,
     "baseUrl": "./src",
+    "preserveSymlinks": true,
     "paths": {
       "@testFixtures/*": ["./__testFixtures/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"],
   "exclude": ["node_modules"]

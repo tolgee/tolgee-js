@@ -3,7 +3,7 @@ module.exports = {
   preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'jsdom',
   unmockedModulePathPatterns: ['/node_modules/*'],
-  transformIgnorePatterns: ['<rootDir>/node_modules/(?!@tolgee)'],
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!@tolgee)', '^.+\\.js$'],
   moduleNameMapper: {
     '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
   },

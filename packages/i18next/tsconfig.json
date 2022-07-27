@@ -11,6 +11,8 @@
     "lib": ["es2015", "es2018", "es2020", "dom"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "preserveSymlinks": true,
+    "skipLibCheck": true,
     "jsx": "react",
     "downlevelIteration": true,
     "esModuleInterop": true,
