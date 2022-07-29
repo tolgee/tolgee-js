@@ -2,7 +2,9 @@
   "compilerOptions": {
     "target": "es5",
     "lib": ["es5", "dom", "es2020"],
-    "types": ["cypress", "cypress-xpath/src"]
+    "types": ["cypress", "cypress-xpath/src"],
+    "checkJs": false,
+    "allowJs": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "cypress/plugins/index.js"]
 }

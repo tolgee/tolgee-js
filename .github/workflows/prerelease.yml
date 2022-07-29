@@ -48,7 +48,7 @@ jobs:
       - name: Build all packages
         run: pnpm build
 
-      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
+      - run: echo "" >> .npmrc && echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} >> .npmrc
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
