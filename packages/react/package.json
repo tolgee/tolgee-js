@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react",
-  "version": "4.7.2",
+  "version": "4.7.3-rc.9b3c981.0",
   "description": "React implementation for tolgee localization framework",
   "main": "index.js",
   "types": "lib/index.d.ts",
@@ -36,8 +36,8 @@
     "react": "^16.14.0 || ^17.0.1 || ^18.1.0"
   },
   "dependencies": {
-    "@tolgee/core": "^4.7.2",
-    "@tolgee/ui": "^4.7.2"
+    "@tolgee/core": "^4.7.3-rc.9b3c981.0",
+    "@tolgee/ui": "^4.7.3-rc.9b3c981.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.3",
