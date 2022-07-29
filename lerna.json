@@ -1,10 +1,6 @@
 {
-  "packages": [
-    "packages/*",
-    "testapps/*",
-    "packages/ngx/projects/ngx-tolgee"
-  ],
   "version": "4.7.2",
+  "useWorkspaces": true,
   "command": {
     "publish": {
       "conventionalCommits": true
