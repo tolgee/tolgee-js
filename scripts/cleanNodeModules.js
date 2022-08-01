@@ -35,16 +35,19 @@ const searchRecursively = function (dirPath, search, arrayOfFiles, depth) {
   return arrayOfFiles;
 };
 
-const files = searchRecursively('.', 'node_modules', [], 5);
-
-files.forEach((file) => {
+const deleteFile = (file, recursive = false) => {
   console.log('deleting', file);
-  fs.rmSync(file, { recursive: true, force: true });
+  fs.rmSync(file, { recursive, force: recursive });
+};
+
+const files = searchRecursively('.', 'node_modules', [], 5);
+files.forEach((file) => {
+  deleteFile(file, true);
 });
 
 const packageLocks = searchRecursively('.', 'package-lock.json', [], 5);
-
 packageLocks.forEach((file) => {
-  console.log('deleting', file);
-  fs.rmSync(file);
+  deleteFile(file);
 });
+
+deleteFile('.pnpm-store', true);
