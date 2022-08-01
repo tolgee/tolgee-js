@@ -4,7 +4,7 @@ export const exampleAppTest = (url: string) =>
       cy.visit(url);
     });
 
-    it('Has title', () => {
+    it('Has title', { retries: 2 }, () => {
       cy.contains('On the road').should('be.visible');
     });
 

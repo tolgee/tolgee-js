@@ -32,7 +32,8 @@
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "custom-links": "node scripts/customLinks.js",
     "ui-version": "node scripts/tolgeeUiVersion.js",
-    "postinstall": "npm run custom-links"
+    "postinstall": "npm run custom-links",
+    "version": "pnpm i && git add pnpm-lock.yaml"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
