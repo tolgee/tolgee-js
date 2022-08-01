@@ -61,10 +61,6 @@ jobs:
         if: always()
         run: pnpm --prefix=e2e run services:stop
 
-      - run: echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Recreate release with push
         run: |
           git stash
@@ -75,6 +71,8 @@ jobs:
 
       - name: Publish
         run: lerna publish from-package --yes
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - uses: actions/upload-artifact@v2
         if: always()
