@@ -39,7 +39,7 @@ jobs:
       - name: Update version locally
         run: |
           lerna version --yes --conventional-commits --conventional-prerelease --preid rc.$(git rev-parse --short HEAD) \
-            --no-push --no-git-tag-version
+            --force-publish --no-push --no-git-tag-version
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
@@ -48,18 +48,18 @@ jobs:
       - name: Build all packages
         run: pnpm build
 
-      - run: echo "" >> .npmrc && echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} >> .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
       - name: Recreate release with push
         run: |
           git stash
           git push --follow-tags -u origin $(git rev-parse --abbrev-ref HEAD)
           lerna version --yes --conventional-commits --conventional-prerelease --preid rc.$(git rev-parse --short HEAD) \
-            --create-release github
+            --force-publish --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
+
       - name: Publish
         run: lerna publish from-package --yes --dist-tag rc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
