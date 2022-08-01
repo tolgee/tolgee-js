@@ -8,6 +8,7 @@ module.exports = {
     '<rootDir>/src/__testFixtures/*',
     '/node_modules/*',
   ],
+
   moduleNameMapper: {
     '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
   },
