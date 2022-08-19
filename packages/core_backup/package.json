@@ -1,6 +1,6 @@
 {
-  "name": "@tolgee/core",
-  "version": "4.9.2",
+  "name": "@tolgee/core_backup",
+  "version": "4.8.0",
   "description": "Library providing ability to translate messages directly in context of developed application.",
   "main": "index.js",
   "module": "./dist/tolgee.esm.mjs",
@@ -57,7 +57,18 @@
     "openapi-typescript": "^4.3.0",
     "rollup": "^2.56.3",
     "rollup-plugin-terser": "7.0.2",
-    "ts-jest": "^28.0.8",
-    "typescript": "^4.7.4"
+    "ts-jest": "^27.0.5",
+    "tslib": "^2.4.0",
+    "typedoc": "0.22.15",
+    "typedoc-plugin-markdown": "3.13.2",
+    "typescript": "4.7.4"
+  },
+  "exports": {
+    "require": "./dist/tolgee.cjs.js",
+    "import": "./dist/tolgee.esm.mjs"
+  },
+  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
+  "publishConfig": {
+    "access": "public"
   }
 }

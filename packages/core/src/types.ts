@@ -1,146 +1,68 @@
-export interface TextInputElementData {
-  oldValue: string;
-  valueInputs: string[];
-  touched: boolean;
-  oldPlaceholder: string;
-  placeholderInputs: string[];
-}
+export type Options = {
+  language?: string;
+  apiUrl?: string;
+  apiKey?: string;
+  /**
+   * Used when auto detection is not available or is turned off
+   */
+  defaultLanguage?: string;
+  /**
+   * Languages which can be used for language detection
+   * and also limits which values can be stored
+   */
+  availableLanguages?: string[];
+  /**
+   * Language which is used when no translation is available for current one
+   */
+  fallbackLanguage?: string;
+  /**
+   * Store user language in localStorage (default: true)
+   */
+  enableLanguageStore?: boolean;
+  /**
+   * Use auto language detection by browser locale (default: true)
+   */
+  enableLanguageDetection?: boolean;
+  filesUrlPrefix?: string;
+  staticData?: {
+    [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
+  };
+};
 
 export type TreeTranslationsData = {
   [key: string]: string | TreeTranslationsData;
 };
 
-export type Translations = Record<string, string>;
-export type TranslationParams = {
-  [key: string]: string | number | bigint;
-};
-export type TranslationParamsTags<T> = {
-  [key: string]: string | number | bigint | ((value: T | T[]) => T);
-};
+export type TranslationsFlat = Map<string, string>;
 
-export type TranslateProps = {
-  key: string;
-  defaultValue?: string;
-  params?: TranslationParams;
-  noWrap?: boolean;
-  orEmpty?: boolean;
-};
-export type TranslatePropsTags<T> = {
-  key: string;
-  defaultValue?: string;
-  params?: TranslationParamsTags<T>;
-  noWrap?: boolean;
-  orEmpty?: boolean;
+export type CacheRecordOrigin = 'initial' | 'prod' | 'dev';
+
+export type CacheRecord = {
+  origin: CacheRecordOrigin;
+  data: TranslationsFlat;
 };
 
-export type InstantProps = {
-  key: string;
-  defaultValue?: string;
-  params?: TranslationParams;
-  noWrap?: boolean;
-  orEmpty?: boolean;
-};
-export type InstantPropsTags<T> = {
-  key: string;
-  defaultValue?: string;
-  params?: TranslationParamsTags<T>;
-  noWrap?: boolean;
-  orEmpty?: boolean;
+export type CacheTranslations = Map<string, CacheRecord>;
+export type CacheAsyncRequests = Map<string, Promise<TreeTranslationsData>>;
+
+export type StateCache = {
+  translations: CacheTranslations;
+  asyncRequests: CacheAsyncRequests;
 };
 
-export type KeyAndParams = {
-  key: string;
-  params: TranslationParams;
-  defaultValue?: string;
-};
-export type KeyAndParamsTags<T> = {
-  key: string;
-  params: TranslationParamsTags<T>;
-  defaultValue?: string;
-};
-
-export type TranslatedWithMetadata = {
-  translated: string;
-  key: string;
-  params: TranslationParams;
-  defaultValue: string | undefined;
-};
-export type TranslatedWithMetadataTags<T> = {
-  translated: TranslationTags<T>;
-  key: string;
-  params: TranslationParamsTags<T>;
-  defaultValue: string | undefined;
-};
-
-export type TranslationTags<T> = string | T[];
-
-export type NodeWithMeta = Node & {
-  _tolgee: NodeMeta;
-};
-
-export type NodeWithLock = Node & {
-  _tolgee: NodeLock;
-};
-
-export type ElementWithMeta = Element &
-  ElementCSSInlineStyle & {
-    _tolgee: ElementMeta;
-  };
-
-export type ElementMeta = {
-  wrappedWithElementOnlyKey?: string;
-  wrappedWithElementOnlyDefaultHtml?: string;
-  nodes: Set<NodeWithMeta>;
-  highlightEl?: HTMLDivElement;
-  highlight?: () => void;
-  unhighlight?: () => void;
-  /**
-   * Stops removing of element's inactive nodes and
-   * unregistering from ElementRegistrar.
-   *
-   * It's used when user has mouse on the element, so there is
-   * potential, that element highlight will be triggered.
-   *
-   * Triggering highlight needs the metadata stored on element, so
-   * we need the ability to prevent clean.
-   */
-  preventClean?: boolean;
-};
-
-export type NodeMeta = {
-  oldTextContent: string;
-  keys: KeyAndParamsTags<any>[];
-} & NodeLock;
-
-export type NodeLock = {
-  locked?: boolean;
-};
-
-export type Scope =
-  | 'translations.edit'
-  | 'translations.view'
-  | 'keys.edit'
-  | 'screenshots.upload'
-  | 'screenshots.view'
-  | 'screenshots.delete';
-
-export type Mode = 'development' | 'production';
-
-export type Unwrapped = { text: string; keys: KeyAndParamsTags<any>[] };
-
-export interface Formatter {
-  format: FormatFunction;
-}
-
-interface FormatterStatic {
-  type: 'formatter';
-  new (): Formatter;
-}
-
-export type TolgeeModule = FormatterStatic;
-
-export type FormatFunction = (props: {
-  translation: string;
-  params: Record<string, any>;
+export type CacheDescriptor = {
   language: string;
-}) => string | any[];
+  workspace?: string;
+};
+
+export type State = {
+  language: string;
+  pendingLanguage: string;
+  initialOptions: Options;
+  cache: StateCache;
+};
+
+export type CacheKeyObject = {
+  language: string;
+  workspace: string;
+};
