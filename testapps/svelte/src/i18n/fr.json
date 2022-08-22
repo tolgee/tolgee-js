@@ -1,12 +1,12 @@
 {
   "add-item-add-button" : "Ajouter",
-  "add-item-input-placeholder" : "Nouveau élément de la liste",
+  "add-item-input-placeholder" : "Nouvel élément de la liste",
   "delete-item-button" : "Supprimer",
-  "menu-item-translation-methods" : "Méthodes de la traduction",
+  "menu-item-translation-methods" : "Méthodes de traduction",
   "on-the-road-subtitle" : "Comment faire sa valise pour la randonnée",
   "on-the-road-title" : "Sur la route",
-  "send-via-email" : "Envoyer par e-mail",
+  "send-via-email" : "Envoyer par courriel",
   "share-button" : "Partager",
-  "this_is_a_key" : "C'est un clé",
-  "this_is_a_key_with_params" : "C'est la clé avec paramètres {key} {key2}"
+  "this_is_a_key" : "C'est une clé",
+  "this_is_a_key_with_params" : "C'est la clé avec les paramètres {key} {key2}"
 }
