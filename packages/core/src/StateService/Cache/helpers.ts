@@ -28,12 +28,12 @@ export const flattenTranslations = (
 
 export const decodeCacheKey = (key: string): CacheKeyObject => {
   const [firstPart, secondPart] = key.split(':');
-  return { language: firstPart, workspace: secondPart || '' };
+  return { language: firstPart, namespace: secondPart || '' };
 };
 
-export const encodeCacheKey = ({ language, workspace }: CacheDescriptor) => {
-  if (workspace) {
-    return `${language}:${workspace}`;
+export const encodeCacheKey = ({ language, namespace }: CacheDescriptor) => {
+  if (namespace) {
+    return `${language}:${namespace}`;
   } else {
     return language;
   }
