@@ -1,5 +1,4 @@
-import { Tolgee } from './Tolgee';
-import { TreeTranslationsData } from './types';
+import { Tolgee, TreeTranslationsData } from '../index';
 
 const resolvablePromise = <T = any>() => {
   let resolve: (value: T) => void;
@@ -9,20 +8,12 @@ const resolvablePromise = <T = any>() => {
   return [promise, resolve!] as const;
 };
 
-describe('basis', () => {
+describe('language changes', () => {
   it('changes language', async () => {
     const tolgee = Tolgee({ language: 'en' });
     expect(tolgee.getLanguage()).toEqual('en');
     await tolgee.changeLanguage('es');
     expect(tolgee.getLanguage()).toEqual('es');
-  });
-
-  it('emits language change event', async () => {
-    const tolgee = Tolgee({ language: 'en' });
-    const handler = jest.fn((lang) => {});
-    tolgee.onLanguageChange.listen(handler);
-    await tolgee.changeLanguage('es');
-    expect(handler).toHaveBeenCalledWith('es');
   });
 
   it('returns correct translation', async () => {
@@ -37,7 +28,7 @@ describe('basis', () => {
     expect(tolgee.instant('hello')).toBeUndefined();
   });
 
-  it('returns correct translation from workspace', () => {
+  it('returns correct translation from namespace', () => {
     const tolgee = Tolgee({
       language: 'en',
       staticData: {
