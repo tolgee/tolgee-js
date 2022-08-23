@@ -43,7 +43,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "13.3.0",
     "@rollup/plugin-replace": "^4.0.0",
-    "@rollup/plugin-typescript": "8.3.3",
+    "@rollup/plugin-typescript": "8.3.4",
     "@testing-library/dom": "^8.7.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@types/jest": "^27.0.2",
@@ -55,7 +55,7 @@
     "jest-environment-jsdom": "^27.5.1",
     "jest-fetch-mock": "^3.0.3",
     "openapi-typescript": "^4.3.0",
-    "rollup": "^2.56.3",
+    "rollup": "^2.78.1",
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^27.0.5",
     "tslib": "^2.4.0",
