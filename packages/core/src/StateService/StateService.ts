@@ -90,6 +90,9 @@ export const StateService = (
   };
 
   const changeLanguage = async (language: string) => {
+    if (state.pendingLanguage === language && state.language === language) {
+      return;
+    }
     state.pendingLanguage = language;
     eventService.onPendingLanguageChange.emit(language);
 

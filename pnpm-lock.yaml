@@ -61,8 +61,36 @@ importers:
   packages/core:
     specifiers:
       '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-replace': ^4.0.0
       '@rollup/plugin-typescript': 8.3.4
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      concurrently: 7.3.0
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      rollup: ^2.56.3
+      rollup-plugin-bundle-size: ^1.0.3
+      rollup-plugin-terser: 7.0.2
+      ts-jest: ^27.1.5
+      typescript: ^4.7.4
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
+      '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      concurrently: 7.3.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      rollup: 2.78.1
+      rollup-plugin-bundle-size: 1.0.3
+      rollup-plugin-terser: 7.0.2_rollup@2.78.1
+      ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
+      typescript: 4.7.4
+
+  packages/core_backup:
+    specifiers:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-replace': ^4.0.0
+      '@rollup/plugin-typescript': 8.3.3
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
       '@types/jest': ^27.0.2
@@ -74,7 +102,7 @@ importers:
       jest-environment-jsdom: ^27.5.1
       jest-fetch-mock: ^3.0.3
       openapi-typescript: ^4.3.0
-      rollup: ^2.78.1
+      rollup: ^2.56.3
       rollup-plugin-terser: 7.0.2
       ts-jest: ^27.0.5
       tslib: ^2.4.0
@@ -84,9 +112,9 @@ importers:
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
       '@rollup/plugin-replace': 4.0.0_rollup@2.78.1
-      '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
-      '@testing-library/dom': 8.16.0
-      '@testing-library/jest-dom': 5.16.4
+      '@rollup/plugin-typescript': 8.3.3_5zsqiitiqqdgwm4iemtywlnhku
+      '@testing-library/dom': 8.17.1
+      '@testing-library/jest-dom': 5.16.5
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/testing-library__jest-dom': 5.14.5
@@ -714,7 +742,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
       '@tolgee/core': link:../../packages/core
-      '@tolgee/svelte': link:../../packages/svelte
+      '@tolgee/svelte': 4.8.2
       '@tolgee/ui': link:../../packages/ui
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
       '@typescript-eslint/parser': 5.34.0_4rv7y5c6xz3vfxwhbrcxxi73bq
@@ -8215,6 +8243,24 @@ packages:
       rollup: 2.78.1
     dev: true
 
+  /@rollup/plugin-typescript/8.3.3_5zsqiitiqqdgwm4iemtywlnhku:
+    resolution: {integrity: sha512-55L9SyiYu3r/JtqdjhwcwaECXP7JeJ9h1Sg1VWRJKIutla2MdZQodTgcCNybXLMCnqpNLEhS2vGENww98L1npg==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      rollup: ^2.14.0
+      tslib: '*'
+      typescript: '>=3.7.0'
+    peerDependenciesMeta:
+      tslib:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.78.1
+      resolve: 1.22.1
+      rollup: 2.78.1
+      tslib: 2.4.0
+      typescript: 4.7.4
+    dev: true
+
   /@rollup/plugin-typescript/8.3.4_5zsqiitiqqdgwm4iemtywlnhku:
     resolution: {integrity: sha512-wt7JnYE9antX6BOXtsxGoeVSu4dZfw0dU3xykfOQ4hC3EddxRbVG/K0xiY1Wup7QOHJcjLYXWAn0Kx9Z1SBHHg==}
     engines: {node: '>=8.0.0'}
@@ -8776,6 +8822,21 @@ packages:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
 
+  /@tolgee/core/4.8.0:
+    resolution: {integrity: sha512-l50pCnOPybLAlasstP4p+1rqOsn6HwgdJRf7aMJeIy/dUhmCEQlz8JW+QNTWzu1DaMI2zshhl3WCdTNVFswoEA==}
+    dev: true
+
+  /@tolgee/svelte/4.8.2:
+    resolution: {integrity: sha512-Knni105wogZ5440jLc1M4Jyq4LvPh6FcSZjeQM7xgRQtaCPbkBLnXsTkbRSqCopLvcsHuEPQIEtTG2G48zV3SA==}
+    dependencies:
+      '@tolgee/core': 4.8.0
+      '@tolgee/ui': 4.8.0
+    dev: true
+
+  /@tolgee/ui/4.8.0:
+    resolution: {integrity: sha512-ZTpfyxfNq9FFFTCDmA8p8KMPvGSmfNwZRyT/sVcc4foBJsEA7v3vUNGZhD34knFifkVKw9TBq3zU/lcg+vNtdg==}
+    dev: true
+
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -9213,7 +9274,7 @@ packages:
   /@types/resolve/1.17.1:
     resolution: {integrity: sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==}
     dependencies:
-      '@types/node': 18.6.2
+      '@types/node': 18.7.11
 
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
@@ -11710,7 +11771,7 @@ packages:
   /axios/0.21.4_debug@3.2.7:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@3.2.7
     transitivePeerDependencies:
       - debug
     dev: false
@@ -18033,6 +18094,14 @@ packages:
     resolution: {integrity: sha512-0btnI/H8f2pavGMN8w40mlSKOfTK2SVJmBfBeVIj3kNw0swwgzyRq0d5TJVOwodFmtvpPeWPN/MCcfuWF0Ezbw==}
     dev: true
 
+  /figures/1.7.0:
+    resolution: {integrity: sha512-UxKlfCRuCBxSXU4C6t9scbDyWZ4VlaFFdojKtzJuSkuOBQ5CNFum+zZXFwHjo+CxBC1t6zlYPgHIgFjL8ggoEQ==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      escape-string-regexp: 1.0.5
+      object-assign: 4.1.1
+    dev: true
+
   /figures/3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -18248,7 +18317,7 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /follow-redirects/1.15.1:
+  /follow-redirects/1.15.1_debug@3.2.7:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -18256,6 +18325,8 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dependencies:
+      debug: 3.2.7
 
   /follow-redirects/1.15.1_debug@4.3.4:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
@@ -19622,6 +19693,13 @@ packages:
     engines: {node: '>= 10.x'}
     dev: false
 
+  /gzip-size/3.0.0:
+    resolution: {integrity: sha512-6s8trQiK+OMzSaCSVXX+iqIcLV9tC+E73jrJrJTyS4h/AJhlxHvzFKqM1YLDJWRGgHX8uLkBeXkA0njNj39L4w==}
+    engines: {node: '>=0.12.0'}
+    dependencies:
+      duplexer: 0.1.2
+    dev: true
+
   /gzip-size/5.1.1:
     resolution: {integrity: sha512-FNHi6mmoHvs1mxZAds4PpdCS6QG8B4C1krxJsMutgxl5t3+GlRTzzI3NEkifXx2pVsOvJdOGSmIgDhQ55FwdPA==}
     engines: {node: '>=6'}
@@ -20120,7 +20198,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@3.2.7
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -23463,6 +23541,16 @@ packages:
     resolution: {integrity: sha512-wbLDJ7Zh0sqA0Vdg6aqlbT+yPxqLblpAZh1mK2+AO2twQkPywvvqQNfEPVwSSRjZ7dZcdeVBIAgiO7MMp3Dszw==}
     engines: {node: '>= 12'}
     hasBin: true
+    dev: true
+
+  /maxmin/2.1.0:
+    resolution: {integrity: sha512-NWlApBjW9az9qRPaeg7CX4sQBWwytqz32bIEo1PW9pRW+kBP9KLRfJO3UC+TV31EcQZEUq7eMzikC7zt3zPJcw==}
+    engines: {node: '>=0.12'}
+    dependencies:
+      chalk: 1.1.3
+      figures: 1.7.0
+      gzip-size: 3.0.0
+      pretty-bytes: 3.0.1
     dev: true
 
   /md5-file/5.0.0:
@@ -27268,6 +27356,13 @@ packages:
     hasBin: true
     dev: true
 
+  /pretty-bytes/3.0.1:
+    resolution: {integrity: sha512-eb7ZAeUTgfh294cElcu51w+OTRp/6ItW758LjwJSK72LDevcuJn0P4eD71PLMDGPwwatXmAmYHTkzvpKlJE3ow==}
+    engines: {node: '>=0.10.0'}
+    dependencies:
+      number-is-nan: 1.0.1
+    dev: true
+
   /pretty-bytes/5.6.0:
     resolution: {integrity: sha512-FFw039TmrBqFK8ma/7OL3sDz/VytdtJr044/QUJtH0wK9lb9jLq9tJyIxUwtQJHwar2BqtiA4iCWSwo9JLkzFg==}
     engines: {node: '>=6'}
@@ -28519,6 +28614,13 @@ packages:
     dependencies:
       hash-base: 3.1.0
       inherits: 2.0.4
+    dev: true
+
+  /rollup-plugin-bundle-size/1.0.3:
+    resolution: {integrity: sha512-aWj0Pvzq90fqbI5vN1IvUrlf4utOqy+AERYxwWjegH1G8PzheMnrRIgQ5tkwKVtQMDP0bHZEACW/zLDF+XgfXQ==}
+    dependencies:
+      chalk: 1.1.3
+      maxmin: 2.1.0
     dev: true
 
   /rollup-plugin-replace/2.2.0:

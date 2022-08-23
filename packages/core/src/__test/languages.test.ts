@@ -31,13 +31,15 @@ describe('language changes', () => {
         es: () => promiseEs,
       },
     });
+    const runPromise = tolgee.run();
     expect(tolgee.instant('test')).toEqual(undefined);
-    const langChangeEnPromise = tolgee.changeLanguage('en');
+    expect(tolgee.getPendingLanguage()).toEqual('en');
     resolveEn({ test: 'Test' });
-    await langChangeEnPromise;
+    await runPromise;
     expect(tolgee.instant('test')).toEqual('Test');
 
     const langChangeEsPromise = tolgee.changeLanguage('es');
+    expect(tolgee.getPendingLanguage()).toEqual('es');
     resolveEs({ test: 'Testa' });
     await langChangeEsPromise;
     expect(tolgee.instant('test')).toEqual('Testa');
