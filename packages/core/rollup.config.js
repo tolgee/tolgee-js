@@ -48,6 +48,7 @@ export default {
     typescript({
       outDir: './lib',
       sourceMap: true,
+      noEmit: true,
     }),
   ],
 };

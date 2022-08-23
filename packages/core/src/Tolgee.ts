@@ -15,6 +15,10 @@ export const Tolgee = (options: Options) => {
     changeLanguage: stateService.changeLanguage,
     changeTranslation: stateService.changeTranslation,
     instant: stateService.getTranslation,
+    addActiveNs: stateService.addActiveNs,
+    removeActiveNs: stateService.removeActiveNs,
+    loadRecord: stateService.loadRecord,
+    run: () => stateService.loadRequiredRecords(),
   });
 };
 
