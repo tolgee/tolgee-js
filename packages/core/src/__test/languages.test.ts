@@ -1,12 +1,5 @@
 import { Tolgee, TreeTranslationsData } from '../index';
-
-const resolvablePromise = <T = any>() => {
-  let resolve: (value: T) => void;
-  const promise = new Promise<T>((innerResolve) => {
-    resolve = innerResolve;
-  });
-  return [promise, resolve!] as const;
-};
+import { resolvablePromise } from './testTools';
 
 describe('language changes', () => {
   it('changes language', async () => {
@@ -26,21 +19,6 @@ describe('language changes', () => {
     expect(tolgee.instant('hello')).toEqual('Mundo');
     await tolgee.changeLanguage('cs');
     expect(tolgee.instant('hello')).toBeUndefined();
-  });
-
-  it('returns correct translation from namespace', () => {
-    const tolgee = Tolgee({
-      language: 'en',
-      staticData: {
-        en: { hello: 'World' },
-        'en:common': { test: 'Test' },
-        es: { hello: 'Mundo' },
-        'es:common': { test: 'Test' },
-      },
-    });
-    expect(tolgee.instant('hello')).toEqual('World');
-    expect(tolgee.instant('test')).toEqual(undefined);
-    expect(tolgee.instant('test', 'common')).toEqual('Test');
   });
 
   it('fetches language data correctly', async () => {

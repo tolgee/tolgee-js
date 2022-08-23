@@ -23,9 +23,13 @@ export type Options = {
    */
   enableLanguageStore?: boolean;
   /**
-   * Namespaces which should be always (default: true)
+   * Namespaces which should be always fetched (default: true)
    */
-  initialNamespaces?: string[];
+  ns?: string[];
+  /**
+   * Default namespace when no namespace defined (default: '')
+   */
+  defaultNs?: string;
   filesUrlPrefix?: string;
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
@@ -37,18 +41,18 @@ export const initState = (options: Options) => {
     apiKey: options.apiKey,
     apiUrl: options.apiUrl,
     defaultLanguage: options.defaultLanguage || 'en',
-    availableLanguages:
-      options.availableLanguages ||
-      (options.staticData && Object.keys(options.staticData)),
+    availableLanguages: options.availableLanguages,
     fallbackLanguage: options.fallbackLanguage || 'en',
     enableLanguageStore: options.enableLanguageStore || false,
-    initialNamespaces: options.initialNamespaces || [''],
+    defaultNs: options.defaultNs || '',
+    ns: options.ns,
     filesUrlPrefix: options.filesUrlPrefix || 'i18n/',
     staticData: options.staticData,
   };
   const language = options.language || initialOptions.defaultLanguage;
   return {
     initialOptions,
+    activeNamespaces: new Map<string, number>(),
     language,
     pendingLanguage: language,
     cache: cacheInit(options.staticData),

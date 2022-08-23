@@ -1,5 +1,5 @@
 import {
-  CacheDescriptor,
+  CacheKeyObject,
   CacheRecordOrigin,
   Options,
   StateCache,
@@ -26,7 +26,7 @@ export const cacheInit = (data: Options['staticData']) => {
 
 export const cacheAddRecord = (
   cache: StateCache,
-  descriptor: CacheDescriptor,
+  descriptor: CacheKeyObject,
   origin: CacheRecordOrigin,
   data: TreeTranslationsData
 ) => {
@@ -38,7 +38,7 @@ export const cacheAddRecord = (
 
 export const cacheAddRecordAsync = async (
   cache: StateCache,
-  descriptor: CacheDescriptor,
+  descriptor: CacheKeyObject,
   origin: CacheRecordOrigin,
   dataPromise: Promise<TreeTranslationsData>
 ) => {
@@ -54,21 +54,21 @@ export const cacheAddRecordAsync = async (
 
 export const cacheIsLoading = async (
   cache: StateCache,
-  descriptor: CacheDescriptor
+  descriptor: CacheKeyObject
 ) => {
   return Boolean(cache.asyncRequests.get(encodeCacheKey(descriptor)));
 };
 
 export const cacheGetRecord = (
   cache: StateCache,
-  descriptor: CacheDescriptor
+  descriptor: CacheKeyObject
 ) => {
   return cache.translations.get(encodeCacheKey(descriptor))?.data;
 };
 
 export const cacheGetTranslation = (
   cache: StateCache,
-  descriptor: CacheDescriptor,
+  descriptor: CacheKeyObject,
   key: string
 ) => {
   return cache.translations.get(encodeCacheKey(descriptor))?.data.get(key);
@@ -76,7 +76,7 @@ export const cacheGetTranslation = (
 
 export const cacheChangeTranslation = (
   cache: StateCache,
-  descriptor: CacheDescriptor,
+  descriptor: CacheKeyObject,
   key: string,
   value: string
 ) => {

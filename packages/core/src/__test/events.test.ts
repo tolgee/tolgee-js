@@ -9,7 +9,7 @@ describe('language changes', () => {
     expect(handler).toHaveBeenCalledWith('es');
   });
 
-  it('correctly emmits translation change listeners', async () => {
+  it('correctly emits translation change listeners', async () => {
     const tolgee = Tolgee({
       language: 'en',
       staticData: {

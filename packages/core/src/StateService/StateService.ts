@@ -1,5 +1,10 @@
 import { EventServiceType } from '../EventService';
-import { CacheAsyncRequests, CacheDescriptor, Options } from '../types';
+import {
+  CacheAsyncRequests,
+  CacheDescriptor,
+  CacheKeyObject,
+  Options,
+} from '../types';
 import {
   cacheAddRecord,
   cacheChangeTranslation,
@@ -17,16 +22,67 @@ export const StateService = (
 
   const asyncRequests: CacheAsyncRequests = new Map();
 
-  const changeLanguage = async (language: string) => {
-    state.pendingLanguage = language;
-    eventService.onPendingLanguageChange.emit(language);
-    await Promise.all(
-      state.initialOptions.initialNamespaces
+  const withDefaultNs = (descriptor: CacheDescriptor): CacheKeyObject => {
+    return {
+      namespace:
+        descriptor.namespace === undefined
+          ? state.initialOptions.defaultNs
+          : descriptor.namespace,
+      language: descriptor.language,
+    };
+  };
+
+  const addActiveNs = async (namespace: string) => {
+    const value = state.activeNamespaces.get(namespace);
+    if (value !== undefined) {
+      state.activeNamespaces.set(namespace, value + 1);
+    } else {
+      state.activeNamespaces.set(namespace, 1);
+    }
+    const data = cacheGetRecord(state.cache, {
+      language: state.language,
+      namespace,
+    });
+    if (!data) {
+      await loadRecord({ namespace, language: state.language });
+    }
+  };
+
+  const removeActiveNs = (ns: string) => {
+    const value = state.activeNamespaces.get(ns);
+    if (value !== undefined && value > 1) {
+      state.activeNamespaces.set(ns, value - 1);
+    } else {
+      state.activeNamespaces.delete(ns);
+    }
+  };
+
+  const getRequiredNamespaces = () => {
+    return Array.from(
+      new Set([
+        ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
+        ...state.activeNamespaces.keys(),
+      ])
+    );
+  };
+
+  const loadRequiredRecords = (lang?: string) => {
+    const language = lang || state.language;
+    const namespaces = getRequiredNamespaces();
+    return Promise.all(
+      namespaces
         .filter(
           (namespace) => !cacheGetRecord(state.cache, { language, namespace })
         )
         .map((namespace) => loadRecord({ language, namespace }))
     );
+  };
+
+  const changeLanguage = async (language: string) => {
+    state.pendingLanguage = language;
+    eventService.onPendingLanguageChange.emit(language);
+
+    loadRequiredRecords(language);
 
     if (language === state.pendingLanguage) {
       // there might be parallel language change
@@ -36,10 +92,10 @@ export const StateService = (
     }
   };
 
-  const getTranslation = (key: string, workspace?: string) => {
+  const getTranslation = (key: string, namespace?: string) => {
     return cacheGetTranslation(
       state.cache,
-      { namespace: workspace, language: state.language },
+      withDefaultNs({ namespace, language: state.language }),
       key
     );
   };
@@ -49,14 +105,16 @@ export const StateService = (
     key: string,
     value: string
   ) => {
-    cacheChangeTranslation(state.cache, descriptor, key, value);
+    const keyObject = withDefaultNs(descriptor);
+    cacheChangeTranslation(state.cache, keyObject, key, value);
     eventService.onKeyChange.emit(key);
   };
 
   const loadRecord = async (descriptor: CacheDescriptor) => {
+    const keyObject = withDefaultNs(descriptor);
     const staticDataValue =
-      state.initialOptions.staticData?.[encodeCacheKey(descriptor)];
-    const cacheKey = encodeCacheKey(descriptor);
+      state.initialOptions.staticData?.[encodeCacheKey(keyObject)];
+    const cacheKey = encodeCacheKey(keyObject);
     const existingPromise = asyncRequests.get(cacheKey);
 
     if (existingPromise) {
@@ -68,8 +126,9 @@ export const StateService = (
       asyncRequests.set(cacheKey, dataPromise);
       const data = await dataPromise;
       asyncRequests.delete(cacheKey);
-      cacheAddRecord(state.cache, descriptor, 'prod', data);
+      cacheAddRecord(state.cache, withDefaultNs(descriptor), 'prod', data);
     }
+    return cacheGetRecord(state.cache, withDefaultNs(descriptor));
   };
 
   return Object.freeze({
@@ -77,5 +136,9 @@ export const StateService = (
     changeLanguage,
     getTranslation,
     changeTranslation,
+    addActiveNs,
+    removeActiveNs,
+    loadRequiredRecords,
+    loadRecord,
   });
 };
