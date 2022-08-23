@@ -42,7 +42,7 @@ jobs:
         run: pnpm i
 
       - name: Build all packages
-        run: pnpm run build
+        run: pnpm build || pnpm build
 
       - name: Test
         run: pnpm run test
@@ -87,10 +87,10 @@ jobs:
         run: pnpm i
 
       - name: Build
-        run: pnpm run build
+        run: pnpm build || pnpm build
 
       - name: Build e2e
-        run: pnpm run build:e2e
+        run: pnpm build:e2e
 
       - id: set-dirs
         run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
@@ -146,10 +146,10 @@ jobs:
         run: pnpm i
 
       - name: Build
-        run: pnpm run build
+        run: pnpm build || pnpm build
 
       - name: Build e2e
-        run: pnpm run build:e2e
+        run: pnpm build:e2e
 
       - name: Cypress
         run: pnpm --prefix=e2e run start
