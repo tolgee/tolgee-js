@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.2](https://github.com/tolgee/tolgee-js/compare/v4.8.1...v4.8.2) (2022-08-23)
+
+
+### Bug Fixes
+
+* **sveltekit:** Update SvelteKit to lastest version. ([082a8e5](https://github.com/tolgee/tolgee-js/commit/082a8e57d1b633342ad6b19c6849c6d2df4c2e4c))
+
+
+
+
+
 # [4.8.0](https://github.com/tolgee/tolgee-js/compare/v4.7.3...v4.8.0) (2022-08-01)
 
 **Note:** Version bump only for package @tolgee/svelte

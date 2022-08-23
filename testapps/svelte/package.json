@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte-testapp",
-  "version": "4.8.1",
+  "version": "4.8.2",
   "private": true,
   "scripts": {
     "dev": "npm run develop",
@@ -19,11 +19,11 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "1.0.0-next.39",
     "@sveltejs/kit": "1.0.0-next.429",
+    "@tolgee/core": "^4.8.0",
+    "@tolgee/svelte": "^4.8.2",
+    "@tolgee/ui": "^4.8.0",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
-    "@tolgee/core": "^4.8.0",
-    "@tolgee/svelte": "^4.8.0",
-    "@tolgee/ui": "^4.8.0",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-svelte3": "^4.0.0",

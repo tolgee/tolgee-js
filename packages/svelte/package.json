@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.8.0",
+  "version": "4.8.2",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
