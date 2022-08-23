@@ -8,11 +8,9 @@ const config = {
 
   plugins: [],
 
-  kit: {
-    package: {
-      files: (filepath) => {
-        return !/^(.*\.(test.ts|spec.ts)|.*__.*)$/.test(filepath);
-      },
+  package: {
+    files: (filepath) => {
+      return !/^(.*\.(test.ts|spec.ts)|.*__.*)$/.test(filepath);
     },
   },
 };

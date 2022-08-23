@@ -139,7 +139,11 @@ header h2 {
   font-weight: 300;
   margin-top: 60px;
   min-height: 500px;
-  background: linear-gradient(180deg, rgba(255, 245, 235, 0.92) 0%, rgba(206, 163, 122, 0.92) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 245, 235, 0.92) 0%,
+    rgba(206, 163, 122, 0.92) 100%
+  );
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   display: flex;

@@ -7,7 +7,7 @@
   let items: string[] = [];
   let newItemValue: string;
   try {
-    items = JSON.parse(localStorage.getItem('tolgee-example-app-items')) || [
+    items = JSON.parse(localStorage.getItem('tolgee-example-app-items') as string) || [
       'Flame-thrower',
       'Horse',
       'My favourite toothbrush'
@@ -30,7 +30,7 @@
   const updateLocalStorage = () =>
     localStorage.setItem('tolgee-example-app-items', JSON.stringify(items));
 
-  const onDelete = (index) => {
+  const onDelete = (index: number) => {
     items.splice(index, 1);
     items = [...items];
     updateLocalStorage();
