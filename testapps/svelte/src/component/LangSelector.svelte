@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getLanguageStore } from "@tolgee/svelte";
+  import { getLanguageStore } from '@tolgee/svelte';
 
   const languageStore = getLanguageStore();
 </script>

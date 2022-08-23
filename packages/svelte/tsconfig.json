@@ -2,29 +2,14 @@
   "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
     "moduleResolution": "node",
-    "lib": [
-      "ES2015",
-      "ES2016",
-      "ES2017",
-      "ES2018",
-      "es2020",
-      "DOM"
-    ],
     "sourceMap": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "baseUrl": ".",
     "allowJs": true,
-    "checkJs": true,
-    "paths": {
-      "$lib": [
-        "src/lib"
-      ],
-      "$lib/*": [
-        "src/lib/*"
-      ]
-    }
+    "checkJs": true
+    // "strict": true,
   },
   "include": [
     "src/**/*.d.ts",

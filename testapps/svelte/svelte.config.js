@@ -3,7 +3,7 @@ import adapter from '@sveltejs/adapter-static';
 
 const distDir = process.env.SVELTE_TESTAPP_DIST_DIR;
 
-/** @type {import("@sveltejs/kit").Config} */
+/** @type {import('@sveltejs/kit').Config} */
 const config = {
   // Consult https://github.com/sveltejs/svelte-preprocess
   // for more information about preprocessors
@@ -14,14 +14,14 @@ const config = {
       // default options are shown
       pages: distDir || 'build',
       assets: distDir || 'build',
-      fallback: null,
-      precompress: false
+      fallback: undefined,
+      precompress: false,
     }),
     prerender: {
       // This can be false if you're using a fallback (i.e. SPA mode)
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 };
 
 export default config;

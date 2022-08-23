@@ -3,8 +3,8 @@
   import { onDestroy } from 'svelte';
 
   export let keyName: string;
-  export let parameters: Record<string, any> | undefined = undefined;
-  export let noWrap: boolean = false;
+  export let parameters: Record<string, unknown> | undefined = undefined;
+  export let noWrap = false;
   export let defaultValue = undefined;
 
   if (!keyName) {
