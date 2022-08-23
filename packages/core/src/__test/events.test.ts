@@ -1,6 +1,6 @@
 import { Tolgee } from '../index';
 
-describe('language changes', () => {
+describe('events', () => {
   it('emits language change event', async () => {
     const tolgee = Tolgee({ language: 'en' });
     const handler = jest.fn((lang) => {});

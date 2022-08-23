@@ -22,6 +22,10 @@ export const StateService = (
 
   const asyncRequests: CacheAsyncRequests = new Map();
 
+  const isFetching = () => {
+    return asyncRequests.size > 0;
+  };
+
   const withDefaultNs = (descriptor: CacheDescriptor): CacheKeyObject => {
     return {
       namespace:
@@ -66,16 +70,23 @@ export const StateService = (
     );
   };
 
-  const loadRequiredRecords = (lang?: string) => {
+  const loadRequiredRecords = async (lang?: string) => {
     const language = lang || state.language;
     const namespaces = getRequiredNamespaces();
-    return Promise.all(
+    await Promise.all(
       namespaces
         .filter(
           (namespace) => !cacheGetRecord(state.cache, { language, namespace })
         )
         .map((namespace) => loadRecord({ language, namespace }))
     );
+  };
+
+  const loadInitial = async () => {
+    state.isLoading = true;
+    await loadRequiredRecords();
+    state.isLoading = false;
+    eventService.onInitialLoaded.emit();
   };
 
   const changeLanguage = async (language: string) => {
@@ -123,16 +134,25 @@ export const StateService = (
 
     if (typeof staticDataValue === 'function') {
       const dataPromise = staticDataValue();
+      const fetchingBefore = isFetching();
       asyncRequests.set(cacheKey, dataPromise);
+      if (!fetchingBefore) {
+        eventService.onFetchingChange.emit(true);
+      }
       const data = await dataPromise;
       asyncRequests.delete(cacheKey);
       cacheAddRecord(state.cache, withDefaultNs(descriptor), 'prod', data);
+      if (!isFetching()) {
+        eventService.onFetchingChange.emit(false);
+      }
     }
     return cacheGetRecord(state.cache, withDefaultNs(descriptor));
   };
 
   return Object.freeze({
-    getState: () => state,
+    get state() {
+      return state;
+    },
     changeLanguage,
     getTranslation,
     changeTranslation,
@@ -140,5 +160,7 @@ export const StateService = (
     removeActiveNs,
     loadRequiredRecords,
     loadRecord,
+    isFetching,
+    loadInitial,
   });
 };

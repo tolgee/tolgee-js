@@ -9,16 +9,20 @@ export const Tolgee = (options: Options) => {
   return Object.freeze({
     onLanguageChange: eventService.onLanguageChange,
     onPendingLanguageChange: eventService.onPendingLanguageChange,
+    onFetchingChange: eventService.onFetchingChange,
     onKeyUpdate: eventService.onKeyUpdate,
-    getLanguage: () => stateService.getState().language,
-    getPendingLanguage: () => stateService.getState().pendingLanguage,
+    onLoad: eventService.onInitialLoaded,
+    getLanguage: () => stateService.state.language,
+    getPendingLanguage: () => stateService.state.pendingLanguage,
     changeLanguage: stateService.changeLanguage,
     changeTranslation: stateService.changeTranslation,
     instant: stateService.getTranslation,
     addActiveNs: stateService.addActiveNs,
     removeActiveNs: stateService.removeActiveNs,
     loadRecord: stateService.loadRecord,
-    run: () => stateService.loadRequiredRecords(),
+    isLoading: () => stateService.state.isLoading,
+    isFetching: () => stateService.isFetching(),
+    run: () => stateService.loadInitial(),
   });
 };
 

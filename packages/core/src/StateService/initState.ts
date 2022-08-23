@@ -56,6 +56,7 @@ export const initState = (options: Options) => {
     language,
     pendingLanguage: language,
     cache: cacheInit(options.staticData),
+    isLoading: false,
   };
 };
 
