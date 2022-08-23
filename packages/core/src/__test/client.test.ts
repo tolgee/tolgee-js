@@ -1,7 +1,7 @@
 import { Tolgee } from '../index';
 
-describe('using tolgee for fetching', () => {
-  it('fetches language data correctly', async () => {
+describe('using tolgee as client', () => {
+  it('fetch data without running', async () => {
     const promiseEnTest = jest.fn(() => Promise.resolve({ test: 'Test' }));
     const promiseEnCommon = jest.fn(() =>
       Promise.resolve({ cancel: 'Cancel' })

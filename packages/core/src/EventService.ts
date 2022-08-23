@@ -5,6 +5,8 @@ export const EventService = () => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
   const onKeyChange = EventEmitter<string>();
+  const onFetchingChange = EventEmitter<boolean>();
+  const onInitialLoaded = EventEmitter<void>();
   const onKeyUpdate = EventEmitterSelective<{
     type: 'language' | 'key';
   }>();
@@ -17,6 +19,8 @@ export const EventService = () => {
     onLanguageChange,
     onKeyChange,
     onKeyUpdate,
+    onFetchingChange,
+    onInitialLoaded,
   });
 };
 
