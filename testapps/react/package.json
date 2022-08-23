@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-testapp",
-  "version": "4.8.0",
+  "version": "4.8.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",

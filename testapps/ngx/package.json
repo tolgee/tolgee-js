@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ngx-testapp",
-  "version": "4.8.0",
+  "version": "4.8.1",
   "scripts": {
     "ng": "ng",
     "develop": "ng serve --configuration=stage",
