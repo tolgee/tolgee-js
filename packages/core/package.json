@@ -26,7 +26,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly",
     "clean": "rm -rf dist lib",
-    "test": "jest",
+    "test": "jest --collect-coverage",
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --preserveWatchOutput --declaration --emitDeclarationOnly\" ",
     "tsc": "tsc --noEmit"
   },

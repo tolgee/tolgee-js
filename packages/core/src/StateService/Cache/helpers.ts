@@ -34,7 +34,3 @@ export const encodeCacheKey = ({ language, namespace }: CacheKeyObject) => {
     return language;
   }
 };
-
-export const normalizeCacheKey = (key: string) => {
-  return encodeCacheKey(decodeCacheKey(key));
-};
