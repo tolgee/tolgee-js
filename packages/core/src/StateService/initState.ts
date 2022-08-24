@@ -1,5 +1,4 @@
 import { TreeTranslationsData } from '../types';
-import { cacheInit } from './Cache/Cache';
 
 export type Options = {
   language?: string;
@@ -55,7 +54,6 @@ export const initState = (options: Options) => {
     activeNamespaces: new Map<string, number>(),
     language,
     pendingLanguage: language,
-    cache: cacheInit(options.staticData),
     isLoading: false,
   };
 };

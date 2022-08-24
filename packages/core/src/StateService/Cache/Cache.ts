@@ -8,12 +8,7 @@ import {
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 
-export const cacheInit = (data: Options['staticData']) => {
-  const cache: StateCache = {
-    translations: new Map(),
-    asyncRequests: new Map(),
-  };
-
+export const cacheInit = (cache: StateCache, data: Options['staticData']) => {
   if (data) {
     Object.entries(data).forEach(([key, value]) => {
       if (typeof value !== 'function') {
@@ -21,7 +16,6 @@ export const cacheInit = (data: Options['staticData']) => {
       }
     });
   }
-  return cache;
 };
 
 export const cacheAddRecord = (
@@ -30,40 +24,17 @@ export const cacheAddRecord = (
   origin: CacheRecordOrigin,
   data: TreeTranslationsData
 ) => {
-  cache.translations.set(encodeCacheKey(descriptor), {
+  cache.set(encodeCacheKey(descriptor), {
     data: flattenTranslations(data),
     origin,
   });
-};
-
-export const cacheAddRecordAsync = async (
-  cache: StateCache,
-  descriptor: CacheKeyObject,
-  origin: CacheRecordOrigin,
-  dataPromise: Promise<TreeTranslationsData>
-) => {
-  const cacheKey = encodeCacheKey(descriptor);
-  cache.asyncRequests.set(cacheKey, dataPromise);
-  const data = await dataPromise;
-  cache.asyncRequests.set(cacheKey, undefined);
-  cache.translations.set(encodeCacheKey(descriptor), {
-    data: flattenTranslations(data),
-    origin,
-  });
-};
-
-export const cacheIsLoading = async (
-  cache: StateCache,
-  descriptor: CacheKeyObject
-) => {
-  return Boolean(cache.asyncRequests.get(encodeCacheKey(descriptor)));
 };
 
 export const cacheGetRecord = (
   cache: StateCache,
   descriptor: CacheKeyObject
 ) => {
-  return cache.translations.get(encodeCacheKey(descriptor))?.data;
+  return cache.get(encodeCacheKey(descriptor))?.data;
 };
 
 export const cacheGetTranslation = (
@@ -71,7 +42,7 @@ export const cacheGetTranslation = (
   descriptor: CacheKeyObject,
   key: string
 ) => {
-  return cache.translations.get(encodeCacheKey(descriptor))?.data.get(key);
+  return cache.get(encodeCacheKey(descriptor))?.data.get(key);
 };
 
 export const cacheChangeTranslation = (
@@ -80,6 +51,6 @@ export const cacheChangeTranslation = (
   key: string,
   value: string
 ) => {
-  const record = cache.translations.get(encodeCacheKey(descriptor))?.data;
+  const record = cache.get(encodeCacheKey(descriptor))?.data;
   record?.set(key, value);
 };

@@ -14,16 +14,11 @@ export type CacheRecord = {
   data: TranslationsFlat;
 };
 
-export type CacheTranslations = Map<string, CacheRecord>;
+export type StateCache = Map<string, CacheRecord>;
 export type CacheAsyncRequests = Map<
   string,
   Promise<TreeTranslationsData> | undefined
 >;
-
-export type StateCache = {
-  translations: CacheTranslations;
-  asyncRequests: CacheAsyncRequests;
-};
 
 export type CacheDescriptor = {
   language: string;
