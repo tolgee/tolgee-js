@@ -1,6 +1,9 @@
 import { TreeTranslationsData } from '../types';
 
 export type Options = {
+  /**
+   * Initial language (default: 'en')
+   */
   language?: string;
   apiUrl?: string;
   apiKey?: string;
@@ -35,18 +38,19 @@ export type Options = {
   };
 };
 
-export const initState = (options: Options) => {
+const defaultValues = {
+  defaultLanguage: 'en',
+  language: 'en',
+  enableLanguageStore: false,
+  defaultNs: '',
+  filesUrlPrefix: 'i18n/',
+} as const;
+
+export const initState = (options: Options, prevousOptions?: Options) => {
   const initialOptions = {
-    apiKey: options.apiKey,
-    apiUrl: options.apiUrl,
-    defaultLanguage: options.defaultLanguage || 'en',
-    availableLanguages: options.availableLanguages,
-    fallbackLanguage: options.fallbackLanguage || 'en',
-    enableLanguageStore: options.enableLanguageStore || false,
-    defaultNs: options.defaultNs || '',
-    ns: options.ns,
-    filesUrlPrefix: options.filesUrlPrefix || 'i18n/',
-    staticData: options.staticData,
+    ...defaultValues,
+    ...prevousOptions,
+    ...options,
   };
   const language = options.language || initialOptions.defaultLanguage;
   return {

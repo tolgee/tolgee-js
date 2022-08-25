@@ -17,15 +17,20 @@ import { encodeCacheKey } from './Cache/helpers';
 import { initState, State } from './initState';
 
 export const StateService = (
-  options: Options,
-  eventService: EventServiceType
+  eventService: EventServiceType,
+  options: Options
 ) => {
-  const state: State = initState(options);
+  let state: State = initState(options);
   const cache: StateCache = new Map();
 
-  cacheInit(cache, options.staticData);
-
   const asyncRequests: CacheAsyncRequests = new Map();
+
+  cacheInit(cache, state.initialOptions.staticData);
+
+  const init = (options: Options) => {
+    state = initState(options, state.initialOptions);
+    cacheInit(cache, state.initialOptions.staticData);
+  };
 
   const isFetching = () => {
     return asyncRequests.size > 0;
@@ -168,6 +173,7 @@ export const StateService = (
   };
 
   return Object.freeze({
+    init,
     getLanguage,
     getPendingLanguage,
     changeLanguage,
@@ -182,3 +188,5 @@ export const StateService = (
     loadInitial,
   });
 };
+
+export type StateServiceType = ReturnType<typeof StateService>;

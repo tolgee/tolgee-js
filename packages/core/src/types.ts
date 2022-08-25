@@ -29,3 +29,36 @@ export type CacheKeyObject = {
   language: string;
   namespace: string;
 };
+
+export type KeyAndParams = {
+  key: string;
+  params?: TranslationParams;
+  defaultValue?: string;
+};
+
+export type TranslationParams = {
+  [key: string]: string | number | bigint;
+};
+
+export type WrapperPlugin = () => {
+  unwrap: (text: string) => {
+    text: string;
+    keys: KeyAndParams[];
+  };
+  wrap: (
+    key: string,
+    translation: string,
+    params?: Record<string, any>,
+    defaultValue?: string | undefined
+  ) => string;
+};
+
+export type FormatterPluginFormatParams = {
+  translation: string;
+  language: string;
+  params: Record<string, any> | undefined;
+};
+
+export type FormatPlugin = () => {
+  format: (props: FormatterPluginFormatParams) => string;
+};
