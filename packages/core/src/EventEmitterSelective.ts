@@ -45,6 +45,6 @@ export const EventEmitterSelective = <T>() => {
   return Object.freeze({ listen, emit });
 };
 
-export type EventEmitterSelectiveType = ReturnType<
-  typeof EventEmitterSelective
+export type EventEmitterSelectiveType<T> = ReturnType<
+  typeof EventEmitterSelective<T>
 >;

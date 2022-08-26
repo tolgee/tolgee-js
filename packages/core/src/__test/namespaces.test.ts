@@ -30,7 +30,7 @@ describe('language changes', () => {
       },
     });
     expect(tolgee.instant('hello')).toEqual('World');
-    expect(tolgee.instant('test')).toEqual(undefined);
+    expect(tolgee.instant('test')).toEqual('test');
     expect(tolgee.instant('test', 'common')).toEqual('Test');
   });
 
@@ -55,12 +55,12 @@ describe('language changes', () => {
     await tolgee.run();
 
     expect(tolgee.instant('cancel', 'common')).toEqual('Cancel');
-    expect(tolgee.instant('test', 'test')).toEqual(undefined);
+    expect(tolgee.instant('test', 'test')).toEqual('test');
 
     await tolgee.changeLanguage('es');
 
     expect(tolgee.instant('cancel', 'common')).toEqual('Cancellar');
-    expect(tolgee.instant('test', 'test')).toEqual(undefined);
+    expect(tolgee.instant('test', 'test')).toEqual('test');
 
     await tolgee.changeLanguage('en');
     await tolgee.addActiveNs('test');
@@ -79,7 +79,7 @@ describe('language changes', () => {
     await tolgee.run();
 
     expect(tolgee.instant('cancel', 'common')).toEqual('Cancel');
-    expect(tolgee.instant('test', 'test')).toEqual(undefined);
+    expect(tolgee.instant('test', 'test')).toEqual('test');
 
     await tolgee.addActiveNs('test');
 
@@ -90,6 +90,6 @@ describe('language changes', () => {
     await tolgee.changeLanguage('es');
 
     expect(tolgee.instant('cancel', 'common')).toEqual('Cancellar');
-    expect(tolgee.instant('test', 'test')).toEqual(undefined);
+    expect(tolgee.instant('test', 'test')).toEqual('test');
   });
 });

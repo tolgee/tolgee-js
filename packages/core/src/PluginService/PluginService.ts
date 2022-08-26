@@ -1,10 +1,10 @@
-import { FormatPlugin, WrapperPlugin } from '../types';
+import { FormatPlugin, ObserverPlugin, WrapperPlugin } from '../types';
 
 export const PluginService = (getLocale: () => string) => {
   const plugins = {
     wrapper: undefined as ReturnType<WrapperPlugin> | undefined,
     formatter: undefined as ReturnType<FormatPlugin> | undefined,
-    observer: undefined as any,
+    observer: undefined as ReturnType<ObserverPlugin> | undefined,
   };
 
   const run = () => {
@@ -19,7 +19,7 @@ export const PluginService = (getLocale: () => string) => {
     return plugins.observer;
   };
 
-  const setObserver = (observer: any) => {
+  const setObserver = (observer: ObserverPlugin) => {
     plugins.observer = observer();
   };
 
@@ -49,7 +49,7 @@ export const PluginService = (getLocale: () => string) => {
     defaultValue?: string
   ) => {
     if (!translation) {
-      return translation;
+      return key;
     }
     let result = translation;
     if (plugins.wrapper) {
