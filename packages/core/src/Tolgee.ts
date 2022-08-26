@@ -1,14 +1,14 @@
 import { EventService } from './EventService';
 import { PluginService } from './PluginService/PluginService';
 import { StateService } from './StateService/StateService';
-import { Options } from './types';
+import { Options, TolgeeInstance } from './types';
 
 export const Tolgee = (options?: Options) => {
   const eventService = EventService();
   const stateService = StateService(eventService, options || {});
   const pluginService = PluginService(stateService.getLanguage);
 
-  return Object.freeze({
+  const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     onLanguageChange: eventService.onLanguageChange,
     onPendingLanguageChange: eventService.onPendingLanguageChange,
@@ -17,9 +17,20 @@ export const Tolgee = (options?: Options) => {
     onLoad: eventService.onInitialLoaded,
 
     // plugins
-    setWrapper: pluginService.setWrapper,
-    setFormat: pluginService.setFormat,
-    setObserver: pluginService.setObserver,
+    setWrapper: (
+      ...params: Parameters<typeof pluginService.setWrapper>
+    ): typeof tolgee => {
+      pluginService.setWrapper(...params);
+      return tolgee;
+    },
+    setFormat: (...params: Parameters<typeof pluginService.setFormat>) => {
+      pluginService.setFormat(...params);
+      return tolgee;
+    },
+    setObserver: (...params: Parameters<typeof pluginService.setObserver>) => {
+      pluginService.setObserver(...params);
+      return tolgee;
+    },
 
     // state
     getLanguage: stateService.getLanguage,
@@ -31,12 +42,15 @@ export const Tolgee = (options?: Options) => {
     loadRecord: stateService.loadRecord,
     isLoading: stateService.isLoading,
     isFetching: stateService.isFetching,
-    init: stateService.init,
+    init: (options: Options) => {
+      stateService.init(options);
+      return tolgee;
+    },
 
     // other
-    run: async () => {
+    run: () => {
       pluginService.run();
-      await stateService.loadInitial();
+      return stateService.loadInitial();
     },
     stop: () => {
       pluginService.stop();
@@ -46,6 +60,7 @@ export const Tolgee = (options?: Options) => {
       return pluginService.formatTranslation(key, translation);
     },
   });
+  return tolgee;
 };
 
 export type TolgeeType = ReturnType<typeof Tolgee>;

@@ -24,4 +24,4 @@ export const EventEmitter = <T>() => {
   return Object.freeze({ listen, emit });
 };
 
-export type EventEmitterType = ReturnType<typeof EventEmitter>;
+export type EventEmitterType<T> = ReturnType<typeof EventEmitter<T>>;

@@ -1,27 +1,27 @@
-import * as umd from '../../node_modules/@tolgee/core/dist/tolgee.umd';
-import * as commonjs from '../../node_modules/@tolgee/core/dist/tolgee.cjs';
-import { IcuFormatter } from '@tolgee/core';
+import { InvisibleWrapper, Tolgee, InvisibleObserver } from '@tolgee/core';
 
-[umd, commonjs].forEach((bundle) => {
-  const bundleDivElement = document.createElement('div');
+const bundleDivElement = document.createElement('div');
 
-  const tolgee = new bundle.Tolgee.use(IcuFormatter).init({
-    watch: true,
-    targetElement: bundleDivElement,
-  });
+const tolgee = Tolgee({
+  targetElement: bundleDivElement,
+  staticData: {
+    en: { hello: 'world' },
+    es: { hellow: 'world' },
+  },
+})
+  .setWrapper(InvisibleWrapper)
+  .setObserver(InvisibleObserver);
 
-  bundleDivElement.setAttribute('id', bundle);
+bundleDivElement.setAttribute('id', 'test');
 
-  document.body.append(bundleDivElement);
+document.body.append(bundleDivElement);
 
-  const htmlParagraphElement = document.createElement('p');
+const htmlParagraphElement = document.createElement('p');
+htmlParagraphElement.textContent = 'hello';
 
-  bundleDivElement.append(htmlParagraphElement);
+bundleDivElement.append(htmlParagraphElement);
 
-  tolgee.run().then(() => {
-    tolgee.translate('test').then((t) => {
-      htmlParagraphElement.append(t);
-      bundleDivElement.append('%-%tolgee:test%-%');
-    });
-  });
+tolgee.run().then(() => {
+  console.log('here');
+  htmlParagraphElement.childNodes[0].nodeValue = tolgee.instant('hello');
 });

@@ -18,7 +18,7 @@ describe('language changes', () => {
     await tolgee.changeLanguage('es');
     expect(tolgee.instant('hello')).toEqual('Mundo');
     await tolgee.changeLanguage('cs');
-    expect(tolgee.instant('hello')).toBeUndefined();
+    expect(tolgee.instant('hello')).toEqual('hello');
   });
 
   it('fetches language data correctly', async () => {
@@ -32,7 +32,7 @@ describe('language changes', () => {
       },
     });
     const runPromise = tolgee.run();
-    expect(tolgee.instant('test')).toEqual(undefined);
+    expect(tolgee.instant('test')).toEqual('test');
     expect(tolgee.getPendingLanguage()).toEqual('en');
     resolveEn({ test: 'Test' });
     await runPromise;
