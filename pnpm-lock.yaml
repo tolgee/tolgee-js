@@ -695,7 +695,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429
       '@tolgee/core': ^4.8.0
-      '@tolgee/svelte': ^4.8.2
+      '@tolgee/svelte': ^4.8.3
       '@tolgee/ui': ^4.8.0
       '@typescript-eslint/eslint-plugin': ^5.30.6
       '@typescript-eslint/parser': ^5.30.6

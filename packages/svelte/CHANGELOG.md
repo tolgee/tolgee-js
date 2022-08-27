@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.3](https://github.com/tolgee/tolgee-js/compare/v4.8.2...v4.8.3) (2022-08-27)
+
+
+### Bug Fixes
+
+* Svelte with auto/node adapter (Import UI only in browser) ([8e1e6ef](https://github.com/tolgee/tolgee-js/commit/8e1e6ef5d164dd6f29120e2a5413c3a21d0fb049))
+
+
+
+
+
 ## [4.8.2](https://github.com/tolgee/tolgee-js/compare/v4.8.1...v4.8.2) (2022-08-23)
 
 
