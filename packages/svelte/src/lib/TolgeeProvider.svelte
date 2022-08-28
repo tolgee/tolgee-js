@@ -8,7 +8,7 @@
   const tolgee = Tolgee.use(IcuFormatter).init({
     wrapperMode: 'invisible',
     ui:
-      process.env.NODE_ENV !== 'development' && typeof window == 'undefined'
+      process.env.NODE_ENV !== 'development'
         ? undefined
         : typeof require !== 'undefined'
         ? require('@tolgee/ui')

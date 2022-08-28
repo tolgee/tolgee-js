@@ -20,12 +20,12 @@ export default {
       plugins: [terser()],
     },
     {
-      file: 'dist/tolgee-ui.esm.js',
+      file: 'dist/tolgee-ui.esm.mjs',
       format: 'esm',
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee-ui.esm.min.js',
+      file: 'dist/tolgee-ui.esm.min.mjs',
       format: 'esm',
       sourcemap: true,
       plugins: [terser()],
