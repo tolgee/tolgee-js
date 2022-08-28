@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.8.3-rc.a861236.0 (2022-08-28)
+
+
+### Bug Fixes
+
+* Svelte with auto/node adapter (Rename the .esm module build) ([a861236](https://github.com/tolgee/tolgee-js/commit/a8612360ddd6f422f785cfc9249e676450edfab2))
+
+
+
+
+
 # [4.8.0](https://github.com/tolgee/tolgee-js/compare/v4.7.3...v4.8.0) (2022-08-01)
 
 **Note:** Version bump only for package @tolgee/ngx-workspace

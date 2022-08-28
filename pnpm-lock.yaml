@@ -109,8 +109,8 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@types/intl-messageformat': ^3.0.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
@@ -165,7 +165,7 @@ importers:
       '@angular/router': ~13.1.3
       '@testing-library/angular': ^10.11.1
       '@testing-library/jest-dom': 5.16.4
-      '@tolgee/core': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
       '@types/jasmine': ~3.10.3
       '@types/jasminewd2': ~2.0.3
       '@types/jest': 27.5.0
@@ -218,7 +218,7 @@ importers:
 
   packages/ngx/projects/ngx-tolgee:
     specifiers:
-      '@tolgee/core': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
     dependencies:
       '@tolgee/core': link:../../../core
     publishDirectory: ../../dist/ngx-tolgee
@@ -229,8 +229,8 @@ importers:
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^12.1.2
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -309,8 +309,8 @@ importers:
       '@sveltejs/package': 1.0.0-next.1
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/svelte': ^3.2.1
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
       '@typescript-eslint/parser': ^5.34.0
@@ -376,7 +376,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.30
@@ -433,8 +433,8 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.2
       '@testing-library/vue': ^6.6.1
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@types/jest': ^27.0.2
       '@vue/vue3-jest': ^27.0.0-alpha.3
       babel-jest: ^27.5.1
@@ -471,8 +471,8 @@ importers:
 
   testapps/core:
     specifiers:
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
       serve: ^13.0.4
@@ -491,7 +491,7 @@ importers:
 
   testapps/gatsby:
     specifiers:
-      '@tolgee/react': ^4.8.0
+      '@tolgee/react': ^4.8.3-rc.a861236.0
       gatsby: ^4.19.2
       gatsby-plugin-react-intl: ^4.0.0
       react: ^17.0.1
@@ -507,7 +507,7 @@ importers:
 
   testapps/next:
     specifiers:
-      '@tolgee/react': ^4.8.0
+      '@tolgee/react': ^4.8.3-rc.a861236.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -528,7 +528,7 @@ importers:
 
   testapps/next-internal:
     specifiers:
-      '@tolgee/react': ^4.8.0
+      '@tolgee/react': ^4.8.3-rc.a861236.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -561,9 +561,9 @@ importers:
       '@angular/platform-browser': ~13.1.3
       '@angular/platform-browser-dynamic': ~13.1.3
       '@angular/router': ~13.1.3
-      '@tolgee/core': ^4.8.0
-      '@tolgee/ngx': ^4.8.0
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/ngx': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@types/node': ^17.0.35
       '@types/react': ^17.0.43
       codelyzer: ^6.0.0
@@ -614,7 +614,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
-      '@tolgee/react': ^4.8.0
+      '@tolgee/react': ^4.8.3-rc.a861236.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -654,8 +654,8 @@ importers:
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^11.1.0
       '@testing-library/user-event': ^12.1.10
-      '@tolgee/core': ^4.8.0
-      '@tolgee/i18next': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/i18next': ^4.8.3-rc.a861236.0
       '@types/node': ^17.0.8
       '@types/react': ^17.0.37
       '@types/react-dom': ^17.0.11
@@ -694,9 +694,9 @@ importers:
     specifiers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429
-      '@tolgee/core': ^4.8.0
-      '@tolgee/svelte': ^4.8.2
-      '@tolgee/ui': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/svelte': ^4.8.3-rc.a861236.0
+      '@tolgee/ui': ^4.8.3-rc.a861236.0
       '@typescript-eslint/eslint-plugin': ^5.30.6
       '@typescript-eslint/parser': ^5.30.6
       eslint: ^8.19.0
@@ -714,7 +714,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
       '@tolgee/core': link:../../packages/core
-      '@tolgee/svelte': link:../../packages/svelte
+      '@tolgee/svelte': 4.8.3
       '@tolgee/ui': link:../../packages/ui
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
       '@typescript-eslint/parser': 5.34.0_4rv7y5c6xz3vfxwhbrcxxi73bq
@@ -732,7 +732,7 @@ importers:
 
   testapps/vue:
     specifiers:
-      '@tolgee/vue': ^4.8.0
+      '@tolgee/vue': ^4.8.3-rc.a861236.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
       '@vue/cli-plugin-typescript': ~4.5.0
@@ -760,8 +760,8 @@ importers:
   testapps/vue-i18next:
     specifiers:
       '@panter/vue-i18next': ^0.15.2
-      '@tolgee/core': ^4.8.0
-      '@tolgee/i18next': ^4.8.0
+      '@tolgee/core': ^4.8.3-rc.a861236.0
+      '@tolgee/i18next': ^4.8.3-rc.a861236.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
       '@vue/cli-service': ~4.5.0
@@ -8775,6 +8775,21 @@ packages:
   /@tokenizer/token/0.3.0:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
+
+  /@tolgee/core/4.8.0:
+    resolution: {integrity: sha512-l50pCnOPybLAlasstP4p+1rqOsn6HwgdJRf7aMJeIy/dUhmCEQlz8JW+QNTWzu1DaMI2zshhl3WCdTNVFswoEA==}
+    dev: true
+
+  /@tolgee/svelte/4.8.3:
+    resolution: {integrity: sha512-Edj580+1betG8yEA+YayuZstXIpjyt03XyisBzMTzNX7CncEI4IR0RmrgxIBGtkqwqRTChKrOEtbqOD83vflqQ==}
+    dependencies:
+      '@tolgee/core': 4.8.0
+      '@tolgee/ui': 4.8.0
+    dev: true
+
+  /@tolgee/ui/4.8.0:
+    resolution: {integrity: sha512-ZTpfyxfNq9FFFTCDmA8p8KMPvGSmfNwZRyT/sVcc4foBJsEA7v3vUNGZhD34knFifkVKw9TBq3zU/lcg+vNtdg==}
+    dev: true
 
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
