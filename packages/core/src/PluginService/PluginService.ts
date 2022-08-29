@@ -1,36 +1,31 @@
-import { FormatPlugin, ObserverPlugin, WrapperPlugin } from '../types';
+import { FormatPlugin, ObserverPlugin } from '../types';
 
 export const PluginService = (getLocale: () => string) => {
   const plugins = {
-    wrapper: undefined as ReturnType<WrapperPlugin> | undefined,
+    formatter: undefined as FormatPlugin | undefined,
+    observer: undefined as ObserverPlugin | undefined,
+  };
+
+  const instances = {
     formatter: undefined as ReturnType<FormatPlugin> | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
   };
 
   const run = () => {
-    plugins.observer?.run();
+    instances.observer = plugins?.observer?.();
   };
 
   const stop = () => {
-    plugins.observer?.stop();
+    instances.observer?.stop();
+    instances.observer = undefined;
   };
 
   const getObserver = () => {
     return plugins.observer;
   };
 
-  const setObserver = (observer: ObserverPlugin) => {
-    plugins.observer = observer();
-  };
-
-  const getWrapper = () => {
-    return plugins.wrapper;
-  };
-
-  const setWrapper = (wrapper: WrapperPlugin | undefined) => {
-    if (wrapper) {
-      plugins.wrapper = wrapper();
-    }
+  const setObserver = (observer: ObserverPlugin | undefined) => {
+    plugins.observer = observer;
   };
 
   const getFormat = () => {
@@ -39,7 +34,8 @@ export const PluginService = (getLocale: () => string) => {
 
   const setFormat = (formatter: FormatPlugin | undefined) => {
     if (formatter) {
-      plugins.formatter = formatter();
+      plugins.formatter = formatter;
+      instances.formatter = formatter();
     }
   };
 
@@ -52,11 +48,11 @@ export const PluginService = (getLocale: () => string) => {
       return key;
     }
     let result = translation;
-    if (plugins.wrapper) {
-      result = plugins.wrapper.wrap(key, result, undefined, defaultValue);
+    if (instances.observer) {
+      result = instances.observer.wrap(key, result, undefined, defaultValue);
     }
-    if (plugins.formatter) {
-      result = plugins.formatter.format({
+    if (instances.formatter) {
+      result = instances.formatter.format({
         translation: result,
         language: getLocale(),
         params: undefined,
@@ -66,8 +62,6 @@ export const PluginService = (getLocale: () => string) => {
   };
 
   return Object.freeze({
-    getWrapper,
-    setWrapper,
     getFormat,
     setFormat,
     formatTranslation,

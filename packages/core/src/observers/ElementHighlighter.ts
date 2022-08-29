@@ -1,6 +1,5 @@
-import { TOLGEE_HIGHLIGHTER_CLASS } from '../Constants/Global';
-import { Properties } from '../Properties';
 import { ElementWithMeta } from '../types';
+import { TOLGEE_HIGHLIGHTER_CLASS } from '../constants';
 
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
   pointerEvents: 'none',
@@ -13,18 +12,17 @@ const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
   borderRadius: '4px',
 };
 
-export class HighlightFunctionsInitializer {
-  constructor(private properties: Properties) {}
+type Props = {
+  highlightColor: string;
+  highlightWidth: number;
+};
 
-  initFunctions(element: ElementWithMeta) {
-    this.initHighlightFunction(element);
-    this.initUnhighlightFunction(element);
-  }
-
-  private initHighlightFunction(element: ElementWithMeta) {
+export const ElementHighlighter = ({
+  highlightColor,
+  highlightWidth,
+}: Props) => {
+  function initHighlightFunction(element: ElementWithMeta) {
     element._tolgee.highlight = () => {
-      const highlightColor = this.properties.config.highlightColor;
-      const highlightWidth = this.properties.config.highlightWidth;
       if (!element.isConnected) {
         return;
       }
@@ -33,7 +31,8 @@ export class HighlightFunctionsInitializer {
         highlightEl = document.createElement('div');
         highlightEl.classList.add(TOLGEE_HIGHLIGHTER_CLASS);
         Object.entries(HIGHLIGHTER_BASE_STYLE).forEach(([key, value]) => {
-          highlightEl.style[key] = value;
+          // @ts-ignore
+          highlightEl!.style[key] = value;
         });
         highlightEl.style.borderColor = highlightColor;
 
@@ -51,10 +50,17 @@ export class HighlightFunctionsInitializer {
     };
   }
 
-  private initUnhighlightFunction(element: ElementWithMeta) {
+  function initUnhighlightFunction(element: ElementWithMeta) {
     element._tolgee.unhighlight = () => {
       element._tolgee.highlightEl?.remove();
-      element._tolgee.highlightEl = null;
+      element._tolgee.highlightEl = undefined;
     };
   }
-}
+
+  function initHighlighter(element: ElementWithMeta) {
+    initHighlightFunction(element);
+    initUnhighlightFunction(element);
+  }
+
+  return Object.freeze({ initHighlighter });
+};

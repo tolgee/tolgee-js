@@ -7,14 +7,20 @@
   "scripts": {
     "build": "webpack",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
-    "develop": "webpack --watch",
+    "develop": "concurrently \"webpack --watch\" \"serve -p 8101 ./dist\"",
     "serve": "serve -p 8101 ./dist"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
+<<<<<<< HEAD
     "@tolgee/core": "^4.9.2",
     "@tolgee/ui": "^4.9.2",
+=======
+    "@tolgee/core": "^4.8.0",
+    "@tolgee/ui": "^4.8.0",
+    "concurrently": "^7.3.0",
+>>>>>>> e128ad41 (feat: element registry and highlighting)
     "copy-webpack-plugin": "^10.2.4",
     "html-webpack-plugin": "^5.5.0",
     "serve": "^13.0.4",

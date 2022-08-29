@@ -68,11 +68,9 @@ export type FormatPlugin = () => {
   format: (props: FormatterPluginFormatParams) => string;
 };
 
-export type ObserverPlugin = () => Readonly<{
+export type ObserverPlugin = () => ReturnType<WrapperPlugin> & {
   stop: () => void;
-  run: () => void;
-  isObserving: () => boolean;
-}>;
+};
 
 export type KeyUpdateEvent = {
   type: 'language' | 'key';
@@ -85,14 +83,9 @@ export type TolgeeInstance = Readonly<{
   onKeyUpdate: EventEmitterSelectiveType<KeyUpdateEvent>;
   onLoad: EventEmitterType<void>;
 
-  setWrapper: (wrapper: WrapperPlugin | undefined) => Readonly<TolgeeInstance>;
   setFormat: (formatter: FormatPlugin | undefined) => Readonly<TolgeeInstance>;
   setObserver: (
-    observer: () => Readonly<{
-      stop: () => void;
-      run: () => void;
-      isObserving: () => boolean;
-    }>
+    observer: ObserverPlugin | undefined
   ) => Readonly<TolgeeInstance>;
 
   getLanguage: () => string;
@@ -135,10 +128,6 @@ export type NodeMeta = {
   keys: KeyAndParamsTags<any>[];
 } & NodeLock;
 
-export type NodeWithLock = Node & {
-  _tolgee: NodeLock;
-};
-
 export type NodeWithMeta = Node & {
   _tolgee: NodeMeta;
 };
@@ -167,3 +156,26 @@ export type ElementWithMeta = Element &
   ElementCSSInlineStyle & {
     _tolgee: ElementMeta;
   };
+
+export type ObserverOptions = {
+  tagAttributes: Record<string, string[]>;
+  highlightKeys: ModifierKey[];
+  highlightColor: string;
+  highlightWidth: number;
+  targetElement: HTMLElement;
+};
+
+export type ObserverOptionsInitial = {
+  tagAttributes?: { [key: string]: string[] };
+  highlightKeys?: ModifierKey[];
+  targetElement?: HTMLElement;
+  highlightColor?: string;
+  highlightWidth?: number;
+};
+
+export enum ModifierKey {
+  Alt,
+  Control,
+  Shift,
+  Meta,
+}

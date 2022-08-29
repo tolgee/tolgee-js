@@ -11,7 +11,7 @@ describe('observer', () => {
     tolgee = Tolgee({
       language: 'en',
       staticData: { en: { hello: 'world' } },
-    }).setObserver(InvisibleObserver);
+    }).setObserver(InvisibleObserver());
 
     tolgee.run();
 
