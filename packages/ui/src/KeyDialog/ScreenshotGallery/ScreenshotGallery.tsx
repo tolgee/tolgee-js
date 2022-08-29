@@ -1,6 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { CircularProgress, IconButton, Tooltip, styled } from '@mui/material';
-import { CameraAlt, AddCircleOutline } from '@mui/icons-material';
+
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
+
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import CameraAlt from '@mui/icons-material/CameraAlt';
 
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';

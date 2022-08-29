@@ -1,6 +1,7 @@
 import React from 'react';
-import { Menu, MenuItem } from '@mui/material';
-import { styled } from '@mui/material';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { styled } from '@mui/material/styles';
 import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 
 import { ThemeProvider } from '../ThemeProvider';

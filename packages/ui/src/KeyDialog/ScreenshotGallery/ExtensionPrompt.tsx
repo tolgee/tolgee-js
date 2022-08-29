@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Dialog, DialogContent, styled } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import { styled } from '@mui/material/styles';
 
 import { DEVTOOLS_Z_INDEX, CHROME_EXTENSION_LINK } from '../../constants';
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Tooltip, IconButton, styled } from '@mui/material';
-import { Clear } from '@mui/icons-material';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import { styled } from '@mui/material/styles';
+import Clear from '@mui/icons-material/Clear';
 import clsx from 'clsx';
 import { ScreenshotInterface } from '../TranslationDialogContextProvider';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
