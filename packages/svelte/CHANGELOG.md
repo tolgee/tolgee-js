@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.4](https://github.com/tolgee/tolgee-js/compare/v4.8.3...v4.8.4) (2022-08-29)
+
+
+### Bug Fixes
+
+* reduce ui bundle size ([58f2765](https://github.com/tolgee/tolgee-js/commit/58f2765920197516bb57e812d4e9174b079e6751))
+
+
+
+
+
 ## [4.8.3](https://github.com/tolgee/tolgee-js/compare/v4.8.2...v4.8.3) (2022-08-27)
 
 
