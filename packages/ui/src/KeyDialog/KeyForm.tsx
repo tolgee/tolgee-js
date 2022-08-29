@@ -1,7 +1,9 @@
 import React from 'react';
 import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
-import { styled, IconButton, Button } from '@mui/material';
-import { OpenInNew } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import OpenInNew from '@mui/icons-material/OpenInNew';
 import { TextHelper } from '@tolgee/core';
 
 import { TranslationFields } from './TranslationFields';

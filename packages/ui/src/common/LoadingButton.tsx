@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, ButtonProps, CircularProgress } from '@mui/material';
-import { styled } from '@mui/material';
+import Button, { ButtonProps } from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import { styled } from '@mui/material/styles';
 
 const StyledButton = styled(Button)`
   position: 'relative';

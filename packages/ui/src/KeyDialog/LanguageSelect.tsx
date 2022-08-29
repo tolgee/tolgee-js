@@ -1,14 +1,12 @@
 import React from 'react';
-import {
-  Select,
-  MenuItem,
-  Checkbox,
-  ListItemText,
-  OutlinedInput,
-  SelectChangeEvent,
-  FormControl,
-  styled,
-} from '@mui/material';
+
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import FormControl from '@mui/material/FormControl';
+import { styled } from '@mui/material/styles';
 
 import { DEVTOOLS_Z_INDEX } from '../constants';
 import {

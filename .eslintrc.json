@@ -8,7 +8,7 @@
     "*.js",
     "**/lib",
     "**/src/serviceWorker.ts",
-    "**/svelte/package/**"
+    "*.d.ts"
   ],
   "extends": [
     "eslint:recommended",
