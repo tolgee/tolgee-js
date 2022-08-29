@@ -2,10 +2,10 @@ import { Tolgee } from '../Tolgee';
 import {
   FormatPlugin,
   FormatterPluginFormatParams,
-  WrapperPlugin,
+  ObserverPlugin,
 } from '../types';
 
-const testWrapper: WrapperPlugin = () => {
+const testObserver: ObserverPlugin = () => {
   const wrap = (key: string, translation: string) => {
     return `${key}|${translation}`;
   };
@@ -14,7 +14,9 @@ const testWrapper: WrapperPlugin = () => {
     return { text, keys: [{ key }] };
   };
 
-  return Object.freeze({ wrap, unwrap });
+  const stop = () => {};
+
+  return Object.freeze({ wrap, unwrap, stop });
 };
 
 const testFormat: FormatPlugin = () => {
@@ -31,10 +33,12 @@ describe('plugins', () => {
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.setWrapper(testWrapper);
+    tolgee.setObserver(testObserver);
+    tolgee.run();
     expect(tolgee.instant('hello')).toEqual('hello|world');
 
     tolgee.setFormat(testFormat);
     expect(tolgee.instant('hello')).toEqual('(hello|world)');
+    tolgee.stop();
   });
 });

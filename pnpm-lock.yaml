@@ -61,7 +61,7 @@ importers:
   packages/core:
     specifiers:
       '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-typescript': 8.4.0
+      '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.5
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
@@ -73,11 +73,12 @@ importers:
       rollup: ^2.56.3
       rollup-plugin-bundle-size: ^1.0.3
       rollup-plugin-terser: 7.0.2
+      rollup-plugin-visualizer: ^5.8.0
       ts-jest: ^27.1.5
       typescript: ^4.7.4
     devDependencies:
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
-      '@rollup/plugin-typescript': 8.4.0_accrhai6qopda76wnqb3pkewpq
+      '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
       '@testing-library/jest-dom': 5.16.5
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
@@ -89,6 +90,7 @@ importers:
       rollup: 2.78.1
       rollup-plugin-bundle-size: 1.0.3
       rollup-plugin-terser: 7.0.2_rollup@2.78.1
+      rollup-plugin-visualizer: 5.8.0_rollup@2.78.1
       ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
       typescript: 4.7.4
 
@@ -505,8 +507,14 @@ importers:
 
   testapps/core:
     specifiers:
+<<<<<<< HEAD
       '@tolgee/core': ^4.9.2
       '@tolgee/ui': ^4.9.2
+=======
+      '@tolgee/core': ^4.8.0
+      '@tolgee/ui': ^4.8.0
+      concurrently: ^7.3.0
+>>>>>>> e128ad41 (feat: element registry and highlighting)
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
       serve: ^13.0.4
@@ -515,7 +523,8 @@ importers:
       webpack-cli: ^4.10.0
     devDependencies:
       '@tolgee/core': link:../../packages/core
-      '@tolgee/ui': link:../../packages/ui
+      '@tolgee/ui': 4.8.4
+      concurrently: 7.3.0
       copy-webpack-plugin: 10.2.4_webpack@5.74.0
       html-webpack-plugin: 5.5.0_webpack@5.74.0
       serve: 13.0.4
@@ -532,7 +541,7 @@ importers:
       react-dom: ^17.0.1
       typescript: ^4.7.4
     dependencies:
-      '@tolgee/react': link:../../packages/react
+      '@tolgee/react': 4.8.4_react@17.0.2
       gatsby: 4.19.2_3tgeifm2vmwrlpqlopppsnjtcu
       gatsby-plugin-react-intl: 4.0.0_6gwab75v6pqvip6qch4h33jmf4
       react: 17.0.2
@@ -550,7 +559,7 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/react': link:../../packages/react
+      '@tolgee/react': 4.8.4_react@17.0.2
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -571,7 +580,7 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/react': link:../../packages/react
+      '@tolgee/react': 4.8.4_react@17.0.2
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -668,7 +677,7 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
-      '@tolgee/react': link:../../packages/react
+      '@tolgee/react': 4.8.4_react@17.0.2
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.43
@@ -708,7 +717,7 @@ importers:
       '@testing-library/react': 11.2.7_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 12.8.3
       '@tolgee/core': link:../../packages/core
-      '@tolgee/i18next': link:../../packages/i18next
+      '@tolgee/i18next': 4.8.4_i18next@21.8.14
       concurrently: 7.3.0
       i18next: 21.8.14
       i18next-icu: 2.0.3
@@ -778,7 +787,7 @@ importers:
       typescript: ~4.7.4
       vue: ^3.2.37
     dependencies:
-      '@tolgee/vue': link:../../packages/vue
+      '@tolgee/vue': 4.8.4_vue@3.2.37
       core-js: 3.24.0
       vue: 3.2.37
     devDependencies:
@@ -809,7 +818,7 @@ importers:
     dependencies:
       '@panter/vue-i18next': 0.15.2_i18next@21.8.14+vue@2.7.8
       '@tolgee/core': link:../../packages/core
-      '@tolgee/i18next': link:../../packages/i18next
+      '@tolgee/i18next': 4.8.4_i18next@21.8.14
       core-js: 3.24.0
       i18next: 21.8.14
       i18next-icu: 2.0.3
@@ -8302,23 +8311,6 @@ packages:
       typescript: 4.7.4
     dev: true
 
-  /@rollup/plugin-typescript/8.4.0_accrhai6qopda76wnqb3pkewpq:
-    resolution: {integrity: sha512-QssfoOP6V4/6skX12EfOW5UzJAv/c334F4OJWmQpe2kg3agEa0JwVCckwmfuvEgDixyX+XyxjFenH7M2rDKUyQ==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      rollup: ^2.14.0
-      tslib: '*'
-      typescript: '>=3.7.0'
-    peerDependenciesMeta:
-      tslib:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.78.1
-      resolve: 1.22.1
-      rollup: 2.78.1
-      typescript: 4.7.4
-    dev: true
-
   /@rollup/pluginutils/3.1.0_rollup@2.77.2:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
     engines: {node: '>= 8.0.0'}
@@ -8847,7 +8839,26 @@ packages:
 
   /@tolgee/core/4.8.0:
     resolution: {integrity: sha512-l50pCnOPybLAlasstP4p+1rqOsn6HwgdJRf7aMJeIy/dUhmCEQlz8JW+QNTWzu1DaMI2zshhl3WCdTNVFswoEA==}
-    dev: true
+
+  /@tolgee/i18next/4.8.4_i18next@21.8.14:
+    resolution: {integrity: sha512-Sx+7G+mv8hOAL1uI5FOSOpzwJv5uHh1U5dtBmOZ/uUd/+ZL9AEZT9ZeB6fAdNk5hHyYfqrvoN+dvmMYfAqhjIQ==}
+    peerDependencies:
+      i18next: ^21.5.4
+    dependencies:
+      '@tolgee/core': 4.8.0
+      '@tolgee/ui': 4.8.4
+      i18next: 21.8.14
+    dev: false
+
+  /@tolgee/react/4.8.4_react@17.0.2:
+    resolution: {integrity: sha512-Z17qz2MF8bfMSaytkSQi+TH3+pws4cSTtz+y8Oew8vOolAum5V9TpSKXUkbGXk+ZNeA3KPb9amdPC15IWkd6dg==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.1 || ^18.1.0
+    dependencies:
+      '@tolgee/core': 4.8.0
+      '@tolgee/ui': 4.8.4
+      react: 17.0.2
+    dev: false
 
   /@tolgee/svelte/4.8.2:
     resolution: {integrity: sha512-Knni105wogZ5440jLc1M4Jyq4LvPh6FcSZjeQM7xgRQtaCPbkBLnXsTkbRSqCopLvcsHuEPQIEtTG2G48zV3SA==}
@@ -8859,6 +8870,19 @@ packages:
   /@tolgee/ui/4.8.0:
     resolution: {integrity: sha512-ZTpfyxfNq9FFFTCDmA8p8KMPvGSmfNwZRyT/sVcc4foBJsEA7v3vUNGZhD34knFifkVKw9TBq3zU/lcg+vNtdg==}
     dev: true
+
+  /@tolgee/ui/4.8.4:
+    resolution: {integrity: sha512-++lTibbbMXIrHtx9RL4WDhlhdSYkJkVCoe+WC6aORuxUw0OsIRbIG25dN1+jqLStwcsou5E3f3cb1ULT8UMu7w==}
+
+  /@tolgee/vue/4.8.4_vue@3.2.37:
+    resolution: {integrity: sha512-s5GMvkxOd9LqkJDErV6/hOgCd3gYEstA2T+PvnNsp2x0lj+Mn7xJpg56lYvuzuHlAW9dE7I/CdaAexbtWZK8BA==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@tolgee/core': 4.8.0
+      '@tolgee/ui': 4.8.4
+      vue: 3.2.37
+    dev: false
 
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -10229,7 +10253,7 @@ packages:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
       eslint: '>= 1.6.0 < 7.0.0'
     dependencies:
-      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
+      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
       '@vue/cli-shared-utils': 4.5.19
       eslint-loader: 2.2.1_webpack@4.46.0
       globby: 9.2.0
@@ -10247,7 +10271,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
+      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
       '@vue/cli-shared-utils': 4.5.19
     dev: true
 
@@ -10295,7 +10319,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
+      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
     dev: true
 
   /@vue/cli-service/4.5.19_7unolrgjwxngstwwllrtmolbmm:
@@ -28739,6 +28763,20 @@ packages:
       rollup: 2.78.1
       serialize-javascript: 4.0.0
       terser: 5.14.2
+    dev: true
+
+  /rollup-plugin-visualizer/5.8.0_rollup@2.78.1:
+    resolution: {integrity: sha512-pY6j/7qHz5I9rB7d/bQoA5gX+2FbV3MBG055wrsFxDn550bgl0FNViRj6wDHh85PMswv+JVdZjhnMBzz/hdAHA==}
+    engines: {node: '>=14'}
+    hasBin: true
+    peerDependencies:
+      rollup: ^2.0.0
+    dependencies:
+      nanoid: 3.3.4
+      open: 8.4.0
+      rollup: 2.78.1
+      source-map: 0.7.4
+      yargs: 17.5.1
     dev: true
 
   /rollup-plugin-vue/6.0.0:

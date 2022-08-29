@@ -1,9 +1,9 @@
 import { EventService } from './EventService';
 import { PluginService } from './PluginService/PluginService';
 import { StateService } from './StateService/StateService';
-import { Options, TolgeeInstance } from './types';
+import { FormatPlugin, ObserverPlugin, Options, TolgeeInstance } from './types';
 
-export const Tolgee = (options?: Options) => {
+export const Tolgee = (options?: Options): TolgeeInstance => {
   const eventService = EventService();
   const stateService = StateService(eventService, options || {});
   const pluginService = PluginService(stateService.getLanguage);
@@ -16,19 +16,12 @@ export const Tolgee = (options?: Options) => {
     onKeyUpdate: eventService.onKeyUpdate,
     onLoad: eventService.onInitialLoaded,
 
-    // plugins
-    setWrapper: (
-      ...params: Parameters<typeof pluginService.setWrapper>
-    ): typeof tolgee => {
-      pluginService.setWrapper(...params);
+    setFormat: (formatter: FormatPlugin | undefined) => {
+      pluginService.setFormat(formatter);
       return tolgee;
     },
-    setFormat: (...params: Parameters<typeof pluginService.setFormat>) => {
-      pluginService.setFormat(...params);
-      return tolgee;
-    },
-    setObserver: (...params: Parameters<typeof pluginService.setObserver>) => {
-      pluginService.setObserver(...params);
+    setObserver: (observer: ObserverPlugin | undefined) => {
+      pluginService.setObserver(observer);
       return tolgee;
     },
 
@@ -62,5 +55,3 @@ export const Tolgee = (options?: Options) => {
   });
   return tolgee;
 };
-
-export type TolgeeType = ReturnType<typeof Tolgee>;
