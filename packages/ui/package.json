@@ -3,7 +3,7 @@
   "version": "4.8.4",
   "description": "Translation mode UI for @tolgee/core package",
   "main": "index.js",
-  "module": "./dist/tolgee-ui.esm.js",
+  "module": "./dist/tolgee-ui.esm.mjs",
   "types": "types/index.d.ts",
   "declaration": true,
   "directories": {
@@ -63,7 +63,7 @@
   },
   "exports": {
     "require": "./dist/tolgee-ui.cjs.js",
-    "import": "./dist/tolgee-ui.esm.js"
+    "import": "./dist/tolgee-ui.esm.mjs"
   },
   "keywords": [
     "localization",
