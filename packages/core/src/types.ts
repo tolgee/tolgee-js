@@ -13,6 +13,7 @@ export type TranslateProps = {
   defaultValue?: string;
   namespace?: string;
   noWrap?: boolean;
+  orEmpty?: boolean;
 };
 
 export type TreeTranslationsData = {
@@ -171,6 +172,7 @@ export type ObserverOptions = {
   targetElement: HTMLElement;
   inputPrefix: string;
   inputSuffix: string;
+  passToParent: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean);
 };
 
 export type ObserverOptionsInitial = Partial<ObserverOptions>;

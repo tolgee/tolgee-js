@@ -48,11 +48,9 @@ export const PluginService = (
     defaultValue,
     noWrap,
     params,
+    orEmpty,
   }: TranslateProps) => {
-    if (!translation) {
-      return key;
-    }
-    let result = translation;
+    let result = translation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
       result = instances.observer.wrap({
         key,
@@ -61,7 +59,7 @@ export const PluginService = (
         params,
       });
     }
-    if (instances.formatter) {
+    if (instances.formatter && translation) {
       result = instances.formatter.format({
         translation: result,
         language: getLocale(),

@@ -17,6 +17,7 @@ const defaultOptions: ObserverOptions = {
   targetElement: document.body,
   inputPrefix: '%-%tolgee:',
   inputSuffix: '%-%',
+  passToParent: ['option', 'optgroup'],
 };
 
 export const initOptions = (

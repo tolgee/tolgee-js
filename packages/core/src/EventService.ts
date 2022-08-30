@@ -11,6 +11,7 @@ export const EventService = () => {
     type: 'language' | 'key';
   }>();
 
+  onInitialLoaded.listen(() => onKeyUpdate.emit({ type: 'language' }));
   onLanguageChange.listen(() => onKeyUpdate.emit({ type: 'language' }));
   onKeyChange.listen((key) => onKeyUpdate.emit({ type: 'key' }, key));
 

@@ -1,8 +1,14 @@
 import { TOLGEE_ATTRIBUTE_NAME } from '../../constants';
-import { NodeMeta, ObserverOptions, TolgeeElement } from '../../types';
+import {
+  ElementMeta,
+  NodeMeta,
+  ObserverOptions,
+  TolgeeElement,
+} from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStore } from './ElementStore';
+import { nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export const ElementRegistry = (options: ObserverOptions) => {
@@ -29,72 +35,78 @@ export const ElementRegistry = (options: ObserverOptions) => {
     elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
   }
 
-  // function refreshAll() {
-  //   for (const element of registredElements) {
-  //     if (!element._tolgee.preventClean) {
-  //       cleanElementInactiveNodes(element);
-  //       if (
-  //         element._tolgee.nodes.size === 0 &&
-  //         !element._tolgee.wrappedWithElementOnlyKey
-  //       ) {
-  //         cleanElement(element);
-  //       }
-  //     }
-  //   }
-  // }
+  function stop() {
+    eventHandler.stop();
+  }
 
-  // function cleanAll() {
-  //   for (const registeredElement of registredElements) {
-  //     cleanElement(registeredElement);
-  //   }
-  // }
+  function refreshAll() {
+    elementStore.forEachElement((element, meta) => {
+      if (!meta.preventClean) {
+        cleanElementInactiveNodes(element, meta);
+        if (meta.nodes.size === 0 && !meta.wrappedWithElementOnlyKey) {
+          cleanElement(element, meta);
+        }
+      }
+    });
+  }
 
-  // function findAllByKey(key: string) {
-  //   const result: ElementWithMeta[] = [];
-  //   for (const registeredElement of registredElements) {
-  //     if (registeredElement._tolgee.wrappedWithElementOnlyKey === key) {
-  //       result.push(registeredElement);
-  //       continue;
-  //     }
-  //     for (const node of registeredElement._tolgee.nodes) {
-  //       if (
-  //         node._tolgee.keys.findIndex(
-  //           (keyWithParams) => keyWithParams.key === key
-  //         ) > -1
-  //       ) {
-  //         result.push(registeredElement);
-  //         break;
-  //       }
-  //     }
-  //   }
-  //   return result;
-  // }
+  function findAllByKey(key: string) {
+    const result: TolgeeElement[] = [];
+    elementStore.forEachElement((element, meta) => {
+      if (meta.wrappedWithElementOnlyKey === key) {
+        result.push(element);
+        return;
+      }
+      for (const nodeMeta of meta.nodes.values()) {
+        if (
+          nodeMeta.keys.findIndex(
+            (keyWithParams) => keyWithParams.key === key
+          ) > -1
+        ) {
+          result.push(element);
+          break;
+        }
+      }
+    });
+    return result;
+  }
 
-  // function cleanElementInactiveNodes(element: ElementWithMeta) {
-  //   if (isElementActive(element)) {
-  //     element._tolgee.nodes = new Set(getActiveNodes(element));
-  //     return;
-  //   }
-  // }
+  function cleanElementInactiveNodes(
+    element: TolgeeElement,
+    meta: ElementMeta
+  ) {
+    if (isElementActive(element)) {
+      meta.nodes = new Map(getActiveNodes(meta));
+      return;
+    }
+  }
 
-  // function cleanElement(element: ElementWithMeta) {
-  //   if (!element._tolgee.preventClean) {
-  //     if (element._tolgee.highlightEl) {
-  //       element._tolgee.unhighlight?.();
-  //     }
-  //     element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
-  //     // @ts-ignore
-  //     delete element._tolgee;
-  //     registredElements.delete(element);
-  //   }
-  // }
+  function* getActiveNodes(meta: ElementMeta) {
+    for (const [node, nodeMeta] of meta.nodes.entries()) {
+      if (nodeContains(options.targetElement, node)) {
+        yield [node, nodeMeta] as const;
+      }
+    }
+  }
 
-  // function isElementActive(element: ElementWithMeta) {
-  //   return options.targetElement.contains(element);
-  // }
+  function cleanElement(element: TolgeeElement, meta: ElementMeta) {
+    if (!meta.preventClean) {
+      if (meta.highlightEl) {
+        meta.unhighlight?.();
+      }
+      element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
+      elementStore.remove(element);
+    }
+  }
+
+  function isElementActive(element: TolgeeElement) {
+    return options.targetElement.contains(element);
+  }
 
   return Object.freeze({
     register,
     forEachElement: elementStore.forEachElement,
+    refreshAll,
+    stop,
   });
 };
