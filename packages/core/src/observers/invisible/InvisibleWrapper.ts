@@ -55,14 +55,14 @@ export const InvisibleWrapper = (): WrapperInterface => {
   };
 
   const getTextXPath = () => {
-    return `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+    return `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
   };
 
   const getAttributeXPath: WrapperAttributeXPathGetter = ({
     tag,
     attribute,
   }) => {
-    return `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+    return `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
   };
 
   return Object.freeze({
