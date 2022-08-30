@@ -13,7 +13,7 @@ export const GeneralObserver = (
 
   const domHelper = DomHelper(options);
   const nodeHandler = NodeHandler(options, wrapper);
-  const elementRegistrar = ElementRegistry(options);
+  const elementRegistry = ElementRegistry(options);
 
   function handleNodes(nodes: Array<Text | Attr>) {
     for (const textNode of nodes) {
@@ -24,7 +24,7 @@ export const GeneralObserver = (
         setNodeText(textNode, text);
         const nodeMeta = initNodeMeta(oldTextContent!, keys);
         const parentElement = domHelper.getSuitableParent(textNode);
-        elementRegistrar.register(parentElement, textNode, nodeMeta);
+        elementRegistry.register(parentElement, textNode, nodeMeta);
       }
     }
   }
@@ -49,6 +49,7 @@ export const GeneralObserver = (
           break;
       }
       handleNodes(result);
+      elementRegistry.refreshAll();
     }
   });
 
@@ -62,13 +63,14 @@ export const GeneralObserver = (
   const stop = () => {
     isObserving = false;
     observer?.disconnect();
+    elementRegistry.stop();
   };
 
   return Object.freeze({
     stop,
     wrap: wrapper.wrap,
     unwrap: wrapper.unwrap,
-    forEachElement: elementRegistrar.forEachElement,
+    forEachElement: elementRegistry.forEachElement,
   });
 };
 

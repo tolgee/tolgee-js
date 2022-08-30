@@ -116,7 +116,7 @@ export const StateService = (
     state.pendingLanguage = language;
     eventService.onPendingLanguageChange.emit(language);
 
-    loadRequiredRecords(language);
+    await loadRequiredRecords(language);
 
     if (language === state.pendingLanguage) {
       // there might be parallel language change

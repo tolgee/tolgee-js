@@ -1,6 +1,6 @@
 import { ObserverOptions } from '../../types';
 
-export const DomHelper = (options: ObserverOptions | undefined) => {
+export const DomHelper = (options: ObserverOptions) => {
   function getParentElement(node: Node): Element | undefined {
     if (node.parentElement) {
       return node.parentElement;
@@ -19,25 +19,25 @@ export const DomHelper = (options: ObserverOptions | undefined) => {
       throw new Error('No suitable parent found for node above.');
     }
 
-    // if (!this.properties.config.passToParent) {
-    return domParent;
-    // }
+    if (!options.passToParent) {
+      return domParent;
+    }
 
-    // if (Array.isArray(this.properties.config.passToParent)) {
-    //   const tagNameEquals = (elementTagName: string) =>
-    //     domParent.tagName.toLowerCase() === elementTagName.toLowerCase();
-    //   if (this.properties.config.passToParent.findIndex(tagNameEquals) === -1) {
-    //     return domParent;
-    //   }
-    // }
+    if (Array.isArray(options.passToParent)) {
+      const tagNameEquals = (elementTagName: string) =>
+        domParent.tagName.toLowerCase() === elementTagName.toLowerCase();
+      if (options.passToParent.findIndex(tagNameEquals) === -1) {
+        return domParent;
+      }
+    }
 
-    // if (typeof this.properties.config.passToParent === 'function') {
-    //   if (!this.properties.config.passToParent(domParent)) {
-    //     return domParent;
-    //   }
-    // }
+    if (typeof options.passToParent === 'function') {
+      if (!options.passToParent(domParent)) {
+        return domParent;
+      }
+    }
 
-    // return getSuitableParent(domParent);
+    return getSuitableParent(domParent);
   }
 
   return Object.freeze({

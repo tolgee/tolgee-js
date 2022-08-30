@@ -12,19 +12,19 @@ import {
 export const Tolgee = (options?: Options): TolgeeInstance => {
   const eventService = EventService();
   const stateService = StateService(eventService, options || {});
-  const pluginService = PluginService(stateService.getLanguage, (params) =>
-    instant(params)
-  );
+  const pluginService = PluginService(stateService.getLanguage, instant);
 
-  const instant = (params: TranslateProps) => {
+  function instant(params: TranslateProps) {
     const translation = stateService.getTranslation(
       params.key,
       params.namespace
     );
     return pluginService.formatTranslation({ ...params, translation });
-  };
+  }
 
-  eventService.onLanguageChange.listen(pluginService.retranslate);
+  eventService.onKeyUpdate.listenAll((e) => {
+    pluginService.retranslate();
+  });
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners

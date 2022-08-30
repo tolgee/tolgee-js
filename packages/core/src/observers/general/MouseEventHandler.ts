@@ -1,4 +1,4 @@
-import { ModifierKey, TolgeeElement } from '../../types';
+import { ElementMeta, ModifierKey, TolgeeElement } from '../../types';
 import { DEVTOOLS_ID } from '../../constants';
 import { ElementStoreType } from './ElementStore';
 
@@ -19,7 +19,7 @@ type Coordinates = {
 type Props = {
   highlightKeys: ModifierKey[];
   elementStore: ElementStoreType;
-  onClick: (el: TolgeeElement) => void;
+  onClick: (el: TolgeeElement, meta: ElementMeta) => void;
 };
 
 export const MouseEventHandler = ({
@@ -119,7 +119,8 @@ export const MouseEventHandler = ({
     if (areKeysDown()) {
       const element = getClosestTolgeeElement(e.target as TolgeeElement);
       if (element && element === highlighted) {
-        onClick(element);
+        const meta = elementStore.get(element);
+        onClick(element, meta!);
         unhighlight();
       }
     }
