@@ -1,5 +1,6 @@
 import { ObserverOptions, ObserverPlugin } from '../types';
 import { GeneralObserver } from './general/GeneralObserver';
+import { setNodeText } from './general/helpers';
 import { initOptions } from './general/initOptions';
 import { TextWrapper } from './text/TextWrapper';
 
@@ -12,5 +13,26 @@ export const TextObserver =
       inputSuffix: observerOptions.inputSuffix,
       translate,
     });
-    return GeneralObserver(wrapper, observerOptions);
+    const { wrap, unwrap, stop, forEachElement } = GeneralObserver(
+      wrapper,
+      observerOptions
+    );
+
+    const retranslate = () => {
+      forEachElement((_, elMeta) => {
+        for (const [node, nodeMeta] of elMeta.nodes.entries()) {
+          const result = wrapper.unwrap(nodeMeta.oldTextContent);
+          if (result) {
+            setNodeText(node, result.text);
+          }
+        }
+      });
+    };
+
+    return {
+      wrap,
+      unwrap,
+      stop,
+      retranslate,
+    };
   };

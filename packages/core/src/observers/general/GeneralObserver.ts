@@ -68,7 +68,7 @@ export const GeneralObserver = (
     stop,
     wrap: wrapper.wrap,
     unwrap: wrapper.unwrap,
-    isObserving: () => isObserving,
+    forEachElement: elementRegistrar.forEachElement,
   });
 };
 

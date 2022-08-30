@@ -15,10 +15,16 @@ export const ElementStore = () => {
     return registredElements.delete(el);
   }
 
+  function forEachElement(
+    callback: (el: TolgeeElement, meta: ElementMeta) => void
+  ) {
+    registredElements.forEach((value, key) => callback(key, value));
+  }
   return Object.freeze({
     set,
     get,
     remove,
+    forEachElement,
   });
 };
 

@@ -6,6 +6,17 @@ type HandlerWrapperType<T> = {
 
 export const EventEmitterSelective = <T>() => {
   let handlers: HandlerWrapperType<T>[] = [];
+  let allListeners: HandlerType<T>[] = [];
+
+  const listenAll = (handler: HandlerType<T>) => {
+    allListeners.push(handler);
+
+    const result = {
+      unsubscribe: () => {
+        allListeners = allListeners.filter((i) => handler !== i);
+      },
+    };
+  };
 
   const listen = (handler: HandlerType<T>) => {
     const handlerWrapper = {
@@ -35,6 +46,9 @@ export const EventEmitterSelective = <T>() => {
   };
 
   const emit = (data: T, key?: string) => {
+    allListeners.forEach((handler) => {
+      handler(data);
+    });
     handlers.forEach((handler) => {
       if (!key || handler.keys.has(key)) {
         handler.fn(data);
@@ -42,7 +56,7 @@ export const EventEmitterSelective = <T>() => {
     });
   };
 
-  return Object.freeze({ listen, emit });
+  return Object.freeze({ listen, listenAll, emit });
 };
 
 export type EventEmitterSelectiveType<T> = ReturnType<

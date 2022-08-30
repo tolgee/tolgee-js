@@ -17,7 +17,9 @@ const testObserver: ObserverPlugin = () => {
 
   const stop = () => {};
 
-  return Object.freeze({ wrap, unwrap, stop });
+  const retranslate = () => {};
+
+  return Object.freeze({ wrap, unwrap, stop, retranslate });
 };
 
 const testFormat: FormatPlugin = () => {
