@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.5](https://github.com/tolgee/tolgee-js/compare/v4.8.4...v4.8.5) (2022-08-30)
+
+
+### Bug Fixes
+
+* Svelte with auto/node adapter (Rename UI esm build to .mjs) ([28329d3](https://github.com/tolgee/tolgee-js/commit/28329d316bff55c5daff520b0f90ece941ac57cd))
+
+
+
+
+
 ## [4.8.4](https://github.com/tolgee/tolgee-js/compare/v4.8.3...v4.8.4) (2022-08-29)
 
 

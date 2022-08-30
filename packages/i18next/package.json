@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/i18next",
-  "version": "4.8.4",
+  "version": "4.8.5",
   "description": "Tolgee i18n integration.",
   "main": "index.js",
   "module": "./dist/tolgee-i18next.esm.js",
@@ -71,6 +71,6 @@
   },
   "dependencies": {
     "@tolgee/core": "^4.8.0",
-    "@tolgee/ui": "^4.8.4"
+    "@tolgee/ui": "^4.8.5"
   }
 }
