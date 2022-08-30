@@ -1,7 +1,6 @@
 import { ObserverOptions, ObserverPlugin } from '../types';
 import { GeneralObserver } from './general/GeneralObserver';
 import { initOptions } from './general/initOptions';
-import { NodeHandler } from './text/NodeHandler';
 import { TextWrapper } from './text/TextWrapper';
 
 export const TextObserver =
@@ -13,5 +12,5 @@ export const TextObserver =
       inputSuffix: observerOptions.inputSuffix,
       translate,
     });
-    return GeneralObserver(wrapper, NodeHandler, observerOptions);
+    return GeneralObserver(wrapper, observerOptions);
   };

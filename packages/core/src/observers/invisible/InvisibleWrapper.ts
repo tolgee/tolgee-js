@@ -1,14 +1,21 @@
-import { KeyAndParams, Unwrapped, WrapperPlugin } from '../../types';
+import {
+  WrapperAttributeXPathGetter,
+  KeyAndParams,
+  Unwrapped,
+  WrapperInterface,
+  WrapperWrapFunction,
+} from '../../types';
 import {
   decodeFromText,
   encodeMessage,
+  INVISIBLE_CHARACTERS,
   removeSecrets,
   stringToCodePoints,
 } from './secret';
 
 import { ValueMemory } from './ValueMemory';
 
-export const InvisibleWrapper: WrapperPlugin = () => {
+export const InvisibleWrapper = (): WrapperInterface => {
   const keyMemory = new ValueMemory();
   const defaultMemory = new ValueMemory();
 
@@ -35,12 +42,7 @@ export const InvisibleWrapper: WrapperPlugin = () => {
     return { text: result, keys: keysAndParams };
   };
 
-  const wrap = (
-    key: string,
-    translation: string,
-    _params: Record<string, any> = {},
-    defaultValue: string | undefined = undefined
-  ) => {
+  const wrap: WrapperWrapFunction = ({ key, defaultValue, translation }) => {
     const codes = [keyMemory.valueToNumber(key)];
     if (defaultValue) {
       codes.push(defaultMemory.valueToNumber(defaultValue));
@@ -52,8 +54,21 @@ export const InvisibleWrapper: WrapperPlugin = () => {
     return typeof value === 'string' ? value + invisibleMark : value;
   };
 
+  const getTextXPath = () => {
+    return `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+  };
+
+  const getAttributeXPath: WrapperAttributeXPathGetter = ({
+    tag,
+    attribute,
+  }) => {
+    return `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+  };
+
   return Object.freeze({
     unwrap,
     wrap,
+    getTextXPath,
+    getAttributeXPath,
   });
 };

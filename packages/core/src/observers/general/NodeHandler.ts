@@ -1,11 +1,13 @@
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '../../constants';
-import { ObserverOptions } from '../../types';
+import { ObserverOptions, WrapperInterface } from '../../types';
 import { filterRestricted, xPathEvaluate } from '../general/helpers';
-import { INVISIBLE_CHARACTERS } from './secret';
 
-export const NodeHandler = (options: ObserverOptions) => {
+export const NodeHandler = (
+  options: ObserverOptions,
+  wrapper: WrapperInterface
+) => {
   const handleText = (node: Node) => {
-    const xPath = `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+    const xPath = wrapper.getTextXPath();
     const nodes = xPathEvaluate(xPath, node);
     const filtered: Text[] = filterRestricted(nodes as Text[]);
 
@@ -16,7 +18,7 @@ export const NodeHandler = (options: ObserverOptions) => {
     let result: Attr[] = [];
     for (const [tag, attributes] of Object.entries(options.tagAttributes)) {
       for (const attribute of attributes) {
-        const expression = `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}')]`;
+        const expression = wrapper.getAttributeXPath({ tag, attribute });
         const nodes = xPathEvaluate(expression, node) as Attr[];
         result = [...result, ...nodes];
       }

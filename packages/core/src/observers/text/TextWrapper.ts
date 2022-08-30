@@ -1,8 +1,10 @@
 import {
   KeyAndParams,
   TranslateProps,
-  TranslationParams,
-  Unwrapped,
+  WrapperAttributeXPathGetter,
+  WrapperInterface,
+  WrapperUnwrapFunction,
+  WrapperWrapFunction,
 } from '../../types';
 import { isCharEscaped } from './helpers';
 
@@ -12,7 +14,11 @@ type Props = {
   translate: (params: TranslateProps) => string;
 };
 
-export const TextWrapper = ({ inputPrefix, inputSuffix, translate }: Props) => {
+export const TextWrapper = ({
+  inputPrefix,
+  inputSuffix,
+  translate,
+}: Props): WrapperInterface => {
   function getRawUnWrapRegex(): string {
     const escapedPrefix = escapeForRegExp(inputPrefix);
     const escapedSuffix = escapeForRegExp(inputSuffix);
@@ -94,7 +100,7 @@ export const TextWrapper = ({ inputPrefix, inputSuffix, translate }: Props) => {
     return result;
   }
 
-  function unwrap(text: string): Unwrapped {
+  const unwrap: WrapperUnwrapFunction = (text: string) => {
     const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
 
     const keysAndParams: KeyAndParams[] = [];
@@ -139,15 +145,10 @@ export const TextWrapper = ({ inputPrefix, inputSuffix, translate }: Props) => {
     }
 
     return { text: text, keys: [] };
-  }
+  };
 
-  function wrap(
-    key: string,
-    _translation: string,
-    params: TranslationParams = {},
-    defaultValue: string | undefined = undefined
-  ): string {
-    let paramString = Object.entries(params)
+  const wrap: WrapperWrapFunction = ({ key, params, defaultValue }): string => {
+    let paramString = Object.entries(params || {})
       .map(
         ([name, value]) =>
           `${escapeParam(name)}:${escapeParam(value as string)}`
@@ -161,7 +162,7 @@ export const TextWrapper = ({ inputPrefix, inputSuffix, translate }: Props) => {
     return `${inputPrefix}${escapeParam(
       key
     )}${defaultString}${paramString}${inputSuffix}`;
-  }
+  };
 
   function getTranslatedWithMetadata(text: string) {
     const { key, params, defaultValue } = parseUnwrapped(text);
@@ -187,8 +188,21 @@ export const TextWrapper = ({ inputPrefix, inputSuffix, translate }: Props) => {
     return param;
   };
 
+  const getTextXPath = () => {
+    return `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+  };
+
+  const getAttributeXPath: WrapperAttributeXPathGetter = ({
+    tag,
+    attribute,
+  }) => {
+    return `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+  };
+
   return Object.freeze({
     wrap,
     unwrap,
+    getTextXPath,
+    getAttributeXPath,
   });
 };

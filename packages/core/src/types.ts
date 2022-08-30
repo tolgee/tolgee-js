@@ -56,14 +56,19 @@ export type TranslationParams = {
   [key: string]: string | number | bigint;
 };
 
-export type WrapperPlugin = () => {
-  unwrap: (text: string) => Unwrapped;
-  wrap: (
-    key: string,
-    translation: string,
-    params?: Record<string, any>,
-    defaultValue?: string | undefined
-  ) => string;
+export type WrapperWrapFunction = (props: TranslateProps) => string;
+export type WrapperUnwrapFunction = (text: string) => Unwrapped;
+
+export type WrapperAttributeXPathGetter = (props: {
+  tag: string;
+  attribute: string;
+}) => string;
+
+export type WrapperInterface = {
+  unwrap: WrapperUnwrapFunction;
+  wrap: WrapperWrapFunction;
+  getTextXPath: () => string;
+  getAttributeXPath: WrapperAttributeXPathGetter;
 };
 
 export type FormatterPluginFormatParams = {
@@ -80,9 +85,9 @@ export type ObserverProps = {
   translate: (params: TranslateProps) => string;
 };
 
-export type ObserverPlugin = (
-  props: ObserverProps
-) => ReturnType<WrapperPlugin> & {
+export type ObserverPlugin = (props: ObserverProps) => {
+  unwrap: (text: string) => Unwrapped;
+  wrap: (props: TranslateProps) => string;
   stop: () => void;
 };
 
