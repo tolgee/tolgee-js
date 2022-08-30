@@ -3,10 +3,11 @@ import {
   FormatPlugin,
   FormatterPluginFormatParams,
   ObserverPlugin,
+  WrapperWrapFunction,
 } from '../types';
 
 const testObserver: ObserverPlugin = () => {
-  const wrap = (key: string, translation: string) => {
+  const wrap: WrapperWrapFunction = ({ key, translation }) => {
     return `${key}|${translation}`;
   };
   const unwrap = (input: string) => {

@@ -7,7 +7,7 @@ describe('invisible wrapper', () => {
     const translation = 'world';
     const defaultValue = '!';
 
-    const wrapped = wrapper.wrap(key, translation, undefined, defaultValue);
+    const wrapped = wrapper.wrap({ key, translation, defaultValue });
     const unwraped = wrapper.unwrap(wrapped);
     expect(unwraped.text).toEqual(translation);
     expect(unwraped.keys[0].key).toEqual(key);

@@ -1,24 +1,18 @@
-import { ObserverOptions, WrapperPlugin } from '../../types';
+import { ObserverOptions, WrapperInterface } from '../../types';
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry } from './ElementRegistry';
 import { getNodeText, setNodeText } from './helpers';
-
-type NodeHandlerType = (options: ObserverOptions) => {
-  handleAttributes: (node: Node) => Attr[];
-  handleChildList: (node: Node) => (Text | Attr)[];
-  handleText: (node: Node) => Text[];
-};
+import { NodeHandler } from './NodeHandler';
 
 export const GeneralObserver = (
-  wrapper: ReturnType<WrapperPlugin>,
-  NodeHandler: NodeHandlerType,
+  wrapper: WrapperInterface,
   options: ObserverOptions
 ) => {
   let isObserving = true;
 
   const domHelper = DomHelper(options);
-  const nodeHandler = NodeHandler(options);
+  const nodeHandler = NodeHandler(options, wrapper);
   const elementRegistrar = ElementRegistry(options);
 
   function handleNodes(nodes: Array<Text | Attr>) {
