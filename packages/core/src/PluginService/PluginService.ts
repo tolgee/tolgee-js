@@ -71,6 +71,10 @@ export const PluginService = (
     return result;
   };
 
+  const retranslate = () => {
+    instances.observer?.retranslate();
+  };
+
   return Object.freeze({
     getFormat,
     setFormat,
@@ -79,6 +83,7 @@ export const PluginService = (
     setObserver,
     run,
     stop,
+    retranslate,
   });
 };
 

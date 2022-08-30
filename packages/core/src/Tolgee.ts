@@ -24,6 +24,8 @@ export const Tolgee = (options?: Options): TolgeeInstance => {
     return pluginService.formatTranslation({ ...params, translation });
   };
 
+  eventService.onLanguageChange.listen(pluginService.retranslate);
+
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     onLanguageChange: eventService.onLanguageChange,

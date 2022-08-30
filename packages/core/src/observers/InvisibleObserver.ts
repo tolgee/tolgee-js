@@ -8,5 +8,6 @@ export const InvisibleObserver =
   () => {
     const observerOptions = initOptions(options);
     const wrapper = InvisibleWrapper();
-    return GeneralObserver(wrapper, observerOptions);
+    const observer = GeneralObserver(wrapper, observerOptions);
+    return { ...observer, retranslate: () => {} };
   };

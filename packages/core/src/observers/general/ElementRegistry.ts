@@ -95,5 +95,6 @@ export const ElementRegistry = (options: ObserverOptions) => {
 
   return Object.freeze({
     register,
+    forEachElement: elementStore.forEachElement,
   });
 };

@@ -88,6 +88,7 @@ export type ObserverProps = {
 export type ObserverPlugin = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
   wrap: (props: TranslateProps) => string;
+  retranslate: () => void;
   stop: () => void;
 };
 
@@ -122,7 +123,7 @@ export type TolgeeInstance = Readonly<{
   ) => Promise<TreeTranslationsData | TranslationsFlat | undefined>;
   isLoading: () => boolean;
   isFetching: () => boolean;
-  init: (options: Options) => Readonly<any>;
+  init: (options: Options) => Readonly<TolgeeInstance>;
   run: () => Promise<void>;
   stop: () => void;
   instant: (key: string, namespace?: string) => string;
