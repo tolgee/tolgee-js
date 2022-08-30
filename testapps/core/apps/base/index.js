@@ -1,9 +1,9 @@
-import { InvisibleWrapper, Tolgee, InvisibleObserver } from '@tolgee/core';
+import { Tolgee, TextObserver } from '@tolgee/core';
 
 const bundleDivElement = document.createElement('div');
 
 const tolgee = Tolgee()
-  .setObserver(InvisibleObserver())
+  .setObserver(TextObserver())
   .init({
     targetElement: bundleDivElement,
     staticData: {

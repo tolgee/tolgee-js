@@ -1,6 +1,9 @@
-import { FormatPlugin, ObserverPlugin } from '../types';
+import { FormatPlugin, ObserverPlugin, TranslateProps } from '../types';
 
-export const PluginService = (getLocale: () => string) => {
+export const PluginService = (
+  getLocale: () => string,
+  translate: (params: TranslateProps) => string
+) => {
   const plugins = {
     formatter: undefined as FormatPlugin | undefined,
     observer: undefined as ObserverPlugin | undefined,
@@ -12,7 +15,7 @@ export const PluginService = (getLocale: () => string) => {
   };
 
   const run = () => {
-    instances.observer = plugins?.observer?.();
+    instances.observer = plugins?.observer?.({ translate });
   };
 
   const stop = () => {
@@ -39,16 +42,22 @@ export const PluginService = (getLocale: () => string) => {
     }
   };
 
-  const formatTranslation = (
-    key: string,
-    translation: string | undefined,
-    defaultValue?: string
-  ) => {
+  const formatTranslation = ({
+    key,
+    translation,
+    defaultValue,
+    noWrap,
+  }: {
+    key: string;
+    translation?: string;
+    defaultValue?: string;
+    noWrap?: boolean;
+  }) => {
     if (!translation) {
       return key;
     }
     let result = translation;
-    if (instances.observer) {
+    if (instances.observer && !noWrap) {
       result = instances.observer.wrap(key, result, undefined, defaultValue);
     }
     if (instances.formatter) {

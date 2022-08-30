@@ -1,18 +1,6 @@
-import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
-import { ElementMeta, ElementWithMeta, ObserverOptions } from '../types';
+import { ObserverOptions } from '../../types';
 
 export const DomHelper = (options: ObserverOptions | undefined) => {
-  function initParentElement(element: Element): ElementWithMeta {
-    if ((element as ElementWithMeta)[TOLGEE_ATTRIBUTE_NAME] === undefined) {
-      (element as ElementWithMeta)[TOLGEE_ATTRIBUTE_NAME] = {
-        nodes: new Set(),
-      } as ElementMeta;
-      element.setAttribute(TOLGEE_ATTRIBUTE_NAME, '');
-    }
-
-    return element as ElementWithMeta;
-  }
-
   function getParentElement(node: Node): Element | undefined {
     if (node.parentElement) {
       return node.parentElement;
@@ -20,11 +8,6 @@ export const DomHelper = (options: ObserverOptions | undefined) => {
     if ((node as Attr).ownerElement) {
       return (node as Attr).ownerElement || undefined;
     }
-  }
-
-  function getAndInitParent(node: Node) {
-    const parent = getSuitableParent(node);
-    return initParentElement(parent);
   }
 
   function getSuitableParent(node: Node): Element {
@@ -58,7 +41,6 @@ export const DomHelper = (options: ObserverOptions | undefined) => {
   }
 
   return Object.freeze({
-    getAndInitParent,
     getSuitableParent,
   });
 };

@@ -6,6 +6,15 @@ export type { State, Options } from './StateService/initState';
 export type { EventEmitterType } from './EventEmitter';
 export type { EventEmitterSelectiveType } from './EventEmitterSelective';
 
+export type TranslateProps = {
+  key: string;
+  params?: TranslationParams;
+  translation?: string;
+  defaultValue?: string;
+  namespace?: string;
+  noWrap?: boolean;
+};
+
 export type TreeTranslationsData = {
   [key: string]: string | TreeTranslationsData;
 };
@@ -41,15 +50,14 @@ export type KeyAndParams = {
   defaultValue?: string;
 };
 
+export type Unwrapped = { text: string; keys: KeyAndParams[] };
+
 export type TranslationParams = {
   [key: string]: string | number | bigint;
 };
 
 export type WrapperPlugin = () => {
-  unwrap: (text: string) => {
-    text: string;
-    keys: KeyAndParams[];
-  };
+  unwrap: (text: string) => Unwrapped;
   wrap: (
     key: string,
     translation: string,
@@ -68,7 +76,13 @@ export type FormatPlugin = () => {
   format: (props: FormatterPluginFormatParams) => string;
 };
 
-export type ObserverPlugin = () => ReturnType<WrapperPlugin> & {
+export type ObserverProps = {
+  translate: (params: TranslateProps) => string;
+};
+
+export type ObserverPlugin = (
+  props: ObserverProps
+) => ReturnType<WrapperPlugin> & {
   stop: () => void;
 };
 
@@ -109,33 +123,19 @@ export type TolgeeInstance = Readonly<{
   instant: (key: string, namespace?: string) => string;
 }>;
 
-export type TranslationParamsTags<T> = {
-  [key: string]: string | number | bigint | ((value: T | T[]) => T);
-};
-
 export type NodeLock = {
   locked?: boolean;
 };
 
-export type KeyAndParamsTags<T> = {
-  key: string;
-  params: TranslationParamsTags<T>;
-  defaultValue?: string;
-};
-
 export type NodeMeta = {
   oldTextContent: string;
-  keys: KeyAndParamsTags<any>[];
-} & NodeLock;
-
-export type NodeWithMeta = Node & {
-  _tolgee: NodeMeta;
+  keys: KeyAndParams[];
 };
 
 export type ElementMeta = {
   wrappedWithElementOnlyKey?: string;
   wrappedWithElementOnlyDefaultHtml?: string;
-  nodes: Set<NodeWithMeta>;
+  nodes: Map<Node, NodeMeta>;
   highlightEl?: HTMLDivElement;
   highlight?: () => void;
   unhighlight?: () => void;
@@ -152,9 +152,9 @@ export type ElementMeta = {
   preventClean?: boolean;
 };
 
-export type ElementWithMeta = Element &
+export type TolgeeElement = Element &
   ElementCSSInlineStyle & {
-    _tolgee: ElementMeta;
+    _tolgee?: boolean;
   };
 
 export type ObserverOptions = {
@@ -163,15 +163,13 @@ export type ObserverOptions = {
   highlightColor: string;
   highlightWidth: number;
   targetElement: HTMLElement;
+  inputPrefix: string;
+  inputSuffix: string;
 };
 
-export type ObserverOptionsInitial = {
-  tagAttributes?: { [key: string]: string[] };
-  highlightKeys?: ModifierKey[];
-  targetElement?: HTMLElement;
-  highlightColor?: string;
-  highlightWidth?: number;
-};
+export type ObserverOptionsInitial = Partial<ObserverOptions>;
+
+export type RegistredElementsMap = Map<TolgeeElement, ElementMeta>;
 
 export enum ModifierKey {
   Alt,
