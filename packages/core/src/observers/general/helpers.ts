@@ -1,8 +1,4 @@
-import {
-  RESTRICTED_ASCENDANT_ATTRIBUTE,
-  TOLGEE_ATTRIBUTE_NAME,
-} from '../constants';
-import { KeyAndParams, NodeWithMeta } from '../types';
+import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '../../constants';
 
 export function xPathEvaluate<T extends Node>(
   expression: string,
@@ -49,19 +45,6 @@ export function getNodeText(node: Node) {
 
 export function setNodeText(node: Node, text: string) {
   node.textContent = text;
-}
-
-export function translateChildNode(
-  node: Text | Attr,
-  newValue: string,
-  keys: KeyAndParams[]
-) {
-  (node as any)[TOLGEE_ATTRIBUTE_NAME] = {
-    oldTextContent: getNodeText(node),
-    keys,
-  };
-  setNodeText(node, newValue);
-  return node as Node as NodeWithMeta;
 }
 
 export function nodeContains(descendant: Node, node: Node) {

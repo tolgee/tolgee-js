@@ -1,12 +1,28 @@
 import { EventService } from './EventService';
 import { PluginService } from './PluginService/PluginService';
 import { StateService } from './StateService/StateService';
-import { FormatPlugin, ObserverPlugin, Options, TolgeeInstance } from './types';
+import {
+  FormatPlugin,
+  ObserverPlugin,
+  Options,
+  TolgeeInstance,
+  TranslateProps,
+} from './types';
 
 export const Tolgee = (options?: Options): TolgeeInstance => {
   const eventService = EventService();
   const stateService = StateService(eventService, options || {});
-  const pluginService = PluginService(stateService.getLanguage);
+  const pluginService = PluginService(stateService.getLanguage, (params) =>
+    instant(params)
+  );
+
+  const instant = (params: TranslateProps) => {
+    const translation = stateService.getTranslation(
+      params.key,
+      params.namespace
+    );
+    return pluginService.formatTranslation({ ...params, translation });
+  };
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
@@ -50,7 +66,7 @@ export const Tolgee = (options?: Options): TolgeeInstance => {
     },
     instant: (key: string, namespace?: string) => {
       const translation = stateService.getTranslation(key, namespace);
-      return pluginService.formatTranslation(key, translation);
+      return pluginService.formatTranslation({ key, translation });
     },
   });
   return tolgee;

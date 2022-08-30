@@ -1,4 +1,4 @@
-import { KeyAndParams, WrapperPlugin } from '../../types';
+import { KeyAndParams, Unwrapped, WrapperPlugin } from '../../types';
 import {
   decodeFromText,
   encodeMessage,
@@ -12,7 +12,7 @@ export const InvisibleWrapper: WrapperPlugin = () => {
   const keyMemory = new ValueMemory();
   const defaultMemory = new ValueMemory();
 
-  const unwrap = (text: string) => {
+  const unwrap = (text: string): Unwrapped => {
     const keysAndParams = [] as KeyAndParams[];
     const messages = decodeFromText(text);
 

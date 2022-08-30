@@ -1,5 +1,5 @@
-import { ElementWithMeta } from '../types';
-import { TOLGEE_HIGHLIGHTER_CLASS } from '../constants';
+import { TOLGEE_HIGHLIGHTER_CLASS } from '../../constants';
+import { ElementMeta, TolgeeElement } from '../../types';
 
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
   pointerEvents: 'none',
@@ -21,12 +21,15 @@ export const ElementHighlighter = ({
   highlightColor,
   highlightWidth,
 }: Props) => {
-  function initHighlightFunction(element: ElementWithMeta) {
-    element._tolgee.highlight = () => {
+  function initHighlightFunction(
+    element: TolgeeElement,
+    elementMeta: ElementMeta
+  ) {
+    elementMeta.highlight = () => {
       if (!element.isConnected) {
         return;
       }
-      let highlightEl = element._tolgee.highlightEl;
+      let highlightEl = elementMeta.highlightEl;
       if (!highlightEl) {
         highlightEl = document.createElement('div');
         highlightEl.classList.add(TOLGEE_HIGHLIGHTER_CLASS);
@@ -36,7 +39,7 @@ export const ElementHighlighter = ({
         });
         highlightEl.style.borderColor = highlightColor;
 
-        element._tolgee.highlightEl = highlightEl;
+        elementMeta.highlightEl = highlightEl;
         document.body.appendChild(highlightEl);
       }
 
@@ -50,16 +53,19 @@ export const ElementHighlighter = ({
     };
   }
 
-  function initUnhighlightFunction(element: ElementWithMeta) {
-    element._tolgee.unhighlight = () => {
-      element._tolgee.highlightEl?.remove();
-      element._tolgee.highlightEl = undefined;
+  function initUnhighlightFunction(
+    element: TolgeeElement,
+    elementMeta: ElementMeta
+  ) {
+    elementMeta.unhighlight = () => {
+      elementMeta.highlightEl?.remove();
+      elementMeta.highlightEl = undefined;
     };
   }
 
-  function initHighlighter(element: ElementWithMeta) {
-    initHighlightFunction(element);
-    initUnhighlightFunction(element);
+  function initHighlighter(element: TolgeeElement, elementMeta: ElementMeta) {
+    initHighlightFunction(element, elementMeta);
+    initUnhighlightFunction(element, elementMeta);
   }
 
   return Object.freeze({ initHighlighter });

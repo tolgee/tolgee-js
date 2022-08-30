@@ -1,5 +1,6 @@
-import { ElementMeta, ElementWithMeta, ModifierKey } from '../types';
-import { DEVTOOLS_ID } from '../constants';
+import { ModifierKey, TolgeeElement } from '../../types';
+import { DEVTOOLS_ID } from '../../constants';
+import { ElementStoreType } from './ElementStore';
 
 const eCapture = {
   capture: true,
@@ -15,17 +16,20 @@ type Coordinates = {
   y: number;
 };
 
-type TolgeeElement = Element &
-  ElementCSSInlineStyle & { _tolgee?: ElementMeta };
-
 type Props = {
   highlightKeys: ModifierKey[];
+  elementStore: ElementStoreType;
+  onClick: (el: TolgeeElement) => void;
 };
 
-export const MouseEventHandler = ({ highlightKeys }: Props) => {
+export const MouseEventHandler = ({
+  highlightKeys,
+  elementStore,
+  onClick,
+}: Props) => {
   let keysDown = new Set<ModifierKey>();
-  let highlighted: ElementWithMeta | undefined;
-  // let mouseOnChanged = new EventEmitterImpl<ElementWithMeta>();
+  let highlighted: TolgeeElement | undefined;
+  // let mouseOnChanged = new EventEmitterImpl<Element>();
   // let keysChanged: EventEmitterImpl<boolean> =
   //   new EventEmitterImpl<boolean>();
   let cursorPosition: Coordinates | undefined;
@@ -36,12 +40,13 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
     }
   }
 
-  const highlight = (el: ElementWithMeta | undefined) => {
+  const highlight = (el: TolgeeElement | undefined) => {
     if (highlighted !== el) {
       unhighlight();
-      if (el) {
-        el._tolgee.preventClean = true;
-        el._tolgee.highlight?.();
+      const meta = elementStore.get(el);
+      if (meta) {
+        meta.preventClean = true;
+        meta.highlight?.();
         highlighted = el;
         // mouseOnChanged.emit(el);
       }
@@ -49,9 +54,10 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
   };
 
   const unhighlight = () => {
-    if (highlighted) {
-      highlighted._tolgee.preventClean = false;
-      highlighted._tolgee.unhighlight?.();
+    const meta = elementStore.get(highlighted);
+    if (meta) {
+      meta.preventClean = false;
+      meta.unhighlight?.();
       highlighted = undefined;
       // mouseOnChanged.emit(highlighted);
     }
@@ -60,7 +66,7 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
   function updateHighlight() {
     const position = cursorPosition;
 
-    let newHighlighted: ElementWithMeta | undefined;
+    let newHighlighted: TolgeeElement | undefined;
     if (position && areKeysDown()) {
       const element = document.elementFromPoint(position.x, position.y);
       if (element) {
@@ -105,14 +111,15 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
     updateHighlight();
   };
   const onScroll = () => {
-    highlighted?._tolgee.highlight?.();
+    const meta = elementStore.get(highlighted);
+    meta?.highlight?.();
   };
-  const onClick = (e: MouseEvent) => {
+  const handleClick = (e: MouseEvent) => {
     blockEvents(e);
     if (areKeysDown()) {
       const element = getClosestTolgeeElement(e.target as TolgeeElement);
       if (element && element === highlighted) {
-        // dependencies.translationHighlighter.translationEdit(e, element);
+        onClick(element);
         unhighlight();
       }
     }
@@ -124,7 +131,7 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
     window.addEventListener('keyup', onKeyUp, eCapture);
     window.addEventListener('mousemove', onMouseMove, ePassive);
     window.addEventListener('scroll', onScroll, ePassive);
-    window.addEventListener('click', onClick, eCapture);
+    window.addEventListener('click', handleClick, eCapture);
 
     window.addEventListener('mouseenter', blockEvents, eCapture);
     window.addEventListener('mouseover', blockEvents, eCapture);
@@ -140,7 +147,7 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
     window.removeEventListener('keyup', onKeyUp, eCapture);
     window.removeEventListener('mousemove', onMouseMove, ePassive);
     window.removeEventListener('scroll', onScroll, ePassive);
-    window.removeEventListener('click', onClick, eCapture);
+    window.removeEventListener('click', handleClick, eCapture);
 
     window.removeEventListener('mouseenter', blockEvents, eCapture);
     window.removeEventListener('mouseover', blockEvents, eCapture);
@@ -156,11 +163,10 @@ export const MouseEventHandler = ({ highlightKeys }: Props) => {
 
   function getClosestTolgeeElement(
     element: Element
-  ): ElementWithMeta | undefined {
-    return findAncestor(
-      element,
-      (el) => (el as ElementWithMeta)?._tolgee
-    ) as ElementWithMeta;
+  ): TolgeeElement | undefined {
+    return findAncestor(element, (el) =>
+      elementStore.get(el as TolgeeElement)
+    ) as TolgeeElement;
   }
 
   function findAncestor(
