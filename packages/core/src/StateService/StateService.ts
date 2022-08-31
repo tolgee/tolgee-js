@@ -18,7 +18,7 @@ import { initState, State } from './initState';
 
 export const StateService = (
   eventService: EventServiceType,
-  options: Options
+  options?: Partial<Options>
 ) => {
   let state: State = initState(options);
   const cache: StateCache = new Map();
@@ -27,7 +27,7 @@ export const StateService = (
 
   cacheInit(cache, state.initialOptions.staticData);
 
-  const init = (options: Options) => {
+  const init = (options: Partial<Options>) => {
     state = initState(options, state.initialOptions);
     cacheInit(cache, state.initialOptions.staticData);
   };
