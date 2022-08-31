@@ -7,6 +7,7 @@ import {
   Options,
   TolgeeInstance,
   TranslateProps,
+  UiLibInterface,
 } from './types';
 
 export const Tolgee = (options?: Options): TolgeeInstance => {
@@ -40,6 +41,10 @@ export const Tolgee = (options?: Options): TolgeeInstance => {
     },
     setObserver: (observer: ObserverPlugin | undefined) => {
       pluginService.setObserver(observer);
+      return tolgee;
+    },
+    setUi: (ui: UiLibInterface | undefined) => {
+      pluginService.setUi(ui);
       return tolgee;
     },
 

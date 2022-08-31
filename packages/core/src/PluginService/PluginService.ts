@@ -1,4 +1,13 @@
-import { FormatPlugin, ObserverPlugin, TranslateProps } from '../types';
+import {
+  FormatPlugin,
+  ObserverPlugin,
+  TranslateProps,
+  TranslationOnClick,
+  UiConstructor,
+  UiInstance,
+  UiLibInterface,
+  UiType,
+} from '../types';
 
 export const PluginService = (
   getLocale: () => string,
@@ -7,15 +16,24 @@ export const PluginService = (
   const plugins = {
     formatter: undefined as FormatPlugin | undefined,
     observer: undefined as ObserverPlugin | undefined,
+    ui: undefined as UiConstructor | undefined,
   };
 
   const instances = {
     formatter: undefined as ReturnType<FormatPlugin> | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
+    ui: undefined as UiInstance | undefined,
+  };
+
+  const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
+    instances.ui?.handleElementClick(event, keysAndDefaults);
   };
 
   const run = () => {
-    instances.observer = plugins?.observer?.({ translate });
+    instances.ui =
+      plugins.ui &&
+      new plugins.ui({ getTranslation: (key) => translate({ key }) });
+    instances.observer = plugins?.observer?.({ translate, onClick });
   };
 
   const stop = () => {
@@ -40,6 +58,10 @@ export const PluginService = (
       plugins.formatter = formatter;
       instances.formatter = formatter();
     }
+  };
+
+  const setUi = (ui: UiType | undefined) => {
+    plugins.ui = (ui as UiLibInterface)?.UI || ui;
   };
 
   const formatTranslation = ({
@@ -79,6 +101,7 @@ export const PluginService = (
     formatTranslation,
     getObserver,
     setObserver,
+    setUi,
     run,
     stop,
     retranslate,

@@ -84,6 +84,7 @@ export type FormatPlugin = () => {
 
 export type ObserverProps = {
   translate: (params: TranslateProps) => string;
+  onClick: TranslationOnClick;
 };
 
 export type ObserverPlugin = (props: ObserverProps) => {
@@ -108,6 +109,7 @@ export type TolgeeInstance = Readonly<{
   setObserver: (
     observer: ObserverPlugin | undefined
   ) => Readonly<TolgeeInstance>;
+  setUi: (ui: UiLibInterface | undefined) => Readonly<TolgeeInstance>;
 
   getLanguage: () => string;
   getPendingLanguage: () => string;
@@ -185,3 +187,33 @@ export enum ModifierKey {
   Shift,
   Meta,
 }
+
+export type UiProps = {
+  getTranslation(key: string): string;
+};
+
+export type UiInstance = {
+  handleElementClick(
+    event: MouseEvent,
+    keysAndDefaults: KeyWithDefault[]
+  ): Promise<void>;
+};
+
+export type UiConstructor = new (props: UiProps) => UiInstance;
+
+export type UiLibInterface = {
+  UI: UiConstructor;
+};
+
+export type UiType = UiConstructor | UiLibInterface;
+
+export type KeyWithDefault = { key: string; defaultValue?: string };
+
+export type TranslationOnClick = (
+  event: MouseEvent,
+  data: {
+    keysAndDefaults: KeyWithDefault[];
+    el: TolgeeElement;
+    meta: ElementMeta;
+  }
+) => void;

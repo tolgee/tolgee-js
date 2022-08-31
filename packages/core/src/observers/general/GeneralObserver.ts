@@ -1,4 +1,8 @@
-import { ObserverOptions, WrapperInterface } from '../../types';
+import {
+  ObserverOptions,
+  TranslationOnClick,
+  WrapperInterface,
+} from '../../types';
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry } from './ElementRegistry';
@@ -7,13 +11,14 @@ import { NodeHandler } from './NodeHandler';
 
 export const GeneralObserver = (
   wrapper: WrapperInterface,
-  options: ObserverOptions
+  options: ObserverOptions,
+  onClick: TranslationOnClick
 ) => {
   let isObserving = true;
 
   const domHelper = DomHelper(options);
   const nodeHandler = NodeHandler(options, wrapper);
-  const elementRegistry = ElementRegistry(options);
+  const elementRegistry = ElementRegistry(options, onClick);
 
   function handleNodes(nodes: Array<Text | Attr>) {
     for (const textNode of nodes) {

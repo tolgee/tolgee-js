@@ -2,9 +2,9 @@ import * as React from 'react';
 import { BodyEnd } from '../common/BodyEnd';
 import { DialogProvider } from './TranslationDialogContextProvider';
 import { TranslationDialog } from './TranslationDialog';
-import type { DependencyService } from '@tolgee/core/lib/services/DependencyService';
+import type { UiProps } from '@tolgee/core';
 
-export type ComponentDependencies = DependencyService;
+export type ComponentDependencies = UiProps;
 
 export type Props = {
   dependencies: ComponentDependencies;

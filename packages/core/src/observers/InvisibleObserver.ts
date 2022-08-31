@@ -5,9 +5,9 @@ import { InvisibleWrapper } from './invisible/InvisibleWrapper';
 
 export const InvisibleObserver =
   (options?: ObserverOptions): ObserverPlugin =>
-  () => {
+  ({ onClick }) => {
     const observerOptions = initOptions(options);
     const wrapper = InvisibleWrapper();
-    const observer = GeneralObserver(wrapper, observerOptions);
+    const observer = GeneralObserver(wrapper, observerOptions, onClick);
     return { ...observer, retranslate: () => {} };
   };

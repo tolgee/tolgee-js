@@ -1,8 +1,6 @@
 import React from 'react';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import { styled } from '@mui/material/styles';
-import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
+import { Menu, MenuItem } from '@mui/material';
+import { styled } from '@mui/material';
 
 import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
 import { ThemeProvider } from '../ThemeProvider';
@@ -22,7 +20,7 @@ const ScTranslation = styled('div')`
 
 const ScKey = styled('div')`
   display: flex;
-  margin-top: 10px;
+  margin-top: 0px;
   padding: 3px;
   font-weight: bold;
   font-size: 12px;
@@ -39,12 +37,8 @@ export type KeyContextMenuState = Partial<KeyContextMenuParams> & {
   opened: boolean;
 };
 
-export type ComponentDependencies = {
-  translationService: TranslationService;
-};
-
 export type KeyContextMenuProps = {
-  dependencies: ComponentDependencies;
+  getTranslation(key: string): string;
 };
 
 export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
@@ -105,12 +99,8 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
                 }}
                 key={index}
               >
-                <ScTranslation data-cy="context-menu-value">
-                  {this.props.dependencies.translationService.getFromCacheOrFallback(
-                    key
-                  )}
-                </ScTranslation>
-                <ScKey data-cy="context-menu-key">{key}</ScKey>
+                <ScTranslation>{this.props.getTranslation(key)}</ScTranslation>
+                <ScKey>{key}</ScKey>
               </ScMenuItem>
             ))}
           </Menu>
