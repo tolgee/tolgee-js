@@ -10,7 +10,7 @@ export type Options = {
   /**
    * Used when auto detection is not available or is turned off
    */
-  defaultLanguage?: string;
+  defaultLanguage: string;
   /**
    * Languages which can be used for language detection
    * and also limits which values can be stored
@@ -25,34 +25,39 @@ export type Options = {
    */
   enableLanguageStore?: boolean;
   /**
-   * Namespaces which should be always fetched (default: true)
+   * Namespaces which should be always fetched
    */
   ns?: string[];
   /**
    * Default namespace when no namespace defined (default: '')
    */
-  defaultNs?: string;
-  filesUrlPrefix?: string;
+  defaultNs: string;
+  /**
+   * Prefix used for fetching languages (default: 'i18n/')
+   */
+  filesUrlPrefix: string;
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
   };
 };
 
-const defaultValues = {
+const defaultValues: Options = {
   defaultLanguage: 'en',
-  language: 'en',
-  enableLanguageStore: false,
+  enableLanguageStore: true,
   defaultNs: '',
   filesUrlPrefix: 'i18n/',
-} as const;
+};
 
-export const initState = (options: Options, prevousOptions?: Options) => {
+export const initState = (
+  options?: Partial<Options>,
+  prevousOptions?: Partial<Options>
+) => {
   const initialOptions = {
     ...defaultValues,
     ...prevousOptions,
     ...options,
   };
-  const language = options.language || initialOptions.defaultLanguage;
+  const language = initialOptions.language || initialOptions.defaultLanguage;
   return {
     initialOptions,
     activeNamespaces: new Map<string, number>(),

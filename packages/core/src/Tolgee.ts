@@ -10,9 +10,9 @@ import {
   UiLibInterface,
 } from './types';
 
-export const Tolgee = (options?: Options): TolgeeInstance => {
+export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const eventService = EventService();
-  const stateService = StateService(eventService, options || {});
+  const stateService = StateService(eventService, options);
   const pluginService = PluginService(stateService.getLanguage, instant);
 
   function instant(params: TranslateProps) {
@@ -58,7 +58,7 @@ export const Tolgee = (options?: Options): TolgeeInstance => {
     loadRecord: stateService.loadRecord,
     isLoading: stateService.isLoading,
     isFetching: stateService.isFetching,
-    init: (options: Options) => {
+    init: (options: Partial<Options>) => {
       stateService.init(options);
       return tolgee;
     },
