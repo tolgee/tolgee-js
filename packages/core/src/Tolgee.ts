@@ -7,6 +7,7 @@ import {
   Options,
   TolgeeInstance,
   TranslateProps,
+  TranslatePropsInternal,
   UiLibInterface,
 } from './types';
 
@@ -15,11 +16,8 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const stateService = StateService(eventService, options);
   const pluginService = PluginService(stateService.getLanguage, instant);
 
-  function instant(params: TranslateProps) {
-    const translation = stateService.getTranslation(
-      params.key,
-      params.namespace
-    );
+  function instant(params: TranslatePropsInternal) {
+    const translation = stateService.getTranslation(params);
     return pluginService.formatTranslation({ ...params, translation });
   }
 
@@ -71,9 +69,12 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     stop: () => {
       pluginService.stop();
     },
-    instant: (key: string, namespace?: string) => {
-      const translation = stateService.getTranslation(key, namespace);
-      return pluginService.formatTranslation({ key, translation });
+    instant: (props: TranslateProps) => {
+      const translation = stateService.getTranslation(props);
+      return pluginService.formatTranslation({
+        ...props,
+        translation: translation,
+      });
     },
   });
   return tolgee;

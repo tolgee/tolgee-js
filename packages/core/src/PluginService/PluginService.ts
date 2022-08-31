@@ -1,7 +1,7 @@
 import {
   FormatPlugin,
   ObserverPlugin,
-  TranslateProps,
+  TranslatePropsInternal,
   TranslationOnClick,
   UiConstructor,
   UiInstance,
@@ -11,7 +11,7 @@ import {
 
 export const PluginService = (
   getLocale: () => string,
-  translate: (params: TranslateProps) => string
+  translate: (params: TranslatePropsInternal) => string
 ) => {
   const plugins = {
     formatter: undefined as FormatPlugin | undefined,
@@ -71,7 +71,7 @@ export const PluginService = (
     noWrap,
     params,
     orEmpty,
-  }: TranslateProps) => {
+  }: TranslatePropsInternal) => {
     let result = translation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
       result = instances.observer.wrap({

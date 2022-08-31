@@ -34,13 +34,13 @@ document.body.append(test1);
 document.body.append(test2);
 document.body.append(test3);
 
-tolgee.run().then(() => {
-  test1.childNodes[0].nodeValue = tolgee.instant('world');
-  test1.setAttribute('title', tolgee.instant('title'));
+tolgee.run();
 
-  test2.innerHTML = `<span>${tolgee.instant('world')}</span>`;
+test1.childNodes[0].nodeValue = tolgee.instant({ key: 'world' });
+test1.setAttribute('title', tolgee.instant({ key: 'title' }));
 
-  test3.innerHTML = `<span><span>${tolgee.instant(
-    'world'
-  )}</span><span>${tolgee.instant('title')}</span></span>`;
-});
+test2.innerHTML = `<span>${tolgee.instant({ key: 'world' })}</span>`;
+
+test3.innerHTML = `<span><span>${tolgee.instant({
+  key: 'world',
+})}</span><span>${tolgee.instant({ key: 'title' })}</span></span>`;

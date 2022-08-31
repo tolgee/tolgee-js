@@ -5,15 +5,17 @@ import {
   CacheKeyObject,
   Options,
   StateCache,
+  TranslatePropsInternal,
 } from '../types';
 import {
   cacheAddRecord,
   cacheChangeTranslation,
   cacheGetRecord,
-  cacheGetTranslation,
+  cacheGetTranslationFallback,
   cacheInit,
 } from './Cache/Cache';
 import { encodeCacheKey } from './Cache/helpers';
+import { getFallback, getFallbackFromStruct } from './helpers';
 import { initState, State } from './initState';
 
 export const StateService = (
@@ -93,13 +95,17 @@ export const StateService = (
   };
 
   const loadRequiredRecords = async (lang?: string) => {
-    const language = lang || state.language;
-    const namespaces = getRequiredNamespaces();
-    await Promise.all(
-      namespaces
-        .filter((namespace) => !cacheGetRecord(cache, { language, namespace }))
-        .map((namespace) => loadRecord({ language, namespace }))
-    );
+    const languages = new Set(getFallbackLangs(lang));
+    const namespaces = new Set(getRequiredNamespaces());
+    const requests: ReturnType<typeof loadRecord>[] = [];
+    languages.forEach((language) => {
+      namespaces.forEach((namespace) => {
+        if (!cacheGetRecord(cache, { language, namespace })) {
+          requests.push(loadRecord({ language, namespace }));
+        }
+      });
+    });
+    await Promise.all(requests);
   };
 
   const loadInitial = async () => {
@@ -126,10 +132,25 @@ export const StateService = (
     }
   };
 
-  const getTranslation = (key: string, namespace?: string) => {
-    return cacheGetTranslation(
+  const getFallbackLangs = (lang?: string) => {
+    const language = lang || state.language;
+    return [
+      language,
+      ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
+    ];
+  };
+
+  const getTranslation = ({
+    key,
+    namespace,
+    fallbackLanguages,
+  }: TranslatePropsInternal) => {
+    return cacheGetTranslationFallback(
       cache,
-      withDefaultNs({ namespace, language: state.language }),
+      [namespace || state.initialOptions.defaultNs],
+      fallbackLanguages
+        ? [state.language, ...getFallback(fallbackLanguages)]
+        : getFallbackLangs(),
       key
     );
   };

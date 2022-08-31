@@ -1,4 +1,3 @@
-import { InvisibleWrapper } from '../observers/invisible/InvisibleWrapper';
 import { Tolgee } from '../Tolgee';
 import { screen } from '@testing-library/dom';
 import { InvisibleObserver } from '../observers/InvisibleObserver';
@@ -16,7 +15,7 @@ describe('observer', () => {
     tolgee.run();
 
     document.body.innerHTML = `
-      <span data-testid="translation">${tolgee.instant('hello')}</span>
+      <span data-testid="translation">${tolgee.instant({ key: 'hello' })}</span>
     `;
 
     expect(screen.queryByTestId('translation')?.textContent).toContain('world');

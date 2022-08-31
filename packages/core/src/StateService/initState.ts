@@ -1,4 +1,4 @@
-import { TreeTranslationsData } from '../types';
+import { FallbackLanguageOption, TreeTranslationsData } from '../types';
 
 export type Options = {
   /**
@@ -19,7 +19,7 @@ export type Options = {
   /**
    * Language which is used when no translation is available for current one
    */
-  fallbackLanguage?: string;
+  fallbackLanguage?: FallbackLanguageOption;
   /**
    * Store user language in localStorage (default: true)
    */
