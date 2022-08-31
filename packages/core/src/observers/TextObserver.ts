@@ -6,7 +6,7 @@ import { TextWrapper } from './text/TextWrapper';
 
 export const TextObserver =
   (options?: ObserverOptions): ObserverPlugin =>
-  ({ translate }) => {
+  ({ translate, onClick }) => {
     const observerOptions = initOptions(options);
     const wrapper = TextWrapper({
       inputPrefix: observerOptions.inputPrefix,
@@ -15,7 +15,8 @@ export const TextObserver =
     });
     const { wrap, unwrap, stop, forEachElement } = GeneralObserver(
       wrapper,
-      observerOptions
+      observerOptions,
+      onClick
     );
 
     const retranslate = () => {

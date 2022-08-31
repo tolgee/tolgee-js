@@ -523,7 +523,7 @@ importers:
       webpack-cli: ^4.10.0
     devDependencies:
       '@tolgee/core': link:../../packages/core
-      '@tolgee/ui': 4.8.4
+      '@tolgee/ui': link:../../packages/ui
       concurrently: 7.3.0
       copy-webpack-plugin: 10.2.4_webpack@5.74.0
       html-webpack-plugin: 5.5.0_webpack@5.74.0
@@ -541,7 +541,7 @@ importers:
       react-dom: ^17.0.1
       typescript: ^4.7.4
     dependencies:
-      '@tolgee/react': 4.8.4_react@17.0.2
+      '@tolgee/react': link:../../packages/react
       gatsby: 4.19.2_3tgeifm2vmwrlpqlopppsnjtcu
       gatsby-plugin-react-intl: 4.0.0_6gwab75v6pqvip6qch4h33jmf4
       react: 17.0.2
@@ -559,7 +559,7 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/react': 4.8.4_react@17.0.2
+      '@tolgee/react': link:../../packages/react
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -580,7 +580,7 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/react': 4.8.4_react@17.0.2
+      '@tolgee/react': link:../../packages/react
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -677,7 +677,7 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
-      '@tolgee/react': 4.8.4_react@17.0.2
+      '@tolgee/react': link:../../packages/react
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.43
@@ -717,7 +717,7 @@ importers:
       '@testing-library/react': 11.2.7_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 12.8.3
       '@tolgee/core': link:../../packages/core
-      '@tolgee/i18next': 4.8.4_i18next@21.8.14
+      '@tolgee/i18next': link:../../packages/i18next
       concurrently: 7.3.0
       i18next: 21.8.14
       i18next-icu: 2.0.3
@@ -757,7 +757,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
       '@tolgee/core': link:../../packages/core
-      '@tolgee/svelte': 4.8.2
+      '@tolgee/svelte': link:../../packages/svelte
       '@tolgee/ui': link:../../packages/ui
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
       '@typescript-eslint/parser': 5.34.0_4rv7y5c6xz3vfxwhbrcxxi73bq
@@ -787,7 +787,7 @@ importers:
       typescript: ~4.7.4
       vue: ^3.2.37
     dependencies:
-      '@tolgee/vue': 4.8.4_vue@3.2.37
+      '@tolgee/vue': link:../../packages/vue
       core-js: 3.24.0
       vue: 3.2.37
     devDependencies:
@@ -818,7 +818,7 @@ importers:
     dependencies:
       '@panter/vue-i18next': 0.15.2_i18next@21.8.14+vue@2.7.8
       '@tolgee/core': link:../../packages/core
-      '@tolgee/i18next': 4.8.4_i18next@21.8.14
+      '@tolgee/i18next': link:../../packages/i18next
       core-js: 3.24.0
       i18next: 21.8.14
       i18next-icu: 2.0.3
@@ -8837,53 +8837,6 @@ packages:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
 
-  /@tolgee/core/4.8.0:
-    resolution: {integrity: sha512-l50pCnOPybLAlasstP4p+1rqOsn6HwgdJRf7aMJeIy/dUhmCEQlz8JW+QNTWzu1DaMI2zshhl3WCdTNVFswoEA==}
-
-  /@tolgee/i18next/4.8.4_i18next@21.8.14:
-    resolution: {integrity: sha512-Sx+7G+mv8hOAL1uI5FOSOpzwJv5uHh1U5dtBmOZ/uUd/+ZL9AEZT9ZeB6fAdNk5hHyYfqrvoN+dvmMYfAqhjIQ==}
-    peerDependencies:
-      i18next: ^21.5.4
-    dependencies:
-      '@tolgee/core': 4.8.0
-      '@tolgee/ui': 4.8.4
-      i18next: 21.8.14
-    dev: false
-
-  /@tolgee/react/4.8.4_react@17.0.2:
-    resolution: {integrity: sha512-Z17qz2MF8bfMSaytkSQi+TH3+pws4cSTtz+y8Oew8vOolAum5V9TpSKXUkbGXk+ZNeA3KPb9amdPC15IWkd6dg==}
-    peerDependencies:
-      react: ^16.14.0 || ^17.0.1 || ^18.1.0
-    dependencies:
-      '@tolgee/core': 4.8.0
-      '@tolgee/ui': 4.8.4
-      react: 17.0.2
-    dev: false
-
-  /@tolgee/svelte/4.8.2:
-    resolution: {integrity: sha512-Knni105wogZ5440jLc1M4Jyq4LvPh6FcSZjeQM7xgRQtaCPbkBLnXsTkbRSqCopLvcsHuEPQIEtTG2G48zV3SA==}
-    dependencies:
-      '@tolgee/core': 4.8.0
-      '@tolgee/ui': 4.8.0
-    dev: true
-
-  /@tolgee/ui/4.8.0:
-    resolution: {integrity: sha512-ZTpfyxfNq9FFFTCDmA8p8KMPvGSmfNwZRyT/sVcc4foBJsEA7v3vUNGZhD34knFifkVKw9TBq3zU/lcg+vNtdg==}
-    dev: true
-
-  /@tolgee/ui/4.8.4:
-    resolution: {integrity: sha512-++lTibbbMXIrHtx9RL4WDhlhdSYkJkVCoe+WC6aORuxUw0OsIRbIG25dN1+jqLStwcsou5E3f3cb1ULT8UMu7w==}
-
-  /@tolgee/vue/4.8.4_vue@3.2.37:
-    resolution: {integrity: sha512-s5GMvkxOd9LqkJDErV6/hOgCd3gYEstA2T+PvnNsp2x0lj+Mn7xJpg56lYvuzuHlAW9dE7I/CdaAexbtWZK8BA==}
-    peerDependencies:
-      vue: ^3.0.0
-    dependencies:
-      '@tolgee/core': 4.8.0
-      '@tolgee/ui': 4.8.4
-      vue: 3.2.37
-    dev: false
-
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -10253,7 +10206,7 @@ packages:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
       eslint: '>= 1.6.0 < 7.0.0'
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
       '@vue/cli-shared-utils': 4.5.19
       eslint-loader: 2.2.1_webpack@4.46.0
       globby: 9.2.0
@@ -10271,7 +10224,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
       '@vue/cli-shared-utils': 4.5.19
     dev: true
 
@@ -10319,7 +10272,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
     dev: true
 
   /@vue/cli-service/4.5.19_7unolrgjwxngstwwllrtmolbmm:

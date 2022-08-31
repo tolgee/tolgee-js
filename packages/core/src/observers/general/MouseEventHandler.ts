@@ -19,7 +19,7 @@ type Coordinates = {
 type Props = {
   highlightKeys: ModifierKey[];
   elementStore: ElementStoreType;
-  onClick: (el: TolgeeElement, meta: ElementMeta) => void;
+  onClick: (event: MouseEvent, el: TolgeeElement) => void;
 };
 
 export const MouseEventHandler = ({
@@ -119,8 +119,7 @@ export const MouseEventHandler = ({
     if (areKeysDown()) {
       const element = getClosestTolgeeElement(e.target as TolgeeElement);
       if (element && element === highlighted) {
-        const meta = elementStore.get(element);
-        onClick(element, meta!);
+        onClick(e, element);
         unhighlight();
       }
     }

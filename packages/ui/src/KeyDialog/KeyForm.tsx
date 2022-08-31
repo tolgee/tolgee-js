@@ -1,10 +1,16 @@
 import React from 'react';
 import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
+<<<<<<< HEAD
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import OpenInNew from '@mui/icons-material/OpenInNew';
 import { TextHelper } from '@tolgee/core';
+=======
+import { styled, IconButton, Button } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
+// import { TextHelper } from '@tolgee/core';
+>>>>>>> fd2807cf (feat: make ui work)
 
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';
@@ -91,8 +97,8 @@ export const KeyForm = () => {
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
 
-  const screenshotsView =
-    dependencies.coreService.isAuthorizedTo('screenshots.view');
+  const screenshotsView = false;
+  // dependencies.coreService.isAuthorizedTo('screenshots.view');
 
   const setUseBrowserWindow = (value: boolean) => {
     dispatch({ type: 'SET_USE_BROWSER_WINDOW', payload: value });
@@ -152,7 +158,7 @@ export const KeyForm = () => {
 
       <ScFieldTitle>Key</ScFieldTitle>
       <ScKey>
-        {input && TextHelper.removeEscapes(input)}
+        {input}
         <ScKeyHint>
           {translations?.keyId === undefined && " (key doesn't exist yet)"}
         </ScKeyHint>

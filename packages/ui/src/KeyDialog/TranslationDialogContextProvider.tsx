@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { KeyWithTranslationsModel, LanguageModel } from '@tolgee/core';
 
 import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
@@ -74,22 +73,19 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<string>(null);
     const [takingScreenshot, setTakingScreenshot] = useState<boolean>(false);
-    const [translations, setTranslations] =
-      useState<KeyWithTranslationsModel>(null);
+    const [translations, setTranslations] = useState<any>(null);
     const [translationsForm, setTranslationsForm] =
       useState<FormTranslations>(null);
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
 
-    const coreService = props.dependencies.coreService;
-    const properties = props.dependencies.properties;
-    const linkToPlatform =
-      properties.projectId !== undefined
-        ? `${properties.config.apiUrl}/projects/${properties.projectId}/translations/single?key=${props.input}`
-        : undefined;
+    const linkToPlatform = '';
+    // properties.projectId !== undefined
+    //   ? `${properties.config.apiUrl}/projects/${properties.projectId}/translations/single?key=${props.input}`
+    //   : undefined;
 
-    const translationService = props.dependencies.translationService;
-    const screenshotService = props.dependencies.screenshotService;
+    // const translationService = props.dependencies.translationService;
+    // const screenshotService = props.dependencies.screenshotService;
     const [container, setContainer] = useState(
       undefined as Element | undefined
     );
@@ -99,8 +95,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [screenshotDetail, setScreenshotDetail] =
       useState<ScreenshotInterface | null>(null);
 
-    const permittedLanguageIds =
-      props.dependencies.properties.permittedLanguageIds;
+    // const permittedLanguageIds =
+    //   props.dependencies.properties.permittedLanguageIds;
 
     const dispatch = async (action: State) => {
       switch (action.type) {
@@ -115,47 +111,47 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
         case 'LOAD_TRANSLATIONS': {
           const { reinitialize = true, languages } = action.payload;
-          translationService
-            .getTranslationsOfKey(props.input, languages)
-            .then(([result, languages]) => {
-              setTranslations(
-                result || {
-                  keyId: undefined,
-                  translations: {},
-                  screenshots: [],
-                  keyName: props.input,
-                  keyTags: [],
-                  screenshotCount: 0,
-                }
-              );
+          // translationService
+          //   .getTranslationsOfKey(props.input, languages)
+          //   .then(([result, languages]) => {
+          //     setTranslations(
+          //       result || {
+          //         keyId: undefined,
+          //         translations: {},
+          //         screenshots: [],
+          //         keyName: props.input,
+          //         keyTags: [],
+          //         screenshotCount: 0,
+          //       }
+          //     );
 
-              if (!selectedLanguages?.size) {
-                setSelectedLanguages(new Set(languages));
-              }
+          //     if (!selectedLanguages?.size) {
+          //       setSelectedLanguages(new Set(languages));
+          //     }
 
-              const translationsData = responseToTranslationData(
-                result?.translations
-              );
-              if (!translationsForm || reinitialize) {
-                // reset form
-                setTranslationsForm(translationsData);
+          //     const translationsData = responseToTranslationData(
+          //       result?.translations
+          //     );
+          //     if (!translationsForm || reinitialize) {
+          //       // reset form
+          //       setTranslationsForm(translationsData);
 
-                setScreenshots(
-                  result?.screenshots?.map((sc) => ({
-                    ...sc,
-                    justUploaded: false,
-                  })) || []
-                );
-              } else {
-                // update form
-                const result: FormTranslations = {};
-                languages.forEach((lng) => {
-                  result[lng] = translationsForm[lng] || translationsData[lng];
-                });
-                setTranslationsForm(result);
-              }
-              setLoading(false);
-            });
+          //       setScreenshots(
+          //         result?.screenshots?.map((sc) => ({
+          //           ...sc,
+          //           justUploaded: false,
+          //         })) || []
+          //       );
+          //     } else {
+          //       // update form
+          //       const result: FormTranslations = {};
+          //       languages.forEach((lng) => {
+          //         result[lng] = translationsForm[lng] || translationsData[lng];
+          //       });
+          //       setTranslationsForm(result);
+          //     }
+          //     setLoading(false);
+          //   });
           break;
         }
 
@@ -166,107 +162,107 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
           break;
 
         case 'HANDLE_TAKE_SCREENSHOT': {
-          setTakingScreenshot(true);
-          const data = await props.dependencies.pluginManager.takeScreenshot({
-            key: props.input,
-            translations: translationsForm,
-          });
+          // setTakingScreenshot(true);
+          // const data = await props.dependencies.pluginManager.takeScreenshot({
+          //   key: props.input,
+          //   translations: translationsForm,
+          // });
 
-          setTakingScreenshot(false);
-          setScreenshotsUploading(true);
+          // setTakingScreenshot(false);
+          // setScreenshotsUploading(true);
 
-          const blob = await fetch(data).then((r) => r.blob());
+          // const blob = await fetch(data).then((r) => r.blob());
 
-          await uploadImage(blob);
-          setScreenshotsUploading(false);
+          // await uploadImage(blob);
+          // setScreenshotsUploading(false);
           break;
         }
 
         case 'HANDLE_REMOVE_SCREENSHOT': {
-          const { id } = action.payload;
-          const screenshot = screenshots.find((sc) => sc.id === id);
-          if (screenshot.justUploaded) {
-            screenshotService.deleteImages([screenshot.id]);
-          }
-          setScreenshots(screenshots.filter((sc) => sc.id !== id));
+          // const { id } = action.payload;
+          // const screenshot = screenshots.find((sc) => sc.id === id);
+          // if (screenshot.justUploaded) {
+          //   screenshotService.deleteImages([screenshot.id]);
+          // }
+          // setScreenshots(screenshots.filter((sc) => sc.id !== id));
           break;
         }
 
         case 'ON_SAVE': {
-          setSaving(true);
-          try {
-            const newTranslations = {} as typeof translationsForm;
-            Object.entries(translationsForm).forEach(([language, value]) => {
-              if (
-                isLanguagePermitted(
-                  language,
-                  permittedLanguageIds,
-                  availableLanguages
-                )
-              ) {
-                newTranslations[language] = value;
-              }
-            });
+          // setSaving(true);
+          // try {
+          //   const newTranslations = {} as typeof translationsForm;
+          //   Object.entries(translationsForm).forEach(([language, value]) => {
+          //     if (
+          //       isLanguagePermitted(
+          //         language,
+          //         permittedLanguageIds,
+          //         availableLanguages
+          //       )
+          //     ) {
+          //       newTranslations[language] = value;
+          //     }
+          //   });
 
-            if (translations.keyId === undefined) {
-              await translationService.createKey({
-                name: props.input,
-                translations: newTranslations,
-                screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
-              });
-            } else {
-              await translationService.updateKeyComplex(translations.keyId, {
-                name: props.input,
-                translations: newTranslations,
-                screenshotIdsToDelete: getRemovedScreenshots(),
-                screenshotUploadedImageIds: getJustUploadedScreenshots(),
-              });
-            }
-            await sleep(200);
-            setSuccess(true);
-            setError(null);
-            if (useBrowserWindow) {
-              setSaving(false);
-              await sleep(2000);
-              setSuccess(false);
-            } else {
-              props.onClose();
-            }
-          } catch (e) {
-            setError('Unexpected error occurred :(');
-            // eslint-disable-next-line no-console
-            console.error(e);
-          } finally {
-            setSaving(false);
-          }
+          //   if (translations.keyId === undefined) {
+          //     await translationService.createKey({
+          //       name: props.input,
+          //       translations: newTranslations,
+          //       screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
+          //     });
+          //   } else {
+          //     await translationService.updateKeyComplex(translations.keyId, {
+          //       name: props.input,
+          //       translations: newTranslations,
+          //       screenshotIdsToDelete: getRemovedScreenshots(),
+          //       screenshotUploadedImageIds: getJustUploadedScreenshots(),
+          //     });
+          //   }
+          //   await sleep(200);
+          //   setSuccess(true);
+          //   setError(null);
+          //   if (useBrowserWindow) {
+          //     setSaving(false);
+          //     await sleep(2000);
+          //     setSuccess(false);
+          //   } else {
+          //     props.onClose();
+          //   }
+          // } catch (e) {
+          //   setError('Unexpected error occurred :(');
+          //   // eslint-disable-next-line no-console
+          //   console.error(e);
+          // } finally {
+          //   setSaving(false);
+          // }
           break;
         }
 
         case 'ON_CLOSE': {
-          if (screenshotDetail) {
-            setScreenshotDetail(null);
-          } else {
-            props.onClose();
-            setUseBrowserWindow(false);
-            const uploadedScreenshots = getJustUploadedScreenshots();
-            if (uploadedScreenshots.length) {
-              screenshotService.deleteImages(uploadedScreenshots);
-            }
-            setScreenshots([]);
-          }
+          // if (screenshotDetail) {
+          //   setScreenshotDetail(null);
+          // } else {
+          props.onClose();
+          //   setUseBrowserWindow(false);
+          //   const uploadedScreenshots = getJustUploadedScreenshots();
+          //   if (uploadedScreenshots.length) {
+          //     screenshotService.deleteImages(uploadedScreenshots);
+          //   }
+          //   setScreenshots([]);
+          // }
           break;
         }
 
         case 'ON_SELECTED_LANGUAGES_CHANGE': {
-          const { languages } = action.payload;
-          if (languages.size) {
-            setSelectedLanguages(languages);
-            properties.preferredLanguages = languages;
-            dispatch({
-              type: 'LOAD_TRANSLATIONS',
-              payload: { languages, reinitialize: false },
-            });
-          }
+          // const { languages } = action.payload;
+          // if (languages.size) {
+          //   setSelectedLanguages(languages);
+          //   properties.preferredLanguages = languages;
+          //   dispatch({
+          //     type: 'LOAD_TRANSLATIONS',
+          //     payload: { languages, reinitialize: false },
+          //   });
+          // }
           break;
         }
 
@@ -303,21 +299,21 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     }, [useBrowserWindow]);
 
     useEffect(() => {
-      if (props.open) {
-        setLoading(true);
-        setSuccess(false);
-        setError(null);
-        setTranslationsFormTouched(false);
-        dispatch({
-          type: 'LOAD_TRANSLATIONS',
-          payload: { languages: selectedLanguages },
-        });
-        if (availableLanguages === undefined) {
-          coreService.getLanguagesFull().then((l) => {
-            setAvailableLanguages(l);
-          });
-        }
-      }
+      // if (props.open) {
+      //   setLoading(true);
+      //   setSuccess(false);
+      //   setError(null);
+      //   setTranslationsFormTouched(false);
+      //   dispatch({
+      //     type: 'LOAD_TRANSLATIONS',
+      //     payload: { languages: properties.preferredLanguages },
+      //   });
+      //   if (availableLanguages === undefined) {
+      //     coreService.getLanguagesFull().then((l) => {
+      //       setAvailableLanguages(l);
+      //     });
+      //   }
+      // }
     }, [props.open, useBrowserWindow, props.input]);
 
     const getJustUploadedScreenshots = () => {
@@ -331,76 +327,68 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     };
 
     const uploadImage = async (file: Blob) => {
-      await screenshotService
-        .uploadImage(file)
-        .then((data) =>
-          setScreenshots((screenshots) => [
-            ...screenshots,
-            { ...data, justUploaded: true },
-          ])
-        )
-        .catch((e) => {
-          setError(e.code || e.message);
-        });
+      // await screenshotService
+      //   .uploadImage(file)
+      //   .then((data) =>
+      //     setScreenshots((screenshots) => [
+      //       ...screenshots,
+      //       { ...data, justUploaded: true },
+      //     ])
+      //   )
+      //   .catch((e) => {
+      //     setError(e.code || e.message);
+      //   });
     };
 
-    const formDisabled =
-      loading ||
-      (translations.keyId
-        ? !coreService.isAuthorizedTo('translations.edit')
-        : !coreService.isAuthorizedTo('keys.edit'));
+    const formDisabled = true;
+    // loading ||
+    // (translations.keyId
+    //   ? !coreService.isAuthorizedTo('translations.edit')
+    //   : !coreService.isAuthorizedTo('keys.edit'));
 
-    const [availableLanguages, _setAvailableLanguages] =
-      useState<LanguageModel[]>(undefined);
-    const setAvailableLanguages = (data: LanguageModel[]) => {
-      _setAvailableLanguages(putBaseLangFirst(data));
-    };
+    const [availableLanguages, setAvailableLanguages] =
+      useState<any[]>(undefined);
 
-    const getInitialLanguages = () => {
-      const langs = Array.from(
-        properties.preferredLanguages || [properties.currentLanguage]
-      );
-      return new Set(langs.slice(0, MAX_LANGUAGES_SELECTED));
-    };
+    const selectedLanguages = new Set(['en', 'cs']);
 
-    const [selectedLanguages, setSelectedLanguages] = useState(
-      getInitialLanguages()
-    );
+    // const [selectedLanguages, setSelectedLanguages] = useState(
+    //   properties.preferredLanguages || new Set([properties.currentLanguage])
+    // );
 
     // sets the default value for base language if is not stored already
-    useEffect(() => {
-      if (
-        props.defaultValue &&
-        availableLanguages &&
-        selectedLanguages &&
-        translationsForm
-      ) {
-        const baseLanguageDefinition = availableLanguages.find((l) => l.base);
-        if (
-          baseLanguageDefinition &&
-          selectedLanguages.has(baseLanguageDefinition.tag) &&
-          !translationsFormTouched
-        ) {
-          const wasBaseTranslationProvided =
-            translations.translations[baseLanguageDefinition.tag] !== undefined;
+    // useEffect(() => {
+    //   if (
+    //     props.defaultValue &&
+    //     availableLanguages &&
+    //     selectedLanguages &&
+    //     translationsForm
+    //   ) {
+    //     const baseLanguageDefinition = availableLanguages.find((l) => l.base);
+    //     if (
+    //       baseLanguageDefinition &&
+    //       selectedLanguages.has(baseLanguageDefinition.tag) &&
+    //       !translationsFormTouched
+    //     ) {
+    //       const wasBaseTranslationProvided =
+    //         translations.translations[baseLanguageDefinition.tag] !== undefined;
 
-          if (
-            !translationsForm[baseLanguageDefinition.tag] &&
-            !wasBaseTranslationProvided
-          ) {
-            setTranslationsForm({
-              ...translationsForm,
-              [baseLanguageDefinition.tag]: props.defaultValue,
-            });
-          }
-        }
-      }
-    }, [
-      availableLanguages,
-      translationsForm,
-      selectedLanguages,
-      props.defaultValue,
-    ]);
+    //       if (
+    //         !translationsForm[baseLanguageDefinition.tag] &&
+    //         !wasBaseTranslationProvided
+    //       ) {
+    //         setTranslationsForm({
+    //           ...translationsForm,
+    //           [baseLanguageDefinition.tag]: props.defaultValue,
+    //         });
+    //       }
+    //     }
+    //   }
+    // }, [
+    //   availableLanguages,
+    //   translationsForm,
+    //   selectedLanguages,
+    //   props.defaultValue,
+    // ]);
 
     const baseLang = availableLanguages?.find(({ base }) => base);
 
@@ -419,7 +407,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       translationsForm,
       container,
       useBrowserWindow,
-      pluginAvailable: props.dependencies.pluginManager.handshakeSucceed,
+      pluginAvailable: false, // props.dependencies.pluginManager.handshakeSucceed,
       takingScreenshot,
       screenshotsUploading,
       screenshots,

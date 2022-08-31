@@ -1,10 +1,12 @@
 import { Tolgee, TextObserver } from '@tolgee/core';
+import { UI } from '@tolgee/ui';
 
 const delayedPromise = (data) => () =>
   new Promise((resolve) => setTimeout(() => resolve(data), 100));
 
 const tolgee = Tolgee()
   .setObserver(TextObserver())
+  .setUi(UI)
   .init({
     staticData: {
       en: delayedPromise({ world: 'World', title: 'Title' }),

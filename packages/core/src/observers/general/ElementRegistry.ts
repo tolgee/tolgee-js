@@ -1,9 +1,11 @@
 import { TOLGEE_ATTRIBUTE_NAME } from '../../constants';
 import {
   ElementMeta,
+  KeyWithDefault,
   NodeMeta,
   ObserverOptions,
   TolgeeElement,
+  TranslationOnClick,
 } from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
@@ -11,7 +13,10 @@ import { ElementStore } from './ElementStore';
 import { nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
-export const ElementRegistry = (options: ObserverOptions) => {
+export const ElementRegistry = (
+  options: ObserverOptions,
+  onClick: TranslationOnClick
+) => {
   const elementStore = ElementStore();
   const elementHighlighter = ElementHighlighter({
     highlightColor: options.highlightColor,
@@ -20,7 +25,14 @@ export const ElementRegistry = (options: ObserverOptions) => {
   const eventHandler = MouseEventHandler({
     highlightKeys: options.highlightKeys,
     elementStore,
-    onClick: console.log,
+    onClick: (event, el) => {
+      const meta = elementStore.get(el)!;
+      onClick(event, {
+        el,
+        meta,
+        keysAndDefaults: getKeysAndDefaults(meta),
+      });
+    },
   });
 
   function register(element: Element, node: Node, nodeMeta: NodeMeta) {
@@ -101,6 +113,32 @@ export const ElementRegistry = (options: ObserverOptions) => {
 
   function isElementActive(element: TolgeeElement) {
     return options.targetElement.contains(element);
+  }
+
+  function getKeyOptions(meta: ElementMeta): KeyWithDefault[] {
+    const nodes = Array.from(meta.nodes.values());
+    return nodes.reduce(
+      (acc, curr) => [
+        ...acc,
+        ...curr.keys.map((k) => ({
+          key: k.key,
+          defaultValue: k.defaultValue,
+        })),
+      ],
+      [] as KeyWithDefault[]
+    );
+  }
+
+  function getKeysAndDefaults(meta: ElementMeta): KeyWithDefault[] {
+    if (meta.wrappedWithElementOnlyKey) {
+      return [
+        {
+          key: meta.wrappedWithElementOnlyKey,
+          defaultValue: meta.wrappedWithElementOnlyDefaultHtml,
+        },
+      ];
+    }
+    return getKeyOptions(meta);
   }
 
   return Object.freeze({

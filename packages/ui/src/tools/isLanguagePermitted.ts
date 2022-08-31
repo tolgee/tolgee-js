@@ -1,9 +1,7 @@
-import { LanguageModel } from '@tolgee/core';
-
 export const isLanguagePermitted = (
   language: string,
   permittedLanguages: number[] | undefined,
-  allLanguages?: LanguageModel[]
+  allLanguages?: any[]
 ) => {
   if (!permittedLanguages?.length) {
     return true;
