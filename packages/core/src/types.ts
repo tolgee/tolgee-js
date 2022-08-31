@@ -6,14 +6,24 @@ export type { State, Options } from './StateService/initState';
 export type { EventEmitterType } from './EventEmitter';
 export type { EventEmitterSelectiveType } from './EventEmitterSelective';
 
+export type FallbackLanguage = undefined | false | string | string[];
+
+export type FallbackLanguageObject = Record<string, FallbackLanguage>;
+
+export type FallbackLanguageOption = FallbackLanguage | FallbackLanguageObject;
+
 export type TranslateProps = {
   key: string;
   params?: TranslationParams;
-  translation?: string;
   defaultValue?: string;
   namespace?: string;
   noWrap?: boolean;
   orEmpty?: boolean;
+  fallbackLanguages?: FallbackLanguage;
+};
+
+export type TranslatePropsInternal = TranslateProps & {
+  translation?: string;
 };
 
 export type TreeTranslationsData = {
@@ -57,7 +67,7 @@ export type TranslationParams = {
   [key: string]: string | number | bigint;
 };
 
-export type WrapperWrapFunction = (props: TranslateProps) => string;
+export type WrapperWrapFunction = (props: TranslatePropsInternal) => string;
 export type WrapperUnwrapFunction = (text: string) => Unwrapped;
 
 export type WrapperAttributeXPathGetter = (props: {
@@ -83,13 +93,13 @@ export type FormatPlugin = () => {
 };
 
 export type ObserverProps = {
-  translate: (params: TranslateProps) => string;
+  translate: (params: TranslatePropsInternal) => string;
   onClick: TranslationOnClick;
 };
 
 export type ObserverPlugin = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
-  wrap: (props: TranslateProps) => string;
+  wrap: (props: TranslatePropsInternal) => string;
   retranslate: () => void;
   stop: () => void;
 };
@@ -129,7 +139,7 @@ export type TolgeeInstance = Readonly<{
   init: (options: Options) => Readonly<TolgeeInstance>;
   run: () => Promise<void>;
   stop: () => void;
-  instant: (key: string, namespace?: string) => string;
+  instant: (props: TranslatePropsInternal) => string;
 }>;
 
 export type NodeLock = {

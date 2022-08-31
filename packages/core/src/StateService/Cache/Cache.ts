@@ -45,6 +45,25 @@ export const cacheGetTranslation = (
   return cache.get(encodeCacheKey(descriptor))?.data.get(key);
 };
 
+export const cacheGetTranslationFallback = (
+  cache: StateCache,
+  namespaces: string[],
+  languages: string[],
+  key: string
+) => {
+  for (const namespace of namespaces) {
+    for (const language of languages) {
+      const value = cache
+        .get(encodeCacheKey({ language, namespace }))
+        ?.data.get(key);
+      if (value !== undefined && value !== null) {
+        return value;
+      }
+    }
+  }
+  return undefined;
+};
+
 export const cacheChangeTranslation = (
   cache: StateCache,
   descriptor: CacheKeyObject,

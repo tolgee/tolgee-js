@@ -38,10 +38,10 @@ describe('plugins', () => {
     });
     tolgee.setObserver(testObserver);
     tolgee.run();
-    expect(tolgee.instant('hello')).toEqual('hello|world');
+    expect(tolgee.instant({ key: 'hello' })).toEqual('hello|world');
 
     tolgee.setFormat(testFormat);
-    expect(tolgee.instant('hello')).toEqual('(hello|world)');
+    expect(tolgee.instant({ key: 'hello' })).toEqual('(hello|world)');
     tolgee.stop();
   });
 });

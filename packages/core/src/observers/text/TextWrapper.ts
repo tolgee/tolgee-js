@@ -1,6 +1,6 @@
 import {
   KeyAndParams,
-  TranslateProps,
+  TranslatePropsInternal,
   WrapperAttributeXPathGetter,
   WrapperInterface,
   WrapperUnwrapFunction,
@@ -11,7 +11,7 @@ import { isCharEscaped } from './helpers';
 type Props = {
   inputPrefix: string;
   inputSuffix: string;
-  translate: (params: TranslateProps) => string;
+  translate: (params: TranslatePropsInternal) => string;
 };
 
 export const TextWrapper = ({
