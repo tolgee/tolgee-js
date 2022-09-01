@@ -1,4 +1,5 @@
 import {
+  FallbackGeneral,
   FallbackLanguage,
   FallbackLanguageObject,
   FallbackLanguageOption,
@@ -8,7 +9,7 @@ export function isObject(item: any) {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;
 }
 
-export function getFallback(fallbackLanguage: FallbackLanguage): string[] {
+export function getFallback(fallbackLanguage: FallbackGeneral): string[] {
   if (typeof fallbackLanguage === 'string') {
     return [fallbackLanguage];
   }

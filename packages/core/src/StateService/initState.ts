@@ -1,4 +1,8 @@
-import { FallbackLanguageOption, TreeTranslationsData } from '../types';
+import {
+  FallbackLanguageOption,
+  FallbackNS,
+  TreeTranslationsData,
+} from '../types';
 
 export type Options = {
   /**
@@ -28,6 +32,10 @@ export type Options = {
    * Namespaces which should be always fetched
    */
   ns?: string[];
+  /**
+   * Namespaces to be used to find translation when no explicit namespace set.
+   */
+  fallbackNs?: FallbackNS;
   /**
    * Default namespace when no namespace defined (default: '')
    */

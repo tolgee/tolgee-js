@@ -30,6 +30,18 @@ export const cacheAddRecord = (
   });
 };
 
+export const cacheExists = (
+  cache: StateCache,
+  descriptor: CacheKeyObject,
+  origin?: CacheRecordOrigin
+) => {
+  const record = cache.get(encodeCacheKey(descriptor));
+  if (origin && record) {
+    return origin === record.origin;
+  }
+  return Boolean(record);
+};
+
 export const cacheGetRecord = (
   cache: StateCache,
   descriptor: CacheKeyObject

@@ -6,7 +6,11 @@ export type { State, Options } from './StateService/initState';
 export type { EventEmitterType } from './EventEmitter';
 export type { EventEmitterSelectiveType } from './EventEmitterSelective';
 
-export type FallbackLanguage = undefined | false | string | string[];
+export type FallbackGeneral = undefined | false | string | string[];
+
+export type FallbackNS = FallbackGeneral;
+
+export type FallbackLanguage = FallbackGeneral;
 
 export type FallbackLanguageObject = Record<string, FallbackLanguage>;
 
@@ -16,7 +20,7 @@ export type TranslateProps = {
   key: string;
   params?: TranslationParams;
   defaultValue?: string;
-  namespace?: string;
+  ns?: string | string[];
   noWrap?: boolean;
   orEmpty?: boolean;
   fallbackLanguages?: FallbackLanguage;
@@ -104,6 +108,26 @@ export type ObserverPlugin = (props: ObserverProps) => {
   stop: () => void;
 };
 
+export type BackendProps = {
+  apiUrl?: string;
+  apiKey?: string;
+};
+
+export type BackendGetRecordProps = {
+  language: string;
+  namespace?: string;
+  dev: boolean;
+};
+
+export type BackendGetRecord = (
+  data: BackendGetRecordProps
+) => Promise<TreeTranslationsData> | undefined;
+
+export type BackendPlugin = (props: BackendProps) => {
+  isDev?: boolean;
+  getRecord: BackendGetRecord;
+};
+
 export type KeyUpdateEvent = {
   type: 'language' | 'key';
 };
@@ -120,6 +144,7 @@ export type TolgeeInstance = Readonly<{
     observer: ObserverPlugin | undefined
   ) => Readonly<TolgeeInstance>;
   setUi: (ui: UiLibInterface | undefined) => Readonly<TolgeeInstance>;
+  addBackend: (backend: BackendPlugin | undefined) => Readonly<TolgeeInstance>;
 
   getLanguage: () => string;
   getPendingLanguage: () => string;
@@ -136,7 +161,7 @@ export type TolgeeInstance = Readonly<{
   ) => Promise<TreeTranslationsData | TranslationsFlat | undefined>;
   isLoading: () => boolean;
   isFetching: () => boolean;
-  init: (options: Options) => Readonly<TolgeeInstance>;
+  init: (options: Partial<Options>) => Readonly<TolgeeInstance>;
   run: () => Promise<void>;
   stop: () => void;
   instant: (props: TranslatePropsInternal) => string;

@@ -1,4 +1,7 @@
 import {
+  BackendGetRecord,
+  BackendPlugin,
+  BackendProps,
   FormatPlugin,
   ObserverPlugin,
   TranslatePropsInternal,
@@ -11,17 +14,20 @@ import {
 
 export const PluginService = (
   getLocale: () => string,
-  translate: (params: TranslatePropsInternal) => string
+  translate: (params: TranslatePropsInternal) => string,
+  getBackendProps: () => BackendProps
 ) => {
   const plugins = {
     formatter: undefined as FormatPlugin | undefined,
     observer: undefined as ObserverPlugin | undefined,
+    backends: [] as BackendPlugin[],
     ui: undefined as UiConstructor | undefined,
   };
 
   const instances = {
     formatter: undefined as ReturnType<FormatPlugin> | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
+    backends: [] as ReturnType<BackendPlugin>[],
     ui: undefined as UiInstance | undefined,
   };
 
@@ -64,6 +70,35 @@ export const PluginService = (
     plugins.ui = (ui as UiLibInterface)?.UI || ui;
   };
 
+  const addBackend = (backend: BackendPlugin | undefined) => {
+    if (backend) {
+      plugins.backends.push(backend);
+    }
+  };
+
+  const makeBackendsReady = () => {
+    if (plugins.backends.length !== instances.backends.length) {
+      const backendProps = getBackendProps();
+      instances.backends = plugins.backends.map((backend) =>
+        backend(backendProps)
+      );
+    }
+  };
+
+  const getBackendRecord: BackendGetRecord = ({ language, namespace, dev }) => {
+    makeBackendsReady();
+    for (const backend of instances.backends) {
+      if (Boolean(backend.isDev) !== dev) {
+        continue;
+      }
+      const data = backend.getRecord({ language, namespace, dev });
+      if (data !== undefined) {
+        return data;
+      }
+    }
+    return undefined;
+  };
+
   const formatTranslation = ({
     key,
     translation,
@@ -102,6 +137,8 @@ export const PluginService = (
     getObserver,
     setObserver,
     setUi,
+    addBackend,
+    getBackendRecord,
     run,
     stop,
     retranslate,
