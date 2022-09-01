@@ -1,15 +1,18 @@
 import { EventServiceType } from '../EventService';
 import {
+  BackendGetRecord,
   CacheAsyncRequests,
   CacheDescriptor,
   CacheKeyObject,
   Options,
   StateCache,
   TranslatePropsInternal,
+  TreeTranslationsData,
 } from '../types';
 import {
   cacheAddRecord,
   cacheChangeTranslation,
+  cacheExists,
   cacheGetRecord,
   cacheGetTranslationFallback,
   cacheInit,
@@ -20,6 +23,7 @@ import { initState, State } from './initState';
 
 export const StateService = (
   eventService: EventServiceType,
+  backendGetRecord: BackendGetRecord,
   options?: Partial<Options>
 ) => {
   let state: State = initState(options);
@@ -32,6 +36,10 @@ export const StateService = (
   const init = (options: Partial<Options>) => {
     state = initState(options, state.initialOptions);
     cacheInit(cache, state.initialOptions.staticData);
+  };
+
+  const isDev = () => {
+    return Boolean(state.initialOptions.apiKey);
   };
 
   const isFetching = () => {
@@ -85,6 +93,21 @@ export const StateService = (
     }
   };
 
+  const getFallbackNamespaces = () => {
+    const defaultNs = state.initialOptions.defaultNs;
+    const fallbackNs = state.initialOptions.fallbackNs;
+    const fallbackNamespaces = typeof defaultNs === 'string' ? [defaultNs] : [];
+    return [...fallbackNamespaces, ...getFallback(fallbackNs)];
+  };
+
+  const getFallbackLangs = (lang?: string) => {
+    const language = lang || state.language;
+    return [
+      language,
+      ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
+    ];
+  };
+
   const getRequiredNamespaces = () => {
     return Array.from(
       new Set([
@@ -100,7 +123,13 @@ export const StateService = (
     const requests: ReturnType<typeof loadRecord>[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cacheGetRecord(cache, { language, namespace })) {
+        if (
+          !cacheExists(
+            cache,
+            { language, namespace },
+            isDev() ? 'dev' : undefined
+          )
+        ) {
           requests.push(loadRecord({ language, namespace }));
         }
       });
@@ -132,27 +161,16 @@ export const StateService = (
     }
   };
 
-  const getFallbackLangs = (lang?: string) => {
-    const language = lang || state.language;
-    return [
-      language,
-      ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
-    ];
-  };
-
   const getTranslation = ({
     key,
-    namespace,
+    ns,
     fallbackLanguages,
   }: TranslatePropsInternal) => {
-    return cacheGetTranslationFallback(
-      cache,
-      [namespace || state.initialOptions.defaultNs],
-      fallbackLanguages
-        ? [state.language, ...getFallback(fallbackLanguages)]
-        : getFallbackLangs(),
-      key
-    );
+    const namespaces = ns ? getFallback(ns) : getFallbackNamespaces();
+    const languages = fallbackLanguages
+      ? [state.language, ...getFallback(fallbackLanguages)]
+      : getFallbackLangs();
+    return cacheGetTranslationFallback(cache, namespaces, languages, key);
   };
 
   const changeTranslation = (
@@ -165,10 +183,29 @@ export const StateService = (
     eventService.onKeyChange.emit(key);
   };
 
-  const loadRecord = async (descriptor: CacheDescriptor) => {
-    const keyObject = withDefaultNs(descriptor);
+  const fetchData = (keyObject: CacheKeyObject) => {
+    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
+    if (isDev()) {
+      dataPromise = backendGetRecord({ ...keyObject, dev: true });
+    }
+    if (dataPromise) {
+      return dataPromise;
+    }
     const staticDataValue =
       state.initialOptions.staticData?.[encodeCacheKey(keyObject)];
+
+    if (typeof staticDataValue === 'function') {
+      dataPromise = staticDataValue();
+    }
+    if (dataPromise) {
+      return dataPromise;
+    }
+    dataPromise = backendGetRecord({ ...keyObject, dev: false });
+    return dataPromise;
+  };
+
+  const loadRecord = async (descriptor: CacheDescriptor) => {
+    const keyObject = withDefaultNs(descriptor);
     const cacheKey = encodeCacheKey(keyObject);
     const existingPromise = asyncRequests.get(cacheKey);
 
@@ -176,22 +213,30 @@ export const StateService = (
       return existingPromise;
     }
 
-    if (typeof staticDataValue === 'function') {
-      const dataPromise = staticDataValue();
+    const dataPromise = fetchData(keyObject);
+    if (dataPromise) {
       const fetchingBefore = isFetching();
       asyncRequests.set(cacheKey, dataPromise);
       if (!fetchingBefore) {
         eventService.onFetchingChange.emit(true);
       }
+
       const data = await dataPromise;
+
       asyncRequests.delete(cacheKey);
-      cacheAddRecord(cache, withDefaultNs(descriptor), 'prod', data);
+      cacheAddRecord(cache, keyObject, isDev() ? 'dev' : 'prod', data);
       if (!isFetching()) {
         eventService.onFetchingChange.emit(false);
       }
     }
+
     return cacheGetRecord(cache, withDefaultNs(descriptor));
   };
+
+  const getBackendProps = () => ({
+    apiUrl: state.initialOptions.apiUrl,
+    apiKey: state.initialOptions.apiKey,
+  });
 
   return Object.freeze({
     init,
@@ -207,6 +252,7 @@ export const StateService = (
     isLoading,
     isFetching,
     loadInitial,
+    getBackendProps,
   });
 };
 
