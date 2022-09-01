@@ -4,6 +4,7 @@ import {
   Unwrapped,
   WrapperInterface,
   WrapperWrapFunction,
+  TranslateProps,
 } from '../../types';
 import {
   decodeFromText,
@@ -15,25 +16,30 @@ import {
 
 import { ValueMemory } from './ValueMemory';
 
+type EncodeValue = {
+  // key
+  k: string;
+  // namespaces
+  n: string[] | string | undefined;
+  // default value
+  d: string | undefined;
+};
+
 export const InvisibleWrapper = (): WrapperInterface => {
   const keyMemory = new ValueMemory();
-  const defaultMemory = new ValueMemory();
 
   const unwrap = (text: string): Unwrapped => {
     const keysAndParams = [] as KeyAndParams[];
     const messages = decodeFromText(text);
 
     messages.forEach((msg: string) => {
-      const [keyCode, defaultCode] = stringToCodePoints(msg);
-      const key = keyMemory.numberToValue(keyCode);
-      const defaultValue =
-        defaultCode !== undefined
-          ? defaultMemory.numberToValue(defaultCode)
-          : undefined;
+      const [valueCode] = stringToCodePoints(msg);
+      const encodedValue = keyMemory.numberToValue(valueCode);
+      const { k: key, d: defaultValue, n: ns } = decodeValue(encodedValue);
       keysAndParams.push({
-        key: key,
-        params: undefined,
+        key,
         defaultValue,
+        ns,
       });
     });
 
@@ -42,14 +48,30 @@ export const InvisibleWrapper = (): WrapperInterface => {
     return { text: result, keys: keysAndParams };
   };
 
-  const wrap: WrapperWrapFunction = ({ key, defaultValue, translation }) => {
-    const codes = [keyMemory.valueToNumber(key)];
-    if (defaultValue) {
-      codes.push(defaultMemory.valueToNumber(defaultValue));
-    }
+  const encodeValue = (data: TranslateProps) => {
+    const value: EncodeValue = {
+      k: data.key,
+      n: data.ns,
+      d: data.defaultValue,
+    };
+    return JSON.stringify(value);
+  };
+
+  const decodeValue = (value: string) => {
+    return JSON.parse(value) as EncodeValue;
+  };
+
+  const wrap: WrapperWrapFunction = ({
+    key,
+    defaultValue,
+    translation,
+    ns,
+  }) => {
+    const encodedValue = encodeValue({ key, ns, defaultValue });
+    const code = keyMemory.valueToNumber(encodedValue);
 
     const value = translation || '';
-    const invisibleMark = encodeMessage(String.fromCodePoint(...codes));
+    const invisibleMark = encodeMessage(String.fromCodePoint(code));
 
     return typeof value === 'string' ? value + invisibleMark : value;
   };

@@ -29,14 +29,26 @@ export const TextWrapper = ({
     let escaped = false;
     let actual = '';
     let paramName = '';
-    let readingState: 'KEY' | 'DEFAULT_VALUE' | 'PARAM_NAME' | 'PARAM_VALUE' =
-      'KEY';
+    let readingState:
+      | 'KEY'
+      | 'DEFAULT_VALUE'
+      | 'PARAM_NAME'
+      | 'PARAM_VALUE'
+      | 'NAMESPACE' = 'KEY';
 
     const result = {
       key: '',
+      ns: undefined as string[] | undefined,
       params: {},
       defaultValue: undefined as string | undefined,
     } as KeyAndParams;
+
+    const addNamespace = (ns: string) => {
+      if (!result.ns) {
+        result.ns = [];
+      }
+      (result.ns as string[]).push(ns);
+    };
 
     for (const char of unwrappedString) {
       if (char === '\\' && !escaped) {
@@ -54,7 +66,24 @@ export const TextWrapper = ({
         actual = '';
         continue;
       }
-
+      if (readingState === 'KEY' && char === '|') {
+        readingState = 'NAMESPACE';
+        result.key = actual;
+        actual = '';
+        continue;
+      }
+      if (readingState === 'NAMESPACE' && char === '|') {
+        readingState = 'NAMESPACE';
+        addNamespace(actual);
+        actual = '';
+        continue;
+      }
+      if (readingState === 'NAMESPACE' && char === ',') {
+        readingState = 'DEFAULT_VALUE';
+        addNamespace(actual);
+        actual = '';
+        continue;
+      }
       if (readingState === 'KEY' && char === ':') {
         readingState = 'PARAM_NAME';
         result.key = actual;
@@ -95,6 +124,10 @@ export const TextWrapper = ({
 
     if (readingState === 'PARAM_VALUE') {
       result.params![paramName] = actual;
+    }
+
+    if (readingState === 'NAMESPACE') {
+      addNamespace(actual);
     }
 
     return result;
@@ -147,7 +180,12 @@ export const TextWrapper = ({
     return { text: text, keys: [] };
   };
 
-  const wrap: WrapperWrapFunction = ({ key, params, defaultValue }): string => {
+  const wrap: WrapperWrapFunction = ({
+    key,
+    params,
+    defaultValue,
+    ns,
+  }): string => {
     let paramString = Object.entries(params || {})
       .map(
         ([name, value]) =>
@@ -159,14 +197,26 @@ export const TextWrapper = ({
     const defaultString =
       defaultValue !== undefined ? `,${escapeParam(defaultValue)}` : '';
 
+    const nsArray = typeof ns === 'string' ? [ns] : ns;
+
+    const namespaces = nsArray?.length
+      ? `|${nsArray.map((ns) => escapeParam(ns)).join('|')}`
+      : '';
+
     return `${inputPrefix}${escapeParam(
       key
-    )}${defaultString}${paramString}${inputSuffix}`;
+    )}${namespaces}${defaultString}${paramString}${inputSuffix}`;
   };
 
   function getTranslatedWithMetadata(text: string) {
-    const { key, params, defaultValue } = parseUnwrapped(text);
-    const translated = translate({ key, params, defaultValue, noWrap: true });
+    const { key, params, defaultValue, ns } = parseUnwrapped(text);
+    const translated = translate({
+      key,
+      params,
+      defaultValue,
+      ns,
+      noWrap: true,
+    });
     return { translated, key, params, defaultValue };
   }
 
@@ -176,7 +226,7 @@ export const TextWrapper = ({
 
   const escapeParam = (param: any) => {
     if (typeof param === 'string') {
-      return param.replace(/[,:\\]/gs, '\\$&');
+      return param.replace(/[,:|\\]/gs, '\\$&');
     }
     if (typeof param === 'number' || typeof param === 'bigint') {
       return param.toString();

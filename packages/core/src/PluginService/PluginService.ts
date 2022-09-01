@@ -106,6 +106,7 @@ export const PluginService = (
     noWrap,
     params,
     orEmpty,
+    ns,
   }: TranslatePropsInternal) => {
     let result = translation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
@@ -114,6 +115,7 @@ export const PluginService = (
         translation: result,
         defaultValue,
         params,
+        ns,
       });
     }
     if (instances.formatter && translation) {
