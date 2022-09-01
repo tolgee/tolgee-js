@@ -1,16 +1,17 @@
-import { Tolgee, TextObserver } from '@tolgee/core';
+import { Tolgee, TextObserver, TolgeeBackend } from '@tolgee/core';
 import { UI } from '@tolgee/ui';
-
-const delayedPromise = (data) => () =>
-  new Promise((resolve) => setTimeout(() => resolve(data), 100));
 
 const tolgee = Tolgee()
   .setObserver(TextObserver())
   .setUi(UI)
+  .addBackend(TolgeeBackend)
   .init({
+    apiKey: 'tgpak_he3tmx3oovyhizdgm5vwkmrzoq2xemdjmu2gg5dfoe2wmm3h',
+    apiUrl: 'https://testing.tolgee.io',
     staticData: {
-      en: delayedPromise({ world: 'World', title: 'Title' }),
-      es: delayedPromise({ world: 'Mundo' }),
+      en: { world: 'World', title: 'Title' },
+      'en:ns': { world: 'NSWorld' },
+      es: { world: 'Mundo' },
     },
   });
 
@@ -26,13 +27,14 @@ languageSelect.onchange = (e) => {
 const test1 = document.createElement('div');
 test1.textContent = 'test1';
 const test2 = document.createElement('div');
-
 const test3 = document.createElement('div');
+const test4 = document.createElement('div');
 
 document.body.append(languageSelect);
 document.body.append(test1);
 document.body.append(test2);
 document.body.append(test3);
+document.body.append(test4);
 
 tolgee.run();
 
@@ -44,3 +46,7 @@ test2.innerHTML = `<span>${tolgee.instant({ key: 'world' })}</span>`;
 test3.innerHTML = `<span><span>${tolgee.instant({
   key: 'world',
 })}</span><span>${tolgee.instant({ key: 'title' })}</span></span>`;
+
+test4.innerHTML = `<span>${tolgee.instant({ key: 'world', ns: 'ns' })}</span>`;
+
+console.log(tolgee.instant({ key: 'world', ns: 'ns' }));

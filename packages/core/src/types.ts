@@ -10,6 +10,8 @@ export type FallbackGeneral = undefined | false | string | string[];
 
 export type FallbackNS = FallbackGeneral;
 
+export type FallbackNSTranslation = undefined | string | string[];
+
 export type FallbackLanguage = FallbackGeneral;
 
 export type FallbackLanguageObject = Record<string, FallbackLanguage>;
@@ -20,7 +22,7 @@ export type TranslateProps = {
   key: string;
   params?: TranslationParams;
   defaultValue?: string;
-  ns?: string | string[];
+  ns?: FallbackNSTranslation;
   noWrap?: boolean;
   orEmpty?: boolean;
   fallbackLanguages?: FallbackLanguage;
@@ -63,6 +65,7 @@ export type KeyAndParams = {
   key: string;
   params?: TranslationParams;
   defaultValue?: string;
+  ns?: FallbackNSTranslation;
 };
 
 export type Unwrapped = { text: string; keys: KeyAndParams[] };

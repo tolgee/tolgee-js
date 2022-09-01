@@ -188,19 +188,18 @@ export const StateService = (
     if (isDev()) {
       dataPromise = backendGetRecord({ ...keyObject, dev: true });
     }
-    if (dataPromise) {
-      return dataPromise;
-    }
-    const staticDataValue =
-      state.initialOptions.staticData?.[encodeCacheKey(keyObject)];
 
-    if (typeof staticDataValue === 'function') {
-      dataPromise = staticDataValue();
+    if (!dataPromise) {
+      dataPromise = backendGetRecord({ ...keyObject, dev: false });
     }
-    if (dataPromise) {
-      return dataPromise;
+
+    if (!dataPromise) {
+      const staticDataValue =
+        state.initialOptions.staticData?.[encodeCacheKey(keyObject)];
+      if (typeof staticDataValue === 'function') {
+        dataPromise = staticDataValue();
+      }
     }
-    dataPromise = backendGetRecord({ ...keyObject, dev: false });
     return dataPromise;
   };
 
