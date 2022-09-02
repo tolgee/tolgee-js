@@ -4,8 +4,8 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 
-import { ThemeProvider } from '../ThemeProvider';
 import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
+import { ThemeProvider } from '../ThemeProvider';
 
 const ScMenuItem = styled(MenuItem)`
   display: flex;
