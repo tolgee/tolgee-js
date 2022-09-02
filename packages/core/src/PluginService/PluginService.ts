@@ -1,7 +1,9 @@
+import { TolgeeBackend } from '../backends/TolgeeBackend';
 import {
+  BackendDevPlugin,
   BackendGetRecord,
   BackendPlugin,
-  BackendProps,
+  BackendDevProps,
   FormatPlugin,
   ObserverPlugin,
   TranslatePropsInternal,
@@ -15,11 +17,12 @@ import {
 export const PluginService = (
   getLocale: () => string,
   translate: (params: TranslatePropsInternal) => string,
-  getBackendProps: () => BackendProps
+  getBackendProps: () => BackendDevProps
 ) => {
   const plugins = {
     formatter: undefined as FormatPlugin | undefined,
     observer: undefined as ObserverPlugin | undefined,
+    devBackend: TolgeeBackend as BackendDevPlugin | undefined,
     backends: [] as BackendPlugin[],
     ui: undefined as UiConstructor | undefined,
   };
@@ -27,6 +30,7 @@ export const PluginService = (
   const instances = {
     formatter: undefined as ReturnType<FormatPlugin> | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
+    devBackend: undefined as ReturnType<BackendDevPlugin> | undefined,
     backends: [] as ReturnType<BackendPlugin>[],
     ui: undefined as UiInstance | undefined,
   };
@@ -76,22 +80,28 @@ export const PluginService = (
     }
   };
 
+  const setDevBackend = (backend: BackendDevPlugin | undefined) => {
+    plugins.devBackend = backend;
+  };
+
   const makeBackendsReady = () => {
+    if (!instances.devBackend && plugins.devBackend) {
+      instances.devBackend = plugins.devBackend(getBackendProps());
+    }
     if (plugins.backends.length !== instances.backends.length) {
-      const backendProps = getBackendProps();
-      instances.backends = plugins.backends.map((backend) =>
-        backend(backendProps)
-      );
+      instances.backends = plugins.backends.map((backend) => backend());
     }
   };
 
-  const getBackendRecord: BackendGetRecord = ({ language, namespace, dev }) => {
+  const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
+    makeBackendsReady();
+    return instances.devBackend?.getRecord({ language, namespace });
+  };
+
+  const getBackendRecord: BackendGetRecord = ({ language, namespace }) => {
     makeBackendsReady();
     for (const backend of instances.backends) {
-      if (Boolean(backend.isDev) !== dev) {
-        continue;
-      }
-      const data = backend.getRecord({ language, namespace, dev });
+      const data = backend.getRecord({ language, namespace });
       if (data !== undefined) {
         return data;
       }
@@ -140,7 +150,9 @@ export const PluginService = (
     setObserver,
     setUi,
     addBackend,
+    setDevBackend,
     getBackendRecord,
+    getBackendDevRecord,
     run,
     stop,
     retranslate,

@@ -1,7 +1,6 @@
-import { BackendPlugin } from '../types';
+import { BackendDevPlugin } from '../types';
 
-export const TolgeeBackend: BackendPlugin = ({ apiUrl, apiKey }) => ({
-  isDev: true,
+export const TolgeeBackend: BackendDevPlugin = ({ apiUrl, apiKey }) => ({
   getRecord({ language, namespace }) {
     if (namespace) {
       return undefined;

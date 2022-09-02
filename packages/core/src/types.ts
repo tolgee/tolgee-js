@@ -111,7 +111,7 @@ export type ObserverPlugin = (props: ObserverProps) => {
   stop: () => void;
 };
 
-export type BackendProps = {
+export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
 };
@@ -119,15 +119,17 @@ export type BackendProps = {
 export type BackendGetRecordProps = {
   language: string;
   namespace?: string;
-  dev: boolean;
 };
 
 export type BackendGetRecord = (
   data: BackendGetRecordProps
 ) => Promise<TreeTranslationsData> | undefined;
 
-export type BackendPlugin = (props: BackendProps) => {
-  isDev?: boolean;
+export type BackendPlugin = () => {
+  getRecord: BackendGetRecord;
+};
+
+export type BackendDevPlugin = (props: BackendDevProps) => {
   getRecord: BackendGetRecord;
 };
 
@@ -148,6 +150,9 @@ export type TolgeeInstance = Readonly<{
   ) => Readonly<TolgeeInstance>;
   setUi: (ui: UiLibInterface | undefined) => Readonly<TolgeeInstance>;
   addBackend: (backend: BackendPlugin | undefined) => Readonly<TolgeeInstance>;
+  setDevBackend: (
+    backend: BackendPlugin | undefined
+  ) => Readonly<TolgeeInstance>;
 
   getLanguage: () => string;
   getPendingLanguage: () => string;

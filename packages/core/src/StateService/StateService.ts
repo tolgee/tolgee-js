@@ -21,11 +21,19 @@ import { encodeCacheKey } from './Cache/helpers';
 import { getFallback, getFallbackFromStruct } from './helpers';
 import { initState, State } from './initState';
 
-export const StateService = (
-  eventService: EventServiceType,
-  backendGetRecord: BackendGetRecord,
-  options?: Partial<Options>
-) => {
+type StateServiceProps = {
+  eventService: EventServiceType;
+  backendGetRecord: BackendGetRecord;
+  backendGetDevRecord: BackendGetRecord;
+  options?: Partial<Options>;
+};
+
+export const StateService = ({
+  eventService,
+  backendGetRecord,
+  backendGetDevRecord,
+  options,
+}: StateServiceProps) => {
   let state: State = initState(options);
   const cache: StateCache = new Map();
 
@@ -186,11 +194,11 @@ export const StateService = (
   const fetchData = (keyObject: CacheKeyObject) => {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (isDev()) {
-      dataPromise = backendGetRecord({ ...keyObject, dev: true });
+      dataPromise = backendGetDevRecord(keyObject);
     }
 
     if (!dataPromise) {
-      dataPromise = backendGetRecord({ ...keyObject, dev: false });
+      dataPromise = backendGetRecord(keyObject);
     }
 
     if (!dataPromise) {
@@ -232,10 +240,13 @@ export const StateService = (
     return cacheGetRecord(cache, withDefaultNs(descriptor));
   };
 
-  const getBackendProps = () => ({
-    apiUrl: state.initialOptions.apiUrl,
-    apiKey: state.initialOptions.apiKey,
-  });
+  const getBackendProps = () => {
+    const apiUrl = state.initialOptions.apiUrl;
+    return {
+      apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
+      apiKey: state.initialOptions.apiKey,
+    };
+  };
 
   return Object.freeze({
     init,
