@@ -13,14 +13,14 @@ const data = {
 } as any;
 
 const backendNormal: BackendPlugin = () => ({
-  getRecord({ language, namespace = '', dev }) {
+  getRecord({ language, namespace = '' }) {
     return data[language]?.[namespace];
   },
 });
 
 const backendDev: BackendPlugin = () => ({
   isDev: true,
-  getRecord({ language, namespace = '', dev }) {
+  getRecord() {
     return Promise.resolve({ cancel: 'Dev' });
   },
 });
@@ -32,7 +32,7 @@ describe('backend plugins', () => {
       language: 'en',
     })
       .addBackend(backendNormal)
-      .addBackend(backendDev);
+      .setDevBackend(backendDev);
     await tolgee.run();
     expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
     tolgee.stop();

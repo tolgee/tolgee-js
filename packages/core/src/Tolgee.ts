@@ -2,6 +2,7 @@ import { EventService } from './EventService';
 import { PluginService } from './PluginService/PluginService';
 import { StateService } from './StateService/StateService';
 import {
+  BackendDevPlugin,
   BackendGetRecordProps,
   BackendPlugin,
   FormatPlugin,
@@ -15,7 +16,12 @@ import {
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const eventService = EventService();
-  const stateService = StateService(eventService, getBackendRecord, options);
+  const stateService = StateService({
+    eventService,
+    backendGetRecord,
+    backendGetDevRecord,
+    options,
+  });
   const pluginService = PluginService(
     stateService.getLanguage,
     instant,
@@ -27,8 +33,12 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     return pluginService.formatTranslation({ ...props, translation });
   }
 
-  function getBackendRecord(props: BackendGetRecordProps) {
+  function backendGetRecord(props: BackendGetRecordProps) {
     return pluginService.getBackendRecord(props);
+  }
+
+  function backendGetDevRecord(props: BackendGetRecordProps) {
+    return pluginService.getBackendDevRecord(props);
   }
 
   eventService.onKeyUpdate.listenAll((e) => {
@@ -53,6 +63,10 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     },
     setUi: (ui: UiLibInterface | undefined) => {
       pluginService.setUi(ui);
+      return tolgee;
+    },
+    setDevBackend: (backend: BackendDevPlugin | undefined) => {
+      pluginService.setDevBackend(backend);
       return tolgee;
     },
     addBackend: (backend: BackendPlugin | undefined) => {
