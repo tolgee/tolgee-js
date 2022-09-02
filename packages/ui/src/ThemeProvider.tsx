@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   createTheme,
   ThemeProvider as MuiThemeProvider,
 } from '@mui/material/styles';
-import { DEVTOOLS_Z_INDEX } from './constants';
+import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from './constants';
+import createCache from '@emotion/cache';
+import { CacheProvider } from '@emotion/react';
 
 let theme = createTheme({
   typography: {
@@ -53,5 +55,17 @@ theme = createTheme(theme, {
 });
 
 export const ThemeProvider: React.FC = ({ children }) => {
-  return <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>;
+  const cache = useRef(
+    createCache({
+      key: 'css',
+      prepend: true,
+      container: document.getElementById(DEVTOOLS_ID).shadowRoot,
+    })
+  );
+
+  return (
+    <CacheProvider value={cache.current!}>
+      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
+    </CacheProvider>
+  );
 };

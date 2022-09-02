@@ -10,7 +10,10 @@ export class BodyEnd extends React.PureComponent<{ document?: Document }> {
   }
 
   get devTools() {
-    return this.document.getElementById(DEVTOOLS_ID) || this.document.body;
+    return (
+      this.document.getElementById(DEVTOOLS_ID)?.shadowRoot ||
+      this.document.body
+    );
   }
 
   componentDidMount() {
