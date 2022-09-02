@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.9.0-rc.b7a4088.0 (2022-09-02)
+
+
+### Features
+
+* devtools to shadow dom to avoid css influence ([b7a4088](https://github.com/tolgee/tolgee-js/commit/b7a4088cb46321104c772511db5a748abf9f53ae))
+
+
+
+
+
 # [4.8.0](https://github.com/tolgee/tolgee-js/compare/v4.7.3...v4.8.0) (2022-08-01)
 
 **Note:** Version bump only for package @tolgee/ngx-workspace
