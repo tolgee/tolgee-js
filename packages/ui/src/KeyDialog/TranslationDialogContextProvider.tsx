@@ -5,6 +5,9 @@ import { ComponentDependencies } from './KeyDialog';
 import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
+import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
+
+const MAX_LANGUAGES_SELECTED = 5;
 
 export interface ScreenshotInterface {
   id: number;
@@ -347,11 +350,21 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         ? !coreService.isAuthorizedTo('translations.edit')
         : !coreService.isAuthorizedTo('keys.edit'));
 
-    const [availableLanguages, setAvailableLanguages] =
+    const [availableLanguages, _setAvailableLanguages] =
       useState<LanguageModel[]>(undefined);
+    const setAvailableLanguages = (data: LanguageModel[]) => {
+      _setAvailableLanguages(putBaseLangFirst(data));
+    };
+
+    const getInitialLanguages = () => {
+      const langs = Array.from(
+        properties.preferredLanguages || [properties.currentLanguage]
+      );
+      return new Set(langs.slice(0, MAX_LANGUAGES_SELECTED));
+    };
 
     const [selectedLanguages, setSelectedLanguages] = useState(
-      properties.preferredLanguages || new Set([properties.currentLanguage])
+      getInitialLanguages()
     );
 
     // sets the default value for base language if is not stored already
@@ -389,6 +402,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       props.defaultValue,
     ]);
 
+    const baseLang = availableLanguages?.find(({ base }) => base);
+
     const contextValue = {
       input: props.input,
       dependencies: props.dependencies,
@@ -398,7 +413,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       success,
       error,
       availableLanguages,
-      selectedLanguages,
+      selectedLanguages: putBaseLangFirstTags(selectedLanguages, baseLang?.tag),
       formDisabled,
       translations,
       translationsForm,

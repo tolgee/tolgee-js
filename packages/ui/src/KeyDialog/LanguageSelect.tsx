@@ -45,7 +45,11 @@ export const LanguageSelect: React.FC = () => {
   return (
     <>
       {availableLanguages && (
-        <ScFormControl variant="outlined" size="small">
+        <ScFormControl
+          variant="outlined"
+          size="small"
+          style={{ maxWidth: 250 }}
+        >
           <Select
             multiple
             value={selected.map((o) => o.value)}

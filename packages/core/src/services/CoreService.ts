@@ -18,7 +18,7 @@ export class CoreService {
   async getLanguages(): Promise<Set<string>> {
     if (!(this.languagePromise instanceof Promise)) {
       this.languagePromise = this.apiHttpService.fetchJson(
-        `v2/projects/languages?size=1000`
+        `v2/projects/languages?size=1000&sort=tag`
       );
     }
 
