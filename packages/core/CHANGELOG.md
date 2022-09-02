@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.8.6](https://github.com/tolgee/tolgee-js/compare/v4.8.5...v4.8.6) (2022-09-02)
+
+
+### Bug Fixes
+
+* improve UI dialog behavior when many languages ([8e5495b](https://github.com/tolgee/tolgee-js/commit/8e5495b2934e1a11b689c12f68d596c058ee5633))
+
+
+
+
+
 # [4.8.0](https://github.com/tolgee/tolgee-js/compare/v4.7.3...v4.8.0) (2022-08-01)
 
 

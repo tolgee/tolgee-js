@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/gatsby-testapp",
-  "version": "4.8.5",
+  "version": "4.8.6",
   "private": true,
   "description": "Tolgee Gatsby TestApp",
   "author": "Jan Cizmar",
@@ -15,7 +15,7 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@tolgee/react": "^4.8.5",
+    "@tolgee/react": "^4.8.6",
     "gatsby": "^4.19.2",
     "gatsby-plugin-react-intl": "^4.0.0",
     "react": "^17.0.1",
