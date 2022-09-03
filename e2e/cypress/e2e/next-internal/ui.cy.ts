@@ -7,6 +7,7 @@ import {
   removeScreenshots,
   visitWithApiKey,
 } from '../../common/nextInternalCommon';
+import { getDevUi } from '../../common/devUiTools';
 
 context('UI Dialog', () => {
   beforeEach(() => {
@@ -28,9 +29,10 @@ context('UI Dialog', () => {
       'screenshots.upload',
     ]);
     openUI();
-    cy.contains('Quick translation');
-    cy.contains('Update');
-    cy.get('#_tolgee_platform_link')
+    getDevUi().contains('Quick translation');
+    getDevUi().contains('Update');
+    getDevUi()
+      .find('#_tolgee_platform_link')
       .invoke('attr', 'href')
       .should(
         'contain',
@@ -65,21 +67,20 @@ context('UI Dialog', () => {
       'screenshots.view',
     ]);
     openUI();
-    cy.get('textarea').contains('Auf dem Weg').should('be.disabled');
+    getDevUi().find('textarea').contains('Auf dem Weg').should('be.disabled');
     assertCanEditEnglish();
   });
 
   it('disabled when view only', () => {
     visitWithApiKey(['translations.view', 'screenshots.view']);
     openUI();
-    cy.contains('There are no screenshots.').should('be.visible');
+    getDevUi().contains('There are no screenshots.').should('be.visible');
     getByAriaLabel('Take screenshot').should('not.exist');
-    cy.contains('Update').should('be.disabled');
+    getDevUi().contains('Update').should('be.disabled');
   });
 
   function assertCanEditEnglish() {
-    cy.get('textarea').contains('On the road').click();
-    cy.focused().clear().type('Hello world');
+    getDevUi().find('textarea').contains('On the road').type('Hello world');
     cy.intercept({ path: '/v2/projects/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
@@ -96,8 +97,8 @@ context('UI Dialog', () => {
         },
       });
     }).as('updateTranslation');
-    cy.contains('Update').click();
+    getDevUi().contains('Update').click();
     cy.wait('@updateTranslation');
-    cy.contains('Hello world').should('be.visible');
+    getDevUi().contains('Hello world').should('be.visible');
   }
 });

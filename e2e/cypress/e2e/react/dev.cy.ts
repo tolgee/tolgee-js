@@ -1,6 +1,7 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 import { exampleAppDevTest } from '../../common/exampleAppDevTest';
+import { getDevUi } from '../../common/devUiTools';
 
 context('React app in dev mode', () => {
   const url = 'http://localhost:8113';
@@ -46,12 +47,12 @@ context('React app in dev mode', () => {
 
     it('opens inner translation correctly', () => {
       cy.gcy('translationInner').trigger('keydown', { key: 'Alt' }).click();
-      cy.contains('translation_inner').should('be.visible');
+      getDevUi().contains('translation_inner').should('be.visible');
     });
 
     it('opens outer translation correctly', () => {
       cy.gcy('translationOuter').trigger('keydown', { key: 'Alt' }).click();
-      cy.contains('translation_outer').should('be.visible');
+      getDevUi().contains('translation_outer').should('be.visible');
     });
   });
 });

@@ -1,4 +1,5 @@
 import { createApiKey, deleteScreenshots, getScreenshots } from './apiCalls';
+import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
 export const openUI = (translation = 'On the road') => {
@@ -8,7 +9,8 @@ export const openUI = (translation = 'On the road') => {
     .trigger('mouseover')
     .click();
   cy.window().trigger('keyup', { key: 'Alt' });
-  cy.get('textarea').contains(translation).should('be.visible');
+  getDevUiRoot().should('exist');
+  getDevUi().find('textarea').contains(translation).should('be.visible');
   cy.wait(300);
 };
 
