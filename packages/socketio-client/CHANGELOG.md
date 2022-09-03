@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.8.6-rc.8439ca3.0 (2022-09-03)
+
+
+### Bug Fixes
+
+* cypress tests ([8439ca3](https://github.com/tolgee/tolgee-js/commit/8439ca397ec860e72b06ee0ba5ad6416720cc578))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client
