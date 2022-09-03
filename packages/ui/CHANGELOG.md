@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [4.9.0](https://github.com/tolgee/tolgee-js/compare/v4.8.6...v4.9.0) (2022-09-03)
+
+
+### Bug Fixes
+
+* jest tests ([44eff5c](https://github.com/tolgee/tolgee-js/commit/44eff5c4720b9b003b3dee8e25f29056904c24c4))
+
+
+### Features
+
+* devtools to shadow dom to avoid css influence ([7097b4a](https://github.com/tolgee/tolgee-js/commit/7097b4a0166e8a8c6a300f2b605b112bb47da443))
+
+
+
+
+
 ## [4.8.6](https://github.com/tolgee/tolgee-js/compare/v4.8.5...v4.8.6) (2022-09-02)
 
 
