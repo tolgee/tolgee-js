@@ -310,7 +310,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         setTranslationsFormTouched(false);
         dispatch({
           type: 'LOAD_TRANSLATIONS',
-          payload: { languages: properties.preferredLanguages },
+          payload: { languages: selectedLanguages },
         });
         if (availableLanguages === undefined) {
           coreService.getLanguagesFull().then((l) => {
