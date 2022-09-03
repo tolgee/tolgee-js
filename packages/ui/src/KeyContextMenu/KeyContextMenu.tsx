@@ -105,12 +105,12 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
                 }}
                 key={index}
               >
-                <ScTranslation>
+                <ScTranslation data-cy="context-menu-value">
                   {this.props.dependencies.translationService.getFromCacheOrFallback(
                     key
                   )}
                 </ScTranslation>
-                <ScKey>{key}</ScKey>
+                <ScKey data-cy="context-menu-key">{key}</ScKey>
               </ScMenuItem>
             ))}
           </Menu>
