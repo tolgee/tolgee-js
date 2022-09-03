@@ -1,3 +1,5 @@
+import { getDevUi } from './devUiTools';
+
 type Options = {
   noLoading: boolean;
 };
@@ -18,12 +20,12 @@ export const exampleAppDevTest = (url: string, options?: Options) =>
     it('title can be translated', () => {
       cy.contains('On the road').invoke('attr', '_tolgee').should('exist');
       cy.contains('On the road').trigger('keydown', { key: 'Alt' }).click();
-      cy.contains('Quick translation').should('be.visible');
+      getDevUi().contains('Quick translation').should('be.visible');
     });
 
     it('placeholder can be translated', () => {
       cy.contains('On the road').invoke('attr', '_tolgee').should('exist');
       cy.get('input').trigger('keydown', { key: 'Alt' }).click();
-      cy.contains('Quick translation').should('be.visible');
+      getDevUi().contains('Quick translation').should('be.visible');
     });
   });

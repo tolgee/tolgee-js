@@ -5,6 +5,7 @@ import {
   removeScreenshots,
   visitWithApiKey,
 } from '../../common/nextInternalCommon';
+import { getDevUi } from '../../common/devUiTools';
 
 context('UI Dialog', () => {
   beforeEach(() => {
@@ -26,8 +27,11 @@ context('UI Dialog', () => {
       'screenshots.upload',
     ]);
     openUI();
-    cy.get('*[aria-label="Take screenshot"]').should('be.visible').click();
-    cy.get('*[aria-label="Screenshot"]').should('be.visible');
+    getDevUi()
+      .find('*[aria-label="Take screenshot"]')
+      .should('be.visible')
+      .click();
+    getDevUi().find('*[aria-label="Screenshot"]').should('be.visible');
   });
 
   it('screenshots not editable', () => {
@@ -38,7 +42,7 @@ context('UI Dialog', () => {
       'screenshots.view',
     ]);
     openUI();
-    cy.contains('There are no screenshots.').should('be.visible');
+    getDevUi().contains('There are no screenshots.').should('be.visible');
     getByAriaLabel('Take screenshot').should('not.exist');
   });
 
@@ -51,13 +55,13 @@ context('UI Dialog', () => {
       'screenshots.upload',
     ]);
     openUI();
-    cy.contains('There are no screenshots.').should('be.visible');
+    getDevUi().contains('There are no screenshots.').should('be.visible');
     getByAriaLabel('Take screenshot').should('be.visible').click();
     getByAriaLabel('Screenshot').should('be.visible').trigger('mouseover');
     // we should be able to delete just uploaded images
     getByAriaLabel('Delete').should('be.visible');
 
-    cy.contains('Update').click();
+    getDevUi().contains('Update').click();
 
     openUI();
     getByAriaLabel('Screenshot').should('be.visible').trigger('mouseover');
@@ -77,12 +81,12 @@ context('UI Dialog', () => {
     openUI();
     getByAriaLabel('Take screenshot').should('be.visible').click();
     getByAriaLabel('Screenshot').should('be.visible');
-    cy.contains('Update').click();
+    getDevUi().contains('Update').click();
 
     openUI();
     getByAriaLabel('Screenshot').trigger('mouseover');
     getByAriaLabel('Delete').should('be.visible').click();
-    cy.contains('Update').click();
+    getDevUi().contains('Update').click();
 
     openUI();
     getByAriaLabel('Screenshot').should('not.exist');
