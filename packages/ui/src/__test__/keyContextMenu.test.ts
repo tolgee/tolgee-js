@@ -2,8 +2,12 @@ jest.autoMockOff();
 
 import '@testing-library/jest-dom/extend-expect';
 import { UI } from '../index';
-import { NodeHelper } from '@tolgee/core';
+import { DEVTOOLS_ID } from '@tolgee/core';
 import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
+
+const getDevtoolsRoot = () => document.getElementById(DEVTOOLS_ID).shadowRoot;
+const findByTestId = (testId: string) =>
+  Array.from(getDevtoolsRoot().querySelectorAll(`*[data-cy='${testId}']`));
 
 test('it selects the key', (done) => {
   const ui = new UI({
@@ -41,23 +45,19 @@ test('it selects the key', (done) => {
 
   // check if keys and translations are in dom
   for (const key of keys) {
-    const element = NodeHelper.evaluateToSingle(
-      `//*[contains(text(), '${key}')]`,
-      document.body
-    );
-    // @ts-ignore
-    expect(element).toBeInTheDocument();
+    const elements = findByTestId('context-menu-key');
+
+    expect(elements.find((el) => el.textContent.includes(key))).not.toBeFalsy();
   }
-  const translatedKeys = NodeHelper.evaluate(
-    `//*[contains(text(), 'Translated key')]`,
-    document.body
+  const translatedKeys = findByTestId('context-menu-value').filter(
+    (el) => el.textContent === 'Translated key'
   );
   expect(translatedKeys).toHaveLength(2);
 
   // get key 2 and click it
-  const element = NodeHelper.evaluateToSingle(
-    `//*[contains(text(), 'key 2')]`,
-    document.body
+  const element = findByTestId('context-menu-key').find((el) =>
+    el.textContent.includes('key 2')
   );
+
   element.parentElement.click();
 });
