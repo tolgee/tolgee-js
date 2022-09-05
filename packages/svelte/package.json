@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.9.0",
+  "version": "4.9.1",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@tolgee/core": "^4.8.6",
-    "@tolgee/ui": "^4.9.0"
+    "@tolgee/ui": "^4.9.1"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.0-next.65",

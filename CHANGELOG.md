@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.1](https://github.com/tolgee/tolgee-js/compare/v4.9.0...v4.9.1) (2022-09-05)
+
+
+### Bug Fixes
+
+* fetch only selected languages with limit ([720bb85](https://github.com/tolgee/tolgee-js/commit/720bb85c61cd460bdf2047511c9f6a5981443508))
+
+
+
+
+
 # [4.9.0](https://github.com/tolgee/tolgee-js/compare/v4.8.6...v4.9.0) (2022-09-03)
 
 
