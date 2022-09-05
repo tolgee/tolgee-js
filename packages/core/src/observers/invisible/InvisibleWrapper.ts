@@ -26,7 +26,7 @@ type EncodeValue = {
 };
 
 export const InvisibleWrapper = (): WrapperInterface => {
-  const keyMemory = new ValueMemory();
+  const keyMemory = ValueMemory();
 
   const unwrap = (text: string): Unwrapped => {
     const keysAndParams = [] as KeyAndParams[];

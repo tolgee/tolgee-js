@@ -6,12 +6,19 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { IcuFormatter, Tolgee, TolgeeConfig } from '@tolgee/core';
+import {
+  IcuFormat,
+  InvisibleObserver,
+  Options,
+  Tolgee,
+  TolgeeInstance,
+} from '@tolgee/core';
+import { UI } from '@tolgee/ui';
 
-type ContextValueType = TolgeeConfig & { tolgee: Tolgee };
+type ContextValueType = { tolgee: TolgeeInstance };
 export const TolgeeProviderContext =
   React.createContext<ContextValueType>(null);
-type TolgeeProviderProps = TolgeeConfig & { loadingFallback?: ReactNode };
+type TolgeeProviderProps = Partial<Options> & { loadingFallback?: ReactNode };
 
 export const TolgeeProvider: FunctionComponent<
   PropsWithChildren<TolgeeProviderProps>
@@ -21,38 +28,28 @@ export const TolgeeProvider: FunctionComponent<
   delete config.loadingFallback;
 
   const [tolgee] = useState(
-    Tolgee.use(IcuFormatter).init({
-      wrapperMode: 'invisible',
-      ui:
-        process.env.NODE_ENV !== 'development'
-          ? undefined
-          : typeof require !== 'undefined'
-          ? require('@tolgee/ui')
-          : import('@tolgee/ui'),
-      ...config,
-    })
+    Tolgee()
+      .setUi(UI as any)
+      .setObserver(InvisibleObserver())
+      .setFormat(IcuFormat)
+      .init({
+        ...config,
+      })
   );
 
-  const [loading, setLoading] = useState(tolgee.initialLoading);
-
-  //rerender components on forceLanguage change
-  useEffect(() => {
-    if (config.forceLanguage !== undefined) {
-      tolgee.properties.config.forceLanguage = config.forceLanguage;
-      tolgee.lang = config.forceLanguage;
-    }
-  }, [config.forceLanguage]);
+  const [loading, setLoading] = useState(tolgee.isLoading);
 
   useEffect(() => {
-    tolgee.run().then(() => setLoading(false));
-
+    tolgee.run().then(() => {
+      setLoading(false);
+    });
     return () => {
       tolgee.stop();
     };
   }, []);
 
   return (
-    <TolgeeProviderContext.Provider value={{ ...props, tolgee }}>
+    <TolgeeProviderContext.Provider value={{ tolgee }}>
       {!loading ? props.children : props.loadingFallback}
     </TolgeeProviderContext.Provider>
   );

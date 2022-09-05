@@ -14,8 +14,8 @@ describe('loading', () => {
         es: () => promiseEs,
       },
     });
-    tolgee.onLoad.listen(onLoadHandler);
-    tolgee.onFetchingChange.listen(onFetchingHandler);
+    tolgee.on('initialLoad', onLoadHandler);
+    tolgee.on('fetching', onFetchingHandler);
 
     const runPromise = tolgee.run();
     expect(tolgee.isLoading()).toBeTruthy();

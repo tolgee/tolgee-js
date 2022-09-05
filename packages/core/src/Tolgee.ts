@@ -47,11 +47,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
-    onLanguageChange: eventService.onLanguageChange,
-    onPendingLanguageChange: eventService.onPendingLanguageChange,
-    onFetchingChange: eventService.onFetchingChange,
-    onKeyUpdate: eventService.onKeyUpdate,
-    onLoad: eventService.onInitialLoaded,
+    on: eventService.on,
 
     setFormat: (formatter: FormatPlugin | undefined) => {
       pluginService.setFormat(formatter);

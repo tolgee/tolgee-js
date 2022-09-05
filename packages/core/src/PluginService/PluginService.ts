@@ -118,7 +118,8 @@ export const PluginService = (
     orEmpty,
     ns,
   }: TranslatePropsInternal) => {
-    let result = translation || (orEmpty ? '' : key);
+    const formattableTranslation = translation || defaultValue;
+    let result = formattableTranslation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
       result = instances.observer.wrap({
         key,
@@ -128,7 +129,7 @@ export const PluginService = (
         ns,
       });
     }
-    if (instances.formatter && translation) {
+    if (instances.formatter && formattableTranslation) {
       result = instances.formatter.format({
         translation: result,
         language: getLocale(),
