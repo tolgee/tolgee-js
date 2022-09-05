@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { TranslationTags, TranslationParams } from '@tolgee/core';
+import { TranslationParams, ListenerSelective } from '@tolgee/core';
 
 import { useTolgeeContext } from './useTolgeeContext';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 import { ParamsTags } from './types';
+
+export type TranslationTags<T> = string | T[];
 
 type UseTranslateResultFnProps<T extends TranslationParams | ParamsTags> = {
   key: string;
@@ -42,50 +44,38 @@ type ReturnFnType = {
 
 export const useTranslate: () => ReturnFnType = () => {
   const { tolgee } = useTolgeeContext();
-  const isMounted = useRef(false);
 
   // dummy state to enable re-rendering
   const [instance, setInstance] = useState(0);
 
-  useEffect(() => {
-    isMounted.current = true;
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
   const forceRerender = useCallback(() => {
-    if (isMounted.current) {
-      setInstance((v) => v + 1);
+    setInstance((v) => v + 1);
+  }, [setInstance]);
+
+  const subscriptionRef = useRef(null as ListenerSelective);
+
+  const subscriptionQueue = useRef([] as string[]);
+
+  const subscribeToKey = (key: string) => {
+    if (subscriptionRef.current) {
+      subscriptionRef.current.subscribeToKey(key);
+    } else {
+      subscriptionQueue.current.push(key);
     }
-  }, [setInstance, isMounted]);
-
-  // cache of translations translated with this useTranslate
-  const keysRef = useRef<string[]>([]);
-
-  const resetMemory = (key?: string) => {
-    keysRef.current = key ? keysRef.current.filter((k) => k !== key) : [];
   };
 
   useEffect(() => {
-    const subscription = tolgee.onTranslationChange.subscribe(({ key }) => {
-      if (keysRef.current.includes(key)) {
-        resetMemory(key);
-        forceRerender();
-      }
+    subscriptionRef.current = tolgee.on('keyUpdate', () => {
+      forceRerender();
     });
-    return () => subscription.unsubscribe();
-  }, [tolgee]);
-
-  useEffect(() => {
-    const subscription = tolgee.onLangChange.subscribe(() => {
-      if (keysRef.current.length) {
-        resetMemory();
-        forceRerender();
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [tolgee]);
+    subscriptionQueue.current.forEach((key) =>
+      subscriptionRef.current.subscribeToKey(key)
+    );
+    subscriptionQueue.current = [];
+    return () => {
+      subscriptionRef.current.unsubscribe();
+    };
+  }, []);
 
   const getTranslation = useCallback(
     (
@@ -94,7 +84,7 @@ export const useTranslate: () => ReturnFnType = () => {
       noWrap?: boolean,
       defaultValue?: string
     ) => {
-      const firstRender = !keysRef.current.includes(key);
+      subscribeToKey(key);
       const translation = tolgee.instant({
         key,
         params: wrapTagHandlers(params),
@@ -102,25 +92,9 @@ export const useTranslate: () => ReturnFnType = () => {
         defaultValue: defaultValue,
       });
 
-      if (firstRender) {
-        keysRef.current.push(key);
-        tolgee
-          .translate({
-            key,
-            params: wrapTagHandlers(params),
-            noWrap,
-            defaultValue,
-          })
-          .then((value) => {
-            if (value !== translation) {
-              forceRerender();
-            }
-          });
-      }
-
       return translation;
     },
-    [tolgee, keysRef]
+    [tolgee]
   );
 
   const t: ReturnFnType = useCallback(

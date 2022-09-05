@@ -1,5 +1,4 @@
 import React from 'react';
-import { TranslationParamsTags } from '@tolgee/core';
 
 import { ParamsTags } from './types';
 
@@ -8,7 +7,7 @@ export const wrapTagHandlers = (params: ParamsTags) => {
     return undefined;
   }
 
-  const result: TranslationParamsTags<React.ReactNode> = {};
+  const result: any = {};
 
   Object.entries(params || {}).forEach(([key, value]) => {
     if (typeof value === 'function') {
@@ -18,7 +17,16 @@ export const wrapTagHandlers = (params: ParamsTags) => {
     } else if (React.isValidElement(value)) {
       const el = value as React.ReactElement;
       result[key] = (chunk) => {
-        return { ...el, props: { ...el.props, children: addReactKeys(chunk) } };
+        return {
+          ...el,
+          props: {
+            ...el.props,
+            children:
+              el.props.children !== undefined
+                ? el.props.children
+                : addReactKeys(chunk),
+          },
+        };
       };
     } else {
       result[key] = value;

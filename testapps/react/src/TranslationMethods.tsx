@@ -132,7 +132,7 @@ export const TranslationMethods = () => {
               {t({
                 key: 'translation_outer',
                 parameters: {
-                  b: () => (
+                  b: (
                     <b data-cy="translationInner">
                       {t('translation_inner', 'Translation')}
                     </b>

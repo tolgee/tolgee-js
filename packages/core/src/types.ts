@@ -1,5 +1,3 @@
-import type { EventEmitterType } from './EventEmitter';
-import type { EventEmitterSelectiveType } from './EventEmitterSelective';
 import type { Options } from './StateService/initState';
 
 export type { State, Options } from './StateService/initState';
@@ -133,16 +131,28 @@ export type BackendDevPlugin = (props: BackendDevProps) => {
   getRecord: BackendGetRecord;
 };
 
-export type KeyUpdateEvent = {
-  type: 'language' | 'key';
+export type TolgeeEvent =
+  | 'pendingLanguage'
+  | 'language'
+  | 'key'
+  | 'fetching'
+  | 'initialLoad'
+  | 'keyUpdate';
+
+export type TolgeeOn = {
+  (event: 'pendingLanguage', handler: ListenerHandler<string>): Listener;
+  (event: 'language', handler: ListenerHandler<string>): Listener;
+  (event: 'key', handler: ListenerHandler<string>): Listener;
+  (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
+  (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
+  (event: 'keyUpdate', handler: ListenerHandler<void>): ListenerSelective;
+  (event: TolgeeEvent, handler: ListenerHandler<any>):
+    | Listener
+    | ListenerSelective;
 };
 
 export type TolgeeInstance = Readonly<{
-  onLanguageChange: EventEmitterType<string>;
-  onPendingLanguageChange: EventEmitterType<string>;
-  onFetchingChange: EventEmitterType<boolean>;
-  onKeyUpdate: EventEmitterSelectiveType<KeyUpdateEvent>;
-  onLoad: EventEmitterType<void>;
+  on: TolgeeOn;
 
   setFormat: (formatter: FormatPlugin | undefined) => Readonly<TolgeeInstance>;
   setObserver: (
@@ -260,3 +270,15 @@ export type TranslationOnClick = (
     meta: ElementMeta;
   }
 ) => void;
+
+export type Listener = {
+  unsubscribe: () => void;
+};
+
+export type ListenerSelective = {
+  unsubscribe: () => void;
+  subscribeToKey: (key: string) => ListenerSelective;
+  unsubscribeKey: (key: string) => ListenerSelective;
+};
+
+export type ListenerHandler<T> = (data: T) => void;

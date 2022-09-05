@@ -1,11 +1,11 @@
 jest.dontMock('./ValueMemory');
-import { ValueMemory } from './ValueMemory';
+import { ValueMemory, ValueMemoryInstance } from './ValueMemory';
 
 describe('Value memory', () => {
-  let valueMemory: ValueMemory;
+  let valueMemory: ValueMemoryInstance;
 
   beforeEach(() => {
-    valueMemory = new ValueMemory();
+    valueMemory = ValueMemory();
   });
 
   it('stores key correctly', () => {

@@ -1,16 +1,20 @@
-export class ValueMemory {
-  private values: string[] = [];
+export const ValueMemory = () => {
+  const values: string[] = [];
 
-  public valueToNumber(key: string) {
-    let index = this.values.indexOf(key);
+  const valueToNumber = (key: string) => {
+    let index = values.indexOf(key);
     if (index === -1) {
-      index = this.values.length;
-      this.values.push(key);
+      index = values.length;
+      values.push(key);
     }
     return index;
-  }
+  };
 
-  public numberToValue(num: number) {
-    return this.values[num];
-  }
-}
+  const numberToValue = (num: number) => {
+    return values[num];
+  };
+
+  return Object.freeze({ valueToNumber, numberToValue });
+};
+
+export type ValueMemoryInstance = ReturnType<typeof ValueMemory>;

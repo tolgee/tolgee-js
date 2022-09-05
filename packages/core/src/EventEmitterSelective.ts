@@ -16,6 +16,7 @@ export const EventEmitterSelective = <T>() => {
         allListeners = allListeners.filter((i) => handler !== i);
       },
     };
+    return result;
   };
 
   const listen = (handler: HandlerType<T>) => {
