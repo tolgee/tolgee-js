@@ -1,10 +1,9 @@
-import { TolgeeBackend } from '../backends/TolgeeBackend';
 import {
   BackendDevPlugin,
   BackendGetRecord,
   BackendPlugin,
   BackendDevProps,
-  FormatPlugin,
+  FormatterPlugin,
   ObserverPlugin,
   TranslatePropsInternal,
   TranslationOnClick,
@@ -12,7 +11,7 @@ import {
   UiInstance,
   UiLibInterface,
   UiType,
-} from '../types';
+} from '../../types';
 
 export const PluginService = (
   getLocale: () => string,
@@ -20,18 +19,15 @@ export const PluginService = (
   getBackendProps: () => BackendDevProps
 ) => {
   const plugins = {
-    formatter: undefined as FormatPlugin | undefined,
     observer: undefined as ObserverPlugin | undefined,
-    devBackend: TolgeeBackend as BackendDevPlugin | undefined,
-    backends: [] as BackendPlugin[],
     ui: undefined as UiConstructor | undefined,
   };
 
   const instances = {
-    formatter: undefined as ReturnType<FormatPlugin> | undefined,
+    formatter: undefined as FormatterPlugin | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
-    devBackend: undefined as ReturnType<BackendDevPlugin> | undefined,
-    backends: [] as ReturnType<BackendPlugin>[],
+    devBackend: undefined as BackendDevPlugin | undefined,
+    backends: [] as BackendPlugin[],
     ui: undefined as UiInstance | undefined,
   };
 
@@ -51,23 +47,12 @@ export const PluginService = (
     instances.observer = undefined;
   };
 
-  const getObserver = () => {
-    return plugins.observer;
-  };
-
   const setObserver = (observer: ObserverPlugin | undefined) => {
     plugins.observer = observer;
   };
 
-  const getFormat = () => {
-    return plugins.formatter;
-  };
-
-  const setFormat = (formatter: FormatPlugin | undefined) => {
-    if (formatter) {
-      plugins.formatter = formatter;
-      instances.formatter = formatter();
-    }
+  const setFormatter = (formatter: FormatterPlugin | undefined) => {
+    instances.formatter = formatter;
   };
 
   const setUi = (ui: UiType | undefined) => {
@@ -76,30 +61,23 @@ export const PluginService = (
 
   const addBackend = (backend: BackendPlugin | undefined) => {
     if (backend) {
-      plugins.backends.push(backend);
+      instances.backends.push(backend);
     }
   };
 
   const setDevBackend = (backend: BackendDevPlugin | undefined) => {
-    plugins.devBackend = backend;
-  };
-
-  const makeBackendsReady = () => {
-    if (!instances.devBackend && plugins.devBackend) {
-      instances.devBackend = plugins.devBackend(getBackendProps());
-    }
-    if (plugins.backends.length !== instances.backends.length) {
-      instances.backends = plugins.backends.map((backend) => backend());
-    }
+    instances.devBackend = backend;
   };
 
   const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
-    makeBackendsReady();
-    return instances.devBackend?.getRecord({ language, namespace });
+    return instances.devBackend?.getRecord({
+      ...getBackendProps(),
+      language,
+      namespace,
+    });
   };
 
   const getBackendRecord: BackendGetRecord = ({ language, namespace }) => {
-    makeBackendsReady();
     for (const backend of instances.backends) {
       const data = backend.getRecord({ language, namespace });
       if (data !== undefined) {
@@ -144,10 +122,8 @@ export const PluginService = (
   };
 
   return Object.freeze({
-    getFormat,
-    setFormat,
+    setFormatter,
     formatTranslation,
-    getObserver,
     setObserver,
     setUi,
     addBackend,

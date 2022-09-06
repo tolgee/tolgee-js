@@ -1,72 +1,70 @@
-import { EventServiceType } from '../EventService';
+import type { EventServiceType } from '../EventService/EventService';
 import {
-  BackendGetRecord,
   CacheAsyncRequests,
   CacheDescriptor,
   CacheKeyObject,
   Options,
-  StateCache,
   TranslatePropsInternal,
   TreeTranslationsData,
 } from '../types';
-import {
-  cacheAddRecord,
-  cacheChangeTranslation,
-  cacheExists,
-  cacheGetRecord,
-  cacheGetTranslationFallback,
-  cacheInit,
-} from './Cache/Cache';
+import { Cache } from './Cache/Cache';
 import { encodeCacheKey } from './Cache/helpers';
 import { getFallback, getFallbackFromStruct } from './helpers';
 import { initState, State } from './initState';
+import { PluginService } from './PluginService/PluginService';
 
 type StateServiceProps = {
   eventService: EventServiceType;
-  backendGetRecord: BackendGetRecord;
-  backendGetDevRecord: BackendGetRecord;
   options?: Partial<Options>;
 };
 
-export const StateService = ({
-  eventService,
-  backendGetRecord,
-  backendGetDevRecord,
-  options,
-}: StateServiceProps) => {
+export const StateService = ({ eventService, options }: StateServiceProps) => {
   let state: State = initState(options);
-  const cache: StateCache = new Map();
+  const cache = Cache();
+  cache.init(state.initialOptions.staticData);
+  const pluginService = PluginService(getLanguage, t, getBackendProps);
+
+  function t(props: TranslatePropsInternal) {
+    const translation = getTranslation(props);
+    return pluginService.formatTranslation({ ...props, translation });
+  }
+
+  function getBackendProps() {
+    const apiUrl = state.initialOptions.apiUrl;
+    return {
+      apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
+      apiKey: state.initialOptions.apiKey,
+    };
+  }
 
   const asyncRequests: CacheAsyncRequests = new Map();
 
-  cacheInit(cache, state.initialOptions.staticData);
-
-  const init = (options: Partial<Options>) => {
+  function init(options: Partial<Options>) {
     state = initState(options, state.initialOptions);
-    cacheInit(cache, state.initialOptions.staticData);
-  };
+    cache.init(state.initialOptions.staticData);
+  }
 
-  const isDev = () => {
+  function isDev() {
     return Boolean(state.initialOptions.apiKey);
-  };
+  }
 
-  const isFetching = () => {
+  function isFetching() {
     return asyncRequests.size > 0;
-  };
+  }
 
-  const isLoading = () => {
+  function isLoading() {
     return state.isLoading;
-  };
+  }
 
-  const getLanguage = () => {
+  function getLanguage() {
     return state.language;
-  };
+  }
 
-  const getPendingLanguage = () => {
+  function getPendingLanguage() {
     return state.pendingLanguage;
-  };
+  }
 
-  const withDefaultNs = (descriptor: CacheDescriptor): CacheKeyObject => {
+  function withDefaultNs(descriptor: CacheDescriptor): CacheKeyObject {
     return {
       namespace:
         descriptor.namespace === undefined
@@ -74,85 +72,81 @@ export const StateService = ({
           : descriptor.namespace,
       language: descriptor.language,
     };
-  };
+  }
 
-  const addActiveNs = async (namespace: string) => {
+  async function addActiveNs(namespace: string) {
     const value = state.activeNamespaces.get(namespace);
     if (value !== undefined) {
       state.activeNamespaces.set(namespace, value + 1);
     } else {
       state.activeNamespaces.set(namespace, 1);
     }
-    const data = cacheGetRecord(cache, {
+    const data = cache.getRecord({
       language: state.language,
       namespace,
     });
     if (!data) {
       await loadRecord({ namespace, language: state.language });
     }
-  };
+  }
 
-  const removeActiveNs = (ns: string) => {
+  function removeActiveNs(ns: string) {
     const value = state.activeNamespaces.get(ns);
     if (value !== undefined && value > 1) {
       state.activeNamespaces.set(ns, value - 1);
     } else {
       state.activeNamespaces.delete(ns);
     }
-  };
+  }
 
-  const getFallbackNamespaces = () => {
+  function getFallbackNamespaces() {
     const defaultNs = state.initialOptions.defaultNs;
     const fallbackNs = state.initialOptions.fallbackNs;
     const fallbackNamespaces = typeof defaultNs === 'string' ? [defaultNs] : [];
     return [...fallbackNamespaces, ...getFallback(fallbackNs)];
-  };
+  }
 
-  const getFallbackLangs = (lang?: string) => {
+  function getFallbackLangs(lang?: string) {
     const language = lang || state.language;
     return [
       language,
       ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
     ];
-  };
+  }
 
-  const getRequiredNamespaces = () => {
+  function getRequiredNamespaces() {
     return Array.from(
       new Set([
         ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
         ...state.activeNamespaces.keys(),
       ])
     );
-  };
+  }
 
-  const loadRequiredRecords = async (lang?: string) => {
+  async function loadRequiredRecords(lang?: string) {
     const languages = new Set(getFallbackLangs(lang));
     const namespaces = new Set(getRequiredNamespaces());
     const requests: ReturnType<typeof loadRecord>[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
         if (
-          !cacheExists(
-            cache,
-            { language, namespace },
-            isDev() ? 'dev' : undefined
-          )
+          !cache.exists({ language, namespace }, isDev() ? 'dev' : undefined)
         ) {
           requests.push(loadRecord({ language, namespace }));
         }
       });
     });
     await Promise.all(requests);
-  };
+  }
 
-  const loadInitial = async () => {
+  async function loadInitial() {
     state.isLoading = true;
     await loadRequiredRecords();
     state.isLoading = false;
     eventService.onInitialLoaded.emit();
-  };
+  }
 
-  const changeLanguage = async (language: string) => {
+  async function changeLanguage(language: string) {
     if (state.pendingLanguage === language && state.language === language) {
       return;
     }
@@ -167,38 +161,38 @@ export const StateService = ({
       state.language = language;
       eventService.onLanguageChange.emit(language);
     }
-  };
+  }
 
-  const getTranslation = ({
+  function getTranslation({
     key,
     ns,
     fallbackLanguages,
-  }: TranslatePropsInternal) => {
+  }: TranslatePropsInternal) {
     const namespaces = ns ? getFallback(ns) : getFallbackNamespaces();
     const languages = fallbackLanguages
       ? [state.language, ...getFallback(fallbackLanguages)]
       : getFallbackLangs();
-    return cacheGetTranslationFallback(cache, namespaces, languages, key);
-  };
+    return cache.getTranslationFallback(namespaces, languages, key);
+  }
 
-  const changeTranslation = (
+  function changeTranslation(
     descriptor: CacheDescriptor,
     key: string,
     value: string
-  ) => {
+  ) {
     const keyObject = withDefaultNs(descriptor);
-    cacheChangeTranslation(cache, keyObject, key, value);
+    cache.changeTranslation(keyObject, key, value);
     eventService.onKeyChange.emit(key);
-  };
+  }
 
-  const fetchData = (keyObject: CacheKeyObject) => {
+  function fetchData(keyObject: CacheKeyObject) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (isDev()) {
-      dataPromise = backendGetDevRecord(keyObject);
+      dataPromise = pluginService.getBackendDevRecord(keyObject);
     }
 
     if (!dataPromise) {
-      dataPromise = backendGetRecord(keyObject);
+      dataPromise = pluginService.getBackendRecord(keyObject);
     }
 
     if (!dataPromise) {
@@ -209,9 +203,9 @@ export const StateService = ({
       }
     }
     return dataPromise;
-  };
+  }
 
-  const loadRecord = async (descriptor: CacheDescriptor) => {
+  async function loadRecord(descriptor: CacheDescriptor) {
     const keyObject = withDefaultNs(descriptor);
     const cacheKey = encodeCacheKey(keyObject);
     const existingPromise = asyncRequests.get(cacheKey);
@@ -231,22 +225,22 @@ export const StateService = ({
       const data = await dataPromise;
 
       asyncRequests.delete(cacheKey);
-      cacheAddRecord(cache, keyObject, isDev() ? 'dev' : 'prod', data);
+      cache.addRecord(keyObject, isDev() ? 'dev' : 'prod', data);
       if (!isFetching()) {
         eventService.onFetchingChange.emit(false);
       }
     }
 
-    return cacheGetRecord(cache, withDefaultNs(descriptor));
-  };
+    return cache.getRecord(withDefaultNs(descriptor));
+  }
 
-  const getBackendProps = () => {
-    const apiUrl = state.initialOptions.apiUrl;
-    return {
-      apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
-      apiKey: state.initialOptions.apiKey,
-    };
-  };
+  function run() {
+    pluginService.run();
+  }
+
+  function stop() {
+    pluginService.stop();
+  }
 
   return Object.freeze({
     init,
@@ -262,7 +256,14 @@ export const StateService = ({
     isLoading,
     isFetching,
     loadInitial,
-    getBackendProps,
+    t,
+    setFormatter: pluginService.setFormatter,
+    setObserver: pluginService.setObserver,
+    setUi: pluginService.setUi,
+    setDevBackend: pluginService.setDevBackend,
+    addBackend: pluginService.addBackend,
+    run,
+    stop,
   });
 };
 

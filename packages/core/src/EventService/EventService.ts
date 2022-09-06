@@ -1,6 +1,6 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { ListenerHandler, TolgeeOn } from './types';
+import { ListenerHandler, TolgeeOn } from '../types';
 
 export const EventService = () => {
   const onPendingLanguageChange = EventEmitter<string>();

@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  IcuFormat,
+  IcuFormatter,
   InvisibleObserver,
   Options,
   Tolgee,
@@ -31,7 +31,7 @@ export const TolgeeProvider: FunctionComponent<
     Tolgee()
       .setUi(UI as any)
       .setObserver(InvisibleObserver())
-      .setFormat(IcuFormat)
+      .setFormatter(IcuFormatter)
       .init({
         ...config,
       })

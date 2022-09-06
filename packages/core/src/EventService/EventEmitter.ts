@@ -1,4 +1,4 @@
-import { Listener } from './types';
+import { Listener } from '../types';
 
 type HandlerType<T> = (data: T) => void;
 

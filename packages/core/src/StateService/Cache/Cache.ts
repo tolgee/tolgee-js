@@ -1,87 +1,94 @@
 import {
   CacheKeyObject,
-  CacheRecordOrigin,
   Options,
-  StateCache,
+  TranslationsFlat,
   TreeTranslationsData,
 } from '../../types';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 
-export const cacheInit = (cache: StateCache, data: Options['staticData']) => {
-  if (data) {
-    Object.entries(data).forEach(([key, value]) => {
-      if (typeof value !== 'function') {
-        cacheAddRecord(cache, decodeCacheKey(key), 'initial', value);
-      }
+type CacheRecordOrigin = 'initial' | 'prod' | 'dev';
+
+type CacheRecord = {
+  origin: CacheRecordOrigin;
+  data: TranslationsFlat;
+};
+
+type StateCache = Map<string, CacheRecord>;
+
+export const Cache = () => {
+  const cache: StateCache = new Map();
+  const init = (data: Options['staticData']) => {
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        if (typeof value !== 'function') {
+          addRecord(decodeCacheKey(key), 'initial', value);
+        }
+      });
+    }
+  };
+
+  const addRecord = (
+    descriptor: CacheKeyObject,
+    origin: CacheRecordOrigin,
+    data: TreeTranslationsData
+  ) => {
+    cache.set(encodeCacheKey(descriptor), {
+      data: flattenTranslations(data),
+      origin,
     });
-  }
-};
+  };
 
-export const cacheAddRecord = (
-  cache: StateCache,
-  descriptor: CacheKeyObject,
-  origin: CacheRecordOrigin,
-  data: TreeTranslationsData
-) => {
-  cache.set(encodeCacheKey(descriptor), {
-    data: flattenTranslations(data),
-    origin,
-  });
-};
+  const exists = (descriptor: CacheKeyObject, origin?: CacheRecordOrigin) => {
+    const record = cache.get(encodeCacheKey(descriptor));
+    if (origin && record) {
+      return origin === record.origin;
+    }
+    return Boolean(record);
+  };
 
-export const cacheExists = (
-  cache: StateCache,
-  descriptor: CacheKeyObject,
-  origin?: CacheRecordOrigin
-) => {
-  const record = cache.get(encodeCacheKey(descriptor));
-  if (origin && record) {
-    return origin === record.origin;
-  }
-  return Boolean(record);
-};
+  const getRecord = (descriptor: CacheKeyObject) => {
+    return cache.get(encodeCacheKey(descriptor))?.data;
+  };
 
-export const cacheGetRecord = (
-  cache: StateCache,
-  descriptor: CacheKeyObject
-) => {
-  return cache.get(encodeCacheKey(descriptor))?.data;
-};
+  const getTranslation = (descriptor: CacheKeyObject, key: string) => {
+    return cache.get(encodeCacheKey(descriptor))?.data.get(key);
+  };
 
-export const cacheGetTranslation = (
-  cache: StateCache,
-  descriptor: CacheKeyObject,
-  key: string
-) => {
-  return cache.get(encodeCacheKey(descriptor))?.data.get(key);
-};
-
-export const cacheGetTranslationFallback = (
-  cache: StateCache,
-  namespaces: string[],
-  languages: string[],
-  key: string
-) => {
-  for (const namespace of namespaces) {
-    for (const language of languages) {
-      const value = cache
-        .get(encodeCacheKey({ language, namespace }))
-        ?.data.get(key);
-      if (value !== undefined && value !== null) {
-        return value;
+  const getTranslationFallback = (
+    namespaces: string[],
+    languages: string[],
+    key: string
+  ) => {
+    for (const namespace of namespaces) {
+      for (const language of languages) {
+        const value = cache
+          .get(encodeCacheKey({ language, namespace }))
+          ?.data.get(key);
+        if (value !== undefined && value !== null) {
+          return value;
+        }
       }
     }
-  }
-  return undefined;
-};
+    return undefined;
+  };
 
-export const cacheChangeTranslation = (
-  cache: StateCache,
-  descriptor: CacheKeyObject,
-  key: string,
-  value: string
-) => {
-  const record = cache.get(encodeCacheKey(descriptor))?.data;
-  record?.set(key, value);
+  const changeTranslation = (
+    descriptor: CacheKeyObject,
+    key: string,
+    value: string
+  ) => {
+    const record = cache.get(encodeCacheKey(descriptor))?.data;
+    record?.set(key, value);
+  };
+
+  return Object.freeze({
+    init,
+    addRecord,
+    exists,
+    getRecord,
+    getTranslation,
+    getTranslationFallback,
+    changeTranslation,
+  });
 };

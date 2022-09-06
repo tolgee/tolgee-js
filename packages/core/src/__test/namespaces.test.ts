@@ -29,9 +29,9 @@ describe('language changes', () => {
         'en:common': { test: 'Test' },
       },
     });
-    expect(tolgee.instant({ key: 'hello' })).toEqual('World');
-    expect(tolgee.instant({ key: 'test' })).toEqual('test');
-    expect(tolgee.instant({ key: 'test', ns: 'common' })).toEqual('Test');
+    expect(tolgee.t({ key: 'hello' })).toEqual('World');
+    expect(tolgee.t({ key: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'test', ns: 'common' })).toEqual('Test');
   });
 
   it('uses defaultNs', async () => {
@@ -45,57 +45,51 @@ describe('language changes', () => {
     });
     await tolgee.run();
 
-    expect(tolgee.instant({ key: 'test' })).toEqual('Test');
+    expect(tolgee.t({ key: 'test' })).toEqual('Test');
     await tolgee.changeLanguage('es');
-    expect(tolgee.instant({ key: 'test' })).toEqual('Testa');
+    expect(tolgee.t({ key: 'test' })).toEqual('Testa');
   });
 
   it('active namespaces', async () => {
     const tolgee = tolgeeWithNamespaces();
     await tolgee.run();
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
 
     await tolgee.changeLanguage('es');
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual(
-      'Cancellar'
-    );
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancellar');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
 
     await tolgee.changeLanguage('en');
     await tolgee.addActiveNs('test');
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('Test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('Test');
 
     await tolgee.changeLanguage('es');
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual(
-      'Cancellar'
-    );
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('Testa');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancellar');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('Testa');
   });
 
   it('removing active namespaces', async () => {
     const tolgee = tolgeeWithNamespaces();
     await tolgee.run();
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
 
     await tolgee.addActiveNs('test');
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('Test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('Test');
 
     tolgee.removeActiveNs('test');
     await tolgee.changeLanguage('es');
 
-    expect(tolgee.instant({ key: 'cancel', ns: 'common' })).toEqual(
-      'Cancellar'
-    );
-    expect(tolgee.instant({ key: 'test', ns: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancellar');
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
   });
 });

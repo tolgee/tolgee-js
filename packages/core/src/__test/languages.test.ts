@@ -14,11 +14,11 @@ describe('language changes', () => {
       language: 'en',
       staticData: { en: { hello: 'World' }, es: { hello: 'Mundo' } },
     });
-    expect(tolgee.instant({ key: 'hello' })).toEqual('World');
+    expect(tolgee.t({ key: 'hello' })).toEqual('World');
     await tolgee.changeLanguage('es');
-    expect(tolgee.instant({ key: 'hello' })).toEqual('Mundo');
+    expect(tolgee.t({ key: 'hello' })).toEqual('Mundo');
     await tolgee.changeLanguage('cs');
-    expect(tolgee.instant({ key: 'hello' })).toEqual('hello');
+    expect(tolgee.t({ key: 'hello' })).toEqual('hello');
   });
 
   it('fetches language data correctly', async () => {
@@ -32,17 +32,17 @@ describe('language changes', () => {
       },
     });
     const runPromise = tolgee.run();
-    expect(tolgee.instant({ key: 'test' })).toEqual('test');
+    expect(tolgee.t({ key: 'test' })).toEqual('test');
     expect(tolgee.getPendingLanguage()).toEqual('en');
     resolveEn({ test: 'Test' });
     await runPromise;
-    expect(tolgee.instant({ key: 'test' })).toEqual('Test');
+    expect(tolgee.t({ key: 'test' })).toEqual('Test');
 
     const langChangeEsPromise = tolgee.changeLanguage('es');
     expect(tolgee.getPendingLanguage()).toEqual('es');
     resolveEs({ test: 'Testa' });
     await langChangeEsPromise;
-    expect(tolgee.instant({ key: 'test' })).toEqual('Testa');
+    expect(tolgee.t({ key: 'test' })).toEqual('Testa');
   });
 
   it('fetches fallback', async () => {
@@ -72,25 +72,25 @@ describe('language changes', () => {
     resolveEs({ color: 'Pintar' });
     await tolgee.run();
 
-    expect(tolgee.instant({ key: 'color' })).toEqual('Pintar');
-    expect(tolgee.instant({ key: 'egg' })).toEqual('Egg');
+    expect(tolgee.t({ key: 'color' })).toEqual('Pintar');
+    expect(tolgee.t({ key: 'egg' })).toEqual('Egg');
 
     resolveEnGb({ color: 'Colour', india: 'India' });
     resolveEnIn({ india: 'Blabla' });
 
     await tolgee.changeLanguage('en-IN');
-    expect(tolgee.instant({ key: 'color' })).toEqual('Colour');
-    expect(tolgee.instant({ key: 'egg' })).toEqual('Egg');
-    expect(tolgee.instant({ key: 'india' })).toEqual('Blabla');
+    expect(tolgee.t({ key: 'color' })).toEqual('Colour');
+    expect(tolgee.t({ key: 'egg' })).toEqual('Egg');
+    expect(tolgee.t({ key: 'india' })).toEqual('Blabla');
 
     await tolgee.changeLanguage('en-GB');
-    expect(tolgee.instant({ key: 'color' })).toEqual('Colour');
-    expect(tolgee.instant({ key: 'egg' })).toEqual('Egg');
-    expect(tolgee.instant({ key: 'india' })).toEqual('India');
+    expect(tolgee.t({ key: 'color' })).toEqual('Colour');
+    expect(tolgee.t({ key: 'egg' })).toEqual('Egg');
+    expect(tolgee.t({ key: 'india' })).toEqual('India');
 
     await tolgee.changeLanguage('en');
-    expect(tolgee.instant({ key: 'color' })).toEqual('Color');
-    expect(tolgee.instant({ key: 'egg' })).toEqual('Egg');
-    expect(tolgee.instant({ key: 'india' })).toEqual('india');
+    expect(tolgee.t({ key: 'color' })).toEqual('Color');
+    expect(tolgee.t({ key: 'egg' })).toEqual('Egg');
+    expect(tolgee.t({ key: 'india' })).toEqual('india');
   });
 });
