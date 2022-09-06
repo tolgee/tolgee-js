@@ -1,16 +1,13 @@
-import { EventService } from './EventService';
-import { PluginService } from './PluginService/PluginService';
+import { EventService } from './EventService/EventService';
 import { StateService } from './StateService/StateService';
 import {
   BackendDevPlugin,
-  BackendGetRecordProps,
   BackendPlugin,
-  FormatPlugin,
+  FormatterPlugin,
   ObserverPlugin,
   Options,
   TolgeeInstance,
   TranslateProps,
-  TranslatePropsInternal,
   UiLibInterface,
 } from './types';
 
@@ -18,55 +15,31 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const eventService = EventService();
   const stateService = StateService({
     eventService,
-    backendGetRecord,
-    backendGetDevRecord,
     options,
-  });
-  const pluginService = PluginService(
-    stateService.getLanguage,
-    instant,
-    stateService.getBackendProps
-  );
-
-  function instant(props: TranslatePropsInternal) {
-    const translation = stateService.getTranslation(props);
-    return pluginService.formatTranslation({ ...props, translation });
-  }
-
-  function backendGetRecord(props: BackendGetRecordProps) {
-    return pluginService.getBackendRecord(props);
-  }
-
-  function backendGetDevRecord(props: BackendGetRecordProps) {
-    return pluginService.getBackendDevRecord(props);
-  }
-
-  eventService.onKeyUpdate.listenAll((e) => {
-    pluginService.retranslate();
   });
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     on: eventService.on,
 
-    setFormat: (formatter: FormatPlugin | undefined) => {
-      pluginService.setFormat(formatter);
+    setFormatter: (formatter: FormatterPlugin | undefined) => {
+      stateService.setFormatter(formatter);
       return tolgee;
     },
     setObserver: (observer: ObserverPlugin | undefined) => {
-      pluginService.setObserver(observer);
+      stateService.setObserver(observer);
       return tolgee;
     },
     setUi: (ui: UiLibInterface | undefined) => {
-      pluginService.setUi(ui);
+      stateService.setUi(ui);
       return tolgee;
     },
     setDevBackend: (backend: BackendDevPlugin | undefined) => {
-      pluginService.setDevBackend(backend);
+      stateService.setDevBackend(backend);
       return tolgee;
     },
     addBackend: (backend: BackendPlugin | undefined) => {
-      pluginService.addBackend(backend);
+      stateService.addBackend(backend);
       return tolgee;
     },
 
@@ -87,18 +60,14 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
 
     // other
     run: () => {
-      pluginService.run();
+      stateService.run();
       return stateService.loadInitial();
     },
     stop: () => {
-      pluginService.stop();
+      stateService.stop();
     },
-    instant: (props: TranslateProps) => {
-      const translation = stateService.getTranslation(props);
-      return pluginService.formatTranslation({
-        ...props,
-        translation: translation,
-      });
+    t: (props: TranslateProps) => {
+      return stateService.t(props);
     },
   });
   return tolgee;

@@ -1,8 +1,8 @@
-import { ObserverOptions, ObserverPlugin } from '../types';
-import { GeneralObserver } from './general/GeneralObserver';
-import { setNodeText } from './general/helpers';
-import { initOptions } from './general/initOptions';
-import { TextWrapper } from './text/TextWrapper';
+import { ObserverOptions, ObserverPlugin } from './types';
+import { GeneralObserver } from './observers/general/GeneralObserver';
+import { setNodeText } from './observers/general/helpers';
+import { initOptions } from './observers/general/initOptions';
+import { TextWrapper } from './observers/text/TextWrapper';
 
 export const TextObserver =
   (options?: ObserverOptions): ObserverPlugin =>

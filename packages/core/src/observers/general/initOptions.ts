@@ -14,7 +14,6 @@ const defaultOptions: ObserverOptions = {
   highlightKeys: [ModifierKey.Alt] as ModifierKey[],
   highlightColor: 'rgb(255, 0, 0)',
   highlightWidth: 5,
-  targetElement: document.body,
   inputPrefix: '%-%tolgee:',
   inputSuffix: '%-%',
   passToParent: ['option', 'optgroup'],

@@ -93,9 +93,13 @@ export const ElementRegistry = (
     }
   }
 
+  function getTargetElement() {
+    return options.targetElement || document.body;
+  }
+
   function* getActiveNodes(meta: ElementMeta) {
     for (const [node, nodeMeta] of meta.nodes.entries()) {
-      if (nodeContains(options.targetElement, node)) {
+      if (nodeContains(getTargetElement(), node)) {
         yield [node, nodeMeta] as const;
       }
     }
@@ -112,7 +116,7 @@ export const ElementRegistry = (
   }
 
   function isElementActive(element: TolgeeElement) {
-    return options.targetElement.contains(element);
+    return getTargetElement().contains(element);
   }
 
   function getKeyOptions(meta: ElementMeta): KeyWithDefault[] {

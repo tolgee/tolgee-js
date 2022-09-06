@@ -1,8 +1,8 @@
 import { Tolgee } from '../Tolgee';
 import { screen, waitFor } from '@testing-library/dom';
-import { InvisibleObserver } from '../observers/InvisibleObserver';
+import { InvisibleObserver } from '../InvisibleObserver';
 import { TolgeeInstance } from '../types';
-import { TextObserver } from '../observers/TextObserver';
+import { TextObserver } from '../TextObserver';
 
 describe('observer', () => {
   let tolgee: TolgeeInstance;
@@ -16,7 +16,7 @@ describe('observer', () => {
     tolgee.run();
 
     document.body.innerHTML = `
-      <span data-testid="translation">${tolgee.instant({ key: 'hello' })}</span>
+      <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
     `;
 
     waitFor(() => {
@@ -35,7 +35,7 @@ describe('observer', () => {
     tolgee.run();
 
     document.body.innerHTML = `
-      <span data-testid="translation">${tolgee.instant({ key: 'hello' })}</span>
+      <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
     `;
 
     waitFor(() => {

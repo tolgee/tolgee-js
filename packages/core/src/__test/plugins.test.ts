@@ -1,6 +1,6 @@
 import { Tolgee } from '../Tolgee';
 import {
-  FormatPlugin,
+  FormatterPlugin,
   FormatterPluginFormatParams,
   ObserverPlugin,
   WrapperWrapFunction,
@@ -22,12 +22,10 @@ const testObserver: ObserverPlugin = () => {
   return Object.freeze({ wrap, unwrap, stop, retranslate });
 };
 
-const testFormat: FormatPlugin = () => {
-  return Object.freeze({
-    format: ({ translation }: FormatterPluginFormatParams) => {
-      return `(${translation})`;
-    },
-  });
+const testFormatter: FormatterPlugin = {
+  format: ({ translation }: FormatterPluginFormatParams) => {
+    return `(${translation})`;
+  },
 };
 
 describe('plugins', () => {
@@ -38,10 +36,10 @@ describe('plugins', () => {
     });
     tolgee.setObserver(testObserver);
     tolgee.run();
-    expect(tolgee.instant({ key: 'hello' })).toEqual('hello|world');
+    expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
 
-    tolgee.setFormat(testFormat);
-    expect(tolgee.instant({ key: 'hello' })).toEqual('(hello|world)');
+    tolgee.setFormatter(testFormatter);
+    expect(tolgee.t({ key: 'hello' })).toEqual('(hello|world)');
     tolgee.stop();
   });
 });

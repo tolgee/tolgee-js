@@ -1,8 +1,8 @@
 import type { Options } from './StateService/initState';
 
 export type { State, Options } from './StateService/initState';
-export type { EventEmitterType } from './EventEmitter';
-export type { EventEmitterSelectiveType } from './EventEmitterSelective';
+export type { EventEmitterType } from './EventService/EventEmitter';
+export type { EventEmitterSelectiveType } from './EventService/EventEmitterSelective';
 
 export type FallbackGeneral = undefined | false | string | string[];
 
@@ -30,20 +30,14 @@ export type TranslatePropsInternal = TranslateProps & {
   translation?: string;
 };
 
+export type TranslationValue = string | undefined | null;
+
+export type TranslationsFlat = Map<string, TranslationValue>;
+
 export type TreeTranslationsData = {
-  [key: string]: string | TreeTranslationsData;
+  [key: string]: TranslationValue | TreeTranslationsData;
 };
 
-export type TranslationsFlat = Map<string, string>;
-
-export type CacheRecordOrigin = 'initial' | 'prod' | 'dev';
-
-export type CacheRecord = {
-  origin: CacheRecordOrigin;
-  data: TranslationsFlat;
-};
-
-export type StateCache = Map<string, CacheRecord>;
 export type CacheAsyncRequests = Map<
   string,
   Promise<TreeTranslationsData> | undefined
@@ -93,7 +87,7 @@ export type FormatterPluginFormatParams = {
   params: Record<string, any> | undefined;
 };
 
-export type FormatPlugin = () => {
+export type FormatterPlugin = {
   format: (props: FormatterPluginFormatParams) => string;
 };
 
@@ -123,12 +117,16 @@ export type BackendGetRecord = (
   data: BackendGetRecordProps
 ) => Promise<TreeTranslationsData> | undefined;
 
-export type BackendPlugin = () => {
+export type BackendPlugin = {
   getRecord: BackendGetRecord;
 };
 
-export type BackendDevPlugin = (props: BackendDevProps) => {
-  getRecord: BackendGetRecord;
+export type BackendGetDevRecord = (
+  data: BackendGetRecordProps & BackendDevProps
+) => Promise<TreeTranslationsData> | undefined;
+
+export type BackendDevPlugin = {
+  getRecord: BackendGetDevRecord;
 };
 
 export type TolgeeEvent =
@@ -154,7 +152,9 @@ export type TolgeeOn = {
 export type TolgeeInstance = Readonly<{
   on: TolgeeOn;
 
-  setFormat: (formatter: FormatPlugin | undefined) => Readonly<TolgeeInstance>;
+  setFormatter: (
+    formatter: FormatterPlugin | undefined
+  ) => Readonly<TolgeeInstance>;
   setObserver: (
     observer: ObserverPlugin | undefined
   ) => Readonly<TolgeeInstance>;
@@ -182,7 +182,7 @@ export type TolgeeInstance = Readonly<{
   init: (options: Partial<Options>) => Readonly<TolgeeInstance>;
   run: () => Promise<void>;
   stop: () => void;
-  instant: (props: TranslatePropsInternal) => string;
+  t: (props: TranslatePropsInternal) => string;
 }>;
 
 export type NodeLock = {
@@ -224,7 +224,7 @@ export type ObserverOptions = {
   highlightKeys: ModifierKey[];
   highlightColor: string;
   highlightWidth: number;
-  targetElement: HTMLElement;
+  targetElement?: HTMLElement;
   inputPrefix: string;
   inputSuffix: string;
   passToParent: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean);

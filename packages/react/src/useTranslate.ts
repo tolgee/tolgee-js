@@ -85,7 +85,7 @@ export const useTranslate: () => ReturnFnType = () => {
       defaultValue?: string
     ) => {
       subscribeToKey(key);
-      const translation = tolgee.instant({
+      const translation = tolgee.t({
         key,
         params: wrapTagHandlers(params),
         noWrap,

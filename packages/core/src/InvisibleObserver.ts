@@ -1,7 +1,7 @@
-import { ObserverOptions, ObserverPlugin } from '../types';
-import { GeneralObserver } from './general/GeneralObserver';
-import { initOptions } from './general/initOptions';
-import { InvisibleWrapper } from './invisible/InvisibleWrapper';
+import { ObserverOptions, ObserverPlugin } from './types';
+import { GeneralObserver } from './observers/general/GeneralObserver';
+import { initOptions } from './observers/general/initOptions';
+import { InvisibleWrapper } from './observers/invisible/InvisibleWrapper';
 
 export const InvisibleObserver =
   (options?: ObserverOptions): ObserverPlugin =>
