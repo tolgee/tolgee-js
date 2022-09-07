@@ -36,8 +36,13 @@
     "react": "^16.14.0 || ^17.0.1 || ^18.1.0"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@tolgee/core": "^4.9.2",
     "@tolgee/ui": "^4.9.2"
+=======
+    "@tolgee/core": "^4.8.0",
+    "@tolgee/devtools-web": "^4.8.0"
+>>>>>>> 59dad807 (feat: split to modules)
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.4",
@@ -66,7 +71,7 @@
   },
   "exports": {
     "require": "./dist/tolgee-react.cjs.js",
-    "import": "./dist/tolgee-react.esm.js"
+    "import": "./dist/tolgee-react.esm.mjs"
   },
   "publishConfig": {
     "access": "public"

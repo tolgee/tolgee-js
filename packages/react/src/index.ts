@@ -14,5 +14,4 @@ export {
 };
 
 export * from '@tolgee/core';
-
-export { UI } from '@tolgee/ui';
+export * from '@tolgee/devtools-web';

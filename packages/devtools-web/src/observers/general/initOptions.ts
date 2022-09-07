@@ -1,0 +1,26 @@
+import {
+  ModifierKey,
+  ObserverOptions,
+  ObserverOptionsInitial,
+} from '@tolgee/core';
+
+const defaultOptions: ObserverOptions = {
+  tagAttributes: {
+    textarea: ['placeholder'],
+    input: ['value', 'placeholder'],
+    img: ['alt'],
+    '*': ['aria-label', 'title'],
+  },
+  highlightKeys: [ModifierKey.Alt] as ModifierKey[],
+  highlightColor: 'rgb(255, 0, 0)',
+  highlightWidth: 5,
+  inputPrefix: '%-%tolgee:',
+  inputSuffix: '%-%',
+  passToParent: ['option', 'optgroup'],
+};
+
+export const initOptions = (
+  options?: ObserverOptionsInitial
+): ObserverOptions => {
+  return { ...defaultOptions, ...options };
+};

@@ -1,5 +1,5 @@
-import type { Tolgee } from '@tolgee/core';
-import type { Subscription } from '@tolgee/core/lib/services/Subscription';
+import type { TolgeeInstance } from '@tolgee/core';
+import type { Listener } from '@tolgee/core';
 
 export const mockTolgee = () => {
   const runMock = {
@@ -20,11 +20,7 @@ export const mockTolgee = () => {
   };
 
   const instantMock = jest.fn(
-    (..._: Parameters<Tolgee['instant']> | unknown[]) => translationValue
-  );
-  const translateMock = jest.fn(
-    async (..._: Parameters<Tolgee['translate']> | unknown[]) =>
-      translationValue
+    (..._: Parameters<TolgeeInstance['t']> | unknown[]) => translationValue
   );
   const subscriptionCallbacks = {
     onTranslationChange: null,
@@ -39,7 +35,7 @@ export const mockTolgee = () => {
       subscriptionCallbacks.onTranslationChange = callback;
       return {
         unsubscribe: onTranslationChangeUnsubscribeMock,
-      } as unknown as Subscription;
+      } as unknown as Listener;
     }),
   };
 
@@ -48,30 +44,28 @@ export const mockTolgee = () => {
       subscriptionCallbacks.onLangChange = callback;
       return {
         unsubscribe: onLangChangeUnsubscribeMock,
-      } as unknown as Subscription;
+      } as unknown as Listener;
     }),
   };
 
   const getLangMock = jest.fn(() => 'mocked-lang');
   const setLangMock = jest.fn();
 
-  const tolgee = {
-    init: () => tolgee as Tolgee,
-    use: () => tolgee as Tolgee,
+  const tolgee: Partial<TolgeeInstance> = {
+    init: () => tolgee as TolgeeInstance,
     run: runMock.run,
     stop: stopMock,
-    get lang() {
+    getLanguage() {
       return getLangMock();
     },
-    set lang(lang: string) {
+    async changeLanguage(lang: string) {
       setLangMock(lang);
     },
-    instant: instantMock,
-    translate: translateMock,
-    onTranslationChange: onTranslationChangeMock,
-    onLangChange: onLangChangeMock,
-    initialLoading: true,
-  } as Partial<Tolgee>;
+    t: instantMock,
+    isInitialLoading() {
+      return true;
+    },
+  };
 
   const tolgeeClass = jest.fn().mockImplementation(() => tolgee);
   // @ts-ignore
@@ -83,7 +77,6 @@ export const mockTolgee = () => {
     runMock,
     stopMock,
     instantMock,
-    translateMock,
     onTranslationChangeMock,
     onLangChangeMock,
     subscriptionCallbacks,

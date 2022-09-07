@@ -1,16 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {
-  IcuFormatter,
-  InvisibleObserver,
-  Tolgee,
-  TolgeeProvider,
-} from '@tolgee/react';
-import { UI } from '@tolgee/react';
+import { InvisibleObserver, Tolgee, TolgeeProvider, UI } from '@tolgee/react';
+import { IcuFormatter } from '@tolgee/icu-formatter';
+
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
 
 const tolgee = Tolgee()
-  .setFormatter(IcuFormatter)
+  .setFormatter(IcuFormatter())
   .setObserver(InvisibleObserver())
   .setUi(UI as any)
   .init({

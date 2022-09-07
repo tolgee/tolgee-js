@@ -5,10 +5,10 @@ import '@testing-library/jest-dom/extend-expect';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, useTranslate } from '..';
+import { TolgeeProviderDefault, useTranslate } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Tolgee } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/core';
 import { useTolgeeContext } from '../useTolgeeContext';
 
 const API_URL = 'http://localhost';
@@ -27,7 +27,7 @@ const fetch = fetchMock.mockResponse(async (req) => {
 });
 
 describe('useTolgee integration', () => {
-  let tolgee: Tolgee;
+  let tolgee: TolgeeInstance;
   const TestComponent = () => {
     const t = useTranslate();
     tolgee = useTolgeeContext().tolgee;
@@ -78,7 +78,7 @@ describe('useTolgee integration', () => {
     fetch.enableMocks();
     act(() => {
       render(
-        <TolgeeProvider
+        <TolgeeProviderDefault
           apiUrl={API_URL}
           apiKey={API_KEY}
           loadingFallback="Loading..."
@@ -86,7 +86,7 @@ describe('useTolgee integration', () => {
           fallbackLanguage="en"
         >
           <TestComponent />
-        </TolgeeProvider>
+        </TolgeeProviderDefault>
       );
     });
     await waitFor(() => {
