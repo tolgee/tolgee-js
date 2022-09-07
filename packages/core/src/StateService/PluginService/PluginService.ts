@@ -1,3 +1,4 @@
+import { TolgeeBackend } from '../../TolgeeBackend';
 import {
   BackendDevPlugin,
   BackendGetRecord,
@@ -26,7 +27,7 @@ export const PluginService = (
   const instances = {
     formatter: undefined as FormatterPlugin | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
-    devBackend: undefined as BackendDevPlugin | undefined,
+    devBackend: TolgeeBackend as BackendDevPlugin | undefined,
     backends: [] as BackendPlugin[],
     ui: undefined as UiInstance | undefined,
   };

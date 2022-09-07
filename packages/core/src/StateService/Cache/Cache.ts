@@ -7,10 +7,8 @@ import {
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 
-type CacheRecordOrigin = 'initial' | 'prod' | 'dev';
-
 type CacheRecord = {
-  origin: CacheRecordOrigin;
+  isDev: boolean;
   data: TranslationsFlat;
 };
 
@@ -22,7 +20,7 @@ export const Cache = () => {
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
         if (typeof value !== 'function') {
-          addRecord(decodeCacheKey(key), 'initial', value);
+          addRecord(decodeCacheKey(key), value, false);
         }
       });
     }
@@ -30,19 +28,19 @@ export const Cache = () => {
 
   const addRecord = (
     descriptor: CacheKeyObject,
-    origin: CacheRecordOrigin,
-    data: TreeTranslationsData
+    data: TreeTranslationsData,
+    isDev: boolean
   ) => {
     cache.set(encodeCacheKey(descriptor), {
       data: flattenTranslations(data),
-      origin,
+      isDev,
     });
   };
 
-  const exists = (descriptor: CacheKeyObject, origin?: CacheRecordOrigin) => {
+  const exists = (descriptor: CacheKeyObject, isDev?: boolean) => {
     const record = cache.get(encodeCacheKey(descriptor));
-    if (origin && record) {
-      return origin === record.origin;
+    if (isDev && record) {
+      return record.isDev;
     }
     return Boolean(record);
   };

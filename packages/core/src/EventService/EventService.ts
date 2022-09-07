@@ -6,6 +6,7 @@ export const EventService = () => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
   const onKeyChange = EventEmitter<string>();
+  const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
   const onKeyUpdate = EventEmitterSelective<void>();
@@ -24,6 +25,8 @@ export const EventService = () => {
         return onLanguageChange.listen(handler as ListenerHandler<string>);
       case 'key':
         return onKeyChange.listen(handler as ListenerHandler<string>);
+      case 'loading':
+        return onLoadingChange.listen(handler as ListenerHandler<boolean>);
       case 'fetching':
         return onFetchingChange.listen(handler as ListenerHandler<boolean>);
       case 'initialLoad':
@@ -38,6 +41,7 @@ export const EventService = () => {
     onLanguageChange,
     onKeyChange,
     onKeyUpdate,
+    onLoadingChange,
     onFetchingChange,
     onInitialLoaded,
     on,

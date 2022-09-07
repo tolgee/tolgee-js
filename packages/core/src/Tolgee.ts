@@ -51,6 +51,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     addActiveNs: stateService.addActiveNs,
     removeActiveNs: stateService.removeActiveNs,
     loadRecord: stateService.loadRecord,
+    isInitialLoading: stateService.isInitialLoading,
     isLoading: stateService.isLoading,
     isFetching: stateService.isFetching,
     init: (options: Partial<Options>) => {

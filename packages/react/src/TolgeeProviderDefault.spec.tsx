@@ -1,4 +1,4 @@
-jest.dontMock('./TolgeeProvider');
+jest.dontMock('./TolgeeProviderDefault');
 jest.dontMock('./mocks/mockTolgee');
 
 import { mockTolgee } from './mocks/mockTolgee';
@@ -7,7 +7,10 @@ import * as tolgee from '@tolgee/core';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { ComponentProps, useContext } from 'react';
-import { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
+import {
+  TolgeeProviderDefault,
+  TolgeeProviderContext,
+} from './TolgeeProviderDefault';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { mocked } from 'jest-mock';
@@ -22,12 +25,14 @@ describe('Tolgee Provider Component', function () {
     return <></>;
   };
 
-  const TestComponent = (props: ComponentProps<typeof TolgeeProvider>) => {
+  const TestComponent = (
+    props: ComponentProps<typeof TolgeeProviderDefault>
+  ) => {
     return (
-      <TolgeeProvider {...props}>
+      <TolgeeProviderDefault {...props}>
         <div>It's rendered!</div>
         <ComponentUsingContext />
-      </TolgeeProvider>
+      </TolgeeProviderDefault>
     );
   };
 

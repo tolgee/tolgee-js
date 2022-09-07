@@ -71,7 +71,7 @@ export const initState = (
     activeNamespaces: new Map<string, number>(),
     language,
     pendingLanguage: language,
-    isLoading: false,
+    isInitialLoading: false,
   };
 };
 
