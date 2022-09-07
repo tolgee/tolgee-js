@@ -133,6 +133,7 @@ export type TolgeeEvent =
   | 'pendingLanguage'
   | 'language'
   | 'key'
+  | 'loading'
   | 'fetching'
   | 'initialLoad'
   | 'keyUpdate';
@@ -141,6 +142,7 @@ export type TolgeeOn = {
   (event: 'pendingLanguage', handler: ListenerHandler<string>): Listener;
   (event: 'language', handler: ListenerHandler<string>): Listener;
   (event: 'key', handler: ListenerHandler<string>): Listener;
+  (event: 'loading', handler: ListenerHandler<boolean>): Listener;
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
   (event: 'keyUpdate', handler: ListenerHandler<void>): ListenerSelective;
@@ -177,6 +179,7 @@ export type TolgeeInstance = Readonly<{
   loadRecord: (
     descriptor: CacheDescriptor
   ) => Promise<TreeTranslationsData | TranslationsFlat | undefined>;
+  isInitialLoading: () => boolean;
   isLoading: () => boolean;
   isFetching: () => boolean;
   init: (options: Partial<Options>) => Readonly<TolgeeInstance>;

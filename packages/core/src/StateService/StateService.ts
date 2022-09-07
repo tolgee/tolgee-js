@@ -8,10 +8,11 @@ import {
   TreeTranslationsData,
 } from '../types';
 import { Cache } from './Cache/Cache';
-import { encodeCacheKey } from './Cache/helpers';
+import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
 import { getFallback, getFallbackFromStruct } from './helpers';
 import { initState, State } from './initState';
 import { PluginService } from './PluginService/PluginService';
+import { ValueObserver } from './ValueObserver';
 
 type StateServiceProps = {
   eventService: EventServiceType;
@@ -23,6 +24,8 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   const cache = Cache();
   cache.init(state.initialOptions.staticData);
   const pluginService = PluginService(getLanguage, t, getBackendProps);
+  const fetchingObserver = ValueObserver(eventService.onFetchingChange.emit);
+  const loadingObserver = ValueObserver(eventService.onLoadingChange.emit);
 
   function t(props: TranslatePropsInternal) {
     const translation = getTranslation(props);
@@ -53,7 +56,19 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function isLoading() {
-    return state.isLoading;
+    return Boolean(
+      Array.from(asyncRequests.keys()).find(
+        (key) =>
+          !cache.exists({
+            namespace: decodeCacheKey(key).namespace,
+            language: state.language,
+          })
+      )
+    );
+  }
+
+  function isInitialLoading() {
+    return state.isInitialLoading;
   }
 
   function getLanguage() {
@@ -129,9 +144,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     const requests: ReturnType<typeof loadRecord>[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (
-          !cache.exists({ language, namespace }, isDev() ? 'dev' : undefined)
-        ) {
+        if (!cache.exists({ language, namespace }, isDev())) {
           requests.push(loadRecord({ language, namespace }));
         }
       });
@@ -140,9 +153,9 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   async function loadInitial() {
-    state.isLoading = true;
+    state.isInitialLoading = true;
     await loadRequiredRecords();
-    state.isLoading = false;
+    state.isInitialLoading = false;
     eventService.onInitialLoaded.emit();
   }
 
@@ -216,19 +229,16 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
     const dataPromise = fetchData(keyObject);
     if (dataPromise) {
-      const fetchingBefore = isFetching();
       asyncRequests.set(cacheKey, dataPromise);
-      if (!fetchingBefore) {
-        eventService.onFetchingChange.emit(true);
-      }
+      fetchingObserver.update(isFetching());
+      loadingObserver.update(isLoading());
 
       const data = await dataPromise;
 
       asyncRequests.delete(cacheKey);
-      cache.addRecord(keyObject, isDev() ? 'dev' : 'prod', data);
-      if (!isFetching()) {
-        eventService.onFetchingChange.emit(false);
-      }
+      cache.addRecord(keyObject, data, isDev());
+      fetchingObserver.update(isFetching());
+      loadingObserver.update(isLoading());
     }
 
     return cache.getRecord(withDefaultNs(descriptor));
@@ -255,6 +265,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     loadRecord,
     isLoading,
     isFetching,
+    isInitialLoading,
     loadInitial,
     t,
     setFormatter: pluginService.setFormatter,

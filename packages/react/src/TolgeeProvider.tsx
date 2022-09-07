@@ -1,42 +1,20 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import React, {
-  FunctionComponent,
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
-import {
-  IcuFormatter,
-  InvisibleObserver,
-  Options,
-  Tolgee,
-  TolgeeInstance,
-} from '@tolgee/core';
-import { UI } from '@tolgee/ui';
+import React, { useEffect, useState } from 'react';
+import { TolgeeInstance } from '@tolgee/core';
 
 type ContextValueType = { tolgee: TolgeeInstance };
 export const TolgeeProviderContext =
   React.createContext<ContextValueType>(null);
-type TolgeeProviderProps = Partial<Options> & { loadingFallback?: ReactNode };
 
-export const TolgeeProvider: FunctionComponent<
-  PropsWithChildren<TolgeeProviderProps>
-> = (props) => {
-  const config = { ...props };
-  delete config.children;
-  delete config.loadingFallback;
+type Props = {
+  tolgee: TolgeeInstance;
+  fallback?: React.ReactNode;
+};
 
-  const [tolgee] = useState(
-    Tolgee()
-      .setUi(UI as any)
-      .setObserver(InvisibleObserver())
-      .setFormatter(IcuFormatter)
-      .init({
-        ...config,
-      })
-  );
-
+export const TolgeeProvider: React.FC<Props> = ({
+  tolgee,
+  children,
+  fallback,
+}) => {
   const [loading, setLoading] = useState(tolgee.isLoading);
 
   useEffect(() => {
@@ -50,7 +28,7 @@ export const TolgeeProvider: FunctionComponent<
 
   return (
     <TolgeeProviderContext.Provider value={{ tolgee }}>
-      {!loading ? props.children : props.loadingFallback}
+      {fallback && loading ? fallback : children}
     </TolgeeProviderContext.Provider>
   );
 };
