@@ -5,8 +5,8 @@ import React, {
   ReactNode,
   useState,
 } from 'react';
-import { IcuFormatter, InvisibleObserver, Options, Tolgee } from '@tolgee/core';
-import { UI } from '@tolgee/ui';
+import { Options, Tolgee } from '@tolgee/core';
+import { UI, InvisibleObserver } from '@tolgee/devtools-web';
 import { TolgeeProvider } from './TolgeeProvider';
 
 type TolgeeProviderProps = Partial<Options> & { loadingFallback?: ReactNode };
@@ -22,7 +22,6 @@ export const TolgeeProviderDefault: FunctionComponent<
     Tolgee()
       .setUi(UI as any)
       .setObserver(InvisibleObserver())
-      .setFormatter(IcuFormatter)
       .init({
         ...config,
       })

@@ -67,7 +67,6 @@ importers:
       '@types/node': ^17.0.8
       '@types/testing-library__jest-dom': ^5.14.5
       concurrently: 7.3.0
-      intl-messageformat: ^9.9.1
       jest: ^27.2.4
       jest-fetch-mock: ^3.0.3
       rollup: ^2.56.3
@@ -84,7 +83,6 @@ importers:
       '@types/node': 17.0.45
       '@types/testing-library__jest-dom': 5.14.5
       concurrently: 7.3.0
-      intl-messageformat: 9.13.0
       jest: 27.5.1
       jest-fetch-mock: 3.0.3
       rollup: 2.78.1
@@ -140,6 +138,70 @@ importers:
       typedoc-plugin-markdown: 3.13.2_typedoc@0.22.15
       typescript: 4.7.4
 
+  packages/devtools-web:
+    specifiers:
+      '@babel/preset-typescript': ^7.18.6
+      '@emotion/react': ^11.4.1
+      '@emotion/styled': ^11.3.0
+      '@mui/icons-material': ^5.0.3
+      '@mui/material': ^5.0.3
+      '@rollup/plugin-commonjs': ^22.0.2
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-typescript': 8.3.4
+      '@testing-library/dom': ^8.7.2
+      '@testing-library/jest-dom': ^5.11.4
+      '@tolgee/core': ^4.8.0
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      '@types/react': ^17.0.30
+      '@types/react-dom': ^17.0.1
+      clsx: ^1.1.1
+      concurrently: 7.3.0
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      react: ^17.0.1
+      react-dom: ^17.0.1
+      react-dropzone: ^11.4.2
+      rollup: 2.78.1
+      rollup-plugin-replace: 2.2.0
+      rollup-plugin-sourcemaps: ^0.6.3
+      rollup-plugin-terser: 7.0.2
+      ts-jest: ^27.0.5
+      ts-loader: ^9.2.6
+      typescript: 4.7.4
+      use-context-selector: ^1.4.1
+    devDependencies:
+      '@babel/preset-typescript': 7.18.6
+      '@emotion/react': 11.9.3_skqlhrap4das3cz5b6iqdn2lqi
+      '@emotion/styled': 11.9.3_ogmjhecdyday7npi6hqtx2k5ca
+      '@mui/icons-material': 5.8.4_gbzkruhyzbmkbi6n7iuymrm5ga
+      '@mui/material': 5.9.2_k5v6wpn43yucb4gdef3kgmzfwm
+      '@rollup/plugin-commonjs': 22.0.2_rollup@2.78.1
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
+      '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
+      '@testing-library/dom': 8.17.1
+      '@testing-library/jest-dom': 5.16.5
+      '@tolgee/core': link:../core
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      '@types/react': 17.0.48
+      '@types/react-dom': 17.0.17
+      clsx: 1.2.1
+      concurrently: 7.3.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-dropzone: 11.7.1_react@17.0.2
+      rollup: 2.78.1
+      rollup-plugin-replace: 2.2.0
+      rollup-plugin-sourcemaps: 0.6.3_ml6yfcs427p6a4rndqt5tmunp4
+      rollup-plugin-terser: 7.0.2_rollup@2.78.1
+      ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
+      ts-loader: 9.3.1_typescript@4.7.4
+      typescript: 4.7.4
+      use-context-selector: 1.4.1_sfoxds7t5ydpegc3knd667wn6m
+
   packages/i18next:
     specifiers:
       '@rollup/plugin-typescript': 8.3.4
@@ -164,7 +226,7 @@ importers:
       typescript: 4.7.4
     dependencies:
       '@tolgee/core': link:../core
-      '@tolgee/ui': link:../ui
+      '@tolgee/ui': 4.9.2
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
       '@testing-library/dom': 8.16.0
@@ -183,6 +245,44 @@ importers:
       tslib: 2.4.0
       typedoc: 0.22.10_typescript@4.7.4
       typedoc-plugin-markdown: 3.11.7_typedoc@0.22.10
+      typescript: 4.7.4
+
+  packages/icu-formatter:
+    specifiers:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-typescript': 8.3.4
+      '@testing-library/jest-dom': ^5.16.5
+      '@tolgee/core': ^4.8.0
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      '@types/testing-library__jest-dom': ^5.14.5
+      concurrently: 7.3.0
+      intl-messageformat: ^9.9.1
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      rollup: ^2.56.3
+      rollup-plugin-bundle-size: ^1.0.3
+      rollup-plugin-terser: 7.0.2
+      rollup-plugin-visualizer: ^5.8.0
+      ts-jest: ^27.1.5
+      typescript: ^4.7.4
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
+      '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
+      '@testing-library/jest-dom': 5.16.5
+      '@tolgee/core': link:../core
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      '@types/testing-library__jest-dom': 5.14.5
+      concurrently: 7.3.0
+      intl-messageformat: 9.13.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      rollup: 2.78.1
+      rollup-plugin-bundle-size: 1.0.3
+      rollup-plugin-terser: 7.0.2_rollup@2.78.1
+      rollup-plugin-visualizer: 5.8.0_rollup@2.78.1
+      ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
       typescript: 4.7.4
 
   packages/ngx:
@@ -265,8 +365,8 @@ importers:
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^12.1.2
-      '@tolgee/core': ^4.9.2
-      '@tolgee/ui': ^4.9.2
+      '@tolgee/core': ^4.8.0
+      '@tolgee/devtools-web': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -288,7 +388,7 @@ importers:
       typescript: ^4.7.4
     dependencies:
       '@tolgee/core': link:../core
-      '@tolgee/ui': link:../ui
+      '@tolgee/devtools-web': link:../devtools-web
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
       '@testing-library/dom': 8.16.0
@@ -370,7 +470,7 @@ importers:
       vite: ^3.0.9
     dependencies:
       '@tolgee/core': link:../core
-      '@tolgee/ui': link:../ui
+      '@tolgee/ui': 4.9.2
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.65
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
@@ -400,70 +500,6 @@ importers:
       vite: 3.0.9
     publishDirectory: ./package
 
-  packages/ui:
-    specifiers:
-      '@babel/preset-typescript': ^7.18.6
-      '@emotion/react': ^11.4.1
-      '@emotion/styled': ^11.3.0
-      '@mui/icons-material': ^5.0.3
-      '@mui/material': ^5.0.3
-      '@rollup/plugin-commonjs': ^22.0.2
-      '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-typescript': 8.3.4
-      '@testing-library/dom': ^8.7.2
-      '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.9.2
-      '@types/jest': ^27.0.2
-      '@types/node': ^17.0.8
-      '@types/react': ^17.0.30
-      '@types/react-dom': ^17.0.1
-      clsx: ^1.1.1
-      concurrently: 7.3.0
-      jest: ^27.2.4
-      jest-fetch-mock: ^3.0.3
-      react: ^17.0.1
-      react-dom: ^17.0.1
-      react-dropzone: ^11.4.2
-      rollup: 2.78.1
-      rollup-plugin-replace: 2.2.0
-      rollup-plugin-sourcemaps: ^0.6.3
-      rollup-plugin-terser: 7.0.2
-      ts-jest: ^27.0.5
-      ts-loader: ^9.2.6
-      typescript: 4.7.4
-      use-context-selector: ^1.4.1
-    devDependencies:
-      '@babel/preset-typescript': 7.18.6
-      '@emotion/react': 11.9.3_skqlhrap4das3cz5b6iqdn2lqi
-      '@emotion/styled': 11.9.3_ogmjhecdyday7npi6hqtx2k5ca
-      '@mui/icons-material': 5.8.4_gbzkruhyzbmkbi6n7iuymrm5ga
-      '@mui/material': 5.9.2_k5v6wpn43yucb4gdef3kgmzfwm
-      '@rollup/plugin-commonjs': 22.0.2_rollup@2.78.1
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.78.1
-      '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
-      '@testing-library/dom': 8.16.0
-      '@testing-library/jest-dom': 5.16.4
-      '@tolgee/core': link:../core
-      '@types/jest': 27.5.2
-      '@types/node': 17.0.45
-      '@types/react': 17.0.48
-      '@types/react-dom': 17.0.17
-      clsx: 1.2.1
-      concurrently: 7.3.0
-      jest: 27.5.1
-      jest-fetch-mock: 3.0.3
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-dropzone: 11.7.1_react@17.0.2
-      rollup: 2.78.1
-      rollup-plugin-replace: 2.2.0
-      rollup-plugin-sourcemaps: 0.6.3_ml6yfcs427p6a4rndqt5tmunp4
-      rollup-plugin-terser: 7.0.2_rollup@2.78.1
-      ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
-      ts-loader: 9.3.1_typescript@4.7.4
-      typescript: 4.7.4
-      use-context-selector: 1.4.1_sfoxds7t5ydpegc3knd667wn6m
-
   packages/vue:
     specifiers:
       '@rollup/plugin-typescript': 8.3.4
@@ -486,7 +522,7 @@ importers:
       vue: ^3.0.0
     dependencies:
       '@tolgee/core': link:../core
-      '@tolgee/ui': link:../ui
+      '@tolgee/ui': 4.9.2
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
       '@testing-library/jest-dom': 5.16.4
@@ -507,14 +543,9 @@ importers:
 
   testapps/core:
     specifiers:
-<<<<<<< HEAD
-      '@tolgee/core': ^4.9.2
-      '@tolgee/ui': ^4.9.2
-=======
       '@tolgee/core': ^4.8.0
       '@tolgee/ui': ^4.8.0
       concurrently: ^7.3.0
->>>>>>> e128ad41 (feat: element registry and highlighting)
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
       serve: ^13.0.4
@@ -523,7 +554,7 @@ importers:
       webpack-cli: ^4.10.0
     devDependencies:
       '@tolgee/core': link:../../packages/core
-      '@tolgee/ui': link:../../packages/ui
+      '@tolgee/ui': 4.9.2
       concurrently: 7.3.0
       copy-webpack-plugin: 10.2.4_webpack@5.74.0
       html-webpack-plugin: 5.5.0_webpack@5.74.0
@@ -630,7 +661,7 @@ importers:
       '@angular/router': 13.1.3_tamdlkyl44puuvaarp57ddjc6i
       '@tolgee/core': link:../../packages/core
       '@tolgee/ngx': link:../../packages/ngx/projects/ngx-tolgee
-      '@tolgee/ui': link:../../packages/ui
+      '@tolgee/ui': 4.9.2
       '@types/react': 17.0.48
       rxjs: 7.5.6
       serve: 13.0.4
@@ -657,7 +688,8 @@ importers:
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
-      '@tolgee/react': ^4.9.2
+      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/react': ^4.8.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -677,6 +709,7 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
+      '@tolgee/icu-formatter': link:../../packages/icu-formatter
       '@tolgee/react': link:../../packages/react
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
@@ -758,7 +791,7 @@ importers:
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
       '@tolgee/core': link:../../packages/core
       '@tolgee/svelte': link:../../packages/svelte
-      '@tolgee/ui': link:../../packages/ui
+      '@tolgee/ui': 4.9.2
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
       '@typescript-eslint/parser': 5.34.0_4rv7y5c6xz3vfxwhbrcxxi73bq
       eslint: 8.22.0
@@ -8836,6 +8869,9 @@ packages:
   /@tokenizer/token/0.3.0:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
+
+  /@tolgee/ui/4.9.2:
+    resolution: {integrity: sha512-rna8kC31yGtn1JYKERTDT6jvOhhkM0xO0Z5cv8OvKODvn9eyGaHtNieCchoVVbFxWfPOGmqp8pBPKFj0D9gEgQ==}
 
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
@@ -18318,6 +18354,15 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
+  /follow-redirects/1.15.1:
+    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
+    engines: {node: '>=4.0'}
+    peerDependencies:
+      debug: '*'
+    peerDependenciesMeta:
+      debug:
+        optional: true
+
   /follow-redirects/1.15.1_debug@3.2.7:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
     engines: {node: '>=4.0'}
@@ -18328,6 +18373,7 @@ packages:
         optional: true
     dependencies:
       debug: 3.2.7
+    dev: false
 
   /follow-redirects/1.15.1_debug@4.3.4:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
@@ -20201,7 +20247,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@3.2.7
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
