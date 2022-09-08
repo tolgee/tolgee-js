@@ -4,8 +4,8 @@ import {
   useDialogContext,
   useDialogDispatch,
 } from './TranslationDialogContextProvider';
-import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
+import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';

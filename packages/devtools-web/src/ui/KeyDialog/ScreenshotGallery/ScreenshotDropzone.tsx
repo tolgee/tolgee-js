@@ -4,7 +4,6 @@ import { styled } from '@mui/material/styles';
 import { green, red } from '@mui/material/colors';
 import Backup from '@mui/icons-material/Backup';
 import HighlightOff from '@mui/icons-material/HighlightOff';
-
 import { MAX_FILE_COUNT } from './utils';
 import { dataTransferItemsToArray } from './utils';
 

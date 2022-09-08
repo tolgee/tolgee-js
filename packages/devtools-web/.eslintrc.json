@@ -15,7 +15,6 @@
             "message":
               "Please use `import [package] from '@mui/icons-material/[package]'` instead."
           }
-          
         ],
         "patterns": ["!@mui/material/*","!@mui/icons-material/*"]
       }

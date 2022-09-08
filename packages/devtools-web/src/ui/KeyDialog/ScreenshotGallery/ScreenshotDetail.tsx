@@ -1,7 +1,6 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
-
 import { ScreenshotInterface } from '../TranslationDialogContextProvider';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
 

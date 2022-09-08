@@ -1,16 +1,11 @@
 import React from 'react';
 import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
-<<<<<<< HEAD
-import { styled } from '@mui/material/styles';
+
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
 import OpenInNew from '@mui/icons-material/OpenInNew';
-import { TextHelper } from '@tolgee/core';
-=======
-import { styled, IconButton, Button } from '@mui/material';
-import { OpenInNew } from '@mui/icons-material';
-// import { TextHelper } from '@tolgee/core';
->>>>>>> fd2807cf (feat: make ui work)
+
 
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';
