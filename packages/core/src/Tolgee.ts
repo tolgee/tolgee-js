@@ -3,6 +3,7 @@ import { StateService } from './StateService/StateService';
 import {
   BackendDevPlugin,
   BackendPlugin,
+  FinalFormatterPlugin,
   FormatterPlugin,
   ObserverPlugin,
   Options,
@@ -24,8 +25,12 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     on: eventService.on,
     onKeyUpdate: eventService.onKeyUpdate.listenSome,
 
-    setFormatter: (formatter: FormatterPlugin | undefined) => {
-      stateService.setFormatter(formatter);
+    setFinalFormatter: (formatter: FinalFormatterPlugin | undefined) => {
+      stateService.setFinalFormatter(formatter);
+      return tolgee;
+    },
+    addFormatter: (formatter: FormatterPlugin | undefined) => {
+      stateService.addFormatter(formatter);
       return tolgee;
     },
     setObserver: (observer: ObserverPlugin | undefined) => {
@@ -57,9 +62,11 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     addActiveNs: stateService.addActiveNs,
     removeActiveNs: stateService.removeActiveNs,
     loadRecord: stateService.loadRecord,
+    isLoaded: stateService.isLoaded,
     isInitialLoading: stateService.isInitialLoading,
     isLoading: stateService.isLoading,
     isFetching: stateService.isFetching,
+    isRunning: stateService.isRunning,
     init: (options: Partial<Options>) => {
       stateService.init(options);
       return tolgee;

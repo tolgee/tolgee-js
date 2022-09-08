@@ -1,5 +1,8 @@
-export const ValueObserver = <T>(handler: (value: T) => void) => {
-  let previousValue: T;
+export const ValueObserver = <T = any>(
+  initialValue: T,
+  handler: (value: T) => void
+) => {
+  let previousValue: T = initialValue;
   function init(value: T) {
     previousValue = value;
   }

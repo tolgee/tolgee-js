@@ -1,3 +1,3 @@
 export { UI } from './ui/index';
-export { DevTools } from './DevTools';
+export { DevToolsPlugin } from './DevToolsPlugin';
 export * from './typedIndex';

@@ -1,14 +1,15 @@
-type HandlerType<T> = (data: T) => void;
+import { ListenerHandler, ListenerHandlerEvent } from '../types';
+
 type HandlerWrapperType<T> = {
-  fn: HandlerType<T>;
+  fn: ListenerHandler<T>;
   keys: Set<string>;
 };
 
 export const EventEmitterSelective = <T>() => {
-  const listeners: Set<HandlerType<T>> = new Set();
+  const listeners: Set<ListenerHandler<T>> = new Set();
   const partialListeners: Set<HandlerWrapperType<T>> = new Set();
 
-  const listen = (handler: HandlerType<T>) => {
+  const listen = (handler: ListenerHandler<T>) => {
     listeners.add(handler);
     const result = {
       unsubscribe: () => {
@@ -18,10 +19,10 @@ export const EventEmitterSelective = <T>() => {
     return result;
   };
 
-  const listenSome = (handler: HandlerType<T>) => {
+  const listenSome = (handler: ListenerHandler<T>) => {
     const handlerWrapper = {
-      fn: (data: T) => {
-        handler(data);
+      fn: (e: ListenerHandlerEvent<T>) => {
+        handler(e);
       },
       keys: new Set<string>(),
     };
@@ -47,11 +48,11 @@ export const EventEmitterSelective = <T>() => {
 
   const emit = (data: T, key?: string) => {
     listeners.forEach((handler) => {
-      handler(data);
+      handler({ value: data });
     });
     partialListeners.forEach((handler) => {
       if (!key || handler.keys.has(key)) {
-        handler.fn(data);
+        handler.fn({ value: data });
       }
     });
   };

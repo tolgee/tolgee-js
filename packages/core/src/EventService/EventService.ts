@@ -10,10 +10,11 @@ export const EventService = () => {
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
   const onKeyUpdate = EventEmitterSelective<void>();
+  const onRunningChange = EventEmitterSelective<boolean>();
 
   onInitialLoaded.listen(() => onKeyUpdate.emit());
   onLanguageChange.listen(() => onKeyUpdate.emit());
-  onKeyChange.listen((key) => onKeyUpdate.emit(undefined, key));
+  onKeyChange.listen(({ value }) => onKeyUpdate.emit(undefined, value));
 
   const on: TolgeeOn = (event, handler): any => {
     switch (event) {
@@ -31,6 +32,8 @@ export const EventService = () => {
         return onFetchingChange.listen(handler as ListenerHandler<boolean>);
       case 'initialLoad':
         return onInitialLoaded.listen(handler as ListenerHandler<void>);
+      case 'running':
+        return onRunningChange.listen(handler as ListenerHandler<boolean>);
       case 'keyUpdate':
         return onKeyUpdate.listen(handler as ListenerHandler<void>);
     }
@@ -44,6 +47,7 @@ export const EventService = () => {
     onLoadingChange,
     onFetchingChange,
     onInitialLoaded,
+    onRunningChange,
     on,
   });
 };

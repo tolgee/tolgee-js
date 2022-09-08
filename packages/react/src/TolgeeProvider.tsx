@@ -15,7 +15,7 @@ export const TolgeeProvider: React.FC<Props> = ({
   children,
   fallback,
 }) => {
-  const [loading, setLoading] = useState(tolgee.isLoading);
+  const [loading, setLoading] = useState(!tolgee.isLoaded());
 
   useEffect(() => {
     tolgee.run().then(() => {

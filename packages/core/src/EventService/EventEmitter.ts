@@ -1,13 +1,11 @@
-import { Listener } from '../types';
-
-type HandlerType<T> = (data: T) => void;
+import { Listener, ListenerHandler } from '../types';
 
 export const EventEmitter = <T>() => {
-  let handlers: HandlerType<T>[] = [];
+  let handlers: ListenerHandler<T>[] = [];
 
-  const listen = (handler: HandlerType<T>): Listener => {
-    const handlerWrapper: HandlerType<T> = (data) => {
-      handler(data);
+  const listen = (handler: ListenerHandler<T>): Listener => {
+    const handlerWrapper: ListenerHandler<T> = (e) => {
+      handler(e);
     };
 
     handlers.push(handlerWrapper);
@@ -20,7 +18,7 @@ export const EventEmitter = <T>() => {
   };
 
   const emit = (data: T) => {
-    handlers.forEach((handler) => handler(data));
+    handlers.forEach((handler) => handler({ value: data }));
   };
 
   return Object.freeze({ listen, emit });

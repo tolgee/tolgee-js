@@ -7,4 +7,5 @@ export {
   TOLGEE_HIGHLIGHTER_CLASS,
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
 } from './constants';
+export * from './GlobalInstancePlugin';
 export * from './types';

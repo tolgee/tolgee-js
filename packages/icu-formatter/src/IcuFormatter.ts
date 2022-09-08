@@ -1,7 +1,7 @@
 import IntlMessageFormat from 'intl-messageformat';
-import type { FormatterPlugin } from '@tolgee/core';
+import type { FinalFormatterPlugin } from '@tolgee/core';
 
-export const IcuFormatter = (): FormatterPlugin => {
+export const IcuFormatter = (): FinalFormatterPlugin => {
   const locales = new Map() as Map<string, string>;
 
   function isLocaleValid(locale: string) {
@@ -24,7 +24,7 @@ export const IcuFormatter = (): FormatterPlugin => {
     return locales.get(language);
   }
 
-  const format: FormatterPlugin['format'] = ({
+  const format: FinalFormatterPlugin['format'] = ({
     translation,
     language,
     params,
@@ -37,7 +37,7 @@ export const IcuFormatter = (): FormatterPlugin => {
 
     return new IntlMessageFormat(translation, locale, undefined, {
       ignoreTag,
-    }).format(params) as string;
+    }).format(params);
   };
 
   return Object.freeze({ getLocale, format });

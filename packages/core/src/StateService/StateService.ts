@@ -24,8 +24,18 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   const cache = Cache();
   cache.init(state.initialOptions.staticData);
   const pluginService = PluginService(getLanguage, t, getBackendProps);
-  const fetchingObserver = ValueObserver(eventService.onFetchingChange.emit);
-  const loadingObserver = ValueObserver(eventService.onLoadingChange.emit);
+  const fetchingObserver = ValueObserver<boolean>(
+    false,
+    eventService.onFetchingChange.emit
+  );
+  const loadingObserver = ValueObserver<boolean>(
+    false,
+    eventService.onLoadingChange.emit
+  );
+  const runningObserver = ValueObserver<boolean>(
+    false,
+    eventService.onRunningChange.emit
+  );
 
   function t(props: TranslatePropsInternal) {
     const translation = getTranslation(props);
@@ -67,6 +77,10 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     );
   }
 
+  function isRunning() {
+    return state.isRunning;
+  }
+
   function isInitialLoading() {
     return state.isInitialLoading;
   }
@@ -96,12 +110,14 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     } else {
       state.activeNamespaces.set(namespace, 1);
     }
-    const data = cache.getRecord({
-      language: state.language,
-      namespace,
-    });
-    if (!data) {
-      await loadRecord({ namespace, language: state.language });
+    if (isRunning()) {
+      const data = cache.getRecord({
+        language: state.language,
+        namespace,
+      });
+      if (!data) {
+        await loadRecord({ namespace, language: state.language });
+      }
     }
   }
 
@@ -138,17 +154,29 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     );
   }
 
-  async function loadRequiredRecords(lang?: string) {
+  function getRequiredRecords(lang?: string) {
     const languages = new Set(getFallbackLangs(lang));
     const namespaces = new Set(getRequiredNamespaces());
-    const requests: ReturnType<typeof loadRecord>[] = [];
+    const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
         if (!cache.exists({ language, namespace }, isDev())) {
-          requests.push(loadRecord({ language, namespace }));
+          result.push({ language, namespace });
         }
       });
     });
+    return result;
+  }
+
+  function isLoaded() {
+    return getRequiredRecords().length === 0;
+  }
+
+  async function loadRequiredRecords(lang?: string) {
+    const requests = [] as Array<ReturnType<typeof loadRecord>>;
+    getRequiredRecords(lang).forEach((descriptor) =>
+      requests.push(loadRecord(descriptor))
+    );
     await Promise.all(requests);
   }
 
@@ -166,7 +194,9 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     state.pendingLanguage = language;
     eventService.onPendingLanguageChange.emit(language);
 
-    await loadRequiredRecords(language);
+    if (isRunning()) {
+      await loadRequiredRecords(language);
+    }
 
     if (language === state.pendingLanguage) {
       // there might be parallel language change
@@ -245,11 +275,19 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function run() {
-    pluginService.run();
+    if (!isRunning()) {
+      state.isRunning = true;
+      pluginService.run();
+      runningObserver.update(true);
+    }
   }
 
   function stop() {
-    pluginService.stop();
+    if (isRunning()) {
+      state.isRunning = false;
+      pluginService.stop();
+      runningObserver.update(false);
+    }
   }
 
   return Object.freeze({
@@ -266,15 +304,18 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     isLoading,
     isFetching,
     isInitialLoading,
+    isLoaded,
     loadInitial,
     t,
-    setFormatter: pluginService.setFormatter,
+    setFinalFormatter: pluginService.setFinalFormatter,
+    addFormatter: pluginService.addFormatter,
     setObserver: pluginService.setObserver,
     setUi: pluginService.setUi,
     setDevBackend: pluginService.setDevBackend,
     addBackend: pluginService.addBackend,
     run,
     stop,
+    isRunning,
   });
 };
 
