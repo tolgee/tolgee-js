@@ -9,6 +9,6 @@ export declare class UI {
   getKey(props: { openEvent: MouseEvent; keys: Set<string> }): Promise<string>;
 }
 
-export declare const DevTools = TolgeePlugin;
+export declare const DevToolsPlugin = TolgeePlugin;
 
 export * from '../lib/typedIndex';

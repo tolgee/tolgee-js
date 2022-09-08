@@ -70,7 +70,7 @@ describe('TolgeeProvider integration', () => {
       tolgee = Tolgee({
         apiUrl: API_URL,
         apiKey: API_KEY,
-        defaultLanguage: 'cs',
+        language: 'cs',
         fallbackLanguage: 'en',
       });
 

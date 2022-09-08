@@ -1,4 +1,4 @@
-jest.dontMock('./TolgeeProviderDefault');
+jest.dontMock('./TolgeeProvider');
 jest.dontMock('./mocks/mockTolgee');
 
 import { mockTolgee } from './mocks/mockTolgee';

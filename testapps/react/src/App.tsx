@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { TolgeeReact, useTolgee } from '@tolgee/react';
-import { IcuFormatter } from '@tolgee/icu-formatter';
+import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
+import { IcuPlugin } from '@tolgee/icu-formatter';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
 
-TolgeeReact()
-  .setFormatter(IcuFormatter())
+const tolgee = Tolgee()
+  .use(ReactPlugin())
+  .use(IcuPlugin())
   .init({
     language: 'en',
     staticData: {
@@ -17,22 +18,19 @@ TolgeeReact()
     },
     apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
     apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
-  })
-  .run();
+    fallbackLanguage: 'en',
+  });
 
 export const App = () => {
   const currentRoute = window.location.pathname;
-  const { isInitialLoading } = useTolgee(['initialLoad']);
 
   return (
-    <>
-      {isInitialLoading() ? (
-        <div>Loading ...</div>
-      ) : currentRoute === '/translation-methods' ? (
+    <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+      {currentRoute === '/translation-methods' ? (
         <TranslationMethods />
       ) : (
         <Todos />
       )}
-    </>
+    </TolgeeProvider>
   );
 };

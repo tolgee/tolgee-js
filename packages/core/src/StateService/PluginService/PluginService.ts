@@ -12,6 +12,7 @@ import {
   UiInstance,
   UiLibInterface,
   UiType,
+  FinalFormatterPlugin,
 } from '../../types';
 
 export const PluginService = (
@@ -25,7 +26,8 @@ export const PluginService = (
   };
 
   const instances = {
-    formatter: undefined as FormatterPlugin | undefined,
+    formatters: [] as FormatterPlugin[],
+    finalFormatter: undefined as FinalFormatterPlugin | undefined,
     observer: undefined as ReturnType<ObserverPlugin> | undefined,
     devBackend: TolgeeBackend as BackendDevPlugin | undefined,
     backends: [] as BackendPlugin[],
@@ -52,8 +54,14 @@ export const PluginService = (
     plugins.observer = observer;
   };
 
-  const setFormatter = (formatter: FormatterPlugin | undefined) => {
-    instances.formatter = formatter;
+  const addFormatter = (formatter: FormatterPlugin | undefined) => {
+    if (formatter) {
+      instances.formatters.push(formatter);
+    }
+  };
+
+  const setFinalFormatter = (formatter: FinalFormatterPlugin | undefined) => {
+    instances.finalFormatter = formatter;
   };
 
   const setUi = (ui: UiType | undefined) => {
@@ -108,8 +116,19 @@ export const PluginService = (
         ns,
       });
     }
-    if (instances.formatter && formattableTranslation) {
-      result = instances.formatter.format({
+
+    if (formattableTranslation) {
+      for (const formatter of instances.formatters) {
+        result = formatter.format({
+          translation: result,
+          language: getLocale(),
+          params,
+        });
+      }
+    }
+
+    if (instances.finalFormatter && formattableTranslation) {
+      result = instances.finalFormatter.format({
         translation: result,
         language: getLocale(),
         params,
@@ -123,7 +142,8 @@ export const PluginService = (
   };
 
   return Object.freeze({
-    setFormatter,
+    setFinalFormatter,
+    addFormatter,
     formatTranslation,
     setObserver,
     setUi,

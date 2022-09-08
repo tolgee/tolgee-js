@@ -52,6 +52,7 @@ export default {
       outDir: './lib',
       sourceMap: true,
       noEmit: true,
+      tsconfig: 'tsconfig.prod.json',
     }),
     nodeResolve(),
     sizes(),

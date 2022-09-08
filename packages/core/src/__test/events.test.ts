@@ -6,7 +6,7 @@ describe('events', () => {
     const handler = jest.fn((lang) => {});
     tolgee.on('language', handler);
     await tolgee.changeLanguage('es');
-    expect(handler).toHaveBeenCalledWith('es');
+    expect(handler).toHaveBeenCalledWith({ value: 'es' });
   });
 
   it('correctly emits translation change listeners', async () => {

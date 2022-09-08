@@ -72,6 +72,7 @@ export const initState = (
     language,
     pendingLanguage: language,
     isInitialLoading: false,
+    isRunning: false,
   };
 };
 
