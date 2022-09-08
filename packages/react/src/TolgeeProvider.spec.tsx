@@ -7,8 +7,7 @@ import * as tolgee from '@tolgee/core';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
 import { ComponentProps, useContext } from 'react';
-import { TolgeeProviderDefault } from './TolgeeProviderDefault';
-import { TolgeeProviderContext } from './TolgeeProvider';
+import { TolgeeProviderContext, TolgeeProvider } from './TolgeeProvider';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { mocked } from 'jest-mock';
@@ -23,14 +22,12 @@ describe('Tolgee Provider Component', function () {
     return <></>;
   };
 
-  const TestComponent = (
-    props: ComponentProps<typeof TolgeeProviderDefault>
-  ) => {
+  const TestComponent = (props: ComponentProps<typeof TolgeeProvider>) => {
     return (
-      <TolgeeProviderDefault {...props}>
+      <TolgeeProvider {...props}>
         <div>It's rendered!</div>
         <ComponentUsingContext />
-      </TolgeeProviderDefault>
+      </TolgeeProvider>
     );
   };
 
@@ -42,7 +39,7 @@ describe('Tolgee Provider Component', function () {
   });
 
   test('provides context', async () => {
-    await render(<TestComponent />);
+    await render(<TestComponent tolgee={mockedTolgee.tolgee} />);
     act(() => {
       mockedTolgee.runMock.resolveRunPromise();
     });
@@ -57,7 +54,9 @@ describe('Tolgee Provider Component', function () {
 
   test('runs tolgee', async () => {
     act(() => {
-      render(<TestComponent loadingFallback={<>loading</>} />);
+      render(
+        <TestComponent tolgee={mockedTolgee.tolgee} fallback={<>loading</>} />
+      );
     });
     await waitFor(() => {
       screen.getByText('loading');
@@ -69,14 +68,16 @@ describe('Tolgee Provider Component', function () {
   });
 
   test('stops tolgee', () => {
-    const { unmount } = render(<TestComponent />);
+    const { unmount } = render(<TestComponent tolgee={mockedTolgee.tolgee} />);
     unmount();
     expect(mockedTolgee.stopMock).toHaveBeenCalledTimes(1);
   });
 
   test('renders loadingFallback', async () => {
     act(() => {
-      render(<TestComponent loadingFallback={<>loading</>} />);
+      render(
+        <TestComponent tolgee={mockedTolgee.tolgee} fallback={<>loading</>} />
+      );
     });
     await waitFor(() => {
       screen.getByText('loading');
@@ -87,7 +88,9 @@ describe('Tolgee Provider Component', function () {
     // @ts-ignore
     mockedTolgee.tolgee.initialLoading = false;
     act(() => {
-      render(<TestComponent loadingFallback={<>loading</>} />);
+      render(
+        <TestComponent tolgee={mockedTolgee.tolgee} fallback={<>loading</>} />
+      );
     });
     await waitFor(async () => {
       screen.getByText("It's rendered!");

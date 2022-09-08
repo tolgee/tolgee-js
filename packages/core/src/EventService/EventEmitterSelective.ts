@@ -5,21 +5,20 @@ type HandlerWrapperType<T> = {
 };
 
 export const EventEmitterSelective = <T>() => {
-  let handlers: HandlerWrapperType<T>[] = [];
-  let allListeners: HandlerType<T>[] = [];
+  const listeners: Set<HandlerType<T>> = new Set();
+  const partialListeners: Set<HandlerWrapperType<T>> = new Set();
 
-  const listenAll = (handler: HandlerType<T>) => {
-    allListeners.push(handler);
-
+  const listen = (handler: HandlerType<T>) => {
+    listeners.add(handler);
     const result = {
       unsubscribe: () => {
-        allListeners = allListeners.filter((i) => handler !== i);
+        listeners.delete(handler);
       },
     };
     return result;
   };
 
-  const listen = (handler: HandlerType<T>) => {
+  const listenSome = (handler: HandlerType<T>) => {
     const handlerWrapper = {
       fn: (data: T) => {
         handler(data);
@@ -27,11 +26,11 @@ export const EventEmitterSelective = <T>() => {
       keys: new Set<string>(),
     };
 
-    handlers.push(handlerWrapper);
+    partialListeners.add(handlerWrapper);
 
     const result = {
       unsubscribe: () => {
-        handlers = handlers.filter((i) => handlerWrapper !== i);
+        partialListeners.delete(handlerWrapper);
       },
       subscribeToKey: (key: string) => {
         handlerWrapper.keys.add(key);
@@ -47,17 +46,17 @@ export const EventEmitterSelective = <T>() => {
   };
 
   const emit = (data: T, key?: string) => {
-    allListeners.forEach((handler) => {
+    listeners.forEach((handler) => {
       handler(data);
     });
-    handlers.forEach((handler) => {
+    partialListeners.forEach((handler) => {
       if (!key || handler.keys.has(key)) {
         handler.fn(data);
       }
     });
   };
 
-  return Object.freeze({ listen, listenAll, emit });
+  return Object.freeze({ listenSome, listen, emit });
 };
 
 export type EventEmitterSelectiveType<T> = ReturnType<

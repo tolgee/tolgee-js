@@ -1,17 +1,9 @@
-import { useTranslate } from './useTranslate';
-import { TolgeeProviderDefault } from './TolgeeProviderDefault';
-import { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
-import { T } from './T';
-import { useTolgee } from './useTolgee';
-
-export {
-  T,
-  TolgeeProviderDefault,
-  TolgeeProviderContext,
-  TolgeeProvider,
-  useTranslate,
-  useTolgee,
-};
+export { useTranslate } from './useTranslate';
+export { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
+export { T } from './T';
+export { useTolgee } from './useTolgee';
+export { TolgeeReact } from './TolgeeReact';
+export { GlobalInstance } from './GlobalInstance';
 
 export * from '@tolgee/core';
 export * from '@tolgee/devtools-web';

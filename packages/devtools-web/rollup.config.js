@@ -3,66 +3,94 @@ import { terser } from 'rollup-plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import sizes from 'rollup-plugin-bundle-size';
+import { visualizer } from 'rollup-plugin-visualizer';
+import replace from '@rollup/plugin-replace';
 
-export default {
+const commonConfig = {
   input: 'src/index.ts',
-  output: [
-    {
-      file: 'dist/tolgee-devtools-web.cjs.js',
-      format: 'cjs',
-      sourcemap: true,
-    },
-    {
-      file: 'dist/tolgee-devtools-web.cjs.min.js',
-      format: 'cjs',
-      sourcemap: true,
-      plugins: [terser()],
-    },
-    {
-<<<<<<< HEAD:packages/ui/rollup.config.js
-      file: 'dist/tolgee-ui.esm.mjs',
-=======
-      file: 'dist/tolgee-devtools-web.esm.mjs',
->>>>>>> 59dad807 (feat: split to modules):packages/devtools-web/rollup.config.js
-      format: 'esm',
-      sourcemap: true,
-    },
-    {
-<<<<<<< HEAD:packages/ui/rollup.config.js
-      file: 'dist/tolgee-ui.esm.min.mjs',
-=======
-      file: 'dist/tolgee-devtools-web.esm.min.mjs',
->>>>>>> 59dad807 (feat: split to modules):packages/devtools-web/rollup.config.js
-      format: 'esm',
-      sourcemap: true,
-      plugins: [terser()],
-    },
-    {
-      name: '@tolgee/ui',
-      file: 'dist/tolgee-devtools-web.umd.js',
-      format: 'umd',
-      sourcemap: true,
-    },
-    {
-      name: '@tolgee/ui',
-      file: 'dist/tolgee-devtools-web.umd.min.js',
-      format: 'umd',
-      sourcemap: true,
-      plugins: [terser()],
-    },
-  ],
   watch: {
     clearScreen: false,
   },
-  plugins: [
-    typescript({
-      outDir: './lib',
-      sourceMap: true,
-    }),
-    nodeResolve(),
-    commonjs({
-      include: ['node_modules/**', '../../node_modules/**'],
-    }),
-    sourcemaps(),
-  ],
 };
+
+const commonPlugins = [
+  typescript({
+    tsconfig: 'tsconfig.prod.json',
+    outDir: './lib',
+    sourceMap: true,
+    noEmit: true,
+    declaration: false,
+    emitDeclarationOnly: false,
+  }),
+  nodeResolve(),
+  commonjs({
+    include: ['node_modules/**', '../../node_modules/**'],
+  }),
+  sourcemaps(),
+  sizes(),
+  visualizer(),
+];
+
+export default [
+  {
+    ...commonConfig,
+    output: [
+      {
+        file: 'dist/tolgee-devtools-web.cjs.js',
+        format: 'cjs',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/tolgee-devtools-web.esm.mjs',
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        name: '@tolgee/ui',
+        file: 'dist/tolgee-devtools-web.umd.js',
+        format: 'umd',
+        sourcemap: true,
+      },
+    ],
+
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        include: ['node_modules/**', '../../node_modules/**'],
+        preventAssignment: true,
+      }),
+      ...commonPlugins,
+    ],
+  },
+  // minified outputs
+  {
+    ...commonConfig,
+    output: [
+      {
+        file: 'dist/tolgee-devtools-web.cjs.min.js',
+        format: 'cjs',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/tolgee-devtools-web.esm.min.mjs',
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        name: '@tolgee/ui',
+        file: 'dist/tolgee-devtools-web.umd.min.js',
+        format: 'umd',
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        preventAssignment: true,
+      }),
+      terser(),
+      ...commonPlugins,
+    ],
+  },
+];

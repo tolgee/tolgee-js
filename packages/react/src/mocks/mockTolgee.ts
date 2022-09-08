@@ -51,7 +51,7 @@ export const mockTolgee = () => {
   const getLangMock = jest.fn(() => 'mocked-lang');
   const setLangMock = jest.fn();
 
-  const tolgee: Partial<TolgeeInstance> = {
+  const tolgee = {
     init: () => tolgee as TolgeeInstance,
     run: runMock.run,
     stop: stopMock,
@@ -65,7 +65,7 @@ export const mockTolgee = () => {
     isInitialLoading() {
       return true;
     },
-  };
+  } as unknown as TolgeeInstance;
 
   const tolgeeClass = jest.fn().mockImplementation(() => tolgee);
   // @ts-ignore

@@ -23,6 +23,7 @@ export default {
       sourcemap: true,
       globals: {
         '@tolgee/core': '@tolgee/core',
+        '@tolgee/devtools-web': '@tolgee/devtools-web',
         react: 'React',
       },
     },
@@ -33,6 +34,7 @@ export default {
       sourcemap: true,
       globals: {
         '@tolgee/core': '@tolgee/core',
+        '@tolgee/devtools-web': '@tolgee/devtools-web',
         react: 'React',
       },
       plugins: [terser()],
@@ -43,11 +45,18 @@ export default {
       format: 'esm',
       sourcemap: true,
     },
+    {
+      name: '@tolgee/react',
+      file: 'dist/tolgee-react.esm.min.mjs',
+      format: 'esm',
+      sourcemap: true,
+      plugins: [terser()],
+    },
   ],
   watch: {
     clearScreen: false,
   },
-  external: ['react', '@tolgee/core', '@tolgee/ui'],
+  external: ['react', '@tolgee/core', '@tolgee/devtools-web'],
   plugins: [
     typescript({
       outDir: './lib',

@@ -4,7 +4,7 @@ import { initOptions } from './observers/general/initOptions';
 import { InvisibleWrapper } from './observers/invisible/InvisibleWrapper';
 
 export const InvisibleObserver =
-  (options?: ObserverOptions): ObserverPlugin =>
+  (options?: Partial<ObserverOptions>): ObserverPlugin =>
   ({ onClick }) => {
     const observerOptions = initOptions(options);
     const wrapper = InvisibleWrapper();

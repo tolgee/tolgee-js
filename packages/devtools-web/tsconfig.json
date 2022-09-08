@@ -5,6 +5,7 @@
     "sourceMap": true,
     "rootDir": "./src",
     "declaration": true,
+    "emitDeclarationOnly": true,
     "declarationMap": false,
     "skipLibCheck": true,
     "allowJs": true,
