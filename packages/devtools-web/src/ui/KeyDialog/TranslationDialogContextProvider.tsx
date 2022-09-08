@@ -5,8 +5,11 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
+<<<<<<< HEAD
 
 const MAX_LANGUAGES_SELECTED = 5;
+=======
+>>>>>>> 0bfab229 (fix(UI): many languages)
 
 export interface ScreenshotInterface {
   id: number;
@@ -306,7 +309,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       //   setTranslationsFormTouched(false);
       //   dispatch({
       //     type: 'LOAD_TRANSLATIONS',
-      //     payload: { languages: properties.preferredLanguages },
+      //     payload: { languages: selectedLanguages },
       //   });
       //   if (availableLanguages === undefined) {
       //     coreService.getLanguagesFull().then((l) => {
@@ -346,14 +349,19 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     //   ? !coreService.isAuthorizedTo('translations.edit')
     //   : !coreService.isAuthorizedTo('keys.edit'));
 
-    const [availableLanguages, setAvailableLanguages] =
+    const [availableLanguages, _setAvailableLanguages] =
       useState<any[]>(undefined);
+    const setAvailableLanguages = (data: any[]) => {
+      _setAvailableLanguages(putBaseLangFirst(data));
+    };
 
-    const selectedLanguages = new Set(['en', 'cs']);
-
-    // const [selectedLanguages, setSelectedLanguages] = useState(
-    //   properties.preferredLanguages || new Set([properties.currentLanguage])
-    // );
+    // const getInitialLanguages = () => {
+    //   const langs = Array.from(
+    //     properties.preferredLanguages || [properties.currentLanguage]
+    //   );
+    //   return new Set(langs.slice(0, MAX_LANGUAGES_SELECTED));
+    // };
+    const [selectedLanguages, setSelectedLanguages] = useState(new Set([]));
 
     // sets the default value for base language if is not stored already
     // useEffect(() => {

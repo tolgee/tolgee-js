@@ -1,4 +1,6 @@
-import { LanguageModel } from '@tolgee/core';
+type LanguageModel = {
+  base: string;
+};
 
 export const putBaseLangFirst = (languages: LanguageModel[] | undefined) => {
   const base = languages?.find((l) => l.base);
