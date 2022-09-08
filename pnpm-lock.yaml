@@ -185,7 +185,7 @@ importers:
       '@rollup/plugin-typescript': 8.5.0_id3sp2lbl4kx3dskm7teaj32um
       '@testing-library/dom': 8.17.1
       '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': 4.9.2
+      '@tolgee/core': link:../core
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.48
@@ -9126,10 +9126,6 @@ packages:
   /@tokenizer/token/0.3.0:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
     dev: false
-
-  /@tolgee/core/4.9.2:
-    resolution: {integrity: sha512-+wVYDN2AU5cUHLDw++tA0Bm/pHkltEhC4IvTR7qTJICG/15PpmvhCfQ717Q/hKSjG6QNaap/Qt/eCSp0PI5+SQ==}
-    dev: true
 
   /@tolgee/ui/4.9.2:
     resolution: {integrity: sha512-rna8kC31yGtn1JYKERTDT6jvOhhkM0xO0Z5cv8OvKODvn9eyGaHtNieCchoVVbFxWfPOGmqp8pBPKFj0D9gEgQ==}

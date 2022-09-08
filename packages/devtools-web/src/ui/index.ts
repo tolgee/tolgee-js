@@ -11,9 +11,12 @@ export class UI {
   private keyContextMenu: KeyContextMenu;
 
   constructor(private props: UiProps) {
-    const devTools = document.createElement('div');
-    devTools.id = DEVTOOLS_ID;
-    document.body.append(devTools);
+    const rootElement = document.createElement('div');
+    rootElement.id = DEVTOOLS_ID;
+    rootElement.attachShadow({ mode: 'open' });
+    const devTools = rootElement.shadowRoot;
+
+    document.body.appendChild(rootElement);
 
     const tolgeeModalContainer = document.createElement('div');
     devTools.appendChild(tolgeeModalContainer);
