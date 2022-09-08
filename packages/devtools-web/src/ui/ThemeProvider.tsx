@@ -1,11 +1,9 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import {
-  createTheme,
   ThemeProvider as MuiThemeProvider,
+  createTheme,
 } from '@mui/material/styles';
-import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from './constants';
-import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
+import { DEVTOOLS_Z_INDEX } from './constants';
 
 let theme = createTheme({
   typography: {
