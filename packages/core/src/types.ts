@@ -145,26 +145,20 @@ export type TolgeeOn = {
   (event: 'loading', handler: ListenerHandler<boolean>): Listener;
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
-  (event: 'keyUpdate', handler: ListenerHandler<void>): ListenerSelective;
-  (event: TolgeeEvent, handler: ListenerHandler<any>):
-    | Listener
-    | ListenerSelective;
+  (event: 'keyUpdate', handler: ListenerHandler<void>): Listener;
+  (event: TolgeeEvent, handler: ListenerHandler<any>): Listener;
 };
 
 export type TolgeeInstance = Readonly<{
   on: TolgeeOn;
+  onKeyUpdate: (handler: ListenerHandler<void>) => ListenerSelective;
 
-  setFormatter: (
-    formatter: FormatterPlugin | undefined
-  ) => Readonly<TolgeeInstance>;
-  setObserver: (
-    observer: ObserverPlugin | undefined
-  ) => Readonly<TolgeeInstance>;
-  setUi: (ui: UiLibInterface | undefined) => Readonly<TolgeeInstance>;
-  addBackend: (backend: BackendPlugin | undefined) => Readonly<TolgeeInstance>;
-  setDevBackend: (
-    backend: BackendPlugin | undefined
-  ) => Readonly<TolgeeInstance>;
+  setFormatter: (formatter: FormatterPlugin | undefined) => TolgeeInstance;
+  setObserver: (observer: ObserverPlugin | undefined) => TolgeeInstance;
+  setUi: (ui: UiLibInterface | undefined) => TolgeeInstance;
+  addBackend: (backend: BackendPlugin | undefined) => TolgeeInstance;
+  setDevBackend: (backend: BackendPlugin | undefined) => TolgeeInstance;
+  use: (plugin: TolgeePlugin | undefined) => TolgeeInstance;
 
   getLanguage: () => string;
   getPendingLanguage: () => string;
@@ -182,7 +176,7 @@ export type TolgeeInstance = Readonly<{
   isInitialLoading: () => boolean;
   isLoading: () => boolean;
   isFetching: () => boolean;
-  init: (options: Partial<Options>) => Readonly<TolgeeInstance>;
+  init: (options: Partial<Options>) => TolgeeInstance;
   run: () => Promise<void>;
   stop: () => void;
   t: (props: TranslatePropsInternal) => string;
@@ -285,3 +279,5 @@ export type ListenerSelective = {
 };
 
 export type ListenerHandler<T> = (data: T) => void;
+
+export type TolgeePlugin = (tolgee: TolgeeInstance) => void;

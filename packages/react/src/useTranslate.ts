@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { TranslationParams, ListenerSelective } from '@tolgee/core';
 
-import { useTolgeeContext } from './useTolgeeContext';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 import { ParamsTags } from './types';
+import { useTolgeeContext } from './useTolgeeContext';
 
 export type TranslationTags<T> = string | T[];
 
@@ -43,7 +43,7 @@ type ReturnFnType = {
 };
 
 export const useTranslate: () => ReturnFnType = () => {
-  const { tolgee } = useTolgeeContext();
+  const tolgee = useTolgeeContext();
 
   // dummy state to enable re-rendering
   const [instance, setInstance] = useState(0);
@@ -65,9 +65,7 @@ export const useTranslate: () => ReturnFnType = () => {
   };
 
   useEffect(() => {
-    subscriptionRef.current = tolgee.on('keyUpdate', () => {
-      forceRerender();
-    });
+    subscriptionRef.current = tolgee.onKeyUpdate(forceRerender);
     subscriptionQueue.current.forEach((key) =>
       subscriptionRef.current.subscribeToKey(key)
     );

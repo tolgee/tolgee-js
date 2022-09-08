@@ -7,6 +7,7 @@ import {
   ObserverPlugin,
   Options,
   TolgeeInstance,
+  TolgeePlugin,
   TranslateProps,
   UiLibInterface,
 } from './types';
@@ -21,6 +22,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     on: eventService.on,
+    onKeyUpdate: eventService.onKeyUpdate.listenSome,
 
     setFormatter: (formatter: FormatterPlugin | undefined) => {
       stateService.setFormatter(formatter);
@@ -40,6 +42,10 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     },
     addBackend: (backend: BackendPlugin | undefined) => {
       stateService.addBackend(backend);
+      return tolgee;
+    },
+    use: (plugin: TolgeePlugin | undefined) => {
+      plugin?.(tolgee);
       return tolgee;
     },
 

@@ -7,7 +7,7 @@ import { act } from 'react-dom/test-utils';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
-import { TolgeeProviderDefault, useTranslate } from '..';
+import { TolgeeProvider, useTranslate, Tolgee, TolgeeInstance } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 
 const API_URL = 'http://localhost';
@@ -60,23 +60,25 @@ describe('TolgeeProvider integration', () => {
   describe('regular settings', () => {
     let resolveEnglish;
     let resolveCzech;
+    let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       const fetchMock = createFetchMock();
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
+      tolgee = Tolgee({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        defaultLanguage: 'cs',
+        fallbackLanguage: 'en',
+      });
+
       act(() => {
         render(
-          <TolgeeProviderDefault
-            apiUrl={API_URL}
-            apiKey={API_KEY}
-            loadingFallback="Loading..."
-            defaultLanguage="cs"
-            fallbackLanguage="en"
-          >
+          <TolgeeProvider tolgee={tolgee} fallback="Loading...">
             <TestComponent />
-          </TolgeeProviderDefault>
+          </TolgeeProvider>
         );
       });
     });
@@ -117,23 +119,24 @@ describe('TolgeeProvider integration', () => {
   describe('with preloadFallback', () => {
     let resolveEnglish;
     let resolveCzech;
+    let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       const fetchMock = createFetchMock();
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
+      tolgee = Tolgee({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        defaultLanguage: 'cs',
+        fallbackLanguage: 'en',
+      });
       act(() => {
         render(
-          <TolgeeProviderDefault
-            apiUrl={API_URL}
-            apiKey={API_KEY}
-            loadingFallback="Loading..."
-            defaultLanguage="cs"
-            fallbackLanguage="en"
-          >
+          <TolgeeProvider tolgee={tolgee} fallback="Loading...">
             <TestComponent />
-          </TolgeeProviderDefault>
+          </TolgeeProvider>
         );
       });
     });

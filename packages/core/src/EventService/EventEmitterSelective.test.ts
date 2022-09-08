@@ -3,7 +3,7 @@ import { EventEmitterSelective } from './EventEmitterSelective';
 it('subscribes and unsubscribes', () => {
   const emitter = EventEmitterSelective<void>();
   const handler = jest.fn();
-  const listener = emitter.listen(handler);
+  const listener = emitter.listenSome(handler);
   listener.subscribeToKey('test');
   listener.subscribeToKey('abcd');
 
