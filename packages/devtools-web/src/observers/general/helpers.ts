@@ -1,5 +1,3 @@
-import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
-
 export function xPathEvaluate<T extends Node>(
   expression: string,
   targetNode: Node
@@ -16,20 +14,6 @@ export function xPathEvaluate<T extends Node>(
     result.push(node as T);
   }
   return result;
-}
-
-export function filterRestricted<T extends Element | Text>(nodes: T[]) {
-  const restrictedElements: string[] = [];
-  return nodes.filter((n) => {
-    const e = closestElement(n);
-    if (!e) {
-      return false;
-    }
-    return (
-      restrictedElements.indexOf(e.tagName.toLowerCase()) === -1 &&
-      e.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}="true"]`) === null
-    );
-  });
 }
 
 export function closestElement(node: Element | Text) {

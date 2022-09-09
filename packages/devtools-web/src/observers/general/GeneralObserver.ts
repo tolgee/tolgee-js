@@ -1,12 +1,14 @@
-import type {
-  ObserverOptions,
+import {
+  TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TranslationOnClick,
   WrapperInterface,
 } from '@tolgee/core';
+import { ObserverOptions } from '../../types';
+
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry } from './ElementRegistry';
-import { getNodeText, setNodeText } from './helpers';
+import { getNodeText, setNodeText, xPathEvaluate } from './helpers';
 import { NodeHandler } from './NodeHandler';
 
 export const GeneralObserver = (
@@ -34,6 +36,20 @@ export const GeneralObserver = (
     }
   }
 
+  const handleKeyAttribute = (node: Node) => {
+    const xPath = `./descendant-or-self::*[@${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}]`;
+    const elements = xPathEvaluate(xPath, node) as Element[];
+    elements.forEach((element) => {
+      const node = element.getAttributeNode(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE);
+      const parentElement = domHelper.getSuitableParent(node);
+      elementRegistry.register(parentElement, node, {
+        oldTextContent: '',
+        keys: [{ key: getNodeText(node) }],
+        keyAttributeOnly: true,
+      });
+    });
+  };
+
   const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
     if (!isObserving) {
       return;
@@ -46,10 +62,12 @@ export const GeneralObserver = (
           break;
 
         case 'childList':
+          handleKeyAttribute(mutation.target);
           result = nodeHandler.handleChildList(mutation.target);
           break;
 
         case 'attributes':
+          handleKeyAttribute(mutation.target);
           result = nodeHandler.handleAttributes(mutation.target);
           break;
       }

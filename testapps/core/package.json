@@ -18,7 +18,7 @@
     "@tolgee/ui": "^4.9.2",
 =======
     "@tolgee/core": "^4.8.0",
-    "@tolgee/ui": "^4.8.0",
+    "@tolgee/devtools-web": "^4.8.0",
     "concurrently": "^7.3.0",
 >>>>>>> e128ad41 (feat: element registry and highlighting)
     "copy-webpack-plugin": "^10.2.4",
@@ -28,5 +28,8 @@
     "webpack": "^5.73.0",
     "webpack-cli": "^4.10.0"
   },
-  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08"
+  "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
+  "dependencies": {
+    "@tolgee/icu-formatter": "^4.8.0"
+  }
 }

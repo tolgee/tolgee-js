@@ -1,10 +1,11 @@
-import { Tolgee, TextObserver, IcuFormat } from '@tolgee/core';
-import { UI } from '@tolgee/ui';
+import { Tolgee } from '@tolgee/core';
+import { TextObserver, UI } from '@tolgee/devtools-web';
+import { IcuPlugin } from '@tolgee/icu-formatter';
 
 const tolgee = Tolgee()
   .setObserver(TextObserver())
   .setUi(UI)
-  .setFormat(IcuFormat)
+  .use(IcuPlugin())
   .init({
     ns: ['', 'ns'],
     staticData: {
@@ -37,23 +38,23 @@ document.body.append(test3);
 document.body.append(test4);
 
 tolgee.run().then(() => {
-  test1.childNodes[0].nodeValue = tolgee.instant({
+  test1.childNodes[0].nodeValue = tolgee.t({
     key: 'world',
     params: { name: 'user' },
   });
-  test1.setAttribute('title', tolgee.instant({ key: 'title' }));
+  test1.setAttribute('title', tolgee.t({ key: 'title' }));
 
-  test2.innerHTML = `<span>${tolgee.instant({
+  test2.innerHTML = `<span>${tolgee.t({
     key: 'world',
     params: { name: 'user' },
   })}</span>`;
 
-  test3.innerHTML = `<span><span>${tolgee.instant({
+  test3.innerHTML = `<span><span>${tolgee.t({
     key: 'world',
     params: { name: 'idiot' },
-  })}</span><span>${tolgee.instant({ key: 'title' })}</span></span>`;
+  })}</span><span>${tolgee.t({ key: 'title' })}</span></span>`;
 
-  test4.innerHTML = `<span>${tolgee.instant({
+  test4.innerHTML = `<span>${tolgee.t({
     key: 'world',
     ns: 'ns',
   })}</span>`;

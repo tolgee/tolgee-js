@@ -193,13 +193,10 @@ export type TolgeeInstance = Readonly<{
   t: (props: TranslatePropsInternal) => string;
 }>;
 
-export type NodeLock = {
-  locked?: boolean;
-};
-
 export type NodeMeta = {
   oldTextContent: string;
   keys: KeyAndParams[];
+  keyAttributeOnly?: boolean;
 };
 
 export type ElementMeta = {
@@ -219,35 +216,9 @@ export type ElementMeta = {
    * Triggering highlight needs the metadata stored on element, so
    * we need the ability to prevent clean.
    */
+
   preventClean?: boolean;
 };
-
-export type TolgeeElement = Element &
-  ElementCSSInlineStyle & {
-    _tolgee?: boolean;
-  };
-
-export type ObserverOptions = {
-  tagAttributes: Record<string, string[]>;
-  highlightKeys: ModifierKey[];
-  highlightColor: string;
-  highlightWidth: number;
-  targetElement?: HTMLElement;
-  inputPrefix: string;
-  inputSuffix: string;
-  passToParent: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean);
-};
-
-export type ObserverOptionsInitial = Partial<ObserverOptions>;
-
-export type RegistredElementsMap = Map<TolgeeElement, ElementMeta>;
-
-export enum ModifierKey {
-  Alt,
-  Control,
-  Shift,
-  Meta,
-}
 
 export type UiProps = {
   getTranslation(key: string): string;
@@ -274,7 +245,7 @@ export type TranslationOnClick = (
   event: MouseEvent,
   data: {
     keysAndDefaults: KeyWithDefault[];
-    el: TolgeeElement;
+    el: Element;
     meta: ElementMeta;
   }
 ) => void;

@@ -1,8 +1,4 @@
-import {
-  ModifierKey,
-  ObserverOptions,
-  ObserverOptionsInitial,
-} from '@tolgee/core';
+import { ObserverOptions, ModifierKey } from '../../types';
 
 const defaultOptions: ObserverOptions = {
   tagAttributes: {
@@ -11,6 +7,7 @@ const defaultOptions: ObserverOptions = {
     img: ['alt'],
     '*': ['aria-label', 'title'],
   },
+  restrictedElements: ['script', 'style'],
   highlightKeys: [ModifierKey.Alt] as ModifierKey[],
   highlightColor: 'rgb(255, 0, 0)',
   highlightWidth: 5,
@@ -20,7 +17,7 @@ const defaultOptions: ObserverOptions = {
 };
 
 export const initOptions = (
-  options?: ObserverOptionsInitial
+  options?: Partial<ObserverOptions>
 ): ObserverOptions => {
   return { ...defaultOptions, ...options };
 };

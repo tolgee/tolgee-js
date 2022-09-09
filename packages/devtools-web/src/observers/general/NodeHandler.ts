@@ -1,6 +1,6 @@
-import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
-import { ObserverOptions, WrapperInterface } from '@tolgee/core';
-import { filterRestricted, xPathEvaluate } from '../general/helpers';
+import { WrapperInterface } from '@tolgee/core';
+import { ObserverOptions } from '../../types';
+import { xPathEvaluate } from './helpers';
 
 export const NodeHandler = (
   options: ObserverOptions,
@@ -9,9 +9,7 @@ export const NodeHandler = (
   const handleText = (node: Node) => {
     const xPath = wrapper.getTextXPath();
     const nodes = xPathEvaluate(xPath, node);
-    const filtered: Text[] = filterRestricted(nodes as Text[]);
-
-    return filtered;
+    return nodes as Text[];
   };
 
   const handleAttributes = (node: Node) => {
@@ -24,20 +22,6 @@ export const NodeHandler = (
       }
     }
     return result;
-  };
-
-  const wrappedHandler = (node: Node) => {
-    const xPath = `./descendant-or-self::*[@${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}]`;
-    const nodes = xPathEvaluate(xPath, node);
-    const filtered: Element[] = filterRestricted(nodes as Element[]);
-    filtered.forEach((element) => {
-      // const elementWithMeta = domHelper.getAndInitParent(element);
-      // elementWithMeta._tolgee.wrappedWithElementOnlyKey =
-      //   element.getAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) || undefined;
-      // elementWithMeta._tolgee.wrappedWithElementOnlyDefaultHtml =
-      //   element.innerHTML;
-      // elementRegistrar.register(elementWithMeta);
-    });
   };
 
   const handleChildList = (node: Node) => {

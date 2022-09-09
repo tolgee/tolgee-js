@@ -37,6 +37,12 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     eventService.onRunningChange.emit
   );
 
+  eventService.onKeyUpdate.listen(() => {
+    if (isRunning()) {
+      pluginService.retranslate();
+    }
+  });
+
   function t(props: TranslatePropsInternal) {
     const translation = getTranslation(props);
     return pluginService.formatTranslation({ ...props, translation });

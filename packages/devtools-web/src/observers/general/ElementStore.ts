@@ -1,8 +1,7 @@
-import type {
-  ElementMeta,
-  RegistredElementsMap,
-  TolgeeElement,
-} from '@tolgee/core';
+import type { ElementMeta } from '@tolgee/core';
+import { TolgeeElement } from '../../types';
+
+export type RegistredElementsMap = Map<TolgeeElement, ElementMeta>;
 
 export const ElementStore = () => {
   const registredElements: RegistredElementsMap = new Map();
