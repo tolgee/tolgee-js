@@ -44,7 +44,7 @@ export class UI {
 
   public async getKey(props: {
     openEvent: MouseEvent;
-    keys: Set<string>;
+    keys: Map<string, string>;
   }): Promise<string> {
     return await new Promise<string>((resolve) => {
       this.keyContextMenu.show({

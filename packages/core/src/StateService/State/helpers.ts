@@ -3,7 +3,7 @@ import {
   FallbackLanguage,
   FallbackLanguageObject,
   FallbackLanguageOption,
-} from '../types';
+} from '../../types';
 
 export function isObject(item: any) {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;
@@ -30,4 +30,8 @@ export function getFallbackFromStruct(
   } else {
     return getFallback(fallbackLanguage as FallbackLanguage);
   }
+}
+
+export function unique<T>(arr: T[]) {
+  return Array.from(new Set(arr));
 }

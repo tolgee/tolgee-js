@@ -1,6 +1,6 @@
-import type { Options } from './StateService/initState';
+import type { Options } from './StateService/State/initState';
 
-export type { State, Options } from './StateService/initState';
+export type { State, Options } from './StateService/State/initState';
 export type { EventEmitterType } from './EventService/EventEmitter';
 export type { EventEmitterSelectiveType } from './EventService/EventEmitterSelective';
 

@@ -2,7 +2,7 @@ import {
   FallbackLanguageOption,
   FallbackNS,
   TreeTranslationsData,
-} from '../types';
+} from '../../types';
 
 export type Options = {
   /**
