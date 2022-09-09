@@ -60,10 +60,15 @@ export class UI {
   ) {
     let key = keysAndDefaults[0].key as string | undefined;
     if (keysAndDefaults.length > 1) {
-      const keySet = new Set(keysAndDefaults.map(({ key }) => key));
+      const keys = new Map(
+        keysAndDefaults.map(({ key, defaultValue }) => [
+          key,
+          this.props.getTranslation(key) || defaultValue,
+        ])
+      );
       key = await this.getKey({
         openEvent: event,
-        keys: keySet,
+        keys,
       });
     }
     if (key) {

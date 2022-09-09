@@ -58,4 +58,12 @@ tolgee.run().then(() => {
     key: 'world',
     ns: 'ns',
   })}</span>`;
+
+  test4.innerHTML = `<span>${tolgee.t({
+    key: 'you',
+    defaultValue: 'You',
+  })}${tolgee.t({
+    key: 'da',
+    defaultValue: 'Da',
+  })}</span>`;
 });

@@ -21,7 +21,7 @@ const ScTranslation = styled('div')`
 
 const ScKey = styled('div')`
   display: flex;
-  margin-top: 0px;
+  margin-top: -5px;
   padding: 3px;
   font-weight: bold;
   font-size: 12px;
@@ -30,7 +30,7 @@ const ScKey = styled('div')`
 
 export interface KeyContextMenuParams {
   openEvent: MouseEvent;
-  keys: Set<string>;
+  keys: Map<string, string>;
   onSelect: (key) => void;
 }
 
@@ -90,7 +90,7 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
             container={document.getElementById(DEVTOOLS_ID)}
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
-            {Array.from(this.state.keys).map((key, index) => (
+            {Array.from(this.state.keys).map(([key, translation], index) => (
               <ScMenuItem
                 onClick={() => {
                   this.state.onSelect(key);
@@ -100,7 +100,7 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
                 }}
                 key={index}
               >
-                <ScTranslation>{this.props.getTranslation(key)}</ScTranslation>
+                <ScTranslation>{translation}</ScTranslation>
                 <ScKey>{key}</ScKey>
               </ScMenuItem>
             ))}
