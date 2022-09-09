@@ -9,10 +9,10 @@ import {
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
-import { getFallback, getFallbackFromStruct } from './helpers';
-import { initState, State } from './initState';
+import { getFallback } from './State/helpers';
 import { PluginService } from './PluginService/PluginService';
 import { ValueObserver } from './ValueObserver';
+import { State } from './State/State';
 
 type StateServiceProps = {
   eventService: EventServiceType;
@@ -20,10 +20,17 @@ type StateServiceProps = {
 };
 
 export const StateService = ({ eventService, options }: StateServiceProps) => {
-  let state: State = initState(options);
+  const state = State({
+    onLanguageChange: eventService.onLanguageChange,
+    onPendingLanguageChange: eventService.onPendingLanguageChange,
+    onRunningChange: eventService.onRunningChange,
+  });
   const cache = Cache();
-  cache.init(state.initialOptions.staticData);
-  const pluginService = PluginService(getLanguage, t, getBackendProps);
+  const asyncRequests: CacheAsyncRequests = new Map();
+  const pluginService = PluginService(state.getLanguage, t, getBackendProps);
+
+  state.init(options);
+  cache.init(state.getInitialOptions().staticData);
   const fetchingObserver = ValueObserver<boolean>(
     false,
     eventService.onFetchingChange.emit
@@ -32,13 +39,9 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     false,
     eventService.onLoadingChange.emit
   );
-  const runningObserver = ValueObserver<boolean>(
-    false,
-    eventService.onRunningChange.emit
-  );
 
   eventService.onKeyUpdate.listen(() => {
-    if (isRunning()) {
+    if (state.isRunning()) {
       pluginService.retranslate();
     }
   });
@@ -49,22 +52,16 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function getBackendProps() {
-    const apiUrl = state.initialOptions.apiUrl;
+    const apiUrl = state.getInitialOptions().apiUrl;
     return {
       apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
-      apiKey: state.initialOptions.apiKey,
+      apiKey: state.getInitialOptions().apiKey,
     };
   }
 
-  const asyncRequests: CacheAsyncRequests = new Map();
-
   function init(options: Partial<Options>) {
-    state = initState(options, state.initialOptions);
-    cache.init(state.initialOptions.staticData);
-  }
-
-  function isDev() {
-    return Boolean(state.initialOptions.apiKey);
+    state.init(options);
+    cache.init(state.getInitialOptions().staticData);
   }
 
   function isFetching() {
@@ -77,96 +74,42 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
         (key) =>
           !cache.exists({
             namespace: decodeCacheKey(key).namespace,
-            language: state.language,
+            language: state.getLanguage(),
           })
       )
     );
-  }
-
-  function isRunning() {
-    return state.isRunning;
-  }
-
-  function isInitialLoading() {
-    return state.isInitialLoading;
-  }
-
-  function getLanguage() {
-    return state.language;
-  }
-
-  function getPendingLanguage() {
-    return state.pendingLanguage;
   }
 
   function withDefaultNs(descriptor: CacheDescriptor): CacheKeyObject {
     return {
       namespace:
         descriptor.namespace === undefined
-          ? state.initialOptions.defaultNs
+          ? state.getInitialOptions().defaultNs
           : descriptor.namespace,
       language: descriptor.language,
     };
   }
 
   async function addActiveNs(namespace: string) {
-    const value = state.activeNamespaces.get(namespace);
-    if (value !== undefined) {
-      state.activeNamespaces.set(namespace, value + 1);
-    } else {
-      state.activeNamespaces.set(namespace, 1);
-    }
-    if (isRunning()) {
+    state.addActiveNs(namespace);
+    if (state.isRunning()) {
       const data = cache.getRecord({
-        language: state.language,
+        language: state.getLanguage(),
         namespace,
       });
       if (!data) {
-        await loadRecord({ namespace, language: state.language });
+        await loadRecord({ namespace, language: state.getLanguage() });
       }
     }
   }
 
-  function removeActiveNs(ns: string) {
-    const value = state.activeNamespaces.get(ns);
-    if (value !== undefined && value > 1) {
-      state.activeNamespaces.set(ns, value - 1);
-    } else {
-      state.activeNamespaces.delete(ns);
-    }
-  }
-
-  function getFallbackNamespaces() {
-    const defaultNs = state.initialOptions.defaultNs;
-    const fallbackNs = state.initialOptions.fallbackNs;
-    const fallbackNamespaces = typeof defaultNs === 'string' ? [defaultNs] : [];
-    return [...fallbackNamespaces, ...getFallback(fallbackNs)];
-  }
-
-  function getFallbackLangs(lang?: string) {
-    const language = lang || state.language;
-    return [
-      language,
-      ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
-    ];
-  }
-
-  function getRequiredNamespaces() {
-    return Array.from(
-      new Set([
-        ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
-        ...state.activeNamespaces.keys(),
-      ])
-    );
-  }
-
   function getRequiredRecords(lang?: string) {
-    const languages = new Set(getFallbackLangs(lang));
-    const namespaces = new Set(getRequiredNamespaces());
+    const languages = state.getFallbackLangs(lang);
+    const namespaces = state.getRequiredNamespaces();
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cache.exists({ language, namespace }, isDev())) {
+        if (!cache.exists({ language, namespace }, state.isDev())) {
           result.push({ language, namespace });
         }
       });
@@ -187,28 +130,29 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   async function loadInitial() {
-    state.isInitialLoading = true;
+    state.setInitialLoading(true);
     await loadRequiredRecords();
-    state.isInitialLoading = false;
+    state.setInitialLoading(false);
     eventService.onInitialLoaded.emit();
   }
 
   async function changeLanguage(language: string) {
-    if (state.pendingLanguage === language && state.language === language) {
+    if (
+      state.getPendingLanguage() === language &&
+      state.getLanguage() === language
+    ) {
       return;
     }
-    state.pendingLanguage = language;
-    eventService.onPendingLanguageChange.emit(language);
+    state.setPendingLanguage(language);
 
-    if (isRunning()) {
+    if (state.isRunning()) {
       await loadRequiredRecords(language);
     }
 
-    if (language === state.pendingLanguage) {
+    if (language === state.getPendingLanguage()) {
       // there might be parallel language change
       // we only want to apply latest
-      state.language = language;
-      eventService.onLanguageChange.emit(language);
+      state.setLanguage(language);
     }
   }
 
@@ -217,10 +161,10 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     ns,
     fallbackLanguages,
   }: TranslatePropsInternal) {
-    const namespaces = ns ? getFallback(ns) : getFallbackNamespaces();
+    const namespaces = ns ? getFallback(ns) : state.getFallbackNamespaces();
     const languages = fallbackLanguages
-      ? [state.language, ...getFallback(fallbackLanguages)]
-      : getFallbackLangs();
+      ? [state.getLanguage(), ...getFallback(fallbackLanguages)]
+      : state.getFallbackLangs();
     return cache.getTranslationFallback(namespaces, languages, key);
   }
 
@@ -236,7 +180,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
   function fetchData(keyObject: CacheKeyObject) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
-    if (isDev()) {
+    if (state.isDev()) {
       dataPromise = pluginService.getBackendDevRecord(keyObject);
     }
 
@@ -246,7 +190,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
     if (!dataPromise) {
       const staticDataValue =
-        state.initialOptions.staticData?.[encodeCacheKey(keyObject)];
+        state.getInitialOptions().staticData?.[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
       }
@@ -272,7 +216,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       const data = await dataPromise;
 
       asyncRequests.delete(cacheKey);
-      cache.addRecord(keyObject, data, isDev());
+      cache.addRecord(keyObject, data, state.isDev());
       fetchingObserver.update(isFetching());
       loadingObserver.update(isLoading());
     }
@@ -281,38 +225,37 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function run() {
-    if (!isRunning()) {
-      state.isRunning = true;
+    if (!state.isRunning()) {
       pluginService.run();
-      runningObserver.update(true);
+      state.setRunning(true);
     }
   }
 
   function stop() {
-    if (isRunning()) {
-      state.isRunning = false;
+    if (state.isRunning()) {
       pluginService.stop();
-      runningObserver.update(false);
+      state.setRunning(false);
     }
   }
 
   return Object.freeze({
     init,
-    getLanguage,
-    getPendingLanguage,
     changeLanguage,
     getTranslation,
     changeTranslation,
     addActiveNs,
-    removeActiveNs,
     loadRequiredRecords,
     loadRecord,
     isLoading,
     isFetching,
-    isInitialLoading,
     isLoaded,
     loadInitial,
     t,
+    getLanguage: state.getLanguage,
+    getPendingLanguage: state.getPendingLanguage,
+    removeActiveNs: state.removeActiveNs,
+    isInitialLoading: state.isInitialLoading,
+    isRunning: state.isRunning,
     setFinalFormatter: pluginService.setFinalFormatter,
     addFormatter: pluginService.addFormatter,
     setObserver: pluginService.setObserver,
@@ -321,7 +264,6 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     addBackend: pluginService.addBackend,
     run,
     stop,
-    isRunning,
   });
 };
 

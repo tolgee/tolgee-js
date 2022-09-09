@@ -90,3 +90,5 @@ export const Cache = () => {
     changeTranslation,
   });
 };
+
+export type CacheType = ReturnType<typeof Cache>;
