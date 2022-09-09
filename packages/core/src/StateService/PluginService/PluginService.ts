@@ -41,7 +41,10 @@ export const PluginService = (
   const run = () => {
     instances.ui =
       plugins.ui &&
-      new plugins.ui({ getTranslation: (key) => translate({ key }) });
+      new plugins.ui({
+        getTranslation: (key) =>
+          translate({ key, noWrap: true, orEmpty: true }),
+      });
     instances.observer = plugins?.observer?.({ translate, onClick });
   };
 
