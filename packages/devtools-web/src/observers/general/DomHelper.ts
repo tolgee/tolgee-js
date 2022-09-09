@@ -1,4 +1,4 @@
-import type { ObserverOptions } from '@tolgee/core';
+import { ObserverOptions } from '../../types';
 
 export const DomHelper = (options: ObserverOptions) => {
   function getParentElement(node: Node): Element | undefined {

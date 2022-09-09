@@ -1,12 +1,16 @@
-import { TOLGEE_ATTRIBUTE_NAME } from '@tolgee/core';
+import {
+  RESTRICTED_ASCENDANT_ATTRIBUTE,
+  TOLGEE_ATTRIBUTE_NAME,
+} from '@tolgee/core';
 import type {
   ElementMeta,
   KeyWithDefault,
   NodeMeta,
-  ObserverOptions,
-  TolgeeElement,
   TranslationOnClick,
 } from '@tolgee/core';
+import { TolgeeElement } from '../../types';
+
+import { ObserverOptions } from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStore } from './ElementStore';
@@ -36,12 +40,15 @@ export const ElementRegistry = (
   });
 
   function register(element: Element, node: Node, nodeMeta: NodeMeta) {
+    if (isRestricted(element)) {
+      return;
+    }
     const tolgeeElement = element as TolgeeElement;
     let elementMeta = elementStore.get(tolgeeElement);
     if (!elementMeta) {
       elementMeta = initElementMeta();
-      tolgeeElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, 'true');
       elementStore.set(tolgeeElement, elementMeta);
+      tolgeeElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, 'true');
     }
     elementMeta.nodes.set(node, nodeMeta);
     elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
@@ -51,46 +58,49 @@ export const ElementRegistry = (
     eventHandler.stop();
   }
 
+  function isRestricted(element: Element) {
+    const restrictedElements = options.restrictedElements;
+    return (
+      restrictedElements.indexOf(element.tagName.toLowerCase()) !== -1 ||
+      element.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}]`) !== null
+    );
+  }
+
   function refreshAll() {
     elementStore.forEachElement((element, meta) => {
-      if (!meta.preventClean) {
-        cleanElementInactiveNodes(element, meta);
-        if (meta.nodes.size === 0 && !meta.wrappedWithElementOnlyKey) {
-          cleanElement(element, meta);
-        }
-      }
-    });
-  }
-
-  function findAllByKey(key: string) {
-    const result: TolgeeElement[] = [];
-    elementStore.forEachElement((element, meta) => {
-      if (meta.wrappedWithElementOnlyKey === key) {
-        result.push(element);
+      if (meta.preventClean) {
         return;
       }
-      for (const nodeMeta of meta.nodes.values()) {
-        if (
-          nodeMeta.keys.findIndex(
-            (keyWithParams) => keyWithParams.key === key
-          ) > -1
-        ) {
-          result.push(element);
-          break;
-        }
+      cleanElementInactiveNodes(meta);
+      if (meta.nodes.size === 0) {
+        cleanElement(element, meta);
       }
     });
-    return result;
   }
 
-  function cleanElementInactiveNodes(
-    element: TolgeeElement,
-    meta: ElementMeta
-  ) {
-    if (isElementActive(element)) {
-      meta.nodes = new Map(getActiveNodes(meta));
-      return;
-    }
+  // function findAllByKey(key: string) {
+  //   const result: TolgeeElement[] = [];
+  //   elementStore.forEachElement((element, meta) => {
+  //     if (meta.wrappedWithElementOnlyKey === key) {
+  //       result.push(element);
+  //       return;
+  //     }
+  //     for (const nodeMeta of meta.nodes.values()) {
+  //       if (
+  //         nodeMeta.keys.findIndex(
+  //           (keyWithParams) => keyWithParams.key === key
+  //         ) > -1
+  //       ) {
+  //         result.push(element);
+  //         break;
+  //       }
+  //     }
+  //   });
+  //   return result;
+  // }
+
+  function cleanElementInactiveNodes(meta: ElementMeta) {
+    meta.nodes = new Map(getActiveNodes(meta));
   }
 
   function getTargetElement() {
@@ -106,17 +116,11 @@ export const ElementRegistry = (
   }
 
   function cleanElement(element: TolgeeElement, meta: ElementMeta) {
-    if (!meta.preventClean) {
-      if (meta.highlightEl) {
-        meta.unhighlight?.();
-      }
-      element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
-      elementStore.remove(element);
+    if (meta.highlightEl) {
+      meta.unhighlight?.();
     }
-  }
-
-  function isElementActive(element: TolgeeElement) {
-    return getTargetElement().contains(element);
+    element.removeAttribute(TOLGEE_ATTRIBUTE_NAME);
+    elementStore.remove(element);
   }
 
   function getKeyOptions(meta: ElementMeta): KeyWithDefault[] {
@@ -134,14 +138,6 @@ export const ElementRegistry = (
   }
 
   function getKeysAndDefaults(meta: ElementMeta): KeyWithDefault[] {
-    if (meta.wrappedWithElementOnlyKey) {
-      return [
-        {
-          key: meta.wrappedWithElementOnlyKey,
-          defaultValue: meta.wrappedWithElementOnlyDefaultHtml,
-        },
-      ];
-    }
     return getKeyOptions(meta);
   }
 

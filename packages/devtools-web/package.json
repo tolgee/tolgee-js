@@ -22,7 +22,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --project tsconfig.prod.json",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
-    "test": "jest --config ./jest.config.js",
+    "test": "jest --config ./jest.config.js --collect-coverage",
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --watch --preserveWatchOutput --project tsconfig.prod.json\" "
   },
   "author": "Tolgee",

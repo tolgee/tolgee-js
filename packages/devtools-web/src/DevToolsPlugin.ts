@@ -1,4 +1,5 @@
-import type { ObserverOptions, TolgeePlugin } from '@tolgee/core';
+import type { TolgeePlugin } from '@tolgee/core';
+import type { ObserverOptions } from './types';
 import { InvisibleObserver } from 'InvisibleObserver';
 import { UI } from './ui/index';
 

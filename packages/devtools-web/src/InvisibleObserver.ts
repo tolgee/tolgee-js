@@ -1,4 +1,5 @@
-import type { ObserverOptions, ObserverPlugin } from '@tolgee/core';
+import type { ObserverPlugin } from '@tolgee/core';
+import type { ObserverOptions } from './types';
 import { GeneralObserver } from './observers/general/GeneralObserver';
 import { initOptions } from './observers/general/initOptions';
 import { InvisibleWrapper } from './observers/invisible/InvisibleWrapper';
