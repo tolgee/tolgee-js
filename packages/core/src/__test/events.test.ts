@@ -24,8 +24,10 @@ describe('events', () => {
     tolgee.onKeyUpdate(languageHandler).subscribeToKey({ key: 'language' });
 
     tolgee.changeTranslation({ language: 'es' }, 'hello', 'Světe');
-    await tolgee.changeLanguage('es');
-    expect(helloHandler).toHaveBeenCalledTimes(2);
+    tolgee.changeLanguage('es');
+
+    await Promise.resolve();
+    expect(helloHandler).toHaveBeenCalledTimes(1);
     expect(languageHandler).toHaveBeenCalledTimes(1);
   });
 });

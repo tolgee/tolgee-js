@@ -6,8 +6,8 @@ import {
   ListenerHandlerEvent,
 } from '../types';
 
-type HandlerWrapperType<T> = {
-  fn: ListenerHandler<T>;
+type HandlerWrapperType = {
+  fn: ListenerHandler<undefined>;
   keys: Map<string, number>;
   namespaces: Map<string | undefined, number>;
 };
@@ -29,7 +29,7 @@ function decrementInMap(map: Map<any, number>, value: any) {
 
 export const EventEmitterSelective = <T>() => {
   const listeners: Set<ListenerHandler<T>> = new Set();
-  const partialListeners: Set<HandlerWrapperType<T>> = new Set();
+  const partialListeners: Set<HandlerWrapperType> = new Set();
 
   const listen = (handler: ListenerHandler<T>) => {
     listeners.add(handler);
@@ -41,9 +41,9 @@ export const EventEmitterSelective = <T>() => {
     return result;
   };
 
-  const listenSome = (handler: ListenerHandler<T>) => {
+  const listenSome = (handler: ListenerHandler<undefined>) => {
     const handlerWrapper = {
-      fn: (e: ListenerHandlerEvent<T>) => {
+      fn: (e: ListenerHandlerEvent<undefined>) => {
         handler(e);
       },
       keys: new Map<string, number>(),
@@ -85,21 +85,57 @@ export const EventEmitterSelective = <T>() => {
     return result;
   };
 
-  const emit = (data: T, descriptor?: KeyDescriptorInternal) => {
-    listeners.forEach((handler) => {
-      handler({ value: data });
-    });
+  const callHandlers = (key: string | undefined, ns: string[] | undefined) => {
     partialListeners.forEach((handler) => {
-      const nsMentioned = descriptor?.ns !== undefined;
+      const nsMentioned = ns !== undefined;
       const nsMatches =
         handler.namespaces.has(undefined) ||
-        descriptor?.ns?.findIndex((ns) => handler.namespaces.has(ns)) !== -1;
-      const keyMentioned = descriptor?.key !== undefined;
-      const keyMatches = descriptor?.key && handler.keys.has(descriptor.key);
+        ns?.findIndex((ns) => handler.namespaces.has(ns)) !== -1;
+      const keyMentioned = key !== undefined;
+      const keyMatches = key && handler.keys.has(key);
       if ((!nsMentioned || nsMatches) && (!keyMentioned || keyMatches)) {
-        handler.fn({ value: data });
+        handler.fn({ value: undefined as any });
       }
     });
+  };
+
+  let queue: (KeyDescriptorInternal | undefined)[] = [];
+  const solveQueue = () => {
+    if (queue.length === 0) {
+      return;
+    }
+    listeners.forEach((handler) => {
+      handler({ value: undefined as any });
+    });
+
+    let namespaces = [] as string[] | undefined;
+    let keys = [] as string[] | undefined;
+    queue.forEach((descriptor) => {
+      if (descriptor?.ns === undefined) {
+        namespaces = undefined;
+      } else if (namespaces !== undefined) {
+        namespaces = [...namespaces, ...descriptor.ns];
+      }
+      if (descriptor?.key === undefined) {
+        keys = undefined;
+      } else if (keys !== undefined) {
+        keys = [...keys, descriptor.key];
+      }
+    });
+    (keys || [undefined]).forEach((key) => {
+      callHandlers(key, namespaces);
+    });
+    queue = [];
+  };
+  const emit = (descriptor?: KeyDescriptorInternal, delayed?: boolean) => {
+    queue.push(descriptor);
+    if (!delayed) {
+      solveQueue();
+    } else {
+      Promise.resolve().then(() => {
+        solveQueue();
+      });
+    }
   };
 
   return Object.freeze({ listenSome, listen, emit });
