@@ -141,6 +141,7 @@ export type TolgeeEvent =
   | 'fetching'
   | 'initialLoad'
   | 'running'
+  | 'cache'
   | 'keyUpdate';
 
 export type TolgeeOn = {
@@ -151,6 +152,7 @@ export type TolgeeOn = {
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
   (event: 'running', handler: ListenerHandler<boolean>): Listener;
+  (event: 'cache', handler: ListenerHandler<CacheKeyObject>): Listener;
   (event: 'keyUpdate', handler: ListenerHandler<void>): Listener;
   (event: TolgeeEvent, handler: ListenerHandler<any>): Listener;
 };

@@ -233,6 +233,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       asyncRequests.delete(cacheKey);
       if (data) {
         cache.addRecord(keyObject, data, state.isDev());
+        eventService.onCacheChange.emit(keyObject);
       }
       fetchingObserver.update(isFetching());
       loadingObserver.update(isLoading());

@@ -19,7 +19,7 @@ type UseTranslateResultFnProps<T extends TranslationParams | ParamsTags> = {
   parameters?: T;
   noWrap?: boolean;
   defaultValue?: string;
-  ns: FallbackNSTranslation;
+  ns?: FallbackNSTranslation;
 };
 
 type ReturnFnType = {
