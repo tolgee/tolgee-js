@@ -40,7 +40,7 @@ export type TreeTranslationsData = {
 
 export type CacheAsyncRequests = Map<
   string,
-  Promise<TreeTranslationsData> | undefined
+  Promise<TreeTranslationsData | undefined> | undefined
 >;
 
 export type CacheDescriptor = {
@@ -254,10 +254,20 @@ export type Listener = {
   unsubscribe: () => void;
 };
 
+export type KeyDescriptorInternal = {
+  key?: string;
+  ns?: string[] | undefined;
+};
+
+export type KeyDescriptor = {
+  key: string;
+  ns?: string | string[];
+};
+
 export type ListenerSelective = {
   unsubscribe: () => void;
-  subscribeToKey: (key: string) => ListenerSelective;
-  unsubscribeKey: (key: string) => ListenerSelective;
+  subscribeToKey: (descriptor: KeyDescriptor) => ListenerSelective;
+  unsubscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
 };
 
 export type ListenerHandlerEvent<T> = { value: T };

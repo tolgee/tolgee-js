@@ -20,8 +20,8 @@ describe('events', () => {
     const helloHandler = jest.fn((data) => {});
     const languageHandler = jest.fn((data) => {});
 
-    tolgee.onKeyUpdate(helloHandler).subscribeToKey('hello');
-    tolgee.onKeyUpdate(languageHandler).subscribeToKey('language');
+    tolgee.onKeyUpdate(helloHandler).subscribeToKey({ key: 'hello' });
+    tolgee.onKeyUpdate(languageHandler).subscribeToKey({ key: 'language' });
 
     tolgee.changeTranslation({ language: 'es' }, 'hello', 'Světe');
     await tolgee.changeLanguage('es');

@@ -9,12 +9,12 @@ export function isObject(item: any) {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;
 }
 
-export function getFallback(fallbackLanguage: FallbackGeneral): string[] {
-  if (typeof fallbackLanguage === 'string') {
-    return [fallbackLanguage];
+export function getFallback(value: FallbackGeneral): string[] {
+  if (typeof value === 'string') {
+    return [value];
   }
-  if (Array.isArray(fallbackLanguage)) {
-    return fallbackLanguage;
+  if (Array.isArray(value)) {
+    return value;
   }
   return [];
 }

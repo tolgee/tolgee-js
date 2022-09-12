@@ -1,6 +1,12 @@
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { TranslationParams, ListenerSelective } from '@tolgee/core';
+import {
+  TranslationParams,
+  ListenerSelective,
+  KeyDescriptor,
+  TranslateProps,
+  FallbackNSTranslation,
+} from '@tolgee/core';
 
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 import { ParamsTags } from './types';
@@ -13,6 +19,7 @@ type UseTranslateResultFnProps<T extends TranslationParams | ParamsTags> = {
   parameters?: T;
   noWrap?: boolean;
   defaultValue?: string;
+  ns: FallbackNSTranslation;
 };
 
 type ReturnFnType = {
@@ -54,9 +61,9 @@ export const useTranslate: () => ReturnFnType = () => {
 
   const subscriptionRef = useRef(null as ListenerSelective);
 
-  const subscriptionQueue = useRef([] as string[]);
+  const subscriptionQueue = useRef([] as KeyDescriptor[]);
 
-  const subscribeToKey = (key: string) => {
+  const subscribeToKey = (key: KeyDescriptor) => {
     if (subscriptionRef.current) {
       subscriptionRef.current.subscribeToKey(key);
     } else {
@@ -76,18 +83,14 @@ export const useTranslate: () => ReturnFnType = () => {
   }, []);
 
   const getTranslation = useCallback(
-    (
-      key: string,
-      params?: ParamsTags,
-      noWrap?: boolean,
-      defaultValue?: string
-    ) => {
-      subscribeToKey(key);
+    ({ key, params, noWrap, defaultValue, ns }: TranslateProps) => {
+      subscribeToKey({ key, ns });
       const translation = tolgee.t({
         key,
         params: wrapTagHandlers(params),
         noWrap,
         defaultValue: defaultValue,
+        ns,
       });
 
       return translation;
@@ -122,7 +125,7 @@ export const useTranslate: () => ReturnFnType = () => {
       }
 
       return addReactKeys(
-        getTranslation(key, parameters, noWrap, defaultValue)
+        getTranslation({ key, params: parameters as any, noWrap, defaultValue })
       ) as any;
     },
     [getTranslation, instance]
