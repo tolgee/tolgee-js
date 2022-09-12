@@ -1,9 +1,31 @@
-import { ListenerHandler, ListenerHandlerEvent } from '../types';
+import { getFallback } from '../StateService/State/helpers';
+import {
+  KeyDescriptor,
+  KeyDescriptorInternal,
+  ListenerHandler,
+  ListenerHandlerEvent,
+} from '../types';
 
 type HandlerWrapperType<T> = {
   fn: ListenerHandler<T>;
-  keys: Set<string>;
+  keys: Map<string, number>;
+  namespaces: Map<string | undefined, number>;
 };
+
+function incrementInMap(map: Map<any, number>, value: any) {
+  const currNum = map.get(value) || 0;
+  map.set(value, currNum + 1);
+}
+
+function decrementInMap(map: Map<any, number>, value: any) {
+  let currNum = map.get(value) || 1;
+  currNum -= 1;
+  if (currNum <= 0) {
+    map.delete(value);
+  } else {
+    map.set(value, currNum);
+  }
+}
 
 export const EventEmitterSelective = <T>() => {
   const listeners: Set<ListenerHandler<T>> = new Set();
@@ -24,7 +46,8 @@ export const EventEmitterSelective = <T>() => {
       fn: (e: ListenerHandlerEvent<T>) => {
         handler(e);
       },
-      keys: new Set<string>(),
+      keys: new Map<string, number>(),
+      namespaces: new Map<string | undefined, number>(),
     };
 
     partialListeners.add(handlerWrapper);
@@ -33,12 +56,28 @@ export const EventEmitterSelective = <T>() => {
       unsubscribe: () => {
         partialListeners.delete(handlerWrapper);
       },
-      subscribeToKey: (key: string) => {
-        handlerWrapper.keys.add(key);
+      subscribeToKey: (descriptor: KeyDescriptor) => {
+        const { key, ns } = descriptor;
+        incrementInMap(handlerWrapper.keys, key);
+        getFallback(ns).forEach((val) =>
+          incrementInMap(handlerWrapper.namespaces, val)
+        );
+        if (ns === undefined) {
+          // subscribing to all namespaces
+          incrementInMap(handlerWrapper.namespaces, undefined);
+        }
         return result;
       },
-      unsubscribeKey: (key: string) => {
-        handlerWrapper.keys.delete(key);
+      unsubscribeKey: (descriptor: KeyDescriptor) => {
+        const { key, ns } = descriptor;
+        decrementInMap(handlerWrapper.keys, key);
+        getFallback(ns).forEach((val) =>
+          decrementInMap(handlerWrapper.namespaces, val)
+        );
+        if (ns === undefined) {
+          // subscribing to all namespaces
+          decrementInMap(handlerWrapper.namespaces, undefined);
+        }
         return result;
       },
     };
@@ -46,12 +85,18 @@ export const EventEmitterSelective = <T>() => {
     return result;
   };
 
-  const emit = (data: T, key?: string) => {
+  const emit = (data: T, descriptor?: KeyDescriptorInternal) => {
     listeners.forEach((handler) => {
       handler({ value: data });
     });
     partialListeners.forEach((handler) => {
-      if (!key || handler.keys.has(key)) {
+      const nsMentioned = descriptor?.ns !== undefined;
+      const nsMatches =
+        handler.namespaces.has(undefined) ||
+        descriptor?.ns?.findIndex((ns) => handler.namespaces.has(ns)) !== -1;
+      const keyMentioned = descriptor?.key !== undefined;
+      const keyMatches = descriptor?.key && handler.keys.has(descriptor.key);
+      if ((!nsMentioned || nsMatches) && (!keyMentioned || keyMatches)) {
         handler.fn({ value: data });
       }
     });

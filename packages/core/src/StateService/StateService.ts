@@ -175,15 +175,11 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   ) {
     const keyObject = withDefaultNs(descriptor);
     cache.changeTranslation(keyObject, key, value);
-    eventService.onKeyChange.emit(key);
+    eventService.onKeyChange.emit({ key, ns: [keyObject.namespace] });
   }
 
-  function fetchData(keyObject: CacheKeyObject) {
+  function fetchNormal(keyObject: CacheKeyObject) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
-    if (state.isDev()) {
-      dataPromise = pluginService.getBackendDevRecord(keyObject);
-    }
-
     if (!dataPromise) {
       dataPromise = pluginService.getBackendRecord(keyObject);
     }
@@ -194,6 +190,25 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
       }
+    }
+    return dataPromise;
+  }
+
+  function fetchData(keyObject: CacheKeyObject) {
+    let dataPromise = undefined as
+      | Promise<TreeTranslationsData | undefined>
+      | undefined;
+    if (state.isDev()) {
+      dataPromise = pluginService.getBackendDevRecord(keyObject)?.catch(() => {
+        // eslint-disable-next-line no-console
+        console.warn(`Tolgee: Failed to fetch data from dev backend`);
+        // fallback to normal fetch if dev fails
+        return fetchNormal(keyObject);
+      });
+    }
+
+    if (!dataPromise) {
+      dataPromise = fetchNormal(keyObject);
     }
     return dataPromise;
   }
@@ -216,7 +231,9 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       const data = await dataPromise;
 
       asyncRequests.delete(cacheKey);
-      cache.addRecord(keyObject, data, state.isDev());
+      if (data) {
+        cache.addRecord(keyObject, data, state.isDev());
+      }
       fetchingObserver.update(isFetching());
       loadingObserver.update(isLoading());
     }

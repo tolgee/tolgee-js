@@ -1,11 +1,11 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { ListenerHandler, TolgeeOn } from '../types';
+import { KeyDescriptorInternal, ListenerHandler, TolgeeOn } from '../types';
 
 export const EventService = () => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
-  const onKeyChange = EventEmitter<string>();
+  const onKeyChange = EventEmitter<KeyDescriptorInternal>();
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
@@ -25,7 +25,9 @@ export const EventService = () => {
       case 'language':
         return onLanguageChange.listen(handler as ListenerHandler<string>);
       case 'key':
-        return onKeyChange.listen(handler as ListenerHandler<string>);
+        return onKeyChange.listen(
+          handler as ListenerHandler<KeyDescriptorInternal>
+        );
       case 'loading':
         return onLoadingChange.listen(handler as ListenerHandler<boolean>);
       case 'fetching':
