@@ -41,8 +41,13 @@ export const PluginService = (
   };
 
   const run = () => {
-    instances.ui = plugins.ui && new plugins.ui(getUiProps());
     instances.observer = plugins?.observer?.({ translate, onClick });
+    instances.ui =
+      plugins.ui &&
+      new plugins.ui({
+        ...getUiProps(),
+        highlightByKey: instances.observer?.highlightByKey,
+      });
   };
 
   const stop = () => {

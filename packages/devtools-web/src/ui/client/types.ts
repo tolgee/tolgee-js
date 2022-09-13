@@ -1,10 +1,20 @@
 import { paths } from './apiSchema.generated';
 
+type ExcludeAk<T extends Record<string, Record<string, any>>> = Omit<
+  T,
+  'query'
+> & {
+  query?: Omit<T['query'], 'ak'>;
+};
+
 export type RequestParamsType<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
   Paths = paths
-> = OperationSchema<Url, Method, Paths>['parameters'] &
+> = ExcludeAk<
+  // @ts-ignore
+  Omit<OperationSchema<Url, Method, Paths>['parameters'], 'header'>
+> &
   OperationSchema<Url, Method, Paths>['requestBody'];
 
 export type ResponseContent<

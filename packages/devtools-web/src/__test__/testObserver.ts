@@ -91,7 +91,7 @@ export const testObserver = (observer: ObserverPlugin) => {
       });
 
       screen
-        .queryByTestId('translation')
+        .queryByTestId('translation')!
         .removeAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE);
 
       await waitFor(() => {

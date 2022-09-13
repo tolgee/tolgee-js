@@ -23,20 +23,21 @@ export const TranslationDialogWrapper: React.FC = ({ children }) => {
       {useBrowserWindow ? (
         <NewWindow>{children}</NewWindow>
       ) : (
-        !takingScreenshot && (
-          <Dialog
-            disableRestoreFocus
-            disablePortal
-            disableEnforceFocus
-            open={open}
-            onClose={onClose}
-            aria-labelledby="form-dialog-title"
-            maxWidth="lg"
-            style={{ zIndex: DEVTOOLS_Z_INDEX }}
-          >
-            <>{children}</>
-          </Dialog>
-        )
+        <Dialog
+          disableRestoreFocus
+          disablePortal
+          disableEnforceFocus
+          open={open}
+          onClose={onClose}
+          aria-labelledby="form-dialog-title"
+          maxWidth="lg"
+          style={{
+            zIndex: DEVTOOLS_Z_INDEX,
+            visibility: takingScreenshot ? 'hidden' : 'visible',
+          }}
+        >
+          <>{children}</>
+        </Dialog>
       )}
     </>
   );

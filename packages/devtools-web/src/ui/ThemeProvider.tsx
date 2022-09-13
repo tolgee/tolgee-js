@@ -59,7 +59,7 @@ export const ThemeProvider: React.FC = ({ children }) => {
     createCache({
       key: 'css',
       prepend: true,
-      container: document.getElementById(DEVTOOLS_ID).shadowRoot,
+      container: document.getElementById(DEVTOOLS_ID)?.shadowRoot as Node,
     })
   );
 

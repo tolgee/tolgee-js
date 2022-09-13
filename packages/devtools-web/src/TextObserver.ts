@@ -14,11 +14,8 @@ export const TextObserver =
       inputSuffix: observerOptions.inputSuffix,
       translate,
     });
-    const { wrap, unwrap, stop, forEachElement } = GeneralObserver(
-      wrapper,
-      observerOptions,
-      onClick
-    );
+    const { wrap, unwrap, stop, forEachElement, highlightByKey } =
+      GeneralObserver(wrapper, observerOptions, onClick);
 
     const retranslate = () => {
       forEachElement((_, elMeta) => {
@@ -39,5 +36,6 @@ export const TextObserver =
       unwrap,
       stop,
       retranslate,
+      highlightByKey,
     };
   };

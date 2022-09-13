@@ -41,10 +41,10 @@ export const GeneralObserver = (
     const elements = xPathEvaluate(xPath, node) as Element[];
     elements.forEach((element) => {
       const node = element.getAttributeNode(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE);
-      const parentElement = domHelper.getSuitableParent(node);
-      elementRegistry.register(parentElement, node, {
+      const parentElement = domHelper.getSuitableParent(node as Node);
+      elementRegistry.register(parentElement, node as Node, {
         oldTextContent: '',
-        keys: [{ key: getNodeText(node) }],
+        keys: [{ key: getNodeText(node as Node)! }],
         keyAttributeOnly: true,
       });
     });
@@ -89,11 +89,23 @@ export const GeneralObserver = (
     elementRegistry.stop();
   };
 
+  const highlightByKey = (key: string) => {
+    const elements = elementRegistry.findAllByKey(key);
+    elements.forEach((el) => el.highlight?.());
+
+    return {
+      unhighlight() {
+        elements.forEach((el) => el.unhighlight?.());
+      },
+    };
+  };
+
   return Object.freeze({
     stop,
     wrap: wrapper.wrap,
     unwrap: wrapper.unwrap,
     forEachElement: elementRegistry.forEachElement,
+    highlightByKey,
   });
 };
 

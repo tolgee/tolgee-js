@@ -53,7 +53,7 @@ export const TranslationFields: FunctionComponent = () => {
   const translationsForm = useDialogContext((c) => c.translationsForm);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
-  // const properties = useDialogContext((c) => c.dependencies.properties);
+  const permittedLanguageIds = useDialogContext((c) => c.permittedLanguageIds);
 
   const onChange = (key: string) => (e: any) => {
     dispatch({
@@ -81,7 +81,7 @@ export const TranslationFields: FunctionComponent = () => {
           const lang = availableLanguages?.find((l) => l.tag === key);
           const languagePermitted = isLanguagePermitted(
             key,
-            undefined, //properties.permittedLanguageIds,
+            permittedLanguageIds,
             availableLanguages
           );
 

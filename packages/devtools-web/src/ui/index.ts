@@ -14,7 +14,7 @@ export class UI {
     const rootElement = document.createElement('div');
     rootElement.id = DEVTOOLS_ID;
     rootElement.attachShadow({ mode: 'open' });
-    const devTools = rootElement.shadowRoot;
+    const devTools = rootElement.shadowRoot!;
 
     document.body.appendChild(rootElement);
 
@@ -44,9 +44,9 @@ export class UI {
 
   public async getKey(props: {
     openEvent: MouseEvent;
-    keys: Map<string, string>;
-  }): Promise<string> {
-    return await new Promise<string>((resolve) => {
+    keys: Map<string, string | undefined>;
+  }): Promise<string | undefined> {
+    return await new Promise<string | undefined>((resolve) => {
       this.keyContextMenu.show({
         ...props,
         onSelect: (key) => resolve(key),

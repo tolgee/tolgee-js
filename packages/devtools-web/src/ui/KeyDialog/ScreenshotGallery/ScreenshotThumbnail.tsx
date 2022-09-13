@@ -66,7 +66,7 @@ const DeleteIcon = styled(Clear)`
 
 export type Props = {
   onClick: () => void;
-  onDelete: (id: number) => void;
+  onDelete?: (id: number) => void;
   data: ScreenshotInterface;
 };
 
@@ -82,7 +82,7 @@ export const ScreenshotThumbnail: React.FC<Props> = (props) => {
   };
 
   const onDeleteClick = () => {
-    props.onDelete(props.data.id);
+    props.onDelete?.(props.data.id);
   };
 
   return (

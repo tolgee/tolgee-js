@@ -3,8 +3,9 @@ import type { ObserverOptions } from './types';
 import { InvisibleObserver } from 'InvisibleObserver';
 import { UI } from './ui/index';
 
-let DevToolsPlugin: (options?: Partial<ObserverOptions>) => TolgeePlugin = () =>
-  undefined;
+let DevToolsPlugin: (options?: Partial<ObserverOptions>) => TolgeePlugin =
+  () => (tolgee) =>
+    tolgee;
 
 if (process.env.NODE_ENV !== 'production') {
   DevToolsPlugin = (options) => (tolgee) => {

@@ -30,8 +30,8 @@ const ScKey = styled('div')`
 
 export interface KeyContextMenuParams {
   openEvent: MouseEvent;
-  keys: Map<string, string>;
-  onSelect: (key) => void;
+  keys: Map<string, string | undefined>;
+  onSelect: (key: string | undefined) => void;
 }
 
 export type KeyContextMenuState = Partial<KeyContextMenuParams> & {
@@ -55,10 +55,10 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
     this.setState({ ...params, opened: true });
   }
 
-  keyDown = (e) => {
+  keyDown = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       this.setState((s) => ({ ...s, opened: false }));
-      this.state.onSelect && this.state.onSelect(null);
+      this.state.onSelect && this.state.onSelect(undefined);
     }
   };
 
@@ -77,7 +77,7 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
           <Menu
             disablePortal
             disableEnforceFocus
-            anchorEl={this.state.openEvent.target as Element}
+            anchorEl={this.state.openEvent?.target as Element}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',
@@ -85,25 +85,27 @@ export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
             open
             onClose={() => {
               this.setState({ opened: false });
-              this.state.onSelect(null);
+              this.state.onSelect?.(undefined);
             }}
             container={document.getElementById(DEVTOOLS_ID)}
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
-            {Array.from(this.state.keys).map(([key, translation], index) => (
-              <ScMenuItem
-                onClick={() => {
-                  this.state.onSelect(key);
-                  setTimeout(() => {
-                    this.setState({ opened: false });
-                  });
-                }}
-                key={index}
-              >
-                <ScTranslation>{translation}</ScTranslation>
-                <ScKey>{key}</ScKey>
-              </ScMenuItem>
-            ))}
+            {Array.from(this.state.keys || []).map(
+              ([key, translation], index) => (
+                <ScMenuItem
+                  onClick={() => {
+                    this.state.onSelect?.(key);
+                    setTimeout(() => {
+                      this.setState({ opened: false });
+                    });
+                  }}
+                  key={index}
+                >
+                  <ScTranslation>{translation}</ScTranslation>
+                  <ScKey>{key}</ScKey>
+                </ScMenuItem>
+              )
+            )}
           </Menu>
         )}
       </ThemeProvider>

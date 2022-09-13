@@ -70,6 +70,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       getTranslation: (key) => t({ key, noWrap: true, orEmpty: true }),
       apiKey: state.getInitialOptions().apiKey!,
       apiUrl: state.getInitialOptions().apiUrl!,
+      highlightByKey: undefined,
     };
   }
 

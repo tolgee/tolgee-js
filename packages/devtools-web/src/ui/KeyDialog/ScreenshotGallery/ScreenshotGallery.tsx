@@ -7,7 +7,7 @@ import CameraAlt from '@mui/icons-material/CameraAlt';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
-import { MAX_FILE_COUNT } from './utils';
+import { isAuthorizedTo, MAX_FILE_COUNT } from './utils';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
 import {
   useDialogContext,
@@ -63,6 +63,7 @@ export const ScreenshotGallery: React.FC = () => {
   const pluginAvailable = useDialogContext((c) => c.pluginAvailable);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
+  const scopes = useDialogContext((c) => c.scopes);
 
   const uploadImages = (files: File[]) => {
     dispatch({ type: 'HANDLE_UPLOAD_IMAGES', payload: { files } });
@@ -78,12 +79,10 @@ export const ScreenshotGallery: React.FC = () => {
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
-  const uploadEnabled = false;
-  // dependencies.coreService.isAuthorizedTo('screenshots.upload') &&
-  // !formDisabled;
-  const deleteEnabled = false;
-  // dependencies.coreService.isAuthorizedTo('screenshots.delete') &&
-  // !formDisabled;
+  const uploadEnabled =
+    isAuthorizedTo('screenshots.upload', scopes) && !formDisabled;
+  const deleteEnabled =
+    isAuthorizedTo('screenshots.delete', scopes) && !formDisabled;
 
   function onFileSelected(e: React.SyntheticEvent) {
     const files = (e.target as HTMLInputElement).files;

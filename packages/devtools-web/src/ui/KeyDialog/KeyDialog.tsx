@@ -35,9 +35,9 @@ export class KeyDialog extends React.Component<Props> {
         {this.state.dialogOpened && (
           <DialogProvider
             uiProps={this.props}
-            defaultValue={this.state.defaultValue}
+            defaultValue={this.state.defaultValue || ''}
             open={this.state.dialogOpened}
-            input={this.state.key}
+            keyName={this.state.key!}
             onClose={this.onClose}
           >
             <TranslationDialog />

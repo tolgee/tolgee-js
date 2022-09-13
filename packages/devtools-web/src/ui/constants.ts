@@ -5,3 +5,8 @@ export const DEVTOOLS_Z_INDEX = 2147483000;
 
 export const CHROME_EXTENSION_LINK =
   'https://chrome.google.com/webstore/detail/tolgee-tools/hacnbapajkkfohnonhbmegojnddagfnj';
+
+export const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY =
+  '__tolgee_preferredLanguages';
+
+export const MAX_LANGUAGES_SELECTED = 5;
