@@ -25,7 +25,7 @@ export class UI {
     devTools.appendChild(contextMenuContainer);
 
     const viewerElement = createElement(KeyDialog, {
-      dependencies: this.props,
+      ...this.props,
     });
 
     this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);

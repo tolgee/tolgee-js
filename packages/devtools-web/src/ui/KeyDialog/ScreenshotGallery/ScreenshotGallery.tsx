@@ -61,7 +61,6 @@ export const ScreenshotGallery: React.FC = () => {
   const screenshots = useDialogContext((c) => c.screenshots);
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const pluginAvailable = useDialogContext((c) => c.pluginAvailable);
-  const dependencies = useDialogContext((c) => c.dependencies);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
 

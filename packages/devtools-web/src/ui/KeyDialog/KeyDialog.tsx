@@ -3,12 +3,11 @@ import { BodyEnd } from '../common/BodyEnd';
 import { DialogProvider } from './TranslationDialogContextProvider';
 import { TranslationDialog } from './TranslationDialog';
 import type { UiProps } from '@tolgee/core';
+import { QueryProvider } from 'ui/client/QueryProvider';
 
 export type ComponentDependencies = UiProps;
 
-export type Props = {
-  dependencies: ComponentDependencies;
-};
+export type Props = UiProps;
 
 export class KeyDialog extends React.Component<Props> {
   state = {
@@ -31,19 +30,21 @@ export class KeyDialog extends React.Component<Props> {
   }
 
   public render = () => (
-    <>
-      <BodyEnd>
-        <DialogProvider
-          dependencies={this.props.dependencies}
-          defaultValue={this.state.defaultValue}
-          open={this.state.dialogOpened}
-          input={this.state.key}
-          onClose={this.onClose}
-        >
-          <TranslationDialog />
-        </DialogProvider>
-      </BodyEnd>
-    </>
+    <BodyEnd>
+      <QueryProvider apiUrl={this.props.apiUrl} apiKey={this.props.apiKey}>
+        {this.state.dialogOpened && (
+          <DialogProvider
+            uiProps={this.props}
+            defaultValue={this.state.defaultValue}
+            open={this.state.dialogOpened}
+            input={this.state.key}
+            onClose={this.onClose}
+          >
+            <TranslationDialog />
+          </DialogProvider>
+        )}
+      </QueryProvider>
+    </BodyEnd>
   );
 
   private onClose = () => {

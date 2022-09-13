@@ -6,6 +6,7 @@ import {
   Options,
   TranslatePropsInternal,
   TreeTranslationsData,
+  UiProps,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
@@ -27,7 +28,12 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   });
   const cache = Cache();
   const asyncRequests: CacheAsyncRequests = new Map();
-  const pluginService = PluginService(state.getLanguage, t, getBackendProps);
+  const pluginService = PluginService(
+    state.getLanguage,
+    t,
+    getBackendProps,
+    getUiProps
+  );
 
   state.init(options);
   cache.init(state.getInitialOptions().staticData);
@@ -56,6 +62,14 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return {
       apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
       apiKey: state.getInitialOptions().apiKey,
+    };
+  }
+
+  function getUiProps(): UiProps {
+    return {
+      getTranslation: (key) => t({ key, noWrap: true, orEmpty: true }),
+      apiKey: state.getInitialOptions().apiKey!,
+      apiUrl: state.getInitialOptions().apiUrl!,
     };
   }
 

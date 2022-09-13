@@ -6,10 +6,15 @@ import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 const MAX_LANGUAGES_SELECTED = 5;
 =======
 >>>>>>> 0bfab229 (fix(UI): many languages)
+=======
+import { UiProps } from '@tolgee/core';
+import { useApiQuery } from 'ui/client/useQueryApi';
+>>>>>>> 8c1a72ed (feat: add react query)
 
 export interface ScreenshotInterface {
   id: number;
@@ -33,7 +38,7 @@ type DialogProps = {
   defaultValue: string;
   open: boolean;
   onClose: () => void;
-  dependencies: ComponentDependencies;
+  uiProps: UiProps;
 };
 
 const responseToTranslationData = (
@@ -81,6 +86,11 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       useState<FormTranslations>(null);
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
+
+    const { data } = useApiQuery({
+      url: '/api/apiKeys/scopes',
+      method: 'get',
+    });
 
     const linkToPlatform = '';
     // properties.projectId !== undefined
@@ -402,7 +412,6 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
     const contextValue = {
       input: props.input,
-      dependencies: props.dependencies,
       open: props.open,
       loading,
       saving,
