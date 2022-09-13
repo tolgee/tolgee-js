@@ -16,6 +16,7 @@ import {
   useDialogContext,
   useDialogDispatch,
 } from './TranslationDialogContextProvider';
+import { isAuthorizedTo } from './ScreenshotGallery/utils';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -90,9 +91,10 @@ export const KeyForm = () => {
   const error = useDialogContext((c) => c.error);
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
+  const keyExists = useDialogContext((c) => c.keyExists);
+  const scopes = useDialogContext((c) => c.scopes);
 
-  const screenshotsView = false;
-  // dependencies.coreService.isAuthorizedTo('screenshots.view');
+  const screenshotsView = isAuthorizedTo('screenshots.view', scopes);
 
   const setUseBrowserWindow = (value: boolean) => {
     dispatch({ type: 'SET_USE_BROWSER_WINDOW', payload: value });
@@ -153,9 +155,7 @@ export const KeyForm = () => {
       <ScFieldTitle>Key</ScFieldTitle>
       <ScKey>
         {input}
-        <ScKeyHint>
-          {translations?.keyId === undefined && " (key doesn't exist yet)"}
-        </ScKeyHint>
+        <ScKeyHint>{!keyExists && " (key doesn't exist yet)"}</ScKeyHint>
       </ScKey>
 
       <ScFieldsWrapper>

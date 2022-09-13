@@ -11,3 +11,7 @@ export const dataTransferItemsToArray = (
   }
   return result;
 };
+
+export function isAuthorizedTo(scope: string, scopes: string[] | undefined) {
+  return Boolean(scopes?.includes(scope));
+}

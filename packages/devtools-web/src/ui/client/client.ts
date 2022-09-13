@@ -15,7 +15,9 @@ async function getResObject(r: Response) {
   }
 }
 
-const flattenParams = (params: Params | null | undefined) => {
+const flattenParams = (
+  params: Params | null | undefined
+): Record<string, string | string[]> => {
   if (params) {
     return Object.entries(params).reduce(
       (acc, [key, value]) =>
@@ -35,7 +37,7 @@ function buildQuery(object: { [key: string]: any }): string {
     .map((k) => {
       if (Array.isArray(object[k])) {
         return object[k]
-          .map((v) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
+          .map((v: any) => encodeURIComponent(k) + '=' + encodeURIComponent(v))
           .join('&');
       } else {
         return encodeURIComponent(k) + '=' + encodeURIComponent(object[k]);
@@ -80,12 +82,12 @@ export async function client<
   request: RequestParamsType<Url, Method, Paths>,
   options: GlobalOptions
 ) {
-  const pathParams = request?.path;
+  const pathParams = (request as any)?.path;
   let urlResult = url as string;
 
   if (pathParams) {
     Object.entries(pathParams).forEach(([key, value]) => {
-      urlResult = urlResult.replace(`{${key}}`, value);
+      urlResult = urlResult.replace(`{${key}}`, value as any);
     });
   }
 
@@ -112,7 +114,7 @@ export async function client<
 
   const jsonBody = JSON.stringify(request?.content?.['application/json']);
 
-  const queryParams = request?.query;
+  const queryParams = request?.query as any;
   let queryString = '';
 
   const params = flattenParams(queryParams);

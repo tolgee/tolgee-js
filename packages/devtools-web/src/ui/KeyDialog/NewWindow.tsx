@@ -8,12 +8,12 @@ import {
 } from './TranslationDialogContextProvider';
 
 export const NewWindow: FC = (props) => {
-  const newWindow = useRef(null);
-  const [popup, setPopup] = useState<Window>(null);
+  const newWindow = useRef<Window>(null);
+  const [popup, setPopup] = useState<Window | null>(null);
   const dispatch = useDialogDispatch();
   const container = useDialogContext((c) => c.container);
 
-  const setContainer = (el: Element) => {
+  const setContainer = (el: Element | undefined) => {
     dispatch({ type: 'SET_CONTAINER', payload: el });
   };
   const onClose = () => {
@@ -34,27 +34,33 @@ export const NewWindow: FC = (props) => {
     if (container) {
       // Create window
       const win = window.open('', '', 'width=600,height=600,left=200,top=200');
+
+      if (!win) {
+        return;
+      }
+
       win.document.title = 'Tolgee - Translate Text';
       if (!win.document) {
         alert('Please allow popups to open new window.');
       }
+      // @ts-ignore
       newWindow.current = win;
       // Append container
       win.document.body.style.margin = '0px';
       win.document.body.appendChild(container);
 
       const onExit = () => {
-        setContainer(null);
+        setContainer(undefined);
         win.close();
         onClose();
       };
 
       win.onbeforeunload = () => {
-        setContainer(null);
+        setContainer(undefined);
         onClose();
       };
 
-      const onKeyDown = (e) => {
+      const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           dispatch({ type: 'ON_CLOSE' });
         }
@@ -71,8 +77,8 @@ export const NewWindow: FC = (props) => {
       return () => {
         win.document.removeEventListener('keydown', onKeyDown, true);
         window.removeEventListener('beforeunload', onBeforeUnload, true);
-        setContainer(null);
-        newWindow.current.close();
+        setContainer(undefined);
+        newWindow.current?.close();
         setPopup(null);
       };
     }

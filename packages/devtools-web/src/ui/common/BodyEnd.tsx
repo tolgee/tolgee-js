@@ -3,7 +3,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 export class BodyEnd extends React.PureComponent<{ document?: Document }> {
-  _popup = null;
+  _popup = null as HTMLElement | null;
 
   get document() {
     return this.props.document || document;
@@ -17,7 +17,7 @@ export class BodyEnd extends React.PureComponent<{ document?: Document }> {
   }
 
   componentDidMount() {
-    this._popup = this.document.createElement('div');
+    this._popup = this.document.createElement('div')!;
 
     this.devTools.appendChild(this._popup);
     this._render();
@@ -28,8 +28,10 @@ export class BodyEnd extends React.PureComponent<{ document?: Document }> {
   }
 
   componentWillUnmount() {
-    ReactDOM.unmountComponentAtNode(this._popup);
-    this.devTools.removeChild(this._popup);
+    if (this._popup) {
+      ReactDOM.unmountComponentAtNode(this._popup);
+      this.devTools.removeChild(this._popup);
+    }
   }
 
   _render() {

@@ -30,12 +30,10 @@ export const LanguageSelect: React.FC = () => {
       }))
     : [];
 
-  const selected = options.filter((o) => selectedLanguages.has(o.value));
+  const selected = options.filter((o) => selectedLanguages.includes(o.value));
   const onChange = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
-    const languages = new Set(
-      typeof value === 'string' ? value.split(',') : value
-    );
+    const languages = typeof value === 'string' ? value.split(',') : value;
     dispatch({
       type: 'ON_SELECTED_LANGUAGES_CHANGE',
       payload: { languages },

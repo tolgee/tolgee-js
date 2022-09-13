@@ -78,26 +78,18 @@ export const ElementRegistry = (
     });
   }
 
-  // function findAllByKey(key: string) {
-  //   const result: TolgeeElement[] = [];
-  //   elementStore.forEachElement((element, meta) => {
-  //     if (meta.wrappedWithElementOnlyKey === key) {
-  //       result.push(element);
-  //       return;
-  //     }
-  //     for (const nodeMeta of meta.nodes.values()) {
-  //       if (
-  //         nodeMeta.keys.findIndex(
-  //           (keyWithParams) => keyWithParams.key === key
-  //         ) > -1
-  //       ) {
-  //         result.push(element);
-  //         break;
-  //       }
-  //     }
-  //   });
-  //   return result;
-  // }
+  function findAllByKey(key: string) {
+    const result: ElementMeta[] = [];
+    elementStore.forEachElement((_, meta) => {
+      for (const nodeMeta of meta.nodes.values()) {
+        if (nodeMeta.keys.find((keyWithParams) => keyWithParams.key === key)) {
+          result.push(meta);
+          break;
+        }
+      }
+    });
+    return result;
+  }
 
   function cleanElementInactiveNodes(meta: ElementMeta) {
     meta.nodes = new Map(getActiveNodes(meta));
@@ -144,6 +136,7 @@ export const ElementRegistry = (
   return Object.freeze({
     register,
     forEachElement: elementStore.forEachElement,
+    findAllByKey: findAllByKey,
     refreshAll,
     stop,
   });

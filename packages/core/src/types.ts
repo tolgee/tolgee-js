@@ -100,11 +100,18 @@ export type ObserverProps = {
   onClick: TranslationOnClick;
 };
 
+export type HighlightByKeyType =
+  | undefined
+  | ((key: string) => {
+      unhighlight(): void;
+    });
+
 export type ObserverPlugin = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
   wrap: (props: TranslatePropsInternal) => string;
   retranslate: () => void;
   stop: () => void;
+  highlightByKey: HighlightByKeyType;
 };
 
 export type BackendDevProps = {
@@ -226,6 +233,7 @@ export type UiProps = {
   getTranslation(key: string): string;
   apiUrl: string;
   apiKey: string;
+  highlightByKey: HighlightByKeyType;
 };
 
 export type UiInstance = {

@@ -6,7 +6,15 @@ export type GlobalOptions = {
   apiUrl: string;
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      retry: false,
+    },
+  },
+});
 
 export const QueryContext = React.createContext({} as GlobalOptions);
 
