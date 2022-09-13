@@ -224,6 +224,8 @@ export type ElementMeta = {
 
 export type UiProps = {
   getTranslation(key: string): string;
+  apiUrl: string;
+  apiKey: string;
 };
 
 export type UiInstance = {

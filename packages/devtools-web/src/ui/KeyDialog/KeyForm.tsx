@@ -83,7 +83,6 @@ export const KeyForm = () => {
 
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
-  const dependencies = useDialogContext((c) => c.dependencies);
   const input = useDialogContext((c) => c.input);
   const translations = useDialogContext((c) => c.translations);
   const formDisabled = useDialogContext((c) => c.formDisabled);

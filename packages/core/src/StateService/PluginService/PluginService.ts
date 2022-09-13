@@ -13,12 +13,14 @@ import {
   UiLibInterface,
   UiType,
   FinalFormatterPlugin,
+  UiProps,
 } from '../../types';
 
 export const PluginService = (
   getLocale: () => string,
   translate: (params: TranslatePropsInternal) => string,
-  getBackendProps: () => BackendDevProps
+  getBackendProps: () => BackendDevProps,
+  getUiProps: () => UiProps
 ) => {
   const plugins = {
     observer: undefined as ObserverPlugin | undefined,
@@ -39,12 +41,7 @@ export const PluginService = (
   };
 
   const run = () => {
-    instances.ui =
-      plugins.ui &&
-      new plugins.ui({
-        getTranslation: (key) =>
-          translate({ key, noWrap: true, orEmpty: true }),
-      });
+    instances.ui = plugins.ui && new plugins.ui(getUiProps());
     instances.observer = plugins?.observer?.({ translate, onClick });
   };
 
