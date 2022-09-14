@@ -1,14 +1,9 @@
-import { TolgeePlugin } from '@tolgee/core';
+import type { TolgeePlugin } from '@tolgee/core';
+import { ObserverOptions } from '../lib/types';
 
-export declare class UI {
-  private dependencies;
-  private viewerComponent;
-  private keyContextMenu;
-  constructor(dependencies: any[]);
-  renderViewer(key: string, defaultValue?: string): void;
-  getKey(props: { openEvent: MouseEvent; keys: Set<string> }): Promise<string>;
-}
-
-export declare const DevToolsPlugin = TolgeePlugin;
+export declare const UiPlugin: () => TolgeePlugin;
+export declare const DevTools: (
+  options?: Partial<ObserverOptions>
+) => TolgeePlugin;
 
 export * from '../lib/typedIndex';

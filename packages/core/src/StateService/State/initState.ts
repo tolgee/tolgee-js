@@ -11,6 +11,7 @@ export type Options = {
   language?: string;
   apiUrl?: string;
   apiKey?: string;
+  projectId?: number;
   /**
    * Used when auto detection is not available or is turned off
    */

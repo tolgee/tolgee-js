@@ -1,4 +1,4 @@
-import { EventEmitterType } from '../../types';
+import { EventEmitterType, FallbackNSTranslation } from '../../types';
 import { getFallback, getFallbackFromStruct, unique } from './helpers';
 import { initState, Options } from './initState';
 
@@ -68,22 +68,28 @@ export const State = ({
     return state.initialOptions;
   }
 
-  async function addActiveNs(namespace: string) {
-    const value = state.activeNamespaces.get(namespace);
-    if (value !== undefined) {
-      state.activeNamespaces.set(namespace, value + 1);
-    } else {
-      state.activeNamespaces.set(namespace, 1);
-    }
+  function addActiveNs(ns: FallbackNSTranslation) {
+    const namespaces = getFallback(ns);
+    namespaces.forEach((namespace) => {
+      const value = state.activeNamespaces.get(namespace);
+      if (value !== undefined) {
+        state.activeNamespaces.set(namespace, value + 1);
+      } else {
+        state.activeNamespaces.set(namespace, 1);
+      }
+    });
   }
 
-  function removeActiveNs(ns: string) {
-    const value = state.activeNamespaces.get(ns);
-    if (value !== undefined && value > 1) {
-      state.activeNamespaces.set(ns, value - 1);
-    } else {
-      state.activeNamespaces.delete(ns);
-    }
+  function removeActiveNs(ns: FallbackNSTranslation) {
+    const namespaces = getFallback(ns);
+    namespaces.forEach((namespace) => {
+      const value = state.activeNamespaces.get(namespace);
+      if (value !== undefined && value > 1) {
+        state.activeNamespaces.set(namespace, value - 1);
+      } else {
+        state.activeNamespaces.delete(namespace);
+      }
+    });
   }
 
   function getRequiredNamespaces() {

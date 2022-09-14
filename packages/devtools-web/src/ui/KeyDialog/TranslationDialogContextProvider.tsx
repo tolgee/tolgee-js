@@ -37,18 +37,6 @@ type DialogProps = {
   uiProps: UiProps;
 };
 
-// const responseToTranslationData = (
-//   data: Record<string, TranslationInterface> | undefined
-// ): FormTranslations => {
-//   const translations: Record<string, string> = {};
-//   if (data) {
-//     Object.entries(data).forEach(([language, translation]) => {
-//       translations[language] = translation.text!;
-//     });
-//   }
-//   return translations;
-// };
-
 type Actions =
   | { type: 'ON_INPUT_CHANGE'; payload: { key: string; value: string } }
   | {

@@ -1,5 +1,4 @@
 export { Tolgee } from './Tolgee';
-export { TolgeeBackend } from './TolgeeBackend';
 export {
   RESTRICTED_ASCENDANT_ATTRIBUTE,
   DEVTOOLS_ID,
@@ -9,3 +8,5 @@ export {
 } from './constants';
 export * from './GlobalInstancePlugin';
 export * from './types';
+export { getTranslateParams } from './TranslateParams';
+export { getFallback } from './StateService/State/helpers';

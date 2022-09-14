@@ -1,18 +1,17 @@
-import { TolgeeBackend } from '../../TolgeeBackend';
 import {
-  BackendDevPlugin,
+  BackendDevInterface,
   BackendGetRecord,
-  BackendPlugin,
+  BackendInterface,
   BackendDevProps,
-  FormatterPlugin,
-  ObserverPlugin,
+  FormatterInterface,
+  ObserverInterface,
   TranslatePropsInternal,
   TranslationOnClick,
   UiConstructor,
   UiInstance,
   UiLibInterface,
   UiType,
-  FinalFormatterPlugin,
+  FinalFormatterInterface,
   UiProps,
 } from '../../types';
 
@@ -23,16 +22,16 @@ export const PluginService = (
   getUiProps: () => UiProps
 ) => {
   const plugins = {
-    observer: undefined as ObserverPlugin | undefined,
+    observer: undefined as ObserverInterface | undefined,
     ui: undefined as UiConstructor | undefined,
   };
 
   const instances = {
-    formatters: [] as FormatterPlugin[],
-    finalFormatter: undefined as FinalFormatterPlugin | undefined,
-    observer: undefined as ReturnType<ObserverPlugin> | undefined,
-    devBackend: TolgeeBackend as BackendDevPlugin | undefined,
-    backends: [] as BackendPlugin[],
+    formatters: [] as FormatterInterface[],
+    finalFormatter: undefined as FinalFormatterInterface | undefined,
+    observer: undefined as ReturnType<ObserverInterface> | undefined,
+    devBackend: undefined as BackendDevInterface | undefined,
+    backends: [] as BackendInterface[],
     ui: undefined as UiInstance | undefined,
   };
 
@@ -55,17 +54,19 @@ export const PluginService = (
     instances.observer = undefined;
   };
 
-  const setObserver = (observer: ObserverPlugin | undefined) => {
+  const setObserver = (observer: ObserverInterface | undefined) => {
     plugins.observer = observer;
   };
 
-  const addFormatter = (formatter: FormatterPlugin | undefined) => {
+  const addFormatter = (formatter: FormatterInterface | undefined) => {
     if (formatter) {
       instances.formatters.push(formatter);
     }
   };
 
-  const setFinalFormatter = (formatter: FinalFormatterPlugin | undefined) => {
+  const setFinalFormatter = (
+    formatter: FinalFormatterInterface | undefined
+  ) => {
     instances.finalFormatter = formatter;
   };
 
@@ -73,13 +74,13 @@ export const PluginService = (
     plugins.ui = (ui as UiLibInterface)?.UI || ui;
   };
 
-  const addBackend = (backend: BackendPlugin | undefined) => {
+  const addBackend = (backend: BackendInterface | undefined) => {
     if (backend) {
       instances.backends.push(backend);
     }
   };
 
-  const setDevBackend = (backend: BackendDevPlugin | undefined) => {
+  const setDevBackend = (backend: BackendDevInterface | undefined) => {
     instances.devBackend = backend;
   };
 

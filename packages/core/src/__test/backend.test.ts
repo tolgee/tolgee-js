@@ -1,5 +1,5 @@
 import { Tolgee } from '../Tolgee';
-import { BackendPlugin } from '../types';
+import { BackendInterface, TolgeePlugin } from '../types';
 
 const data = {
   en: {
@@ -12,26 +12,32 @@ const data = {
   },
 } as any;
 
-const backendNormal: BackendPlugin = {
+const backendNormal: BackendInterface = {
   getRecord({ language, namespace = '' }) {
     return data[language]?.[namespace];
   },
 };
 
-const backendDev: BackendPlugin = {
+const backendDev: BackendInterface = {
   getRecord() {
     return Promise.resolve({ cancel: 'Dev' });
   },
 };
 
+const backendPlugin: TolgeePlugin = (tolgee, tools) => {
+  tools.addBackend(backendNormal);
+  tools.setDevBackend(backendDev);
+  return tolgee;
+};
+
 describe('backend plugins', () => {
   it('uses plugin to fetch', async () => {
-    const tolgee = Tolgee({
-      ns: ['common', 'test'],
-      language: 'en',
-    })
-      .addBackend(backendNormal)
-      .setDevBackend(backendDev);
+    const tolgee = Tolgee()
+      .use(backendPlugin)
+      .init({
+        ns: ['common', 'test'],
+        language: 'en',
+      });
     await tolgee.run();
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
     tolgee.stop();

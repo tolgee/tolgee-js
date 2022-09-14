@@ -1,8 +1,10 @@
 import type { EventServiceType } from '../EventService/EventService';
 import {
+  BackendDevProps,
   CacheAsyncRequests,
   CacheDescriptor,
   CacheKeyObject,
+  FallbackNSTranslation,
   Options,
   TranslatePropsInternal,
   TreeTranslationsData,
@@ -57,11 +59,12 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return pluginService.formatTranslation({ ...props, translation });
   }
 
-  function getBackendProps() {
+  function getBackendProps(): BackendDevProps {
     const apiUrl = state.getInitialOptions().apiUrl;
     return {
       apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
       apiKey: state.getInitialOptions().apiKey,
+      projectId: state.getInitialOptions().projectId,
     };
   }
 
@@ -105,16 +108,23 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     };
   }
 
-  async function addActiveNs(namespace: string) {
-    state.addActiveNs(namespace);
+  async function addActiveNs(ns: FallbackNSTranslation) {
+    state.addActiveNs(ns);
+    const namespaces = getFallback(ns);
     if (state.isRunning()) {
-      const data = cache.getRecord({
-        language: state.getLanguage(),
-        namespace,
+      const promises = [] as Promise<any>[];
+      namespaces.forEach((namespace) => {
+        const data = cache.getRecord({
+          language: state.getLanguage(),
+          namespace,
+        });
+        if (!data) {
+          promises.push(
+            loadRecord({ namespace, language: state.getLanguage() })
+          );
+        }
       });
-      if (!data) {
-        await loadRecord({ namespace, language: state.getLanguage() });
-      }
+      await Promise.all(promises);
     }
   }
 

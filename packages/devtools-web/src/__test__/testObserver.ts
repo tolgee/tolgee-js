@@ -1,19 +1,19 @@
 import {
   Tolgee,
   TolgeeInstance,
+  TolgeePlugin,
   TOLGEE_ATTRIBUTE_NAME,
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
 } from '@tolgee/core';
 import { screen, waitFor } from '@testing-library/dom';
-import { ObserverPlugin } from '@tolgee/core';
 
-export const testObserver = (observer: ObserverPlugin) => {
+export const testObserver = (plugin: TolgeePlugin) => {
   describe('observer', () => {
     let tolgee: TolgeeInstance;
 
     beforeEach(() => {
       tolgee = Tolgee()
-        .setObserver(observer)
+        .use(plugin)
         .init({
           language: 'en',
           staticData: { en: { hello: 'world' } },

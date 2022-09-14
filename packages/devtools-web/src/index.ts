@@ -1,3 +1,4 @@
-export { UI } from './ui/index';
-export { DevToolsPlugin } from './DevToolsPlugin';
+export * from './ContextUi';
+export * from './DevTools';
 export * from './typedIndex';
+export { getProjectIdFromApiKey } from './tools/decodeApiKey';
