@@ -3,14 +3,14 @@ export function xPathEvaluate<T extends Node>(
   targetNode: Node
 ): Node[] {
   let node: Node | null;
-  const evaluated = document.evaluate(
+  const evaluated = document?.evaluate(
     expression,
     targetNode,
     undefined,
     XPathResult.ANY_TYPE
   );
   const result: Node[] = [];
-  while ((node = evaluated.iterateNext()) !== null) {
+  while ((node = evaluated?.iterateNext?.())) {
     result.push(node as T);
   }
   return result;

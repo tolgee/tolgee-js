@@ -16,15 +16,18 @@ export type FallbackLanguageObject = Record<string, FallbackLanguage>;
 
 export type FallbackLanguageOption = FallbackLanguage | FallbackLanguageObject;
 
-export type TranslateProps = {
-  key: string;
-  params?: TranslationParams;
-  defaultValue?: string;
+export type TranslateOptions<T> = {
   ns?: FallbackNSTranslation;
   noWrap?: boolean;
   orEmpty?: boolean;
   fallbackLanguages?: FallbackLanguage;
+  params?: TranslateParams<T>;
 };
+
+export type TranslateProps<T = DefaultParamType> = {
+  key: string;
+  defaultValue?: string;
+} & TranslateOptions<T>;
 
 export type TranslatePropsInternal = TranslateProps & {
   translation?: string;
@@ -55,15 +58,29 @@ export type CacheKeyObject = {
 
 export type KeyAndParams = {
   key: string;
-  params?: TranslationParams;
+  params?: TranslateParams;
   defaultValue?: string;
   ns?: FallbackNSTranslation;
 };
 
 export type Unwrapped = { text: string; keys: KeyAndParams[] };
 
-export type TranslationParams = {
-  [key: string]: string | number | bigint;
+type PropType<TObj> = TObj[keyof TObj];
+
+export type DefaultParamType = string | number | bigint;
+
+export type TranslateParams<T = DefaultParamType> = {
+  [key: string]: T;
+};
+
+export type CombinedOptions<T> = TranslateOptions<T> & {
+  [key: string]: T | PropType<TranslateOptions<T>>;
+};
+
+export type TFnType<T, R> = {
+  (key: string, defaultValue?: string, options?: CombinedOptions<T>): R;
+  (key: string, options?: CombinedOptions<T>): R;
+  (props: TranslateProps<T>): R;
 };
 
 export type WrapperWrapFunction = (props: TranslatePropsInternal) => string;
@@ -81,18 +98,18 @@ export type WrapperInterface = {
   getAttributeXPath: WrapperAttributeXPathGetter;
 };
 
-export type FormatterPluginFormatParams = {
+export type FormatterInterfaceFormatParams = {
   translation: string;
   language: string;
   params: Record<string, any> | undefined;
 };
 
-export type FormatterPlugin = {
-  format: (props: FormatterPluginFormatParams) => string;
+export type FormatterInterface = {
+  format: (props: FormatterInterfaceFormatParams) => string;
 };
 
-export type FinalFormatterPlugin = {
-  format: (props: FormatterPluginFormatParams) => any;
+export type FinalFormatterInterface = {
+  format: (props: FormatterInterfaceFormatParams) => any;
 };
 
 export type ObserverProps = {
@@ -106,7 +123,7 @@ export type HighlightByKeyType =
       unhighlight(): void;
     });
 
-export type ObserverPlugin = (props: ObserverProps) => {
+export type ObserverInterface = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
   wrap: (props: TranslatePropsInternal) => string;
   retranslate: () => void;
@@ -117,6 +134,7 @@ export type ObserverPlugin = (props: ObserverProps) => {
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
+  projectId?: number;
 };
 
 export type BackendGetRecordProps = {
@@ -128,7 +146,7 @@ export type BackendGetRecord = (
   data: BackendGetRecordProps
 ) => Promise<TreeTranslationsData> | undefined;
 
-export type BackendPlugin = {
+export type BackendInterface = {
   getRecord: BackendGetRecord;
 };
 
@@ -136,7 +154,7 @@ export type BackendGetDevRecord = (
   data: BackendGetRecordProps & BackendDevProps
 ) => Promise<TreeTranslationsData> | undefined;
 
-export type BackendDevPlugin = {
+export type BackendDevInterface = {
   getRecord: BackendGetDevRecord;
 };
 
@@ -168,14 +186,6 @@ export type TolgeeInstance = Readonly<{
   on: TolgeeOn;
   onKeyUpdate: (handler: ListenerHandler<void>) => ListenerSelective;
 
-  setFinalFormatter: (
-    formatter: FinalFormatterPlugin | undefined
-  ) => TolgeeInstance;
-  addFormatter: (formatter: FormatterPlugin | undefined) => TolgeeInstance;
-  setObserver: (observer: ObserverPlugin | undefined) => TolgeeInstance;
-  setUi: (ui: UiLibInterface | undefined) => TolgeeInstance;
-  addBackend: (backend: BackendPlugin | undefined) => TolgeeInstance;
-  setDevBackend: (backend: BackendPlugin | undefined) => TolgeeInstance;
   use: (plugin: TolgeePlugin | undefined) => TolgeeInstance;
 
   getLanguage: () => string;
@@ -186,8 +196,8 @@ export type TolgeeInstance = Readonly<{
     key: string,
     value: string
   ) => void;
-  addActiveNs: (namespace: string) => Promise<void>;
-  removeActiveNs: (ns: string) => void;
+  addActiveNs: (ns: FallbackNSTranslation) => Promise<void>;
+  removeActiveNs: (ns: FallbackNSTranslation) => void;
   loadRecord: (
     descriptor: CacheDescriptor
   ) => Promise<TreeTranslationsData | TranslationsFlat | undefined>;
@@ -200,6 +210,15 @@ export type TolgeeInstance = Readonly<{
   run: () => Promise<void>;
   stop: () => void;
   t: (props: TranslatePropsInternal) => string;
+}>;
+
+export type PluginServicePublic = Readonly<{
+  setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
+  addFormatter: (formatter: FormatterInterface | undefined) => void;
+  setObserver: (observer: ObserverInterface | undefined) => void;
+  setUi: (ui: UiLibInterface | undefined) => void;
+  addBackend: (backend: BackendInterface | undefined) => void;
+  setDevBackend: (backend: BackendInterface | undefined) => void;
 }>;
 
 export type NodeMeta = {
@@ -285,4 +304,7 @@ export type ListenerSelective = {
 export type ListenerHandlerEvent<T> = { value: T };
 export type ListenerHandler<T> = (e: ListenerHandlerEvent<T>) => void;
 
-export type TolgeePlugin = (tolgee: TolgeeInstance) => TolgeeInstance;
+export type TolgeePlugin = (
+  tolgee: TolgeeInstance,
+  tools: PluginServicePublic
+) => TolgeeInstance;

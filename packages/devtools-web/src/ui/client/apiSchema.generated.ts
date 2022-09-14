@@ -879,11 +879,11 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
+      username?: string;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       projectId: number;
-      username?: string;
       /** Format: int64 */
       lastUsedAt?: number;
       description: string;

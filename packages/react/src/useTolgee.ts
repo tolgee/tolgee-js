@@ -17,7 +17,7 @@ export const useTolgee = (
     return () => {
       listeners.forEach((listener) => listener.unsubscribe());
     };
-  }, [events.join('')]);
+  }, [events.join(':')]);
 
   return tolgee;
 };

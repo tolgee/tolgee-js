@@ -35,7 +35,7 @@ describe('T component integration', () => {
     return (
       <>
         <div data-testid="peter_dogs">
-          <T keyName="peter_dogs" parameters={{ dogsCount: 5 }} />
+          <T keyName="peter_dogs" params={{ dogsCount: 5 }} />
         </div>
         <div data-testid="hello_world">
           <T>hello_world</T>
@@ -47,12 +47,12 @@ describe('T component integration', () => {
           <T keyName="non_existant">Non existant</T>
         </div>
         <div data-testid="with_tags">
-          <T keyName="with_tags" parameters={{ b: <b />, i: <i /> }} />
+          <T keyName="with_tags" params={{ b: <b />, i: <i /> }} />
         </div>
         <div data-testid="with_tag">
           <T
             keyName="with_tag"
-            parameters={{
+            params={{
               b: (text: string) => <b title={text}>{text}</b>,
             }}
           />

@@ -1,17 +1,6 @@
 import { EventService } from './EventService/EventService';
 import { StateService } from './StateService/StateService';
-import {
-  BackendDevPlugin,
-  BackendPlugin,
-  FinalFormatterPlugin,
-  FormatterPlugin,
-  ObserverPlugin,
-  Options,
-  TolgeeInstance,
-  TolgeePlugin,
-  TranslateProps,
-  UiLibInterface,
-} from './types';
+import { Options, TolgeeInstance, TolgeePlugin, TranslateProps } from './types';
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const eventService = EventService();
@@ -20,37 +9,22 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     options,
   });
 
+  const pluginTools = Object.freeze({
+    setFinalFormatter: stateService.setFinalFormatter,
+    addFormatter: stateService.addFormatter,
+    setObserver: stateService.setObserver,
+    setUi: stateService.setUi,
+    setDevBackend: stateService.setDevBackend,
+    addBackend: stateService.addBackend,
+  });
+
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     on: eventService.on,
     onKeyUpdate: eventService.onKeyUpdate.listenSome,
 
-    setFinalFormatter: (formatter: FinalFormatterPlugin | undefined) => {
-      stateService.setFinalFormatter(formatter);
-      return tolgee;
-    },
-    addFormatter: (formatter: FormatterPlugin | undefined) => {
-      stateService.addFormatter(formatter);
-      return tolgee;
-    },
-    setObserver: (observer: ObserverPlugin | undefined) => {
-      stateService.setObserver(observer);
-      return tolgee;
-    },
-    setUi: (ui: UiLibInterface | undefined) => {
-      stateService.setUi(ui);
-      return tolgee;
-    },
-    setDevBackend: (backend: BackendDevPlugin | undefined) => {
-      stateService.setDevBackend(backend);
-      return tolgee;
-    },
-    addBackend: (backend: BackendPlugin | undefined) => {
-      stateService.addBackend(backend);
-      return tolgee;
-    },
     use: (plugin: TolgeePlugin | undefined) => {
-      plugin?.(tolgee);
+      plugin?.(tolgee, pluginTools);
       return tolgee;
     },
 
@@ -84,5 +58,6 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
       return stateService.t(props);
     },
   });
+
   return tolgee;
 };

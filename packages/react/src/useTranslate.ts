@@ -1,134 +1,18 @@
-import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  TranslationParams,
-  ListenerSelective,
-  KeyDescriptor,
-  TranslateProps,
-  FallbackNSTranslation,
-} from '@tolgee/core';
+import { useCallback } from 'react';
+import { TFnType, getTranslateParams, DefaultParamType } from '@tolgee/core';
 
-import { addReactKeys, wrapTagHandlers } from './tagsTools';
-import { ParamsTags } from './types';
-import { useTolgeeContext } from './useTolgeeContext';
+import { useTranslateInternal } from './useTranslateInternal';
 
-export type TranslationTags<T> = string | T[];
+export const useTranslate = (ns?: string[]) => {
+  const tInternal = useTranslateInternal(ns);
 
-type UseTranslateResultFnProps<T extends TranslationParams | ParamsTags> = {
-  key: string;
-  parameters?: T;
-  noWrap?: boolean;
-  defaultValue?: string;
-  ns?: FallbackNSTranslation;
-};
-
-type ReturnFnType = {
-  <T extends TranslationParams | ParamsTags = TranslationParams>(
-    props: UseTranslateResultFnProps<T>
-  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
-
-  (key: string, defaultValue?: string, noWrap?: boolean): string;
-
-  <T extends TranslationParams | ParamsTags = TranslationParams>(
-    key: string,
-    defaultValue?: string,
-    parameters?: T
-  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
-
-  <T extends TranslationParams | ParamsTags = TranslationParams>(
-    key: string,
-    parameters?: T,
-    defaultValue?: string
-  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
-
-  <T extends TranslationParams | ParamsTags = TranslationParams>(
-    key: string,
-    parameters?: T,
-    noWrap?: boolean,
-    defaultValue?: string
-  ): T extends TranslationParams ? string : TranslationTags<React.ReactNode>;
-};
-
-export const useTranslate: () => ReturnFnType = () => {
-  const tolgee = useTolgeeContext();
-
-  // dummy state to enable re-rendering
-  const [instance, setInstance] = useState(0);
-
-  const forceRerender = useCallback(() => {
-    setInstance((v) => v + 1);
-  }, [setInstance]);
-
-  const subscriptionRef = useRef(null as ListenerSelective);
-
-  const subscriptionQueue = useRef([] as KeyDescriptor[]);
-
-  const subscribeToKey = (key: KeyDescriptor) => {
-    if (subscriptionRef.current) {
-      subscriptionRef.current.subscribeToKey(key);
-    } else {
-      subscriptionQueue.current.push(key);
-    }
-  };
-
-  useEffect(() => {
-    subscriptionRef.current = tolgee.onKeyUpdate(forceRerender);
-    subscriptionQueue.current.forEach((key) =>
-      subscriptionRef.current.subscribeToKey(key)
-    );
-    subscriptionQueue.current = [];
-    return () => {
-      subscriptionRef.current.unsubscribe();
-    };
-  }, []);
-
-  const getTranslation = useCallback(
-    ({ key, params, noWrap, defaultValue, ns }: TranslateProps) => {
-      subscribeToKey({ key, ns });
-      const translation = tolgee.t({
-        key,
-        params: wrapTagHandlers(params),
-        noWrap,
-        defaultValue: defaultValue,
-        ns,
-      });
-
-      return translation;
+  const t: TFnType<DefaultParamType, string> = useCallback(
+    (...params: any) => {
+      // @ts-ignore
+      const props = getTranslateParams(...params);
+      return tInternal(props);
     },
-    [tolgee]
-  );
-
-  const t: ReturnFnType = useCallback(
-    (keyOrProps, ...params: (ParamsTags | boolean | string)[]) => {
-      let parameters: ParamsTags = undefined;
-      let noWrap: boolean = undefined;
-      let defaultValue = undefined;
-      // allow user to pass object of params and make the code cleaner
-      const key = typeof keyOrProps === 'object' ? keyOrProps.key : keyOrProps;
-      if (typeof keyOrProps === 'object') {
-        parameters = keyOrProps.parameters;
-        noWrap = keyOrProps.noWrap;
-        defaultValue = keyOrProps.defaultValue;
-      } else {
-        params.forEach((param) => {
-          switch (typeof param) {
-            case 'object':
-              parameters = param;
-              break;
-            case 'boolean':
-              noWrap = param;
-              break;
-            case 'string':
-              defaultValue = param;
-          }
-        });
-      }
-
-      return addReactKeys(
-        getTranslation({ key, params: parameters as any, noWrap, defaultValue })
-      ) as any;
-    },
-    [getTranslation, instance]
+    [tInternal]
   );
 
   return t;

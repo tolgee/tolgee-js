@@ -1,3 +1,4 @@
+import { getProjectIdFromApiKey } from 'tools/decodeApiKey';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
@@ -72,6 +73,10 @@ async function customFetch(
   });
 }
 
+export const addProjectIdToUrl = (url: string) => {
+  return url.replace('/projects/', '/projects/{projectId}/');
+};
+
 export async function client<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
@@ -82,8 +87,14 @@ export async function client<
   request: RequestParamsType<Url, Method, Paths>,
   options: GlobalOptions
 ) {
-  const pathParams = (request as any)?.path;
+  const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
+
+  const projectId = getProjectIdFromApiKey(options.apiKey);
+  if (projectId !== undefined) {
+    pathParams.projectId = projectId;
+    urlResult = addProjectIdToUrl(urlResult);
+  }
 
   if (pathParams) {
     Object.entries(pathParams).forEach(([key, value]) => {

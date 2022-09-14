@@ -1,10 +1,12 @@
+import { TranslateParams } from '@tolgee/core';
 import React, { FunctionComponent } from 'react';
+import { addReactKeys, wrapTagHandlers } from './tagsTools';
 
 import { ParamsTags } from './types';
-import { useTranslate } from './useTranslate';
+import { useTranslateInternal } from './useTranslateInternal';
 
 type TProps = {
-  parameters?: ParamsTags;
+  params?: TranslateParams<ParamsTags>;
   children?: string;
   noWrap?: boolean;
   /**
@@ -22,14 +24,16 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
   }
   const defaultValue = props.keyName ? props.children : undefined;
 
-  const t = useTranslate();
+  const t = useTranslateInternal();
 
-  const translation = t({
-    key,
-    parameters: props.parameters,
-    defaultValue,
-    noWrap: props.noWrap,
-  });
+  const translation = addReactKeys(
+    t({
+      key,
+      params: wrapTagHandlers(props.params),
+      defaultValue,
+      noWrap: props.noWrap,
+    })
+  );
 
   return <>{translation}</>;
 };

@@ -7,7 +7,13 @@ import { act } from 'react-dom/test-utils';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, useTranslate, Tolgee, TolgeeInstance } from '..';
+import {
+  TolgeeProvider,
+  useTranslate,
+  Tolgee,
+  TolgeeInstance,
+  DevTools,
+} from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 
 const API_URL = 'http://localhost';
@@ -67,7 +73,7 @@ describe('TolgeeProvider integration', () => {
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
-      tolgee = Tolgee({
+      tolgee = Tolgee().use(DevTools()).init({
         apiUrl: API_URL,
         apiKey: API_KEY,
         language: 'cs',
@@ -89,15 +95,7 @@ describe('TolgeeProvider integration', () => {
         resolveCzech();
       });
       await waitFor(() => {
-        expect(screen.queryByTestId('hello_world')).toContainHTML(
-          'Ahoj světe!'
-        );
-        expect(screen.queryByTestId('english_fallback')).not.toContainHTML(
-          'Default value'
-        );
-        expect(screen.queryByTestId('non_existant')).not.toContainHTML(
-          'Default value'
-        );
+        expect(screen.queryByText('Loading...')).toBeInTheDocument();
       });
       act(() => {
         resolveEnglish();
@@ -116,7 +114,7 @@ describe('TolgeeProvider integration', () => {
     });
   });
 
-  describe('with preloadFallback', () => {
+  describe('with fallback', () => {
     let resolveEnglish;
     let resolveCzech;
     let tolgee: TolgeeInstance;
@@ -126,7 +124,7 @@ describe('TolgeeProvider integration', () => {
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
-      tolgee = Tolgee({
+      tolgee = Tolgee().use(DevTools()).init({
         apiUrl: API_URL,
         apiKey: API_KEY,
         defaultLanguage: 'cs',

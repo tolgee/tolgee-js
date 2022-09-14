@@ -1,18 +1,18 @@
 import { screen, waitFor } from '@testing-library/dom';
 import {
-  ObserverPlugin,
   Tolgee,
   TolgeeInstance,
+  TolgeePlugin,
   TOLGEE_ATTRIBUTE_NAME,
 } from '@tolgee/core';
 
-export const testRetranslate = (observer: ObserverPlugin) => {
+export const testRetranslate = (plugin: TolgeePlugin) => {
   describe('retranslate', () => {
     let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       tolgee = Tolgee()
-        .setObserver(observer)
+        .use(plugin)
         .init({
           language: 'en',
           staticData: { en: { hello: 'world' }, es: { hello: 'mundo' } },

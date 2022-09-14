@@ -1,13 +1,14 @@
 import { Tolgee } from '../Tolgee';
 import {
-  FinalFormatterPlugin,
-  FormatterPlugin,
-  FormatterPluginFormatParams,
-  ObserverPlugin,
+  FinalFormatterInterface,
+  FormatterInterface,
+  FormatterInterfaceFormatParams,
+  ObserverInterface,
+  TolgeePlugin,
   WrapperWrapFunction,
 } from '../types';
 
-const testObserver: ObserverPlugin = () => {
+const testObserver: ObserverInterface = () => {
   const wrap: WrapperWrapFunction = ({ key, translation }) => {
     return `${key}|${translation}`;
   };
@@ -20,25 +21,43 @@ const testObserver: ObserverPlugin = () => {
 
   const retranslate = () => {};
 
-  return Object.freeze({ wrap, unwrap, stop, retranslate });
+  return Object.freeze({
+    wrap,
+    unwrap,
+    stop,
+    retranslate,
+    highlightByKey: undefined,
+  });
 };
 
-const testFormatter1: FormatterPlugin = {
-  format: ({ translation }: FormatterPluginFormatParams) => {
+const testFormatter1: FormatterInterface = {
+  format: ({ translation }: FormatterInterfaceFormatParams) => {
     return `(1${translation})`;
   },
 };
 
-const testFormatter2: FormatterPlugin = {
-  format: ({ translation }: FormatterPluginFormatParams) => {
+const testFormatter2: FormatterInterface = {
+  format: ({ translation }: FormatterInterfaceFormatParams) => {
     return `(2${translation})`;
   },
 };
 
-const testFinalFormatter: FinalFormatterPlugin = {
-  format: ({ translation }: FormatterPluginFormatParams) => {
+const testFinalFormatter: FinalFormatterInterface = {
+  format: ({ translation }: FormatterInterfaceFormatParams) => {
     return { final: translation };
   },
+};
+
+const observerPlugin: TolgeePlugin = (tolgee, tools) => {
+  tools.setObserver(testObserver);
+  return tolgee;
+};
+
+const formattersPlugin: TolgeePlugin = (tolgee, tools) => {
+  tools.addFormatter(testFormatter1);
+  tools.addFormatter(testFormatter2);
+  tools.setFinalFormatter(testFinalFormatter);
+  return tolgee;
 };
 
 describe('plugins', () => {
@@ -47,13 +66,11 @@ describe('plugins', () => {
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.setObserver(testObserver);
+    tolgee.use(observerPlugin);
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
 
-    tolgee.addFormatter(testFormatter1);
-    tolgee.addFormatter(testFormatter2);
-    tolgee.setFinalFormatter(testFinalFormatter);
+    tolgee.use(formattersPlugin);
     expect(tolgee.t({ key: 'hello' })).toEqual({ final: '(2(1hello|world))' });
     tolgee.stop();
   });
