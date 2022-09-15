@@ -79,6 +79,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
   function init(options: Partial<Options>) {
     state.init(options);
+    cache.clear();
     cache.init(state.getInitialOptions().staticData);
   }
 
@@ -95,6 +96,12 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
             language: state.getLanguage(),
           })
       )
+    );
+  }
+
+  function isDev() {
+    return Boolean(
+      state.getInitialOptions().apiKey && pluginService.getDevBackend()
     );
   }
 
@@ -134,7 +141,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cache.exists({ language, namespace }, state.isDev())) {
+        if (!cache.exists({ language, namespace }, isDev())) {
           result.push({ language, namespace });
         }
       });
@@ -223,7 +230,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     let dataPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
-    if (state.isDev()) {
+    if (isDev()) {
       dataPromise = pluginService.getBackendDevRecord(keyObject)?.catch(() => {
         // eslint-disable-next-line no-console
         console.warn(`Tolgee: Failed to fetch data from dev backend`);
@@ -257,7 +264,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
       asyncRequests.delete(cacheKey);
       if (data) {
-        cache.addRecord(keyObject, data, state.isDev());
+        cache.addRecord(keyObject, data, isDev());
         eventService.onCacheChange.emit(keyObject);
       }
       fetchingObserver.update(isFetching());
@@ -267,10 +274,11 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return cache.getRecord(withDefaultNs(descriptor));
   }
 
-  function run() {
+  async function run() {
     if (!state.isRunning()) {
-      pluginService.run();
       state.setRunning(true);
+      pluginService.run();
+      await loadInitial();
     }
   }
 

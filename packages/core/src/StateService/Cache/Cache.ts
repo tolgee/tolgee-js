@@ -80,6 +80,10 @@ export const Cache = () => {
     record?.set(key, value);
   };
 
+  const clear = () => {
+    cache.clear();
+  };
+
   return Object.freeze({
     init,
     addRecord,
@@ -88,6 +92,7 @@ export const Cache = () => {
     getTranslation,
     getTranslationFallback,
     changeTranslation,
+    clear,
   });
 };
 

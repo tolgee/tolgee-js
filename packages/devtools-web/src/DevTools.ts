@@ -1,20 +1,11 @@
 import type { TolgeePlugin } from '@tolgee/core';
 import type { ObserverOptions } from './types';
-import { InvisibleObserver } from './InvisibleObserver';
-import { DevBackend } from './DevBackend';
-import { ContextUi } from './ContextUi';
+import { InContextTools } from './InContextTools';
 
-let DevTools: (options?: Partial<ObserverOptions>) => TolgeePlugin =
-  () => (tolgee) =>
-    tolgee;
+let DevTools: typeof InContextTools = () => (tolgee) => tolgee;
 
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = (options) => (tolgee, tools) => {
-    tolgee.use(InvisibleObserver(options));
-    tolgee.use(DevBackend());
-    tolgee.use(ContextUi());
-    return tolgee;
-  };
+  DevTools = InContextTools;
 }
 
 export { DevTools };

@@ -7,12 +7,13 @@ import {
   ObserverInterface,
   TranslatePropsInternal,
   TranslationOnClick,
-  UiConstructor,
   UiInstance,
   UiLibInterface,
   UiType,
   FinalFormatterInterface,
   UiProps,
+  HighlightByKeyType,
+  UiConstructor,
 } from '../../types';
 
 export const PluginService = (
@@ -22,7 +23,6 @@ export const PluginService = (
   getUiProps: () => UiProps
 ) => {
   const plugins = {
-    observer: undefined as ObserverInterface | undefined,
     ui: undefined as UiConstructor | undefined,
   };
 
@@ -40,22 +40,26 @@ export const PluginService = (
   };
 
   const run = () => {
-    instances.observer = plugins?.observer?.({ translate, onClick });
     instances.ui =
       plugins.ui &&
       new plugins.ui({
         ...getUiProps(),
-        highlightByKey: instances.observer?.highlightByKey,
+        highlightByKey,
       });
+    instances.observer?.run();
   };
 
   const stop = () => {
+    instances.ui = undefined;
     instances.observer?.stop();
-    instances.observer = undefined;
+  };
+
+  const highlightByKey: HighlightByKeyType = (key) => {
+    return instances.observer?.highlightByKey?.(key) || { unhighlight() {} };
   };
 
   const setObserver = (observer: ObserverInterface | undefined) => {
-    plugins.observer = observer;
+    instances.observer = observer?.({ translate, onClick });
   };
 
   const addFormatter = (formatter: FormatterInterface | undefined) => {
@@ -82,6 +86,10 @@ export const PluginService = (
 
   const setDevBackend = (backend: BackendDevInterface | undefined) => {
     instances.devBackend = backend;
+  };
+
+  const getDevBackend = () => {
+    return instances.devBackend;
   };
 
   const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
@@ -155,6 +163,7 @@ export const PluginService = (
     setUi,
     addBackend,
     setDevBackend,
+    getDevBackend,
     getBackendRecord,
     getBackendDevRecord,
     run,

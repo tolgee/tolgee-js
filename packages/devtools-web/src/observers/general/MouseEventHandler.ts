@@ -34,12 +34,6 @@ export const MouseEventHandler = ({
   //   new EventEmitterImpl<boolean>();
   let cursorPosition: Coordinates | undefined;
 
-  function stop() {
-    if (typeof window !== 'undefined') {
-      removeEventListeners();
-    }
-  }
-
   const highlight = (el: TolgeeElement | undefined) => {
     if (highlighted !== el) {
       unhighlight();
@@ -191,9 +185,16 @@ export const MouseEventHandler = ({
     return true;
   }
 
-  initEventListeners();
+  function stop() {
+    removeEventListeners();
+  }
+
+  function run() {
+    initEventListeners();
+  }
 
   return Object.freeze({
+    run,
     stop,
   });
 };

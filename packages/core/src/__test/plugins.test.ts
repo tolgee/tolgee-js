@@ -18,12 +18,14 @@ const testObserver: ObserverInterface = () => {
   };
 
   const stop = () => {};
+  const run = () => {};
 
   const retranslate = () => {};
 
   return Object.freeze({
     wrap,
     unwrap,
+    run,
     stop,
     retranslate,
     highlightByKey: undefined,

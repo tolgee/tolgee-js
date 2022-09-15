@@ -54,6 +54,10 @@ export const ElementRegistry = (
     elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
   }
 
+  function run() {
+    eventHandler.run();
+  }
+
   function stop() {
     eventHandler.stop();
   }
@@ -138,6 +142,7 @@ export const ElementRegistry = (
     forEachElement: elementStore.forEachElement,
     findAllByKey: findAllByKey,
     refreshAll,
+    run,
     stop,
   });
 };
