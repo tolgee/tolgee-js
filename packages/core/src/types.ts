@@ -128,6 +128,7 @@ export type ObserverInterface = (props: ObserverProps) => {
   wrap: (props: TranslatePropsInternal) => string;
   retranslate: () => void;
   stop: () => void;
+  run: () => void;
   highlightByKey: HighlightByKeyType;
 };
 

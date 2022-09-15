@@ -1,6 +1,6 @@
 import { EventService } from './EventService/EventService';
 import { StateService } from './StateService/StateService';
-import { Options, TolgeeInstance, TolgeePlugin, TranslateProps } from './types';
+import { Options, TolgeeInstance, TolgeePlugin } from './types';
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const eventService = EventService();
@@ -18,15 +18,17 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     addBackend: stateService.addBackend,
   });
 
+  const withRestart = (callback: () => void) => {
+    const wasRunning = stateService.isRunning();
+    wasRunning && stateService.stop();
+    callback();
+    wasRunning && stateService.run();
+  };
+
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
     on: eventService.on,
     onKeyUpdate: eventService.onKeyUpdate.listenSome,
-
-    use: (plugin: TolgeePlugin | undefined) => {
-      plugin?.(tolgee, pluginTools);
-      return tolgee;
-    },
 
     // state
     getLanguage: stateService.getLanguage,
@@ -41,21 +43,20 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     isLoading: stateService.isLoading,
     isFetching: stateService.isFetching,
     isRunning: stateService.isRunning,
-    init: (options: Partial<Options>) => {
-      stateService.init(options);
+    run: stateService.run,
+    stop: stateService.stop,
+    t: stateService.t,
+
+    // plugins
+    use: (plugin: TolgeePlugin | undefined) => {
+      if (plugin) {
+        withRestart(() => plugin(tolgee, pluginTools));
+      }
       return tolgee;
     },
-
-    // other
-    run: () => {
-      stateService.run();
-      return stateService.loadInitial();
-    },
-    stop: () => {
-      stateService.stop();
-    },
-    t: (props: TranslateProps) => {
-      return stateService.t(props);
+    init: (options: Partial<Options>) => {
+      withRestart(() => stateService.init(options));
+      return tolgee;
     },
   });
 

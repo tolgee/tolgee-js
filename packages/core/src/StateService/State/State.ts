@@ -60,10 +60,6 @@ export const State = ({
     }
   }
 
-  function isDev() {
-    return Boolean(state.initialOptions.apiKey);
-  }
-
   function getInitialOptions() {
     return state.initialOptions;
   }
@@ -124,7 +120,6 @@ export const State = ({
     setLanguage,
     getPendingLanguage,
     setPendingLanguage,
-    isDev,
     getInitialOptions,
     addActiveNs,
     removeActiveNs,

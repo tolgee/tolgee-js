@@ -16,7 +16,7 @@ export const GeneralObserver = (
   options: ObserverOptions,
   onClick: TranslationOnClick
 ) => {
-  let isObserving = true;
+  let isObserving = false;
 
   const domHelper = DomHelper(options);
   const nodeHandler = NodeHandler(options, wrapper);
@@ -76,17 +76,21 @@ export const GeneralObserver = (
     }
   });
 
-  observer.observe(document.body, {
-    attributes: true,
-    childList: true,
-    subtree: true,
-    characterData: true,
-  });
+  const run = () => {
+    isObserving = true;
+    elementRegistry.run();
+    observer.observe(options.targetElement || document.body, {
+      attributes: true,
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+  };
 
   const stop = () => {
     isObserving = false;
-    observer?.disconnect();
     elementRegistry.stop();
+    observer.disconnect();
   };
 
   const highlightByKey = (key: string) => {
@@ -101,6 +105,7 @@ export const GeneralObserver = (
   };
 
   return Object.freeze({
+    run,
     stop,
     wrap: wrapper.wrap,
     unwrap: wrapper.unwrap,
