@@ -77,8 +77,15 @@ export const GeneralObserver = (
   });
 
   const run = () => {
+    const targetElement = options.targetElement || document.body;
     isObserving = true;
     elementRegistry.run();
+
+    // initially go through all elements
+    handleKeyAttribute(targetElement);
+    handleNodes(nodeHandler.handleChildList(targetElement));
+
+    // then observe for changes
     observer.observe(options.targetElement || document.body, {
       attributes: true,
       childList: true,
@@ -93,7 +100,7 @@ export const GeneralObserver = (
     observer.disconnect();
   };
 
-  const highlightByKey = (key: string) => {
+  const highlight = (key?: string) => {
     const elements = elementRegistry.findAllByKey(key);
     elements.forEach((el) => el.highlight?.());
 
@@ -110,7 +117,7 @@ export const GeneralObserver = (
     wrap: wrapper.wrap,
     unwrap: wrapper.unwrap,
     forEachElement: elementRegistry.forEachElement,
-    highlightByKey,
+    highlight,
   });
 };
 

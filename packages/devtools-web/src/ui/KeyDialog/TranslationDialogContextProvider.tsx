@@ -10,7 +10,7 @@ import { useApiQuery } from 'ui/client/useQueryApi';
 import { useApiMutation, useApiQuery } from 'ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
-import { detectPlugin, takeScreenshot } from 'ui/tools/plugin';
+import { detectPlugin, takeScreenshot } from '../../tools/plugin';
 
 export interface ScreenshotInterface {
   id: number;
@@ -385,6 +385,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const baseLang = availableLanguages?.find(({ base }) => base);
     const loading =
       languagesLoadable.isLoading ||
+      languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
       scopesLoadable.isLoading;
     const saving = updateKey.isLoading || createKey.isLoading;
@@ -392,6 +393,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       languagesLoadable.error ||
       translationsLoadable.error ||
       scopesLoadable.error;
+
     const screenshotsUploading = uploadImage.isLoading;
 
     const scopes = scopesLoadable.data?.scopes;

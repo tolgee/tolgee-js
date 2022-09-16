@@ -9,6 +9,7 @@ import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
+import { getPreferredLanguages } from './tools';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -49,6 +50,9 @@ export const TranslationFields: FunctionComponent = () => {
   const dispatch = useDialogDispatch();
 
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
+  const langFields = selectedLanguages.length
+    ? selectedLanguages
+    : getPreferredLanguages();
   const availableLanguages = useDialogContext((c) => c.availableLanguages);
   const translationsForm = useDialogContext((c) => c.translationsForm);
   const formDisabled = useDialogContext((c) => c.formDisabled);
@@ -64,11 +68,9 @@ export const TranslationFields: FunctionComponent = () => {
 
   const Loading = () => (
     <>
-      {selectedLanguages ? (
-        [...selectedLanguages].map((lang) => <LoadingTextArea key={lang} />)
-      ) : (
-        <LoadingTextArea />
-      )}
+      {langFields.map((lang) => (
+        <LoadingTextArea key={lang} />
+      ))}
     </>
   );
 

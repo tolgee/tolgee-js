@@ -12,7 +12,7 @@ import {
   UiType,
   FinalFormatterInterface,
   UiProps,
-  HighlightByKeyType,
+  HighlightInterface,
   UiConstructor,
 } from '../../types';
 
@@ -39,23 +39,18 @@ export const PluginService = (
     instances.ui?.handleElementClick(event, keysAndDefaults);
   };
 
-  const run = () => {
-    instances.ui =
-      plugins.ui &&
-      new plugins.ui({
-        ...getUiProps(),
-        highlightByKey,
-      });
+  const run = (isDev: boolean) => {
+    instances.ui = plugins.ui && new plugins.ui(getUiProps());
     instances.observer?.run();
   };
 
-  const stop = () => {
+  const stop = (isDev: boolean) => {
     instances.ui = undefined;
     instances.observer?.stop();
   };
 
-  const highlightByKey: HighlightByKeyType = (key) => {
-    return instances.observer?.highlightByKey?.(key) || { unhighlight() {} };
+  const highlight: HighlightInterface = (key) => {
+    return instances.observer?.highlight?.(key) || { unhighlight() {} };
   };
 
   const setObserver = (observer: ObserverInterface | undefined) => {
@@ -169,6 +164,7 @@ export const PluginService = (
     run,
     stop,
     retranslate,
+    highlight,
   });
 };
 

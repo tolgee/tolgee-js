@@ -52,14 +52,19 @@ async function customFetch(
   options: GlobalOptions,
   init?: RequestInit
 ): Promise<Response> {
-  if (options.apiKey) {
-    init = init || {};
-    init.headers = init.headers || {};
-    init.headers = {
-      ...init.headers,
-      'X-API-Key': options.apiKey,
-    };
+  if (options.apiUrl === undefined) {
+    throw 'Api url not specified';
   }
+  if (options.apiKey === undefined) {
+    throw 'Api key not specified';
+  }
+
+  init = init || {};
+  init.headers = init.headers || {};
+  init.headers = {
+    ...init.headers,
+    'X-API-Key': options.apiKey,
+  };
 
   return fetch(options.apiUrl + input, init).then(async (r) => {
     if (!r.ok) {
@@ -67,7 +72,7 @@ async function customFetch(
       const message = `${r.status}: ${
         data?.message || 'Error status code from server'
       }`;
-      throw new Error(message);
+      throw message;
     }
     return await getResObject(r);
   });

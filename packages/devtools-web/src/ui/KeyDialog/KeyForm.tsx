@@ -108,6 +108,8 @@ export const KeyForm = () => {
     dispatch({ type: 'ON_SAVE' });
   };
 
+  const ready = !loading && !error;
+
   return (
     <ScContainer {...{ [RESTRICTED_ASCENDANT_ATTRIBUTE]: 'true' }}>
       <ScHeading>
@@ -147,28 +149,28 @@ export const KeyForm = () => {
           </IconButton>
         )}
 
-        <ScHeadingRight>
-          <LanguageSelect />
-        </ScHeadingRight>
+        <ScHeadingRight>{!loading && <LanguageSelect />}</ScHeadingRight>
       </ScHeading>
 
       <ScFieldTitle>Key</ScFieldTitle>
       <ScKey>
         {input}
-        <ScKeyHint>{!keyExists && " (key doesn't exist yet)"}</ScKeyHint>
+        <ScKeyHint>
+          {!keyExists && ready && " (key doesn't exist yet)"}
+        </ScKeyHint>
       </ScKey>
 
       <ScFieldsWrapper>
         <TranslationFields />
       </ScFieldsWrapper>
 
-      {screenshotsView && (
+      {screenshotsView && ready && (
         <ScGalleryWrapper>
           <ScreenshotGallery />
         </ScGalleryWrapper>
       )}
 
-      {formDisabled && !loading && (
+      {formDisabled && ready && (
         <ScRestriction>{`Modification is restricted due to missing ${
           translations?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
         } scope in current api key settings.`}</ScRestriction>
