@@ -14,7 +14,7 @@ describe('Tolgee Provider Component', () => {
 
   beforeEach(() => {
     mockedTolgee = {
-      ...Tolgee(),
+      ...Tolgee({ language: 'en' }),
       run: jest.fn(() => new Promise<void>(() => {})),
       stop: jest.fn(),
     };
@@ -22,7 +22,13 @@ describe('Tolgee Provider Component', () => {
 
   test('renders loadingFallback', async () => {
     act(() => {
-      render(<TolgeeProvider tolgee={mockedTolgee} fallback={<>loading</>} />);
+      render(
+        <TolgeeProvider
+          tolgee={mockedTolgee}
+          fallback={<>loading</>}
+          options={{ useSuspense: false }}
+        />
+      );
     });
     await waitFor(() => {
       screen.getByText('loading');

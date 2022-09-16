@@ -83,19 +83,32 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     cache.init(state.getInitialOptions().staticData);
   }
 
-  function isFetching() {
-    return asyncRequests.size > 0;
+  function isFetching(ns?: FallbackNSTranslation) {
+    if (ns === undefined) {
+      return asyncRequests.size > 0;
+    }
+    const namespaces = getFallback(ns);
+    return Boolean(
+      Array.from(asyncRequests.keys()).find((key) =>
+        namespaces.includes(decodeCacheKey(key).namespace)
+      )
+    );
   }
 
-  function isLoading() {
+  function isLoading(ns?: FallbackNSTranslation) {
+    const namespaces = getFallback(ns);
+
     return Boolean(
-      Array.from(asyncRequests.keys()).find(
-        (key) =>
+      Array.from(asyncRequests.keys()).find((key) => {
+        const descriptor = decodeCacheKey(key);
+        return (
+          (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
           !cache.exists({
-            namespace: decodeCacheKey(key).namespace,
+            namespace: descriptor.namespace,
             language: state.getLanguage(),
           })
-      )
+        );
+      })
     );
   }
 
@@ -115,29 +128,19 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     };
   }
 
-  async function addActiveNs(ns: FallbackNSTranslation) {
-    state.addActiveNs(ns);
-    const namespaces = getFallback(ns);
+  async function addActiveNs(ns: FallbackNSTranslation, forget?: boolean) {
+    if (!forget) {
+      state.addActiveNs(ns);
+    }
     if (state.isRunning()) {
-      const promises = [] as Promise<any>[];
-      namespaces.forEach((namespace) => {
-        const data = cache.getRecord({
-          language: state.getLanguage(),
-          namespace,
-        });
-        if (!data) {
-          promises.push(
-            loadRecord({ namespace, language: state.getLanguage() })
-          );
-        }
-      });
-      await Promise.all(promises);
+      await loadRequiredRecords(undefined, ns);
     }
   }
 
-  function getRequiredRecords(lang?: string) {
+  function getRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const languages = state.getFallbackLangs(lang);
-    const namespaces = state.getRequiredNamespaces();
+    const namespaces =
+      ns !== undefined ? getFallback(ns) : state.getRequiredNamespaces();
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
@@ -149,16 +152,16 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return result;
   }
 
-  function isLoaded() {
-    return getRequiredRecords().length === 0;
+  function isLoaded(ns?: FallbackNSTranslation) {
+    return getRequiredRecords(undefined, ns).length === 0;
   }
 
-  async function loadRequiredRecords(lang?: string) {
-    const requests = [] as Array<ReturnType<typeof loadRecord>>;
-    getRequiredRecords(lang).forEach((descriptor) =>
-      requests.push(loadRecord(descriptor))
-    );
-    await Promise.all(requests);
+  async function loadRequiredRecords(
+    lang?: string,
+    ns?: FallbackNSTranslation
+  ) {
+    const descriptors = getRequiredRecords(lang, ns);
+    await loadRecords(descriptors);
   }
 
   async function loadInitial() {
@@ -223,13 +226,16 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
         dataPromise = staticDataValue();
       }
     }
+
+    if (!dataPromise) {
+      // return empty data, so we know it has already been attempted to fetch
+      dataPromise = Promise.resolve({});
+    }
     return dataPromise;
   }
 
   function fetchData(keyObject: CacheKeyObject) {
-    let dataPromise = undefined as
-      | Promise<TreeTranslationsData | undefined>
-      | undefined;
+    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (isDev()) {
       dataPromise = pluginService.getBackendDevRecord(keyObject)?.catch(() => {
         // eslint-disable-next-line no-console
@@ -242,36 +248,57 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     if (!dataPromise) {
       dataPromise = fetchNormal(keyObject);
     }
+
     return dataPromise;
   }
 
-  async function loadRecord(descriptor: CacheDescriptor) {
-    const keyObject = withDefaultNs(descriptor);
-    const cacheKey = encodeCacheKey(keyObject);
-    const existingPromise = asyncRequests.get(cacheKey);
+  async function loadRecords(descriptors: CacheDescriptor[]) {
+    const withPromises = descriptors.map((descriptor) => {
+      const keyObject = withDefaultNs(descriptor);
+      const cacheKey = encodeCacheKey(keyObject);
+      const existingPromise = asyncRequests.get(cacheKey);
 
-    if (existingPromise) {
-      return existingPromise;
-    }
-
-    const dataPromise = fetchData(keyObject);
-    if (dataPromise) {
-      asyncRequests.set(cacheKey, dataPromise);
-      fetchingObserver.update(isFetching());
-      loadingObserver.update(isLoading());
-
-      const data = await dataPromise;
-
-      asyncRequests.delete(cacheKey);
-      if (data) {
-        cache.addRecord(keyObject, data, isDev());
-        eventService.onCacheChange.emit(keyObject);
+      if (existingPromise) {
+        return {
+          new: false,
+          promise: existingPromise,
+          keyObject,
+          cacheKey,
+        };
       }
-      fetchingObserver.update(isFetching());
-      loadingObserver.update(isLoading());
-    }
+      const dataPromise = fetchData(keyObject);
+      asyncRequests.set(cacheKey, dataPromise);
+      return {
+        new: true,
+        promise: dataPromise,
+        keyObject,
+        cacheKey,
+      };
+    });
+    fetchingObserver.update(isFetching());
+    loadingObserver.update(isLoading());
 
-    return cache.getRecord(withDefaultNs(descriptor));
+    const results = await Promise.all(withPromises.map((val) => val.promise));
+
+    withPromises.forEach((value, i) => {
+      if (value.new) {
+        asyncRequests.delete(value.cacheKey);
+        const data = results[i];
+        if (data) {
+          cache.addRecord(value.keyObject, data, isDev());
+          eventService.onCacheChange.emit(value.keyObject);
+        }
+      }
+    });
+    fetchingObserver.update(isFetching());
+    loadingObserver.update(isLoading());
+
+    return withPromises.map((val) => cache.getRecord(val.keyObject)!);
+  }
+
+  async function loadRecord(descriptor: CacheDescriptor) {
+    const result = await loadRecords([descriptor]);
+    return result[0];
   }
 
   async function run() {
@@ -296,6 +323,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     changeTranslation,
     addActiveNs,
     loadRequiredRecords,
+    loadRecords,
     loadRecord,
     isLoading,
     isFetching,

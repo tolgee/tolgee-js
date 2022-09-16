@@ -2,9 +2,10 @@ import { useCallback } from 'react';
 import { TFnType, getTranslateParams, DefaultParamType } from '@tolgee/core';
 
 import { useTranslateInternal } from './useTranslateInternal';
+import { ReactOptions } from './types';
 
-export const useTranslate = (ns?: string[]) => {
-  const tInternal = useTranslateInternal(ns);
+export const useTranslate = (ns?: string[], options?: ReactOptions) => {
+  const { t: tInternal, isLoading } = useTranslateInternal(ns, options);
 
   const t: TFnType<DefaultParamType, string> = useCallback(
     (...params: any) => {
@@ -15,5 +16,5 @@ export const useTranslate = (ns?: string[]) => {
     [tInternal]
   );
 
-  return t;
+  return { t, isLoading };
 };

@@ -3,7 +3,7 @@ import { T, useTranslate } from '@tolgee/react';
 import { Navbar } from './components/Navbar';
 
 export const TranslationMethods = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   return (
     <main className="translation-methods">

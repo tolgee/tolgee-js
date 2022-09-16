@@ -37,6 +37,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     changeTranslation: stateService.changeTranslation,
     addActiveNs: stateService.addActiveNs,
     removeActiveNs: stateService.removeActiveNs,
+    loadRecords: stateService.loadRecords,
     loadRecord: stateService.loadRecord,
     isLoaded: stateService.isLoaded,
     isInitialLoading: stateService.isInitialLoading,

@@ -31,7 +31,7 @@ const fetch = fetchMock.mockResponse(async (req) => {
 describe('T component integration', () => {
   let tolgee: TolgeeInstance;
   const TestComponent = () => {
-    tolgee = useTolgeeContext();
+    tolgee = useTolgeeContext().tolgee;
     return (
       <>
         <div data-testid="peter_dogs">
@@ -66,7 +66,7 @@ describe('T component integration', () => {
     tolgee = Tolgee().use(ReactPlugin()).use(IcuPlugin()).init({
       apiUrl: API_URL,
       apiKey: API_KEY,
-      defaultLanguage: 'cs',
+      language: 'cs',
       fallbackLanguage: 'en',
     });
     act(() => {
@@ -77,7 +77,9 @@ describe('T component integration', () => {
       );
     });
     await waitFor(() => {
-      expect(screen.queryByTestId('hello_world')).toContainHTML('Ahoj světe!');
+      expect(screen.queryByTestId('hello_world')?.textContent).toContain(
+        'Ahoj světe!'
+      );
       expect(screen.queryByTestId('hello_world')).toHaveAttribute(
         '_tolgee',
         'true'

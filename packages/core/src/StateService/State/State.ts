@@ -16,7 +16,7 @@ export const State = ({
   let state = initState();
 
   function init(options?: Partial<Options>) {
-    state = initState(options, state.initialOptions);
+    state = initState(options, state);
   }
 
   function isRunning() {
@@ -39,7 +39,11 @@ export const State = ({
   }
 
   function getLanguage() {
-    return state.language;
+    const language = state.language || state.initialOptions.language;
+    if (!language) {
+      throw new Error(`No language set`);
+    }
+    return language;
   }
 
   function setLanguage(language: string) {
@@ -50,7 +54,7 @@ export const State = ({
   }
 
   function getPendingLanguage() {
-    return state.pendingLanguage;
+    return state.pendingLanguage || getLanguage();
   }
 
   function setPendingLanguage(language: string) {
@@ -96,7 +100,7 @@ export const State = ({
   }
 
   function getFallbackLangs(lang?: string) {
-    const language = lang || state.language;
+    const language = lang || getLanguage();
     return unique([
       language,
       ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),

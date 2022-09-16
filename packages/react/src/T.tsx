@@ -1,4 +1,4 @@
-import { TranslateParams } from '@tolgee/core';
+import { FallbackNSTranslation, TranslateParams } from '@tolgee/core';
 import React, { FunctionComponent } from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 
@@ -9,29 +9,27 @@ type TProps = {
   params?: TranslateParams<ParamsTags>;
   children?: string;
   noWrap?: boolean;
-  /**
-   * @deprecated Use noWrap to disable in-context wrapping
-   */
-  strategy?: 'ELEMENT_WRAP' | 'TEXT_WRAP' | 'NO_WRAP';
   keyName?: string;
+  ns?: FallbackNSTranslation;
 };
 
 export const T: FunctionComponent<TProps> = (props: TProps) => {
   const key = props.keyName || props.children;
-  if (!key) {
+  if (key === undefined) {
     // eslint-disable-next-line no-console
     console.error('T component: keyName not defined');
   }
   const defaultValue = props.keyName ? props.children : undefined;
 
-  const t = useTranslateInternal();
+  const { t } = useTranslateInternal();
 
   const translation = addReactKeys(
     t({
-      key,
+      key: key!,
       params: wrapTagHandlers(props.params),
       defaultValue,
       noWrap: props.noWrap,
+      ns: props.ns,
     })
   );
 

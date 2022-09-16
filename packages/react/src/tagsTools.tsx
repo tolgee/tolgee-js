@@ -11,12 +11,12 @@ export const wrapTagHandlers = (params: ParamsTags) => {
 
   Object.entries(params || {}).forEach(([key, value]) => {
     if (typeof value === 'function') {
-      result[key] = (chunk) => {
+      result[key] = (chunk: any) => {
         return value(addReactKeys(chunk));
       };
-    } else if (React.isValidElement(value)) {
+    } else if (React.isValidElement(value as any)) {
       const el = value as React.ReactElement;
-      result[key] = (chunk) => {
+      result[key] = (chunk: any) => {
         return {
           ...el,
           props: {

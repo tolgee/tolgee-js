@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act } from 'react-dom/test-utils';
 
 import mockTranslations from './mockTranslations';
-import fetchMock from 'jest-fetch-mock';
+import fetchMock, { MockResponseInitFunction } from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
 import {
   TolgeeProvider,
@@ -38,9 +38,9 @@ export const createFetchMock = () => {
     if (req.url.includes('/v2/api-keys/current')) {
       return JSON.stringify(testConfig);
     } else if (req.url.includes('/v2/projects/translations/en')) {
-      return englishPromise;
+      return englishPromise as any;
     } else if (req.url.includes('/v2/projects/translations/cs')) {
-      return czechPromise;
+      return czechPromise as any;
     }
     throw new Error('Invalid request');
   });
@@ -49,7 +49,7 @@ export const createFetchMock = () => {
 
 describe('TolgeeProvider integration', () => {
   const TestComponent = () => {
-    const t = useTranslate();
+    const { t } = useTranslate();
     return (
       <>
         <div data-testid="hello_world">{t('hello_world')}</div>
@@ -64,8 +64,8 @@ describe('TolgeeProvider integration', () => {
   };
 
   describe('regular settings', () => {
-    let resolveEnglish;
-    let resolveCzech;
+    let resolveEnglish: any;
+    let resolveCzech: any;
     let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
@@ -115,8 +115,8 @@ describe('TolgeeProvider integration', () => {
   });
 
   describe('with fallback', () => {
-    let resolveEnglish;
-    let resolveCzech;
+    let resolveEnglish: any;
+    let resolveCzech: any;
     let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
@@ -127,7 +127,7 @@ describe('TolgeeProvider integration', () => {
       tolgee = Tolgee().use(DevTools()).init({
         apiUrl: API_URL,
         apiKey: API_KEY,
-        defaultLanguage: 'cs',
+        language: 'cs',
         fallbackLanguage: 'en',
       });
       act(() => {

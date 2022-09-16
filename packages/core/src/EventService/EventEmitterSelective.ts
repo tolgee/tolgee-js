@@ -1,5 +1,6 @@
 import { getFallback } from '../StateService/State/helpers';
 import {
+  FallbackNSTranslation,
   KeyDescriptor,
   KeyDescriptorInternal,
   ListenerHandler,
@@ -56,7 +57,19 @@ export const EventEmitterSelective = <T>() => {
       unsubscribe: () => {
         partialListeners.delete(handlerWrapper);
       },
-      subscribeToKey: (descriptor: KeyDescriptor) => {
+      subscribeNs: (ns: FallbackNSTranslation) => {
+        getFallback(ns).forEach((val) =>
+          incrementInMap(handlerWrapper.namespaces, val)
+        );
+        return result;
+      },
+      unsubscribeNs: (ns: FallbackNSTranslation) => {
+        getFallback(ns).forEach((val) =>
+          decrementInMap(handlerWrapper.namespaces, val)
+        );
+        return result;
+      },
+      subscribeKey: (descriptor: KeyDescriptor) => {
         const { key, ns } = descriptor;
         incrementInMap(handlerWrapper.keys, key);
         getFallback(ns).forEach((val) =>
@@ -92,7 +105,8 @@ export const EventEmitterSelective = <T>() => {
         handler.namespaces.has(undefined) ||
         ns?.findIndex((ns) => handler.namespaces.has(ns)) !== -1;
       const keyMentioned = key !== undefined;
-      const keyMatches = key && handler.keys.has(key);
+      const keyMatches =
+        key === undefined || handler.keys.has(key) || handler.keys.size === 0;
       if ((!nsMentioned || nsMatches) && (!keyMentioned || keyMatches)) {
         handler.fn({ value: undefined as any });
       }

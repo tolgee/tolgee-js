@@ -29,7 +29,7 @@ const fetch = fetchMock.mockResponse(async (req) => {
 describe('useTranslation hook integration', () => {
   let tolgee: TolgeeInstance;
   const TestComponent = () => {
-    const t = useTranslate();
+    const { t } = useTranslate(undefined);
 
     expect(typeof t('peter_dogs', { dogsCount: '5' })).toEqual('string');
     expect(typeof t('non_existant', '<i>non_formatted</i>')).toEqual('string');
@@ -58,12 +58,15 @@ describe('useTranslation hook integration', () => {
 
   beforeEach(async () => {
     fetch.enableMocks();
-    tolgee = Tolgee().use(ReactPlugin()).use(IcuPlugin()).init({
-      apiUrl: API_URL,
-      apiKey: API_KEY,
-      defaultLanguage: 'cs',
-      fallbackLanguage: 'en',
-    });
+    tolgee = Tolgee()
+      .use(ReactPlugin({ useSuspense: false }))
+      .use(IcuPlugin())
+      .init({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        language: 'cs',
+        fallbackLanguage: 'en',
+      });
     tolgee.run();
     act(() => {
       render(<TestComponent />);
@@ -107,7 +110,7 @@ describe('useTranslation hook integration', () => {
 
   it('works with tags in default value', async () => {
     await waitFor(() => {
-      expect(screen.queryByTestId('non_formatted').textContent).toContain(
+      expect(screen.queryByTestId('non_formatted')?.textContent).toContain(
         '<i>non_formatted</i>'
       );
     });

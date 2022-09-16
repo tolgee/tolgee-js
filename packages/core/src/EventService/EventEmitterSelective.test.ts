@@ -5,8 +5,8 @@ describe('event emitter selective', () => {
     const emitter = EventEmitterSelective<void>();
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
-    listener.subscribeToKey({ key: 'test' });
-    listener.subscribeToKey({ key: 'abcd' });
+    listener.subscribeKey({ key: 'test' });
+    listener.subscribeKey({ key: 'abcd' });
 
     emitter.emit({ key: 'test' });
     emitter.emit({ key: 'youda' });
@@ -21,8 +21,8 @@ describe('event emitter selective', () => {
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
-    listener.subscribeToKey({ key: 'test', ns: 'common' });
-    listener.subscribeToKey({ key: 'abcd', ns: ['test', 'abcd'] });
+    listener.subscribeKey({ key: 'test', ns: 'common' });
+    listener.subscribeKey({ key: 'abcd', ns: ['test', 'abcd'] });
 
     emitter.emit({ key: 'youda', ns: ['common'] });
     emitter.emit({ key: 'test', ns: ['youda'] });
@@ -40,8 +40,8 @@ describe('event emitter selective', () => {
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
-    listener.subscribeToKey({ key: 'test', ns: 'common' });
-    listener.subscribeToKey({ key: 'abcd', ns: ['test', 'abcd'] });
+    listener.subscribeKey({ key: 'test', ns: 'common' });
+    listener.subscribeKey({ key: 'abcd', ns: ['test', 'abcd'] });
 
     emitter.emit({ key: 'youda', ns: ['common'] });
     emitter.emit({ key: 'test', ns: ['youda'] });
@@ -66,7 +66,7 @@ describe('event emitter selective', () => {
     const listener = emitter.listenSome(handler);
     const listenerAll = emitter.listen(hanlderAll);
 
-    listener.subscribeToKey({ key: 'abcd', ns: ['test', 'abcd'] });
+    listener.subscribeKey({ key: 'abcd', ns: ['test', 'abcd'] });
 
     emitter.emit({ key: 'abcd' }, true);
     emitter.emit({ ns: ['opqrst'] }, true);
@@ -85,5 +85,24 @@ describe('event emitter selective', () => {
     listener.unsubscribe();
     listenerAll.unsubscribe();
     emitter.emit();
+  });
+
+  it('subscribes to ns only', async () => {
+    const emitter = EventEmitterSelective<void>();
+    const handler = jest.fn();
+    const listener = emitter.listenSome(handler);
+    listener.subscribeNs(['test']);
+
+    emitter.emit({ key: 'youda' });
+    expect(handler).toBeCalledTimes(1);
+
+    emitter.emit({ ns: ['test'] });
+    expect(handler).toBeCalledTimes(2);
+
+    emitter.emit({ ns: ['youda'] });
+    expect(handler).toBeCalledTimes(2);
+
+    emitter.emit({ key: 'youda', ns: ['youda'] });
+    expect(handler).toBeCalledTimes(2);
   });
 });

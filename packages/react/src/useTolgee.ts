@@ -8,7 +8,7 @@ const DEFAULT_EVENTS: TolgeeEvent[] = ['language', 'pendingLanguage'];
 export const useTolgee = (
   events: TolgeeEvent[] = DEFAULT_EVENTS
 ): TolgeeInstance => {
-  const tolgee = useTolgeeContext();
+  const { tolgee } = useTolgeeContext();
 
   const rerender = useRerender();
 
