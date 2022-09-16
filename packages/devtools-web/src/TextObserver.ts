@@ -14,7 +14,7 @@ const TextObserverCreator =
       inputSuffix: observerOptions.inputSuffix,
       translate,
     });
-    const { wrap, unwrap, stop, forEachElement, highlightByKey, run } =
+    const { wrap, unwrap, stop, forEachElement, highlight, run } =
       GeneralObserver(wrapper, observerOptions, onClick);
 
     const retranslate = () => {
@@ -37,7 +37,7 @@ const TextObserverCreator =
       stop,
       run,
       retranslate,
-      highlightByKey,
+      highlight,
     };
   };
 

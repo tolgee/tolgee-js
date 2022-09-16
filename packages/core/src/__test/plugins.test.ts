@@ -28,7 +28,7 @@ const testObserver: ObserverInterface = () => {
     run,
     stop,
     retranslate,
-    highlightByKey: undefined,
+    highlight: () => ({ unhighlight: () => {} }),
   });
 };
 

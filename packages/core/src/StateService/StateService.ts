@@ -73,7 +73,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       getTranslation: (key) => t({ key, noWrap: true, orEmpty: true }),
       apiKey: state.getInitialOptions().apiKey!,
       apiUrl: state.getInitialOptions().apiUrl!,
-      highlightByKey: undefined,
+      highlightByKey: pluginService.highlight,
     };
   }
 
@@ -277,14 +277,14 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   async function run() {
     if (!state.isRunning()) {
       state.setRunning(true);
-      pluginService.run();
+      pluginService.run(isDev());
       await loadInitial();
     }
   }
 
   function stop() {
     if (state.isRunning()) {
-      pluginService.stop();
+      pluginService.stop(isDev());
       state.setRunning(false);
     }
   }
@@ -313,6 +313,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     setUi: pluginService.setUi,
     setDevBackend: pluginService.setDevBackend,
     addBackend: pluginService.addBackend,
+    highlight: pluginService.highlight,
     run,
     stop,
   });

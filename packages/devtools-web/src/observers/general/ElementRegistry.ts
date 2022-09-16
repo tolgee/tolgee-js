@@ -82,11 +82,14 @@ export const ElementRegistry = (
     });
   }
 
-  function findAllByKey(key: string) {
+  function findAllByKey(key?: string) {
     const result: ElementMeta[] = [];
     elementStore.forEachElement((_, meta) => {
       for (const nodeMeta of meta.nodes.values()) {
-        if (nodeMeta.keys.find((keyWithParams) => keyWithParams.key === key)) {
+        if (
+          key === undefined ||
+          nodeMeta.keys.find((keyWithParams) => keyWithParams.key === key)
+        ) {
           result.push(meta);
           break;
         }

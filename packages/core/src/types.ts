@@ -117,11 +117,9 @@ export type ObserverProps = {
   onClick: TranslationOnClick;
 };
 
-export type HighlightByKeyType =
-  | undefined
-  | ((key: string) => {
-      unhighlight(): void;
-    });
+export type HighlightInterface = (key?: string) => {
+  unhighlight(): void;
+};
 
 export type ObserverInterface = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
@@ -129,7 +127,7 @@ export type ObserverInterface = (props: ObserverProps) => {
   retranslate: () => void;
   stop: () => void;
   run: () => void;
-  highlightByKey: HighlightByKeyType;
+  highlight: HighlightInterface;
 };
 
 export type BackendDevProps = {
@@ -207,6 +205,7 @@ export type TolgeeInstance = Readonly<{
   isLoaded: () => boolean;
   isFetching: () => boolean;
   isRunning: () => boolean;
+  highlight: HighlightInterface;
   init: (options: Partial<Options>) => TolgeeInstance;
   run: () => Promise<void>;
   stop: () => void;
@@ -253,7 +252,7 @@ export type UiProps = {
   getTranslation(key: string): string;
   apiUrl: string;
   apiKey: string;
-  highlightByKey: HighlightByKeyType;
+  highlightByKey: HighlightInterface;
 };
 
 export type UiInstance = {
