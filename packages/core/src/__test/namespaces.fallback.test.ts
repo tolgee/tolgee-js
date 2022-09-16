@@ -3,6 +3,7 @@ import { Tolgee } from '../Tolgee';
 describe('namespaces fallback', () => {
   test('works with multiple and default', () => {
     const tolgee = Tolgee({
+      language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
         'en:first': { '1': 'first' },
@@ -20,6 +21,7 @@ describe('namespaces fallback', () => {
 
   test('works when no fallback specified', () => {
     const tolgee = Tolgee({
+      language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
         'en:second': { '2': 'second' },
@@ -36,6 +38,7 @@ describe('namespaces fallback', () => {
 
   test('works when data present but no fallback', () => {
     const tolgee = Tolgee({
+      language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
         'en:first': { '1': 'first' },
@@ -53,6 +56,7 @@ describe('namespaces fallback', () => {
 
   test('works with override', () => {
     const tolgee = Tolgee({
+      language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
         'en:first': { '1': 'first' },

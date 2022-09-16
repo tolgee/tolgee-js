@@ -6,7 +6,7 @@ import {
 
 export type Options = {
   /**
-   * Initial language (default: 'en')
+   * Initial language
    */
   language?: string;
   apiUrl?: string;
@@ -15,7 +15,7 @@ export type Options = {
   /**
    * Used when auto detection is not available or is turned off
    */
-  defaultLanguage: string;
+  defaultLanguage?: string;
   /**
    * Languages which can be used for language detection
    * and also limits which values can be stored
@@ -50,8 +50,16 @@ export type Options = {
   };
 };
 
+export type State = {
+  initialOptions: Options;
+  activeNamespaces: Map<string, number>;
+  language: string | undefined;
+  pendingLanguage: string | undefined;
+  isInitialLoading: boolean;
+  isRunning: boolean;
+};
+
 const defaultValues: Options = {
-  defaultLanguage: 'en',
   enableLanguageStore: true,
   defaultNs: '',
   filesUrlPrefix: 'i18n/',
@@ -59,22 +67,20 @@ const defaultValues: Options = {
 
 export const initState = (
   options?: Partial<Options>,
-  prevousOptions?: Partial<Options>
-) => {
+  previousState?: State
+): State => {
   const initialOptions = {
     ...defaultValues,
-    ...prevousOptions,
+    ...previousState?.initialOptions,
     ...options,
   };
-  const language = initialOptions.language || initialOptions.defaultLanguage;
   return {
     initialOptions,
-    activeNamespaces: new Map<string, number>(),
-    language,
-    pendingLanguage: language,
+    activeNamespaces:
+      previousState?.activeNamespaces || new Map<string, number>(),
+    language: previousState?.language,
+    pendingLanguage: previousState?.language,
     isInitialLoading: false,
     isRunning: false,
   };
 };
-
-export type State = ReturnType<typeof initState>;

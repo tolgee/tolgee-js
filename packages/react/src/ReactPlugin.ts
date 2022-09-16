@@ -1,14 +1,18 @@
-import { TolgeePlugin, GlobalInstancePlugin } from '@tolgee/core';
+import { TolgeePlugin } from '@tolgee/core';
 import {
   ObserverOptions,
   DevTools,
   BrowserExtensionPlugin,
 } from '@tolgee/devtools-web';
+import { GlobalContextPlugin } from './GlobalContextPlugin';
+import { ReactOptions } from './types';
+
+type Props = Partial<ObserverOptions> & Partial<ReactOptions>;
 
 export const ReactPlugin =
-  (observerOptions?: Partial<ObserverOptions>): TolgeePlugin =>
+  (props?: Props): TolgeePlugin =>
   (tolgee) =>
     tolgee
       .use(BrowserExtensionPlugin())
-      .use(DevTools({ observer: observerOptions }))
-      .use(GlobalInstancePlugin());
+      .use(DevTools({ observer: props }))
+      .use(GlobalContextPlugin(props));

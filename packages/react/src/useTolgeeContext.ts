@@ -1,14 +1,13 @@
 import { useContext } from 'react';
-import { getGlobalInstance } from '@tolgee/core';
+import { getGlobalContext } from './GlobalContextPlugin';
 import { TolgeeProviderContext } from './TolgeeProvider';
 
 export const useTolgeeContext = () => {
-  const context = useContext(TolgeeProviderContext);
-  const tolgee = context?.tolgee || getGlobalInstance();
-  if (!tolgee) {
+  const context = useContext(TolgeeProviderContext) || getGlobalContext();
+  if (!context) {
     throw new Error(
       "Couldn't find tolgee instance, did you forgot to use `ReactPlugin`?"
     );
   }
-  return tolgee;
+  return context;
 };

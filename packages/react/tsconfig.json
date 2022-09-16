@@ -12,6 +12,7 @@
     "emitDecoratorMetadata": true,
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
+    "strict": true,
     "jsx": "react",
     "downlevelIteration": true
   },

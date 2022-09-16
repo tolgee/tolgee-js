@@ -8,9 +8,19 @@ import {
 } from '@tolgee/core';
 
 import { useTolgeeContext } from './useTolgeeContext';
+import { ReactOptions } from './types';
 
-export const useTranslateInternal = (namespaces?: FallbackNSTranslation) => {
-  const tolgee = useTolgeeContext();
+export const useTranslateInternal = (
+  namespaces?: FallbackNSTranslation,
+  options?: ReactOptions
+) => {
+  const { tolgee, options: defaultOptions } = useTolgeeContext();
+  const namespacesJoined = getFallback(namespaces).join(':');
+
+  const currentOptions = {
+    ...defaultOptions,
+    ...options,
+  };
 
   // dummy state to enable re-rendering
   const [instance, setInstance] = useState(0);
@@ -19,18 +29,13 @@ export const useTranslateInternal = (namespaces?: FallbackNSTranslation) => {
     setInstance((v) => v + 1);
   }, [setInstance]);
 
-  const subscriptionRef = useRef(null as ListenerSelective);
+  const subscriptionRef = useRef<ListenerSelective>();
 
   const subscriptionQueue = useRef([] as KeyDescriptor[]);
 
-  useEffect(() => {
-    tolgee.addActiveNs(namespaces);
-    return () => tolgee.removeActiveNs(namespaces);
-  }, [getFallback(namespaces).join(':')]);
-
   const subscribeToKey = (key: KeyDescriptor) => {
     if (subscriptionRef.current) {
-      subscriptionRef.current.subscribeToKey(key);
+      subscriptionRef.current.subscribeKey(key);
     } else {
       subscriptionQueue.current.push(key);
     }
@@ -38,23 +43,42 @@ export const useTranslateInternal = (namespaces?: FallbackNSTranslation) => {
 
   useEffect(() => {
     subscriptionRef.current = tolgee.onKeyUpdate(forceRerender);
-    subscriptionQueue.current.forEach((key) =>
-      subscriptionRef.current.subscribeToKey(key)
-    );
+    subscriptionQueue.current.forEach((key) => {
+      subscriptionRef.current!.subscribeKey(key);
+    });
     subscriptionQueue.current = [];
     return () => {
-      subscriptionRef.current.unsubscribe();
+      subscriptionRef.current!.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    subscriptionRef.current!.subscribeNs(namespaces);
+    return () => {
+      subscriptionRef.current!.unsubscribeNs(namespaces);
+    };
+  }, [namespacesJoined]);
+
+  useEffect(() => {
+    tolgee.addActiveNs(namespaces);
+    return () => tolgee.removeActiveNs(namespaces);
+  }, [namespacesJoined]);
 
   const t = useCallback(
     (props: TranslateProps<any>) => {
       const { key, ns } = props;
-      subscribeToKey({ key, ns });
-      return tolgee.t(props) as any;
+      const fallbackNs = ns || namespaces;
+      subscribeToKey({ key, ns: fallbackNs });
+      return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },
     [tolgee, instance]
   );
 
-  return t;
+  const isLoaded = tolgee.isLoaded(namespaces);
+
+  if (currentOptions?.useSuspense && !isLoaded) {
+    throw tolgee.addActiveNs(namespaces, true);
+  }
+
+  return { t, isLoading: !isLoaded };
 };

@@ -21,7 +21,7 @@ const getInitialItems = () => {
 };
 
 export const Todos = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<string[]>(getInitialItems());
@@ -53,7 +53,7 @@ export const Todos = () => {
         </Navbar>
         <header>
           <h1 className="header__title">
-            <T keyName="on-the-road-title">On the road</T>
+            <T keyName="on-the-road-title"></T>
           </h1>
           <h2 className="header__subtitle">
             <T keyName="on-the-road-subtitle">what to pack for the trip</T>

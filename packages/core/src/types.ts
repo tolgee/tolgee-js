@@ -43,7 +43,7 @@ export type TreeTranslationsData = {
 
 export type CacheAsyncRequests = Map<
   string,
-  Promise<TreeTranslationsData | undefined> | undefined
+  Promise<TreeTranslationsData> | undefined
 >;
 
 export type CacheDescriptor = {
@@ -195,15 +195,14 @@ export type TolgeeInstance = Readonly<{
     key: string,
     value: string
   ) => void;
-  addActiveNs: (ns: FallbackNSTranslation) => Promise<void>;
+  addActiveNs: (ns: FallbackNSTranslation, forget?: boolean) => Promise<void>;
   removeActiveNs: (ns: FallbackNSTranslation) => void;
-  loadRecord: (
-    descriptor: CacheDescriptor
-  ) => Promise<TreeTranslationsData | TranslationsFlat | undefined>;
+  loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
+  loadRecord: (descriptors: CacheDescriptor) => Promise<TranslationsFlat>;
   isInitialLoading: () => boolean;
-  isLoading: () => boolean;
-  isLoaded: () => boolean;
-  isFetching: () => boolean;
+  isLoading: (ns?: FallbackNSTranslation) => boolean;
+  isLoaded: (ns?: FallbackNSTranslation) => boolean;
+  isFetching: (ns?: FallbackNSTranslation) => boolean;
   isRunning: () => boolean;
   highlight: HighlightInterface;
   init: (options: Partial<Options>) => TolgeeInstance;
@@ -297,7 +296,9 @@ export type KeyDescriptor = {
 
 export type ListenerSelective = {
   unsubscribe: () => void;
-  subscribeToKey: (descriptor: KeyDescriptor) => ListenerSelective;
+  subscribeNs: (ns: FallbackNSTranslation) => ListenerSelective;
+  unsubscribeNs: (ns: FallbackNSTranslation) => ListenerSelective;
+  subscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
   unsubscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
 };
 
