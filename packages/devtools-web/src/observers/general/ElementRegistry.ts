@@ -1,12 +1,15 @@
 import {
+  FallbackNSTranslation,
+  getFallback,
   RESTRICTED_ASCENDANT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
 } from '@tolgee/core';
-import type {
+import {
   ElementMeta,
   KeyWithDefault,
   NodeMeta,
   TranslationOnClick,
+  compareDescriptors,
 } from '@tolgee/core';
 import { TolgeeElement } from '../../types';
 
@@ -82,14 +85,17 @@ export const ElementRegistry = (
     });
   }
 
-  function findAllByKey(key?: string) {
+  function findAll(key?: string, ns?: FallbackNSTranslation) {
     const result: ElementMeta[] = [];
     elementStore.forEachElement((_, meta) => {
       for (const nodeMeta of meta.nodes.values()) {
-        if (
-          key === undefined ||
-          nodeMeta.keys.find((keyWithParams) => keyWithParams.key === key)
-        ) {
+        const fits = nodeMeta.keys.find((val) =>
+          compareDescriptors(
+            { key, ns: getFallback(ns) },
+            { key: val.key, ns: getFallback(val.ns) }
+          )
+        );
+        if (fits) {
           result.push(meta);
           break;
         }
@@ -144,7 +150,7 @@ export const ElementRegistry = (
   return Object.freeze({
     register,
     forEachElement: elementStore.forEachElement,
-    findAllByKey: findAllByKey,
+    findAll,
     refreshAll,
     run,
     stop,

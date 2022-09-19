@@ -1,7 +1,10 @@
 import {
-  CacheKeyObject,
+  CacheDescriptorInternal,
+  CacheDescriptorWithKey,
+  EventEmitterType,
   Options,
   TranslationsFlat,
+  TranslationValue,
   TreeTranslationsData,
 } from '../../types';
 
@@ -14,7 +17,11 @@ type CacheRecord = {
 
 type StateCache = Map<string, CacheRecord>;
 
-export const Cache = () => {
+type Props = {
+  onCacheChange: EventEmitterType<CacheDescriptorWithKey>;
+};
+
+export const Cache = ({ onCacheChange }: Props) => {
   const cache: StateCache = new Map();
   const init = (data: Options['staticData']) => {
     if (data) {
@@ -27,7 +34,7 @@ export const Cache = () => {
   };
 
   const addRecord = (
-    descriptor: CacheKeyObject,
+    descriptor: CacheDescriptorInternal,
     data: TreeTranslationsData,
     isDev: boolean
   ) => {
@@ -35,9 +42,10 @@ export const Cache = () => {
       data: flattenTranslations(data),
       isDev,
     });
+    onCacheChange.emit(descriptor);
   };
 
-  const exists = (descriptor: CacheKeyObject, isDev?: boolean) => {
+  const exists = (descriptor: CacheDescriptorInternal, isDev?: boolean) => {
     const record = cache.get(encodeCacheKey(descriptor));
     if (isDev && record) {
       return record.isDev;
@@ -45,25 +53,27 @@ export const Cache = () => {
     return Boolean(record);
   };
 
-  const getRecord = (descriptor: CacheKeyObject) => {
+  const getRecord = (descriptor: CacheDescriptorInternal) => {
     return cache.get(encodeCacheKey(descriptor))?.data;
   };
 
-  const getTranslation = (descriptor: CacheKeyObject, key: string) => {
+  const getTranslation = (descriptor: CacheDescriptorInternal, key: string) => {
     return cache.get(encodeCacheKey(descriptor))?.data.get(key);
   };
 
   const getTranslationNs = (
     namespaces: string[],
-    language: string,
+    languages: string[],
     key: string
   ) => {
     for (const namespace of namespaces) {
-      const value = cache
-        .get(encodeCacheKey({ language, namespace }))
-        ?.data.get(key);
-      if (value !== undefined && value !== null) {
-        return namespace;
+      for (const language of languages) {
+        const value = cache
+          .get(encodeCacheKey({ language, namespace }))
+          ?.data.get(key);
+        if (value !== undefined && value !== null) {
+          return namespace;
+        }
       }
     }
     return Array.from(new Set(namespaces));
@@ -88,12 +98,13 @@ export const Cache = () => {
   };
 
   const changeTranslation = (
-    descriptor: CacheKeyObject,
+    descriptor: CacheDescriptorInternal,
     key: string,
-    value: string
+    value: TranslationValue
   ) => {
     const record = cache.get(encodeCacheKey(descriptor))?.data;
     record?.set(key, value);
+    onCacheChange.emit({ ...descriptor, key });
   };
 
   const clear = () => {

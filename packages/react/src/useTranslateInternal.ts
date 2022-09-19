@@ -4,7 +4,7 @@ import {
   KeyDescriptor,
   TranslateProps,
   FallbackNSTranslation,
-  getFallback,
+  getFallbackArray,
 } from '@tolgee/core';
 
 import { useTolgeeContext } from './useTolgeeContext';
@@ -15,7 +15,7 @@ export const useTranslateInternal = (
   options?: ReactOptions
 ) => {
   const { tolgee, options: defaultOptions } = useTolgeeContext();
-  const namespacesJoined = getFallback(namespaces).join(':');
+  const namespacesJoined = getFallbackArray(namespaces).join(':');
 
   const currentOptions = {
     ...defaultOptions,

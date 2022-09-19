@@ -9,14 +9,18 @@ export function isObject(item: any) {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;
 }
 
-export function getFallback(value: FallbackGeneral): string[] {
+export function getFallback(value: FallbackGeneral): string[] | undefined {
   if (typeof value === 'string') {
     return [value];
   }
   if (Array.isArray(value)) {
     return value;
   }
-  return [];
+  return undefined;
+}
+
+export function getFallbackArray(value: FallbackGeneral): string[] {
+  return getFallback(value) || [];
 }
 
 export function getFallbackFromStruct(
@@ -24,11 +28,11 @@ export function getFallbackFromStruct(
   fallbackLanguage: FallbackLanguageOption
 ) {
   if (isObject(fallbackLanguage)) {
-    return getFallback(
+    return getFallbackArray(
       (fallbackLanguage as FallbackLanguageObject)?.[language]
     );
   } else {
-    return getFallback(fallbackLanguage as FallbackLanguage);
+    return getFallbackArray(fallbackLanguage as FallbackLanguage);
   }
 }
 
