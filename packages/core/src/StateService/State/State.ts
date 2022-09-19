@@ -1,5 +1,5 @@
 import { EventEmitterType, FallbackNSTranslation } from '../../types';
-import { getFallback, getFallbackFromStruct, unique } from './helpers';
+import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
 import { initState, Options } from './initState';
 
 type Props = {
@@ -69,7 +69,7 @@ export const State = ({
   }
 
   function addActiveNs(ns: FallbackNSTranslation) {
-    const namespaces = getFallback(ns);
+    const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);
       if (value !== undefined) {
@@ -81,7 +81,7 @@ export const State = ({
   }
 
   function removeActiveNs(ns: FallbackNSTranslation) {
-    const namespaces = getFallback(ns);
+    const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);
       if (value !== undefined && value > 1) {
@@ -111,7 +111,7 @@ export const State = ({
     const defaultNs = state.initialOptions.defaultNs;
     const fallbackNs = state.initialOptions.fallbackNs;
     const fallbackNamespaces = typeof defaultNs === 'string' ? [defaultNs] : [];
-    return unique([...fallbackNamespaces, ...getFallback(fallbackNs)]);
+    return unique([...fallbackNamespaces, ...getFallbackArray(fallbackNs)]);
   }
 
   return Object.freeze({

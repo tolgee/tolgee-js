@@ -16,14 +16,15 @@ import {
   UiConstructor,
   UiKeyOption,
 } from '../../types';
-import { getFallback } from '../State/helpers';
+import { getFallbackArray } from '../State/helpers';
 
 export const PluginService = (
   getLocale: () => string,
   translate: (params: TranslatePropsInternal) => string,
   getBackendProps: () => BackendDevProps,
   getUiProps: () => UiProps,
-  getTranslationNs: (props: TranslatePropsInternal) => string[] | string
+  getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
+  getTranslation: (props: TranslatePropsInternal) => string | undefined
 ) => {
   const plugins = {
     ui: undefined as UiConstructor | undefined,
@@ -43,11 +44,10 @@ export const PluginService = (
       ({ key, ns, defaultValue }) => ({
         key,
         defaultValue,
-        ns: getFallback(getTranslationNs({ key, ns, defaultValue })),
-        translation: translate({
+        ns: getFallbackArray(getTranslationNs({ key, ns, defaultValue })),
+        translation: getTranslation({
           key,
-          noWrap: true,
-          orEmpty: true,
+          ns,
         }),
       })
     );
@@ -64,8 +64,8 @@ export const PluginService = (
     instances.observer?.stop();
   };
 
-  const highlight: HighlightInterface = (key) => {
-    return instances.observer?.highlight?.(key) || { unhighlight() {} };
+  const highlight: HighlightInterface = (key, ns) => {
+    return instances.observer?.highlight?.(key, ns) || { unhighlight() {} };
   };
 
   const setObserver = (observer: ObserverInterface | undefined) => {

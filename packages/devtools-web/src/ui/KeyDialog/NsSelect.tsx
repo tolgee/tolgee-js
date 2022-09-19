@@ -1,5 +1,5 @@
 import React from 'react';
-import { FallbackNSTranslation, getFallback } from '@tolgee/core';
+import { FallbackNSTranslation } from '@tolgee/core';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -8,6 +8,7 @@ import Select from '@mui/material/Select';
 import ListItemText from '@mui/material/ListItemText';
 import { DEVTOOLS_Z_INDEX } from '../constants';
 import { ScFieldTitle } from 'ui/common/FieldTitle';
+import { getFallbackArray } from '@tolgee/core';
 
 const getNsName = (ns: string) => {
   if (!ns) {
@@ -23,7 +24,7 @@ type Props = {
 };
 
 export const NsSelect: React.FC<Props> = ({ onChange, options, value }) => {
-  const namespaces = getFallback(options);
+  const namespaces = getFallbackArray(options);
   const namespaceOne = namespaces.length === 1;
   const namespaceEmpty = namespaceOne && namespaces[0] === '';
 

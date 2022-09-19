@@ -24,7 +24,6 @@ export type TranslateOptions<T> = {
   ns?: FallbackNSTranslation;
   noWrap?: boolean;
   orEmpty?: boolean;
-  fallbackLanguages?: FallbackLanguage;
   params?: TranslateParams<T>;
 };
 
@@ -55,9 +54,13 @@ export type CacheDescriptor = {
   namespace?: string;
 };
 
-export type CacheKeyObject = {
+export type CacheDescriptorInternal = {
   language: string;
   namespace: string;
+};
+
+export type CacheDescriptorWithKey = CacheDescriptorInternal & {
+  key?: string;
 };
 
 export type KeyAndParams = {
@@ -121,7 +124,10 @@ export type ObserverProps = {
   onClick: TranslationOnClick;
 };
 
-export type HighlightInterface = (key?: string) => {
+export type HighlightInterface = (
+  key?: string,
+  ns?: FallbackNSTranslation
+) => {
   unhighlight(): void;
 };
 
@@ -180,7 +186,6 @@ export type TolgeeOn = {
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
   (event: 'running', handler: ListenerHandler<boolean>): Listener;
-  (event: 'cache', handler: ListenerHandler<CacheKeyObject>): Listener;
   (event: 'keyUpdate', handler: ListenerHandler<void>): Listener;
   (event: TolgeeEvent, handler: ListenerHandler<any>): Listener;
 };
@@ -194,11 +199,7 @@ export type TolgeeInstance = Readonly<{
   getLanguage: () => string;
   getPendingLanguage: () => string;
   changeLanguage: (language: string) => Promise<void>;
-  changeTranslation: (
-    descriptor: CacheDescriptor,
-    key: string,
-    value: string
-  ) => void;
+  changeTranslation: ChangeTranslationInterface;
   addActiveNs: (ns: FallbackNSTranslation, forget?: boolean) => Promise<void>;
   removeActiveNs: (ns: FallbackNSTranslation) => void;
   loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
@@ -251,10 +252,17 @@ export type ElementMeta = {
   preventClean?: boolean;
 };
 
+export type ChangeTranslationInterface = (
+  descriptor: CacheDescriptor,
+  key: string,
+  value: string
+) => { revert: () => void };
+
 export type UiProps = {
   apiUrl: string;
   apiKey: string;
-  highlightByKey: HighlightInterface;
+  highlight: HighlightInterface;
+  changeTranslation: ChangeTranslationInterface;
 };
 
 export interface UiInterface {

@@ -8,7 +8,6 @@ const testParams: TranslateProps = {
   ns: [],
   orEmpty: true,
   params: { yo: 'yo', ns: '(this is param not namespace)' },
-  fallbackLanguages: ['es'],
 };
 
 describe('getTranslateParams', () => {
@@ -32,7 +31,6 @@ describe('getTranslateParams', () => {
       noWrap: true,
       ns: [],
       orEmpty: true,
-      fallbackLanguages: ['es'],
       yo: 'yo',
       params: {
         ns: '(this is param not namespace)',

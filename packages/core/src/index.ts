@@ -8,4 +8,5 @@ export {
 } from './constants';
 export * from './types';
 export { getTranslateParams } from './TranslateParams';
-export { getFallback } from './StateService/State/helpers';
+export { getFallback, getFallbackArray } from './StateService/State/helpers';
+export { compareDescriptors } from './EventService/helpers';

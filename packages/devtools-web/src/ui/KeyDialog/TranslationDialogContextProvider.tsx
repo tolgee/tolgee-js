@@ -4,7 +4,7 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
-import { FallbackNSTranslation, getFallback, UiProps } from '@tolgee/core';
+import { FallbackNSTranslation, getFallbackArray, UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from 'ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
@@ -22,10 +22,6 @@ export interface ScreenshotInterface {
 type FormTranslations = {
   [key: string]: string;
 };
-
-// interface TranslationInterface {
-//   text?: string;
-// }
 
 type DialogProps = {
   keyName: string;
@@ -56,6 +52,7 @@ type Actions =
 
 export const [DialogProvider, useDialogDispatch, useDialogContext] =
   createProvider((props: DialogProps) => {
+    const [namespaces, setNamespaces] = useState<undefined | string[]>();
     const [success, setSuccess] = useState<boolean>(false);
     const [takingScreenshot, setTakingScreenshot] = useState(false);
     const [translationsForm, setTranslationsForm] = useState<FormTranslations>(
@@ -67,7 +64,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
     const [selectedNs, setSelectedNs] = useState<string>(
-      getFallback(props.ns)[0]
+      getFallbackArray(props.ns)[0]
     );
 
     const scopesLoadable = useApiQuery({
@@ -98,6 +95,20 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     }, [languagesLoadable.data]);
 
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+
+    const changeInCache = (values: [language: string, value: string][]) => {
+      const changers = values.map(([language, value]) =>
+        props.uiProps.changeTranslation(
+          {
+            language,
+            namespace: selectedNs,
+          },
+          props.keyName,
+          value
+        )
+      );
+      return { revert: () => changers.forEach((ch) => ch.revert()) };
+    };
 
     const translationsLoadable = useApiQuery({
       url: '/v2/projects/translations',
@@ -186,7 +197,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
             ...translationsForm,
             [action.payload.key]: action.payload.value,
           });
-          setSelectedNs(getFallback(props.ns)[0]);
+          setSelectedNs(getFallbackArray(props.ns)[0]);
           break;
 
         case 'HANDLE_UPLOAD_IMAGES':
@@ -197,7 +208,11 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
         case 'HANDLE_TAKE_SCREENSHOT': {
           setTakingScreenshot(true);
-          const { unhighlight } = props.uiProps.highlightByKey!(props.keyName);
+          const { unhighlight } = props.uiProps.highlight(
+            props.keyName,
+            selectedNs
+          );
+          const { revert } = changeInCache(Object.entries(translationsForm));
           await sleep(100);
           let screenshot: string;
           try {
@@ -207,6 +222,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
             console.error(e);
             break;
           } finally {
+            revert();
             unhighlight();
             setTakingScreenshot(false);
           }
@@ -265,6 +281,9 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 path: { id: translations.keyId },
               });
             }
+            changeInCache(Object.entries(newTranslations));
+            setNamespaces([selectedNs]);
+            translationsLoadable.refetch();
             setSuccess(true);
             if (useBrowserWindow) {
               await sleep(2000);
@@ -418,7 +437,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const contextValue = {
       input: props.keyName,
       open: props.open,
-      ns: props.ns,
+      ns: namespaces || props.ns,
       selectedNs,
       loading,
       saving,

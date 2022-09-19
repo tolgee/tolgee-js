@@ -9,7 +9,6 @@ function parseCombinedOptions({
   ns,
   noWrap,
   orEmpty,
-  fallbackLanguages,
   params,
   ...rest
 }: CombinedOptions<any>): Partial<TranslateProps> {
@@ -17,7 +16,6 @@ function parseCombinedOptions({
     ns: ns!,
     noWrap: noWrap!,
     orEmpty: orEmpty!,
-    fallbackLanguages: fallbackLanguages!,
     params: {
       ...rest,
       ...params,

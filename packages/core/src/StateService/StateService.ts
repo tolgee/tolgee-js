@@ -3,7 +3,7 @@ import {
   BackendDevProps,
   CacheAsyncRequests,
   CacheDescriptor,
-  CacheKeyObject,
+  CacheDescriptorInternal,
   FallbackNSTranslation,
   Options,
   TranslatePropsInternal,
@@ -12,7 +12,7 @@ import {
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
-import { getFallback } from './State/helpers';
+import { getFallbackArray } from './State/helpers';
 import { PluginService } from './PluginService/PluginService';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
@@ -28,14 +28,17 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     onPendingLanguageChange: eventService.onPendingLanguageChange,
     onRunningChange: eventService.onRunningChange,
   });
-  const cache = Cache();
+  const cache = Cache({
+    onCacheChange: eventService.onCacheChange,
+  });
   const asyncRequests: CacheAsyncRequests = new Map();
   const pluginService = PluginService(
     state.getLanguage,
     t,
     getBackendProps,
     getUiProps,
-    getTranslationNs
+    getTranslationNs,
+    getTranslation
   );
 
   state.init(options);
@@ -69,11 +72,27 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     };
   }
 
+  function changeTranslation(
+    descriptor: CacheDescriptor,
+    key: string,
+    value: string
+  ) {
+    const keyObject = withDefaultNs(descriptor);
+    const previousValue = cache.getTranslation(keyObject, key);
+    cache.changeTranslation(keyObject, key, value);
+    return {
+      revert: () => {
+        cache.changeTranslation(keyObject, key, previousValue);
+      },
+    };
+  }
+
   function getUiProps(): UiProps {
     return {
       apiKey: state.getInitialOptions().apiKey!,
       apiUrl: state.getInitialOptions().apiUrl!,
-      highlightByKey: pluginService.highlight,
+      highlight: pluginService.highlight,
+      changeTranslation,
     };
   }
 
@@ -87,7 +106,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     if (ns === undefined) {
       return asyncRequests.size > 0;
     }
-    const namespaces = getFallback(ns);
+    const namespaces = getFallbackArray(ns);
     return Boolean(
       Array.from(asyncRequests.keys()).find((key) =>
         namespaces.includes(decodeCacheKey(key).namespace)
@@ -96,7 +115,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function isLoading(ns?: FallbackNSTranslation) {
-    const namespaces = getFallback(ns);
+    const namespaces = getFallbackArray(ns);
 
     return Boolean(
       Array.from(asyncRequests.keys()).find((key) => {
@@ -118,7 +137,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     );
   }
 
-  function withDefaultNs(descriptor: CacheDescriptor): CacheKeyObject {
+  function withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
     return {
       namespace:
         descriptor.namespace === undefined
@@ -140,7 +159,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   function getRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const languages = state.getFallbackLangs(lang);
     const namespaces =
-      ns !== undefined ? getFallback(ns) : state.getRequiredNamespaces();
+      ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
@@ -191,35 +210,29 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     }
   }
 
-  function getTranslationNs({ key, ns }: TranslatePropsInternal) {
-    const namespaces = ns ? getFallback(ns) : state.getFallbackNamespaces();
-    const language = state.getLanguage();
-    return cache.getTranslationNs(namespaces, language, key);
+  function getTranslationNs({
+    key,
+    ns,
+  }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
+    const namespaces = ns
+      ? getFallbackArray(ns)
+      : state.getFallbackNamespaces();
+    const languages = state.getFallbackLangs();
+    return cache.getTranslationNs(namespaces, languages, key);
   }
 
   function getTranslation({
     key,
     ns,
-    fallbackLanguages,
-  }: TranslatePropsInternal) {
-    const namespaces = ns ? getFallback(ns) : state.getFallbackNamespaces();
-    const languages = fallbackLanguages
-      ? [state.getLanguage(), ...getFallback(fallbackLanguages)]
-      : state.getFallbackLangs();
+  }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
+    const namespaces = ns
+      ? getFallbackArray(ns)
+      : state.getFallbackNamespaces();
+    const languages = state.getFallbackLangs();
     return cache.getTranslationFallback(namespaces, languages, key);
   }
 
-  function changeTranslation(
-    descriptor: CacheDescriptor,
-    key: string,
-    value: string
-  ) {
-    const keyObject = withDefaultNs(descriptor);
-    cache.changeTranslation(keyObject, key, value);
-    eventService.onKeyChange.emit({ key, ns: [keyObject.namespace] });
-  }
-
-  function fetchNormal(keyObject: CacheKeyObject) {
+  function fetchNormal(keyObject: CacheDescriptorInternal) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (!dataPromise) {
       dataPromise = pluginService.getBackendRecord(keyObject);
@@ -240,7 +253,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return dataPromise;
   }
 
-  function fetchData(keyObject: CacheKeyObject) {
+  function fetchData(keyObject: CacheDescriptorInternal) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (isDev()) {
       dataPromise = pluginService.getBackendDevRecord(keyObject)?.catch(() => {
@@ -292,7 +305,6 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
         const data = results[i];
         if (data) {
           cache.addRecord(value.keyObject, data, isDev());
-          eventService.onCacheChange.emit(value.keyObject);
         }
       }
     });

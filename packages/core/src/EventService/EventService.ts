@@ -1,7 +1,7 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
 import {
-  CacheKeyObject,
+  CacheDescriptorWithKey,
   KeyDescriptorInternal,
   ListenerHandler,
   TolgeeOn,
@@ -15,15 +15,14 @@ export const EventService = () => {
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
   const onKeyUpdate = EventEmitterSelective<void>();
-  const onCacheChange = EventEmitter<CacheKeyObject>();
+  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
 
   onInitialLoaded.listen(() => onKeyUpdate.emit());
   onLanguageChange.listen(() => onKeyUpdate.emit());
   onCacheChange.listen(({ value }) =>
-    onKeyUpdate.emit({ ns: [value.namespace] }, true)
+    onKeyUpdate.emit({ ns: [value.namespace], key: value.key }, true)
   );
-  onKeyChange.listen(({ value }) => onKeyUpdate.emit(value, true));
 
   const on: TolgeeOn = (event, handler): any => {
     switch (event) {
@@ -33,10 +32,6 @@ export const EventService = () => {
         );
       case 'language':
         return onLanguageChange.listen(handler as ListenerHandler<string>);
-      case 'key':
-        return onKeyChange.listen(
-          handler as ListenerHandler<KeyDescriptorInternal>
-        );
       case 'loading':
         return onLoadingChange.listen(handler as ListenerHandler<boolean>);
       case 'fetching':
@@ -46,7 +41,9 @@ export const EventService = () => {
       case 'running':
         return onRunningChange.listen(handler as ListenerHandler<boolean>);
       case 'cache':
-        return onCacheChange.listen(handler as ListenerHandler<CacheKeyObject>);
+        return onCacheChange.listen(
+          handler as ListenerHandler<CacheDescriptorWithKey>
+        );
       case 'keyUpdate':
         return onKeyUpdate.listen(handler as ListenerHandler<void>);
     }

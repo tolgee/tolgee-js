@@ -1,4 +1,4 @@
-import { CacheKeyObject, TreeTranslationsData } from '../../types';
+import { CacheDescriptorInternal, TreeTranslationsData } from '../../types';
 
 export const flattenTranslations = (
   data: TreeTranslationsData
@@ -22,12 +22,15 @@ export const flattenTranslations = (
   return result;
 };
 
-export const decodeCacheKey = (key: string): CacheKeyObject => {
+export const decodeCacheKey = (key: string): CacheDescriptorInternal => {
   const [firstPart, secondPart] = key.split(':');
   return { language: firstPart, namespace: secondPart || '' };
 };
 
-export const encodeCacheKey = ({ language, namespace }: CacheKeyObject) => {
+export const encodeCacheKey = ({
+  language,
+  namespace,
+}: CacheDescriptorInternal) => {
   if (namespace) {
     return `${language}:${namespace}`;
   } else {
