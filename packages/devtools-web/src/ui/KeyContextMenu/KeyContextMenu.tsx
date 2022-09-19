@@ -38,15 +38,7 @@ export type KeyContextMenuState = Partial<KeyContextMenuParams> & {
   opened: boolean;
 };
 
-export type KeyContextMenuProps = {
-  getTranslation(key: string): string;
-};
-
-export class KeyContextMenu extends React.Component<KeyContextMenuProps> {
-  constructor(props: KeyContextMenuProps) {
-    super(props);
-  }
-
+export class KeyContextMenu extends React.Component {
   state: KeyContextMenuState & { opened: boolean } = {
     opened: false,
   };

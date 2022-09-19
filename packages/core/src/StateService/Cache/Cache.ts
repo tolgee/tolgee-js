@@ -53,6 +53,22 @@ export const Cache = () => {
     return cache.get(encodeCacheKey(descriptor))?.data.get(key);
   };
 
+  const getTranslationNs = (
+    namespaces: string[],
+    language: string,
+    key: string
+  ) => {
+    for (const namespace of namespaces) {
+      const value = cache
+        .get(encodeCacheKey({ language, namespace }))
+        ?.data.get(key);
+      if (value !== undefined && value !== null) {
+        return namespace;
+      }
+    }
+    return Array.from(new Set(namespaces));
+  };
+
   const getTranslationFallback = (
     namespaces: string[],
     languages: string[],
@@ -90,6 +106,7 @@ export const Cache = () => {
     exists,
     getRecord,
     getTranslation,
+    getTranslationNs,
     getTranslationFallback,
     changeTranslation,
     clear,

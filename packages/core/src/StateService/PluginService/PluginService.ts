@@ -7,20 +7,23 @@ import {
   ObserverInterface,
   TranslatePropsInternal,
   TranslationOnClick,
-  UiInstance,
+  UiInterface,
   UiLibInterface,
   UiType,
   FinalFormatterInterface,
   UiProps,
   HighlightInterface,
   UiConstructor,
+  UiKeyOption,
 } from '../../types';
+import { getFallback } from '../State/helpers';
 
 export const PluginService = (
   getLocale: () => string,
   translate: (params: TranslatePropsInternal) => string,
   getBackendProps: () => BackendDevProps,
-  getUiProps: () => UiProps
+  getUiProps: () => UiProps,
+  getTranslationNs: (props: TranslatePropsInternal) => string[] | string
 ) => {
   const plugins = {
     ui: undefined as UiConstructor | undefined,
@@ -32,11 +35,23 @@ export const PluginService = (
     observer: undefined as ReturnType<ObserverInterface> | undefined,
     devBackend: undefined as BackendDevInterface | undefined,
     backends: [] as BackendInterface[],
-    ui: undefined as UiInstance | undefined,
+    ui: undefined as UiInterface | undefined,
   };
 
   const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
-    instances.ui?.handleElementClick(event, keysAndDefaults);
+    const withNs: UiKeyOption[] = keysAndDefaults.map(
+      ({ key, ns, defaultValue }) => ({
+        key,
+        defaultValue,
+        ns: getFallback(getTranslationNs({ key, ns, defaultValue })),
+        translation: translate({
+          key,
+          noWrap: true,
+          orEmpty: true,
+        }),
+      })
+    );
+    instances.ui?.handleElementClick(event, withNs);
   };
 
   const run = (isDev: boolean) => {
