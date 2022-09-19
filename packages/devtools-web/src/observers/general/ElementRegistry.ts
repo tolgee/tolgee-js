@@ -130,6 +130,7 @@ export const ElementRegistry = (
         ...curr.keys.map((k) => ({
           key: k.key,
           defaultValue: k.defaultValue,
+          ns: k.ns,
         })),
       ],
       [] as KeyWithDefault[]

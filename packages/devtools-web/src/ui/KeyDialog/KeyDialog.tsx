@@ -2,30 +2,43 @@ import * as React from 'react';
 import { BodyEnd } from '../common/BodyEnd';
 import { DialogProvider } from './TranslationDialogContextProvider';
 import { TranslationDialog } from './TranslationDialog';
-import type { UiProps } from '@tolgee/core';
+import type { FallbackNSTranslation, UiProps } from '@tolgee/core';
 import { QueryProvider } from 'ui/client/QueryProvider';
 
 export type ComponentDependencies = UiProps;
 
 export type Props = UiProps;
 
-export class KeyDialog extends React.Component<Props> {
+type State = {
+  key: null | string;
+  defaultValue: undefined | string;
+  dialogOpened: boolean;
+  ns: FallbackNSTranslation;
+};
+
+export class KeyDialog extends React.Component<Props, State> {
   state = {
     key: null,
     defaultValue: undefined,
     dialogOpened: false,
+    ns: undefined,
   };
 
   constructor(props: Props) {
     super(props);
   }
 
-  public translationEdit(key: string, defaultValue?: string) {
+  public translationEdit(
+    key: string,
+    defaultValue: string | undefined,
+    ns: FallbackNSTranslation
+  ) {
     this.setState({
       ...this.state,
       dialogOpened: true,
       defaultValue: defaultValue,
-      key: key,
+      key,
+      ns,
     });
   }
 
@@ -38,6 +51,7 @@ export class KeyDialog extends React.Component<Props> {
             defaultValue={this.state.defaultValue || ''}
             open={this.state.dialogOpened}
             keyName={this.state.key!}
+            ns={this.state.ns}
             onClose={this.onClose}
           >
             <TranslationDialog />

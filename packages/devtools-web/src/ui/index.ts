@@ -1,12 +1,18 @@
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
-import type { KeyWithDefault, UiProps } from '@tolgee/core';
+import type {
+  FallbackNSTranslation,
+  KeyWithDefault,
+  UiProps,
+  UiInterface,
+  UiKeyOption,
+} from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { DEVTOOLS_ID } from './constants';
 
-export class UI {
+export class UI implements UiInterface {
   private viewerComponent: KeyDialog;
   private keyContextMenu: KeyContextMenu;
 
@@ -31,15 +37,17 @@ export class UI {
     this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);
 
     this.keyContextMenu = ReactDOM.render(
-      createElement(KeyContextMenu, {
-        getTranslation: this.props.getTranslation,
-      }),
+      createElement(KeyContextMenu),
       contextMenuContainer
     );
   }
 
-  public renderViewer(key: string, defaultValue?: string) {
-    this.viewerComponent.translationEdit(key, defaultValue);
+  public renderViewer(
+    key: string,
+    defaultValue: string | undefined,
+    ns: FallbackNSTranslation
+  ) {
+    this.viewerComponent.translationEdit(key, defaultValue, ns);
   }
 
   public async getKey(props: {
@@ -56,14 +64,14 @@ export class UI {
 
   public async handleElementClick(
     event: MouseEvent,
-    keysAndDefaults: KeyWithDefault[]
+    keysAndDefaults: UiKeyOption[]
   ) {
     let key = keysAndDefaults[0].key as string | undefined;
     if (keysAndDefaults.length > 1) {
       const keys = new Map(
-        keysAndDefaults.map(({ key, defaultValue }) => [
+        keysAndDefaults.map(({ key, translation, defaultValue }) => [
           key,
-          this.props.getTranslation(key) || defaultValue,
+          translation || defaultValue,
         ])
       );
       key = await this.getKey({
@@ -72,10 +80,8 @@ export class UI {
       });
     }
     if (key) {
-      const defaultValue = keysAndDefaults.find(
-        (val) => val.key === key
-      )?.defaultValue;
-      this?.renderViewer(key, defaultValue);
+      const value = keysAndDefaults.find((val) => val.key === key)!;
+      this?.renderViewer(key, value.defaultValue, value.ns);
     }
   }
 }

@@ -34,7 +34,8 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     state.getLanguage,
     t,
     getBackendProps,
-    getUiProps
+    getUiProps,
+    getTranslationNs
   );
 
   state.init(options);
@@ -70,7 +71,6 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
 
   function getUiProps(): UiProps {
     return {
-      getTranslation: (key) => t({ key, noWrap: true, orEmpty: true }),
       apiKey: state.getInitialOptions().apiKey!,
       apiUrl: state.getInitialOptions().apiUrl!,
       highlightByKey: pluginService.highlight,
@@ -189,6 +189,12 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       // we only want to apply latest
       state.setLanguage(language);
     }
+  }
+
+  function getTranslationNs({ key, ns }: TranslatePropsInternal) {
+    const namespaces = ns ? getFallback(ns) : state.getFallbackNamespaces();
+    const language = state.getLanguage();
+    return cache.getTranslationNs(namespaces, language, key);
   }
 
   function getTranslation({

@@ -4,9 +4,7 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
-
-import { UiProps } from '@tolgee/core';
-import { useApiQuery } from 'ui/client/useQueryApi';
+import { FallbackNSTranslation, getFallback, UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from 'ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
@@ -35,6 +33,7 @@ type DialogProps = {
   open: boolean;
   onClose: () => void;
   uiProps: UiProps;
+  ns: FallbackNSTranslation;
 };
 
 type Actions =
@@ -52,7 +51,8 @@ type Actions =
   | { type: 'SET_CONTAINER'; payload: Element | undefined }
   | { type: 'OPEN_SCREENSHOT_DETAIL'; payload: ScreenshotInterface }
   | { type: 'CLOSE_SCREENSHOT_DETAIL' }
-  | { type: 'ON_ESCAPE' };
+  | { type: 'ON_ESCAPE' }
+  | { type: 'SELECTED_NS_CHANGE'; payload: { ns: string } };
 
 export const [DialogProvider, useDialogDispatch, useDialogContext] =
   createProvider((props: DialogProps) => {
@@ -66,6 +66,9 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     );
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
+    const [selectedNs, setSelectedNs] = useState<string>(
+      getFallback(props.ns)[0]
+    );
 
     const scopesLoadable = useApiQuery({
       url: '/v2/api-keys/current',
@@ -183,6 +186,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
             ...translationsForm,
             [action.payload.key]: action.payload.value,
           });
+          setSelectedNs(getFallback(props.ns)[0]);
           break;
 
         case 'HANDLE_UPLOAD_IMAGES':
@@ -317,6 +321,9 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         case 'CLOSE_SCREENSHOT_DETAIL':
           setScreenshotDetail(null);
           break;
+        case 'SELECTED_NS_CHANGE':
+          setSelectedNs(action.payload.ns);
+          break;
       }
     };
 
@@ -411,6 +418,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const contextValue = {
       input: props.keyName,
       open: props.open,
+      ns: props.ns,
+      selectedNs,
       loading,
       saving,
       success,

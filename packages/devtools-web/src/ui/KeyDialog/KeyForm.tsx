@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import OpenInNew from '@mui/icons-material/OpenInNew';
 
-
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';
 import { LoadingButton } from '../common/LoadingButton';
@@ -17,6 +16,7 @@ import {
   useDialogDispatch,
 } from './TranslationDialogContextProvider';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
+import { NsSelect } from './NsSelect';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -93,6 +93,8 @@ export const KeyForm = () => {
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
   const scopes = useDialogContext((c) => c.scopes);
+  const ns = useDialogContext((c) => c.ns);
+  const selectedNs = useDialogContext((c) => c.selectedNs);
 
   const screenshotsView = isAuthorizedTo('screenshots.view', scopes);
 
@@ -106,6 +108,10 @@ export const KeyForm = () => {
 
   const onSave = () => {
     dispatch({ type: 'ON_SAVE' });
+  };
+
+  const onNamespaceChange = (ns: string) => {
+    dispatch({ type: 'SELECTED_NS_CHANGE', payload: { ns } });
   };
 
   const ready = !loading && !error;
@@ -148,7 +154,6 @@ export const KeyForm = () => {
             <OpenInNew fontSize="small" />
           </IconButton>
         )}
-
         <ScHeadingRight>{!loading && <LanguageSelect />}</ScHeadingRight>
       </ScHeading>
 
@@ -159,6 +164,8 @@ export const KeyForm = () => {
           {!keyExists && ready && " (key doesn't exist yet)"}
         </ScKeyHint>
       </ScKey>
+
+      <NsSelect options={ns} value={selectedNs} onChange={onNamespaceChange} />
 
       <ScFieldsWrapper>
         <TranslationFields />

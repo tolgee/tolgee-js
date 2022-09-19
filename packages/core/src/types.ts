@@ -8,7 +8,11 @@ export type FallbackGeneral = undefined | false | string | string[];
 
 export type FallbackNS = FallbackGeneral;
 
-export type FallbackNSTranslation = undefined | string | string[];
+export type NsType = string;
+
+export type KeyType = string;
+
+export type FallbackNSTranslation = undefined | NsType | NsType[];
 
 export type FallbackLanguage = FallbackGeneral;
 
@@ -25,7 +29,7 @@ export type TranslateOptions<T> = {
 };
 
 export type TranslateProps<T = DefaultParamType> = {
-  key: string;
+  key: KeyType;
   defaultValue?: string;
 } & TranslateOptions<T>;
 
@@ -248,20 +252,19 @@ export type ElementMeta = {
 };
 
 export type UiProps = {
-  getTranslation(key: string): string;
   apiUrl: string;
   apiKey: string;
   highlightByKey: HighlightInterface;
 };
 
-export type UiInstance = {
+export interface UiInterface {
   handleElementClick(
     event: MouseEvent,
-    keysAndDefaults: KeyWithDefault[]
+    keysAndDefaults: UiKeyOption[]
   ): Promise<void>;
-};
+}
 
-export type UiConstructor = new (props: UiProps) => UiInstance;
+export type UiConstructor = new (props: UiProps) => UiInterface;
 
 export type UiLibInterface = {
   UI: UiConstructor;
@@ -269,7 +272,18 @@ export type UiLibInterface = {
 
 export type UiType = UiConstructor | UiLibInterface;
 
-export type KeyWithDefault = { key: string; defaultValue?: string };
+export type UiKeyOption = {
+  key: string;
+  defaultValue?: string;
+  ns: string[];
+  translation: string | undefined;
+};
+
+export type KeyWithDefault = {
+  key: string;
+  defaultValue?: string;
+  ns: FallbackNSTranslation;
+};
 
 export type TranslationOnClick = (
   event: MouseEvent,
