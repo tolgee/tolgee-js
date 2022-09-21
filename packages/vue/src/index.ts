@@ -1,8 +1,10 @@
-import { TolgeeProvider } from './TolgeeProvider';
-import { T } from './T';
-import { TolgeeMixin } from './TolgeeMixin';
-import { useTranslate } from './useTranslate';
-import { useLanguage } from './useLanguage';
+export { TolgeeProvider } from './TolgeeProvider';
+export { T } from './T';
+export { useTolgee } from './useTolgee';
+export { useTranslate } from './useTranslate';
+export { VuePlugin } from './VuePlugin';
+export { TolgeeVue } from './TolgeeVue';
 export * from './types';
 
-export { T, TolgeeProvider, TolgeeMixin, useTranslate, useLanguage };
+export * from '@tolgee/core';
+export * from '@tolgee/devtools-web';

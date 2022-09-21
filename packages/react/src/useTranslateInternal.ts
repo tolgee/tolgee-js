@@ -52,12 +52,16 @@ export const useTranslateInternal = (
     };
   }, []);
 
+  const isLoaded = tolgee.isLoaded(namespaces);
+
   useEffect(() => {
-    subscriptionRef.current!.subscribeNs(namespaces);
-    return () => {
-      subscriptionRef.current!.unsubscribeNs(namespaces);
-    };
-  }, [namespacesJoined]);
+    if (!isLoaded) {
+      subscriptionRef.current!.subscribeNs(namespaces);
+      return () => {
+        subscriptionRef.current!.unsubscribeNs(namespaces);
+      };
+    }
+  }, [namespacesJoined, isLoaded]);
 
   useEffect(() => {
     tolgee.addActiveNs(namespaces);
@@ -67,14 +71,12 @@ export const useTranslateInternal = (
   const t = useCallback(
     (props: TranslateProps<any>) => {
       const { key, ns } = props;
-      const fallbackNs = ns || namespaces;
+      const fallbackNs = ns || namespaces?.[0];
       subscribeToKey({ key, ns: fallbackNs });
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },
     [tolgee, instance]
   );
-
-  const isLoaded = tolgee.isLoaded(namespaces);
 
   if (currentOptions?.useSuspense && !isLoaded) {
     throw tolgee.addActiveNs(namespaces, true);
