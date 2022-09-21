@@ -11,7 +11,8 @@
     "serve": "serve -p 3002 -s dist"
   },
   "dependencies": {
-    "@tolgee/vue": "^4.9.2",
+    "@tolgee/icu-formatter": "^4.8.0",
+    "@tolgee/vue": "^4.8.0",
     "core-js": "^3.23.0",
     "vue": "^3.2.37"
   },

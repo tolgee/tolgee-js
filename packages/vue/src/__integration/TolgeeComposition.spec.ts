@@ -7,7 +7,7 @@ import { render, screen, waitFor } from '@testing-library/vue';
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
 import { TolgeeProvider } from '..';
-import { useTranslate } from '../useTranslate';
+import { useTranslate } from '../useTranslateInternal';
 import { useLanguage } from '../useLanguage';
 
 const API_URL = 'http://localhost';

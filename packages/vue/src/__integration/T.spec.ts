@@ -1,18 +1,18 @@
 jest.autoMockOff();
 
 import fetchMock from 'jest-fetch-mock';
-import { Tolgee } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/core';
 import '@testing-library/jest-dom/extend-expect';
 import { render, screen, waitFor } from '@testing-library/vue';
 
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, T, TolgeeMixin } from '..';
+import { TolgeeProvider, T } from '..';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
 
-let tolgee: Tolgee;
+let tolgee: TolgeeInstance;
 
 const fetch = fetchMock.mockResponse(async (req) => {
   if (req.url.includes('/v2/api-keys/current')) {
@@ -27,7 +27,7 @@ const fetch = fetchMock.mockResponse(async (req) => {
 });
 
 const TestComponent = {
-  mixins: [TolgeeMixin],
+  inject: ['tolgeeContext'],
   components: { T },
   template: `
     <div>

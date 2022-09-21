@@ -1,28 +1,34 @@
+import {
+  FallbackNSTranslation,
+  TranslateParams,
+  TranslateProps,
+} from '@tolgee/core';
 import { defineComponent, PropType } from 'vue';
-import { useTranslate } from './useTranslate';
-import { TranslateFnProps } from '.';
+import { useTranslateInternal } from './useTranslateInternal';
 
 export const T = defineComponent({
   name: 'T',
   props: {
     keyName: { type: String, required: true },
-    parameters: Object as PropType<{ [key: string]: string }>,
+    params: Object as PropType<TranslateParams>,
     defaultValue: String as PropType<string>,
     noWrap: {
       type: Boolean,
       default: false,
     },
+    ns: { type: Object as PropType<FallbackNSTranslation> },
   },
   setup() {
-    const t = useTranslate();
+    const { t } = useTranslateInternal();
     return { t };
   },
   render() {
-    const params: TranslateFnProps = {
+    const params: TranslateProps = {
       key: this.$props.keyName,
-      parameters: this.$props.parameters,
+      params: this.$props.params,
       defaultValue: this.$props.defaultValue,
-      noWrap: this.noWrap,
+      noWrap: this.$props.noWrap,
+      ns: this.$props.ns,
     };
     const content = this.t(params);
     return content;
