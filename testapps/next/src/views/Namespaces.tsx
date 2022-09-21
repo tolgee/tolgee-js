@@ -1,5 +1,6 @@
 import { useTranslate } from '@tolgee/react';
-import { Navbar } from './components/Navbar';
+import Link from 'next/link';
+import { Navbar } from '../components/Navbar';
 
 export const Namespaces = () => {
   const { t, isLoading } = useTranslate(['base']);
@@ -11,23 +12,27 @@ export const Namespaces = () => {
     <main className="background-wrapper">
       <div className="example">
         <Navbar>
-          <a href="/">The example app</a>
+          <Link href="/">
+            <a>The example app</a>
+          </Link>
         </Navbar>
-        {t('test')}
-        <Test1 />
-        <Test2 />
-        <Test3 />
+        <div>
+          {t('test')}
+          <Test1 />
+          <Test2 />
+          <Test3 />
+        </div>
       </div>
     </main>
   );
 };
 
 export const Test1 = () => {
-  const { t, isLoading } = useTranslate(['', 'base', 'test1']);
+  const { t, isLoading } = useTranslate(['test1']);
   if (isLoading) {
     return <>Loading1</>;
   }
-  return <div>{t('fuck', 'Aaaaaaaaaaaaaaaaaa')}</div>;
+  return <div>{t('test')}</div>;
 };
 
 export const Test2 = () => {

@@ -1,4 +1,5 @@
 import type { TolgeeInstance, TolgeePlugin } from '@tolgee/core';
+import { isDataView } from 'util/types';
 import { handshakeWithExtension, listen } from './tools/plugin';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -22,23 +23,6 @@ function clearSessionStorage() {
   sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
 }
 
-listen('SET_CREDENTIALS', () => {
-  registredInstances.forEach(async (tolgee) => {
-    const credentials = getCredentials();
-    if (credentials.apiKey) {
-      tolgee.init({
-        ...credentials,
-      });
-      const { unsubscribe } = tolgee.on('initialLoad', async () => {
-        unsubscribe();
-        const result = tolgee.highlight();
-        await sleep(300);
-        result.unhighlight();
-      });
-    }
-  });
-});
-
 function onDocumentReady(callback: () => void) {
   // in case the document is already rendered
   if (document.readyState !== 'loading') {
@@ -50,29 +34,52 @@ function onDocumentReady(callback: () => void) {
   }
 }
 
-export const BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
-  registredInstances.push(tolgee);
-  Promise.resolve().then(async () => {
-    // do it async, so we override
-    const credentials = getCredentials();
-    if (credentials.apiKey) {
-      tolgee.init({
-        ...credentials,
-      });
-    }
-    onDocumentReady(() => {
-      handshakeWithExtension({
-        uiPresent: true,
-        uiVersion: undefined,
-        noRestart: true,
-        mode: 'production',
-        config: {
-          apiUrl: 'https://app.tolgee.io',
-          apiKey: '',
-        },
-      }).catch(clearSessionStorage);
+let BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => tolgee;
+
+if (typeof window !== 'undefined') {
+  listen('SET_CREDENTIALS', () => {
+    registredInstances.forEach(async (tolgee) => {
+      const credentials = getCredentials();
+      if (credentials.apiKey) {
+        tolgee.init({
+          ...credentials,
+        });
+        const { unsubscribe } = tolgee.on('initialLoad', async () => {
+          unsubscribe();
+          const result = tolgee.highlight();
+          await sleep(300);
+          result.unhighlight();
+        });
+      }
     });
   });
 
-  return tolgee;
-};
+  BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
+    registredInstances.push(tolgee);
+    Promise.resolve().then(async () => {
+      // do it async, so we override
+      const credentials = getCredentials();
+      if (credentials.apiKey) {
+        tolgee.init({
+          ...credentials,
+        });
+      }
+      onDocumentReady(() => {
+        handshakeWithExtension({
+          uiPresent: true,
+          uiVersion: undefined,
+          noRestart: true,
+          mode: tolgee.isDev() ? 'development' : 'production',
+          config: {
+            apiUrl: tolgee.getInitialOptions().apiUrl || '',
+            apiKey: tolgee.getInitialOptions().apiKey || '',
+          },
+        }).catch(clearSessionStorage);
+      });
+    });
+
+    return tolgee;
+  };
+}
+
+export { BrowserExtensionPlugin };

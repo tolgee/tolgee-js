@@ -51,33 +51,40 @@ export const GeneralObserver = (
     });
   };
 
-  const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
-    if (!isObserving) {
-      return;
-    }
-    for (const mutation of mutationsList) {
-      let result: (Attr | Text)[] = [];
-      switch (mutation.type) {
-        case 'characterData':
-          result = nodeHandler.handleText(mutation.target);
-          break;
-
-        case 'childList':
-          handleKeyAttribute(mutation.target);
-          result = nodeHandler.handleChildList(mutation.target);
-          break;
-
-        case 'attributes':
-          handleKeyAttribute(mutation.target);
-          result = nodeHandler.handleAttributes(mutation.target);
-          break;
+  const createMutationObserver = () => {
+    return new MutationObserver((mutationsList: MutationRecord[]) => {
+      if (!isObserving) {
+        return;
       }
-      handleNodes(result);
-      elementRegistry.refreshAll();
-    }
-  });
+      for (const mutation of mutationsList) {
+        let result: (Attr | Text)[] = [];
+        switch (mutation.type) {
+          case 'characterData':
+            result = nodeHandler.handleText(mutation.target);
+            break;
+
+          case 'childList':
+            handleKeyAttribute(mutation.target);
+            result = nodeHandler.handleChildList(mutation.target);
+            break;
+
+          case 'attributes':
+            handleKeyAttribute(mutation.target);
+            result = nodeHandler.handleAttributes(mutation.target);
+            break;
+        }
+        handleNodes(result);
+        elementRegistry.refreshAll();
+      }
+    });
+  };
+
+  let observer: MutationObserver;
 
   const run = () => {
+    if (!observer) {
+      observer = createMutationObserver();
+    }
     const targetElement = options.targetElement || document.body;
     isObserving = true;
     elementRegistry.run();

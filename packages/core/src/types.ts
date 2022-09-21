@@ -210,6 +210,8 @@ export type TolgeeInstance = Readonly<{
   isFetching: (ns?: FallbackNSTranslation) => boolean;
   isRunning: () => boolean;
   highlight: HighlightInterface;
+  getInitialOptions: () => Options;
+  isDev: () => boolean;
   init: (options: Partial<Options>) => TolgeeInstance;
   run: () => Promise<void>;
   stop: () => void;

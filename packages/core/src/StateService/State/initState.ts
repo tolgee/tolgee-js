@@ -69,11 +69,11 @@ export const initState = (
   options?: Partial<Options>,
   previousState?: State
 ): State => {
-  const initialOptions = {
+  const initialOptions = Object.freeze({
     ...defaultValues,
     ...previousState?.initialOptions,
     ...options,
-  };
+  });
   return {
     initialOptions,
     activeNamespaces:

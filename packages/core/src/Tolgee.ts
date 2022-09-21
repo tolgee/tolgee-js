@@ -48,6 +48,8 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     stop: stateService.stop,
     t: stateService.t,
     highlight: stateService.highlight,
+    getInitialOptions: stateService.getInitialOptions,
+    isDev: stateService.isDev,
 
     // plugins
     use: (plugin: TolgeePlugin | undefined) => {

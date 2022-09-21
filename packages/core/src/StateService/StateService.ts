@@ -172,7 +172,18 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function isLoaded(ns?: FallbackNSTranslation) {
-    return getRequiredRecords(undefined, ns).length === 0;
+    const languages = state.getFallbackLangs(state.getLanguage());
+    const namespaces =
+      ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
+    const result: CacheDescriptor[] = [];
+    languages.forEach((language) => {
+      namespaces.forEach((namespace) => {
+        if (!cache.exists({ language, namespace })) {
+          result.push({ language, namespace });
+        }
+      });
+    });
+    return result.length === 0;
   }
 
   async function loadRequiredRecords(
@@ -235,15 +246,17 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   function fetchNormal(keyObject: CacheDescriptorInternal) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (!dataPromise) {
-      dataPromise = pluginService.getBackendRecord(keyObject);
-    }
-
-    if (!dataPromise) {
       const staticDataValue =
         state.getInitialOptions().staticData?.[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
+      } else if (staticDataValue) {
+        dataPromise = Promise.resolve(staticDataValue);
       }
+    }
+
+    if (!dataPromise) {
+      dataPromise = pluginService.getBackendRecord(keyObject);
     }
 
     if (!dataPromise) {
@@ -348,11 +361,13 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     isLoaded,
     loadInitial,
     t,
+    isDev,
     getLanguage: state.getLanguage,
     getPendingLanguage: state.getPendingLanguage,
     removeActiveNs: state.removeActiveNs,
     isInitialLoading: state.isInitialLoading,
     isRunning: state.isRunning,
+    getInitialOptions: state.getInitialOptions,
     setFinalFormatter: pluginService.setFinalFormatter,
     addFormatter: pluginService.addFormatter,
     setObserver: pluginService.setObserver,
