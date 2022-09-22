@@ -1,41 +1,28 @@
 <script lang="ts">
   import { onDestroy, onMount, setContext } from 'svelte';
-  import { IcuFormatter, Tolgee, TolgeeConfig } from '@tolgee/core';
-  import type { TolgeeContext } from './getTolgeeContext';
+  import type { TolgeeInstance } from '@tolgee/core';
+  import type { TolgeeSvelteContext } from './types';
 
-  export let config: TolgeeConfig;
+  export let tolgee: TolgeeInstance;
 
-  const tolgee = Tolgee.use(IcuFormatter).init({
-    wrapperMode: 'invisible',
-    ui:
-      process.env.NODE_ENV !== 'development'
-        ? undefined
-        : typeof require !== 'undefined'
-        ? require('@tolgee/ui')
-        : import('@tolgee/ui'),
-    ...(config || new TolgeeConfig()),
-  });
-
-  let tolgeeRunPromise: Promise<void>;
+  let isLoading: boolean = !tolgee.isLoaded();
 
   setContext('tolgeeContext', {
     tolgee,
-  } as TolgeeContext);
+  } as TolgeeSvelteContext);
 
   if (typeof window !== 'undefined') {
-    onMount(() => (tolgeeRunPromise = tolgee.run()));
+    onMount(() => {
+      tolgee.run().then(() => {
+        isLoading = false
+      })
+    });
     onDestroy(tolgee.stop);
   }
 </script>
 
-{#if !tolgee.initialLoading}
+{#if !isLoading }
   <slot />
-{:else if !tolgeeRunPromise}
+{:else }
   <slot name="loading-fallback" />
-{:else}
-  {#await tolgeeRunPromise}
-    <slot name="loading-fallback" />
-  {:then _}
-    <slot />
-  {/await}
 {/if}

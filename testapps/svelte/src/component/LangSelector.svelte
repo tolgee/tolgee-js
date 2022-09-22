@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { getLanguageStore } from '@tolgee/svelte';
+  import { getTolgee } from '@tolgee/svelte';
+  import { get } from 'svelte/store'
 
-  const languageStore = getLanguageStore();
+  const tolgee = getTolgee()
+
+  function handleLanguageChange(e: any) {
+    get(tolgee).changeLanguage(e.currentTarget!.value)
+  }
 </script>
 
-<select bind:value={$languageStore} class="lang-selector">
+<select value={$tolgee.getPendingLanguage()} on:change={handleLanguageChange} class="lang-selector">
   <option value="en">🇬🇧 English</option>
   <option value="cs">🇨🇿 česky</option>
   <option value="fr">🇫🇷 français</option>

@@ -84,7 +84,7 @@ export type CombinedOptions<T> = TranslateOptions<T> & {
   [key: string]: T | PropType<TranslateOptions<T>>;
 };
 
-export type TFnType<T, R> = {
+export type TFnType<T = DefaultParamType, R = string> = {
   (key: string, defaultValue?: string, options?: CombinedOptions<T>): R;
   (key: string, options?: CombinedOptions<T>): R;
   (props: TranslateProps<T>): R;

@@ -2,7 +2,7 @@
   import { T, getTranslate } from '@tolgee/svelte';
   import Navbar from '../../component/Navbar.svelte';
 
-  const t = getTranslate();
+  const { t } = getTranslate();
 </script>
 
 <main class="translation-methods">
@@ -29,7 +29,7 @@
     <div>
       <h1>T component with params</h1>
       <div>
-        <T keyName="this_is_a_key_with_params" parameters={{ key: 'value', key2: 'value2' }} />
+        <T keyName="this_is_a_key_with_params" params={{ key: 'value', key2: 'value2' }} />
       </div>
     </div>
 
@@ -38,7 +38,7 @@
       <div>
         <T
           keyName="this_is_a_key_with_params"
-          parameters={{ key: 'value', key2: 'value2' }}
+          params={{ key: 'value', key2: 'value2' }}
           noWrap={true}
         />
       </div>
@@ -61,7 +61,7 @@
     <div>
       <h1>t function with noWrap</h1>
       <div>
-        {$t('this_is_a_key', undefined, true)}
+        {$t('this_is_a_key', { noWrap: true })}
       </div>
     </div>
 
@@ -82,7 +82,7 @@
     <div>
       <h1>t function with props object noWrap is true</h1>
       <div>
-        {$t({ key: 'this_is_a_key', parameters: { key: 'value', key2: 'value2' }, noWrap: true })}
+        {$t({ key: 'this_is_a_key', params: { key: 'value', key2: 'value2' }, noWrap: true })}
       </div>
     </div>
   </div>
