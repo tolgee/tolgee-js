@@ -223,6 +223,10 @@ export type TolgeeInstance = Readonly<{
   removeActiveNs: (ns: FallbackNSTranslation) => void;
   loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
   loadRecord: (descriptors: CacheDescriptor) => Promise<TranslationsFlat>;
+  getRecord: (
+    descriptor: CacheDescriptorInternal
+  ) => TranslationsFlat | undefined;
+  getAllRecords: () => CachePublicRecord[];
   isInitialLoading: () => boolean;
   isLoading: (ns?: FallbackNSTranslation) => boolean;
   isLoaded: (ns?: FallbackNSTranslation) => boolean;
@@ -359,3 +363,9 @@ export type TolgeePlugin = (
   tolgee: TolgeeInstance,
   tools: PluginServicePublic
 ) => TolgeeInstance;
+
+export type CachePublicRecord = {
+  data: TranslationsFlat;
+  language: string;
+  namespace: string;
+};
