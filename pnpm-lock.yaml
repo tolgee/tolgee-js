@@ -254,8 +254,8 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.9.2
-      '@tolgee/ui': ^4.9.2
+      '@tolgee/core': ^4.8.0
+      '@tolgee/devtools-web': ^4.8.0
       '@types/intl-messageformat': ^3.0.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
@@ -273,7 +273,7 @@ importers:
       typescript: 4.7.4
     dependencies:
       '@tolgee/core': link:../core
-      '@tolgee/ui': 4.9.2
+      '@tolgee/devtools-web': link:../devtools-web
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
       '@testing-library/dom': 8.16.0

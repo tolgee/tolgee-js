@@ -70,7 +70,7 @@
     "import": "./dist/tolgee-i18next.esm.js"
   },
   "dependencies": {
-    "@tolgee/core": "^4.9.2",
-    "@tolgee/ui": "^4.9.2"
+    "@tolgee/core": "^4.8.0",
+    "@tolgee/devtools-web": "^4.8.0"
   }
 }

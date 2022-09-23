@@ -41,6 +41,8 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     removeActiveNs: controller.removeActiveNs,
     loadRecords: controller.loadRecords,
     loadRecord: controller.loadRecord,
+    getRecord: controller.getRecord,
+    getAllRecords: controller.getAllRecords,
     isLoaded: controller.isLoaded,
     isInitialLoading: controller.isInitialLoading,
     isLoading: controller.isLoading,

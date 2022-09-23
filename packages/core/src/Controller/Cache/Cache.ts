@@ -15,7 +15,12 @@ import {
 import { getFallbackArray } from '../State/helpers';
 import { ValueObserverInstance } from '../ValueObserver';
 
-import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
+import {
+  decodeCacheKey,
+  encodeCacheKey,
+  flattenTranslations,
+  mapToObject,
+} from './helpers';
 
 type CacheRecord = {
   isDev: boolean;
@@ -247,6 +252,16 @@ export const Cache = (
     return result[0];
   }
 
+  function getAllRecords() {
+    const entries = Array.from(cache.entries());
+    return entries.map(([key, entry]) => {
+      return {
+        ...decodeCacheKey(key),
+        data: entry.data,
+      };
+    });
+  }
+
   return Object.freeze({
     init,
     addRecord,
@@ -261,6 +276,7 @@ export const Cache = (
     loadRecord,
     loadRecords,
     clear,
+    getAllRecords,
   });
 };
 
