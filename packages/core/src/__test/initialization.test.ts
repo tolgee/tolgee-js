@@ -46,4 +46,28 @@ describe('initialization behavior', () => {
     expect(onInitialLoad).toBeCalledTimes(1);
     expect(onRunningChange).toBeCalledTimes(2);
   });
+
+  it("won't start loading when nothing to load", async () => {
+    const tolgee = Tolgee({
+      language: 'en',
+      staticData: {
+        en: { test: 'Test' },
+      },
+    });
+    const onFetchingHandler = jest.fn(() => {});
+    const onLoadingHandler = jest.fn(() => {});
+
+    tolgee.on('fetching', onFetchingHandler);
+    tolgee.on('loading', onLoadingHandler);
+
+    const runPromise = tolgee.run();
+    expect(tolgee.isLoading()).toBeFalsy();
+    expect(tolgee.isFetching()).toBeFalsy();
+
+    await runPromise;
+    expect(tolgee.isLoading()).toBeFalsy();
+    expect(tolgee.isFetching()).toBeFalsy();
+    expect(onFetchingHandler).not.toBeCalled();
+    expect(onLoadingHandler).not.toBeCalled();
+  });
 });

@@ -1,4 +1,4 @@
-import { getFallbackArray } from '../StateService/State/helpers';
+import { getFallbackArray } from '../Controller/State/helpers';
 import {
   FallbackNSTranslation,
   KeyDescriptor,

@@ -93,4 +93,14 @@ describe('language changes', () => {
     expect(tolgee.t({ key: 'egg' })).toEqual('Egg');
     expect(tolgee.t({ key: 'india' })).toEqual('india');
   });
+
+  it('will fallback to default value', () => {
+    const tolgee = Tolgee({
+      defaultLanguage: 'en',
+    });
+
+    expect(tolgee.getLanguage()).toEqual(undefined);
+    tolgee.run();
+    expect(tolgee.getLanguage()).toEqual('en');
+  });
 });

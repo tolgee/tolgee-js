@@ -138,6 +138,42 @@ importers:
       typedoc-plugin-markdown: 3.13.2_typedoc@0.22.15
       typescript: 4.7.4
 
+  packages/detector-web:
+    specifiers:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-typescript': 8.3.4
+      '@testing-library/jest-dom': ^5.16.5
+      '@tolgee/core': ^4.8.0
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      '@types/testing-library__jest-dom': ^5.14.5
+      concurrently: 7.3.0
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      rollup: ^2.56.3
+      rollup-plugin-bundle-size: ^1.0.3
+      rollup-plugin-terser: 7.0.2
+      rollup-plugin-visualizer: ^5.8.0
+      ts-jest: ^27.1.5
+      typescript: ^4.7.4
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.0
+      '@rollup/plugin-typescript': 8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m
+      '@testing-library/jest-dom': 5.16.5
+      '@tolgee/core': link:../core
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      '@types/testing-library__jest-dom': 5.14.5
+      concurrently: 7.3.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      rollup: 2.79.0
+      rollup-plugin-bundle-size: 1.0.3
+      rollup-plugin-terser: 7.0.2_rollup@2.79.0
+      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
+      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
+      typescript: 4.8.3
+
   packages/devtools-web:
     specifiers:
       '@babel/preset-typescript': ^7.18.6
@@ -451,6 +487,42 @@ importers:
       webpack: 5.74.0_webpack-cli@4.10.0
       webpack-cli: 4.10.0_webpack@5.74.0
 
+  packages/storage-web:
+    specifiers:
+      '@rollup/plugin-node-resolve': 13.3.0
+      '@rollup/plugin-typescript': 8.3.4
+      '@testing-library/jest-dom': ^5.16.5
+      '@tolgee/core': ^4.8.0
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      '@types/testing-library__jest-dom': ^5.14.5
+      concurrently: 7.3.0
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      rollup: ^2.56.3
+      rollup-plugin-bundle-size: ^1.0.3
+      rollup-plugin-terser: 7.0.2
+      rollup-plugin-visualizer: ^5.8.0
+      ts-jest: ^27.1.5
+      typescript: ^4.7.4
+    devDependencies:
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.0
+      '@rollup/plugin-typescript': 8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m
+      '@testing-library/jest-dom': 5.16.5
+      '@tolgee/core': link:../core
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      '@types/testing-library__jest-dom': 5.14.5
+      concurrently: 7.3.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      rollup: 2.79.0
+      rollup-plugin-bundle-size: 1.0.3
+      rollup-plugin-terser: 7.0.2_rollup@2.79.0
+      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
+      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
+      typescript: 4.8.3
+
   packages/svelte:
     specifiers:
       '@sveltejs/adapter-auto': 1.0.0-next.65
@@ -707,8 +779,10 @@ importers:
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
+      '@tolgee/detector-web': ^4.8.0
       '@tolgee/icu-formatter': ^4.8.0
       '@tolgee/react': ^4.8.0
+      '@tolgee/storage-web': ^4.8.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -728,8 +802,10 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
+      '@tolgee/detector-web': link:../../packages/detector-web
       '@tolgee/icu-formatter': link:../../packages/icu-formatter
       '@tolgee/react': link:../../packages/react
+      '@tolgee/storage-web': link:../../packages/storage-web
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.43
@@ -825,7 +901,9 @@ importers:
 
   testapps/vue:
     specifiers:
+      '@tolgee/detector-web': ^4.8.0
       '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/storage-web': ^4.8.0
       '@tolgee/vue': ^4.8.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
@@ -838,7 +916,9 @@ importers:
       typescript: ~4.7.4
       vue: ^3.2.37
     dependencies:
+      '@tolgee/detector-web': link:../../packages/detector-web
       '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/storage-web': link:../../packages/storage-web
       '@tolgee/vue': link:../../packages/vue
       core-js: 3.24.0
       vue: 3.2.37
@@ -8439,6 +8519,21 @@ packages:
       rollup: 2.78.1
     dev: true
 
+  /@rollup/plugin-node-resolve/13.3.0_rollup@2.79.0:
+    resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
+    engines: {node: '>= 10.0.0'}
+    peerDependencies:
+      rollup: ^2.42.0
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.79.0
+      '@types/resolve': 1.17.1
+      deepmerge: 4.2.2
+      is-builtin-module: 3.2.0
+      is-module: 1.0.0
+      resolve: 1.22.1
+      rollup: 2.79.0
+    dev: true
+
   /@rollup/plugin-node-resolve/14.0.0_rollup@2.79.0:
     resolution: {integrity: sha512-XkWfpgp/zGiFu8LS+JAiQeZN4oYYA4/ViFJiZhwQegTg5ZbzKTvM9YyKXVBNnmZ8Et76WnlVgwRUu1rhKF4ayw==}
     engines: {node: '>= 10.0.0'}
@@ -8535,6 +8630,23 @@ packages:
       resolve: 1.22.1
       rollup: 2.78.1
       typescript: 4.7.4
+    dev: true
+
+  /@rollup/plugin-typescript/8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m:
+    resolution: {integrity: sha512-wt7JnYE9antX6BOXtsxGoeVSu4dZfw0dU3xykfOQ4hC3EddxRbVG/K0xiY1Wup7QOHJcjLYXWAn0Kx9Z1SBHHg==}
+    engines: {node: '>=8.0.0'}
+    peerDependencies:
+      rollup: ^2.14.0
+      tslib: '*'
+      typescript: '>=3.7.0'
+    peerDependenciesMeta:
+      tslib:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 3.1.0_rollup@2.79.0
+      resolve: 1.22.1
+      rollup: 2.79.0
+      typescript: 4.8.3
     dev: true
 
   /@rollup/plugin-typescript/8.5.0_ihkqvyh37tzxtjmovjyy2yrv7m:
@@ -10472,7 +10584,7 @@ packages:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
       eslint: '>= 1.6.0 < 7.0.0'
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
       '@vue/cli-shared-utils': 4.5.19
       eslint-loader: 2.2.1_webpack@4.46.0
       globby: 9.2.0
@@ -10490,7 +10602,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
       '@vue/cli-shared-utils': 4.5.19
     dev: true
 
@@ -10538,7 +10650,7 @@ packages:
     peerDependencies:
       '@vue/cli-service': ^3.0.0 || ^4.0.0-0
     dependencies:
-      '@vue/cli-service': 4.5.19_7unolrgjwxngstwwllrtmolbmm
+      '@vue/cli-service': 4.5.19_noq4gwohsd3gmdtj4ctm5uh3vq
     dev: true
 
   /@vue/cli-service/4.5.19_7unolrgjwxngstwwllrtmolbmm:
@@ -18617,15 +18729,6 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /follow-redirects/1.15.1:
-    resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-
   /follow-redirects/1.15.1_debug@3.2.7:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
     engines: {node: '>=4.0'}
@@ -18636,7 +18739,6 @@ packages:
         optional: true
     dependencies:
       debug: 3.2.7
-    dev: false
 
   /follow-redirects/1.15.1_debug@4.3.4:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
@@ -20508,7 +20610,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@3.2.7
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -22722,7 +22824,7 @@ packages:
     resolution: {integrity: sha512-KWYVV1c4i+jbMpaBC+U++4Va0cp8OisU185o73T1vo99hqi7w8tSJfUXYswwqqrjzwxa6KpRK54WhPvwf5w6PQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 18.6.2
+      '@types/node': 18.7.11
       merge-stream: 2.0.0
       supports-color: 7.2.0
 

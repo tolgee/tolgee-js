@@ -1,18 +1,13 @@
 import { EventEmitterType, FallbackNSTranslation } from '../../types';
+import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
 import { initState, Options } from './initState';
 
-type Props = {
-  onLanguageChange: EventEmitterType<string>;
-  onPendingLanguageChange: EventEmitterType<string>;
-  onRunningChange: EventEmitterType<boolean>;
-};
-
-export const State = ({
-  onLanguageChange,
-  onPendingLanguageChange,
-  onRunningChange,
-}: Props) => {
+export const State = (
+  onLanguageChange: EventEmitterType<string>,
+  onPendingLanguageChange: EventEmitterType<string>,
+  onRunningChange: EventEmitterType<boolean>
+) => {
   let state = initState();
 
   function init(options?: Partial<Options>) {
@@ -39,6 +34,10 @@ export const State = ({
   }
 
   function getLanguage() {
+    return state.language || state.initialOptions.language;
+  }
+
+  function getLanguageOrFail() {
     const language = state.language || state.initialOptions.language;
     if (!language) {
       throw new Error(`No language set`);
@@ -101,6 +100,9 @@ export const State = ({
 
   function getFallbackLangs(lang?: string) {
     const language = lang || getLanguage();
+    if (!language) {
+      return [];
+    }
     return unique([
       language,
       ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
@@ -114,6 +116,22 @@ export const State = ({
     return unique([...fallbackNamespaces, ...getFallbackArray(fallbackNs)]);
   }
 
+  function getAvailableLanguages() {
+    if (state.initialOptions.availableLanguages) {
+      return state.initialOptions.availableLanguages;
+    } else if (state.initialOptions.staticData) {
+      const languagesFromStaticData = Object.keys(
+        state.initialOptions.staticData
+      ).map((key) => decodeCacheKey(key).language);
+      return Array.from(new Set(languagesFromStaticData));
+    }
+  }
+
+  function getApiUrl() {
+    const apiUrl = state.initialOptions.apiUrl;
+    return apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl;
+  }
+
   return Object.freeze({
     init,
     isRunning,
@@ -121,6 +139,7 @@ export const State = ({
     isInitialLoading,
     setInitialLoading,
     getLanguage,
+    getLanguageOrFail,
     setLanguage,
     getPendingLanguage,
     setPendingLanguage,
@@ -130,5 +149,7 @@ export const State = ({
     getRequiredNamespaces,
     getFallbackLangs,
     getFallbackNamespaces,
+    getAvailableLanguages,
+    getApiUrl,
   });
 };

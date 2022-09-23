@@ -1,6 +1,5 @@
-import type { EventServiceType } from '../EventService/EventService';
+import type { EventServiceType } from '../Events/Events';
 import {
-  BackendDevProps,
   CacheAsyncRequests,
   CacheDescriptor,
   CacheDescriptorInternal,
@@ -8,51 +7,53 @@ import {
   Options,
   TranslatePropsInternal,
   TreeTranslationsData,
-  UiProps,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
 import { getFallbackArray } from './State/helpers';
-import { PluginService } from './PluginService/PluginService';
+import { PluginService } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
+import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
 
 type StateServiceProps = {
-  eventService: EventServiceType;
+  events: EventServiceType;
   options?: Partial<Options>;
 };
 
-export const StateService = ({ eventService, options }: StateServiceProps) => {
-  const state = State({
-    onLanguageChange: eventService.onLanguageChange,
-    onPendingLanguageChange: eventService.onPendingLanguageChange,
-    onRunningChange: eventService.onRunningChange,
-  });
+export const Controller = ({ events, options }: StateServiceProps) => {
+  const state = State(
+    events.onLanguageChange,
+    events.onPendingLanguageChange,
+    events.onRunningChange
+  );
   const cache = Cache({
-    onCacheChange: eventService.onCacheChange,
+    onCacheChange: events.onCacheChange,
   });
   const asyncRequests: CacheAsyncRequests = new Map();
   const pluginService = PluginService(
-    state.getLanguage,
     t,
-    getBackendProps,
-    getUiProps,
+    state.getLanguage,
+    state.getInitialOptions,
+    state.getApiUrl,
+    state.getAvailableLanguages,
     getTranslationNs,
-    getTranslation
+    getTranslation,
+    changeTranslation
   );
 
   state.init(options);
   cache.init(state.getInitialOptions().staticData);
   const fetchingObserver = ValueObserver<boolean>(
     false,
-    eventService.onFetchingChange.emit
+    events.onFetchingChange.emit
   );
   const loadingObserver = ValueObserver<boolean>(
     false,
-    eventService.onLoadingChange.emit
+    events.onLoadingChange.emit
   );
 
-  eventService.onKeyUpdate.listen(() => {
+  events.onKeyUpdate.listen(() => {
     if (state.isRunning()) {
       pluginService.retranslate();
     }
@@ -61,15 +62,6 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   function t(props: TranslatePropsInternal) {
     const translation = getTranslation(props);
     return pluginService.formatTranslation({ ...props, translation });
-  }
-
-  function getBackendProps(): BackendDevProps {
-    const apiUrl = state.getInitialOptions().apiUrl;
-    return {
-      apiUrl: apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl,
-      apiKey: state.getInitialOptions().apiKey,
-      projectId: state.getInitialOptions().projectId,
-    };
   }
 
   function changeTranslation(
@@ -87,15 +79,6 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     };
   }
 
-  function getUiProps(): UiProps {
-    return {
-      apiKey: state.getInitialOptions().apiKey!,
-      apiUrl: state.getInitialOptions().apiUrl!,
-      highlight: pluginService.highlight,
-      changeTranslation,
-    };
-  }
-
   function init(options: Partial<Options>) {
     state.init(options);
     cache.clear();
@@ -103,6 +86,10 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function isFetching(ns?: FallbackNSTranslation) {
+    if (state.isInitialLoading()) {
+      return true;
+    }
+
     if (ns === undefined) {
       return asyncRequests.size > 0;
     }
@@ -118,16 +105,17 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     const namespaces = getFallbackArray(ns);
 
     return Boolean(
-      Array.from(asyncRequests.keys()).find((key) => {
-        const descriptor = decodeCacheKey(key);
-        return (
-          (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
-          !cache.exists({
-            namespace: descriptor.namespace,
-            language: state.getLanguage(),
-          })
-        );
-      })
+      state.isInitialLoading() ||
+        Array.from(asyncRequests.keys()).find((key) => {
+          const descriptor = decodeCacheKey(key);
+          return (
+            (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
+            !cache.exists({
+              namespace: descriptor.namespace,
+              language: state.getLanguage()!,
+            })
+          );
+        })
     );
   }
 
@@ -172,7 +160,11 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   function isLoaded(ns?: FallbackNSTranslation) {
-    const languages = state.getFallbackLangs(state.getLanguage());
+    const language = state.getLanguage();
+    if (!language) {
+      return false;
+    }
+    const languages = state.getFallbackLangs(language);
     const namespaces =
       ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
     const result: CacheDescriptor[] = [];
@@ -186,19 +178,11 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return result.length === 0;
   }
 
-  async function loadRequiredRecords(
-    lang?: string,
-    ns?: FallbackNSTranslation
-  ) {
+  function loadRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const descriptors = getRequiredRecords(lang, ns);
-    await loadRecords(descriptors);
-  }
-
-  async function loadInitial() {
-    state.setInitialLoading(true);
-    await loadRequiredRecords();
-    state.setInitialLoading(false);
-    eventService.onInitialLoaded.emit();
+    if (descriptors.length) {
+      return valueOrPromise(loadRecords(descriptors), () => {});
+    }
   }
 
   async function changeLanguage(language: string) {
@@ -218,6 +202,7 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
       // there might be parallel language change
       // we only want to apply latest
       state.setLanguage(language);
+      pluginService.setStoredLanguage(language);
     }
   }
 
@@ -332,11 +317,50 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     return result[0];
   }
 
-  async function run() {
+  function loadInitial() {
+    const data = valueOrPromise(initializeLanguage(), () => {
+      state.getLanguageOrFail();
+      return loadRequiredRecords();
+    });
+
+    if (isPromise(data)) {
+      state.setInitialLoading(true);
+      fetchingObserver.update(isFetching());
+      loadingObserver.update(isLoading());
+      return Promise.resolve(data).then(() => {
+        state.setInitialLoading(false);
+        fetchingObserver.update(isFetching());
+        loadingObserver.update(isLoading());
+        events.onInitialLoaded.emit();
+      });
+    } else {
+      events.onInitialLoaded.emit();
+    }
+  }
+
+  function initializeLanguage() {
+    const existingLanguage = state.getLanguage();
+    if (existingLanguage) {
+      state.setLanguage(existingLanguage);
+      return;
+    }
+    if (!state.getInitialOptions().defaultLanguage) {
+      throw new Error(missingOptionError('defaultLanguage'));
+    }
+    const languageOrPromise = pluginService.getInitialLanguage();
+    return valueOrPromise(languageOrPromise, (lang) => {
+      const language =
+        (lang as string | undefined) ||
+        state.getInitialOptions().defaultLanguage;
+      language && state.setLanguage(language);
+    });
+  }
+
+  function run() {
     if (!state.isRunning()) {
       state.setRunning(true);
       pluginService.run(isDev());
-      await loadInitial();
+      return loadInitial();
     }
   }
 
@@ -348,6 +372,8 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
   }
 
   return Object.freeze({
+    ...state,
+    ...pluginService,
     init,
     changeLanguage,
     getTranslation,
@@ -359,25 +385,11 @@ export const StateService = ({ eventService, options }: StateServiceProps) => {
     isLoading,
     isFetching,
     isLoaded,
-    loadInitial,
     t,
     isDev,
-    getLanguage: state.getLanguage,
-    getPendingLanguage: state.getPendingLanguage,
-    removeActiveNs: state.removeActiveNs,
-    isInitialLoading: state.isInitialLoading,
-    isRunning: state.isRunning,
-    getInitialOptions: state.getInitialOptions,
-    setFinalFormatter: pluginService.setFinalFormatter,
-    addFormatter: pluginService.addFormatter,
-    setObserver: pluginService.setObserver,
-    setUi: pluginService.setUi,
-    setDevBackend: pluginService.setDevBackend,
-    addBackend: pluginService.addBackend,
-    highlight: pluginService.highlight,
     run,
     stop,
   });
 };
 
-export type StateServiceType = ReturnType<typeof StateService>;
+export type StateServiceType = ReturnType<typeof Controller>;

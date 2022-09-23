@@ -7,7 +7,7 @@ import {
   TolgeeOn,
 } from '../types';
 
-export const EventService = () => {
+export const Events = () => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
   const onKeyChange = EventEmitter<KeyDescriptorInternal>();
@@ -63,4 +63,4 @@ export const EventService = () => {
   });
 };
 
-export type EventServiceType = ReturnType<typeof EventService>;
+export type EventServiceType = ReturnType<typeof Events>;
