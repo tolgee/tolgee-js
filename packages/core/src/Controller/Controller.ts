@@ -1,15 +1,11 @@
 import type { EventServiceType } from '../Events/Events';
 import {
-  CacheAsyncRequests,
   CacheDescriptor,
-  CacheDescriptorInternal,
   FallbackNSTranslation,
   Options,
   TranslatePropsInternal,
-  TreeTranslationsData,
 } from '../types';
 import { Cache } from './Cache/Cache';
-import { decodeCacheKey, encodeCacheKey } from './Cache/helpers';
 import { getFallbackArray } from './State/helpers';
 import { PluginService } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
@@ -22,36 +18,47 @@ type StateServiceProps = {
 };
 
 export const Controller = ({ events, options }: StateServiceProps) => {
+  const fetchingObserver = ValueObserver<boolean>(
+    false,
+    () => cache.isFetching(),
+    events.onFetchingChange.emit
+  );
+  const loadingObserver = ValueObserver<boolean>(
+    false,
+    () => isLoading(),
+    events.onLoadingChange.emit
+  );
+
   const state = State(
     events.onLanguageChange,
     events.onPendingLanguageChange,
     events.onRunningChange
   );
-  const cache = Cache({
-    onCacheChange: events.onCacheChange,
-  });
-  const asyncRequests: CacheAsyncRequests = new Map();
+
   const pluginService = PluginService(
     t,
     state.getLanguage,
     state.getInitialOptions,
-    state.getApiUrl,
     state.getAvailableLanguages,
     getTranslationNs,
     getTranslation,
     changeTranslation
   );
 
+  const cache = Cache(
+    events.onCacheChange,
+    () => state.getInitialOptions().staticData,
+    pluginService.getBackendRecord,
+    pluginService.getBackendDevRecord,
+    isDev,
+    state.withDefaultNs,
+    state.isInitialLoading,
+    fetchingObserver,
+    loadingObserver
+  );
+
   state.init(options);
   cache.init(state.getInitialOptions().staticData);
-  const fetchingObserver = ValueObserver<boolean>(
-    false,
-    events.onFetchingChange.emit
-  );
-  const loadingObserver = ValueObserver<boolean>(
-    false,
-    events.onLoadingChange.emit
-  );
 
   events.onKeyUpdate.listen(() => {
     if (state.isRunning()) {
@@ -69,7 +76,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     key: string,
     value: string
   ) {
-    const keyObject = withDefaultNs(descriptor);
+    const keyObject = state.withDefaultNs(descriptor);
     const previousValue = cache.getTranslation(keyObject, key);
     cache.changeTranslation(keyObject, key, value);
     return {
@@ -85,54 +92,14 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     cache.init(state.getInitialOptions().staticData);
   }
 
-  function isFetching(ns?: FallbackNSTranslation) {
-    if (state.isInitialLoading()) {
-      return true;
-    }
-
-    if (ns === undefined) {
-      return asyncRequests.size > 0;
-    }
-    const namespaces = getFallbackArray(ns);
-    return Boolean(
-      Array.from(asyncRequests.keys()).find((key) =>
-        namespaces.includes(decodeCacheKey(key).namespace)
-      )
-    );
-  }
-
   function isLoading(ns?: FallbackNSTranslation) {
-    const namespaces = getFallbackArray(ns);
-
-    return Boolean(
-      state.isInitialLoading() ||
-        Array.from(asyncRequests.keys()).find((key) => {
-          const descriptor = decodeCacheKey(key);
-          return (
-            (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
-            !cache.exists({
-              namespace: descriptor.namespace,
-              language: state.getLanguage()!,
-            })
-          );
-        })
-    );
+    return cache.isLoading(state.getLanguage()!, ns);
   }
 
   function isDev() {
     return Boolean(
       state.getInitialOptions().apiKey && pluginService.getDevBackend()
     );
-  }
-
-  function withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
-    return {
-      namespace:
-        descriptor.namespace === undefined
-          ? state.getInitialOptions().defaultNs
-          : descriptor.namespace,
-      language: descriptor.language,
-    };
   }
 
   async function addActiveNs(ns: FallbackNSTranslation, forget?: boolean) {
@@ -181,7 +148,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function loadRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const descriptors = getRequiredRecords(lang, ns);
     if (descriptors.length) {
-      return valueOrPromise(loadRecords(descriptors), () => {});
+      return valueOrPromise(cache.loadRecords(descriptors), () => {});
     }
   }
 
@@ -228,109 +195,21 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     return cache.getTranslationFallback(namespaces, languages, key);
   }
 
-  function fetchNormal(keyObject: CacheDescriptorInternal) {
-    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
-    if (!dataPromise) {
-      const staticDataValue =
-        state.getInitialOptions().staticData?.[encodeCacheKey(keyObject)];
-      if (typeof staticDataValue === 'function') {
-        dataPromise = staticDataValue();
-      } else if (staticDataValue) {
-        dataPromise = Promise.resolve(staticDataValue);
-      }
-    }
-
-    if (!dataPromise) {
-      dataPromise = pluginService.getBackendRecord(keyObject);
-    }
-
-    if (!dataPromise) {
-      // return empty data, so we know it has already been attempted to fetch
-      dataPromise = Promise.resolve({});
-    }
-    return dataPromise;
-  }
-
-  function fetchData(keyObject: CacheDescriptorInternal) {
-    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
-    if (isDev()) {
-      dataPromise = pluginService.getBackendDevRecord(keyObject)?.catch(() => {
-        // eslint-disable-next-line no-console
-        console.warn(`Tolgee: Failed to fetch data from dev backend`);
-        // fallback to normal fetch if dev fails
-        return fetchNormal(keyObject);
-      });
-    }
-
-    if (!dataPromise) {
-      dataPromise = fetchNormal(keyObject);
-    }
-
-    return dataPromise;
-  }
-
-  async function loadRecords(descriptors: CacheDescriptor[]) {
-    const withPromises = descriptors.map((descriptor) => {
-      const keyObject = withDefaultNs(descriptor);
-      const cacheKey = encodeCacheKey(keyObject);
-      const existingPromise = asyncRequests.get(cacheKey);
-
-      if (existingPromise) {
-        return {
-          new: false,
-          promise: existingPromise,
-          keyObject,
-          cacheKey,
-        };
-      }
-      const dataPromise = fetchData(keyObject);
-      asyncRequests.set(cacheKey, dataPromise);
-      return {
-        new: true,
-        promise: dataPromise,
-        keyObject,
-        cacheKey,
-      };
-    });
-    fetchingObserver.update(isFetching());
-    loadingObserver.update(isLoading());
-
-    const results = await Promise.all(withPromises.map((val) => val.promise));
-
-    withPromises.forEach((value, i) => {
-      if (value.new) {
-        asyncRequests.delete(value.cacheKey);
-        const data = results[i];
-        if (data) {
-          cache.addRecord(value.keyObject, data, isDev());
-        }
-      }
-    });
-    fetchingObserver.update(isFetching());
-    loadingObserver.update(isLoading());
-
-    return withPromises.map((val) => cache.getRecord(val.keyObject)!);
-  }
-
-  async function loadRecord(descriptor: CacheDescriptor) {
-    const result = await loadRecords([descriptor]);
-    return result[0];
-  }
-
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
+      // fail if there is no language
       state.getLanguageOrFail();
       return loadRequiredRecords();
     });
 
     if (isPromise(data)) {
       state.setInitialLoading(true);
-      fetchingObserver.update(isFetching());
-      loadingObserver.update(isLoading());
+      fetchingObserver.notify();
+      loadingObserver.notify();
       return Promise.resolve(data).then(() => {
         state.setInitialLoading(false);
-        fetchingObserver.update(isFetching());
-        loadingObserver.update(isLoading());
+        fetchingObserver.notify();
+        loadingObserver.notify();
         events.onInitialLoaded.emit();
       });
     } else {
@@ -357,16 +236,18 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   }
 
   function run() {
+    let result: Promise<void> | undefined = undefined;
     if (!state.isRunning()) {
       state.setRunning(true);
-      pluginService.run(isDev());
-      return loadInitial();
+      pluginService.run();
+      result = loadInitial();
     }
+    return Promise.resolve(result);
   }
 
   function stop() {
     if (state.isRunning()) {
-      pluginService.stop(isDev());
+      pluginService.stop();
       state.setRunning(false);
     }
   }
@@ -374,16 +255,14 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   return Object.freeze({
     ...state,
     ...pluginService,
+    ...cache,
     init,
     changeLanguage,
     getTranslation,
     changeTranslation,
     addActiveNs,
     loadRequiredRecords,
-    loadRecords,
-    loadRecord,
     isLoading,
-    isFetching,
     isLoaded,
     t,
     isDev,

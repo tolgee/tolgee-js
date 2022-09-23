@@ -1,4 +1,3 @@
-import { TolgeePlugin } from '@tolgee/core';
 import { InvisibleObserver } from '../InvisibleObserver';
 import { TextObserver } from '../TextObserver';
 import { testObserver } from './testObserver';

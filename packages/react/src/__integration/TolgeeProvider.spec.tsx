@@ -5,7 +5,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { act } from 'react-dom/test-utils';
 
 import mockTranslations from './mockTranslations';
-import fetchMock, { MockResponseInitFunction } from 'jest-fetch-mock';
+import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
 import {
   TolgeeProvider,

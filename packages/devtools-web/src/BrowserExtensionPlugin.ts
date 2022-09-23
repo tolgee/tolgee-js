@@ -1,5 +1,4 @@
 import type { TolgeeInstance, TolgeePlugin } from '@tolgee/core';
-import { isDataView } from 'util/types';
 import { handshakeWithExtension, listen } from './tools/plugin';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -1,4 +1,9 @@
-import { EventEmitterType, FallbackNSTranslation } from '../../types';
+import {
+  CacheDescriptor,
+  CacheDescriptorInternal,
+  EventEmitterType,
+  FallbackNSTranslation,
+} from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
 import { initState, Options } from './initState';
@@ -127,9 +132,14 @@ export const State = (
     }
   }
 
-  function getApiUrl() {
-    const apiUrl = state.initialOptions.apiUrl;
-    return apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl;
+  function withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
+    return {
+      namespace:
+        descriptor.namespace === undefined
+          ? getInitialOptions().defaultNs
+          : descriptor.namespace,
+      language: descriptor.language,
+    };
   }
 
   return Object.freeze({
@@ -150,6 +160,6 @@ export const State = (
     getFallbackLangs,
     getFallbackNamespaces,
     getAvailableLanguages,
-    getApiUrl,
+    withDefaultNs,
   });
 };
