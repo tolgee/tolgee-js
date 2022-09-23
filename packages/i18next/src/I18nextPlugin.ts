@@ -11,6 +11,6 @@ export const I18nextPlugin =
   (props?: Props): TolgeePlugin =>
   (tolgee) =>
     tolgee
-      .use(BrowserExtensionPlugin())
+      .use(BrowserExtensionPlugin({ fullReload: true }))
       .use(DevTools({ observer: props }))
       .init({ ns: [] });

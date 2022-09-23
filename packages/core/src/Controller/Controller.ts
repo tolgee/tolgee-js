@@ -148,7 +148,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function loadRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const descriptors = getRequiredRecords(lang, ns);
     if (descriptors.length) {
-      return valueOrPromise(cache.loadRecords(descriptors, isDev()), () => {});
+      return valueOrPromise(loadRecords(descriptors), () => {});
     }
   }
 
@@ -235,6 +235,14 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     });
   }
 
+  async function loadRecord(descriptor: CacheDescriptor) {
+    return (await loadRecords([descriptor]))[0];
+  }
+
+  function loadRecords(descriptors: CacheDescriptor[]) {
+    return cache.loadRecords(descriptors, isDev());
+  }
+
   function run() {
     let result: Promise<void> | undefined = undefined;
     if (!state.isRunning()) {
@@ -262,6 +270,8 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     changeTranslation,
     addActiveNs,
     loadRequiredRecords,
+    loadRecords,
+    loadRecord,
     isLoading,
     isLoaded,
     t,

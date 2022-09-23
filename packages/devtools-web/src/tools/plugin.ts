@@ -91,3 +91,16 @@ export async function handshakeWithExtension(
   }
   throw new Error('Tolgee extension not present');
 }
+
+export async function updateConfig(data: LibConfig): Promise<boolean> {
+  try {
+    await sendAndRecieve({
+      message: 'TOLGEE_CONFIG_UPDATE',
+      recievingMessage: 'TOLGEE_PLUGIN_UPDATED',
+      data,
+    });
+    return true;
+  } catch {
+    throw new Error('Tolgee extension not present');
+  }
+}

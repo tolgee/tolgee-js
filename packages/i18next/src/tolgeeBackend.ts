@@ -13,7 +13,9 @@ export const tolgeeBackend = (tolgee: TolgeeInstance): Module => {
           namespace: ns === 'translation' ? '' : undefined,
         });
         callback(null, Object.fromEntries(translations));
-      } catch {
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(e);
         callback(true);
       }
     },
