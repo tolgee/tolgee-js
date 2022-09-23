@@ -8,5 +8,5 @@ export {
 } from './constants';
 export * from './types';
 export { getTranslateParams } from './TranslateParams';
-export { getFallback, getFallbackArray } from './StateService/State/helpers';
-export { compareDescriptors } from './EventService/helpers';
+export { getFallback, getFallbackArray } from './Controller/State/helpers';
+export { compareDescriptors } from './Events/helpers';

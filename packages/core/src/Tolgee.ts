@@ -1,55 +1,57 @@
-import { EventService } from './EventService/EventService';
-import { StateService } from './StateService/StateService';
+import { Events } from './Events/Events';
+import { Controller } from './Controller/Controller';
 import { Options, TolgeeInstance, TolgeePlugin } from './types';
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
-  const eventService = EventService();
-  const stateService = StateService({
-    eventService,
+  const events = Events();
+  const controller = Controller({
+    events,
     options,
   });
 
   const pluginTools = Object.freeze({
-    setFinalFormatter: stateService.setFinalFormatter,
-    addFormatter: stateService.addFormatter,
-    setObserver: stateService.setObserver,
-    setUi: stateService.setUi,
-    setDevBackend: stateService.setDevBackend,
-    addBackend: stateService.addBackend,
+    setFinalFormatter: controller.setFinalFormatter,
+    addFormatter: controller.addFormatter,
+    setObserver: controller.setObserver,
+    setUi: controller.setUi,
+    setDevBackend: controller.setDevBackend,
+    addBackend: controller.addBackend,
+    setLanguageDetector: controller.setLanguageDetector,
+    setLanguageStorage: controller.setLanguageStorage,
   });
 
   const withRestart = (callback: () => void) => {
-    const wasRunning = stateService.isRunning();
-    wasRunning && stateService.stop();
+    const wasRunning = controller.isRunning();
+    wasRunning && controller.stop();
     callback();
-    wasRunning && stateService.run();
+    wasRunning && controller.run();
   };
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
-    on: eventService.on,
-    onKeyUpdate: eventService.onKeyUpdate.listenSome,
+    on: events.on,
+    onKeyUpdate: events.onKeyUpdate.listenSome,
 
     // state
-    getLanguage: stateService.getLanguage,
-    getPendingLanguage: stateService.getPendingLanguage,
-    changeLanguage: stateService.changeLanguage,
-    changeTranslation: stateService.changeTranslation,
-    addActiveNs: stateService.addActiveNs,
-    removeActiveNs: stateService.removeActiveNs,
-    loadRecords: stateService.loadRecords,
-    loadRecord: stateService.loadRecord,
-    isLoaded: stateService.isLoaded,
-    isInitialLoading: stateService.isInitialLoading,
-    isLoading: stateService.isLoading,
-    isFetching: stateService.isFetching,
-    isRunning: stateService.isRunning,
-    run: stateService.run,
-    stop: stateService.stop,
-    t: stateService.t,
-    highlight: stateService.highlight,
-    getInitialOptions: stateService.getInitialOptions,
-    isDev: stateService.isDev,
+    getLanguage: controller.getLanguage,
+    getPendingLanguage: controller.getPendingLanguage,
+    changeLanguage: controller.changeLanguage,
+    changeTranslation: controller.changeTranslation,
+    addActiveNs: controller.addActiveNs,
+    removeActiveNs: controller.removeActiveNs,
+    loadRecords: controller.loadRecords,
+    loadRecord: controller.loadRecord,
+    isLoaded: controller.isLoaded,
+    isInitialLoading: controller.isInitialLoading,
+    isLoading: controller.isLoading,
+    isFetching: controller.isFetching,
+    isRunning: controller.isRunning,
+    run: controller.run,
+    stop: controller.stop,
+    t: controller.t,
+    highlight: controller.highlight,
+    getInitialOptions: controller.getInitialOptions,
+    isDev: controller.isDev,
 
     // plugins
     use: (plugin: TolgeePlugin | undefined) => {
@@ -59,7 +61,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
       return tolgee;
     },
     init: (options: Partial<Options>) => {
-      withRestart(() => stateService.init(options));
+      withRestart(() => controller.init(options));
       return tolgee;
     },
   });

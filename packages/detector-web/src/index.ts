@@ -1,0 +1,1 @@
+export { DetectorPlugin } from './LanguageDetectorPlugin';

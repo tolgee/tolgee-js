@@ -1,8 +1,8 @@
-import type { Options } from './StateService/State/initState';
+import type { Options } from './Controller/State/initState';
 
-export type { State, Options } from './StateService/State/initState';
-export type { EventEmitterType } from './EventService/EventEmitter';
-export type { EventEmitterSelectiveType } from './EventService/EventEmitterSelective';
+export type { State, Options } from './Controller/State/initState';
+export type { EventEmitterType } from './Events/EventEmitter';
+export type { EventEmitterSelectiveType } from './Events/EventEmitterSelective';
 
 export type FallbackGeneral = undefined | false | string | string[];
 
@@ -140,6 +140,21 @@ export type ObserverInterface = (props: ObserverProps) => {
   highlight: HighlightInterface;
 };
 
+export type LanguageDetectorProps = {
+  availableLanguages: string[];
+};
+
+export type LanguageDetectorInterface = {
+  getLanguage: (
+    props: LanguageDetectorProps
+  ) => string | undefined | Promise<string | undefined>;
+};
+
+export type LanguageStorageInterface = {
+  getLanguage: () => string | undefined | Promise<string | undefined>;
+  setLanguage: (language: string) => void | Promise<void>;
+};
+
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
@@ -196,8 +211,8 @@ export type TolgeeInstance = Readonly<{
 
   use: (plugin: TolgeePlugin | undefined) => TolgeeInstance;
 
-  getLanguage: () => string;
-  getPendingLanguage: () => string;
+  getLanguage: () => string | undefined;
+  getPendingLanguage: () => string | undefined;
   changeLanguage: (language: string) => Promise<void>;
   changeTranslation: ChangeTranslationInterface;
   addActiveNs: (ns: FallbackNSTranslation, forget?: boolean) => Promise<void>;
@@ -213,7 +228,7 @@ export type TolgeeInstance = Readonly<{
   getInitialOptions: () => Options;
   isDev: () => boolean;
   init: (options: Partial<Options>) => TolgeeInstance;
-  run: () => Promise<void>;
+  run: () => Promise<void> | void;
   stop: () => void;
   t: (props: TranslatePropsInternal) => string;
 }>;
@@ -225,6 +240,12 @@ export type PluginServicePublic = Readonly<{
   setUi: (ui: UiLibInterface | undefined) => void;
   addBackend: (backend: BackendInterface | undefined) => void;
   setDevBackend: (backend: BackendInterface | undefined) => void;
+  setLanguageDetector: (
+    languageDetector: LanguageDetectorInterface | undefined
+  ) => void;
+  setLanguageStorage: (
+    languageStorage: LanguageStorageInterface | undefined
+  ) => void;
 }>;
 
 export type NodeMeta = {

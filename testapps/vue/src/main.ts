@@ -2,12 +2,16 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { Tolgee, VuePlugin, TolgeeVue } from '@tolgee/vue';
 import { IcuPlugin } from '@tolgee/icu-formatter';
+import { DetectorPlugin } from '@tolgee/detector-web';
+import { StoragePlugin } from '@tolgee/storage-web';
 
 const tolgee = Tolgee()
   .use(VuePlugin())
   .use(IcuPlugin())
+  .use(DetectorPlugin())
+  .use(StoragePlugin())
   .init({
-    language: 'en',
+    defaultLanguage: 'en',
     staticData: {
       en: () => import('../i18n/en.json'),
       de: () => import('../i18n/de.json'),

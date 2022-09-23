@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
 import { IcuPlugin } from '@tolgee/icu-formatter';
+import { DetectorPlugin } from '@tolgee/detector-web';
+import { StoragePlugin } from '@tolgee/storage-web';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
@@ -14,8 +16,9 @@ const withSleep = (ms: number, promise: Promise<any>) =>
 const tolgee = Tolgee()
   .use(ReactPlugin())
   .use(IcuPlugin())
+  .use(DetectorPlugin())
+  .use(StoragePlugin())
   .init({
-    language: 'en',
     staticData: {
       en: () => import('./i18n/en.json'),
       de: () => import('./i18n/de.json'),
@@ -33,6 +36,7 @@ const tolgee = Tolgee()
     apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
     apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
     fallbackLanguage: 'en',
+    defaultLanguage: 'en',
   });
 
 export const App = () => {

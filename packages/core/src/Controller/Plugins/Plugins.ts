@@ -1,8 +1,8 @@
+import { missingOptionError, valueOrPromise } from '../../helpers';
 import {
   BackendDevInterface,
   BackendGetRecord,
   BackendInterface,
-  BackendDevProps,
   FormatterInterface,
   ObserverInterface,
   TranslatePropsInternal,
@@ -11,20 +11,25 @@ import {
   UiLibInterface,
   UiType,
   FinalFormatterInterface,
-  UiProps,
   HighlightInterface,
   UiConstructor,
   UiKeyOption,
+  LanguageDetectorInterface,
+  LanguageStorageInterface,
+  Options,
+  ChangeTranslationInterface,
 } from '../../types';
 import { getFallbackArray } from '../State/helpers';
 
 export const PluginService = (
-  getLocale: () => string,
   translate: (params: TranslatePropsInternal) => string,
-  getBackendProps: () => BackendDevProps,
-  getUiProps: () => UiProps,
+  getLanguage: () => string | undefined,
+  getInitialOptions: () => Options,
+  getApiUrl: () => string | undefined,
+  getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
-  getTranslation: (props: TranslatePropsInternal) => string | undefined
+  getTranslation: (props: TranslatePropsInternal) => string | undefined,
+  changeTranslation: ChangeTranslationInterface
 ) => {
   const plugins = {
     ui: undefined as UiConstructor | undefined,
@@ -37,6 +42,8 @@ export const PluginService = (
     devBackend: undefined as BackendDevInterface | undefined,
     backends: [] as BackendInterface[],
     ui: undefined as UiInterface | undefined,
+    languageDetector: undefined as LanguageDetectorInterface | undefined,
+    languageStorage: undefined as LanguageStorageInterface | undefined,
   };
 
   const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
@@ -55,7 +62,14 @@ export const PluginService = (
   };
 
   const run = (isDev: boolean) => {
-    instances.ui = plugins.ui && new plugins.ui(getUiProps());
+    instances.ui =
+      plugins.ui &&
+      new plugins.ui({
+        apiKey: getInitialOptions().apiKey!,
+        apiUrl: getApiUrl()!,
+        highlight,
+        changeTranslation,
+      });
     instances.observer?.run();
   };
 
@@ -88,6 +102,53 @@ export const PluginService = (
     plugins.ui = (ui as UiLibInterface)?.UI || ui;
   };
 
+  const setLanguageStorage = (
+    storage: LanguageStorageInterface | undefined
+  ) => {
+    instances.languageStorage = storage;
+  };
+
+  const setStoredLanguage = (language: string) => {
+    instances.languageStorage?.setLanguage(language);
+  };
+
+  const setLanguageDetector = (
+    detector: LanguageDetectorInterface | undefined
+  ) => {
+    instances.languageDetector = detector;
+  };
+
+  const detectLanguage = () => {
+    if (!instances.languageDetector) {
+      return undefined;
+    }
+
+    const availableLanguages = getAvailableLanguages();
+
+    if (!availableLanguages) {
+      throw new Error(missingOptionError('availableLanguages'));
+    }
+
+    return instances.languageDetector.getLanguage({
+      availableLanguages,
+    });
+  };
+
+  const getInitialLanguage = () => {
+    const availableLanguages = getAvailableLanguages();
+    const languageOrPromise = instances.languageStorage?.getLanguage();
+
+    return valueOrPromise(languageOrPromise, (language) => {
+      if (
+        (!availableLanguages || availableLanguages.includes(language!)) &&
+        language
+      ) {
+        return language;
+      }
+      return detectLanguage();
+    });
+  };
+
   const addBackend = (backend: BackendInterface | undefined) => {
     if (backend) {
       instances.backends.push(backend);
@@ -104,7 +165,8 @@ export const PluginService = (
 
   const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
     return instances.devBackend?.getRecord({
-      ...getBackendProps(),
+      apiKey: getInitialOptions().apiKey,
+      apiUrl: getApiUrl(),
       language,
       namespace,
     });
@@ -141,20 +203,21 @@ export const PluginService = (
       });
     }
 
-    if (formattableTranslation) {
+    const language = getLanguage();
+    if (formattableTranslation && language) {
       for (const formatter of instances.formatters) {
         result = formatter.format({
           translation: result,
-          language: getLocale(),
+          language,
           params,
         });
       }
     }
 
-    if (instances.finalFormatter && formattableTranslation) {
+    if (instances.finalFormatter && formattableTranslation && language) {
       result = instances.finalFormatter.format({
         translation: result,
-        language: getLocale(),
+        language,
         params,
       });
     }
@@ -176,6 +239,10 @@ export const PluginService = (
     getDevBackend,
     getBackendRecord,
     getBackendDevRecord,
+    setLanguageDetector,
+    setLanguageStorage,
+    getInitialLanguage,
+    setStoredLanguage,
     run,
     stop,
     retranslate,
