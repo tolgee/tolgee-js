@@ -52,6 +52,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     highlight: controller.highlight,
     getInitialOptions: controller.getInitialOptions,
     isDev: controller.isDev,
+    wrap: controller.wrap,
 
     // plugins
     use: (plugin: TolgeePlugin | undefined) => {

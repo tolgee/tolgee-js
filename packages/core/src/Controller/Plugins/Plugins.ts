@@ -18,6 +18,7 @@ import {
   LanguageStorageInterface,
   Options,
   ChangeTranslationInterface,
+  WrapperWrapProps,
 } from '../../types';
 import { getFallbackArray } from '../State/helpers';
 
@@ -25,7 +26,6 @@ export const PluginService = (
   translate: (params: TranslatePropsInternal) => string,
   getLanguage: () => string | undefined,
   getInitialOptions: () => Options,
-  getApiUrl: () => string | undefined,
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
   getTranslation: (props: TranslatePropsInternal) => string | undefined,
@@ -61,19 +61,19 @@ export const PluginService = (
     instances.ui?.handleElementClick(event, withNs);
   };
 
-  const run = (isDev: boolean) => {
+  const run = () => {
     instances.ui =
       plugins.ui &&
       new plugins.ui({
         apiKey: getInitialOptions().apiKey!,
-        apiUrl: getApiUrl()!,
+        apiUrl: getInitialOptions().apiUrl!,
         highlight,
         changeTranslation,
       });
     instances.observer?.run();
   };
 
-  const stop = (isDev: boolean) => {
+  const stop = () => {
     instances.ui = undefined;
     instances.observer?.stop();
   };
@@ -166,7 +166,7 @@ export const PluginService = (
   const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
     return instances.devBackend?.getRecord({
       apiKey: getInitialOptions().apiKey,
-      apiUrl: getApiUrl(),
+      apiUrl: getInitialOptions().apiUrl,
       language,
       namespace,
     });
@@ -224,6 +224,13 @@ export const PluginService = (
     return result;
   };
 
+  const wrap = (params: WrapperWrapProps) => {
+    if (instances.observer) {
+      return instances.observer?.wrap(params);
+    }
+    return params.translation;
+  };
+
   const retranslate = () => {
     instances.observer?.retranslate();
   };
@@ -247,6 +254,7 @@ export const PluginService = (
     stop,
     retranslate,
     highlight,
+    wrap,
   });
 };
 

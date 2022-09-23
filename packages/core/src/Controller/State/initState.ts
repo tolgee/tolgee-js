@@ -69,11 +69,15 @@ export const initState = (
   options?: Partial<Options>,
   previousState?: State
 ): State => {
-  const initialOptions = Object.freeze({
+  const initialOptions = {
     ...defaultValues,
     ...previousState?.initialOptions,
     ...options,
-  });
+  };
+  // remove extra '/' from url end
+  const apiUrl = initialOptions.apiUrl;
+  initialOptions.apiUrl = apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl;
+
   return {
     initialOptions,
     activeNamespaces:

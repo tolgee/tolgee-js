@@ -1,12 +1,14 @@
 export const ValueObserver = <T = any>(
   initialValue: T,
+  valueGetter: () => T,
   handler: (value: T) => void
 ) => {
   let previousValue: T = initialValue;
   function init(value: T) {
     previousValue = value;
   }
-  function update(value: T) {
+  function notify() {
+    const value = valueGetter();
     if (previousValue !== value) {
       handler(value);
     }
@@ -14,6 +16,8 @@ export const ValueObserver = <T = any>(
   }
   return Object.freeze({
     init,
-    update,
+    notify,
   });
 };
+
+export type ValueObserverInstance<T> = ReturnType<typeof ValueObserver<T>>;

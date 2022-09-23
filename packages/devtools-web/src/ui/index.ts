@@ -2,7 +2,6 @@ import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
 import type {
   FallbackNSTranslation,
-  KeyWithDefault,
   UiProps,
   UiInterface,
   UiKeyOption,

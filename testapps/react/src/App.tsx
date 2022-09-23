@@ -8,11 +8,6 @@ import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
 import { Namespaces } from './Namespaces';
 
-const withSleep = (ms: number, promise: Promise<any>) =>
-  promise.then(
-    (data) => new Promise<any>((resolve) => setTimeout(() => resolve(data), ms))
-  );
-
 const tolgee = Tolgee()
   .use(ReactPlugin())
   .use(IcuPlugin())

@@ -90,7 +90,11 @@ export type TFnType<T = DefaultParamType, R = string> = {
   (props: TranslateProps<T>): R;
 };
 
-export type WrapperWrapFunction = (props: TranslatePropsInternal) => string;
+export type WrapperWrapProps = Pick<
+  TranslatePropsInternal,
+  'key' | 'params' | 'defaultValue' | 'ns' | 'translation'
+>;
+export type WrapperWrapFunction = (props: WrapperWrapProps) => string;
 export type WrapperUnwrapFunction = (text: string) => Unwrapped;
 
 export type WrapperAttributeXPathGetter = (props: {
@@ -133,7 +137,7 @@ export type HighlightInterface = (
 
 export type ObserverInterface = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
-  wrap: (props: TranslatePropsInternal) => string;
+  wrap: WrapperWrapFunction;
   retranslate: () => void;
   stop: () => void;
   run: () => void;
@@ -228,9 +232,10 @@ export type TolgeeInstance = Readonly<{
   getInitialOptions: () => Options;
   isDev: () => boolean;
   init: (options: Partial<Options>) => TolgeeInstance;
-  run: () => Promise<void> | void;
+  run: () => Promise<void>;
   stop: () => void;
   t: (props: TranslatePropsInternal) => string;
+  wrap: (params: TranslatePropsInternal) => string | undefined;
 }>;
 
 export type PluginServicePublic = Readonly<{

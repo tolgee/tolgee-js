@@ -41,6 +41,7 @@ const getTranslateInternal = (namespaces?: FallbackNSTranslation) => {
   };
 
   function createTFunction() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props: TranslateProps<any>) => {
       const { key, ns } = props;
       const fallbackNs = ns || namespaces?.[0];
