@@ -15,15 +15,10 @@ import {
 import { getFallbackArray } from '../State/helpers';
 import { ValueObserverInstance } from '../ValueObserver';
 
-import {
-  decodeCacheKey,
-  encodeCacheKey,
-  flattenTranslations,
-  mapToObject,
-} from './helpers';
+import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 
 type CacheRecord = {
-  isDev: boolean;
+  version: number;
   data: TranslationsFlat;
 };
 
@@ -31,10 +26,8 @@ type StateCache = Map<string, CacheRecord>;
 
 export const Cache = (
   onCacheChange: EventEmitterType<CacheDescriptorWithKey>,
-  getStaticData: () => Options['staticData'],
   backendGetRecord: BackendGetRecord,
   backendGetDevRecord: BackendGetDevRecord,
-  isDev: () => boolean,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
   isInitialLoading: () => boolean,
   fetchingObserver: ValueObserverInstance<boolean>,
@@ -42,49 +35,58 @@ export const Cache = (
 ) => {
   const asyncRequests: CacheAsyncRequests = new Map();
   const cache: StateCache = new Map();
-  const init = (data: Options['staticData']) => {
+  let staticData: NonNullable<Options['staticData']> = {};
+  let version = 0;
+
+  function init(data: Options['staticData']) {
     if (data) {
+      staticData = { ...staticData, ...data };
       Object.entries(data).forEach(([key, value]) => {
         if (typeof value !== 'function') {
-          addRecord(decodeCacheKey(key), value, false);
+          addRecord(decodeCacheKey(key), value);
         }
       });
     }
-  };
+  }
 
-  const addRecord = (
+  function invalidate() {
+    version += 1;
+  }
+
+  function addRecord(
     descriptor: CacheDescriptorInternal,
-    data: TreeTranslationsData,
-    isDev: boolean
-  ) => {
-    cache.set(encodeCacheKey(descriptor), {
+    data: TreeTranslationsData
+  ) {
+    const cacheKey = encodeCacheKey(descriptor);
+    staticData[cacheKey] = data;
+    cache.set(cacheKey, {
       data: flattenTranslations(data),
-      isDev,
+      version: version,
     });
     onCacheChange.emit(descriptor);
-  };
+  }
 
-  const exists = (descriptor: CacheDescriptorInternal, isDev?: boolean) => {
+  function exists(descriptor: CacheDescriptorInternal, strict = false) {
     const record = cache.get(encodeCacheKey(descriptor));
-    if (isDev && record) {
-      return record.isDev;
+    if (record && strict) {
+      return record.version === version;
     }
     return Boolean(record);
-  };
+  }
 
-  const getRecord = (descriptor: CacheDescriptorInternal) => {
+  function getRecord(descriptor: CacheDescriptorInternal) {
     return cache.get(encodeCacheKey(descriptor))?.data;
-  };
+  }
 
-  const getTranslation = (descriptor: CacheDescriptorInternal, key: string) => {
+  function getTranslation(descriptor: CacheDescriptorInternal, key: string) {
     return cache.get(encodeCacheKey(descriptor))?.data.get(key);
-  };
+  }
 
-  const getTranslationNs = (
+  function getTranslationNs(
     namespaces: string[],
     languages: string[],
     key: string
-  ) => {
+  ) {
     for (const namespace of namespaces) {
       for (const language of languages) {
         const value = cache
@@ -96,13 +98,13 @@ export const Cache = (
       }
     }
     return Array.from(new Set(namespaces));
-  };
+  }
 
-  const getTranslationFallback = (
+  function getTranslationFallback(
     namespaces: string[],
     languages: string[],
     key: string
-  ) => {
+  ) {
     for (const namespace of namespaces) {
       for (const language of languages) {
         const value = cache
@@ -114,21 +116,21 @@ export const Cache = (
       }
     }
     return undefined;
-  };
+  }
 
-  const changeTranslation = (
+  function changeTranslation(
     descriptor: CacheDescriptorInternal,
     key: string,
     value: TranslationValue
-  ) => {
+  ) {
     const record = cache.get(encodeCacheKey(descriptor))?.data;
     record?.set(key, value);
     onCacheChange.emit({ ...descriptor, key });
-  };
+  }
 
-  const clear = () => {
+  function clear() {
     cache.clear();
-  };
+  }
 
   function isFetching(ns?: FallbackNSTranslation) {
     if (isInitialLoading()) {
@@ -167,7 +169,7 @@ export const Cache = (
   function fetchNormal(keyObject: CacheDescriptorInternal) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
     if (!dataPromise) {
-      const staticDataValue = getStaticData()?.[encodeCacheKey(keyObject)];
+      const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
       } else if (staticDataValue) {
@@ -186,9 +188,9 @@ export const Cache = (
     return dataPromise;
   }
 
-  function fetchData(keyObject: CacheDescriptorInternal) {
+  function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
     let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
-    if (isDev()) {
+    if (isDev) {
       dataPromise = backendGetDevRecord(keyObject)?.catch(() => {
         // eslint-disable-next-line no-console
         console.warn(`Tolgee: Failed to fetch data from dev backend`);
@@ -204,7 +206,7 @@ export const Cache = (
     return dataPromise;
   }
 
-  async function loadRecords(descriptors: CacheDescriptor[]) {
+  async function loadRecords(descriptors: CacheDescriptor[], isDev: boolean) {
     const withPromises = descriptors.map((descriptor) => {
       const keyObject = withDefaultNs(descriptor);
       const cacheKey = encodeCacheKey(keyObject);
@@ -218,7 +220,7 @@ export const Cache = (
           cacheKey,
         };
       }
-      const dataPromise = fetchData(keyObject);
+      const dataPromise = fetchData(keyObject, isDev);
       asyncRequests.set(cacheKey, dataPromise);
       return {
         new: true,
@@ -237,7 +239,7 @@ export const Cache = (
         asyncRequests.delete(value.cacheKey);
         const data = results[i];
         if (data) {
-          addRecord(value.keyObject, data, isDev());
+          addRecord(value.keyObject, data);
         }
       }
     });
@@ -245,11 +247,6 @@ export const Cache = (
     loadingObserver.notify();
 
     return withPromises.map((val) => getRecord(val.keyObject)!);
-  }
-
-  async function loadRecord(descriptor: CacheDescriptor) {
-    const result = await loadRecords([descriptor]);
-    return result[0];
   }
 
   function getAllRecords() {
@@ -264,6 +261,7 @@ export const Cache = (
 
   return Object.freeze({
     init,
+    invalidate,
     addRecord,
     exists,
     getRecord,
@@ -273,7 +271,6 @@ export const Cache = (
     changeTranslation,
     isFetching,
     isLoading,
-    loadRecord,
     loadRecords,
     clear,
     getAllRecords,
