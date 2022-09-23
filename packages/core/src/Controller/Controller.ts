@@ -47,10 +47,8 @@ export const Controller = ({ events, options }: StateServiceProps) => {
 
   const cache = Cache(
     events.onCacheChange,
-    () => state.getInitialOptions().staticData,
     pluginService.getBackendRecord,
     pluginService.getBackendDevRecord,
-    isDev,
     state.withDefaultNs,
     state.isInitialLoading,
     fetchingObserver,
@@ -88,8 +86,10 @@ export const Controller = ({ events, options }: StateServiceProps) => {
 
   function init(options: Partial<Options>) {
     state.init(options);
-    cache.clear();
     cache.init(state.getInitialOptions().staticData);
+    if (isDev()) {
+      cache.invalidate();
+    }
   }
 
   function isLoading(ns?: FallbackNSTranslation) {
@@ -118,7 +118,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cache.exists({ language, namespace }, isDev())) {
+        if (!cache.exists({ language, namespace }, true)) {
           result.push({ language, namespace });
         }
       });
@@ -148,7 +148,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function loadRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
     const descriptors = getRequiredRecords(lang, ns);
     if (descriptors.length) {
-      return valueOrPromise(cache.loadRecords(descriptors), () => {});
+      return valueOrPromise(cache.loadRecords(descriptors, isDev()), () => {});
     }
   }
 
