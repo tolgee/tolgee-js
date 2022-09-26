@@ -594,7 +594,9 @@ importers:
       '@testing-library/vue': ^6.6.1
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
+      '@tolgee/icu-formatter': ^4.8.0
       '@types/jest': ^27.0.2
+      '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
       babel-jest: ^27.5.1
       concurrently: 7.2.2
@@ -610,10 +612,12 @@ importers:
     dependencies:
       '@tolgee/core': link:../core
       '@tolgee/devtools-web': link:../devtools-web
+      '@types/testing-library__jest-dom': 5.14.5
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/vue': 6.6.1_vue@3.2.37
+      '@tolgee/icu-formatter': link:../icu-formatter
       '@types/jest': 27.5.2
       '@vue/vue3-jest': 27.0.0_usluppwkbzs5e3mabc3pp2k4m4
       babel-jest: 27.5.1

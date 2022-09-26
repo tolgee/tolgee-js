@@ -1,5 +1,4 @@
 module.exports = {
-  automock: true,
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   unmockedModulePathPatterns: ['/node_modules/*'],

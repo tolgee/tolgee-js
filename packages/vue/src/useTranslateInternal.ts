@@ -4,6 +4,7 @@ import {
   TranslateProps,
   KeyDescriptor,
   FallbackNSTranslation,
+  getFallback,
 } from '@tolgee/core';
 import {
   inject,
@@ -14,7 +15,8 @@ import {
 } from 'vue';
 import { TolgeeVueContext } from './types';
 
-export const useTranslateInternal = (namespaces?: FallbackNSTranslation) => {
+export const useTranslateInternal = (ns?: FallbackNSTranslation) => {
+  const namespaces = getFallback(ns);
   const tolgeeContext = inject('tolgeeContext', {
     tolgee: getCurrentInstance().proxy.$tolgee,
   }) as TolgeeVueContext;
@@ -50,9 +52,8 @@ export const useTranslateInternal = (namespaces?: FallbackNSTranslation) => {
 
   function createTFunction() {
     return (props: TranslateProps<any>) => {
-      const { key, ns } = props;
-      const fallbackNs = ns || namespaces?.[0];
-      subscribeToKey({ key, ns: fallbackNs });
+      const fallbackNs = props.ns || namespaces?.[0];
+      subscribeToKey({ key: props.key, ns: fallbackNs });
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     };
   }

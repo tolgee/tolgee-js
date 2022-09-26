@@ -31,7 +31,7 @@ export default {
       plugins: [terser()],
     },
   ],
-  external: ['vue', '@tolgee/core', '@tolgee/ui'],
+  external: ['vue', '@tolgee/core', '@tolgee/devtools-web'],
   watch: {
     clearScreen: false,
   },

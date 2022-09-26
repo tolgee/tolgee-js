@@ -38,12 +38,14 @@
   },
   "dependencies": {
     "@tolgee/core": "^4.8.0",
-    "@tolgee/devtools-web": "^4.8.0"
+    "@tolgee/devtools-web": "^4.8.0",
+    "@types/testing-library__jest-dom": "^5.14.5"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.4",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/vue": "^6.6.1",
+    "@tolgee/icu-formatter": "^4.8.0",
     "@types/jest": "^27.0.2",
     "@vue/vue3-jest": "^27.0.0-alpha.3",
     "babel-jest": "^27.5.1",

@@ -11,7 +11,7 @@
 import { useTolgee } from '@tolgee/vue';
 import { computed } from 'vue';
 
-const tolgee = useTolgee();
+const tolgee = useTolgee(['language']);
 
 // @ts-ignore
 const changeLanguage = (e) => {
