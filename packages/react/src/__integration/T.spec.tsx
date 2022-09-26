@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import fetchMock from 'jest-fetch-mock';
 import { act } from 'react-dom/test-utils';
 import React from 'react';

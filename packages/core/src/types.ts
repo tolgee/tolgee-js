@@ -240,6 +240,7 @@ export type TolgeeInstance = Readonly<{
   stop: () => void;
   t: (props: TranslatePropsInternal) => string;
   wrap: (params: TranslatePropsInternal) => string | undefined;
+  unwrap: (text: string) => Unwrapped;
 }>;
 
 export type PluginServicePublic = Readonly<{

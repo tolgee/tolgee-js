@@ -5,16 +5,18 @@ import {
   TranslateProps,
   FallbackNSTranslation,
   getFallbackArray,
+  getFallback,
 } from '@tolgee/core';
 
 import { useTolgeeContext } from './useTolgeeContext';
 import { ReactOptions } from './types';
 
 export const useTranslateInternal = (
-  namespaces?: FallbackNSTranslation,
+  ns?: FallbackNSTranslation,
   options?: ReactOptions
 ) => {
   const { tolgee, options: defaultOptions } = useTolgeeContext();
+  const namespaces = getFallback(ns);
   const namespacesJoined = getFallbackArray(namespaces).join(':');
 
   const currentOptions = {
@@ -70,9 +72,8 @@ export const useTranslateInternal = (
 
   const t = useCallback(
     (props: TranslateProps<any>) => {
-      const { key, ns } = props;
-      const fallbackNs = ns || namespaces?.[0];
-      subscribeToKey({ key, ns: fallbackNs });
+      const fallbackNs = props.ns || namespaces?.[0];
+      subscribeToKey({ key: props.key, ns: fallbackNs });
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },
     [tolgee, instance]

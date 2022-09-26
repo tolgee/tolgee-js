@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { act } from 'react-dom/test-utils';
@@ -87,6 +85,10 @@ describe('TolgeeProvider integration', () => {
           </TolgeeProvider>
         );
       });
+    });
+
+    afterEach(() => {
+      tolgee.stop();
     });
 
     it('shows correctly loading, fallback and default value', async () => {
