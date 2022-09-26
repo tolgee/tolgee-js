@@ -15,7 +15,8 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@tolgee/react": "^4.9.2",
+    "@tolgee/icu-formatter": "^4.8.0",
+    "@tolgee/react": "^4.8.0",
     "gatsby": "^4.19.2",
     "gatsby-plugin-react-intl": "^4.0.0",
     "react": "^17.0.1",

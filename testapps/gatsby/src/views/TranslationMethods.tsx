@@ -5,7 +5,7 @@ import { Link } from 'gatsby-plugin-react-intl';
 import { Navbar } from '../components/Navbar';
 
 export const TranslationMethods = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   return (
     <main className="translation-methods">
@@ -33,7 +33,7 @@ export const TranslationMethods = () => {
           <div>
             <T
               keyName="this_is_a_key_with_params"
-              parameters={{ key: 'value', key2: 'value2' }}
+              params={{ key: 'value', key2: 'value2' }}
             />
           </div>
         </div>
@@ -43,7 +43,7 @@ export const TranslationMethods = () => {
           <div>
             <T
               keyName="this_is_a_key_with_params"
-              parameters={{ key: 'value', key2: 'value2' }}
+              params={{ key: 'value', key2: 'value2' }}
               noWrap
             />
           </div>
@@ -63,14 +63,12 @@ export const TranslationMethods = () => {
 
         <div>
           <h1>t function with noWrap</h1>
-          <div>{t('this_is_a_key', undefined, true)}</div>
+          <div>{t('this_is_a_key', { noWrap: true })}</div>
         </div>
 
         <div>
           <h1>t function with default</h1>
-          <div>
-            {t('this_key_does_not_exist', undefined, false, 'This is default')}
-          </div>
+          <div>{t('this_key_does_not_exist', 'This is default')}</div>
         </div>
 
         <div>
@@ -78,7 +76,7 @@ export const TranslationMethods = () => {
           <div>
             {t({
               key: 'this_is_a_key',
-              parameters: { key: 'value', key2: 'value2' },
+              params: { key: 'value', key2: 'value2' },
             })}
           </div>
         </div>
@@ -88,7 +86,7 @@ export const TranslationMethods = () => {
           <div>
             {t({
               key: 'this_is_a_key',
-              parameters: { key: 'value', key2: 'value2' },
+              params: { key: 'value', key2: 'value2' },
               noWrap: true,
             })}
           </div>
