@@ -29,7 +29,6 @@ const fetch = fetchMock.mockResponse(async (req) => {
 describe('T component integration', () => {
   let tolgee: TolgeeInstance;
   const TestComponent = () => {
-    tolgee = useTolgeeContext().tolgee;
     return (
       <>
         <div data-testid="peter_dogs">

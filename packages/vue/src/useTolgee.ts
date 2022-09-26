@@ -2,23 +2,23 @@ import { TolgeeEvent } from '@tolgee/core';
 import { getCurrentInstance, inject, onUnmounted, ref } from 'vue';
 import { TolgeeVueContext } from './types';
 
-const DEFAULT_EVENTS: TolgeeEvent[] = ['language', 'pendingLanguage'];
-
-export const useTolgee = (events: TolgeeEvent[] = DEFAULT_EVENTS) => {
+export const useTolgee = (events?: TolgeeEvent[]) => {
+  const instance = getCurrentInstance();
   const tolgeeContext = inject('tolgeeContext', {
-    tolgee: getCurrentInstance().proxy.$tolgee,
+    tolgee: instance.proxy.$tolgee,
   }) as TolgeeVueContext;
 
   const tolgee = ref(tolgeeContext.tolgee);
 
-  const listeners = events.map((e) =>
+  const listeners = events?.map((e) =>
     tolgee.value.on(e, () => {
       tolgee.value = Object.freeze({ ...tolgee.value });
+      instance.proxy.$forceUpdate();
     })
   );
 
   onUnmounted(() => {
-    listeners.forEach((listener) => listener.unsubscribe());
+    listeners?.forEach((listener) => listener.unsubscribe());
   });
 
   return tolgee;

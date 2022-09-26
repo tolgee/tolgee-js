@@ -1,19 +1,23 @@
 jest.autoMockOff();
 
 import fetchMock from 'jest-fetch-mock';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/vue';
 
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
-import { TolgeeProvider } from '..';
-import { useTranslate } from '../useTranslateInternal';
-import { useLanguage } from '../useLanguage';
+import {
+  useTranslate,
+  TolgeeProvider,
+  Tolgee,
+  VuePlugin,
+  TolgeeInstance,
+  TolgeeVue,
+} from '..';
+import { IcuPlugin } from '@tolgee/icu-formatter';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
-
-let setLanguage: (lang: string) => void;
 
 const fetch = fetchMock.mockResponse(async (req) => {
   if (req.url.includes('/v2/api-keys/current')) {
@@ -44,13 +48,7 @@ const TestComponent = {
       </div>
     </div>`,
   setup() {
-    const t = useTranslate();
-    const language = useLanguage();
-
-    setLanguage = (lang: string) => {
-      language.value = lang;
-    };
-
+    const { t } = useTranslate();
     return { t };
   },
 };
@@ -59,28 +57,31 @@ const WrapperComponent = {
   components: { TestComponent, TolgeeProvider },
   template: `
     <TolgeeProvider
-      :config="config"
+      :tolgee="tolgee"
     >
       <TestComponent />
     </TolgeeProvider>
   `,
-  props: ['config'],
+  props: ['tolgee'],
 };
 
-describe('mixin integration', () => {
+describe('composition api', () => {
+  let tolgee: TolgeeInstance;
   beforeEach(async () => {
     fetch.enableMocks();
+    tolgee = Tolgee().use(VuePlugin()).use(IcuPlugin()).init({
+      apiKey: API_KEY,
+      apiUrl: API_URL,
+      defaultLanguage: 'cs',
+      fallbackLanguage: 'en',
+    });
 
     render(WrapperComponent, {
       props: {
-        config: {
-          apiKey: API_KEY,
-          apiUrl: API_URL,
-          defaultLanguage: 'cs',
-          fallbackLanguage: 'en',
-        },
-        loadingFallback: 'Loading...',
+        tolgee,
+        fallback: 'Loading...',
       },
+      global: { plugins: [[TolgeeVue, { tolgee }]] },
     });
 
     await waitFor(() => {
@@ -90,18 +91,22 @@ describe('mixin integration', () => {
     });
   });
 
+  afterEach(() => {
+    tolgee.stop();
+  });
+
   it('wraps translation correctly', async () => {
     expect(screen.queryByTestId('hello_world').innerHTML).toContain(
       'Ahoj světe!'
     );
-    expect(screen.queryByTestId('hello_world')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
   });
 
   it('works with no wrap', () => {
     expect(screen.queryByTestId('hello_world_no_wrap').innerHTML).toContain(
       'Ahoj světe!'
     );
-    expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveProperty(
+    expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveAttribute(
       '_tolgee'
     );
   });
@@ -110,7 +115,7 @@ describe('mixin integration', () => {
     expect(screen.queryByTestId('peter_dogs').innerHTML).toContain(
       'Petr má 5 psů.'
     );
-    expect(screen.queryByTestId('peter_dogs')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('peter_dogs')).toHaveAttribute('_tolgee');
   });
 
   it('works with default value', async () => {
@@ -118,20 +123,20 @@ describe('mixin integration', () => {
       'Non existant'
     );
     waitFor(() => {
-      expect(screen.queryByTestId('non_existant')).toHaveProperty('_tolgee');
+      expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
     });
   });
 
   describe('language switch', () => {
     beforeEach(async () => {
-      setLanguage('en');
+      tolgee.changeLanguage('en');
     });
 
     it('changes translation with tags', () => {
       expect(screen.queryByTestId('hello_world').innerHTML).toContain(
         'Hello world!'
       );
-      expect(screen.queryByTestId('hello_world')).toHaveProperty('_tolgee');
+      expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
     });
   });
 });

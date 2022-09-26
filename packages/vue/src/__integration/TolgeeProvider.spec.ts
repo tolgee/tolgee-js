@@ -6,7 +6,14 @@ import { render, screen, waitFor } from '@testing-library/vue';
 
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, TolgeeMixin } from '..';
+import {
+  TolgeeProvider,
+  TolgeeInstance,
+  Tolgee,
+  VuePlugin,
+  TolgeeVue,
+} from '..';
+import { IcuPlugin } from '@tolgee/icu-formatter';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -40,7 +47,6 @@ export const createFetchMock = () => {
 };
 
 const TestComponent = {
-  mixins: [TolgeeMixin],
   template: `
     <div>
       <div data-testid="hello_world">
@@ -59,15 +65,17 @@ const WrapperComponent = {
   components: { TestComponent, TolgeeProvider },
   template: `
     <TolgeeProvider
-      :config="config"
+      :tolgee="tolgee"
     >
       <TestComponent />
     </TolgeeProvider>
   `,
-  props: ['config'],
+  props: ['tolgee'],
 };
 
 describe('TolgeeProvider integration', () => {
+  let tolgee: TolgeeInstance;
+
   describe('regular settings', () => {
     let resolveEnglish;
     let resolveCzech;
@@ -76,16 +84,20 @@ describe('TolgeeProvider integration', () => {
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
+
+      tolgee = Tolgee().use(VuePlugin()).use(IcuPlugin()).init({
+        apiKey: API_KEY,
+        apiUrl: API_URL,
+        defaultLanguage: 'cs',
+        fallbackLanguage: 'en',
+      });
+
       render(WrapperComponent, {
         props: {
-          config: {
-            apiKey: API_KEY,
-            apiUrl: API_URL,
-            defaultLanguage: 'cs',
-            fallbackLanguage: 'en',
-          },
-          loadingFallback: 'Loading...',
+          tolgee,
+          fallback: 'Loading...',
         },
+        global: { plugins: [[TolgeeVue, { tolgee }]] },
       });
     });
 
@@ -97,67 +109,11 @@ describe('TolgeeProvider integration', () => {
       });
       resolveCzech();
       await waitFor(() => {
-        expect(screen.queryByTestId('hello_world').innerHTML).toContain(
-          'Ahoj světe!'
-        );
-        expect(
-          screen.queryByTestId('english_fallback').innerHTML
-        ).not.toContain('Default value');
-        expect(screen.queryByTestId('non_existant').innerHTML).not.toContain(
-          'Default value'
-        );
-      });
-      resolveEnglish();
-      await waitFor(() => {
-        expect(screen.queryByTestId('hello_world').innerHTML).toContain(
-          'Ahoj světe!'
-        );
-        expect(screen.queryByTestId('english_fallback').innerHTML).toContain(
-          'English fallback'
-        );
-        expect(screen.queryByTestId('non_existant').innerHTML).toContain(
-          'Default value'
-        );
-      });
-    });
-  });
-
-  describe('with preloadFallback', () => {
-    let resolveEnglish;
-    let resolveCzech;
-    beforeEach(async () => {
-      const fetchMock = createFetchMock();
-      resolveCzech = fetchMock.resolveCzech;
-      resolveEnglish = fetchMock.resolveEnglish;
-      fetchMock.fetch.enableMocks();
-      render(WrapperComponent, {
-        props: {
-          config: {
-            apiKey: API_KEY,
-            apiUrl: API_URL,
-            defaultLanguage: 'cs',
-            fallbackLanguage: 'en',
-            preloadFallback: true,
-          },
-          loadingFallback: 'Loading...',
-        },
-      });
-    });
-
-    it('shows correctly loading, fallback and default value', async () => {
-      expect(screen.queryByText('Loading...')?.innerHTML).toContain(
-        'Loading...'
-      );
-      resolveCzech();
-
-      await waitFor(() => {
         expect(screen.queryByText('Loading...')?.innerHTML).toContain(
           'Loading...'
         );
-        expect(screen.queryByTestId('hello_world')).toBeFalsy();
       });
       resolveEnglish();
-
       await waitFor(() => {
         expect(screen.queryByTestId('hello_world').innerHTML).toContain(
           'Ahoj světe!'

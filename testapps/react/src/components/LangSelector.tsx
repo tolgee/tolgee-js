@@ -2,7 +2,7 @@ import React from 'react';
 import { useTolgee } from '@tolgee/react';
 
 export const LangSelector: React.FC = () => {
-  const tolgee = useTolgee();
+  const tolgee = useTolgee(['pendingLanguage']);
 
   return (
     <select
