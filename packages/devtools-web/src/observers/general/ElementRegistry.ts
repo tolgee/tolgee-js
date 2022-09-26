@@ -9,7 +9,6 @@ import {
   KeyWithDefault,
   NodeMeta,
   TranslationOnClick,
-  compareDescriptors,
 } from '@tolgee/core';
 import { TolgeeElement } from '../../types';
 
@@ -17,7 +16,7 @@ import { ObserverOptions } from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStore } from './ElementStore';
-import { nodeContains } from './helpers';
+import { compareDescriptors, nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export const ElementRegistry = (

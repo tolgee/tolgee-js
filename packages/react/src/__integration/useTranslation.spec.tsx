@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import mockTranslations from './mockTranslations';
@@ -29,7 +27,7 @@ const fetch = fetchMock.mockResponse(async (req) => {
 describe('useTranslation hook integration', () => {
   let tolgee: TolgeeInstance;
   const TestComponent = () => {
-    const { t } = useTranslate(undefined);
+    const { t } = useTranslate();
 
     expect(typeof t('peter_dogs', { dogsCount: '5' })).toEqual('string');
     expect(typeof t('non_existant', '<i>non_formatted</i>')).toEqual('string');
@@ -74,6 +72,10 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('hello_world')).toContainHTML('Ahoj světe!');
     });
+  });
+
+  afterEach(() => {
+    tolgee.stop();
   });
 
   it('wraps translation correctly', async () => {

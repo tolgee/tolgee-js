@@ -1,3 +1,5 @@
+import { KeyDescriptorInternal } from '@tolgee/core';
+
 export function xPathEvaluate<T extends Node>(
   expression: string,
   targetNode: Node
@@ -45,3 +47,19 @@ export function nodeContains(descendant: Node, node: Node) {
   }
   return false;
 }
+
+export const compareDescriptors = (
+  descriptor: KeyDescriptorInternal,
+  criteria: KeyDescriptorInternal
+) => {
+  const keyMatches =
+    descriptor.key === undefined ||
+    criteria.key === undefined ||
+    criteria.key === descriptor.key;
+  const nsMatches =
+    descriptor.ns === undefined ||
+    criteria.ns === undefined ||
+    descriptor.ns?.findIndex((ns) => criteria.ns?.includes(ns)) !== -1;
+
+  return keyMatches && nsMatches;
+};

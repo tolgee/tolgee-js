@@ -19,6 +19,7 @@ import {
   Options,
   ChangeTranslationInterface,
   WrapperWrapProps,
+  Unwrapped,
 } from '../../types';
 import { getFallbackArray } from '../State/helpers';
 
@@ -231,6 +232,13 @@ export const PluginService = (
     return params.translation;
   };
 
+  const unwrap = (text: string): Unwrapped => {
+    if (instances.observer) {
+      return instances.observer?.unwrap(text);
+    }
+    return { text, keys: [] };
+  };
+
   const retranslate = () => {
     instances.observer?.retranslate();
   };
@@ -255,6 +263,7 @@ export const PluginService = (
     retranslate,
     highlight,
     wrap,
+    unwrap,
   });
 };
 
