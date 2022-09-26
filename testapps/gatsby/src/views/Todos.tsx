@@ -26,7 +26,7 @@ const getInitialItems = () => {
 };
 
 export const Todos = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<string[]>(getInitialItems());

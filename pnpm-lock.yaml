@@ -659,13 +659,15 @@ importers:
 
   testapps/gatsby:
     specifiers:
-      '@tolgee/react': ^4.9.2
+      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/react': ^4.8.0
       gatsby: ^4.19.2
       gatsby-plugin-react-intl: ^4.0.0
       react: ^17.0.1
       react-dom: ^17.0.1
       typescript: ^4.7.4
     dependencies:
+      '@tolgee/icu-formatter': link:../../packages/icu-formatter
       '@tolgee/react': link:../../packages/react
       gatsby: 4.19.2_3tgeifm2vmwrlpqlopppsnjtcu
       gatsby-plugin-react-intl: 4.0.0_6gwab75v6pqvip6qch4h33jmf4
@@ -31261,7 +31263,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.0
       terser: 5.14.2
-      webpack: 5.74.0_webpack-cli@4.10.0
+      webpack: 5.74.0
 
   /terser/4.8.1:
     resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
@@ -33815,7 +33817,6 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
-    dev: false
 
   /webpack/5.74.0_webpack-cli@4.10.0:
     resolution: {integrity: sha512-A2InDwnhhGN4LYctJj6M1JEaGL7Luj6LOmyBHjcI8529cm5p6VXiTIW2sn6ffvEAKmveLzvu4jrihwXtPojlAA==}
