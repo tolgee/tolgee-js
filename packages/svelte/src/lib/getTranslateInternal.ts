@@ -1,14 +1,16 @@
 import { writable, type Readable } from 'svelte/store';
 import { onDestroy } from 'svelte';
-import type {
-  FallbackNSTranslation,
-  KeyDescriptor,
-  TolgeeInstance,
-  TranslateProps,
+import {
+  getFallback,
+  type FallbackNSTranslation,
+  type KeyDescriptor,
+  type TolgeeInstance,
+  type TranslateProps,
 } from '@tolgee/core';
 import { getTolgeeContext } from '$lib/index';
 
-const getTranslateInternal = (namespaces?: FallbackNSTranslation) => {
+const getTranslateInternal = (ns?: FallbackNSTranslation) => {
+  const namespaces = getFallback(ns);
   const tolgeeContext = getTolgeeContext();
 
   const tolgee = tolgeeContext?.tolgee as TolgeeInstance;
@@ -43,9 +45,8 @@ const getTranslateInternal = (namespaces?: FallbackNSTranslation) => {
   function createTFunction() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props: TranslateProps<any>) => {
-      const { key, ns } = props;
-      const fallbackNs = ns || namespaces?.[0];
-      subscribeToKey({ key, ns: fallbackNs });
+      const fallbackNs = props.ns || namespaces?.[0];
+      subscribeToKey({ key: props.key, ns: fallbackNs });
       return tolgee.t({ ...props, ns: fallbackNs });
     };
   }

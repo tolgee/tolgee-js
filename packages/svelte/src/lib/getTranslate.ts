@@ -6,8 +6,8 @@ import {
 } from '@tolgee/core';
 import getTranslateInternal from './getTranslateInternal';
 
-const getTranslate = (namespaces?: FallbackNSTranslation) => {
-  const { t: tInternal, isLoading } = getTranslateInternal(namespaces);
+const getTranslate = (ns?: FallbackNSTranslation) => {
+  const { t: tInternal, isLoading } = getTranslateInternal(ns);
 
   const t = derived(tInternal, (value) => (...params) => {
     //@ts-ignore
