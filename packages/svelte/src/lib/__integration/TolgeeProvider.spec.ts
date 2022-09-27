@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import fetchMock from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
@@ -7,6 +5,9 @@ import { render, screen, waitFor } from '@testing-library/svelte';
 import mockTranslations from './data/mockTranslations';
 import { testConfig } from './data/testConfig';
 import TestProviderComponent from './components/TestProviderComponent.svelte';
+import { Tolgee, type TolgeeInstance } from '@tolgee/core';
+import { SveltePlugin } from '$lib/SveltePlugin';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -40,101 +41,50 @@ const createFetchMock = () => {
 };
 
 describe('TolgeeProvider integration', () => {
-  describe('regular settings', () => {
-    let resolveEnglish;
-    let resolveCzech;
-    beforeEach(async () => {
-      const fetchMock = createFetchMock();
-      resolveCzech = fetchMock.resolveCzech;
-      resolveEnglish = fetchMock.resolveEnglish;
-      fetchMock.fetch.enableMocks();
-      render(TestProviderComponent, {
-        config: {
-          apiKey: API_KEY,
-          apiUrl: API_URL,
-          defaultLanguage: 'cs',
-          fallbackLanguage: 'en',
-        },
-      });
+  let tolgee: TolgeeInstance;
+  let resolveEnglish;
+  let resolveCzech;
+  beforeEach(async () => {
+    const fetchMock = createFetchMock();
+    resolveCzech = fetchMock.resolveCzech;
+    resolveEnglish = fetchMock.resolveEnglish;
+    fetchMock.fetch.enableMocks();
+
+    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
+      apiKey: API_KEY,
+      apiUrl: API_URL,
+      defaultLanguage: 'cs',
+      fallbackLanguage: 'en',
     });
 
-    it('shows correctly loading, fallback and default value', async () => {
-      await waitFor(() => {
-        expect(screen.queryByText('Loading...')?.innerHTML).toContain(
-          'Loading...'
-        );
-      });
-      resolveCzech();
-      await waitFor(() => {
-        expect(screen.queryByTestId('hello_world').innerHTML).toContain(
-          'Ahoj světe!'
-        );
-        expect(
-          screen.queryByTestId('english_fallback').innerHTML
-        ).not.toContain('Default value');
-        expect(screen.queryByTestId('non_existant').innerHTML).not.toContain(
-          'Default value'
-        );
-      });
-      resolveEnglish();
-      await waitFor(() => {
-        expect(screen.queryByTestId('hello_world').innerHTML).toContain(
-          'Ahoj světe!'
-        );
-        expect(screen.queryByTestId('english_fallback').innerHTML).toContain(
-          'English fallback'
-        );
-        expect(screen.queryByTestId('non_existant').innerHTML).toContain(
-          'Default value'
-        );
-      });
+    render(TestProviderComponent, {
+      tolgee,
     });
   });
 
-  describe('with preloadFallback', () => {
-    let resolveEnglish;
-    let resolveCzech;
-    beforeEach(async () => {
-      const fetchMock = createFetchMock();
-      resolveCzech = fetchMock.resolveCzech;
-      resolveEnglish = fetchMock.resolveEnglish;
-      fetchMock.fetch.enableMocks();
-      render(TestProviderComponent, {
-        config: {
-          apiKey: API_KEY,
-          apiUrl: API_URL,
-          defaultLanguage: 'cs',
-          fallbackLanguage: 'en',
-          preloadFallback: true,
-        },
-      });
-    });
-
-    it('shows correctly loading, fallback and default value', async () => {
+  it('shows correctly loading, fallback and default value', async () => {
+    await waitFor(() => {
       expect(screen.queryByText('Loading...')?.innerHTML).toContain(
         'Loading...'
       );
-      resolveCzech();
-
-      await waitFor(() => {
-        expect(screen.queryByText('Loading...')?.innerHTML).toContain(
-          'Loading...'
-        );
-        expect(screen.queryByTestId('hello_world')).toBeFalsy();
-      });
-      resolveEnglish();
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('hello_world').innerHTML).toContain(
-          'Ahoj světe!'
-        );
-        expect(screen.queryByTestId('english_fallback').innerHTML).toContain(
-          'English fallback'
-        );
-        expect(screen.queryByTestId('non_existant').innerHTML).toContain(
-          'Default value'
-        );
-      });
+    });
+    resolveCzech();
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')?.innerHTML).toContain(
+        'Loading...'
+      );
+    });
+    resolveEnglish();
+    await waitFor(() => {
+      expect(screen.queryByTestId('hello_world').innerHTML).toContain(
+        'Ahoj světe!'
+      );
+      expect(screen.queryByTestId('english_fallback').innerHTML).toContain(
+        'English fallback'
+      );
+      expect(screen.queryByTestId('non_existant').innerHTML).toContain(
+        'Default value'
+      );
     });
   });
 });

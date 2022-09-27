@@ -5,9 +5,8 @@
   export let tolgee: TolgeeInstance
 </script>
 
-<TolgeeProvider tolgee={tolgee}>
-  <div slot="loading-fallback">loading</div>
-  <div slot="default">
+<TolgeeProvider tolgee={tolgee} fallback="loading">
+  <div>
     It's rendered!
   </div>
 </TolgeeProvider>

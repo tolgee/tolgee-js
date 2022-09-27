@@ -1,14 +1,14 @@
-<script>
+<script lang="ts">
   import { T, TolgeeProvider } from '$lib';
-  import InstanceGrabber from './InstanceGrabber.svelte';
-  export let config;
-  export let instanceRef;
+  import type { TolgeeInstance } from '@tolgee/core';
+  
+  export let tolgee: TolgeeInstance;
 </script>
 
-<TolgeeProvider {config}>
+<TolgeeProvider {tolgee}>
   <div>
     <div data-testid="peter_dogs">
-      <T keyName="peter_dogs" parameters={{ dogsCount: 5 }} />
+      <T keyName="peter_dogs" params={{ dogsCount: 5 }} />
     </div>
     <div data-testid="hello_world">
       <T keyName="hello_world" />
@@ -20,6 +20,5 @@
       <T keyName="non_existant" defaultValue="Non existant" />
     </div>
   </div>
-  <InstanceGrabber {instanceRef} />
   <span slot="loading-fallback">Loading...</span>
 </TolgeeProvider>

@@ -1,5 +1,3 @@
-jest.autoMockOff();
-
 import fetchMock from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
@@ -7,11 +5,12 @@ import { render, screen, waitFor } from '@testing-library/svelte';
 import mockTranslations from './data/mockTranslations';
 import { testConfig } from './data/testConfig';
 import TestTranslateComponent from './components/TestTranslateComponent.svelte';
+import { Tolgee, type TolgeeInstance } from '@tolgee/core';
+import { SveltePlugin } from '$lib/SveltePlugin';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
-
-export const instanceRef = { changeLanguage: null };
 
 const fetch = fetchMock.mockResponse(async (req) => {
   if (req.url.includes('/v2/api-keys/current')) {
@@ -25,18 +24,20 @@ const fetch = fetchMock.mockResponse(async (req) => {
   throw new Error('Invalid request');
 });
 
-describe('mixin integration', () => {
+describe('getTranslate', () => {
+  let tolgee: TolgeeInstance;
   beforeEach(async () => {
     fetch.enableMocks();
 
+    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
+      apiKey: API_KEY,
+      apiUrl: API_URL,
+      defaultLanguage: 'cs',
+      fallbackLanguage: 'en',
+    });
+
     render(TestTranslateComponent, {
-      config: {
-        apiKey: API_KEY,
-        apiUrl: API_URL,
-        defaultLanguage: 'cs',
-        fallbackLanguage: 'en',
-      },
-      instanceRef,
+      tolgee,
     });
 
     await waitFor(() => {
@@ -50,14 +51,14 @@ describe('mixin integration', () => {
     expect(screen.queryByTestId('hello_world').innerHTML).toContain(
       'Ahoj světe!'
     );
-    expect(screen.queryByTestId('hello_world')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
   });
 
   it('works with no wrap', () => {
     expect(screen.queryByTestId('hello_world_no_wrap').innerHTML).toContain(
       'Ahoj světe!'
     );
-    expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveProperty(
+    expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveAttribute(
       '_tolgee'
     );
   });
@@ -66,26 +67,26 @@ describe('mixin integration', () => {
     expect(screen.queryByTestId('peter_dogs').innerHTML).toContain(
       'Petr má 5 psů.'
     );
-    expect(screen.queryByTestId('peter_dogs')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('peter_dogs')).toHaveAttribute('_tolgee');
   });
 
   it('works with default value', async () => {
     expect(screen.queryByTestId('non_existant').innerHTML).toContain(
       'Non existant'
     );
-    expect(screen.queryByTestId('non_existant')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
   });
 
   describe('language switch', () => {
     beforeEach(async () => {
-      await instanceRef.changeLanguage('en');
+      await tolgee.changeLanguage('en');
     });
 
-    it('changes translation with tags', () => {
+    it('changes translation', () => {
       expect(screen.queryByTestId('hello_world').innerHTML).toContain(
         'Hello world!'
       );
-      expect(screen.queryByTestId('hello_world')).toHaveProperty('_tolgee');
+      expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
     });
   });
 });

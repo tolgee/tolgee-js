@@ -4,6 +4,7 @@
   import type { TolgeeSvelteContext } from './types';
 
   export let tolgee: TolgeeInstance;
+  export let fallback = undefined;
 
   let isLoading: boolean = !tolgee.isLoaded();
 
@@ -24,5 +25,9 @@
 {#if !isLoading }
   <slot />
 {:else }
-  <slot name="loading-fallback" />
+  {#if fallback}
+    {fallback}
+  {:else}
+    <slot name="loading-fallback" />
+  {/if}
 {/if}

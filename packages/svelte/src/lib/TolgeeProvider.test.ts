@@ -1,88 +1,75 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-jest.mock('@tolgee/core');
-jest.mock('svelte', () => {
-  return {
-    ...(jest.requireActual('svelte') as Record<string, unknown>),
-    setContext: (...args) => setContextMock(...args),
-    onMount: (callback) => (onMountCallback = callback),
-    onDestroy: (callback) => (onDestroyCallback = callback),
-  };
-});
-
-import { mockTolgee } from '$lib/__testUtil/mockTolgee';
-import * as tolgee from '@tolgee/core';
-
-const setContextMock = jest.fn();
-const tolgeeMock = mockTolgee();
-
-// @ts-ignore Mock tolgee class, so Tolgee.init and Tolgee.use is mocked also
-tolgee.Tolgee = tolgeeMock.tolgeeClass;
-// @ts-ignore
-tolgee.TolgeeConfig = function () {
-  jest.fn();
-};
-
-import { render } from '@testing-library/svelte';
-import { TolgeeProvider } from '$lib/index';
-import TolgeeProviderSlotTest from '$lib/__testUtil/TolgeeProviderSlotTest.svelte';
-
-let onMountCallback;
-let onDestroyCallback;
+import { Tolgee } from '@tolgee/core';
+import { render, waitFor, screen } from '@testing-library/svelte';
+import type { TolgeeInstance } from '@tolgee/core';
+import { TolgeeProvider } from '$lib';
+import TolgeeProviderSlotTestSvelte from './__testUtil/TolgeeProviderSlotTest.svelte';
+import TolgeeProviderFallback from './__testUtil/TolgeeProviderFallback.svelte';
 
 describe('TolgeeProvider', () => {
-  describe('on start', () => {
-    beforeEach(() => {
-      render(TolgeeProvider, {
-        props: {
-          config: {},
-        },
-      });
-    });
+  let mockedTolgee: TolgeeInstance;
 
-    it('sets context', () => {
-      expect(setContextMock).toHaveBeenCalledTimes(1);
-      expect(setContextMock).toHaveBeenCalledWith('tolgeeContext', {
-        tolgee: tolgeeMock.tolgee,
-      });
-    });
+  beforeEach(() => {
+    mockedTolgee = {
+      ...Tolgee({ language: 'en' }),
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      run: jest.fn(() => new Promise<void>(() => {})),
+      stop: jest.fn(),
+    };
+  });
 
-    it('runs on mount', () => {
-      expect(tolgeeMock.runMock.run).toHaveBeenCalledTimes(0);
-      onMountCallback();
-      expect(tolgeeMock.runMock.run).toHaveBeenCalledTimes(1);
+  test('runs tolgee', async () => {
+    render(TolgeeProvider, {
+      tolgee: mockedTolgee,
     });
+    expect(mockedTolgee.run).toHaveBeenCalledTimes(1);
+  });
 
-    it('stops on destroy', () => {
-      expect(tolgeeMock.stopMock).toHaveBeenCalledTimes(0);
-      onDestroyCallback();
-      expect(tolgeeMock.stopMock).toHaveBeenCalledTimes(1);
+  test('stops tolgee', () => {
+    const { unmount } = render(TolgeeProvider, {
+      tolgee: mockedTolgee,
+    });
+    unmount();
+    expect(mockedTolgee.stop).toHaveBeenCalledTimes(1);
+  });
+
+  test('renders fallback', async () => {
+    render(TolgeeProviderFallback, {
+      tolgee: mockedTolgee,
+    });
+    await waitFor(() => {
+      expect(screen.getByText('loading')).not.toBeNull();
+      expect(screen.queryByText("It's rendered!")).toBeNull();
     });
   });
 
-  describe('slots', () => {
-    describe('with initialLoading true', () => {
-      let findByText;
-
-      beforeEach(() => {
-        (tolgeeMock.tolgee.initialLoading as boolean) = true;
-        findByText = render(TolgeeProviderSlotTest, {}).findByText;
-        onMountCallback();
-      });
-
-      it('shows loading fallback slot when loading', async () => {
-        expect(await findByText('Custom loading fallback')).toBeInTheDocument();
-      });
-
-      it('shows content when loaded', async () => {
-        tolgeeMock.runMock.resolveRunPromise();
-        expect(await findByText('Default slot')).toBeInTheDocument();
-      });
+  test("doesn't render fallback when initialLoading is false", async () => {
+    render(TolgeeProviderFallback, {
+      tolgee: { ...mockedTolgee, isLoaded: () => true },
     });
+    await waitFor(async () => {
+      screen.getByText("It's rendered!");
+      expect(screen.queryByText('loading')).toBeNull();
+    });
+  });
 
-    it('shows default when initialLoading is false', async () => {
-      (tolgeeMock.tolgee.initialLoading as boolean) = false;
-      const { findByText } = render(TolgeeProviderSlotTest, {});
-      expect(await findByText('Default slot')).toBeInTheDocument();
+  test('renders fallback with slot', async () => {
+    render(TolgeeProviderSlotTestSvelte, {
+      tolgee: mockedTolgee,
+    });
+    await waitFor(() => {
+      expect(screen.getByText('loading')).not.toBeNull();
+      expect(screen.queryByText("It's rendered!")).toBeNull();
+    });
+  });
+
+  test("doesn't render fallback when initialLoading is false with slot", async () => {
+    render(TolgeeProviderSlotTestSvelte, {
+      tolgee: { ...mockedTolgee, isLoaded: () => true },
+    });
+    await waitFor(async () => {
+      screen.getByText("It's rendered!");
+      expect(screen.queryByText('loading')).toBeNull();
     });
   });
 });

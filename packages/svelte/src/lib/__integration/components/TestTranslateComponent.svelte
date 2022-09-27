@@ -1,13 +1,12 @@
-<script>
+<script lang="ts">
   import { TolgeeProvider } from '$lib';
-  import InstanceGrabber from './InstanceGrabber.svelte';
+  import type {TolgeeInstance} from '@tolgee/core';
+
   import TestTranslateComponentInside from './TestTranslateComponentInside.svelte';
-  export let config;
-  export let instanceRef;
+  export let tolgee: TolgeeInstance;
 </script>
 
-<TolgeeProvider {config}>
+<TolgeeProvider tolgee={tolgee}>
   <TestTranslateComponentInside />
-  <InstanceGrabber {instanceRef} />
   <span slot="loading-fallback">Loading...</span>
 </TolgeeProvider>
