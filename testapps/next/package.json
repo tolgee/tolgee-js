@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tolgee/backend-fetch": "^4.8.0",
     "@tolgee/format-icu": "^4.8.0",
     "@tolgee/react": "^4.8.0",
     "next": "12.2.3",

@@ -56,7 +56,10 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   );
 
   state.init(options);
-  cache.init(state.getInitialOptions().staticData);
+  cache.addStaticData(state.getInitialOptions().staticData);
+  if (isDev()) {
+    cache.invalidate();
+  }
 
   events.onKeyUpdate.listen(() => {
     if (state.isRunning()) {
@@ -86,7 +89,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
 
   function init(options: Partial<Options>) {
     state.init(options);
-    cache.init(state.getInitialOptions().staticData);
+    cache.addStaticData(state.getInitialOptions().staticData);
     if (isDev()) {
       cache.invalidate();
     }

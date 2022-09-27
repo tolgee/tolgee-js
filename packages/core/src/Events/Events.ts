@@ -20,9 +20,9 @@ export const Events = () => {
 
   onInitialLoaded.listen(() => onKeyUpdate.emit());
   onLanguageChange.listen(() => onKeyUpdate.emit());
-  onCacheChange.listen(({ value }) =>
-    onKeyUpdate.emit({ ns: [value.namespace], key: value.key }, true)
-  );
+  onCacheChange.listen(({ value }) => {
+    onKeyUpdate.emit({ ns: [value.namespace], key: value.key }, true);
+  });
 
   const on: TolgeeOn = (event, handler): any => {
     switch (event) {
