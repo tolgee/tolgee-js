@@ -46,7 +46,7 @@ export type TreeTranslationsData = {
 
 export type CacheAsyncRequests = Map<
   string,
-  Promise<TreeTranslationsData> | undefined
+  Promise<TreeTranslationsData | undefined> | undefined
 >;
 
 export type CacheDescriptor = {
@@ -172,15 +172,15 @@ export type BackendGetRecordProps = {
 
 export type BackendGetRecord = (
   data: BackendGetRecordProps
-) => Promise<TreeTranslationsData> | undefined;
+) => Promise<TreeTranslationsData | undefined> | undefined;
 
-export type BackendInterface = {
+export interface BackendInterface {
   getRecord: BackendGetRecord;
-};
+}
 
 export type BackendGetDevRecord = (
   data: BackendGetRecordProps & BackendDevProps
-) => Promise<TreeTranslationsData> | undefined;
+) => Promise<TreeTranslationsData | undefined> | undefined;
 
 export type BackendDevInterface = {
   getRecord: BackendGetDevRecord;

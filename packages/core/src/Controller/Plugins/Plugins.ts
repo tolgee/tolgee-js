@@ -1,4 +1,4 @@
-import { missingOptionError, valueOrPromise } from '../../helpers';
+import { isPromise, missingOptionError, valueOrPromise } from '../../helpers';
 import {
   BackendDevInterface,
   BackendGetRecord,
@@ -176,6 +176,13 @@ export const PluginService = (
   const getBackendRecord: BackendGetRecord = ({ language, namespace }) => {
     for (const backend of instances.backends) {
       const data = backend.getRecord({ language, namespace });
+      if (isPromise(data)) {
+        return data?.catch((e) => {
+          // eslint-disable-next-line no-console
+          console.error(e);
+          return {};
+        });
+      }
       if (data !== undefined) {
         return data;
       }
