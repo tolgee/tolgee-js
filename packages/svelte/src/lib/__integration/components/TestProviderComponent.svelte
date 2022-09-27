@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
   import { TolgeeProvider, T } from '$lib';
-  export let config;
+    import type { TolgeeInstance } from '@tolgee/core';
+  export let tolgee: TolgeeInstance;
 </script>
 
-<TolgeeProvider {config}>
+<TolgeeProvider {tolgee}>
   <div>
     <div data-testid="hello_world">
       <T keyName="hello_world" />
