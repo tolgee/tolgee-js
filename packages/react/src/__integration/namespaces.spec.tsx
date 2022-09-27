@@ -1,12 +1,12 @@
 jest.autoMockOff();
 
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { ReactPlugin, useTranslate } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeInstance } from '@tolgee/core';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import mockTranslations from './mockTranslations';
 
 const API_URL = 'http://localhost';
@@ -42,7 +42,7 @@ describe('useTranslations namespaces', () => {
   beforeEach(async () => {
     tolgee = Tolgee()
       .use(ReactPlugin({ useSuspense: false }))
-      .use(IcuPlugin())
+      .use(FormatIcu())
       .init({
         apiUrl: API_URL,
         language: 'cs',

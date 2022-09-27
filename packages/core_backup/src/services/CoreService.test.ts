@@ -1,7 +1,7 @@
 jest.dontMock('./CoreService');
 jest.dontMock('./DependencyService');
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { CoreService } from './CoreService';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { ApiHttpService } from './ApiHttpService';

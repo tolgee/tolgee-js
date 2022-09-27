@@ -1,11 +1,11 @@
 import { Tolgee } from '@tolgee/core';
 import { TextObserver, UI } from '@tolgee/devtools-web';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const tolgee = Tolgee()
   .setObserver(TextObserver())
   .setUi(UI)
-  .use(IcuPlugin())
+  .use(FormatIcu())
   .init({
     ns: ['', 'ns'],
     staticData: {

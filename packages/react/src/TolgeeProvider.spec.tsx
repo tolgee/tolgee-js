@@ -2,7 +2,7 @@ jest.autoMockOff();
 
 import { Tolgee } from '@tolgee/core';
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import React from 'react';
 import { TolgeeProvider } from './TolgeeProvider';
 

@@ -2,7 +2,7 @@ jest.dontMock('./Observer');
 jest.dontMock('./services/DependencyService');
 
 import { DependencyService } from './services/DependencyService';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import 'regenerator-runtime/runtime.js';
 import { getMockedInstance } from '@testFixtures/mocked';
 import { Properties } from './Properties';

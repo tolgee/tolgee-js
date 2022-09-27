@@ -1,7 +1,7 @@
 jest.dontMock('./ElementRegistrar');
 jest.dontMock('./DependencyService');
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { ElementRegistrar } from './ElementRegistrar';
 import { ElementWithMeta } from '../types';
 import { getMockedInstance } from '@testFixtures/mocked';

@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { VuePlugin, useTranslate, TolgeeVue } from '..';
 import { render, screen, waitFor } from '@testing-library/vue';
 import { Tolgee, TolgeeInstance } from '@tolgee/core';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import mockTranslations from './mockTranslations';
 
 const API_URL = 'http://localhost';
@@ -42,7 +42,7 @@ describe('useTranslations namespaces', () => {
   beforeEach(async () => {
     tolgee = Tolgee()
       .use(VuePlugin())
-      .use(IcuPlugin())
+      .use(FormatIcu())
       .init({
         apiUrl: API_URL,
         language: 'cs',

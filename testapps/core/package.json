@@ -30,6 +30,6 @@
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "dependencies": {
-    "@tolgee/icu-formatter": "^4.8.0"
+    "@tolgee/format-icu": "^4.8.0"
   }
 }

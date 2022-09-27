@@ -1,11 +1,11 @@
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import mockTranslations from './mockTranslations';
 import { ReactPlugin, useTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/core';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 
@@ -48,7 +48,7 @@ describe('useTranslation hook integration', () => {
   beforeEach(async () => {
     tolgee = Tolgee()
       .use(ReactPlugin({ useSuspense: false }))
-      .use(IcuPlugin())
+      .use(FormatIcu())
       .init({
         apiUrl: API_URL,
         language: 'cs',

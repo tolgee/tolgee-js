@@ -1,7 +1,7 @@
 jest.autoMockOff();
 
 import fetchMock from 'jest-fetch-mock';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
 
 import mockTranslations from './data/mockTranslations';

@@ -1,4 +1,4 @@
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 // import { UI } from '../index';
 // import type { TranslationService } from '@tolgee/core/lib/services/TranslationService';
 

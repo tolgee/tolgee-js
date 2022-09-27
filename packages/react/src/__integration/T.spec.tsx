@@ -1,15 +1,14 @@
 import fetchMock from 'jest-fetch-mock';
 import { act } from 'react-dom/test-utils';
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import { TolgeeProvider, ReactPlugin, TolgeeInstance, Tolgee } from '../index';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
 import { T } from '../index';
-import { useTolgeeContext } from '../useTolgeeContext';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -60,7 +59,7 @@ describe('T component integration', () => {
 
   beforeEach(async () => {
     fetch.enableMocks();
-    tolgee = Tolgee().use(ReactPlugin()).use(IcuPlugin()).init({
+    tolgee = Tolgee().use(ReactPlugin()).use(FormatIcu()).init({
       apiUrl: API_URL,
       apiKey: API_KEY,
       language: 'cs',

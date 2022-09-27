@@ -5,7 +5,7 @@ import { render, screen, waitFor } from '@testing-library/vue';
 import mockTranslations from './mockTranslations';
 import { testConfig } from './testConfig';
 import { TolgeeProvider, T, TolgeeInstance, Tolgee, VuePlugin } from '..';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -60,7 +60,7 @@ describe('T component integration', () => {
   beforeEach(async () => {
     fetch.enableMocks();
 
-    tolgee = Tolgee().use(VuePlugin()).use(IcuPlugin()).init({
+    tolgee = Tolgee().use(VuePlugin()).use(FormatIcu()).init({
       apiUrl: API_URL,
       apiKey: API_KEY,
       language: 'cs',

@@ -6,7 +6,7 @@ jest.dontMock('../../helpers/NodeHelper.ts');
 jest.dontMock('../../services/DependencyService');
 
 import { ContentHandler } from './ContentHandler';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { ElementWithMeta, NodeWithMeta, Unwrapped } from '../../types';
 import { NodeHelper } from '../../helpers/NodeHelper';
 import { createTestDom } from '@testFixtures/createTestDom';
