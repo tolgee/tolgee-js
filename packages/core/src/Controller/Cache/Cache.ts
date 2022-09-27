@@ -38,12 +38,16 @@ export const Cache = (
   let staticData: NonNullable<Options['staticData']> = {};
   let version = 0;
 
-  function init(data: Options['staticData']) {
+  function addStaticData(data: Options['staticData']) {
     if (data) {
       staticData = { ...staticData, ...data };
       Object.entries(data).forEach(([key, value]) => {
         if (typeof value !== 'function') {
-          addRecord(decodeCacheKey(key), value);
+          const descriptor = decodeCacheKey(key);
+          const existing = cache.get(key);
+          if (!existing || existing.version === 0) {
+            addRecordInternal(descriptor, value, 0);
+          }
         }
       });
     }
@@ -53,17 +57,24 @@ export const Cache = (
     version += 1;
   }
 
-  function addRecord(
+  function addRecordInternal(
     descriptor: CacheDescriptorInternal,
-    data: TreeTranslationsData
+    data: TreeTranslationsData,
+    version: number
   ) {
     const cacheKey = encodeCacheKey(descriptor);
-    staticData[cacheKey] = data;
     cache.set(cacheKey, {
       data: flattenTranslations(data),
       version: version,
     });
     onCacheChange.emit(descriptor);
+  }
+
+  function addRecord(
+    descriptor: CacheDescriptorInternal,
+    data: TreeTranslationsData
+  ) {
+    addRecordInternal(descriptor, data, version);
   }
 
   function exists(descriptor: CacheDescriptorInternal, strict = false) {
@@ -264,7 +275,7 @@ export const Cache = (
   }
 
   return Object.freeze({
-    init,
+    addStaticData,
     invalidate,
     addRecord,
     exists,
