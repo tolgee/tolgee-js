@@ -3,7 +3,7 @@ jest.mock('socket.io-client');
 
 import { TranslationsClient } from './TranslationsClient';
 import io from 'socket.io-client';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 describe('TranslationsClient', () => {
   const authentication = {
