@@ -1,7 +1,7 @@
 jest.autoMockOff();
 
 import { waitFor } from '@testing-library/dom';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { Tolgee } from '..';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';

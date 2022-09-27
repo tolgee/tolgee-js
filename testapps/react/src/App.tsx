@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import { DetectorPlugin } from '@tolgee/detector-web';
 import { StoragePlugin } from '@tolgee/storage-web';
 
@@ -10,7 +10,7 @@ import { Namespaces } from './Namespaces';
 
 const tolgee = Tolgee()
   .use(ReactPlugin())
-  .use(IcuPlugin())
+  .use(FormatIcu())
   .use(DetectorPlugin())
   .use(StoragePlugin())
   .init({

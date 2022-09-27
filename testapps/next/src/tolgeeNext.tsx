@@ -1,4 +1,4 @@
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import {
   FallbackNSTranslation,
   ReactPlugin,
@@ -17,7 +17,7 @@ export const useTolgeeSSR = (staticLocales: any) => {
   const [tolgee] = useState(
     Tolgee()
       .use(ReactPlugin())
-      .use(IcuPlugin())
+      .use(FormatIcu())
       .init({
         language: router.locale,
         apiKey: apiKey,

@@ -1,9 +1,9 @@
 {
-  "name": "@tolgee/icu-formatter",
+  "name": "@tolgee/format-icu",
   "version": "4.8.0",
-  "description": "Tolgee icu-formatter plugin.",
-  "main": "./dist/tolgee-icu-formatter.cjs.js",
-  "module": "./dist/tolgee-icu-formatter.esm.mjs",
+  "description": "Tolgee format-icu plugin.",
+  "main": "./dist/tolgee-format-icu.cjs.js",
+  "module": "./dist/tolgee-format-icu.esm.mjs",
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -24,8 +24,8 @@
     "dist": "dist"
   },
   "exports": {
-    "require": "./dist/tolgee-icu-formatter.cjs.js",
-    "import": "./dist/tolgee-icu-formatter.esm.mjs"
+    "require": "./dist/tolgee-format-icu.cjs.js",
+    "import": "./dist/tolgee-format-icu.esm.mjs"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --project tsconfig.prod.json",

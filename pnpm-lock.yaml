@@ -294,7 +294,7 @@ importers:
       typedoc-plugin-markdown: 3.11.7_typedoc@0.22.10
       typescript: 4.7.4
 
-  packages/icu-formatter:
+  packages/format-icu:
     specifiers:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-typescript': 8.3.4
@@ -414,7 +414,7 @@ importers:
       '@testing-library/react': ^12.1.2
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -442,7 +442,7 @@ importers:
       '@testing-library/dom': 8.16.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
-      '@tolgee/icu-formatter': link:../icu-formatter
+      '@tolgee/format-icu': link:../format-icu
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.48
@@ -532,7 +532,7 @@ importers:
       '@testing-library/svelte': ^3.2.1
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
       '@typescript-eslint/parser': ^5.34.0
@@ -557,7 +557,7 @@ importers:
     dependencies:
       '@tolgee/core': link:../core
       '@tolgee/devtools-web': link:../devtools-web
-      '@tolgee/icu-formatter': link:../icu-formatter
+      '@tolgee/format-icu': link:../format-icu
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.65
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
@@ -594,7 +594,7 @@ importers:
       '@testing-library/vue': ^6.6.1
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
@@ -617,7 +617,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/vue': 6.6.1_vue@3.2.37
-      '@tolgee/icu-formatter': link:../icu-formatter
+      '@tolgee/format-icu': link:../format-icu
       '@types/jest': 27.5.2
       '@vue/vue3-jest': 27.0.0_usluppwkbzs5e3mabc3pp2k4m4
       babel-jest: 27.5.1
@@ -636,7 +636,7 @@ importers:
     specifiers:
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
@@ -645,7 +645,7 @@ importers:
       webpack: ^5.73.0
       webpack-cli: ^4.10.0
     dependencies:
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
     devDependencies:
       '@tolgee/core': link:../../packages/core
       '@tolgee/devtools-web': link:../../packages/devtools-web
@@ -659,7 +659,7 @@ importers:
 
   testapps/gatsby:
     specifiers:
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@tolgee/react': ^4.8.0
       gatsby: ^4.19.2
       gatsby-plugin-react-intl: ^4.0.0
@@ -667,7 +667,7 @@ importers:
       react-dom: ^17.0.1
       typescript: ^4.7.4
     dependencies:
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/react': link:../../packages/react
       gatsby: 4.19.2_3tgeifm2vmwrlpqlopppsnjtcu
       gatsby-plugin-react-intl: 4.0.0_6gwab75v6pqvip6qch4h33jmf4
@@ -677,7 +677,8 @@ importers:
 
   testapps/next:
     specifiers:
-      '@tolgee/react': ^4.9.2
+      '@tolgee/format-icu': ^4.8.0
+      '@tolgee/react': ^4.8.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -686,7 +687,7 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/react': link:../../packages/react
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
@@ -786,7 +787,7 @@ importers:
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
       '@tolgee/detector-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@tolgee/react': ^4.8.0
       '@tolgee/storage-web': ^4.8.0
       '@types/jest': ^27.5.1
@@ -809,7 +810,7 @@ importers:
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
       '@tolgee/detector-web': link:../../packages/detector-web
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/react': link:../../packages/react
       '@tolgee/storage-web': link:../../packages/storage-web
       '@types/jest': 27.5.2
@@ -871,7 +872,7 @@ importers:
     specifiers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@tolgee/svelte': ^4.8.0
       '@typescript-eslint/eslint-plugin': ^5.30.6
       '@typescript-eslint/parser': ^5.30.6
@@ -889,7 +890,7 @@ importers:
     devDependencies:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/svelte': link:../../packages/svelte
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
       '@typescript-eslint/parser': 5.34.0_4rv7y5c6xz3vfxwhbrcxxi73bq
@@ -908,7 +909,7 @@ importers:
   testapps/vue:
     specifiers:
       '@tolgee/detector-web': ^4.8.0
-      '@tolgee/icu-formatter': ^4.8.0
+      '@tolgee/format-icu': ^4.8.0
       '@tolgee/storage-web': ^4.8.0
       '@tolgee/vue': ^4.8.0
       '@vue/cli-plugin-babel': ~4.5.0
@@ -923,7 +924,7 @@ importers:
       vue: ^3.2.37
     dependencies:
       '@tolgee/detector-web': link:../../packages/detector-web
-      '@tolgee/icu-formatter': link:../../packages/icu-formatter
+      '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/storage-web': link:../../packages/storage-web
       '@tolgee/vue': link:../../packages/vue
       core-js: 3.24.0

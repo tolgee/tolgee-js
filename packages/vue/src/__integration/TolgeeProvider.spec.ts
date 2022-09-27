@@ -1,7 +1,7 @@
 jest.autoMockOff();
 
 import fetchMock from 'jest-fetch-mock';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/vue';
 
 import mockTranslations from './mockTranslations';
@@ -13,7 +13,7 @@ import {
   VuePlugin,
   TolgeeVue,
 } from '..';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -85,7 +85,7 @@ describe('TolgeeProvider integration', () => {
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
 
-      tolgee = Tolgee().use(VuePlugin()).use(IcuPlugin()).init({
+      tolgee = Tolgee().use(VuePlugin()).use(FormatIcu()).init({
         apiKey: API_KEY,
         apiUrl: API_URL,
         defaultLanguage: 'cs',

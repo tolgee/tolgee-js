@@ -14,7 +14,7 @@ import {
   TolgeeInstance,
   TolgeeVue,
 } from '..';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -69,7 +69,7 @@ describe('composition api', () => {
   let tolgee: TolgeeInstance;
   beforeEach(async () => {
     fetch.enableMocks();
-    tolgee = Tolgee().use(VuePlugin()).use(IcuPlugin()).init({
+    tolgee = Tolgee().use(VuePlugin()).use(FormatIcu()).init({
       apiKey: API_KEY,
       apiUrl: API_URL,
       defaultLanguage: 'cs',

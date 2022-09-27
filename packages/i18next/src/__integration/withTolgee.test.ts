@@ -1,6 +1,6 @@
 jest.autoMockOff();
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';

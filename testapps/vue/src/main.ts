@@ -1,13 +1,13 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import { Tolgee, VuePlugin, TolgeeVue } from '@tolgee/vue';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import { DetectorPlugin } from '@tolgee/detector-web';
 import { StoragePlugin } from '@tolgee/storage-web';
 
 const tolgee = Tolgee()
   .use(VuePlugin())
-  .use(IcuPlugin())
+  .use(FormatIcu())
   .use(DetectorPlugin())
   .use(StoragePlugin())
   .init({

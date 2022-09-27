@@ -1,7 +1,7 @@
 jest.dontMock('./Properties');
 jest.dontMock('./TolgeeConfig');
 
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { mocked } from 'jest-mock';
 import { TolgeeConfig } from './TolgeeConfig';
 import { Properties } from './Properties';

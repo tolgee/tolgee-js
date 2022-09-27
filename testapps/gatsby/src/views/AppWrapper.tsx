@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React, { useState } from 'react';
 import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
-import { IcuPlugin } from '@tolgee/icu-formatter';
+import { FormatIcu } from '@tolgee/format-icu';
 import { useIntl } from 'gatsby-plugin-react-intl';
 import '../style/style.css';
 
@@ -11,7 +11,7 @@ export const AppWrapper: React.FC = ({ children }) => {
   const [tolgee] = useState(
     Tolgee()
       .use(ReactPlugin())
-      .use(IcuPlugin())
+      .use(FormatIcu())
       .init({
         language: locale,
         apiKey: process.env.GATSBY_TOLGEE_API_KEY,

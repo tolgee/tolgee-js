@@ -1,8 +1,8 @@
 <script lang="ts">
   import { TolgeeProvider, Tolgee, SveltePlugin } from '@tolgee/svelte';
-  import { IcuPlugin } from '@tolgee/icu-formatter'
+  import { FormatIcu } from '@tolgee/format-icu'
 
-  const tolgee = Tolgee().use(SveltePlugin()).use(IcuPlugin()).init({
+  const tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
     apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
     apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
     language: 'en',

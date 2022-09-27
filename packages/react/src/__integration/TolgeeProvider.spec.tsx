@@ -1,5 +1,5 @@
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
 
 import mockTranslations from './mockTranslations';
