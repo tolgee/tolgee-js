@@ -1,19 +1,10 @@
 {
-<<<<<<< HEAD:packages/ui/package.json
-  "name": "@tolgee/ui",
-  "version": "4.9.2",
-  "description": "Translation mode UI for @tolgee/core package",
-  "main": "index.js",
-  "module": "./dist/tolgee-ui.esm.mjs",
-  "types": "types/index.d.ts",
-=======
   "name": "@tolgee/devtools-web",
   "version": "4.8.0",
   "description": "Dev tools for @tolgee/core package",
   "main": "./dist/tolgee-devtools-web.cjs.js",
   "module": "./dist/tolgee-devtools-web.esm.mjs",
   "types": "./types/index.d.ts",
->>>>>>> 59dad807 (feat: split to modules):packages/devtools-web/package.json
   "declaration": true,
   "directories": {
     "lib": "lib",
@@ -76,13 +67,8 @@
     "url": "git+https://github.com/tolgee/tolgee-js.git"
   },
   "exports": {
-<<<<<<< HEAD:packages/ui/package.json
-    "require": "./dist/tolgee-ui.cjs.js",
-    "import": "./dist/tolgee-ui.esm.mjs"
-=======
     "require": "./dist/tolgee-devtools-web.cjs.js",
     "import": "./dist/tolgee-devtools-web.esm.mjs"
->>>>>>> 59dad807 (feat: split to modules):packages/devtools-web/package.json
   },
   "keywords": [
     "localization",

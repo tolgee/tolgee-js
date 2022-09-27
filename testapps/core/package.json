@@ -13,14 +13,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-<<<<<<< HEAD
-    "@tolgee/core": "^4.9.2",
-    "@tolgee/ui": "^4.9.2",
-=======
     "@tolgee/core": "^4.8.0",
     "@tolgee/devtools-web": "^4.8.0",
     "concurrently": "^7.3.0",
->>>>>>> e128ad41 (feat: element registry and highlighting)
     "copy-webpack-plugin": "^10.2.4",
     "html-webpack-plugin": "^5.5.0",
     "serve": "^13.0.4",
