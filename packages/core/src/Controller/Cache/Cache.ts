@@ -167,7 +167,9 @@ export const Cache = (
   }
 
   function fetchNormal(keyObject: CacheDescriptorInternal) {
-    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
+    let dataPromise = undefined as
+      | Promise<TreeTranslationsData | undefined>
+      | undefined;
     if (!dataPromise) {
       const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
@@ -189,7 +191,9 @@ export const Cache = (
   }
 
   function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
-    let dataPromise = undefined as Promise<TreeTranslationsData> | undefined;
+    let dataPromise = undefined as
+      | Promise<TreeTranslationsData | undefined>
+      | undefined;
     if (isDev) {
       dataPromise = backendGetDevRecord(keyObject)?.catch(() => {
         // eslint-disable-next-line no-console
