@@ -30,7 +30,6 @@
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --project tsconfig.prod.json",
     "clean": "rm -rf dist lib",
-    "test": "jest --collect-coverage",
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --declaration --emitDeclarationOnly --watch --preserveWatchOutput --project tsconfig.prod.json\" ",
     "tsc": "tsc --noEmit"
   },

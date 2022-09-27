@@ -66,24 +66,6 @@ describe('useTranslation hook integration', () => {
     tolgee.stop();
   });
 
-  it('shows initial state without changes', async () => {
-    render(<TestComponent />);
-    const initialState: CheckStateProps = {
-      initialLoad: 'false',
-      loading: 'true',
-      fetching: 'true',
-      language: 'cs',
-      pendingLanguage: 'cs',
-    };
-    checkState(initialState);
-    await runPromise;
-    checkState(initialState);
-    await act(async () => {
-      await tolgee.changeLanguage('en');
-    });
-    checkState(initialState);
-  });
-
   it('updates initialLoading', async () => {
     await act(async () => {
       render(<TestComponent events={['initialLoad']} />);
