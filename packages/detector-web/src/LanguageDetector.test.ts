@@ -12,7 +12,6 @@ describe('icu formatter', () => {
 
     const result = detector.getLanguage({
       availableLanguages: ['cs', 'sk'],
-      defaultLanguage: 'en',
     });
 
     expect(result).toEqual('cs');

@@ -29,7 +29,11 @@ export const AppWrapper: React.FC = ({ children }) => {
   );
 
   return (
-    <TolgeeProvider tolgee={tolgee} fallback={<div>Loading...</div>}>
+    <TolgeeProvider
+      tolgee={tolgee}
+      fallback={<div>Loading...</div>}
+      options={{ useSuspense: false }}
+    >
       {children}
     </TolgeeProvider>
   );

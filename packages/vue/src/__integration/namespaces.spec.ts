@@ -9,8 +9,14 @@ import mockTranslations from './mockTranslations';
 
 const API_URL = 'http://localhost';
 
+let pending = [] as (() => void)[];
+const resolvePending = () => {
+  pending.forEach((resolve) => resolve());
+  pending = [];
+};
+
 const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => setTimeout(() => resolve(data), 20));
+  new Promise<any>((resolve) => pending.push(() => resolve(data)));
 
 describe('useTranslations namespaces', () => {
   let tolgee: TolgeeInstance;
@@ -55,7 +61,9 @@ describe('useTranslations namespaces', () => {
         },
       });
 
-    tolgee.run();
+    const runPromise = tolgee.run();
+    resolvePending();
+    await runPromise;
     render(TestComponent, {
       global: { plugins: [[TolgeeVue, { tolgee }]] },
     });
@@ -63,6 +71,7 @@ describe('useTranslations namespaces', () => {
 
   it('loads namespace after render', async () => {
     expect(screen.queryByTestId('loading')).toContainHTML('Loading...');
+    resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).toBeFalsy();
       expect(screen.queryByTestId('test')).toContainHTML('Český test');
@@ -71,6 +80,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with english fallback', async () => {
+    resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('test_english_fallback')).toContainHTML(
         'Test english fallback'
@@ -85,6 +95,7 @@ describe('useTranslations namespaces', () => {
     expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
       'test_english_fallback'
     );
+    resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
         'Test english fallback'
@@ -99,6 +110,7 @@ describe('useTranslations namespaces', () => {
     expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
       'test_english_fallback'
     );
+    resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
         'Test english fallback'
@@ -110,6 +122,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with default value', async () => {
+    resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('non_existant')).toContainHTML(
         'Non existant'

@@ -24,6 +24,7 @@
     "@sveltejs/package": "1.0.0-next.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.1",
+    "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",
