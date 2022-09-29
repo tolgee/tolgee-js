@@ -253,7 +253,9 @@ export type PluginServicePublic = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
   addFormatter: (formatter: FormatterInterface | undefined) => void;
   setObserver: (observer: ObserverInterface | undefined) => void;
+  getObserver: () => ReturnType<ObserverInterface> | undefined;
   setUi: (ui: UiLibInterface | undefined) => void;
+  getUi: () => UiConstructor | undefined;
   addBackend: (backend: BackendInterface | undefined) => void;
   setDevBackend: (backend: BackendInterface | undefined) => void;
   setLanguageDetector: (

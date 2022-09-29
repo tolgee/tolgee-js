@@ -93,9 +93,6 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function init(options: Partial<Options>) {
     state.init(options);
     cache.addStaticData(state.getInitialOptions().staticData);
-    if (isDev()) {
-      cache.invalidate();
-    }
   }
 
   function isLoading(ns?: FallbackNSTranslation) {
@@ -251,6 +248,9 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function run() {
     let result: Promise<void> | undefined = undefined;
     if (!state.isRunning()) {
+      if (isDev()) {
+        cache.invalidate();
+      }
       state.setRunning(true);
       pluginService.run();
       result = loadInitial();

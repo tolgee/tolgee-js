@@ -27,7 +27,7 @@ const tolgee = Tolgee()
     fallbackLanguage: 'en',
   });
 tolgee.changeLanguage('cs');
-tolgee.on('language', () => {
+tolgee.on('keyUpdate', () => {
   refresh();
 });
 

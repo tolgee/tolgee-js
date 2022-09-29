@@ -59,9 +59,6 @@
     "typescript": "4.7.4"
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
-  "publishConfig": {
-    "access": "public"
-  },
   "peerDependencies": {
     "i18next": "^21.5.4"
   },
@@ -72,5 +69,8 @@
   "dependencies": {
     "@tolgee/core": "^4.8.0",
     "@tolgee/devtools-web": "^4.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

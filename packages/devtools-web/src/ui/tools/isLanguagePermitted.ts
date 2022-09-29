@@ -7,5 +7,8 @@ export const isLanguagePermitted = (
     return true;
   }
   const languageId = allLanguages?.find((l) => l.tag === language)?.id;
+  if (languageId === undefined) {
+    return true;
+  }
   return permittedLanguages.includes(languageId as number);
 };
