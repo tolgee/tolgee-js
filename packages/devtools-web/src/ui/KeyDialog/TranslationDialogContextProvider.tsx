@@ -412,7 +412,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const loading =
       languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
-      scopesLoadable.isFetching;
+      scopesLoadable.isLoading;
     const saving = updateKey.isLoading || createKey.isLoading;
     const error =
       languagesLoadable.error ||

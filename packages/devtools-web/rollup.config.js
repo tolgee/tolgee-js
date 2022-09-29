@@ -30,6 +30,12 @@ const commonPlugins = [
   sourcemaps(),
   sizes(),
   visualizer(),
+  replace({
+    'process.env.TOLGEE_UI_VERSION': JSON.stringify(
+      process.env.TOLGEE_UI_VERSION
+    ),
+    preventAssignment: true,
+  }),
 ];
 
 export default [
@@ -47,7 +53,7 @@ export default [
         sourcemap: true,
       },
       {
-        name: '@tolgee/ui',
+        name: '@tolgee/tolgee-devtools-web',
         file: 'dist/tolgee-devtools-web.umd.js',
         format: 'umd',
         sourcemap: true,
@@ -78,8 +84,38 @@ export default [
         sourcemap: true,
       },
       {
-        name: '@tolgee/ui',
+        name: '@tolgee/tolgee-devtools-web',
         file: 'dist/tolgee-devtools-web.umd.min.js',
+        format: 'umd',
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      replace({
+        'process.env.NODE_ENV': JSON.stringify('production'),
+        preventAssignment: true,
+      }),
+      terser(),
+      ...commonPlugins,
+    ],
+  },
+  {
+    ...commonConfig,
+    input: 'src/InContextProduction.ts',
+    output: [
+      {
+        file: 'dist/tolgee-in-context-production.cjs.min.js',
+        format: 'cjs',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/tolgee-in-context-production.esm.min.mjs',
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        name: '@tolgee/tolgee-in-context-production',
+        file: 'dist/tolgee-in-context-production.umd.min.js',
         format: 'umd',
         sourcemap: true,
       },

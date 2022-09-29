@@ -101,6 +101,10 @@ export const PluginService = (
     instances.observer = observer?.({ translate, onClick });
   };
 
+  const getObserver = () => {
+    return instances.observer;
+  };
+
   const addFormatter = (formatter: FormatterInterface | undefined) => {
     if (formatter) {
       instances.formatters.push(formatter);
@@ -115,6 +119,10 @@ export const PluginService = (
 
   const setUi = (ui: UiType | undefined) => {
     plugins.ui = (ui as UiLibInterface)?.UI || ui;
+  };
+
+  const getUi = () => {
+    return plugins.ui;
   };
 
   const setLanguageStorage = (
@@ -273,7 +281,9 @@ export const PluginService = (
     addFormatter,
     formatTranslation,
     setObserver,
+    getObserver,
     setUi,
+    getUi,
     addBackend,
     setDevBackend,
     getDevBackend,
