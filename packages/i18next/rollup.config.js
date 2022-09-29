@@ -44,7 +44,7 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/core', '@tolgee/ui'],
+  external: ['@tolgee/core', '@tolgee/devtools-web'],
   plugins: [
     typescript({
       outDir: './lib',

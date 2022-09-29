@@ -13,6 +13,6 @@ export const ReactPlugin =
   (props?: Props): TolgeePlugin =>
   (tolgee) =>
     tolgee
-      .use(BrowserExtensionPlugin())
+      .use(BrowserExtensionPlugin({ noReload: true }))
       .use(DevTools({ observer: props }))
       .use(GlobalContextPlugin(props));

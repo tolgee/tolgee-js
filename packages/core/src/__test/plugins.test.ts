@@ -8,29 +8,32 @@ import {
   WrapperWrapFunction,
 } from '../types';
 
-const testObserver: ObserverInterface = () => {
-  const wrap: WrapperWrapFunction = ({ key, translation }) => {
-    return `${key}|${translation}`;
+const testObserver =
+  (outputNotFormattable: boolean): ObserverInterface =>
+  () => {
+    const wrap: WrapperWrapFunction = ({ key, translation }) => {
+      return `${key}|${translation}`;
+    };
+    const unwrap = (input: string) => {
+      const [key, text] = input.split('|');
+      return { text, keys: [{ key }] };
+    };
+
+    const stop = () => {};
+    const run = () => {};
+
+    const retranslate = () => {};
+
+    return Object.freeze({
+      wrap,
+      unwrap,
+      run,
+      stop,
+      retranslate,
+      highlight: () => ({ unhighlight: () => {} }),
+      outputNotFormattable,
+    });
   };
-  const unwrap = (input: string) => {
-    const [key, text] = input.split('|');
-    return { text, keys: [{ key }] };
-  };
-
-  const stop = () => {};
-  const run = () => {};
-
-  const retranslate = () => {};
-
-  return Object.freeze({
-    wrap,
-    unwrap,
-    run,
-    stop,
-    retranslate,
-    highlight: () => ({ unhighlight: () => {} }),
-  });
-};
 
 const testFormatter1: FormatterInterface = {
   format: ({ translation }: FormatterInterfaceFormatParams) => {
@@ -50,10 +53,12 @@ const testFinalFormatter: FinalFormatterInterface = {
   },
 };
 
-const observerPlugin: TolgeePlugin = (tolgee, tools) => {
-  tools.setObserver(testObserver);
-  return tolgee;
-};
+const observerPlugin =
+  (outputNotFormattable: boolean): TolgeePlugin =>
+  (tolgee, tools) => {
+    tools.setObserver(testObserver(outputNotFormattable));
+    return tolgee;
+  };
 
 const formattersPlugin: TolgeePlugin = (tolgee, tools) => {
   tools.addFormatter(testFormatter1);
@@ -68,12 +73,26 @@ describe('plugins', () => {
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.use(observerPlugin);
+    tolgee.use(observerPlugin(false));
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
 
     tolgee.use(formattersPlugin);
     expect(tolgee.t({ key: 'hello' })).toEqual({ final: '(2(1hello|world))' });
+    tolgee.stop();
+  });
+
+  it("won't format when observer doesn't return formattable text", () => {
+    const tolgee = Tolgee({
+      language: 'en',
+      staticData: { en: { hello: 'world' } },
+    });
+    tolgee.use(observerPlugin(true));
+    tolgee.run();
+    expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
+
+    tolgee.use(formattersPlugin);
+    expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
     tolgee.stop();
   });
 });

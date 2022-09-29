@@ -3,6 +3,7 @@ import {
   CacheDescriptor,
   FallbackNSTranslation,
   Options,
+  TFnType,
   TranslatePropsInternal,
 } from '../types';
 import { Cache } from './Cache/Cache';
@@ -11,6 +12,7 @@ import { PluginService } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
 import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
+import { getTranslateParams } from '../TranslateParams';
 
 type StateServiceProps = {
   events: EventServiceType;
@@ -36,7 +38,6 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   );
 
   const pluginService = PluginService(
-    t,
     state.getLanguage,
     state.getInitialOptions,
     state.getAvailableLanguages,
@@ -67,10 +68,12 @@ export const Controller = ({ events, options }: StateServiceProps) => {
     }
   });
 
-  function t(props: TranslatePropsInternal) {
-    const translation = getTranslation(props);
-    return pluginService.formatTranslation({ ...props, translation });
-  }
+  const t: TFnType = (...args) => {
+    // @ts-ignore
+    const params = getTranslateParams(...args);
+    const translation = getTranslation(params);
+    return pluginService.formatTranslation({ ...params, translation });
+  };
 
   function changeTranslation(
     descriptor: CacheDescriptor,
@@ -223,7 +226,6 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   function initializeLanguage() {
     const existingLanguage = state.getLanguage();
     if (existingLanguage) {
-      state.setLanguage(existingLanguage);
       return;
     }
     if (!state.getInitialOptions().defaultLanguage) {

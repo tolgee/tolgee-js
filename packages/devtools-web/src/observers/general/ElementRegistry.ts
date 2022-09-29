@@ -56,8 +56,10 @@ export const ElementRegistry = (
     elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
   }
 
-  function run() {
-    eventHandler.run();
+  function run(mouseHighlight: boolean) {
+    if (mouseHighlight) {
+      eventHandler.run();
+    }
   }
 
   function stop() {

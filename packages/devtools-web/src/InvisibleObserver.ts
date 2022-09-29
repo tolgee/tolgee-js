@@ -10,7 +10,7 @@ const InvisibleObserverCreator =
     const observerOptions = initOptions(options);
     const wrapper = InvisibleWrapper();
     const observer = GeneralObserver(wrapper, observerOptions, onClick);
-    return { ...observer, retranslate: () => {} };
+    return { ...observer, retranslate: () => {}, outputNotFormattable: false };
   };
 
 export const InvisibleObserver =

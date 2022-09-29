@@ -554,9 +554,11 @@ importers:
 
   testapps/core:
     specifiers:
+      '@tolgee/backend-fetch': ^4.8.0
       '@tolgee/core': ^4.8.0
       '@tolgee/devtools-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/storage-web': ^4.8.0
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
@@ -565,7 +567,9 @@ importers:
       webpack: ^5.73.0
       webpack-cli: ^4.10.0
     dependencies:
+      '@tolgee/backend-fetch': link:../../packages/backend-fetch
       '@tolgee/format-icu': link:../../packages/format-icu
+      '@tolgee/storage-web': link:../../packages/storage-web
     devDependencies:
       '@tolgee/core': link:../../packages/core
       '@tolgee/devtools-web': link:../../packages/devtools-web
@@ -11787,7 +11791,7 @@ packages:
   /axios/0.21.4_debug@3.2.7:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.1
+      follow-redirects: 1.15.1_debug@4.3.4
     transitivePeerDependencies:
       - debug
     dev: false
@@ -17943,7 +17947,6 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
-    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}

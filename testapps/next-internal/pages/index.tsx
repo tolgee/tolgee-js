@@ -16,14 +16,15 @@ const Home: NextPage = () => {
 
   const router = useRouter();
 
+  const apiKey =
+    (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
+
   const [tolgee] = useState(
     Tolgee()
       .use(ReactPlugin())
       .init({
         language: activeLocale,
-        apiKey:
-          (router.query.api_key as string) ||
-          process.env.NEXT_PUBLIC_TOLGEE_API_KEY,
+        apiKey: apiKey,
         apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
         staticData: {
           en: enLocale,
@@ -31,6 +32,10 @@ const Home: NextPage = () => {
         },
       })
   );
+
+  useEffect(() => {
+    tolgee.init({ apiKey });
+  }, [apiKey]);
 
   useEffect(() => {
     tolgee.changeLanguage(activeLocale!);

@@ -3,6 +3,7 @@ import {
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TranslationOnClick,
   WrapperInterface,
+  ObserverRunProps,
 } from '@tolgee/core';
 import { ObserverOptions } from '../../types';
 
@@ -81,13 +82,13 @@ export const GeneralObserver = (
 
   let observer: MutationObserver;
 
-  const run = () => {
+  const run = ({ mouseHighlight }: ObserverRunProps) => {
     if (!observer) {
       observer = createMutationObserver();
     }
     const targetElement = options.targetElement || document.body;
     isObserving = true;
-    elementRegistry.run();
+    elementRegistry.run(mouseHighlight);
 
     // initially go through all elements
     handleKeyAttribute(targetElement);

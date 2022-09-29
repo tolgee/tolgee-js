@@ -10,4 +10,6 @@ type Props = Partial<ObserverOptions>;
 export const VuePlugin =
   (props?: Props): TolgeePlugin =>
   (tolgee) =>
-    tolgee.use(BrowserExtensionPlugin()).use(DevTools({ observer: props }));
+    tolgee
+      .use(BrowserExtensionPlugin({ noReload: true }))
+      .use(DevTools({ observer: props }));

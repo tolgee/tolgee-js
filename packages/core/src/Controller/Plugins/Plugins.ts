@@ -24,7 +24,6 @@ import {
 import { getFallbackArray } from '../State/helpers';
 
 export const PluginService = (
-  translate: (params: TranslatePropsInternal) => string,
   getLanguage: () => string | undefined,
   getInitialOptions: () => Options,
   getAvailableLanguages: () => string[] | undefined,
@@ -71,7 +70,17 @@ export const PluginService = (
         highlight,
         changeTranslation,
       });
-    instances.observer?.run();
+    instances.observer?.run({ mouseHighlight: Boolean(instances.ui) });
+    checkCorrectConfiguration();
+  };
+
+  const checkCorrectConfiguration = () => {
+    if (instances.languageDetector) {
+      const availableLanguages = getAvailableLanguages();
+      if (!availableLanguages) {
+        throw new Error(missingOptionError('availableLanguages'));
+      }
+    }
   };
 
   const stop = () => {
@@ -81,6 +90,11 @@ export const PluginService = (
 
   const highlight: HighlightInterface = (key, ns) => {
     return instances.observer?.highlight?.(key, ns) || { unhighlight() {} };
+  };
+
+  const translate = (props: TranslatePropsInternal) => {
+    const translation = getTranslation(props);
+    return formatTranslation({ ...props, translation, formatEnabled: true });
   };
 
   const setObserver = (observer: ObserverInterface | undefined) => {
@@ -124,11 +138,7 @@ export const PluginService = (
       return undefined;
     }
 
-    const availableLanguages = getAvailableLanguages();
-
-    if (!availableLanguages) {
-      throw new Error(missingOptionError('availableLanguages'));
-    }
+    const availableLanguages = getAvailableLanguages()!;
 
     return instances.languageDetector.getLanguage({
       availableLanguages,
@@ -198,7 +208,8 @@ export const PluginService = (
     params,
     orEmpty,
     ns,
-  }: TranslatePropsInternal) => {
+    formatEnabled,
+  }: TranslatePropsInternal & { formatEnabled?: boolean }) => {
     const formattableTranslation = translation || defaultValue;
     let result = formattableTranslation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
@@ -212,7 +223,9 @@ export const PluginService = (
     }
 
     const language = getLanguage();
-    if (formattableTranslation && language) {
+    const isFormatEnabled =
+      formatEnabled || !instances.observer?.outputNotFormattable;
+    if (formattableTranslation && language && isFormatEnabled) {
       for (const formatter of instances.formatters) {
         result = formatter.format({
           translation: result,
@@ -222,7 +235,12 @@ export const PluginService = (
       }
     }
 
-    if (instances.finalFormatter && formattableTranslation && language) {
+    if (
+      instances.finalFormatter &&
+      formattableTranslation &&
+      language &&
+      isFormatEnabled
+    ) {
       result = instances.finalFormatter.format({
         translation: result,
         language,
