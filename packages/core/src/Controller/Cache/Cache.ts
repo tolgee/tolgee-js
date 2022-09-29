@@ -54,18 +54,19 @@ export const Cache = (
   }
 
   function invalidate() {
+    asyncRequests.clear();
     version += 1;
   }
 
   function addRecordInternal(
     descriptor: CacheDescriptorInternal,
     data: TreeTranslationsData,
-    version: number
+    recordVersion: number
   ) {
     const cacheKey = encodeCacheKey(descriptor);
     cache.set(cacheKey, {
       data: flattenTranslations(data),
-      version: version,
+      version: recordVersion,
     });
     onCacheChange.emit(descriptor);
   }
@@ -250,7 +251,11 @@ export const Cache = (
     const results = await Promise.all(withPromises.map((val) => val.promise));
 
     withPromises.forEach((value, i) => {
-      if (value.new) {
+      const promiseChanged =
+        asyncRequests.get(value.cacheKey) !== value.promise;
+      // if promise has changed in between, it means cache been invalidated or
+      // new data are being fetched
+      if (value.new && !promiseChanged) {
         asyncRequests.delete(value.cacheKey);
         const data = results[i];
         if (data) {

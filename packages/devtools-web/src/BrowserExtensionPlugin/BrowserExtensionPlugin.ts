@@ -1,5 +1,6 @@
 import type { TolgeePlugin } from '@tolgee/core';
-import { handshakeWithExtension, listen, updateConfig } from './tools/plugin';
+import { handshakeWithExtension, listen, updateConfig } from '../tools/plugin';
+import { injectUiLib } from './injectUiLib';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -56,7 +57,21 @@ if (typeof window !== 'undefined') {
           },
         } as const);
 
-      listen('SET_CREDENTIALS', () => {
+      const tolgeePlugin = async (): Promise<TolgeePlugin> => {
+        await injectUiLib(process.env.TOLGEE_UI_VERSION || 'rc');
+        return (tolgee) => {
+          const credentials = getCredentials();
+          // @ts-ignore
+          const InContextProduction = window['@tolgee/ui'].InContextProduction;
+          tolgee.use(InContextProduction());
+          tolgee.init({
+            ...credentials,
+          });
+          return tolgee;
+        };
+      };
+
+      listen('SET_CREDENTIALS', async () => {
         const credentials = getCredentials();
         if (credentials.apiKey) {
           const { unsubscribe } = tolgee.on('initialLoad', async () => {
@@ -65,9 +80,7 @@ if (typeof window !== 'undefined') {
             await sleep(300);
             result.unhighlight();
           });
-          tolgee.init({
-            ...credentials,
-          });
+          tolgee.use(await tolgeePlugin());
           updateConfig(getConfig()).catch(clearSessionStorage);
         }
       });
@@ -76,9 +89,7 @@ if (typeof window !== 'undefined') {
         // do it async, so we override
         const credentials = getCredentials();
         if (credentials.apiKey) {
-          tolgee.init({
-            ...credentials,
-          });
+          tolgee.use(await tolgeePlugin());
         }
         onDocumentReady(() => {
           handshakeWithExtension(getConfig()).catch(clearSessionStorage);

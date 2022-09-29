@@ -27,6 +27,7 @@ export default {
       format: 'umd',
       globals: {
         '@tolgee/core': '@tolgee/core',
+        '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       sourcemap: true,
     },
@@ -36,6 +37,7 @@ export default {
       format: 'umd',
       globals: {
         '@tolgee/core': '@tolgee/core',
+        '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       plugins: [terser()],
       sourcemap: true,
