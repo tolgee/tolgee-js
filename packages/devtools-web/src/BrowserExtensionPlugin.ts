@@ -1,4 +1,5 @@
 import type { TolgeePlugin } from '@tolgee/core';
+import { InContextProduction } from 'index';
 import { handshakeWithExtension, listen, updateConfig } from './tools/plugin';
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,6 +57,15 @@ if (typeof window !== 'undefined') {
           },
         } as const);
 
+      const tolgeePlugin: TolgeePlugin = (tolgee, tools) => {
+        const credentials = getCredentials();
+        tolgee.use(InContextProduction());
+        tolgee.init({
+          ...credentials,
+        });
+        return tolgee;
+      };
+
       listen('SET_CREDENTIALS', () => {
         const credentials = getCredentials();
         if (credentials.apiKey) {
@@ -65,9 +75,7 @@ if (typeof window !== 'undefined') {
             await sleep(300);
             result.unhighlight();
           });
-          tolgee.init({
-            ...credentials,
-          });
+          tolgee.use(tolgeePlugin);
           updateConfig(getConfig()).catch(clearSessionStorage);
         }
       });
@@ -76,9 +84,7 @@ if (typeof window !== 'undefined') {
         // do it async, so we override
         const credentials = getCredentials();
         if (credentials.apiKey) {
-          tolgee.init({
-            ...credentials,
-          });
+          tolgee.use(tolgeePlugin);
         }
         onDocumentReady(() => {
           handshakeWithExtension(getConfig()).catch(clearSessionStorage);
