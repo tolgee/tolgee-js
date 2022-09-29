@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 5.0.0-rc.4aa3be8.0 (2022-09-29)
+
+
+### Features
+
+* prepare for rc release ([4aa3be8](https://github.com/tolgee/tolgee-js/commit/4aa3be895bb213c01dbef68982c794f3e1cf3261))
+
+
+### BREAKING CHANGES
+
+* new tolgee API
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/i18next
