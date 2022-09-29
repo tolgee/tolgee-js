@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 5.0.0-rc.9be0f0e.0 (2022-09-29)
+
+
+### Features
+
+* prepare for rc release ([9be0f0e](https://github.com/tolgee/tolgee-js/commit/9be0f0e475edfacf948ecf0b93979936aae7ae79))
+
+
+### BREAKING CHANGES
+
+* new tolgee API
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/svelte
