@@ -25,6 +25,8 @@
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "dependencies": {
-    "@tolgee/format-icu": "^4.8.0"
+    "@tolgee/backend-fetch": "^4.8.0",
+    "@tolgee/format-icu": "^4.8.0",
+    "@tolgee/storage-web": "^4.8.0"
   }
 }

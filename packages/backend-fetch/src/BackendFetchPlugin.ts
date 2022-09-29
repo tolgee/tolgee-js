@@ -5,6 +5,6 @@ import { BackendOptions } from './types';
 export const BackendPlugin =
   (options?: Partial<BackendOptions>): TolgeePlugin =>
   (tolgee, tools) => {
-    tools.addBackend(BackendFetch());
+    tools.addBackend(BackendFetch(options));
     return tolgee;
   };

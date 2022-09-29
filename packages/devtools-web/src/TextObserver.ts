@@ -38,6 +38,7 @@ const TextObserverCreator =
       run,
       retranslate,
       highlight,
+      outputNotFormattable: true,
     };
   };
 

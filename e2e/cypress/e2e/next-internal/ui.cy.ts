@@ -81,7 +81,7 @@ context('UI Dialog', () => {
 
   function assertCanEditEnglish() {
     getDevUi().find('textarea').contains('On the road').type('Hello world');
-    cy.intercept({ path: '/v2/projects/keys/**', method: 'put' }, (req) => {
+    cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
           id: 1000000706,

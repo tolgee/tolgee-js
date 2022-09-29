@@ -66,16 +66,20 @@ async function customFetch(
     'X-API-Key': options.apiKey,
   };
 
-  return fetch(options.apiUrl + input, init).then(async (r) => {
-    if (!r.ok) {
-      const data = await getResObject(r);
-      const message = `${r.status}: ${
-        data?.message || 'Error status code from server'
-      }`;
-      throw message;
-    }
-    return await getResObject(r);
-  });
+  return fetch(options.apiUrl + input, init)
+    .then(async (r) => {
+      if (!r.ok) {
+        const data = await getResObject(r);
+        const message = `${r.status}: ${
+          data?.message || 'Error status code from server'
+        }`;
+        throw message;
+      }
+      return await getResObject(r);
+    })
+    .catch((e) => {
+      throw e.message;
+    });
 }
 
 export const addProjectIdToUrl = (url: string) => {

@@ -135,13 +135,18 @@ export type HighlightInterface = (
   unhighlight(): void;
 };
 
+export type ObserverRunProps = {
+  mouseHighlight: boolean;
+};
+
 export type ObserverInterface = (props: ObserverProps) => {
   unwrap: (text: string) => Unwrapped;
   wrap: WrapperWrapFunction;
   retranslate: () => void;
   stop: () => void;
-  run: () => void;
+  run: (props: ObserverRunProps) => void;
   highlight: HighlightInterface;
+  outputNotFormattable: boolean;
 };
 
 export type LanguageDetectorProps = {

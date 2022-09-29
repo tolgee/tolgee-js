@@ -105,24 +105,6 @@ export const TranslationMethods = () => {
             })}
           </div>
         </div>
-
-        <div>
-          <h1>t component with interpolation</h1>
-          <div>
-            <div data-cy="translationWithTags">
-              <T
-                keyName="this_is_a_key_with_tags"
-                params={{
-                  b: <b />,
-                  i: <i />,
-                  key: 'value',
-                }}
-              >
-                Hey
-              </T>
-            </div>
-          </div>
-        </div>
       </div>
     </main>
   );

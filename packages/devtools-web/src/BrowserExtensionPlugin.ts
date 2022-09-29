@@ -32,7 +32,7 @@ function onDocumentReady(callback: () => void) {
 }
 
 type Props = {
-  fullReload?: boolean;
+  noReload?: boolean;
 };
 
 let BrowserExtensionPlugin =
@@ -48,7 +48,7 @@ if (typeof window !== 'undefined') {
         ({
           uiPresent: true,
           uiVersion: undefined,
-          noRestart: !props?.fullReload,
+          noRestart: Boolean(props?.noReload),
           mode: tolgee.isDev() ? 'development' : 'production',
           config: {
             apiUrl: tolgee.getInitialOptions().apiUrl || '',

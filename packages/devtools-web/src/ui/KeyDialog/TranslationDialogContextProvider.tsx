@@ -410,10 +410,9 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
     const baseLang = availableLanguages?.find(({ base }) => base);
     const loading =
-      languagesLoadable.isLoading ||
       languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
-      scopesLoadable.isLoading;
+      scopesLoadable.isFetching;
     const saving = updateKey.isLoading || createKey.isLoading;
     const error =
       languagesLoadable.error ||
