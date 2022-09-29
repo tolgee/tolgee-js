@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/core-testapp",
-  "version": "4.9.2",
+  "version": "5.0.0-rc.0b3e627.0",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
@@ -13,8 +13,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@tolgee/core": "^4.8.0",
-    "@tolgee/devtools-web": "^4.8.0",
+    "@tolgee/core": "^5.0.0-rc.0b3e627.0",
+    "@tolgee/devtools-web": "^5.0.0-rc.0b3e627.0",
     "concurrently": "^7.3.0",
     "copy-webpack-plugin": "^10.2.4",
     "html-webpack-plugin": "^5.5.0",
@@ -25,8 +25,8 @@
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "dependencies": {
-    "@tolgee/backend-fetch": "^4.8.0",
-    "@tolgee/format-icu": "^4.8.0",
-    "@tolgee/storage-web": "^4.8.0"
+    "@tolgee/backend-fetch": "^5.0.0-rc.0b3e627.0",
+    "@tolgee/format-icu": "^5.0.0-rc.0b3e627.0",
+    "@tolgee/storage-web": "^5.0.0-rc.0b3e627.0"
   }
 }
