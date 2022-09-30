@@ -140,10 +140,6 @@ export const Cache = (
     onCacheChange.emit({ ...descriptor, key });
   }
 
-  function clear() {
-    cache.clear();
-  }
-
   function isFetching(ns?: FallbackNSTranslation) {
     if (isInitialLoading()) {
       return true;
@@ -186,8 +182,6 @@ export const Cache = (
       const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
-      } else if (staticDataValue) {
-        dataPromise = Promise.resolve(staticDataValue);
       }
     }
 
@@ -292,7 +286,6 @@ export const Cache = (
     isFetching,
     isLoading,
     loadRecords,
-    clear,
     getAllRecords,
   });
 };
