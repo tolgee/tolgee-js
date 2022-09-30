@@ -1,8 +1,25 @@
 import { EventEmitterSelective } from './EventEmitterSelective';
 
 describe('event emitter selective', () => {
+  it('handles correctly fallback namespaces', () => {
+    const emitter = EventEmitterSelective<void>(() => ['a', 'b']);
+    const handler = jest.fn();
+    const listener = emitter.listenSome(handler);
+
+    // subscribe to fallback namespaces
+    listener.subscribeKey({ key: 'test' });
+
+    // emmit
+    emitter.emit({ key: 'test' });
+    emitter.emit({ ns: ['a'] });
+    // should be ignored
+    emitter.emit({ ns: ['c'] });
+
+    expect(handler).toBeCalledTimes(2);
+  });
+
   it('subscribes to key', () => {
-    const emitter = EventEmitterSelective<void>();
+    const emitter = EventEmitterSelective<void>(() => ['']);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
     listener.subscribeKey({ key: 'test' });
@@ -17,7 +34,7 @@ describe('event emitter selective', () => {
   });
 
   it('subscribes to key with namespaces', () => {
-    const emitter = EventEmitterSelective<void>();
+    const emitter = EventEmitterSelective<void>(() => []);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
@@ -36,7 +53,7 @@ describe('event emitter selective', () => {
   });
 
   it('unsubscribes', () => {
-    const emitter = EventEmitterSelective<void>();
+    const emitter = EventEmitterSelective<void>(() => []);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
@@ -60,13 +77,13 @@ describe('event emitter selective', () => {
   });
 
   it('groups events correctly', async () => {
-    const emitter = EventEmitterSelective<void>();
+    const emitter = EventEmitterSelective<void>(() => ['test', 'opqrst']);
     const handler = jest.fn();
     const hanlderAll = jest.fn();
     const listener = emitter.listenSome(handler);
     const listenerAll = emitter.listen(hanlderAll);
 
-    listener.subscribeKey({ key: 'abcd', ns: ['test', 'abcd'] });
+    listener.subscribeKey({ key: 'abcd', ns: ['test'] });
 
     emitter.emit({ key: 'abcd' }, true);
     emitter.emit({ ns: ['opqrst'] }, true);
@@ -88,7 +105,7 @@ describe('event emitter selective', () => {
   });
 
   it('subscribes to ns only', async () => {
-    const emitter = EventEmitterSelective<void>();
+    const emitter = EventEmitterSelective<void>(() => ['test', 'youda']);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
     listener.subscribeNs(['test']);

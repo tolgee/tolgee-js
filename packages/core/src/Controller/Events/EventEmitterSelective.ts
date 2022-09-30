@@ -1,11 +1,11 @@
-import { getFallbackArray } from '../Controller/State/helpers';
+import { getFallbackArray } from '../State/helpers';
 import {
   FallbackNSTranslation,
   KeyDescriptor,
   KeyDescriptorInternal,
   ListenerHandler,
   ListenerHandlerEvent,
-} from '../types';
+} from '../../types';
 
 type HandlerWrapperType = {
   fn: ListenerHandler<undefined>;
@@ -28,7 +28,9 @@ function decrementInMap(map: Map<any, number>, value: any) {
   }
 }
 
-export const EventEmitterSelective = <T>() => {
+export const EventEmitterSelective = <T>(
+  getFallbackNamespaces: () => string[]
+) => {
   const listeners: Set<ListenerHandler<T>> = new Set();
   const partialListeners: Set<HandlerWrapperType> = new Set();
 
@@ -98,22 +100,34 @@ export const EventEmitterSelective = <T>() => {
     return result;
   };
 
+  const namespacesWithFallbacks = (
+    namespaces: Map<string | undefined, number> | Set<string | undefined>
+  ) => {
+    if (namespaces.has(undefined)) {
+      const result = new Set(namespaces.keys());
+      result.delete(undefined);
+      getFallbackNamespaces().forEach((ns) => result.add(ns));
+      return result as Set<string>;
+    }
+    return namespaces as Map<string, number>;
+  };
+
   const callHandlers = (key: string | undefined, ns: string[] | undefined) => {
     partialListeners.forEach((handler) => {
-      const nsMentioned = ns !== undefined;
+      const handlerNamespaces = namespacesWithFallbacks(handler.namespaces);
       const nsMatches =
-        handler.namespaces.has(undefined) ||
-        ns?.findIndex((ns) => handler.namespaces.has(ns)) !== -1;
-      const keyMentioned = key !== undefined;
+        ns === undefined ||
+        ns?.findIndex((ns) => handlerNamespaces.has(ns)) !== -1;
       const keyMatches =
         key === undefined || handler.keys.has(key) || handler.keys.size === 0;
-      if ((!nsMentioned || nsMatches) && (!keyMentioned || keyMatches)) {
+      if (nsMatches && keyMatches) {
         handler.fn({ value: undefined as any });
       }
     });
   };
 
   let queue: (KeyDescriptorInternal | undefined)[] = [];
+  // merge events in queue into one event
   const solveQueue = () => {
     if (queue.length === 0) {
       return;
@@ -122,22 +136,27 @@ export const EventEmitterSelective = <T>() => {
       handler({ value: undefined as any });
     });
 
-    let namespaces = [] as string[] | undefined;
-    let keys = [] as string[] | undefined;
+    const namespaces = new Set<string | undefined>();
+    let keys: Set<string> | undefined = new Set<string>();
     queue.forEach((descriptor) => {
       if (descriptor?.ns === undefined) {
-        namespaces = undefined;
-      } else if (namespaces !== undefined) {
-        namespaces = [...namespaces, ...descriptor.ns];
+        // when no ns specified, it affets all fallback namespaces
+        namespaces.add(undefined);
+      } else {
+        descriptor.ns.forEach((ns) => namespaces.add(ns));
       }
       if (descriptor?.key === undefined) {
+        // when no key specified, it affects all keys
         keys = undefined;
       } else if (keys !== undefined) {
-        keys = [...keys, descriptor.key];
+        keys.add(descriptor.key);
       }
     });
+    const namespacesArray = Array.from(
+      namespacesWithFallbacks(namespaces).keys()
+    );
     (keys || [undefined]).forEach((key) => {
-      callHandlers(key, namespaces);
+      callHandlers(key, namespacesArray);
     });
     queue = [];
   };

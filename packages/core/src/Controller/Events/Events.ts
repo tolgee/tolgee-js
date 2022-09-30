@@ -5,16 +5,16 @@ import {
   KeyDescriptorInternal,
   ListenerHandler,
   TolgeeOn,
-} from '../types';
+} from '../../types';
 
-export const Events = () => {
+export const Events = (getFallbackNamespaces: () => string[]) => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
   const onKeyChange = EventEmitter<KeyDescriptorInternal>();
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onKeyUpdate = EventEmitterSelective<void>();
+  const onKeyUpdate = EventEmitterSelective<void>(getFallbackNamespaces);
   const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
 
