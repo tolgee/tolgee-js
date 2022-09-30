@@ -424,7 +424,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const scopes = scopesLoadable.data?.scopes;
 
     const formDisabled =
-      loading ||
+      scopesLoadable.data &&
+      !loading &&
       (translationsLoadable.data?._embedded?.keys?.length
         ? !isAuthorizedTo('translations.edit', scopes)
         : !isAuthorizedTo('keys.edit', scopes));

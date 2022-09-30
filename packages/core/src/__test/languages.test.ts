@@ -103,4 +103,10 @@ describe('language changes', () => {
     tolgee.run();
     expect(tolgee.getLanguage()).toEqual('en');
   });
+
+  it('will throw error when no language specified', () => {
+    const tolgee = Tolgee({});
+
+    expect(() => tolgee.run()).toThrow(/'language'/);
+  });
 });

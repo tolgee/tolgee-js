@@ -42,14 +42,6 @@ export const State = (
     return state.language || state.initialOptions.language;
   }
 
-  function getLanguageOrFail() {
-    const language = state.language || state.initialOptions.language;
-    if (!language) {
-      throw new Error(`No language set`);
-    }
-    return language;
-  }
-
   function setLanguage(language: string) {
     if (state.language !== language) {
       state.language = language;
@@ -149,7 +141,6 @@ export const State = (
     isInitialLoading,
     setInitialLoading,
     getLanguage,
-    getLanguageOrFail,
     setLanguage,
     getPendingLanguage,
     setPendingLanguage,
