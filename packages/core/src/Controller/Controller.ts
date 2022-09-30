@@ -68,13 +68,6 @@ export const Controller = ({ options }: StateServiceProps) => {
     }
   });
 
-  const t: TFnType = (...args) => {
-    // @ts-ignore
-    const params = getTranslateParams(...args);
-    const translation = getTranslation(params);
-    return pluginService.formatTranslation({ ...params, translation });
-  };
-
   function changeTranslation(
     descriptor: CacheDescriptor,
     key: string,
@@ -268,6 +261,13 @@ export const Controller = ({ options }: StateServiceProps) => {
       state.setRunning(false);
     }
   }
+
+  const t: TFnType = (...args) => {
+    // @ts-ignore
+    const params = getTranslateParams(...args);
+    const translation = getTranslation(params);
+    return pluginService.formatTranslation({ ...params, translation });
+  };
 
   return Object.freeze({
     ...events,
