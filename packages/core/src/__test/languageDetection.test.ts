@@ -118,6 +118,12 @@ describe('language detection plugin', () => {
         },
       });
 
-    expect(() => tolgee.run()).toThrow();
+    expect(() => tolgee.run()).toThrow(/'defaultLanguage'/);
+  });
+
+  it('will throw error when no available languages specified', () => {
+    tolgee = Tolgee().use(DetectionPlugin('en')).init({});
+
+    expect(() => tolgee.run()).toThrow(/'availableLanguages'/);
   });
 });

@@ -1,4 +1,4 @@
-import { isPromise, missingOptionError, valueOrPromise } from '../../helpers';
+import { isPromise, valueOrPromise } from '../../helpers';
 import {
   BackendDevInterface,
   BackendGetRecord,
@@ -71,16 +71,6 @@ export const PluginService = (
         changeTranslation,
       });
     instances.observer?.run({ mouseHighlight: Boolean(instances.ui) });
-    checkCorrectConfiguration();
-  };
-
-  const checkCorrectConfiguration = () => {
-    if (instances.languageDetector) {
-      const availableLanguages = getAvailableLanguages();
-      if (!availableLanguages) {
-        throw new Error(missingOptionError('availableLanguages'));
-      }
-    }
   };
 
   const stop = () => {
@@ -131,6 +121,10 @@ export const PluginService = (
     instances.languageStorage = storage;
   };
 
+  const getLanguageStorage = () => {
+    return instances.languageStorage;
+  };
+
   const setStoredLanguage = (language: string) => {
     instances.languageStorage?.setLanguage(language);
   };
@@ -139,6 +133,10 @@ export const PluginService = (
     detector: LanguageDetectorInterface | undefined
   ) => {
     instances.languageDetector = detector;
+  };
+
+  const getLanguageDetector = () => {
+    return instances.languageDetector;
   };
 
   const detectLanguage = () => {
@@ -290,7 +288,9 @@ export const PluginService = (
     getBackendRecord,
     getBackendDevRecord,
     setLanguageDetector,
+    getLanguageDetector,
     setLanguageStorage,
+    getLanguageStorage,
     getInitialLanguage,
     setStoredLanguage,
     run,

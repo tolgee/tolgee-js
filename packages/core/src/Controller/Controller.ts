@@ -56,10 +56,8 @@ export const Controller = ({ options }: StateServiceProps) => {
     loadingObserver
   );
 
-  state.init(options);
-  cache.addStaticData(state.getInitialOptions().staticData);
-  if (isDev()) {
-    cache.invalidate();
+  if (options) {
+    init(options);
   }
 
   events.onKeyUpdate.listen(() => {
@@ -177,9 +175,8 @@ export const Controller = ({ options }: StateServiceProps) => {
     key,
     ns,
   }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
-    const namespaces = ns
-      ? getFallbackArray(ns)
-      : state.getFallbackNamespaces();
+    const namespaces =
+      ns !== undefined ? getFallbackArray(ns) : state.getFallbackNamespaces();
     const languages = state.getFallbackLangs();
     return cache.getTranslationNs(namespaces, languages, key);
   }
@@ -188,9 +185,8 @@ export const Controller = ({ options }: StateServiceProps) => {
     key,
     ns,
   }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
-    const namespaces = ns
-      ? getFallbackArray(ns)
-      : state.getFallbackNamespaces();
+    const namespaces =
+      ns !== undefined ? getFallbackArray(ns) : state.getFallbackNamespaces();
     const languages = state.getFallbackLangs();
     return cache.getTranslationFallback(namespaces, languages, key);
   }
@@ -198,7 +194,6 @@ export const Controller = ({ options }: StateServiceProps) => {
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
       // fail if there is no language
-      state.getLanguageOrFail();
       return loadRequiredRecords();
     });
 
@@ -242,8 +237,26 @@ export const Controller = ({ options }: StateServiceProps) => {
     return cache.loadRecords(descriptors, isDev());
   }
 
+  const checkCorrectConfiguration = () => {
+    const languageDetector = pluginService.getLanguageDetector();
+    if (languageDetector) {
+      const availableLanguages = state.getAvailableLanguages();
+      if (!availableLanguages) {
+        throw new Error(missingOptionError('availableLanguages'));
+      }
+    }
+    if (!state.getLanguage() && !state.getInitialOptions().defaultLanguage) {
+      if (languageDetector) {
+        throw new Error(missingOptionError('defaultLanguage'));
+      } else {
+        throw new Error(missingOptionError('language'));
+      }
+    }
+  };
+
   function run() {
     let result: Promise<void> | undefined = undefined;
+    checkCorrectConfiguration();
     if (!state.isRunning()) {
       if (isDev()) {
         cache.invalidate();
