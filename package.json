@@ -50,7 +50,7 @@
     "lerna": "^5.3.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "2.7.0",
-    "turbo": "1.2.3",
+    "turbo": "1.5.5",
     "typescript": "^4.7.4"
   },
   "commitlint": {
@@ -58,5 +58,5 @@
       "@commitlint/config-conventional"
     ]
   },
-  "packageManager": "npm@8.1.0"
+  "packageManager": "pnpm@7.9.4"
 }
