@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "4.9.2",
+  "version": "4.10.0-rc.2b55a5c.0",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
@@ -14,9 +14,9 @@
     "format": "prettier --cache --write ."
   },
   "dependencies": {
-    "@tolgee/core": "^4.8.0",
-    "@tolgee/devtools-web": "^4.8.0",
-    "@tolgee/format-icu": "^4.8.0"
+    "@tolgee/core": "^4.10.0-rc.2b55a5c.0",
+    "@tolgee/devtools-web": "^4.10.0-rc.2b55a5c.0",
+    "@tolgee/format-icu": "^4.10.0-rc.2b55a5c.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.0-next.65",

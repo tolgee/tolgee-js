@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.10.0-rc.2b55a5c.0 (2022-09-30)
+
+
+### Features
+
+* improve tests ([2b55a5c](https://github.com/tolgee/tolgee-js/commit/2b55a5cf679926029818de87e47d46466fbee6e8))
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/core-testapp
