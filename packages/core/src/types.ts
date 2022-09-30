@@ -229,9 +229,7 @@ export type TolgeeInstance = Readonly<{
   loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
   loadRecord: (descriptors: CacheDescriptor) => Promise<TranslationsFlat>;
   addStaticData: (data: Options['staticData']) => void;
-  getRecord: (
-    descriptor: CacheDescriptorInternal
-  ) => TranslationsFlat | undefined;
+  getRecord: (descriptor: CacheDescriptor) => TranslationsFlat | undefined;
   getAllRecords: () => CachePublicRecord[];
   isInitialLoading: () => boolean;
   isLoading: (ns?: FallbackNSTranslation) => boolean;
@@ -244,7 +242,7 @@ export type TolgeeInstance = Readonly<{
   init: (options: Partial<Options>) => TolgeeInstance;
   run: () => Promise<void>;
   stop: () => void;
-  t: (props: TranslatePropsInternal) => string;
+  t: TFnType;
   wrap: (params: TranslatePropsInternal) => string | undefined;
   unwrap: (text: string) => Unwrapped;
 }>;

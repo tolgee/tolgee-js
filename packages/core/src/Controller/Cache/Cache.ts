@@ -86,8 +86,8 @@ export const Cache = (
     return Boolean(record);
   }
 
-  function getRecord(descriptor: CacheDescriptorInternal) {
-    return cache.get(encodeCacheKey(descriptor))?.data;
+  function getRecord(descriptor: CacheDescriptor) {
+    return cache.get(encodeCacheKey(withDefaultNs(descriptor)))?.data;
   }
 
   function getTranslation(descriptor: CacheDescriptorInternal, key: string) {

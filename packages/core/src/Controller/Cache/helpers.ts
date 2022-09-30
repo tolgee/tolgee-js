@@ -10,11 +10,9 @@ export const flattenTranslations = (
       return;
     }
     if (typeof value === 'object') {
-      Object.entries(flattenTranslations(value)).forEach(
-        ([flatKey, flatValue]) => {
-          result.set(key + '.' + flatKey, flatValue);
-        }
-      );
+      flattenTranslations(value).forEach((flatValue, flatKey) => {
+        result.set(key + '.' + flatKey, flatValue);
+      });
       return;
     }
     result.set(key, value as string);
