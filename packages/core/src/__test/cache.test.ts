@@ -1,5 +1,14 @@
 import { Tolgee } from '../Tolgee';
-import { TolgeeInstance, TolgeePlugin } from '../types';
+import { TolgeeInstance, TolgeePlugin, TreeTranslationsData } from '../types';
+import { resolvablePromise } from './testTools';
+
+const waitForInitialLoad = (tolgee: TolgeeInstance) =>
+  new Promise<void>((resolve) => {
+    const { unsubscribe } = tolgee.on('initialLoad', () => {
+      unsubscribe();
+      resolve();
+    });
+  });
 
 const DevToolsPlugin =
   (postfix = ''): TolgeePlugin =>
@@ -19,7 +28,7 @@ describe('cache', () => {
   let tolgee: TolgeeInstance;
 
   beforeEach(async () => {
-    tolgee = Tolgee().init({
+    tolgee = Tolgee({
       language: 'en',
       staticData: {
         en: { test: { sub: 'subtestEn' } },
@@ -36,6 +45,15 @@ describe('cache', () => {
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
     await tolgee.changeLanguage('cs');
     expect(tolgee.t('test.sub')).toEqual('subtestCs');
+  });
+
+  it('ignores empty values', async () => {
+    tolgee.addStaticData({
+      en: { sub: { test: 'Test', null: null, undefined: undefined } },
+    });
+    expect(tolgee.t('sub.test')).toEqual('Test');
+    expect(tolgee.t('sub.null')).toEqual('sub.null');
+    expect(tolgee.t('sub.undefined')).toEqual('sub.undefined');
   });
 
   it('returns correct data when in dev mode', async () => {
@@ -71,13 +89,8 @@ describe('cache', () => {
     tolgee.use(DevToolsPlugin('.new'));
     expect(tolgee.t('test.sub')).toEqual('en.default');
 
-    await new Promise<void>((resolve) => {
-      const { unsubscribe } = tolgee.on('initialLoad', async () => {
-        expect(tolgee.t('test.sub')).toEqual('en.default.new');
-        unsubscribe();
-        resolve();
-      });
-    });
+    await waitForInitialLoad(tolgee);
+    expect(tolgee.t('test.sub')).toEqual('en.default.new');
   });
 
   it('updates initial data correctly', async () => {
@@ -92,6 +105,44 @@ describe('cache', () => {
     await tolgee.run();
     expect(tolgee.t('test.sub')).toEqual('en.default');
     tolgee.addStaticData({ en: { test: { sub: 'newSubtestEn' } } });
+    expect(tolgee.t('test.sub')).toEqual('en.default');
+  });
+
+  it('gets all records', async () => {
+    await tolgee.run();
+    expect(tolgee.getAllRecords().length).toEqual(2);
+  });
+
+  it('fetching works with namespaces', async () => {
+    tolgee.use(DevToolsPlugin());
+    const runPromise = tolgee.run();
+    expect(tolgee.isFetching()).toBeTruthy();
+    await runPromise;
+    expect(tolgee.t('test.sub', { ns: 'common' })).toEqual('test.sub');
+    const nsPromise = tolgee.addActiveNs('common');
+    expect(tolgee.isFetching()).toBeTruthy();
+    expect(tolgee.isFetching('common')).toBeTruthy();
+    expect(tolgee.isFetching('nonexistant')).toBeFalsy();
+    await nsPromise;
+    expect(tolgee.t('test.sub', { ns: 'common' })).toEqual('en.common');
+    expect(tolgee.isFetching()).toBeFalsy();
+  });
+
+  it("pending requests won't rewrite cache when reinitialized", async () => {
+    const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
+    tolgee = Tolgee({
+      language: 'en',
+      staticData: {
+        en: () => promiseEn,
+      },
+    });
+    tolgee.run();
+    await Promise.resolve();
+    tolgee.use(DevToolsPlugin());
+    await waitForInitialLoad(tolgee);
+    expect(tolgee.t('test.sub')).toEqual('en.default');
+    resolveEn({ test: { sub: 'Invalid' } });
+    await Promise.resolve();
     expect(tolgee.t('test.sub')).toEqual('en.default');
   });
 });
