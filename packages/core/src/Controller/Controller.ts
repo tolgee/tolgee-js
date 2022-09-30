@@ -1,4 +1,4 @@
-import type { EventServiceType } from '../Events/Events';
+import { Events } from './Events/Events';
 import {
   CacheDescriptor,
   FallbackNSTranslation,
@@ -15,11 +15,11 @@ import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
 import { getTranslateParams } from '../TranslateParams';
 
 type StateServiceProps = {
-  events: EventServiceType;
   options?: Partial<Options>;
 };
 
-export const Controller = ({ events, options }: StateServiceProps) => {
+export const Controller = ({ options }: StateServiceProps) => {
+  const events = Events(getFallbackNamespaces);
   const fetchingObserver = ValueObserver<boolean>(
     false,
     () => cache.isFetching(),
@@ -88,6 +88,10 @@ export const Controller = ({ events, options }: StateServiceProps) => {
         cache.changeTranslation(keyObject, key, previousValue);
       },
     };
+  }
+
+  function getFallbackNamespaces() {
+    return state.getFallbackNamespaces();
   }
 
   function init(options: Partial<Options>) {
@@ -266,6 +270,7 @@ export const Controller = ({ events, options }: StateServiceProps) => {
   }
 
   return Object.freeze({
+    ...events,
     ...state,
     ...pluginService,
     ...cache,

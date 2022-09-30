@@ -1,11 +1,8 @@
-import { Events } from './Events/Events';
 import { Controller } from './Controller/Controller';
 import { Options, TolgeeInstance, TolgeePlugin } from './types';
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
-  const events = Events();
   const controller = Controller({
-    events,
     options,
   });
 
@@ -31,8 +28,8 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
-    on: events.on,
-    onKeyUpdate: events.onKeyUpdate.listenSome,
+    on: controller.on,
+    onKeyUpdate: controller.onKeyUpdate.listenSome,
 
     // state
     getLanguage: controller.getLanguage,

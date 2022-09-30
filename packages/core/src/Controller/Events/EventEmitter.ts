@@ -1,4 +1,4 @@
-import { Listener, ListenerHandler } from '../types';
+import { Listener, ListenerHandler } from '../../types';
 
 export const EventEmitter = <T>() => {
   let handlers: ListenerHandler<T>[] = [];

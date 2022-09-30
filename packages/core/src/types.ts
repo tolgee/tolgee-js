@@ -1,8 +1,8 @@
 import type { Options } from './Controller/State/initState';
 
 export type { State, Options } from './Controller/State/initState';
-export type { EventEmitterType } from './Events/EventEmitter';
-export type { EventEmitterSelectiveType } from './Events/EventEmitterSelective';
+export type { EventEmitterType } from './Controller/Events/EventEmitter';
+export type { EventEmitterSelectiveType } from './Controller/Events/EventEmitterSelective';
 
 export type FallbackGeneral = undefined | false | string | string[];
 
