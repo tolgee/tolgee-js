@@ -1,4 +1,4 @@
-import type { TolgeePlugin } from '@tolgee/core';
+import type { TolgeePlugin } from '@tolgee/web';
 import { DEFAULT_REACT_OPTIONS } from './TolgeeProvider';
 import type { ReactOptions, TolgeeReactContext } from './types';
 

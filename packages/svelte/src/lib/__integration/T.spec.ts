@@ -5,7 +5,7 @@ import { render, screen, waitFor } from '@testing-library/svelte';
 import mockTranslations from './data/mockTranslations';
 import { testConfig } from './data/testConfig';
 import TestTComponent from './components/TestTComponent.svelte';
-import { Tolgee, type TolgeeInstance } from '@tolgee/core';
+import { Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { SveltePlugin } from '$lib/SveltePlugin';
 import { FormatIcu } from '@tolgee/format-icu';
 

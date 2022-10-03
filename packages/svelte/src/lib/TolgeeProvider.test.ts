@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Tolgee } from '@tolgee/core';
+import { Tolgee } from '@tolgee/web';
 import { render, waitFor, screen } from '@testing-library/svelte';
-import type { TolgeeInstance } from '@tolgee/core';
+import type { TolgeeInstance } from '@tolgee/web';
 import { TolgeeProvider } from '$lib';
 import TolgeeProviderSlotTestSvelte from './__testUtil/TolgeeProviderSlotTest.svelte';
 import TolgeeProviderFallback from './__testUtil/TolgeeProviderFallback.svelte';

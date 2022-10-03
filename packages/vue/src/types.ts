@@ -1,4 +1,4 @@
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 
 export type TolgeeVueContext = {
   tolgee: TolgeeInstance;

@@ -1,4 +1,4 @@
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { InitOptions } from 'i18next';
 import { TOLGEE_PROCESSOR_NAME } from './tolgeeProcessor';
 

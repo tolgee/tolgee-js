@@ -6,7 +6,7 @@ import {
   type KeyDescriptor,
   type TolgeeInstance,
   type TranslateProps,
-} from '@tolgee/core';
+} from '@tolgee/web';
 import { getTolgeeContext } from '$lib/index';
 
 const getTranslateInternal = (ns?: FallbackNSTranslation) => {

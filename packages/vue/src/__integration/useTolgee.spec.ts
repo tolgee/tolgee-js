@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import mockTranslations from './mockTranslations';
 import { VuePlugin, useTolgee, TolgeeVue } from '..';
 import { render, screen, waitFor } from '@testing-library/vue';
-import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/core';
+import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { PropType } from 'vue';
 

@@ -5,7 +5,8 @@ import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
 import i18n from 'i18next';
-import { withTolgee, Tolgee, I18nextPlugin } from '..';
+import { Tolgee } from '@tolgee/web';
+import { withTolgee, I18nextPlugin } from '..';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';

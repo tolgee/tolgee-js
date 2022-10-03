@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { Callback, i18n, InitOptions } from 'i18next';
 import { tolgeeApply } from './tolgeeApply';
 import { tolgeeBackend } from './tolgeeBackend';

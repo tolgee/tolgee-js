@@ -1,4 +1,4 @@
-import { FallbackNSTranslation, TranslateParams } from '@tolgee/core';
+import { FallbackNSTranslation, TranslateParams } from '@tolgee/web';
 import React, { FunctionComponent } from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 

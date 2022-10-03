@@ -1,5 +1,5 @@
 import { readable } from 'svelte/store';
-import type { TolgeeEvent } from '@tolgee/core';
+import type { TolgeeEvent } from '@tolgee/web';
 import { getTolgeeContext } from './getTolgeeContext';
 
 const DEFAULT_EVENTS: TolgeeEvent[] = ['language', 'pendingLanguage'];

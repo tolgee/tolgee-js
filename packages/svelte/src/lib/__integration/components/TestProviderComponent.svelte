@@ -1,6 +1,6 @@
 <script lang="ts">
   import { TolgeeProvider, T } from '$lib';
-    import type { TolgeeInstance } from '@tolgee/core';
+    import type { TolgeeInstance } from '@tolgee/web';
   export let tolgee: TolgeeInstance;
 </script>
 

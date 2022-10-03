@@ -2,14 +2,13 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import { Tolgee, VuePlugin, TolgeeVue } from '@tolgee/vue';
 import { FormatIcu } from '@tolgee/format-icu';
-import { DetectorPlugin } from '@tolgee/detector-web';
-import { StoragePlugin } from '@tolgee/storage-web';
+import { LanguageDetector, LanguageStorage } from '@tolgee/web';
 
 const tolgee = Tolgee()
   .use(VuePlugin())
   .use(FormatIcu())
-  .use(DetectorPlugin())
-  .use(StoragePlugin())
+  .use(LanguageDetector())
+  .use(LanguageStorage())
   .init({
     defaultLanguage: 'en',
     staticData: {

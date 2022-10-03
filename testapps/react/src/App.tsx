@@ -1,7 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
+import {
+  ReactPlugin,
+  Tolgee,
+  TolgeeProvider,
+  BackendFetch,
+} from '@tolgee/react';
 import { FormatIcu } from '@tolgee/format-icu';
-import { BackendPlugin } from '@tolgee/backend-fetch';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
@@ -10,7 +14,7 @@ import { Namespaces } from './Namespaces';
 const tolgee = Tolgee()
   .use(ReactPlugin())
   .use(FormatIcu())
-  .use(BackendPlugin())
+  .use(BackendFetch())
   .init({
     availableLanguages: ['en', 'cs', 'fr', 'de'],
     apiUrl: process.env.REACT_APP_TOLGEE_API_URL,

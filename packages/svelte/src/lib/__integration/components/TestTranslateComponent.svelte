@@ -1,6 +1,6 @@
 <script lang="ts">
   import { TolgeeProvider } from '$lib';
-  import type {TolgeeInstance} from '@tolgee/core';
+  import type {TolgeeInstance} from '@tolgee/web';
 
   import TestTranslateComponentInside from './TestTranslateComponentInside.svelte';
   export let tolgee: TolgeeInstance;

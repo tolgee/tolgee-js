@@ -1,4 +1,4 @@
-import type { DefaultParamType, TolgeeInstance } from '@tolgee/core';
+import type { DefaultParamType, TolgeeInstance } from '@tolgee/web';
 import React from 'react';
 
 export type ParamsTags =

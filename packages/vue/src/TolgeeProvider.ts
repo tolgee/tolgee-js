@@ -8,7 +8,7 @@ import {
   onUnmounted,
   ref,
 } from 'vue';
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { TolgeeVueContext } from './types';
 
 export const TolgeeProvider = defineComponent({

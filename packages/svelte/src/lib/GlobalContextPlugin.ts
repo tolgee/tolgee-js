@@ -1,4 +1,4 @@
-import type { TolgeePlugin } from '@tolgee/core';
+import type { TolgeePlugin } from '@tolgee/web';
 import type { TolgeeSvelteContext } from './types';
 
 let globalContext: TolgeeSvelteContext | undefined;

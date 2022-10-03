@@ -58,42 +58,6 @@ importers:
       download-github-release: 0.3.2
       typescript: 4.7.4
 
-  packages/backend-fetch:
-    specifiers:
-      '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-typescript': 8.3.4
-      '@testing-library/jest-dom': ^5.16.5
-      '@tolgee/core': ^4.8.0
-      '@types/jest': ^27.0.2
-      '@types/node': ^17.0.8
-      '@types/testing-library__jest-dom': ^5.14.5
-      concurrently: 7.3.0
-      jest: ^27.2.4
-      jest-fetch-mock: ^3.0.3
-      rollup: ^2.56.3
-      rollup-plugin-bundle-size: ^1.0.3
-      rollup-plugin-terser: 7.0.2
-      rollup-plugin-visualizer: ^5.8.0
-      ts-jest: ^27.1.5
-      typescript: ^4.7.4
-    devDependencies:
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.0
-      '@rollup/plugin-typescript': 8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m
-      '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': link:../core
-      '@types/jest': 27.5.2
-      '@types/node': 17.0.45
-      '@types/testing-library__jest-dom': 5.14.5
-      concurrently: 7.3.0
-      jest: 27.5.1
-      jest-fetch-mock: 3.0.3
-      rollup: 2.79.0
-      rollup-plugin-bundle-size: 1.0.3
-      rollup-plugin-terser: 7.0.2_rollup@2.79.0
-      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
-      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
-      typescript: 4.8.3
-
   packages/core:
     specifiers:
       '@rollup/plugin-node-resolve': 13.3.0
@@ -127,117 +91,6 @@ importers:
       rollup-plugin-visualizer: 5.8.0_rollup@2.78.1
       ts-jest: 27.1.5_mqaoisgizytgigbr3gbjwvnjie
       typescript: 4.7.4
-
-  packages/detector-web:
-    specifiers:
-      '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-typescript': 8.3.4
-      '@testing-library/jest-dom': ^5.16.5
-      '@tolgee/core': ^4.8.0
-      '@types/jest': ^27.0.2
-      '@types/node': ^17.0.8
-      '@types/testing-library__jest-dom': ^5.14.5
-      concurrently: 7.3.0
-      jest: ^27.2.4
-      jest-fetch-mock: ^3.0.3
-      rollup: ^2.56.3
-      rollup-plugin-bundle-size: ^1.0.3
-      rollup-plugin-terser: 7.0.2
-      rollup-plugin-visualizer: ^5.8.0
-      ts-jest: ^27.1.5
-      typescript: ^4.7.4
-    devDependencies:
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.0
-      '@rollup/plugin-typescript': 8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m
-      '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': link:../core
-      '@types/jest': 27.5.2
-      '@types/node': 17.0.45
-      '@types/testing-library__jest-dom': 5.14.5
-      concurrently: 7.3.0
-      jest: 27.5.1
-      jest-fetch-mock: 3.0.3
-      rollup: 2.79.0
-      rollup-plugin-bundle-size: 1.0.3
-      rollup-plugin-terser: 7.0.2_rollup@2.79.0
-      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
-      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
-      typescript: 4.8.3
-
-  packages/devtools-web:
-    specifiers:
-      '@babel/preset-typescript': ^7.18.6
-      '@emotion/react': ^11.10.4
-      '@emotion/styled': ^11.10.4
-      '@mui/icons-material': ^5.10.3
-      '@mui/material': ^5.10.4
-      '@rollup/plugin-commonjs': ^22.0.2
-      '@rollup/plugin-node-resolve': 14.0.0
-      '@rollup/plugin-replace': ^4.0.0
-      '@rollup/plugin-typescript': 8.5.0
-      '@testing-library/dom': ^8.7.2
-      '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.9.2
-      '@types/jest': ^27.0.2
-      '@types/node': ^17.0.8
-      '@types/react': ^17.0.30
-      '@types/react-dom': ^17.0.1
-      clsx: ^1.1.1
-      concurrently: 7.4.0
-      jest: ^27.2.4
-      jest-fetch-mock: ^3.0.3
-      openapi-typescript: ^4.3.0
-      react: ^17.0.1
-      react-dom: ^17.0.1
-      react-dropzone: ^11.4.2
-      react-query: ^3.39.2
-      rollup: 2.79.0
-      rollup-plugin-bundle-size: ^1.0.3
-      rollup-plugin-replace: 2.2.0
-      rollup-plugin-sourcemaps: ^0.6.3
-      rollup-plugin-terser: 7.0.2
-      rollup-plugin-visualizer: ^5.8.1
-      ts-jest: ^27.0.5
-      ts-loader: ^9.2.6
-      typescript: 4.8.3
-      use-context-selector: ^1.4.1
-    dependencies:
-      react-query: 3.39.2_sfoxds7t5ydpegc3knd667wn6m
-    devDependencies:
-      '@babel/preset-typescript': 7.18.6
-      '@emotion/react': 11.10.4_skqlhrap4das3cz5b6iqdn2lqi
-      '@emotion/styled': 11.10.4_2wavot4xmcc54xgq35psri2bxe
-      '@mui/icons-material': 5.10.3_6kkz44zrcv4xav7cvxs5ob7idq
-      '@mui/material': 5.10.4_k6hr2hiyqflxfqoozh6nsu3gbi
-      '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.0
-      '@rollup/plugin-node-resolve': 14.0.0_rollup@2.79.0
-      '@rollup/plugin-replace': 4.0.0_rollup@2.79.0
-      '@rollup/plugin-typescript': 8.5.0_ihkqvyh37tzxtjmovjyy2yrv7m
-      '@testing-library/dom': 8.17.1
-      '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': link:../core
-      '@types/jest': 27.5.2
-      '@types/node': 17.0.45
-      '@types/react': 17.0.48
-      '@types/react-dom': 17.0.17
-      clsx: 1.2.1
-      concurrently: 7.4.0
-      jest: 27.5.1
-      jest-fetch-mock: 3.0.3
-      openapi-typescript: 4.5.0
-      react: 17.0.2
-      react-dom: 17.0.2_react@17.0.2
-      react-dropzone: 11.7.1_react@17.0.2
-      rollup: 2.79.0
-      rollup-plugin-bundle-size: 1.0.3
-      rollup-plugin-replace: 2.2.0
-      rollup-plugin-sourcemaps: 0.6.3_riqkex7zadj34l5cmc5tim37ia
-      rollup-plugin-terser: 7.0.2_rollup@2.79.0
-      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
-      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
-      ts-loader: 9.3.1_typescript@4.8.3
-      typescript: 4.8.3
-      use-context-selector: 1.4.1_sfoxds7t5ydpegc3knd667wn6m
 
   packages/format-icu:
     specifiers:
@@ -282,8 +135,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.8.0
-      '@tolgee/devtools-web': ^4.8.0
+      '@tolgee/web': ^4.8.0
       '@types/intl-messageformat': ^3.0.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
@@ -300,8 +152,7 @@ importers:
       typedoc-plugin-markdown: 3.11.7
       typescript: 4.7.4
     dependencies:
-      '@tolgee/core': link:../core
-      '@tolgee/devtools-web': link:../devtools-web
+      '@tolgee/web': link:../web
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
       '@testing-library/dom': 8.16.0
@@ -328,9 +179,8 @@ importers:
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^12.1.2
-      '@tolgee/core': ^4.8.0
-      '@tolgee/devtools-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/web': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -351,8 +201,7 @@ importers:
       tslint: ~5.15.0
       typescript: ^4.7.4
     dependencies:
-      '@tolgee/core': link:../core
-      '@tolgee/devtools-web': link:../devtools-web
+      '@tolgee/web': link:../web
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_5zsqiitiqqdgwm4iemtywlnhku
       '@testing-library/dom': 8.16.0
@@ -405,42 +254,6 @@ importers:
       webpack: 5.74.0_webpack-cli@4.10.0
       webpack-cli: 4.10.0_webpack@5.74.0
 
-  packages/storage-web:
-    specifiers:
-      '@rollup/plugin-node-resolve': 13.3.0
-      '@rollup/plugin-typescript': 8.3.4
-      '@testing-library/jest-dom': ^5.16.5
-      '@tolgee/core': ^4.8.0
-      '@types/jest': ^27.0.2
-      '@types/node': ^17.0.8
-      '@types/testing-library__jest-dom': ^5.14.5
-      concurrently: 7.3.0
-      jest: ^27.2.4
-      jest-fetch-mock: ^3.0.3
-      rollup: ^2.56.3
-      rollup-plugin-bundle-size: ^1.0.3
-      rollup-plugin-terser: 7.0.2
-      rollup-plugin-visualizer: ^5.8.0
-      ts-jest: ^27.1.5
-      typescript: ^4.7.4
-    devDependencies:
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.0
-      '@rollup/plugin-typescript': 8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m
-      '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': link:../core
-      '@types/jest': 27.5.2
-      '@types/node': 17.0.45
-      '@types/testing-library__jest-dom': 5.14.5
-      concurrently: 7.3.0
-      jest: 27.5.1
-      jest-fetch-mock: 3.0.3
-      rollup: 2.79.0
-      rollup-plugin-bundle-size: 1.0.3
-      rollup-plugin-terser: 7.0.2_rollup@2.79.0
-      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
-      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
-      typescript: 4.8.3
-
   packages/svelte:
     specifiers:
       '@sveltejs/adapter-auto': 1.0.0-next.65
@@ -448,9 +261,8 @@ importers:
       '@sveltejs/package': 1.0.0-next.1
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/svelte': ^3.2.1
-      '@tolgee/core': ^4.8.0
-      '@tolgee/devtools-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/web': ^4.8.0
       '@tsconfig/svelte': ^3.0.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
@@ -474,15 +286,14 @@ importers:
       typescript: ^4.7.4
       vite: ^3.0.9
     dependencies:
-      '@tolgee/core': link:../core
-      '@tolgee/devtools-web': link:../devtools-web
-      '@tolgee/format-icu': link:../format-icu
+      '@tolgee/web': link:../web
     devDependencies:
       '@sveltejs/adapter-auto': 1.0.0-next.65
       '@sveltejs/kit': 1.0.0-next.429_svelte@3.49.0+vite@3.0.9
       '@sveltejs/package': 1.0.0-next.1_uslzfc62di2n2otc2tvfklnwji
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/svelte': 3.2.1_svelte@3.49.0
+      '@tolgee/format-icu': link:../format-icu
       '@tsconfig/svelte': 3.0.0
       '@types/jest': 28.1.7
       '@typescript-eslint/eslint-plugin': 5.34.0_euudt5oqhhodkyae5tf6wjmsda
@@ -512,9 +323,8 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.2
       '@testing-library/vue': ^6.6.1
-      '@tolgee/core': ^4.8.0
-      '@tolgee/devtools-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/web': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
@@ -530,15 +340,14 @@ importers:
       typescript: ^4.7.4
       vue: ^3.0.0
     dependencies:
-      '@tolgee/core': link:../core
-      '@tolgee/devtools-web': link:../devtools-web
-      '@types/testing-library__jest-dom': 5.14.5
+      '@tolgee/web': link:../web
     devDependencies:
       '@rollup/plugin-typescript': 8.3.4_accrhai6qopda76wnqb3pkewpq
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/vue': 6.6.1_vue@3.2.37
       '@tolgee/format-icu': link:../format-icu
       '@types/jest': 27.5.2
+      '@types/testing-library__jest-dom': 5.14.5
       '@vue/vue3-jest': 27.0.0_usluppwkbzs5e3mabc3pp2k4m4
       babel-jest: 27.5.1
       concurrently: 7.2.2
@@ -552,13 +361,85 @@ importers:
       typescript: 4.7.4
       vue: 3.2.37
 
+  packages/web:
+    specifiers:
+      '@babel/preset-typescript': ^7.18.6
+      '@emotion/react': ^11.10.4
+      '@emotion/styled': ^11.10.4
+      '@mui/icons-material': ^5.10.3
+      '@mui/material': ^5.10.4
+      '@rollup/plugin-commonjs': ^22.0.2
+      '@rollup/plugin-node-resolve': 14.0.0
+      '@rollup/plugin-replace': ^4.0.0
+      '@rollup/plugin-typescript': 8.5.0
+      '@testing-library/dom': ^8.7.2
+      '@testing-library/jest-dom': ^5.11.4
+      '@tolgee/core': ^4.9.2
+      '@types/jest': ^27.0.2
+      '@types/node': ^17.0.8
+      '@types/react': ^17.0.30
+      '@types/react-dom': ^17.0.1
+      clsx: ^1.1.1
+      concurrently: 7.4.0
+      jest: ^27.2.4
+      jest-fetch-mock: ^3.0.3
+      openapi-typescript: ^4.3.0
+      react: ^17.0.1
+      react-dom: ^17.0.1
+      react-dropzone: ^11.4.2
+      react-query: ^3.39.2
+      rollup: 2.79.0
+      rollup-plugin-bundle-size: ^1.0.3
+      rollup-plugin-replace: 2.2.0
+      rollup-plugin-sourcemaps: ^0.6.3
+      rollup-plugin-terser: 7.0.2
+      rollup-plugin-visualizer: ^5.8.1
+      ts-jest: ^27.0.5
+      ts-loader: ^9.2.6
+      typescript: 4.8.3
+      use-context-selector: ^1.4.1
+    dependencies:
+      '@tolgee/core': link:../core
+    devDependencies:
+      '@babel/preset-typescript': 7.18.6
+      '@emotion/react': 11.10.4_t4v2ig6j532zggk4vxuuplsqcq
+      '@emotion/styled': 11.10.4_35dtyzacsenk6ahz35hir52gj4
+      '@mui/icons-material': 5.10.3_6g56idddptlbm6srqtl55igaiq
+      '@mui/material': 5.10.4_jyl6hmschmdid4lxqxuaosgwoq
+      '@rollup/plugin-commonjs': 22.0.2_rollup@2.79.0
+      '@rollup/plugin-node-resolve': 14.0.0_rollup@2.79.0
+      '@rollup/plugin-replace': 4.0.0_rollup@2.79.0
+      '@rollup/plugin-typescript': 8.5.0_ihkqvyh37tzxtjmovjyy2yrv7m
+      '@testing-library/dom': 8.17.1
+      '@testing-library/jest-dom': 5.16.5
+      '@types/jest': 27.5.2
+      '@types/node': 17.0.45
+      '@types/react': 17.0.49
+      '@types/react-dom': 17.0.17
+      clsx: 1.2.1
+      concurrently: 7.4.0
+      jest: 27.5.1
+      jest-fetch-mock: 3.0.3
+      openapi-typescript: 4.5.0
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
+      react-dropzone: 11.7.1_react@17.0.2
+      react-query: 3.39.2_sfoxds7t5ydpegc3knd667wn6m
+      rollup: 2.79.0
+      rollup-plugin-bundle-size: 1.0.3
+      rollup-plugin-replace: 2.2.0
+      rollup-plugin-sourcemaps: 0.6.3_riqkex7zadj34l5cmc5tim37ia
+      rollup-plugin-terser: 7.0.2_rollup@2.79.0
+      rollup-plugin-visualizer: 5.8.1_rollup@2.79.0
+      ts-jest: 27.1.5_qqheuyrmnawe7ws7n63adpwbnu
+      ts-loader: 9.3.1_typescript@4.8.3
+      typescript: 4.8.3
+      use-context-selector: 1.4.1_sfoxds7t5ydpegc3knd667wn6m
+
   testapps/core:
     specifiers:
-      '@tolgee/backend-fetch': ^4.8.0
-      '@tolgee/core': ^4.8.0
-      '@tolgee/devtools-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
-      '@tolgee/storage-web': ^4.8.0
+      '@tolgee/web': ^4.8.0
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
@@ -567,12 +448,9 @@ importers:
       webpack: ^5.73.0
       webpack-cli: ^4.10.0
     dependencies:
-      '@tolgee/backend-fetch': link:../../packages/backend-fetch
       '@tolgee/format-icu': link:../../packages/format-icu
-      '@tolgee/storage-web': link:../../packages/storage-web
+      '@tolgee/web': link:../../packages/web
     devDependencies:
-      '@tolgee/core': link:../../packages/core
-      '@tolgee/devtools-web': link:../../packages/devtools-web
       concurrently: 7.3.0
       copy-webpack-plugin: 10.2.4_webpack@5.74.0
       html-webpack-plugin: 5.5.0_webpack@5.74.0
@@ -651,11 +529,8 @@ importers:
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
-      '@tolgee/backend-fetch': ^4.8.0
-      '@tolgee/detector-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
       '@tolgee/react': ^4.8.0
-      '@tolgee/storage-web': ^4.8.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -675,11 +550,8 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@testing-library/user-event': 13.5.0
-      '@tolgee/backend-fetch': link:../../packages/backend-fetch
-      '@tolgee/detector-web': link:../../packages/detector-web
       '@tolgee/format-icu': link:../../packages/format-icu
       '@tolgee/react': link:../../packages/react
-      '@tolgee/storage-web': link:../../packages/storage-web
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.43
@@ -777,10 +649,9 @@ importers:
 
   testapps/vue:
     specifiers:
-      '@tolgee/detector-web': ^4.8.0
       '@tolgee/format-icu': ^4.8.0
-      '@tolgee/storage-web': ^4.8.0
       '@tolgee/vue': ^4.8.0
+      '@tolgee/web': ^4.8.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
       '@vue/cli-plugin-typescript': ~4.5.0
@@ -792,10 +663,9 @@ importers:
       typescript: ~4.7.4
       vue: ^3.2.37
     dependencies:
-      '@tolgee/detector-web': link:../../packages/detector-web
       '@tolgee/format-icu': link:../../packages/format-icu
-      '@tolgee/storage-web': link:../../packages/storage-web
       '@tolgee/vue': link:../../packages/vue
+      '@tolgee/web': link:../../packages/web
       core-js: 3.24.0
       vue: 3.2.37
     devDependencies:
@@ -1131,23 +1001,6 @@ packages:
       browserslist: 4.21.4
       semver: 6.3.0
 
-  /@babel/helper-create-class-features-plugin/7.18.9:
-    resolution: {integrity: sha512-WvypNAYaVh23QcjpMR24CwZY2Nz6hqdOcFdPbNpV56hL5H6KiFheO7Xm1aPdlLQ7d5emYZX7VZwPp9x3z+2opw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-    dependencies:
-      '@babel/helper-annotate-as-pure': 7.18.6
-      '@babel/helper-environment-visitor': 7.18.9
-      '@babel/helper-function-name': 7.18.9
-      '@babel/helper-member-expression-to-functions': 7.18.9
-      '@babel/helper-optimise-call-expression': 7.18.6
-      '@babel/helper-replace-supers': 7.18.9
-      '@babel/helper-split-export-declaration': 7.18.6
-    transitivePeerDependencies:
-      - supports-color
-    dev: true
-
   /@babel/helper-create-class-features-plugin/7.18.9_@babel+core@7.18.9:
     resolution: {integrity: sha512-WvypNAYaVh23QcjpMR24CwZY2Nz6hqdOcFdPbNpV56hL5H6KiFheO7Xm1aPdlLQ7d5emYZX7VZwPp9x3z+2opw==}
     engines: {node: '>=6.9.0'}
@@ -1182,6 +1035,41 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@babel/helper-create-class-features-plugin/7.19.0:
+    resolution: {integrity: sha512-NRz8DwF4jT3UfrmUoZjd0Uph9HQnP30t7Ash+weACcyNkiYTywpIjDBgReJMKgr+n86sn2nPVVmJ28Dm053Kqw==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/helper-annotate-as-pure': 7.18.6
+      '@babel/helper-environment-visitor': 7.18.9
+      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-member-expression-to-functions': 7.18.9
+      '@babel/helper-optimise-call-expression': 7.18.6
+      '@babel/helper-replace-supers': 7.19.1
+      '@babel/helper-split-export-declaration': 7.18.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@babel/helper-create-class-features-plugin/7.19.0_@babel+core@7.18.9:
+    resolution: {integrity: sha512-NRz8DwF4jT3UfrmUoZjd0Uph9HQnP30t7Ash+weACcyNkiYTywpIjDBgReJMKgr+n86sn2nPVVmJ28Dm053Kqw==}
+    engines: {node: '>=6.9.0'}
+    peerDependencies:
+      '@babel/core': ^7.0.0
+    dependencies:
+      '@babel/core': 7.18.9
+      '@babel/helper-annotate-as-pure': 7.18.6
+      '@babel/helper-environment-visitor': 7.18.9
+      '@babel/helper-function-name': 7.19.0
+      '@babel/helper-member-expression-to-functions': 7.18.9
+      '@babel/helper-optimise-call-expression': 7.18.6
+      '@babel/helper-replace-supers': 7.19.1
+      '@babel/helper-split-export-declaration': 7.18.6
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
 
   /@babel/helper-create-class-features-plugin/7.19.0_@babel+core@7.19.1:
     resolution: {integrity: sha512-NRz8DwF4jT3UfrmUoZjd0Uph9HQnP30t7Ash+weACcyNkiYTywpIjDBgReJMKgr+n86sn2nPVVmJ28Dm053Kqw==}
@@ -1402,7 +1290,6 @@ packages:
       '@babel/types': 7.19.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/helper-simple-access/7.18.6:
     resolution: {integrity: sha512-iNpIgTgyAvDQpDj76POqg+YEt8fPxx3yaNBg3S30dxNKm2SWfYhD0TGrK/Eu9wHpUW63VQU894TsTg+GLbUa1g==}
@@ -3283,8 +3170,8 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/helper-create-class-features-plugin': 7.18.9
-      '@babel/helper-plugin-utils': 7.18.9
+      '@babel/helper-create-class-features-plugin': 7.19.0
+      '@babel/helper-plugin-utils': 7.19.0
       '@babel/plugin-syntax-typescript': 7.18.6
     transitivePeerDependencies:
       - supports-color
@@ -3297,8 +3184,8 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.18.9
-      '@babel/helper-create-class-features-plugin': 7.18.9_@babel+core@7.18.9
-      '@babel/helper-plugin-utils': 7.18.9
+      '@babel/helper-create-class-features-plugin': 7.19.0_@babel+core@7.18.9
+      '@babel/helper-plugin-utils': 7.19.0
       '@babel/plugin-syntax-typescript': 7.18.6_@babel+core@7.18.9
     transitivePeerDependencies:
       - supports-color
@@ -3561,7 +3448,7 @@ packages:
     peerDependencies:
       '@babel/core': ^7.0.0-0
     dependencies:
-      '@babel/helper-plugin-utils': 7.18.9
+      '@babel/helper-plugin-utils': 7.19.0
       '@babel/helper-validator-option': 7.18.6
       '@babel/plugin-transform-typescript': 7.18.8
     transitivePeerDependencies:
@@ -3575,7 +3462,7 @@ packages:
       '@babel/core': ^7.0.0-0
     dependencies:
       '@babel/core': 7.18.9
-      '@babel/helper-plugin-utils': 7.18.9
+      '@babel/helper-plugin-utils': 7.19.0
       '@babel/helper-validator-option': 7.18.6
       '@babel/plugin-transform-typescript': 7.18.8_@babel+core@7.18.9
     transitivePeerDependencies:
@@ -4139,7 +4026,7 @@ packages:
     resolution: {integrity: sha512-G/YwXTkv7Den9mXDO7AhLWkE3q+I92B+VqAE+dYG4NGPaHZGvt3G8Q0p9vmE+sq7rTGphUbAvmQ9YpbfMQGGlA==}
     dev: true
 
-  /@emotion/react/11.10.4_skqlhrap4das3cz5b6iqdn2lqi:
+  /@emotion/react/11.10.4_t4v2ig6j532zggk4vxuuplsqcq:
     resolution: {integrity: sha512-j0AkMpr6BL8gldJZ6XQsQ8DnS9TxEQu1R+OGmDZiWjBAJtCcbt0tS3I/YffoqHXxH6MjgI7KdMbYKw3MEiU9eA==}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -4158,7 +4045,7 @@ packages:
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@17.0.2
       '@emotion/utils': 1.2.0
       '@emotion/weak-memoize': 0.3.0
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       hoist-non-react-statics: 3.3.2
       react: 17.0.2
     dev: true
@@ -4214,7 +4101,7 @@ packages:
     resolution: {integrity: sha512-OiTkRgpxescko+M51tZsMq7Puu/KP55wMT8BgpcXVG2hqXc0Vo0mfymJ/Uj24Hp0i083ji/o0aLddh08UEjq8w==}
     dev: true
 
-  /@emotion/styled/11.10.4_2wavot4xmcc54xgq35psri2bxe:
+  /@emotion/styled/11.10.4_35dtyzacsenk6ahz35hir52gj4:
     resolution: {integrity: sha512-pRl4R8Ez3UXvOPfc2bzIoV8u9P97UedgHS4FPX594ntwEuAMA114wlaHvOK24HB48uqfXiGlYIZYCxVJ1R1ttQ==}
     peerDependencies:
       '@babel/core': ^7.0.0
@@ -4230,11 +4117,11 @@ packages:
       '@babel/runtime': 7.19.0
       '@emotion/babel-plugin': 11.10.2
       '@emotion/is-prop-valid': 1.2.0
-      '@emotion/react': 11.10.4_skqlhrap4das3cz5b6iqdn2lqi
+      '@emotion/react': 11.10.4_t4v2ig6j532zggk4vxuuplsqcq
       '@emotion/serialize': 1.1.0
       '@emotion/use-insertion-effect-with-fallbacks': 1.0.0_react@17.0.2
       '@emotion/utils': 1.2.0
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       react: 17.0.2
     dev: true
 
@@ -6781,7 +6668,7 @@ packages:
       react-is: 18.2.0
     dev: false
 
-  /@mui/base/5.0.0-alpha.96_sk3eihvpffgp52mstba5zhq3vu:
+  /@mui/base/5.0.0-alpha.96_j6sw2p2tdbh6crpcmkxtmmhma4:
     resolution: {integrity: sha512-GZf2YguepLFMWGG8vQNLRl7FlXPDeyxQBYgrkHxwNJYeRw55rrGrJxHzL1iCbk71VZ2IIAIs5IAxNpyHK9iqPQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6794,10 +6681,10 @@ packages:
     dependencies:
       '@babel/runtime': 7.19.0
       '@emotion/is-prop-valid': 1.2.0
-      '@mui/types': 7.2.0_@types+react@17.0.48
+      '@mui/types': 7.2.0_@types+react@17.0.49
       '@mui/utils': 5.10.3_react@17.0.2
       '@popperjs/core': 2.11.6
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       clsx: 1.2.1
       prop-types: 15.8.1
       react: 17.0.2
@@ -6809,7 +6696,7 @@ packages:
     resolution: {integrity: sha512-VGekVa9dleJ+ii47+gXvKUV5a11T0nsjXN8bk5NqiJRQWRCAhbTHgsfZuctNcMeLW9FSf2gu6U0k2U6rhABKcA==}
     dev: true
 
-  /@mui/icons-material/5.10.3_6kkz44zrcv4xav7cvxs5ob7idq:
+  /@mui/icons-material/5.10.3_6g56idddptlbm6srqtl55igaiq:
     resolution: {integrity: sha512-o0kbUlsWCBtCE0wP33cGKbyryCh7kpm2EECYMPDmWrLhbA+HUODXIdhiTFS26szp2xXo9HY1lEx0ufeJ+tddYw==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6821,12 +6708,12 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.19.0
-      '@mui/material': 5.10.4_k6hr2hiyqflxfqoozh6nsu3gbi
-      '@types/react': 17.0.48
+      '@mui/material': 5.10.4_jyl6hmschmdid4lxqxuaosgwoq
+      '@types/react': 17.0.49
       react: 17.0.2
     dev: true
 
-  /@mui/material/5.10.4_k6hr2hiyqflxfqoozh6nsu3gbi:
+  /@mui/material/5.10.4_jyl6hmschmdid4lxqxuaosgwoq:
     resolution: {integrity: sha512-uwupjunU3p8XxZU4f2zF1GYlwB9GDxW1H05BMDPSh0u+37yLxuQDMMxwQQPUo9jSA5Y22/eR4Y71ScxKU89QHg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6844,14 +6731,14 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.19.0
-      '@emotion/react': 11.10.4_skqlhrap4das3cz5b6iqdn2lqi
-      '@emotion/styled': 11.10.4_2wavot4xmcc54xgq35psri2bxe
-      '@mui/base': 5.0.0-alpha.96_sk3eihvpffgp52mstba5zhq3vu
+      '@emotion/react': 11.10.4_t4v2ig6j532zggk4vxuuplsqcq
+      '@emotion/styled': 11.10.4_35dtyzacsenk6ahz35hir52gj4
+      '@mui/base': 5.0.0-alpha.96_j6sw2p2tdbh6crpcmkxtmmhma4
       '@mui/core-downloads-tracker': 5.10.4
-      '@mui/system': 5.10.4_iglxbcwt2u4xwmtqdmeto5wbwa
-      '@mui/types': 7.2.0_@types+react@17.0.48
+      '@mui/system': 5.10.4_nx4spdtsxbjqvy7zigd4wakwlm
+      '@mui/types': 7.2.0_@types+react@17.0.49
       '@mui/utils': 5.10.3_react@17.0.2
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       '@types/react-transition-group': 4.4.5
       clsx: 1.2.1
       csstype: 3.1.0
@@ -6897,7 +6784,7 @@ packages:
       react-transition-group: 4.4.2_sfoxds7t5ydpegc3knd667wn6m
     dev: false
 
-  /@mui/private-theming/5.10.3_skqlhrap4das3cz5b6iqdn2lqi:
+  /@mui/private-theming/5.10.3_t4v2ig6j532zggk4vxuuplsqcq:
     resolution: {integrity: sha512-LCYIKlkGz2BTSng2BFzzwSJBRZbChIUri2x2Nh8ryk2B1Ho7zpvE7ex6y39LlStG2Frf92NFC/V4YQbmMAjD5A==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6909,7 +6796,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.19.0
       '@mui/utils': 5.10.3_react@17.0.2
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       prop-types: 15.8.1
       react: 17.0.2
     dev: true
@@ -6946,8 +6833,8 @@ packages:
     dependencies:
       '@babel/runtime': 7.19.0
       '@emotion/cache': 11.10.3
-      '@emotion/react': 11.10.4_skqlhrap4das3cz5b6iqdn2lqi
-      '@emotion/styled': 11.10.4_2wavot4xmcc54xgq35psri2bxe
+      '@emotion/react': 11.10.4_t4v2ig6j532zggk4vxuuplsqcq
+      '@emotion/styled': 11.10.4_35dtyzacsenk6ahz35hir52gj4
       csstype: 3.1.0
       prop-types: 15.8.1
       react: 17.0.2
@@ -6975,7 +6862,7 @@ packages:
       react: 17.0.2
     dev: false
 
-  /@mui/system/5.10.4_iglxbcwt2u4xwmtqdmeto5wbwa:
+  /@mui/system/5.10.4_nx4spdtsxbjqvy7zigd4wakwlm:
     resolution: {integrity: sha512-fE7LtYStPHPfq7EJXEVLQGvz23pS5YwSI7A4mWEFyyW21hHUh0c1opZXb7caHJsUTiBoC22W7R8GGfbVdSOnZA==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -6992,13 +6879,13 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.19.0
-      '@emotion/react': 11.10.4_skqlhrap4das3cz5b6iqdn2lqi
-      '@emotion/styled': 11.10.4_2wavot4xmcc54xgq35psri2bxe
-      '@mui/private-theming': 5.10.3_skqlhrap4das3cz5b6iqdn2lqi
+      '@emotion/react': 11.10.4_t4v2ig6j532zggk4vxuuplsqcq
+      '@emotion/styled': 11.10.4_35dtyzacsenk6ahz35hir52gj4
+      '@mui/private-theming': 5.10.3_t4v2ig6j532zggk4vxuuplsqcq
       '@mui/styled-engine': 5.10.4_eiduz6gn53osuo65buerufurei
-      '@mui/types': 7.2.0_@types+react@17.0.48
+      '@mui/types': 7.2.0_@types+react@17.0.49
       '@mui/utils': 5.10.3_react@17.0.2
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
       clsx: 1.2.1
       csstype: 3.1.0
       prop-types: 15.8.1
@@ -7046,7 +6933,7 @@ packages:
       '@types/react': 17.0.43
     dev: false
 
-  /@mui/types/7.2.0_@types+react@17.0.48:
+  /@mui/types/7.2.0_@types+react@17.0.49:
     resolution: {integrity: sha512-lGXtFKe5lp3UxTBGqKI1l7G8sE2xBik8qCfrLHD5olwP/YU0/ReWoWT7Lp1//ri32dK39oPMrJN8TgbkCSbsNA==}
     peerDependencies:
       '@types/react': '*'
@@ -7054,7 +6941,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 17.0.48
+      '@types/react': 17.0.49
     dev: true
 
   /@mui/utils/5.10.3_react@17.0.2:
@@ -8077,21 +7964,6 @@ packages:
       rollup: 2.78.1
     dev: true
 
-  /@rollup/plugin-node-resolve/13.3.0_rollup@2.79.0:
-    resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
-    engines: {node: '>= 10.0.0'}
-    peerDependencies:
-      rollup: ^2.42.0
-    dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.0
-      '@types/resolve': 1.17.1
-      deepmerge: 4.2.2
-      is-builtin-module: 3.2.0
-      is-module: 1.0.0
-      resolve: 1.22.1
-      rollup: 2.79.0
-    dev: true
-
   /@rollup/plugin-node-resolve/14.0.0_rollup@2.79.0:
     resolution: {integrity: sha512-XkWfpgp/zGiFu8LS+JAiQeZN4oYYA4/ViFJiZhwQegTg5ZbzKTvM9YyKXVBNnmZ8Et76WnlVgwRUu1rhKF4ayw==}
     engines: {node: '>= 10.0.0'}
@@ -8160,23 +8032,6 @@ packages:
       resolve: 1.22.1
       rollup: 2.78.1
       typescript: 4.7.4
-    dev: true
-
-  /@rollup/plugin-typescript/8.3.4_ihkqvyh37tzxtjmovjyy2yrv7m:
-    resolution: {integrity: sha512-wt7JnYE9antX6BOXtsxGoeVSu4dZfw0dU3xykfOQ4hC3EddxRbVG/K0xiY1Wup7QOHJcjLYXWAn0Kx9Z1SBHHg==}
-    engines: {node: '>=8.0.0'}
-    peerDependencies:
-      rollup: ^2.14.0
-      tslib: '*'
-      typescript: '>=3.7.0'
-    peerDependenciesMeta:
-      tslib:
-        optional: true
-    dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.79.0
-      resolve: 1.22.1
-      rollup: 2.79.0
-      typescript: 4.8.3
     dev: true
 
   /@rollup/plugin-typescript/8.5.0_ihkqvyh37tzxtjmovjyy2yrv7m:
@@ -12388,7 +12243,7 @@ packages:
   /big-integer/1.6.51:
     resolution: {integrity: sha512-GPEid2Y9QU1Exl1rpO9B2IPJGHPSupF5GnVIP0blYvNOMer2bTvSWs1jGOUg04hTmu67nmLsQ9TBo1puaotBHg==}
     engines: {node: '>=0.6'}
-    dev: false
+    dev: true
 
   /big.js/3.2.0:
     resolution: {integrity: sha512-+hN/Zh2D08Mx65pZ/4g5bsmNiZUuChDiQfTUQ7qJr4/kuopCr88xZsAXv6mBoZEsUI4OuGHlX59qE94K2mMW8Q==}
@@ -12630,7 +12485,7 @@ packages:
       oblivious-set: 1.0.0
       rimraf: 3.0.2
       unload: 2.2.0
-    dev: false
+    dev: true
 
   /brorand/1.1.0:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
@@ -21919,7 +21774,7 @@ packages:
 
   /js-sha3/0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
-    dev: false
+    dev: true
 
   /js-tokens/3.0.2:
     resolution: {integrity: sha512-RjTcuD4xjtthQkaWH7dFlH85L+QaVtSoOyGdZ3g6HFhS9dFNDfLyqgm2NFe2X6cQpeFmt0452FJjFG5UameExg==}
@@ -22839,7 +22694,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.19.0
       remove-accents: 0.4.2
-    dev: false
+    dev: true
 
   /maxmin/2.1.0:
     resolution: {integrity: sha512-NWlApBjW9az9qRPaeg7CX4sQBWwytqz32bIEo1PW9pRW+kBP9KLRfJO3UC+TV31EcQZEUq7eMzikC7zt3zPJcw==}
@@ -23045,7 +22900,7 @@ packages:
 
   /microseconds/0.2.0:
     resolution: {integrity: sha512-n7DHHMjR1avBbSpsTBj6fmMGh2AGrifVV4e+WYc3Q9lO+xnSZ3NyhcBND3vzzatt05LFhoKFRxrIyklmLlUtyA==}
-    dev: false
+    dev: true
 
   /miller-rabin/4.0.1:
     resolution: {integrity: sha512-115fLhvZVqWwHPbClyntxEVfVDfl9DLLTuJvq3g2O/Oxi8AiNouAHvDSzHS0viUJc+V5vm3eq91Xwqn9dp4jRA==}
@@ -23480,7 +23335,7 @@ packages:
     resolution: {integrity: sha512-flnngywOoQ0lLQOTRNexn2gGSNuM9bKj9RZAWSzhQ+UJYaAFG9bac4DW9VHjUAzrOaIcajHybCTHe/bkvozQqA==}
     dependencies:
       big-integer: 1.6.51
-    dev: false
+    dev: true
 
   /nanoid/1.3.4:
     resolution: {integrity: sha512-4ug4BsuHxiVHoRUe1ud6rUFT3WUMmjXt1W0quL0CviZQANdan7D8kqN5/maw53hmAApY/jfzMRkC57BNNs60ZQ==}
@@ -24150,7 +24005,7 @@ packages:
 
   /oblivious-set/1.0.0:
     resolution: {integrity: sha512-z+pI07qxo4c2CulUHCDf9lcqDlMSo72N/4rLUpRXf6fu+q8vjt8y0xS+Tlf8NTJDdTXHbdeO1n3MlbctwEoXZw==}
-    dev: false
+    dev: true
 
   /obuf/1.1.2:
     resolution: {integrity: sha512-PX1wu0AmAdPqOL1mWhqmlOd8kOIZQwGZw6rh7uby9fTc5lhaOWFLX3I6R1hrF9k3zUY40e6igsLGkDXK92LJNg==}
@@ -26966,7 +26821,7 @@ packages:
       match-sorter: 6.3.1
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
-    dev: false
+    dev: true
 
   /react-refresh/0.11.0:
     resolution: {integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==}
@@ -27443,7 +27298,7 @@ packages:
 
   /remove-accents/0.4.2:
     resolution: {integrity: sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==}
-    dev: false
+    dev: true
 
   /remove-trailing-separator/1.1.0:
     resolution: {integrity: sha512-/hS+Y0u3aOfIETiaiirUFwDBDzmXPvO+jAfKTitUngIPzdKc6Z0LoFjM/CK5PL4C+eKwHohlHAb6H0VFfmmUsw==}
@@ -30784,7 +30639,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.19.0
       detect-node: 2.1.0
-    dev: false
+    dev: true
 
   /unpipe/1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}

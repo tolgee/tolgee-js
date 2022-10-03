@@ -6,7 +6,7 @@ import {
   FallbackNSTranslation,
   getFallbackArray,
   getFallback,
-} from '@tolgee/core';
+} from '@tolgee/web';
 
 import { useTolgeeContext } from './useTolgeeContext';
 import { ReactOptions } from './types';

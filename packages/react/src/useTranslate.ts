@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TFnType, getTranslateParams, DefaultParamType } from '@tolgee/core';
+import { TFnType, getTranslateParams, DefaultParamType } from '@tolgee/web';
 
 import { useTranslateInternal } from './useTranslateInternal';
 import { ReactOptions } from './types';

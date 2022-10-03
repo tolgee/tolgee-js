@@ -1,4 +1,4 @@
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { Module } from 'i18next';
 
 export const TOLGEE_PROCESSOR_NAME = 'tolgeeProcessor';

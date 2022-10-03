@@ -22,7 +22,7 @@ export default {
       format: 'umd',
       sourcemap: true,
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
         '@tolgee/devtools-web': '@tolgee/devtools-web',
         react: 'React',
       },
@@ -33,7 +33,7 @@ export default {
       format: 'umd',
       sourcemap: true,
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
         '@tolgee/devtools-web': '@tolgee/devtools-web',
         react: 'React',
       },
@@ -56,7 +56,7 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['react', '@tolgee/core', '@tolgee/devtools-web'],
+  external: ['react', '@tolgee/web', '@tolgee/devtools-web'],
   plugins: [
     typescript({
       outDir: './lib',

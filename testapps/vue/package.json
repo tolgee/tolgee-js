@@ -11,9 +11,8 @@
     "serve": "serve -p 3002 -s dist"
   },
   "dependencies": {
-    "@tolgee/detector-web": "^4.8.0",
     "@tolgee/format-icu": "^4.8.0",
-    "@tolgee/storage-web": "^4.8.0",
+    "@tolgee/web": "^4.8.0",
     "@tolgee/vue": "^4.8.0",
     "core-js": "^3.23.0",
     "vue": "^3.2.37"

@@ -1,13 +1,12 @@
 jest.autoMockOff();
 
-import { Tolgee } from '@tolgee/core';
+import { Tolgee, TolgeeInstance } from '@tolgee/web';
 
 import '@testing-library/jest-dom';
 import React from 'react';
 import { TolgeeProvider } from './TolgeeProvider';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { TolgeeInstance } from '@tolgee/core';
 
 describe('Tolgee Provider Component', () => {
   let mockedTolgee: TolgeeInstance;

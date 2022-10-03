@@ -3,7 +3,7 @@ import {
   FallbackNSTranslation,
   TFnType,
   getTranslateParams,
-} from '@tolgee/core';
+} from '@tolgee/web';
 import { computed, Ref } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 

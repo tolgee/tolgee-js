@@ -5,5 +5,4 @@ export * from './tolgeeBackend';
 export * from './tolgeeProcessor';
 export * from './I18nextPlugin';
 
-export * from '@tolgee/core';
-export * from '@tolgee/devtools-web';
+export * from '@tolgee/web';

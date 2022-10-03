@@ -3,7 +3,7 @@ import {
   getTranslateParams,
   type FallbackNSTranslation,
   type TFnType,
-} from '@tolgee/core';
+} from '@tolgee/web';
 import getTranslateInternal from './getTranslateInternal';
 
 const getTranslate = (ns?: FallbackNSTranslation) => {

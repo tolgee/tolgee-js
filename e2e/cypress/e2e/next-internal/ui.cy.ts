@@ -53,7 +53,7 @@ context('UI Dialog', () => {
     assertCanEditEnglish();
   });
 
-  it('updates translation properly when languages restricted', () => {
+  it.only('updates translation properly when languages restricted', () => {
     // simulating restricted languages in api key info (english only)
     cy.intercept({ path: '/v2/api-keys/current**', method: 'get' }, (req) => {
       req.reply(testApiKey);
@@ -80,7 +80,14 @@ context('UI Dialog', () => {
   });
 
   function assertCanEditEnglish() {
-    getDevUi().find('textarea').contains('On the road').type('Hello world');
+    getDevUi()
+      .find('textarea')
+      .contains('On the road')
+      .should('not.be.disabled');
+    getDevUi()
+      .find('textarea')
+      .contains('On the road')
+      .type('{selectAll}{del}Hello world', { force: true });
     cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
