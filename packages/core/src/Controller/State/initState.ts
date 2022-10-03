@@ -26,10 +26,6 @@ export type Options = {
    */
   fallbackLanguage?: FallbackLanguageOption;
   /**
-   * Store user language in localStorage (default: true)
-   */
-  enableLanguageStore?: boolean;
-  /**
    * Namespaces which should be always fetched
    */
   ns?: string[];
@@ -60,7 +56,6 @@ export type State = {
 };
 
 const defaultValues: Options = {
-  enableLanguageStore: true,
   defaultNs: '',
   filesUrlPrefix: 'i18n/',
 };

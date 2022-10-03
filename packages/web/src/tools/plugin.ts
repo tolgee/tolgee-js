@@ -63,7 +63,6 @@ export async function detectPlugin(): Promise<boolean> {
 }
 
 export type LibConfig = {
-  noRestart: boolean;
   uiPresent: boolean;
   uiVersion?: string;
   mode: 'production' | 'development';

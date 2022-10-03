@@ -17,6 +17,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     addBackend: controller.addBackend,
     setLanguageDetector: controller.setLanguageDetector,
     setLanguageStorage: controller.setLanguageStorage,
+    overrideCredentials: controller.overrideCredentials,
   });
 
   const withRestart = (callback: () => void) => {

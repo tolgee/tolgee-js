@@ -1,6 +1,7 @@
 import {
   CacheDescriptor,
   CacheDescriptorInternal,
+  DevCredentials,
   EventEmitterType,
   FallbackNSTranslation,
 } from '../../types';
@@ -14,6 +15,7 @@ export const State = (
   onRunningChange: EventEmitterType<boolean>
 ) => {
   let state = initState();
+  let devCredentials: DevCredentials = {};
 
   function init(options?: Partial<Options>) {
     state = initState(options, state);
@@ -61,7 +63,7 @@ export const State = (
   }
 
   function getInitialOptions() {
-    return state.initialOptions;
+    return { ...state.initialOptions, ...devCredentials };
   }
 
   function addActiveNs(ns: FallbackNSTranslation) {
@@ -134,6 +136,10 @@ export const State = (
     };
   }
 
+  function overrideCredentials(credentials: DevCredentials) {
+    devCredentials = credentials;
+  }
+
   return Object.freeze({
     init,
     isRunning,
@@ -152,5 +158,6 @@ export const State = (
     getFallbackNamespaces,
     getAvailableLanguages,
     withDefaultNs,
+    overrideCredentials,
   });
 };
