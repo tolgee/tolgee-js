@@ -58,7 +58,7 @@ const buildMinified = (input, name) => ({
       sourcemap: true,
     },
     {
-      name: `@tolgee/tolgee-${name}`,
+      name: `@tolgee/${name}`,
       file: `dist/tolgee-${name}.umd.min.js`,
       format: 'umd',
       sourcemap: true,

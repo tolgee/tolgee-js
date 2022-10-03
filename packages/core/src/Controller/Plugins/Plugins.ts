@@ -61,7 +61,7 @@ export const PluginService = (
     instances.ui?.handleElementClick(event, withNs);
   };
 
-  const run = () => {
+  const run = (isDev: boolean) => {
     instances.ui =
       plugins.ui &&
       new plugins.ui({
@@ -70,7 +70,7 @@ export const PluginService = (
         highlight,
         changeTranslation,
       });
-    instances.observer?.run({ mouseHighlight: Boolean(instances.ui) });
+    instances.observer?.run({ mouseHighlight: isDev });
   };
 
   const stop = () => {

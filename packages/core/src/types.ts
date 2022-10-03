@@ -164,6 +164,11 @@ export type LanguageStorageInterface = {
   setLanguage: (language: string) => void | Promise<void>;
 };
 
+export type DevCredentials = {
+  apiUrl?: string;
+  apiKey?: string;
+};
+
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
@@ -262,6 +267,7 @@ export type PluginServicePublic = Readonly<{
   setLanguageStorage: (
     languageStorage: LanguageStorageInterface | undefined
   ) => void;
+  overrideCredentials: (credentials: DevCredentials) => void;
 }>;
 
 export type NodeMeta = {

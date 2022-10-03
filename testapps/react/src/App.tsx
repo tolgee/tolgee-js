@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import {
-  ReactPlugin,
   Tolgee,
   TolgeeProvider,
   BackendFetch,
+  ReactPlugin,
 } from '@tolgee/react';
 import { FormatIcu } from '@tolgee/format-icu';
 

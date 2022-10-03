@@ -96,7 +96,9 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   function isDev() {
     return Boolean(
-      state.getInitialOptions().apiKey && pluginService.getDevBackend()
+      state.getInitialOptions().apiKey &&
+        state.getInitialOptions().apiUrl &&
+        pluginService.getDevBackend()
     );
   }
 
@@ -262,7 +264,7 @@ export const Controller = ({ options }: StateServiceProps) => {
         cache.invalidate();
       }
       state.setRunning(true);
-      pluginService.run();
+      pluginService.run(isDev());
       result = loadInitial();
     }
     return Promise.resolve(result);
