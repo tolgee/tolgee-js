@@ -26,7 +26,7 @@ export default {
       file: 'dist/tolgee-i18next.umd.js',
       format: 'umd',
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
         '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       sourcemap: true,
@@ -36,7 +36,7 @@ export default {
       file: 'dist/tolgee-i18next.umd.min.js',
       format: 'umd',
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
         '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       plugins: [terser()],
@@ -46,7 +46,7 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/core', '@tolgee/devtools-web'],
+  external: ['@tolgee/web', '@tolgee/devtools-web'],
   plugins: [
     typescript({
       outDir: './lib',

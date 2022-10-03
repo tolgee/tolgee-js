@@ -1,14 +1,13 @@
-import * as umd from '../../node_modules/@tolgee/core/dist/tolgee.umd';
-import * as commonjs from '../../node_modules/@tolgee/core/dist/tolgee.cjs';
-import { TextObserver, ContextUi } from '@tolgee/devtools-web';
-import { BackendPlugin } from '@tolgee/backend-fetch';
+import * as umd from '../../node_modules/@tolgee/web/dist/tolgee-web.umd';
+import * as commonjs from '../../node_modules/@tolgee/web/dist/tolgee-web.cjs';
+import { TextObserver, ContextUi, BackendFetch } from '@tolgee/web';
 
 [umd, commonjs].forEach((bundle) => {
   const bundleDivElement = document.createElement('div');
 
   const tolgee = bundle
     .Tolgee()
-    .use(BackendPlugin({ prefix: 'i18n' }))
+    .use(BackendFetch({ prefix: 'i18n' }))
     .use(TextObserver())
     .use(ContextUi())
     .init({

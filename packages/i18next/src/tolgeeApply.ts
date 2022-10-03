@@ -1,4 +1,4 @@
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { i18n } from 'i18next';
 
 export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {

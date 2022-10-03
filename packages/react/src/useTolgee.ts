@@ -1,4 +1,4 @@
-import { TolgeeEvent, TolgeeInstance } from '@tolgee/core';
+import { TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { useEffect } from 'react';
 import { useRerender } from './hooks';
 import { useTolgeeContext } from './useTolgeeContext';

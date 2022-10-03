@@ -5,7 +5,7 @@ import {
   KeyDescriptor,
   FallbackNSTranslation,
   getFallback,
-} from '@tolgee/core';
+} from '@tolgee/web';
 import {
   inject,
   onBeforeMount,

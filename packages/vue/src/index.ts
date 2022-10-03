@@ -6,5 +6,4 @@ export { VuePlugin } from './VuePlugin';
 export { TolgeeVue } from './TolgeeVue';
 export * from './types';
 
-export * from '@tolgee/core';
-export * from '@tolgee/devtools-web';
+export * from '@tolgee/web';

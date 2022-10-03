@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { TolgeeInstance } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { ReactOptions, TolgeeReactContext } from './types';
 
 export const DEFAULT_REACT_OPTIONS: ReactOptions = {

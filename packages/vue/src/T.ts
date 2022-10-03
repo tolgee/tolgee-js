@@ -2,7 +2,7 @@ import {
   FallbackNSTranslation,
   TranslateParams,
   TranslateProps,
-} from '@tolgee/core';
+} from '@tolgee/web';
 import { defineComponent, PropType } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 

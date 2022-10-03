@@ -1,4 +1,4 @@
-import { TolgeeEvent } from '@tolgee/core';
+import { TolgeeEvent } from '@tolgee/web';
 import { getCurrentInstance, inject, onUnmounted, ref } from 'vue';
 import { TolgeeVueContext } from './types';
 

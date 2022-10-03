@@ -5,5 +5,4 @@ export { getTolgeeContext } from './getTolgeeContext';
 export { SveltePlugin } from './SveltePlugin';
 export { getTolgee } from './getTolgee';
 
-export * from '@tolgee/core';
-export * from '@tolgee/devtools-web';
+export * from '@tolgee/web';

@@ -6,7 +6,7 @@ import { testConfig } from './testConfig';
 import { ReactPlugin, useTranslate } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';

@@ -37,9 +37,7 @@
     "vue": "^3.0.0"
   },
   "dependencies": {
-    "@tolgee/core": "^4.8.0",
-    "@tolgee/devtools-web": "^4.8.0",
-    "@types/testing-library__jest-dom": "^5.14.5"
+    "@tolgee/web": "^4.8.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "8.3.4",
@@ -47,6 +45,7 @@
     "@testing-library/vue": "^6.6.1",
     "@tolgee/format-icu": "^4.8.0",
     "@types/jest": "^27.0.2",
+    "@types/testing-library__jest-dom": "^5.14.5",
     "@vue/vue3-jest": "^27.0.0-alpha.3",
     "babel-jest": "^27.5.1",
     "concurrently": "7.2.2",

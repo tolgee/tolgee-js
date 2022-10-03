@@ -3,7 +3,7 @@ jest.autoMockOff();
 import '@testing-library/jest-dom';
 import { VuePlugin, useTranslate, TolgeeVue } from '..';
 import { render, screen, waitFor } from '@testing-library/vue';
-import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import mockTranslations from './mockTranslations';
 

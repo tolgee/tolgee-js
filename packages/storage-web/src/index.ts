@@ -1,1 +1,0 @@
-export { StoragePlugin } from './LanguageStoragePlugin';

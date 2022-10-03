@@ -36,7 +36,7 @@ Then use the library in your app:
 
 <script lang="ts">
   import { TolgeeProvider } from "@tolgee/svelte";
-  import type { TolgeeConfig } from "@tolgee/core";
+  import type { TolgeeConfig } from "@tolgee/web";
 
   const tolgeeConfig = {
     preloadFallback: true,

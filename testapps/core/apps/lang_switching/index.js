@@ -1,10 +1,8 @@
-import { Tolgee } from '@tolgee/core';
-import { BackendPlugin } from '@tolgee/backend-fetch';
-import { StoragePlugin } from '@tolgee/storage-web';
+import { Tolgee, BackendFetch, LanguageStorage } from '@tolgee/web';
 
 const tolgee = Tolgee()
-  .use(BackendPlugin({ prefix: 'i18n' }))
-  .use(StoragePlugin())
+  .use(BackendFetch({ prefix: 'i18n' }))
+  .use(LanguageStorage())
   .init({
     targetElement: document.body,
     highlightColor: 'yellow',

@@ -2,8 +2,9 @@ import '@testing-library/jest-dom';
 import { SveltePlugin } from '..';
 import Namespaces from './components/Namespaces.svelte';
 import { render, screen, waitFor } from '@testing-library/svelte';
-import { Tolgee, type TolgeeInstance } from '@tolgee/core';
+import { Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
+
 import mockTranslations from './data/mockTranslations';
 
 const API_URL = 'http://localhost';

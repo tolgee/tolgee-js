@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy, onMount, setContext } from 'svelte';
-  import type { TolgeeInstance } from '@tolgee/core';
+  import type { TolgeeInstance } from '@tolgee/web';
   import type { TolgeeSvelteContext } from './types';
 
   export let tolgee: TolgeeInstance;

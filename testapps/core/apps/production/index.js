@@ -1,6 +1,4 @@
-import { Tolgee } from '@tolgee/core';
-import { BrowserExtensionPlugin, TextObserver } from '@tolgee/devtools-web';
-import { BackendPlugin } from '@tolgee/backend-fetch';
+import { Tolgee, TextObserver, BackendFetch } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
 document.body = document.createElement('body');
@@ -20,8 +18,7 @@ const tolgee = Tolgee()
     })
   )
   .use(FormatIcu())
-  .use(BackendPlugin({ prefix: 'i18n' }))
-  .use(BrowserExtensionPlugin())
+  .use(BackendFetch({ prefix: 'i18n' }))
   .init({
     currentLanguage: 'cs',
     fallbackLanguage: 'en',

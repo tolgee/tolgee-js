@@ -1,9 +1,9 @@
-import { TolgeePlugin } from '@tolgee/core';
 import {
+  TolgeePlugin,
   ObserverOptions,
   DevTools,
   BrowserExtensionPlugin,
-} from '@tolgee/devtools-web';
+} from '@tolgee/web';
 
 type Props = Partial<ObserverOptions>;
 

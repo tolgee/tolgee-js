@@ -4,7 +4,7 @@ import mockTranslations from './mockTranslations';
 import { ReactPlugin, useTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/core';
+import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';

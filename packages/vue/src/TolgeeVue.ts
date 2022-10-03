@@ -4,7 +4,7 @@ import {
   TolgeeInstance,
   TFnType,
   DefaultParamType,
-} from '@tolgee/core';
+} from '@tolgee/web';
 
 type Options = {
   tolgee?: TolgeeInstance;

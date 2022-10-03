@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/vue';
 import ProviderComponent from './mocks/ProviderComponent.vue';
 import ProviderComponentSlot from './mocks/ProviderComponentSlot.vue';
-import { TolgeeInstance, Tolgee } from '@tolgee/core';
+import { TolgeeInstance, Tolgee } from '@tolgee/web';
 
 describe('Tolgee Provider Component', function () {
   let mockedTolgee: TolgeeInstance;
