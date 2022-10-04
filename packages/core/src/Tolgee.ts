@@ -1,5 +1,10 @@
 import { Controller } from './Controller/Controller';
-import { Options, TolgeeInstance, TolgeePlugin } from './types';
+import {
+  Options,
+  TolgeeInstance,
+  TolgeePlugin,
+  ObserverOptions,
+} from './types';
 
 export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
   const controller = Controller({
@@ -10,9 +15,9 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     setFinalFormatter: controller.setFinalFormatter,
     addFormatter: controller.addFormatter,
     setObserver: controller.setObserver,
-    getObserver: controller.getObserver,
+    hasObserver: controller.hasObserver,
     setUi: controller.setUi,
-    getUi: controller.getUi,
+    hasUi: controller.hasUi,
     setDevBackend: controller.setDevBackend,
     addBackend: controller.addBackend,
     setLanguageDetector: controller.setLanguageDetector,
@@ -59,6 +64,10 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
     unwrap: controller.unwrap,
 
     // plugins
+    setObserverOptions: (options: Partial<ObserverOptions>) => {
+      controller.setObserverOptions(options);
+      return tolgee;
+    },
     use: (plugin: TolgeePlugin | undefined) => {
       if (plugin) {
         withRestart(() => plugin(tolgee, pluginTools));

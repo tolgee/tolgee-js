@@ -5,10 +5,10 @@ import { InvisibleObserver } from './InvisibleObserver';
 
 export const InContextProduction = (): TolgeePlugin => (tolgee, tools) => {
   tolgee.use(DevBackend());
-  if (!tools.getObserver()) {
+  if (!tools.hasObserver()) {
     tolgee.use(InvisibleObserver());
   }
-  if (!tools.getUi()) {
+  if (!tools.hasUi()) {
     tolgee.use(ContextUi());
   }
   return tolgee;

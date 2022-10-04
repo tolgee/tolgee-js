@@ -6,11 +6,15 @@ import {
   ObserverInterface,
   TolgeePlugin,
   WrapperWrapFunction,
+  ObserverOptions,
 } from '../types';
 
 const testObserver =
-  (outputNotFormattable: boolean): ObserverInterface =>
-  () => {
+  (
+    outputNotFormattable: boolean,
+    onCreate?: (options: ObserverOptions) => void
+  ): ObserverInterface =>
+  ({ options }) => {
     const wrap: WrapperWrapFunction = ({ key, translation }) => {
       return `${key}|${translation}`;
     };
@@ -23,6 +27,8 @@ const testObserver =
     const run = () => {};
 
     const retranslate = () => {};
+
+    onCreate?.(options);
 
     return Object.freeze({
       wrap,
@@ -54,9 +60,12 @@ const testFinalFormatter: FinalFormatterInterface = {
 };
 
 const observerPlugin =
-  (outputNotFormattable: boolean): TolgeePlugin =>
+  (
+    outputNotFormattable: boolean,
+    onCreate?: (options: ObserverOptions) => void
+  ): TolgeePlugin =>
   (tolgee, tools) => {
-    tools.setObserver(testObserver(outputNotFormattable));
+    tools.setObserver(testObserver(outputNotFormattable, onCreate));
     return tolgee;
   };
 
@@ -94,5 +103,34 @@ describe('plugins', () => {
     tolgee.use(formattersPlugin);
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
     tolgee.stop();
+  });
+
+  it("won't wrap before run", () => {
+    const tolgee = Tolgee({
+      language: 'en',
+      staticData: { en: { hello: 'world' } },
+    });
+    tolgee.use(observerPlugin(false));
+    expect(tolgee.t({ key: 'hello' })).toEqual('world');
+    tolgee.run();
+    expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
+  });
+
+  it('observer recieves options', () => {
+    const tolgee = Tolgee({
+      language: 'en',
+      staticData: { en: { hello: 'world' } },
+    });
+    const restrictedElements = ['test'];
+    tolgee.setObserverOptions({
+      restrictedElements,
+    });
+    const onCreate = jest.fn();
+    tolgee.use(observerPlugin(false, onCreate));
+    tolgee.run();
+    expect(onCreate).toBeCalledTimes(1);
+    expect(onCreate.mock.calls[0][0].restrictedElements).toEqual(
+      restrictedElements
+    );
   });
 });

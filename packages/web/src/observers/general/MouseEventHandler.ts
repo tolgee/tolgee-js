@@ -1,5 +1,5 @@
-import { ModifierKey, TolgeeElement } from '../../types';
-import { DEVTOOLS_ID } from '@tolgee/core';
+import { TolgeeElement } from '../../types';
+import { DEVTOOLS_ID, ModifierKey } from '@tolgee/core';
 import { ElementStoreType } from './ElementStore';
 
 const eCapture = {
@@ -90,8 +90,7 @@ export const MouseEventHandler = ({
     updateHighlight();
   };
   const onKeyDown = (e: KeyboardEvent) => {
-    // @ts-ignore
-    const modifierKey = ModifierKey[e.key];
+    const modifierKey = e.key as unknown as ModifierKey;
     if (modifierKey !== undefined) {
       keysDown.add(modifierKey);
       // keysChanged.emit(areKeysDown());
@@ -99,8 +98,7 @@ export const MouseEventHandler = ({
     updateHighlight();
   };
   const onKeyUp = (e: KeyboardEvent) => {
-    // @ts-ignore
-    keysDown.delete(ModifierKey[e.key]);
+    keysDown.delete(e.key as unknown as ModifierKey);
     // keysChanged.emit(areKeysDown());
     updateHighlight();
   };

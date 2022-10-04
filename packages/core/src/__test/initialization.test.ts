@@ -70,4 +70,16 @@ describe('initialization behavior', () => {
     expect(onFetchingHandler).not.toBeCalled();
     expect(onLoadingHandler).not.toBeCalled();
   });
+
+  it('emits keyUpdate on initialLoad', async () => {
+    const tolgee = Tolgee({
+      language: 'en',
+      staticData: { en: { hello: 'world' } },
+    });
+    const onKeyChange = jest.fn();
+    tolgee.on('keyUpdate', onKeyChange);
+    expect(onKeyChange).toBeCalledTimes(0);
+    await tolgee.run();
+    expect(onKeyChange).toBeCalledTimes(1);
+  });
 });
