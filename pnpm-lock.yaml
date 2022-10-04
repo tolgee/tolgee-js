@@ -97,7 +97,7 @@ importers:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.5
-      '@tolgee/core': ^4.8.0
+      '@tolgee/core': ^4.10.0-rc.f068ae1.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/testing-library__jest-dom': ^5.14.5
@@ -135,7 +135,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/web': ^4.8.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       '@types/intl-messageformat': ^3.0.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
@@ -179,8 +179,8 @@ importers:
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^12.1.2
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/web': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -261,8 +261,8 @@ importers:
       '@sveltejs/package': 1.0.0-next.1
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/svelte': ^3.2.1
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/web': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       '@tsconfig/svelte': ^3.0.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
@@ -323,8 +323,8 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.2
       '@testing-library/vue': ^6.6.1
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/web': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
@@ -374,7 +374,7 @@ importers:
       '@rollup/plugin-typescript': 8.5.0
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': ^4.9.2
+      '@tolgee/core': ^4.10.0-rc.f068ae1.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.30
@@ -437,8 +437,8 @@ importers:
 
   testapps/core:
     specifiers:
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/web': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
@@ -460,8 +460,8 @@ importers:
 
   testapps/gatsby:
     specifiers:
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/react': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/react': ^4.10.0-rc.f068ae1.0
       gatsby: ^4.19.2
       gatsby-plugin-react-intl: ^4.0.0
       react: ^17.0.1
@@ -478,8 +478,8 @@ importers:
 
   testapps/next:
     specifiers:
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/react': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/react': ^4.10.0-rc.f068ae1.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -501,7 +501,7 @@ importers:
 
   testapps/next-internal:
     specifiers:
-      '@tolgee/react': ^4.9.2
+      '@tolgee/react': ^4.10.0-rc.f068ae1.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -528,8 +528,8 @@ importers:
       '@testing-library/jest-dom': ^5.16.4
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/react': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/react': ^4.10.0-rc.f068ae1.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -570,8 +570,8 @@ importers:
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^11.1.0
       '@testing-library/user-event': ^12.1.10
-      '@tolgee/core': ^4.9.2
-      '@tolgee/i18next': ^4.9.2
+      '@tolgee/core': ^4.10.0-rc.f068ae1.0
+      '@tolgee/i18next': ^4.10.0-rc.f068ae1.0
       '@types/node': ^17.0.8
       '@types/react': ^17.0.37
       '@types/react-dom': ^17.0.11
@@ -610,8 +610,8 @@ importers:
     specifiers:
       '@sveltejs/adapter-static': 1.0.0-next.39
       '@sveltejs/kit': 1.0.0-next.429
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/svelte': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/svelte': ^4.10.0-rc.f068ae1.0
       '@tsconfig/svelte': ^3.0.0
       '@typescript-eslint/eslint-plugin': ^5.30.6
       '@typescript-eslint/parser': ^5.30.6
@@ -648,9 +648,9 @@ importers:
 
   testapps/vue:
     specifiers:
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/vue': ^4.8.0
-      '@tolgee/web': ^4.8.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/vue': ^4.10.0-rc.f068ae1.0
+      '@tolgee/web': ^4.10.0-rc.f068ae1.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
       '@vue/cli-plugin-typescript': ~4.5.0
@@ -680,9 +680,9 @@ importers:
   testapps/vue-i18next:
     specifiers:
       '@panter/vue-i18next': ^0.15.2
-      '@tolgee/core': ^4.8.0
-      '@tolgee/format-icu': ^4.8.0
-      '@tolgee/i18next': ^4.8.0
+      '@tolgee/core': ^4.10.0-rc.f068ae1.0
+      '@tolgee/format-icu': ^4.10.0-rc.f068ae1.0
+      '@tolgee/i18next': ^4.10.0-rc.f068ae1.0
       '@vue/cli-plugin-babel': ~5.0.8
       '@vue/cli-plugin-eslint': ~5.0.8
       '@vue/cli-service': ~5.0.8
@@ -11645,7 +11645,7 @@ packages:
   /axios/0.21.4_debug@3.2.7:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.1_debug@3.2.7
+      follow-redirects: 1.15.1
     transitivePeerDependencies:
       - debug
     dev: false
@@ -17781,7 +17781,7 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /follow-redirects/1.15.1_debug@3.2.7:
+  /follow-redirects/1.15.1:
     resolution: {integrity: sha512-yLAMQs+k0b2m7cVxpS1VKJVvoz7SS9Td1zss3XRwXj+ZDH00RJgnuLx7E44wx02kQLrdM3aOOy+FpzS7+8OizA==}
     engines: {node: '>=4.0'}
     peerDependencies:
@@ -17789,8 +17789,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dependencies:
-      debug: 3.2.7
     dev: false
 
   /follow-redirects/1.15.1_debug@4.3.4:
@@ -19635,7 +19633,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.15.1_debug@3.2.7
+      follow-redirects: 1.15.1
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
