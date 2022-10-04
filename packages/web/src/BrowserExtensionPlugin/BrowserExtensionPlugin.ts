@@ -1,6 +1,6 @@
 import type { TolgeePlugin } from '@tolgee/core';
 import { handshakeWithExtension } from '../tools/plugin';
-import { injectUiLib } from './injectUiLib';
+import { loadInContextLib } from './loadInContextLib';
 
 export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
 export const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
@@ -47,9 +47,12 @@ if (typeof window !== 'undefined') {
   BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
     const getConfig = () =>
       ({
+        // prevent extension downloading ui library
         uiPresent: true,
         uiVersion: undefined,
+        // tolgee mode
         mode: tolgee.isDev() ? 'development' : 'production',
+        // pass credentials
         config: {
           apiUrl: tolgee.getInitialOptions().apiUrl || '',
           apiKey: tolgee.getInitialOptions().apiKey || '',
@@ -57,14 +60,12 @@ if (typeof window !== 'undefined') {
       } as const);
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
-      await injectUiLib(process.env.TOLGEE_UI_VERSION || 'rc');
-      return (tolgee, tools) => {
+      const InContextTools = await loadInContextLib(
+        process.env.TOLGEE_UI_VERSION || 'rc'
+      );
+      return (tolgee) => {
         const credentials = getCredentials()!;
-        const InContextProduction =
-          // @ts-ignore
-          window['@tolgee/tolgee-in-context-production'].InContextProduction;
-        tolgee.use(InContextProduction());
-        tools.overrideCredentials(credentials);
+        tolgee.use(InContextTools(credentials));
         return tolgee;
       };
     };
@@ -79,9 +80,14 @@ if (typeof window !== 'undefined') {
 
     const credentials = getCredentials();
     if (credentials) {
-      getTolgeePlugin().then((plugin) => {
-        tolgee.use(plugin);
-      });
+      getTolgeePlugin()
+        .then((plugin) => {
+          tolgee.use(plugin);
+        })
+        .catch(() => {
+          // eslint-disable-next-line no-console
+          console.error('Tolgee: Failed to load in-context tools');
+        });
     }
 
     return tolgee;

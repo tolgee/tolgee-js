@@ -11,18 +11,18 @@ initialTextsToTranslate.innerHTML =
 document.body.append(initialTextsToTranslate);
 
 const tolgee = Tolgee()
-  .use(
-    TextObserver({
-      inputPrefix: '{{',
-      inputSuffix: '}}',
-    })
-  )
+  .use(TextObserver())
   .use(FormatIcu())
   .use(BackendFetch({ prefix: 'i18n' }))
+  .setObserverOptions({
+    inputPrefix: '{{',
+    inputSuffix: '}}',
+  })
   .init({
     currentLanguage: 'cs',
     fallbackLanguage: 'en',
   });
+
 tolgee.changeLanguage('cs');
 tolgee.on('keyUpdate', () => {
   refresh();

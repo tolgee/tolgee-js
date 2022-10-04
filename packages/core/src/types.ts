@@ -1,6 +1,12 @@
 import type { Options } from './Controller/State/initState';
+import type { ObserverOptions } from './Controller/State/initObserverOptions';
 
 export type { State, Options } from './Controller/State/initState';
+export type {
+  ObserverOptions,
+  ModifierKey,
+} from './Controller/State/initObserverOptions';
+
 export type { EventEmitterType } from './Controller/Events/EventEmitter';
 export type { EventEmitterSelectiveType } from './Controller/Events/EventEmitterSelective';
 
@@ -126,6 +132,7 @@ export type FinalFormatterInterface = {
 export type ObserverProps = {
   translate: (params: TranslatePropsInternal) => string;
   onClick: TranslationOnClick;
+  options: ObserverOptions;
 };
 
 export type HighlightInterface = (
@@ -164,10 +171,12 @@ export type LanguageStorageInterface = {
   setLanguage: (language: string) => void | Promise<void>;
 };
 
-export type DevCredentials = {
-  apiUrl?: string;
-  apiKey?: string;
-};
+export type DevCredentials =
+  | undefined
+  | {
+      apiUrl?: string;
+      apiKey?: string;
+    };
 
 export type BackendDevProps = {
   apiUrl?: string;
@@ -250,15 +259,16 @@ export type TolgeeInstance = Readonly<{
   t: TFnType;
   wrap: (params: TranslatePropsInternal) => string | undefined;
   unwrap: (text: string) => Unwrapped;
+  setObserverOptions: (options: Partial<ObserverOptions>) => TolgeeInstance;
 }>;
 
 export type PluginServicePublic = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
   addFormatter: (formatter: FormatterInterface | undefined) => void;
   setObserver: (observer: ObserverInterface | undefined) => void;
-  getObserver: () => ReturnType<ObserverInterface> | undefined;
+  hasObserver: () => boolean;
   setUi: (ui: UiLibInterface | undefined) => void;
-  getUi: () => UiConstructor | undefined;
+  hasUi: () => boolean;
   addBackend: (backend: BackendInterface | undefined) => void;
   setDevBackend: (backend: BackendInterface | undefined) => void;
   setLanguageDetector: (

@@ -22,10 +22,12 @@ import {
   Unwrapped,
 } from '../../types';
 import { getFallbackArray } from '../State/helpers';
+import { ObserverOptions } from '../State/initObserverOptions';
 
 export const PluginService = (
   getLanguage: () => string | undefined,
   getInitialOptions: () => Options,
+  getObserverOptions: () => ObserverOptions,
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
   getTranslation: (props: TranslatePropsInternal) => string | undefined,
@@ -33,6 +35,7 @@ export const PluginService = (
 ) => {
   const plugins = {
     ui: undefined as UiConstructor | undefined,
+    observer: undefined as ObserverInterface | undefined,
   };
 
   const instances = {
@@ -70,6 +73,13 @@ export const PluginService = (
         highlight,
         changeTranslation,
       });
+    if (!instances.observer) {
+      instances.observer = plugins.observer?.({
+        translate,
+        onClick,
+        options: getObserverOptions(),
+      });
+    }
     instances.observer?.run({ mouseHighlight: isDev });
   };
 
@@ -88,11 +98,11 @@ export const PluginService = (
   };
 
   const setObserver = (observer: ObserverInterface | undefined) => {
-    instances.observer = observer?.({ translate, onClick });
+    plugins.observer = observer;
   };
 
-  const getObserver = () => {
-    return instances.observer;
+  const hasObserver = () => {
+    return Boolean(plugins.observer);
   };
 
   const addFormatter = (formatter: FormatterInterface | undefined) => {
@@ -111,8 +121,8 @@ export const PluginService = (
     plugins.ui = (ui as UiLibInterface)?.UI || ui;
   };
 
-  const getUi = () => {
-    return plugins.ui;
+  const hasUi = () => {
+    return Boolean(plugins.ui);
   };
 
   const setLanguageStorage = (
@@ -279,9 +289,9 @@ export const PluginService = (
     addFormatter,
     formatTranslation,
     setObserver,
-    getObserver,
+    hasObserver,
     setUi,
-    getUi,
+    hasUi,
     addBackend,
     setDevBackend,
     getDevBackend,
