@@ -6,7 +6,6 @@
     "dev": "npm run develop",
     "develop": "vite dev --port 5000",
     "build": "vite build",
-    "build:e2e": "SVELTE_TESTAPP_DIST_DIR=./build-e2e VITE_TOLGEE_API_URL=http://localhost:8202 VITE_TOLGEE_API_KEY=examples-admin-imported-project-implicit vite build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
     "preview": "vite preview",
     "serve": "serve -p 5000 ./build",

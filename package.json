@@ -33,7 +33,8 @@
     "custom-links": "node scripts/customLinks.js",
     "ui-version": "node scripts/tolgeeUiVersion.js",
     "postinstall": "npm run custom-links",
-    "version": "pnpm i --no-frozen-lockfile && git add pnpm-lock.yaml"
+    "version": "pnpm i --no-frozen-lockfile && git add pnpm-lock.yaml",
+    "builder": "docker compose --project-directory e2e run builder pnpm"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",

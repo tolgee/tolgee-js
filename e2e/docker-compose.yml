@@ -20,6 +20,12 @@ services:
       - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,address=*:8091,server=y,suspend=n
     volumes:
       - ./import-data:/data/import-data
+  builder:
+    container_name: tolgee_js_builder
+    build:
+      dockerfile: ../docker/Dockerfile.builder
+    volumes:
+      - '../:/data/'
   e2e_app_core:
     container_name: tolgee_js_e2e_serve_testapps_core
     build: ../docker
@@ -125,6 +131,9 @@ services:
       - 8110:5000
     command: npm run serve:e2e
     working_dir: /data/testapps/svelte
+    environment:
+      VITE_TOLGEE_API_URL: http://localhost:8202
+      VITE_TOLGEE_API_KEY: examples-admin-imported-project-implicit
   e2e_app_vue_prod:
     container_name: tolgee_js_e2e_serve_testapps_vue_prod
     build: ../docker
