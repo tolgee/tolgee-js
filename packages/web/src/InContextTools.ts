@@ -1,21 +1,20 @@
-import type { ObserverOptions } from './types';
-import type { Options, TolgeePlugin } from '@tolgee/core';
+import type { DevCredentials, TolgeePlugin } from '@tolgee/core';
 import { InvisibleObserver } from './InvisibleObserver';
 import { DevBackend } from './DevBackend';
 import { ContextUi } from './ContextUi';
 
-type Props = {
-  tolgee?: Partial<Options>;
-  observer?: Partial<ObserverOptions>;
-};
-
-export const InContextTools: (props?: Props) => TolgeePlugin =
-  (props) => (tolgee) => {
-    tolgee.use(InvisibleObserver(props?.observer));
+export const InContextTools =
+  (overrideCredentials?: DevCredentials): TolgeePlugin =>
+  (tolgee, tools) => {
     tolgee.use(DevBackend());
-    tolgee.use(ContextUi());
-    if (props?.tolgee) {
-      tolgee.init(props.tolgee);
+    if (!tools.hasObserver()) {
+      tolgee.use(InvisibleObserver());
+    }
+    if (!tools.hasUi()) {
+      tolgee.use(ContextUi());
+    }
+    if (overrideCredentials) {
+      tools.overrideCredentials(overrideCredentials);
     }
     return tolgee;
   };

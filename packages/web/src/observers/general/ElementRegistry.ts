@@ -9,10 +9,10 @@ import {
   KeyWithDefault,
   NodeMeta,
   TranslationOnClick,
+  ObserverOptions,
 } from '@tolgee/core';
 import { TolgeeElement } from '../../types';
 
-import { ObserverOptions } from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStore } from './ElementStore';

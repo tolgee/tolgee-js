@@ -3,7 +3,7 @@ import { buildMain, buildMinified } from './rollup.common';
 export default [
   buildMain(),
   buildMinified('src/index.ts', 'web'),
-  buildMinified('src/InContextProduction.ts', 'in-context-production'),
+  buildMinified('src/InContextTools.ts', 'in-context-tools'),
   buildMinified('src/TextObserver.ts', 'text-observer'),
   buildMinified('src/InvisibleObserver.ts', 'invisible-observer'),
   buildMinified('src/ContextUi.ts', 'context-ui'),
