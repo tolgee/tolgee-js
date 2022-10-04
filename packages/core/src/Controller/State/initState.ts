@@ -69,6 +69,7 @@ export const initState = (
     ...previousState?.initialOptions,
     ...options,
   };
+
   // remove extra '/' from url end
   const apiUrl = initialOptions.apiUrl;
   initialOptions.apiUrl = apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl;

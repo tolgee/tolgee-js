@@ -4,8 +4,8 @@ import {
   TranslationOnClick,
   WrapperInterface,
   ObserverRunProps,
+  ObserverOptions,
 } from '@tolgee/core';
-import { ObserverOptions } from '../../types';
 
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';

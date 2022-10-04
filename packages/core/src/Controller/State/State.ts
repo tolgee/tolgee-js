@@ -7,6 +7,7 @@ import {
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
+import { initObserverOptions, ObserverOptions } from './initObserverOptions';
 import { initState, Options } from './initState';
 
 export const State = (
@@ -15,6 +16,7 @@ export const State = (
   onRunningChange: EventEmitterType<boolean>
 ) => {
   let state = initState();
+  let observerOptions = initObserverOptions();
   let devCredentials: DevCredentials = {};
 
   function init(options?: Partial<Options>) {
@@ -140,6 +142,14 @@ export const State = (
     devCredentials = credentials;
   }
 
+  function setObserverOptions(options: Partial<ObserverOptions>) {
+    observerOptions = initObserverOptions(options);
+  }
+
+  function getObserverOptions() {
+    return observerOptions;
+  }
+
   return Object.freeze({
     init,
     isRunning,
@@ -159,5 +169,7 @@ export const State = (
     getAvailableLanguages,
     withDefaultNs,
     overrideCredentials,
+    setObserverOptions,
+    getObserverOptions,
   });
 };

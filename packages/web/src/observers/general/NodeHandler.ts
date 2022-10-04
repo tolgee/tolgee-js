@@ -1,5 +1,4 @@
-import { WrapperInterface } from '@tolgee/core';
-import { ObserverOptions } from '../../types';
+import { WrapperInterface, ObserverOptions } from '@tolgee/core';
 import { xPathEvaluate } from './helpers';
 
 export const NodeHandler = (
