@@ -53,14 +53,17 @@ context('UI Dialog', () => {
     assertCanEditEnglish();
   });
 
-  it.only('updates translation properly when languages restricted', () => {
+  it('updates translation properly when languages restricted', () => {
     // simulating restricted languages in api key info (english only)
     cy.intercept({ path: '/v2/api-keys/current**', method: 'get' }, (req) => {
       req.reply(testApiKey);
     });
-    cy.intercept({ path: '/v2/projects/languages**', method: 'get' }, (req) => {
-      req.reply(testLanguages);
-    });
+    cy.intercept(
+      { path: '/v2/projects/*/languages**', method: 'get' },
+      (req) => {
+        req.reply(testLanguages);
+      }
+    );
     visitWithApiKey([
       'translations.view',
       'translations.edit',
