@@ -1,6 +1,8 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import sizes from 'rollup-plugin-bundle-size';
 
 export default {
   input: 'src/index.ts',
@@ -27,7 +29,6 @@ export default {
       format: 'umd',
       globals: {
         '@tolgee/web': '@tolgee/web',
-        '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       sourcemap: true,
     },
@@ -37,7 +38,6 @@ export default {
       format: 'umd',
       globals: {
         '@tolgee/web': '@tolgee/web',
-        '@tolgee/devtools-web': '@tolgee/devtools-web',
       },
       plugins: [terser()],
       sourcemap: true,
@@ -46,12 +46,15 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/web', '@tolgee/devtools-web'],
   plugins: [
+    nodeResolve({
+      resolveOnly: ['@tolgee/web'],
+    }),
     typescript({
       outDir: './lib',
       sourceMap: true,
     }),
     sourcemaps(),
+    sizes(),
   ],
 };
