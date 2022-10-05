@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 import sizes from 'rollup-plugin-bundle-size';
 
 export default {
@@ -21,6 +20,12 @@ export default {
     {
       file: 'dist/tolgee-i18next.esm.js',
       format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/tolgee-i18next.esm.min.js',
+      format: 'esm',
+      plugins: [terser()],
       sourcemap: true,
     },
     {
@@ -46,10 +51,8 @@ export default {
   watch: {
     clearScreen: false,
   },
+  external: ['@tolgee/web'],
   plugins: [
-    nodeResolve({
-      resolveOnly: ['@tolgee/web'],
-    }),
     typescript({
       outDir: './lib',
       sourceMap: true,

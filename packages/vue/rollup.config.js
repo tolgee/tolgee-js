@@ -2,7 +2,6 @@ import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import vue from 'rollup-plugin-vue';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 import sizes from 'rollup-plugin-bundle-size';
 
 export default {
@@ -54,14 +53,11 @@ export default {
       plugins: [terser()],
     },
   ],
-  external: ['vue'],
+  external: ['vue', '@tolgee/web'],
   watch: {
     clearScreen: false,
   },
   plugins: [
-    nodeResolve({
-      resolveOnly: ['@tolgee/web'],
-    }),
     typescript({
       outDir: './lib',
       sourceMap: true,
