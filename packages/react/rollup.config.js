@@ -1,7 +1,6 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import sourcemaps from 'rollup-plugin-sourcemaps';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
 import sizes from 'rollup-plugin-bundle-size';
 
 export default {
@@ -56,11 +55,8 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['react'],
+  external: ['react', '@tolgee/web'],
   plugins: [
-    nodeResolve({
-      resolveOnly: ['@tolgee/web'],
-    }),
     typescript({
       outDir: './lib',
     }),
