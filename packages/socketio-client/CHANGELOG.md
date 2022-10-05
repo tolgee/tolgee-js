@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.10.0-rc.a50bdc6.0 (2022-10-05)
+
+
+### Features
+
+* update peer dependencies ([a50bdc6](https://github.com/tolgee/tolgee-js/commit/a50bdc6e92369eab3fc52706a17e4391fbefeb53))
+
+
+
+
+
 # [4.0.0](https://github.com/tolgee/tolgee-js/compare/v3.6.0...v4.0.0) (2022-03-10)
 
 **Note:** Version bump only for package @tolgee/socketio-client
