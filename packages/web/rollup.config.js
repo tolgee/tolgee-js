@@ -3,6 +3,7 @@ import { buildMain, buildMinified } from './rollup.common';
 export default [
   buildMain(),
   buildMinified('src/index.ts', 'web'),
+  // separately built modules intended for vanilla usage
   buildMinified('src/InContextTools.ts', 'in-context-tools'),
   buildMinified('src/TextObserver.ts', 'text-observer'),
   buildMinified('src/InvisibleObserver.ts', 'invisible-observer'),

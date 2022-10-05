@@ -63,7 +63,7 @@ describe('compatibility with browser extension', () => {
     );
     expect(fileContent.toString().includes(IN_CONTEXT_UMD_NAME)).toBeTruthy();
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const module = require(`../../dist/${IN_CONTEXT_FILE}`);
+    const module = await import(`../../dist/${IN_CONTEXT_FILE}`);
     expect(typeof module[IN_CONTEXT_EXPORT_NAME]).toEqual('function');
   });
 });
