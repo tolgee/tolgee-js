@@ -7,8 +7,8 @@ export type {
   ModifierKey,
 } from './Controller/State/initObserverOptions';
 
-export type { EventEmitterType } from './Controller/Events/EventEmitter';
-export type { EventEmitterSelectiveType } from './Controller/Events/EventEmitterSelective';
+export type { EventEmitterInstance } from './Controller/Events/EventEmitter';
+export type { EventEmitterSelectiveInstance } from './Controller/Events/EventEmitterSelective';
 
 export type FallbackGeneral = undefined | false | string | string[];
 

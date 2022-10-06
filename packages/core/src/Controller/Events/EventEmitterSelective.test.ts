@@ -2,7 +2,7 @@ import { EventEmitterSelective } from './EventEmitterSelective';
 
 describe('event emitter selective', () => {
   it('handles correctly fallback namespaces', () => {
-    const emitter = EventEmitterSelective<void>(() => ['a', 'b']);
+    const emitter = EventEmitterSelective(() => ['a', 'b']);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
@@ -19,7 +19,7 @@ describe('event emitter selective', () => {
   });
 
   it('subscribes to key', () => {
-    const emitter = EventEmitterSelective<void>(() => ['']);
+    const emitter = EventEmitterSelective(() => ['']);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
     listener.subscribeKey({ key: 'test' });
@@ -34,7 +34,7 @@ describe('event emitter selective', () => {
   });
 
   it('subscribes to key with namespaces', () => {
-    const emitter = EventEmitterSelective<void>(() => []);
+    const emitter = EventEmitterSelective(() => []);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
@@ -53,7 +53,7 @@ describe('event emitter selective', () => {
   });
 
   it('unsubscribes', () => {
-    const emitter = EventEmitterSelective<void>(() => []);
+    const emitter = EventEmitterSelective(() => []);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
 
@@ -77,7 +77,7 @@ describe('event emitter selective', () => {
   });
 
   it('groups events correctly', async () => {
-    const emitter = EventEmitterSelective<void>(() => ['test', 'opqrst']);
+    const emitter = EventEmitterSelective(() => ['test', 'opqrst']);
     const handler = jest.fn();
     const hanlderAll = jest.fn();
     const listener = emitter.listenSome(handler);
@@ -105,7 +105,7 @@ describe('event emitter selective', () => {
   });
 
   it('subscribes to ns only', async () => {
-    const emitter = EventEmitterSelective<void>(() => ['test', 'youda']);
+    const emitter = EventEmitterSelective(() => ['test', 'youda']);
     const handler = jest.fn();
     const listener = emitter.listenSome(handler);
     listener.subscribeNs(['test']);

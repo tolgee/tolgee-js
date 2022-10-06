@@ -2,7 +2,7 @@ export const ValueObserver = <T = any>(
   initialValue: T,
   valueGetter: () => T,
   handler: (value: T) => void
-) => {
+): ValueObserverInstance<T> => {
   let previousValue: T = initialValue;
   function init(value: T) {
     previousValue = value;
@@ -20,4 +20,7 @@ export const ValueObserver = <T = any>(
   });
 };
 
-export type ValueObserverInstance<T> = ReturnType<typeof ValueObserver<T>>;
+export type ValueObserverInstance<T> = {
+  readonly init: (value: T) => void;
+  readonly notify: () => void;
+};
