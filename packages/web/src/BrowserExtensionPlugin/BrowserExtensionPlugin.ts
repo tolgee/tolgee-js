@@ -1,5 +1,5 @@
 import type { TolgeePlugin } from '@tolgee/core';
-import { Handshaker } from '../tools/plugin';
+import { Handshaker } from '../tools/extension';
 import { loadInContextLib } from './loadInContextLib';
 
 export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';

@@ -2,6 +2,7 @@ type Props = {
   message: string;
   recievingMessage: string[];
   data?: any;
+  attempts?: number;
 };
 
 export function listen<T = any>(type: string[], callback: (data?: T) => any) {
@@ -18,13 +19,15 @@ export function listen<T = any>(type: string[], callback: (data?: T) => any) {
   };
 }
 
-function sendAndRecieve<T>(
-  { message, recievingMessage, data }: Props,
-  attempts = 1
-) {
+export function sendAndRecieve<T>({
+  message,
+  recievingMessage,
+  data,
+  attempts = 1,
+}: Props) {
   let cancelled = false;
   const makeAttempt = () =>
-    new Promise((resolve, reject) => {
+    new Promise<T>((resolve, reject) => {
       const listener = listen(recievingMessage, handler);
       window.postMessage({ type: message, data }, window.origin);
       const timer = setTimeout(timeout, 300);
@@ -39,26 +42,27 @@ function sendAndRecieve<T>(
       }
       function timeout() {
         removeEventListener();
-        reject(new Error(`Didn't recieve ${recievingMessage} in time.`));
+        reject();
       }
     });
 
   return {
     cancel: () => (cancelled = true),
     promise: new Promise<T>(async (resolve, reject) => {
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < attempts; i++) {
         if (cancelled) {
-          break;
+          return;
         }
         try {
           const result = await makeAttempt();
-          return result;
-        } catch {
+          resolve(result);
+          return;
+        } catch (e) {
           continue;
         }
       }
       if (!cancelled) {
-        throw new Error('Tolgee extension not present');
+        reject(`Didn't recieve ${recievingMessage.join(' or ')} in time.`);
       }
     }),
   };
@@ -71,15 +75,13 @@ export function takeScreenshot(): Promise<string> {
   }).promise as Promise<string>;
 }
 
-export async function detectPlugin(): Promise<boolean> {
+export async function detectExtension(): Promise<boolean> {
   try {
-    await sendAndRecieve(
-      {
-        message: 'TOLGEE_PING',
-        recievingMessage: ['TOLGEE_PONG'],
-      },
-      2
-    ).promise;
+    await sendAndRecieve({
+      message: 'TOLGEE_PING',
+      recievingMessage: ['TOLGEE_PONG'],
+      attempts: 2,
+    }).promise;
     return true;
   } catch {
     return false;
@@ -99,14 +101,13 @@ export type LibConfig = {
 export function Handshaker() {
   let cancelLast: undefined | (() => void) = undefined;
   async function update(data: LibConfig): Promise<boolean> {
-    const { cancel, promise } = sendAndRecieve<boolean>(
-      {
-        message: 'TOLGEE_READY',
-        recievingMessage: ['TOLGEE_PLUGIN_READY', 'TOLGEE_PLUGIN_UPDATED'],
-        data,
-      },
-      4
-    );
+    cancelLast?.();
+    const { cancel, promise } = sendAndRecieve<boolean>({
+      message: 'TOLGEE_READY',
+      recievingMessage: ['TOLGEE_PLUGIN_READY', 'TOLGEE_PLUGIN_UPDATED'],
+      data,
+      attempts: 4,
+    });
     cancelLast = cancel;
     return promise;
   }
