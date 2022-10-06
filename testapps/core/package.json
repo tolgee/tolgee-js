@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/core-testapp",
-  "version": "4.9.2",
+  "version": "4.9.3-rc.ad9d2a4.0",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",
   "private": true,
@@ -23,7 +23,7 @@
   },
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "dependencies": {
-    "@tolgee/web": "^4.8.0",
-    "@tolgee/format-icu": "^4.8.0"
+    "@tolgee/format-icu": "^4.9.3-rc.ad9d2a4.0",
+    "@tolgee/web": "^4.9.3-rc.ad9d2a4.0"
   }
 }
