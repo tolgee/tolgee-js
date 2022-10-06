@@ -65,14 +65,14 @@ export const PluginService = (
   };
 
   const run = (isDev: boolean) => {
-    instances.ui =
-      plugins.ui &&
-      new plugins.ui({
+    if (!instances.ui && plugins.ui) {
+      instances.ui = new plugins.ui({
         apiKey: getInitialOptions().apiKey!,
         apiUrl: getInitialOptions().apiUrl!,
         highlight,
         changeTranslation,
       });
+    }
     if (!instances.observer) {
       instances.observer = plugins.observer?.({
         translate,

@@ -1,5 +1,5 @@
 import type { TolgeePlugin } from '@tolgee/core';
-import { handshakeWithExtension } from '../tools/plugin';
+import { Handshaker } from '../tools/plugin';
 import { loadInContextLib } from './loadInContextLib';
 
 export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
@@ -45,6 +45,7 @@ let BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => tolgee;
 
 if (typeof window !== 'undefined') {
   BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
+    const handshaker = Handshaker();
     const getConfig = () =>
       ({
         // prevent extension downloading ui library
@@ -73,7 +74,7 @@ if (typeof window !== 'undefined') {
     tolgee.on('running', ({ value: isRunning }) => {
       if (isRunning) {
         onDocumentReady(() => {
-          handshakeWithExtension(getConfig()).catch(clearSessionStorage);
+          handshaker.update(getConfig()).catch(clearSessionStorage);
         });
       }
     });

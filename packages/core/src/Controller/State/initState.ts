@@ -37,10 +37,6 @@ export type Options = {
    * Default namespace when no namespace defined (default: '')
    */
   defaultNs: string;
-  /**
-   * Prefix used for fetching languages (default: 'i18n/')
-   */
-  filesUrlPrefix: string;
   staticData?: {
     [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
   };
@@ -57,7 +53,6 @@ export type State = {
 
 const defaultValues: Options = {
   defaultNs: '',
-  filesUrlPrefix: 'i18n/',
 };
 
 export const initState = (

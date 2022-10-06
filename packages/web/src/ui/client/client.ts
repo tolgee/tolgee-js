@@ -73,12 +73,12 @@ async function customFetch(
         const message = `${r.status}: ${
           data?.message || 'Error status code from server'
         }`;
-        throw message;
+        throw new Error(message);
       }
       return await getResObject(r);
     })
     .catch((e) => {
-      throw e.message;
+      throw e.message || 'Failed to fetch';
     });
 }
 
