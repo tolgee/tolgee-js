@@ -2,7 +2,7 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   DevCredentials,
-  EventEmitterType,
+  EventEmitterInstance,
   FallbackNSTranslation,
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
@@ -11,9 +11,9 @@ import { initObserverOptions, ObserverOptions } from './initObserverOptions';
 import { initState, Options } from './initState';
 
 export const State = (
-  onLanguageChange: EventEmitterType<string>,
-  onPendingLanguageChange: EventEmitterType<string>,
-  onRunningChange: EventEmitterType<boolean>
+  onLanguageChange: EventEmitterInstance<string>,
+  onPendingLanguageChange: EventEmitterInstance<string>,
+  onRunningChange: EventEmitterInstance<boolean>
 ) => {
   let state = initState();
   let observerOptions = initObserverOptions();

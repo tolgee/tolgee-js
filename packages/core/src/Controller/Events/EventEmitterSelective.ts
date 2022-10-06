@@ -3,8 +3,10 @@ import {
   FallbackNSTranslation,
   KeyDescriptor,
   KeyDescriptorInternal,
+  Listener,
   ListenerHandler,
   ListenerHandlerEvent,
+  ListenerSelective,
 } from '../../types';
 
 type HandlerWrapperType = {
@@ -28,13 +30,13 @@ function decrementInMap(map: Map<any, number>, value: any) {
   }
 }
 
-export const EventEmitterSelective = <T>(
+export const EventEmitterSelective = (
   getFallbackNamespaces: () => string[]
-) => {
-  const listeners: Set<ListenerHandler<T>> = new Set();
+): EventEmitterSelectiveInstance => {
+  const listeners: Set<ListenerHandler<undefined>> = new Set();
   const partialListeners: Set<HandlerWrapperType> = new Set();
 
-  const listen = (handler: ListenerHandler<T>) => {
+  const listen = (handler: ListenerHandler<undefined>) => {
     listeners.add(handler);
     const result = {
       unsubscribe: () => {
@@ -174,6 +176,13 @@ export const EventEmitterSelective = <T>(
   return Object.freeze({ listenSome, listen, emit });
 };
 
-export type EventEmitterSelectiveType<T> = ReturnType<
-  typeof EventEmitterSelective<T>
->;
+export type EventEmitterSelectiveInstance = {
+  readonly listenSome: (
+    handler: ListenerHandler<undefined>
+  ) => ListenerSelective;
+  readonly listen: (handler: ListenerHandler<undefined>) => Listener;
+  readonly emit: (
+    descriptor?: KeyDescriptorInternal,
+    delayed?: boolean
+  ) => void;
+};

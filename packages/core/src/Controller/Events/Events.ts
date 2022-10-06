@@ -14,7 +14,7 @@ export const Events = (getFallbackNamespaces: () => string[]) => {
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onKeyUpdate = EventEmitterSelective<void>(getFallbackNamespaces);
+  const onKeyUpdate = EventEmitterSelective(getFallbackNamespaces);
   const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
 

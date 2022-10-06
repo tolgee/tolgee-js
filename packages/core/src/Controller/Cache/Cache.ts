@@ -3,7 +3,7 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   CacheDescriptorWithKey,
-  EventEmitterType,
+  EventEmitterInstance,
   FallbackNSTranslation,
   Options,
   TranslationsFlat,
@@ -25,7 +25,7 @@ type CacheRecord = {
 type StateCache = Map<string, CacheRecord>;
 
 export const Cache = (
-  onCacheChange: EventEmitterType<CacheDescriptorWithKey>,
+  onCacheChange: EventEmitterInstance<CacheDescriptorWithKey>,
   backendGetRecord: BackendGetRecord,
   backendGetDevRecord: BackendGetDevRecord,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,

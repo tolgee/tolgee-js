@@ -1,6 +1,6 @@
 import { Listener, ListenerHandler } from '../../types';
 
-export const EventEmitter = <T>() => {
+export const EventEmitter = <T>(): EventEmitterInstance<T> => {
   let handlers: ListenerHandler<T>[] = [];
 
   const listen = (handler: ListenerHandler<T>): Listener => {
@@ -24,4 +24,7 @@ export const EventEmitter = <T>() => {
   return Object.freeze({ listen, emit });
 };
 
-export type EventEmitterType<T> = ReturnType<typeof EventEmitter<T>>;
+export type EventEmitterInstance<T> = {
+  readonly listen: (handler: ListenerHandler<T>) => Listener;
+  readonly emit: (data: T) => void;
+};
