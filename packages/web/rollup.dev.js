@@ -1,4 +1,4 @@
-import { buildMain } from './rollup.common';
+import { buildMain, buildMinified } from './rollup.common';
 
 export default [
   buildMain(),

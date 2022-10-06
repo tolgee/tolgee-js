@@ -16,12 +16,14 @@ export class UI implements UiInterface {
   private keyContextMenu: KeyContextMenu;
 
   constructor(private props: UiProps) {
-    const rootElement = document.createElement('div');
-    rootElement.id = DEVTOOLS_ID;
-    rootElement.attachShadow({ mode: 'open' });
+    let rootElement = document.getElementById(DEVTOOLS_ID);
+    if (!rootElement) {
+      rootElement = document.createElement('div');
+      rootElement.id = DEVTOOLS_ID;
+      rootElement.attachShadow({ mode: 'open' });
+      document.body.appendChild(rootElement);
+    }
     const devTools = rootElement.shadowRoot!;
-
-    document.body.appendChild(rootElement);
 
     const tolgeeModalContainer = document.createElement('div');
     devTools.appendChild(tolgeeModalContainer);
