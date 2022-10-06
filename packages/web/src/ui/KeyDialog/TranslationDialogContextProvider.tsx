@@ -8,7 +8,7 @@ import { FallbackNSTranslation, getFallbackArray, UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
-import { detectPlugin, takeScreenshot } from '../../tools/plugin';
+import { detectExtension, takeScreenshot } from '../../tools/extension';
 
 export interface ScreenshotInterface {
   id: number;
@@ -73,7 +73,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     });
 
     useEffect(() => {
-      detectPlugin().then((available) => setPluginAvailable(available));
+      detectExtension().then((available) => setPluginAvailable(available));
     }, []);
 
     const languagesLoadable = useApiQuery({

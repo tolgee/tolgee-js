@@ -1,8 +1,9 @@
-const handshakeWithExtension = jest.fn(() => Promise.resolve());
+const handshakerUpdate = jest.fn(() => Promise.resolve());
+const Handshaker = jest.fn(() => ({ update: handshakerUpdate }));
 const loadInContextLib = jest.fn(() => Promise.resolve(() => {}));
 
-jest.mock('../tools/plugin', () => ({
-  handshakeWithExtension,
+jest.mock('../tools/extension', () => ({
+  Handshaker,
 }));
 
 import {
@@ -33,8 +34,8 @@ describe('compatibility with browser extension', () => {
     const tolgee = Tolgee({ language: 'en', apiUrl: 'test' });
     tolgee.use(BrowserExtensionPlugin());
     await tolgee.run();
-    expect(handshakeWithExtension).toBeCalledTimes(1);
-    expect(handshakeWithExtension).toBeCalledWith({
+    expect(handshakerUpdate).toBeCalledTimes(1);
+    expect(handshakerUpdate).toBeCalledWith({
       config: {
         apiKey: '',
         apiUrl: 'test',
