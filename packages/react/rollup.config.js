@@ -40,7 +40,7 @@ export default {
     },
     {
       name: '@tolgee/react',
-      file: 'dist/tolgee-react.esm.mjs',
+      file: 'dist/tolgee-react.esm.js',
       format: 'esm',
       sourcemap: true,
     },

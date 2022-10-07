@@ -18,7 +18,7 @@ export default {
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee-i18next.esm.mjs',
+      file: 'dist/tolgee-i18next.esm.js',
       format: 'esm',
       sourcemap: true,
     },

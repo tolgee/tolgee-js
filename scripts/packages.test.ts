@@ -42,6 +42,10 @@ const checkPackage = (filePath) => {
     assertExpr(f.main || f.module || f.exports, 'Has entry point');
     assertFileExists(folder, f.main, 'main');
     assertFileExists(folder, f.module, 'module');
+    if (f.module) {
+      // if module field ends with .mjs it causes issues with webpack
+      assertExpr(f.module.endsWith('.js'), ' - module ends with .js');
+    }
     assertFileExists(folder, f.types, 'types');
     Object.entries(f.exports || {}).forEach(([key, target]) => {
       assertFileExists(

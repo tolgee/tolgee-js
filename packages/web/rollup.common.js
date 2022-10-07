@@ -84,7 +84,7 @@ export const buildMain = () => {
         sourcemap: true,
       },
       {
-        file: 'dist/tolgee-web.esm.mjs',
+        file: 'dist/tolgee-web.esm.js',
         format: 'esm',
         sourcemap: true,
       },

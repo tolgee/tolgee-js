@@ -20,7 +20,7 @@ export default {
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee-format-icu.esm.mjs',
+      file: 'dist/tolgee-format-icu.esm.js',
       format: 'esm',
       sourcemap: true,
     },
