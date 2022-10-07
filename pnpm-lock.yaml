@@ -74,6 +74,7 @@ importers:
       '@types/node': ^17.0.8
       '@types/testing-library__jest-dom': ^5.14.5
       concurrently: 7.3.0
+      intl-messageformat: ^9.9.1
       jest: ^27.2.4
       jest-fetch-mock: ^3.0.3
       rollup: ^2.56.3
@@ -90,13 +91,14 @@ importers:
       '@types/node': 17.0.45
       '@types/testing-library__jest-dom': 5.14.5
       concurrently: 7.3.0
+      intl-messageformat: 9.13.0
       jest: 27.5.1
       jest-fetch-mock: 3.0.3
       rollup: 2.79.1
       rollup-plugin-bundle-size: 1.0.3
       rollup-plugin-terser: 7.0.2_rollup@2.79.1
       rollup-plugin-visualizer: 5.8.2_rollup@2.79.1
-      ts-jest: 27.1.5_h2mjkler2cwtrz56xjx3qgassu
+      ts-jest: 27.1.5_zgo3ukr7wfsrfu7w73hol4lxpy
       typescript: 4.8.4
 
   packages/format-icu:
@@ -27628,7 +27630,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1_ts-node@10.9.1
+      jest: 27.5.1
       jest-util: 27.5.1
       json5: 2.2.1
       lodash.memoize: 4.1.2

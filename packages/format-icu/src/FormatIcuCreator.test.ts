@@ -1,9 +1,9 @@
 jest.autoMockOff();
-import { IcuFormatter } from './IcuFormatter';
+import { FormatIcuCreator } from './FormatIcuCreator';
 
-describe('icu formatter', () => {
+describe('format icu', () => {
   it('formats simple string', () => {
-    const formatter = IcuFormatter();
+    const formatter = FormatIcuCreator();
     const result = formatter.format({
       translation: 'result is {number, number}',
       params: { number: 42000 },
@@ -13,7 +13,7 @@ describe('icu formatter', () => {
   });
 
   it('fixes invalid locale', () => {
-    const formatter = IcuFormatter() as any;
+    const formatter = FormatIcuCreator() as any;
     expect(formatter.getLocale('en_GB')).toEqual('en-GB');
     expect(formatter.getLocale('en_GB-nonsenceeeee')).toEqual('en-GB');
     expect(formatter.getLocale('cs CZ')).toEqual('cs-CZ');
