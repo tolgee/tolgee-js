@@ -4,8 +4,8 @@ import {
   TolgeeProvider,
   BackendFetch,
   ReactPlugin,
+  FormatSimple,
 } from '@tolgee/react';
-import { FormatIcu } from '@tolgee/format-icu';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
@@ -13,7 +13,7 @@ import { Namespaces } from './Namespaces';
 
 const tolgee = Tolgee()
   .use(ReactPlugin())
-  .use(FormatIcu())
+  .use(FormatSimple())
   .use(BackendFetch())
   .init({
     availableLanguages: ['en', 'cs', 'fr', 'de'],

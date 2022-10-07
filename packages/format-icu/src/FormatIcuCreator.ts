@@ -1,7 +1,7 @@
 import IntlMessageFormat from 'intl-messageformat';
 import type { FinalFormatterInterface } from '@tolgee/core';
 
-export const IcuFormatter = (): FinalFormatterInterface => {
+export const FormatIcuCreator = (): FinalFormatterInterface => {
   const locales = new Map() as Map<string, string>;
 
   function isLocaleValid(locale: string) {

@@ -1,7 +1,7 @@
 import { TolgeePlugin } from '@tolgee/core';
-import { IcuFormatter } from './IcuFormatter';
+import { FormatIcuCreator } from './FormatIcuCreator';
 
 export const FormatIcu = (): TolgeePlugin => (tolgee, tools) => {
-  tools.setFinalFormatter(IcuFormatter());
+  tools.setFinalFormatter(FormatIcuCreator());
   return tolgee;
 };
