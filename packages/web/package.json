@@ -1,5 +1,6 @@
 {
   "name": "@tolgee/web",
+  "type": "module",
   "version": "4.8.0",
   "description": "Tolgee for web",
   "main": "./dist/tolgee-web.cjs.js",
