@@ -22,9 +22,7 @@ let injectPromise = null as any as Promise<typeof InContextTools>;
 export function loadInContextLib(version?: string) {
   if (!injectPromise) {
     injectPromise = injectScript(
-      `${CDN_URL}/npm/@tolgee/web@${
-        version || 'latest'
-      }/dist/${IN_CONTEXT_FILE}`
+      `${CDN_URL}/@tolgee/web@${version || 'latest'}/dist/${IN_CONTEXT_FILE}`
     ).then(() => {
       // @ts-ignore
       return window[IN_CONTEXT_UMD_NAME][IN_CONTEXT_EXPORT_NAME];
