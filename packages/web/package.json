@@ -3,7 +3,7 @@
   "version": "4.8.0",
   "description": "Tolgee for web",
   "main": "./dist/tolgee-web.cjs.js",
-  "module": "./dist/tolgee-web.esm.mjs",
+  "module": "./dist/tolgee-web.esm.js",
   "types": "./types/index.d.ts",
   "declaration": true,
   "directories": {
@@ -71,7 +71,7 @@
   },
   "exports": {
     "require": "./dist/tolgee-web.cjs.js",
-    "import": "./dist/tolgee-web.esm.mjs"
+    "import": "./dist/tolgee-web.esm.js"
   },
   "keywords": [
     "localization",

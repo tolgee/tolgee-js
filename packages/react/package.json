@@ -3,7 +3,7 @@
   "version": "4.9.2",
   "description": "React implementation for tolgee localization framework",
   "main": "./dist/tolgee-react.cjs.js",
-  "module": "./dist/tolgee-react.esm.mjs",
+  "module": "./dist/tolgee-react.esm.js",
   "types": "lib/index.d.ts",
   "repository": "https://github.com/tolgee/tolgee-js",
   "homepage": "https://tolgee.io",
@@ -69,7 +69,7 @@
   },
   "exports": {
     "require": "./dist/tolgee-react.cjs.js",
-    "import": "./dist/tolgee-react.esm.mjs"
+    "import": "./dist/tolgee-react.esm.js"
   },
   "publishConfig": {
     "access": "public"

@@ -3,7 +3,7 @@
   "version": "4.8.0",
   "description": "Tolgee format-icu plugin.",
   "main": "./dist/tolgee-format-icu.cjs.js",
-  "module": "./dist/tolgee-format-icu.esm.mjs",
+  "module": "./dist/tolgee-format-icu.esm.js",
   "types": "./lib/index.d.ts",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
   },
   "exports": {
     "require": "./dist/tolgee-format-icu.cjs.js",
-    "import": "./dist/tolgee-format-icu.esm.mjs"
+    "import": "./dist/tolgee-format-icu.esm.js"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --project tsconfig.prod.json",

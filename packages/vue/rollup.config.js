@@ -26,7 +26,7 @@ export default {
     },
     {
       name: '@tolgee/vue',
-      file: 'dist/tolgee-vue.esm.min.js',
+      file: 'dist/tolgee-vue.esm.min.mjs',
       format: 'esm',
       sourcemap: true,
       plugins: [terser()],
