@@ -6,7 +6,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import ListItemText from '@mui/material/ListItemText';
-import { DEVTOOLS_Z_INDEX } from '../constants';
+import { DEVTOOLS_Z_INDEX } from '../../constants';
 import { ScFieldTitle } from '../../ui/common/FieldTitle';
 import { getFallbackArray } from '@tolgee/core';
 

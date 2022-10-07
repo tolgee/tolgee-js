@@ -6,7 +6,7 @@ import {
   useDialogDispatch,
 } from './TranslationDialogContextProvider';
 import { NewWindow } from './NewWindow';
-import { DEVTOOLS_Z_INDEX } from '../constants';
+import { DEVTOOLS_Z_INDEX } from '../../constants';
 
 export const TranslationDialogWrapper: React.FC = ({ children }) => {
   const dispatch = useDialogDispatch();

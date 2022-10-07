@@ -1,5 +1,6 @@
 import { TolgeeElement } from '../../types';
-import { DEVTOOLS_ID, ModifierKey } from '@tolgee/core';
+import { ModifierKey } from '@tolgee/core';
+import { DEVTOOLS_ID } from '../../constants';
 import { ElementStoreType } from './ElementStore';
 
 const eCapture = {

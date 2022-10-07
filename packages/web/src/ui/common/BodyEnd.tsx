@@ -1,4 +1,4 @@
-import { DEVTOOLS_ID } from '../constants';
+import { DEVTOOLS_ID } from '../../constants';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 

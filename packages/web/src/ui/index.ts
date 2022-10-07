@@ -9,7 +9,7 @@ import type {
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
-import { DEVTOOLS_ID } from './constants';
+import { DEVTOOLS_ID } from '../constants';
 
 export class UI implements UiInterface {
   private viewerComponent: KeyDialog;

@@ -3,7 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 
-import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
+import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../../constants';
 import { ThemeProvider } from '../ThemeProvider';
 
 const ScMenuItem = styled(MenuItem)`
@@ -93,8 +93,10 @@ export class KeyContextMenu extends React.Component {
                   }}
                   key={index}
                 >
-                  <ScTranslation>{translation}</ScTranslation>
-                  <ScKey>{key}</ScKey>
+                  <ScTranslation data-testid="key_context_menu_translation">
+                    {translation}
+                  </ScTranslation>
+                  <ScKey data-testid="key_context_menu_key">{key}</ScKey>
                 </ScMenuItem>
               )
             )}

@@ -8,7 +8,7 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
 import { styled } from '@mui/material/styles';
 
-import { DEVTOOLS_Z_INDEX } from '../constants';
+import { DEVTOOLS_Z_INDEX } from '../../constants';
 import {
   useDialogContext,
   useDialogDispatch,

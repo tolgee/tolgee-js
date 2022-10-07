@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import { styled } from '@mui/material/styles';
 
-import { DEVTOOLS_Z_INDEX, CHROME_EXTENSION_LINK } from '../../constants';
+import { DEVTOOLS_Z_INDEX, CHROME_EXTENSION_LINK } from '../../../constants';
 
 type Props = {
   onClose: () => void;
