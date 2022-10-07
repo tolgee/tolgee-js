@@ -1,7 +1,7 @@
 import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
-} from '../constants';
+} from '../../constants';
 
 export function getPreferredLanguages(): string[] {
   try {

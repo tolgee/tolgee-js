@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import Clear from '@mui/icons-material/Clear';
 import clsx from 'clsx';
 import { ScreenshotInterface } from '../TranslationDialogContextProvider';
-import { DEVTOOLS_Z_INDEX } from '../../constants';
+import { DEVTOOLS_Z_INDEX } from '../../../constants';
 
 const Screenshot = styled('img')`
   width: 100%;

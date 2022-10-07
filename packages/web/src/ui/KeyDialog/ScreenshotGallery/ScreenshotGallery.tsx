@@ -8,7 +8,7 @@ import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
 import { isAuthorizedTo, MAX_FILE_COUNT } from './utils';
-import { DEVTOOLS_Z_INDEX } from '../../constants';
+import { DEVTOOLS_Z_INDEX } from '../../../constants';
 import {
   useDialogContext,
   useDialogDispatch,
