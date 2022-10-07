@@ -1,11 +1,10 @@
 <script lang="ts">
   import { getTolgee } from '@tolgee/svelte';
-  import { get } from 'svelte/store'
 
   const tolgee = getTolgee()
 
   function handleLanguageChange(e: any) {
-    get(tolgee).changeLanguage(e.currentTarget!.value)
+    $tolgee.changeLanguage(e.currentTarget!.value)
   }
 </script>
 
