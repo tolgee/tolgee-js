@@ -5,7 +5,7 @@
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
     "build": "svelte-kit sync && svelte-package",
-    "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
