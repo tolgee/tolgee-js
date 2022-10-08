@@ -1,7 +1,13 @@
 import { TranslateParams } from '../types';
 import IntlMessageFormat from 'intl-messageformat';
 import { formatter } from './formatter';
-import { ErrorEnum, FormatError } from './FormatError';
+import {
+  ErrorCode,
+  ERROR_PARAM_EMPTY,
+  ERROR_UNEXPECTED_CHAR,
+  ERROR_UNEXPECTED_END,
+  FormatError,
+} from './FormatError';
 
 function icu(text: string, params?: TranslateParams) {
   return new IntlMessageFormat(text, 'en', undefined, {
@@ -20,7 +26,7 @@ function matchIcu(params?: TranslateParams) {
 
 function expectToThrow(
   text: string,
-  code?: ErrorEnum,
+  code?: ErrorCode,
   params?: TranslateParams
 ) {
   let error: FormatError | undefined = undefined;
@@ -33,13 +39,13 @@ function expectToThrow(
   expect(error?.code).toEqual(code);
 }
 
-function expectToThrowWithIcu(code?: ErrorEnum, params?: TranslateParams) {
+function expectToThrowWithIcu(code?: ErrorCode, params?: TranslateParams) {
   const text = getText();
   expect(() => icu(text, params)).toThrow();
   expectToThrow(text, code, params);
 }
 
-function unsupported(code?: ErrorEnum, params?: TranslateParams) {
+function unsupported(code?: ErrorCode, params?: TranslateParams) {
   const text = getText();
   expect(() => icu(text, params)).not.toThrow();
   expectToThrow(text, code, params);
@@ -72,7 +78,7 @@ function characterInParamFailWithIcu(chars: string[]) {
     it(`fails with: ${text}`, () => {
       const params = { [param]: 'test' };
       expect(() => icu(text, params)).toThrow();
-      expectToThrow(text, ErrorEnum.UNEXPECTED_CHARACTER, params);
+      expectToThrow(text, ERROR_UNEXPECTED_CHAR, params);
     });
   });
 }
@@ -82,7 +88,7 @@ function characterInParamFail(chars: string[]) {
     const text = `test { ${param} } param`;
     it(`works with: ${text}`, () => {
       const params = { [param]: 'valid' };
-      expectToThrow(text, ErrorEnum.UNEXPECTED_CHARACTER, params);
+      expectToThrow(text, ERROR_UNEXPECTED_CHAR, params);
     });
   });
 }
@@ -141,31 +147,31 @@ describe('simple formatter', () => {
   });
 
   test('this is just {} wrong', () => {
-    expectToThrowWithIcu(ErrorEnum.EMPTY_PARAMETER);
+    expectToThrowWithIcu(ERROR_PARAM_EMPTY);
   });
 
   test('this also { } wrong', () => {
-    expectToThrowWithIcu(ErrorEnum.EMPTY_PARAMETER);
+    expectToThrowWithIcu(ERROR_PARAM_EMPTY);
   });
 
   test('this plain { , } wrong', () => {
-    expectToThrowWithIcu(ErrorEnum.UNEXPECTED_CHARACTER);
+    expectToThrowWithIcu(ERROR_UNEXPECTED_CHAR);
   });
 
   test('this is { unexpected', () => {
-    expectToThrowWithIcu(ErrorEnum.UNEXPECTED_END);
+    expectToThrowWithIcu(ERROR_UNEXPECTED_END);
   });
 
   test('this is obviously bad { yo yo }', () => {
-    expectToThrowWithIcu(ErrorEnum.UNEXPECTED_CHARACTER);
+    expectToThrowWithIcu(ERROR_UNEXPECTED_CHAR);
   });
 
   test('this is obviously bad { yo, }', () => {
-    expectToThrowWithIcu(ErrorEnum.UNEXPECTED_CHARACTER);
+    expectToThrowWithIcu(ERROR_UNEXPECTED_CHAR);
   });
 
   test('good for icu { yo, number } not for me', () => {
-    unsupported(ErrorEnum.UNEXPECTED_CHARACTER, { yo: 6 });
+    unsupported(ERROR_UNEXPECTED_CHAR, { yo: 6 });
   });
 
   describe('supported characters in params', () => {
