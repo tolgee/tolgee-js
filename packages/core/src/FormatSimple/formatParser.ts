@@ -1,18 +1,29 @@
-import { ErrorEnum, FormatError } from './FormatError';
+import {
+  ErrorCode,
+  ERROR_PARAM_EMPTY,
+  ERROR_UNEXPECTED_CHAR,
+  ERROR_UNEXPECTED_END,
+  FormatError,
+} from './FormatError';
 
 function isWhitespace(ch: string) {
   return /\s/.test(ch);
 }
 
-enum State {
-  TEXT,
-  ESCAPE_MAYBE,
-  ESCAPE,
-  PARAM,
-  PARAM_AFTER,
-}
+const TEXT = 0,
+  ESCAPE_MAYBE = 1,
+  ESCAPE = 2,
+  PARAM = 3,
+  PARAM_AFTER = 4;
 
-const END_STATES = new Set([State.ESCAPE, State.ESCAPE_MAYBE, State.TEXT]);
+type State =
+  | typeof TEXT
+  | typeof ESCAPE_MAYBE
+  | typeof ESCAPE
+  | typeof PARAM
+  | typeof PARAM_AFTER;
+
+const END_STATES = new Set<State>([ESCAPE, ESCAPE_MAYBE, TEXT]);
 const CHAR_ESCAPE = "'";
 const ESCAPABLE = new Set(['{', '}', CHAR_ESCAPE]);
 
@@ -21,7 +32,7 @@ const isAllowedInParam = (char: string) => {
 };
 
 export function formatParser(translation: string) {
-  let state: State = State.TEXT;
+  let state: State = TEXT;
   let text = '';
   let param = '';
   let ch = '';
@@ -30,7 +41,7 @@ export function formatParser(translation: string) {
 
   let i = 0;
 
-  function parsingError(code: ErrorEnum): never {
+  function parsingError(code: ErrorCode): never {
     throw new FormatError(code, i, translation);
   }
 
@@ -41,14 +52,14 @@ export function formatParser(translation: string) {
 
   const addParamChar = () => {
     if (!isAllowedInParam(ch)) {
-      parsingError(ErrorEnum.UNEXPECTED_CHARACTER);
+      parsingError(ERROR_UNEXPECTED_CHAR);
     }
     param += ch;
   };
 
   const addParam = () => {
     if (param === '') {
-      parsingError(ErrorEnum.EMPTY_PARAMETER);
+      parsingError(ERROR_PARAM_EMPTY);
     }
     params.push(param);
     param = '';
@@ -57,61 +68,61 @@ export function formatParser(translation: string) {
   for (i = 0; i < translation.length; i++) {
     ch = translation[i];
     switch (state) {
-      case State.TEXT:
+      case TEXT:
         if (ch === CHAR_ESCAPE) {
           text += ch;
-          state = State.ESCAPE_MAYBE;
+          state = ESCAPE_MAYBE;
         } else if (ch === '{') {
           addText();
-          state = State.PARAM;
+          state = PARAM;
         } else {
           text += ch;
-          state = State.TEXT;
+          state = TEXT;
         }
         break;
 
-      case State.ESCAPE_MAYBE:
+      case ESCAPE_MAYBE:
         if (ESCAPABLE.has(ch)) {
           text = text.slice(0, -1) + ch;
-          state = State.ESCAPE;
+          state = ESCAPE;
         } else {
           text += ch;
-          state = State.TEXT;
+          state = TEXT;
         }
         break;
-      case State.ESCAPE:
+      case ESCAPE:
         if (ch === CHAR_ESCAPE) {
-          state = State.TEXT;
+          state = TEXT;
         } else {
           text += ch;
-          state = State.ESCAPE;
+          state = ESCAPE;
         }
         break;
-      case State.PARAM:
+      case PARAM:
         if (ch === '}') {
           addParam();
-          state = State.TEXT;
-        } else if (isWhitespace(ch)) {
+          state = TEXT;
+        } else if (!isWhitespace(ch)) {
           addParamChar();
-          state = State.PARAM;
+          state = PARAM;
         } else if (param !== '') {
           addParam();
-          state = State.PARAM_AFTER;
+          state = PARAM_AFTER;
         }
 
         break;
-      case State.PARAM_AFTER:
+      case PARAM_AFTER:
         if (ch == '}') {
-          state = State.TEXT;
+          state = TEXT;
         } else if (isWhitespace(ch)) {
-          state = State.PARAM_AFTER;
+          state = PARAM_AFTER;
         } else {
-          parsingError(ErrorEnum.UNEXPECTED_CHARACTER);
+          parsingError(ERROR_UNEXPECTED_CHAR);
         }
     }
   }
   if (!END_STATES.has(state)) {
-    parsingError(ErrorEnum.UNEXPECTED_END);
+    parsingError(ERROR_UNEXPECTED_END);
   }
   addText();
   return [texts, params];
