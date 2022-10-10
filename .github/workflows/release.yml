@@ -38,7 +38,7 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version --yes --conventional-commits \
+          lerna version --yes --conventional-commits --exact \
             --no-push --no-git-tag-version
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
@@ -64,7 +64,7 @@ jobs:
       - name: Recreate release with push
         run: |
           git stash
-          lerna version --yes --conventional-commits\
+          lerna version --yes --conventional-commits --exact \
             --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
