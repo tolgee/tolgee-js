@@ -1,0 +1,75 @@
+<script>
+  import {getTranslate} from "@tolgee/svelte";
+
+  const t = getTranslate();
+</script>
+
+<main class="translation-methods">
+  <app-navbar>
+    <a href="/">The example app</a>
+  </app-navbar>
+
+  <div class="tiles">
+    <div>
+      <h1>t selector component with default</h1>
+      <div t key="this_key_does_not_exist" default="This is default"></div>
+    </div>
+    <div>
+      <h1>t selector component without default</h1>
+      <div t key="this_is_a_key"></div>
+    </div>
+    <div>
+      <h1>t selector component with params</h1>
+      <div t key="this_is_a_key_with_params" [params]="{key: 'value', key2: 'value2'}"></div>
+    </div>
+
+    <div>
+      <h1>translate pipe with default</h1>
+      <div>{{ 'this_key_does_not_exist' | translate:'This is default'}}</div>
+    </div>
+    <div>
+      <h1>translate pipe without default</h1>
+      <div>{{ 'this_is_a_key' | translate}}</div>
+    </div>
+    <div>
+      <h1>translate pipe with params</h1>
+      <div>{{ 'this_is_a_key_with_params' | translate:{key: 'value', key2: 'value2'} }}</div>
+    </div>
+
+    <div>
+      <h1>stranslate pipe without default</h1>
+      <div>{{ 'this_is_a_key' | stranslate}}</div>
+    </div>
+    <div>
+      <h1>stranslate pipe with params</h1>
+      <div>
+        {{ 'this_is_a_key_with_params' | stranslate:{key: 'value', key2: 'value2'} }}
+      </div>
+    </div>
+    <div>
+      <h1>service get without default</h1>
+      <div>{{translatedWithoutParamsValue}}</div>
+    </div>
+    <div>
+      <h1>service get with default</h1>
+      <div>{{translatedWithDefaultValue}}</div>
+    </div>
+    <div>
+      <h1>service get with params</h1>
+      <div>{{translatedWithParamsValue}}</div>
+    </div>
+
+    <div>
+      <h1>service getSafe without default</h1>
+      <div>{{translatedSafeWithoutParamsValue}}</div>
+    </div>
+    <div>
+      <h1>service getSafe with default</h1>
+      <div>{{translatedSafeWithDefaultValue}}</div>
+    </div>
+    <div>
+      <h1>service getSafe with params</h1>
+      <div>{{translatedSafeWithParamsValue}}</div>
+    </div>
+  </div>
+</main>

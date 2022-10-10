@@ -1,0 +1,39 @@
+<div class="background-wrapper">
+  <div class="example">
+    <app-navbar>
+      <div slot="menu-items">
+        <a href="/translation-methods" t key="menu-item-translation-methods" default="Translation methods"></a>
+      </div>
+    </app-navbar>
+
+    <header>
+      <h1 class="header__title" t key="on-the-road-title" default="On the road"></h1>
+      <h2 class="header__subtitle" t key="on-the-road-subtitle" default="what to pack for the trip"></h2>
+    </header>
+    <section class="items">
+      <div class="items__new-item">
+        <input
+          [(ngModel)]="newItemValue"
+          placeholder="{{ 'add-item-input-placeholder' | translate:'New list item' }}"
+        />
+        <button (click)="onAdd()"
+                [disabled]="!newItemValue"
+                class="button"
+                t key="add-item-add-button" default="Add">
+        </button>
+      </div>
+      <div class="items__list">
+        <div class="item" *ngFor="let item of items; let i = index ">
+          <div class="item__text">{{ item }}</div>
+          <button (click)="onDelete(i)" t key="delete-item-button" default="Delete"></button>
+        </div>
+      </div>
+      <div class="items__buttons">
+        <button class="button" (click)="onAction('share')" t default="Share" key="share-button"></button>
+        <button class="button button--secondary"
+                (click)="onAction('email')"
+                t key="send-via-email" default="Send via e-mail"></button>
+      </div>
+    </section>
+  </div>
+</div>
