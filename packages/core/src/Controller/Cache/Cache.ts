@@ -182,6 +182,8 @@ export const Cache = (
       const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
         dataPromise = staticDataValue();
+      } else if (staticDataValue) {
+        dataPromise = Promise.resolve(staticDataValue);
       }
     }
 
@@ -190,9 +192,10 @@ export const Cache = (
     }
 
     if (!dataPromise) {
-      // return empty data, so we know it has already been attempted to fetch
+      // return current data or empty object
       dataPromise = Promise.resolve({});
     }
+
     return dataPromise;
   }
 
