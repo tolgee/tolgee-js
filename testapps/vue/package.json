@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-testapp",
-  "version": "4.9.2",
+  "version": "4.9.3-rc.128edeb.0",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -11,9 +11,9 @@
     "serve": "serve -p 3002 -s dist"
   },
   "dependencies": {
-    "@tolgee/format-icu": "^4.8.0",
-    "@tolgee/web": "^4.8.0",
-    "@tolgee/vue": "^4.8.0",
+    "@tolgee/format-icu": "4.9.3-rc.128edeb.0",
+    "@tolgee/vue": "4.9.3-rc.128edeb.0",
+    "@tolgee/web": "4.9.3-rc.128edeb.0",
     "core-js": "^3.23.0",
     "vue": "^3.2.37"
   },
