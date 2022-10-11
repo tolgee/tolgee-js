@@ -190,8 +190,8 @@ export const Cache = (
     }
 
     if (!dataPromise) {
-      // return empty data, so we know it has already been attempted to fetch
-      dataPromise = Promise.resolve({});
+      // return current data or empty object
+      dataPromise = Promise.resolve(cache.get(encodeCacheKey(keyObject)) || {});
     }
     return dataPromise;
   }
