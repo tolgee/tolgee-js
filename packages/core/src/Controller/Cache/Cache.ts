@@ -189,10 +189,6 @@ export const Cache = (
       dataPromise = backendGetRecord(keyObject);
     }
 
-    if (!dataPromise) {
-      // return empty data, so we know it has already been attempted to fetch
-      dataPromise = Promise.resolve({});
-    }
     return dataPromise;
   }
 
@@ -230,7 +226,8 @@ export const Cache = (
           cacheKey,
         };
       }
-      const dataPromise = fetchData(keyObject, isDev);
+      const dataPromise =
+        fetchData(keyObject, isDev) || Promise.resolve(undefined);
       asyncRequests.set(cacheKey, dataPromise);
       return {
         new: true,
@@ -254,6 +251,9 @@ export const Cache = (
         const data = results[i];
         if (data) {
           addRecord(value.keyObject, data);
+        } else if (!getRecord(value.keyObject)) {
+          // if no data exist, put empty object
+          addRecord(value.keyObject, {});
         }
       }
     });

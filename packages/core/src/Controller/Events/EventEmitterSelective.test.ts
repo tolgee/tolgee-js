@@ -88,7 +88,7 @@ describe('event emitter selective', () => {
     emitter.emit({ key: 'abcd' }, true);
     emitter.emit({ ns: ['opqrst'] }, true);
 
-    await Promise.resolve();
+    await new Promise((resolve) => setTimeout(resolve));
 
     expect(hanlderAll).toBeCalledTimes(1);
     expect(handler).toBeCalledTimes(1);

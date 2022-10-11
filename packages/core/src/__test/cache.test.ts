@@ -24,6 +24,16 @@ const DevToolsPlugin =
     return tolgee;
   };
 
+const DevToolsThrow = (): TolgeePlugin => (tolgee, tools) => {
+  tolgee.init({ apiKey: 'test', apiUrl: 'test' });
+  tools.setDevBackend({
+    getRecord() {
+      return Promise.reject();
+    },
+  });
+  return tolgee;
+};
+
 describe('cache', () => {
   let tolgee: TolgeeInstance;
 
@@ -91,6 +101,18 @@ describe('cache', () => {
 
     await waitForInitialLoad(tolgee);
     expect(tolgee.t('test.sub')).toEqual('en.default.new');
+  });
+
+  it('keeps data when dev backend throws', async () => {
+    const keyUpdateHandler = jest.fn();
+    tolgee.on('keyUpdate', keyUpdateHandler);
+    await tolgee.run();
+    expect(keyUpdateHandler).toBeCalledTimes(1);
+    expect(tolgee.t('test.sub')).toEqual('subtestEn');
+    tolgee.use(DevToolsThrow());
+    await waitForInitialLoad(tolgee);
+    expect(keyUpdateHandler).toBeCalledTimes(2);
+    expect(tolgee.t('test.sub')).toEqual('subtestEn');
   });
 
   it('updates initial data correctly', async () => {

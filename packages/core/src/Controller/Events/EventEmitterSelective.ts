@@ -167,9 +167,7 @@ export const EventEmitterSelective = (
     if (!delayed) {
       solveQueue();
     } else {
-      Promise.resolve().then(() => {
-        solveQueue();
-      });
+      setTimeout(solveQueue, 0);
     }
   };
 
