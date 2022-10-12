@@ -1,12 +1,12 @@
 import { Controller } from './Controller/Controller';
 import {
-  Options,
+  TolgeeOptions,
   TolgeeInstance,
   TolgeePlugin,
   ObserverOptions,
 } from './types';
 
-export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
+export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
   const controller = Controller({
     options,
   });
@@ -74,7 +74,7 @@ export const Tolgee = (options?: Partial<Options>): TolgeeInstance => {
       }
       return tolgee;
     },
-    init: (options: Partial<Options>) => {
+    init: (options: Partial<TolgeeOptions>) => {
       withRestart(() => controller.init(options));
       return tolgee;
     },

@@ -1,7 +1,7 @@
-import type { Options } from './Controller/State/initState';
+import type { TolgeeOptions } from './Controller/State/initState';
 import type { ObserverOptions } from './Controller/State/initObserverOptions';
 
-export type { State, Options } from './Controller/State/initState';
+export type { State, TolgeeOptions } from './Controller/State/initState';
 export type {
   ObserverOptions,
   ModifierKey,
@@ -242,7 +242,7 @@ export type TolgeeInstance = Readonly<{
   removeActiveNs: (ns: FallbackNSTranslation) => void;
   loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
   loadRecord: (descriptors: CacheDescriptor) => Promise<TranslationsFlat>;
-  addStaticData: (data: Options['staticData']) => void;
+  addStaticData: (data: TolgeeOptions['staticData']) => void;
   getRecord: (descriptor: CacheDescriptor) => TranslationsFlat | undefined;
   getAllRecords: () => CachePublicRecord[];
   isInitialLoading: () => boolean;
@@ -251,9 +251,9 @@ export type TolgeeInstance = Readonly<{
   isFetching: (ns?: FallbackNSTranslation) => boolean;
   isRunning: () => boolean;
   highlight: HighlightInterface;
-  getInitialOptions: () => Options;
+  getInitialOptions: () => TolgeeOptions;
   isDev: () => boolean;
-  init: (options: Partial<Options>) => TolgeeInstance;
+  init: (options: Partial<TolgeeOptions>) => TolgeeInstance;
   run: () => Promise<void>;
   stop: () => void;
   t: TFnType;
@@ -262,7 +262,7 @@ export type TolgeeInstance = Readonly<{
   setObserverOptions: (options: Partial<ObserverOptions>) => TolgeeInstance;
 }>;
 
-export type PluginServicePublic = Readonly<{
+export type PluginTools = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
   addFormatter: (formatter: FormatterInterface | undefined) => void;
   setObserver: (observer: ObserverInterface | undefined) => void;
@@ -384,7 +384,7 @@ export type ListenerHandler<T> = (e: ListenerHandlerEvent<T>) => void;
 
 export type TolgeePlugin = (
   tolgee: TolgeeInstance,
-  tools: PluginServicePublic
+  tools: PluginTools
 ) => TolgeeInstance;
 
 export type CachePublicRecord = {

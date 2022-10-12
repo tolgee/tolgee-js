@@ -8,7 +8,7 @@ import {
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
 import { initObserverOptions, ObserverOptions } from './initObserverOptions';
-import { initState, Options } from './initState';
+import { initState, TolgeeOptions } from './initState';
 
 export const State = (
   onLanguageChange: EventEmitterInstance<string>,
@@ -19,7 +19,7 @@ export const State = (
   let observerOptions = initObserverOptions();
   let devCredentials: DevCredentials = undefined;
 
-  function init(options?: Partial<Options>) {
+  function init(options?: Partial<TolgeeOptions>) {
     state = initState(options, state);
   }
 

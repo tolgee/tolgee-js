@@ -2,7 +2,7 @@ import { Events } from './Events/Events';
 import {
   CacheDescriptor,
   FallbackNSTranslation,
-  Options,
+  TolgeeOptions,
   TFnType,
   TranslatePropsInternal,
 } from '../types';
@@ -15,7 +15,7 @@ import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
 import { getTranslateParams } from '../TranslateParams';
 
 type StateServiceProps = {
-  options?: Partial<Options>;
+  options?: Partial<TolgeeOptions>;
 };
 
 export const Controller = ({ options }: StateServiceProps) => {
@@ -86,7 +86,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     return state.getFallbackNamespaces();
   }
 
-  function init(options: Partial<Options>) {
+  function init(options: Partial<TolgeeOptions>) {
     state.init(options);
     cache.addStaticData(state.getInitialOptions().staticData);
   }

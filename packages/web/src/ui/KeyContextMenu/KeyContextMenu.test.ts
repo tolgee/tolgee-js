@@ -28,11 +28,6 @@ test('it selects the key', async () => {
   const resultPromise = ui.getKey({ openEvent: mouseEvent, keys: keys });
 
   await sleep(10);
-  const shadowRoot = document.getElementById(DEVTOOLS_ID)!.shadowRoot!;
-
-  Array.from(shadowRoot.children).forEach((child) => {
-    screen.debug(child);
-  });
 
   keys.forEach((translation, key) => {
     expect(

@@ -4,7 +4,7 @@ import {
   TreeTranslationsData,
 } from '../../types';
 
-export type Options = {
+export type TolgeeOptions = {
   /**
    * Initial language
    */
@@ -43,7 +43,7 @@ export type Options = {
 };
 
 export type State = {
-  initialOptions: Options;
+  initialOptions: TolgeeOptions;
   activeNamespaces: Map<string, number>;
   language: string | undefined;
   pendingLanguage: string | undefined;
@@ -51,12 +51,12 @@ export type State = {
   isRunning: boolean;
 };
 
-const defaultValues: Options = {
+const defaultValues: TolgeeOptions = {
   defaultNs: '',
 };
 
 export const initState = (
-  options?: Partial<Options>,
+  options?: Partial<TolgeeOptions>,
   previousState?: State
 ): State => {
   const initialOptions = {

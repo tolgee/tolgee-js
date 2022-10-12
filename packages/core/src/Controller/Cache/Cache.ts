@@ -5,7 +5,7 @@ import {
   CacheDescriptorWithKey,
   EventEmitterInstance,
   FallbackNSTranslation,
-  Options,
+  TolgeeOptions,
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
@@ -35,10 +35,10 @@ export const Cache = (
 ) => {
   const asyncRequests: CacheAsyncRequests = new Map();
   const cache: StateCache = new Map();
-  let staticData: NonNullable<Options['staticData']> = {};
+  let staticData: NonNullable<TolgeeOptions['staticData']> = {};
   let version = 0;
 
-  function addStaticData(data: Options['staticData']) {
+  function addStaticData(data: TolgeeOptions['staticData']) {
     if (data) {
       staticData = { ...staticData, ...data };
       Object.entries(data).forEach(([key, value]) => {

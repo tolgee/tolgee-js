@@ -16,7 +16,7 @@ import {
   UiKeyOption,
   LanguageDetectorInterface,
   LanguageStorageInterface,
-  Options,
+  TolgeeOptions,
   ChangeTranslationInterface,
   WrapperWrapProps,
   Unwrapped,
@@ -26,7 +26,7 @@ import { ObserverOptions } from '../State/initObserverOptions';
 
 export const PluginService = (
   getLanguage: () => string | undefined,
-  getInitialOptions: () => Options,
+  getInitialOptions: () => TolgeeOptions,
   getObserverOptions: () => ObserverOptions,
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
