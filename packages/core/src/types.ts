@@ -224,6 +224,7 @@ export type TolgeeOn = {
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
   (event: 'running', handler: ListenerHandler<boolean>): Listener;
+  (event: 'cache', handler: ListenerHandler<CacheDescriptorWithKey>): Listener;
   (event: 'keyUpdate', handler: ListenerHandler<void>): Listener;
   (event: TolgeeEvent, handler: ListenerHandler<any>): Listener;
 };
@@ -374,9 +375,7 @@ export type KeyDescriptor = {
 export type ListenerSelective = {
   unsubscribe: () => void;
   subscribeNs: (ns: FallbackNSTranslation) => ListenerSelective;
-  unsubscribeNs: (ns: FallbackNSTranslation) => ListenerSelective;
   subscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
-  unsubscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
 };
 
 export type ListenerHandlerEvent<T> = { value: T };

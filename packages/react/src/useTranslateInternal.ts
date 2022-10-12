@@ -43,6 +43,8 @@ export const useTranslateInternal = (
     }
   };
 
+  const isLoaded = tolgee.isLoaded(namespaces);
+
   useEffect(() => {
     subscriptionRef.current = tolgee.onKeyUpdate(forceRerender);
     subscriptionQueue.current.forEach((key) => {
@@ -54,14 +56,9 @@ export const useTranslateInternal = (
     };
   }, []);
 
-  const isLoaded = tolgee.isLoaded(namespaces);
-
   useEffect(() => {
     if (!isLoaded) {
       subscriptionRef.current!.subscribeNs(namespaces);
-      return () => {
-        subscriptionRef.current!.unsubscribeNs(namespaces);
-      };
     }
   }, [namespacesJoined, isLoaded]);
 

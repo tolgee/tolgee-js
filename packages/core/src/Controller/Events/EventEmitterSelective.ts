@@ -11,24 +11,9 @@ import {
 
 type HandlerWrapperType = {
   fn: ListenerHandler<undefined>;
-  keys: Map<string, number>;
-  namespaces: Map<string | undefined, number>;
+  keys: Set<string>;
+  namespaces: Set<string | undefined>;
 };
-
-function incrementInMap(map: Map<any, number>, value: any) {
-  const currNum = map.get(value) || 0;
-  map.set(value, currNum + 1);
-}
-
-function decrementInMap(map: Map<any, number>, value: any) {
-  let currNum = map.get(value) || 1;
-  currNum -= 1;
-  if (currNum <= 0) {
-    map.delete(value);
-  } else {
-    map.set(value, currNum);
-  }
-}
 
 export const EventEmitterSelective = (
   getFallbackNamespaces: () => string[]
@@ -51,8 +36,8 @@ export const EventEmitterSelective = (
       fn: (e: ListenerHandlerEvent<undefined>) => {
         handler(e);
       },
-      keys: new Map<string, number>(),
-      namespaces: new Map<string | undefined, number>(),
+      keys: new Set<string>(),
+      namespaces: new Set<string | undefined>(),
     };
 
     partialListeners.add(handlerWrapper);
@@ -63,37 +48,19 @@ export const EventEmitterSelective = (
       },
       subscribeNs: (ns: FallbackNSTranslation) => {
         getFallbackArray(ns).forEach((val) =>
-          incrementInMap(handlerWrapper.namespaces, val)
-        );
-        return result;
-      },
-      unsubscribeNs: (ns: FallbackNSTranslation) => {
-        getFallbackArray(ns).forEach((val) =>
-          decrementInMap(handlerWrapper.namespaces, val)
+          handlerWrapper.namespaces.add(val)
         );
         return result;
       },
       subscribeKey: (descriptor: KeyDescriptor) => {
         const { key, ns } = descriptor;
-        incrementInMap(handlerWrapper.keys, key);
+        handlerWrapper.keys.add(key);
         getFallbackArray(ns).forEach((val) =>
-          incrementInMap(handlerWrapper.namespaces, val)
+          handlerWrapper.namespaces.add(val)
         );
         if (ns === undefined) {
           // subscribing to all namespaces
-          incrementInMap(handlerWrapper.namespaces, undefined);
-        }
-        return result;
-      },
-      unsubscribeKey: (descriptor: KeyDescriptor) => {
-        const { key, ns } = descriptor;
-        decrementInMap(handlerWrapper.keys, key);
-        getFallbackArray(ns).forEach((val) =>
-          decrementInMap(handlerWrapper.namespaces, val)
-        );
-        if (ns === undefined) {
-          // subscribing to all namespaces
-          decrementInMap(handlerWrapper.namespaces, undefined);
+          handlerWrapper.namespaces.add(undefined);
         }
         return result;
       },

@@ -67,10 +67,6 @@ describe('event emitter selective', () => {
     emitter.emit({ ns: ['test'] });
     expect(handler).toBeCalledTimes(2);
 
-    listener.unsubscribeKey({ key: 'abcd', ns: ['test', 'abcd'] });
-    emitter.emit({ key: 'abcd' });
-    emitter.emit({ ns: ['test'] });
-
     listener.unsubscribe();
     emitter.emit();
     expect(handler).toBeCalledTimes(2);
