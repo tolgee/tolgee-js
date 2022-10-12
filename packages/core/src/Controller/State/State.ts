@@ -3,7 +3,7 @@ import {
   CacheDescriptorInternal,
   DevCredentials,
   EventEmitterInstance,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
@@ -68,7 +68,7 @@ export const State = (
     return { ...state.initialOptions, ...devCredentials };
   }
 
-  function addActiveNs(ns: FallbackNSTranslation) {
+  function addActiveNs(ns: FallbackNsTranslation) {
     const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);
@@ -80,7 +80,7 @@ export const State = (
     });
   }
 
-  function removeActiveNs(ns: FallbackNSTranslation) {
+  function removeActiveNs(ns: FallbackNsTranslation) {
     const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);

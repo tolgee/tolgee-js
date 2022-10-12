@@ -7,7 +7,7 @@ const testParams: TranslateProps = {
   noWrap: true,
   ns: [],
   orEmpty: true,
-  params: { yo: 'yo', ns: '(this is param not namespace)' },
+  params: { yo: 'yo' },
 };
 
 describe('getTranslateParams', () => {
@@ -32,9 +32,6 @@ describe('getTranslateParams', () => {
       ns: [],
       orEmpty: true,
       yo: 'yo',
-      params: {
-        ns: '(this is param not namespace)',
-      },
     });
     expect(result).toEqual(testParams);
   });

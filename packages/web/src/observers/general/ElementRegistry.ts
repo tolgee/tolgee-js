@@ -1,5 +1,5 @@
 import {
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   getFallback,
   RESTRICTED_ASCENDANT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
@@ -86,7 +86,7 @@ export const ElementRegistry = (
     });
   }
 
-  function findAll(key?: string, ns?: FallbackNSTranslation) {
+  function findAll(key?: string, ns?: FallbackNsTranslation) {
     const result: ElementMeta[] = [];
     elementStore.forEachElement((_, meta) => {
       for (const nodeMeta of meta.nodes.values()) {

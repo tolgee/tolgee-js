@@ -1,5 +1,5 @@
 import React from 'react';
-import { FallbackNSTranslation } from '@tolgee/core';
+import { FallbackNsTranslation } from '@tolgee/core';
 
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,7 +18,7 @@ const getNsName = (ns: string) => {
 };
 
 type Props = {
-  options: FallbackNSTranslation;
+  options: FallbackNsTranslation;
   value: string;
   onChange: (value: string) => void;
 };

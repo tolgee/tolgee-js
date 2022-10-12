@@ -1,7 +1,7 @@
 import { Events } from './Events/Events';
 import {
   CacheDescriptor,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   TolgeeOptions,
   TFnType,
   TranslatePropsInternal,
@@ -91,7 +91,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     cache.addStaticData(state.getInitialOptions().staticData);
   }
 
-  function isLoading(ns?: FallbackNSTranslation) {
+  function isLoading(ns?: FallbackNsTranslation) {
     return cache.isLoading(state.getLanguage()!, ns);
   }
 
@@ -103,7 +103,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     );
   }
 
-  async function addActiveNs(ns: FallbackNSTranslation, forget?: boolean) {
+  async function addActiveNs(ns: FallbackNsTranslation, forget?: boolean) {
     if (!forget) {
       state.addActiveNs(ns);
     }
@@ -112,7 +112,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     }
   }
 
-  function getRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
+  function getRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
     const languages = state.getFallbackLangs(lang);
     const namespaces =
       ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
@@ -127,7 +127,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     return result;
   }
 
-  function isLoaded(ns?: FallbackNSTranslation) {
+  function isLoaded(ns?: FallbackNsTranslation) {
     const language = state.getLanguage();
     if (!language) {
       return false;
@@ -146,7 +146,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     return result.length === 0;
   }
 
-  function loadRequiredRecords(lang?: string, ns?: FallbackNSTranslation) {
+  function loadRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
     const descriptors = getRequiredRecords(lang, ns);
     if (descriptors.length) {
       return valueOrPromise(loadRecords(descriptors), () => {});

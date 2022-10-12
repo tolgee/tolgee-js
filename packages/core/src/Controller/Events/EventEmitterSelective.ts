@@ -1,6 +1,6 @@
 import { getFallbackArray } from '../State/helpers';
 import {
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   KeyDescriptor,
   KeyDescriptorInternal,
   Listener,
@@ -46,7 +46,7 @@ export const EventEmitterSelective = (
       unsubscribe: () => {
         partialListeners.delete(handlerWrapper);
       },
-      subscribeNs: (ns: FallbackNSTranslation) => {
+      subscribeNs: (ns: FallbackNsTranslation) => {
         getFallbackArray(ns).forEach((val) =>
           handlerWrapper.namespaces.add(val)
         );

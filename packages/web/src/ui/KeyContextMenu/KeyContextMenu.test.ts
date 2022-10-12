@@ -1,7 +1,6 @@
 import '@testing-library/jest-dom';
 import { UI } from '../index';
 import { sleep } from '../tools/sleep';
-import { screen } from '@testing-library/dom';
 import { DEVTOOLS_ID } from '../../constants';
 
 function getShadowRootElement(testId: string, textContent: string) {

@@ -1,7 +1,7 @@
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
 import type {
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   UiProps,
   UiInterface,
   UiKeyOption,
@@ -46,7 +46,7 @@ export class UI implements UiInterface {
   public renderViewer(
     key: string,
     defaultValue: string | undefined,
-    ns: FallbackNSTranslation
+    ns: FallbackNsTranslation
   ) {
     this.viewerComponent.translationEdit(key, defaultValue, ns);
   }

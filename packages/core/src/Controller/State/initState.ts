@@ -1,6 +1,6 @@
 import {
   FallbackLanguageOption,
-  FallbackNS,
+  FallbackNs,
   TreeTranslationsData,
 } from '../../types';
 
@@ -32,7 +32,7 @@ export type TolgeeOptions = {
   /**
    * Namespaces to be used to find translation when no explicit namespace set.
    */
-  fallbackNs?: FallbackNS;
+  fallbackNs?: FallbackNs;
   /**
    * Default namespace when no namespace defined (default: '')
    */

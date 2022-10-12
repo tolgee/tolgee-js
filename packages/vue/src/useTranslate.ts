@@ -1,13 +1,13 @@
 import {
   DefaultParamType,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   TFnType,
   getTranslateParams,
 } from '@tolgee/web';
 import { computed, Ref } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 
-export const useTranslate = (namespaces?: FallbackNSTranslation) => {
+export const useTranslate = (namespaces?: FallbackNsTranslation) => {
   const { t: tInternal, isLoading } = useTranslateInternal(namespaces);
 
   const t: Ref<TFnType<DefaultParamType, string>> = computed(

@@ -4,7 +4,7 @@ import {
   CacheDescriptorInternal,
   CacheDescriptorWithKey,
   EventEmitterInstance,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   TolgeeOptions,
   TranslationsFlat,
   TranslationValue,
@@ -140,7 +140,7 @@ export const Cache = (
     onCacheChange.emit({ ...descriptor, key });
   }
 
-  function isFetching(ns?: FallbackNSTranslation) {
+  function isFetching(ns?: FallbackNsTranslation) {
     if (isInitialLoading()) {
       return true;
     }
@@ -156,7 +156,7 @@ export const Cache = (
     );
   }
 
-  function isLoading(language: string | undefined, ns?: FallbackNSTranslation) {
+  function isLoading(language: string | undefined, ns?: FallbackNsTranslation) {
     const namespaces = getFallbackArray(ns);
 
     return Boolean(

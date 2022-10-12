@@ -1,5 +1,5 @@
 import {
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TranslationOnClick,
   WrapperInterface,
@@ -109,7 +109,7 @@ export const GeneralObserver = (
     observer.disconnect();
   };
 
-  const highlight = (key?: string, ns?: FallbackNSTranslation) => {
+  const highlight = (key?: string, ns?: FallbackNsTranslation) => {
     const elements = elementRegistry.findAll(key, ns);
     elements.forEach((el) => el.highlight?.());
 

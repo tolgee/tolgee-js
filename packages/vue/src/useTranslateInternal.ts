@@ -3,7 +3,7 @@ import {
   TolgeeInstance,
   TranslateProps,
   KeyDescriptor,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   getFallback,
 } from '@tolgee/web';
 import {
@@ -15,7 +15,7 @@ import {
 } from 'vue';
 import { TolgeeVueContext } from './types';
 
-export const useTranslateInternal = (ns?: FallbackNSTranslation) => {
+export const useTranslateInternal = (ns?: FallbackNsTranslation) => {
   const namespaces = getFallback(ns);
   const tolgeeContext = inject('tolgeeContext', {
     tolgee: getCurrentInstance().proxy.$tolgee,

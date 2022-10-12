@@ -4,7 +4,7 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
-import { FallbackNSTranslation, getFallbackArray, UiProps } from '@tolgee/core';
+import { FallbackNsTranslation, getFallbackArray, UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
@@ -29,7 +29,7 @@ type DialogProps = {
   open: boolean;
   onClose: () => void;
   uiProps: UiProps;
-  ns: FallbackNSTranslation;
+  ns: FallbackNsTranslation;
 };
 
 type Actions =

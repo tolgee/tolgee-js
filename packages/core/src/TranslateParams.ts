@@ -11,17 +11,18 @@ function parseCombinedOptions({
   orEmpty,
   params,
   ...rest
-}: CombinedOptions<any>): Partial<TranslateProps> {
-  const options: Required<TranslateOptions<any>> = {
+}: Partial<TranslateProps>): Partial<TranslateProps> {
+  const options: Required<TranslateOptions> = {
     ns: ns!,
     noWrap: noWrap!,
     orEmpty: orEmpty!,
+  };
+  return {
+    ...options,
     params: {
       ...rest,
-      ...params,
     },
   };
-  return options;
 }
 
 export const getTranslateParams: TFnType<any, TranslateProps<any>> = (

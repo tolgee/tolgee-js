@@ -3,7 +3,7 @@ import {
   ListenerSelective,
   KeyDescriptor,
   TranslateProps,
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   getFallbackArray,
   getFallback,
 } from '@tolgee/web';
@@ -12,7 +12,7 @@ import { useTolgeeContext } from './useTolgeeContext';
 import { ReactOptions } from './types';
 
 export const useTranslateInternal = (
-  ns?: FallbackNSTranslation,
+  ns?: FallbackNsTranslation,
   options?: ReactOptions
 ) => {
   const { tolgee, options: defaultOptions } = useTolgeeContext();

@@ -1,5 +1,5 @@
 import {
-  FallbackNSTranslation,
+  FallbackNsTranslation,
   TranslateParams,
   TranslateProps,
 } from '@tolgee/web';
@@ -16,7 +16,7 @@ export const T = defineComponent({
       type: Boolean,
       default: false,
     },
-    ns: { type: Object as PropType<FallbackNSTranslation> },
+    ns: { type: Object as PropType<FallbackNsTranslation> },
   },
   setup() {
     const { t } = useTranslateInternal();

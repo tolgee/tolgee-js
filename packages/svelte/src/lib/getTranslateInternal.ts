@@ -2,14 +2,14 @@ import { writable, type Readable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 import {
   getFallback,
-  type FallbackNSTranslation,
+  type FallbackNsTranslation,
   type KeyDescriptor,
   type TolgeeInstance,
   type TranslateProps,
 } from '@tolgee/web';
 import { getTolgeeContext } from '$lib/index';
 
-const getTranslateInternal = (ns?: FallbackNSTranslation) => {
+const getTranslateInternal = (ns?: FallbackNsTranslation) => {
   const namespaces = getFallback(ns);
   const tolgeeContext = getTolgeeContext();
 
