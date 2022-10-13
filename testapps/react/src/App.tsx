@@ -19,6 +19,7 @@ const tolgee = Tolgee()
     availableLanguages: ['en', 'cs', 'fr', 'de'],
     apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
     apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
+    projectId: process.env.REACT_APP_TOLGEE_PROJECT_ID,
     fallbackLanguage: 'en',
     defaultLanguage: 'en',
   });

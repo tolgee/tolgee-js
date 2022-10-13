@@ -4,6 +4,10 @@ import {
   TreeTranslationsData,
 } from '../../types';
 
+export type TolgeeStaticData = {
+  [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
+};
+
 export type TolgeeOptions = {
   /**
    * Initial language
@@ -11,7 +15,7 @@ export type TolgeeOptions = {
   language?: string;
   apiUrl?: string;
   apiKey?: string;
-  projectId?: number;
+  projectId?: number | string;
   /**
    * Used when auto detection is not available or is turned off
    */
@@ -37,9 +41,7 @@ export type TolgeeOptions = {
    * Default namespace when no namespace defined (default: '')
    */
   defaultNs: string;
-  staticData?: {
-    [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
-  };
+  staticData?: TolgeeStaticData;
 };
 
 export type State = {

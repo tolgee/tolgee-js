@@ -191,9 +191,11 @@ export const PluginService = (
   };
 
   const getBackendDevRecord: BackendGetRecord = ({ language, namespace }) => {
+    const { apiKey, apiUrl, projectId } = getInitialOptions();
     return instances.devBackend?.getRecord({
-      apiKey: getInitialOptions().apiKey,
-      apiUrl: getInitialOptions().apiUrl,
+      apiKey,
+      apiUrl,
+      projectId,
       language,
       namespace,
     });

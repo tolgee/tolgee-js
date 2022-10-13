@@ -5,7 +5,6 @@ import {
   CacheDescriptorWithKey,
   EventEmitterInstance,
   FallbackNsTranslation,
-  TolgeeOptions,
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
@@ -13,6 +12,7 @@ import {
   BackendGetDevRecord,
 } from '../../types';
 import { getFallbackArray } from '../State/helpers';
+import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
@@ -35,10 +35,10 @@ export const Cache = (
 ) => {
   const asyncRequests: CacheAsyncRequests = new Map();
   const cache: StateCache = new Map();
-  let staticData: NonNullable<TolgeeOptions['staticData']> = {};
+  let staticData: NonNullable<TolgeeStaticData> = {};
   let version = 0;
 
-  function addStaticData(data: TolgeeOptions['staticData']) {
+  function addStaticData(data: TolgeeStaticData | undefined) {
     if (data) {
       staticData = { ...staticData, ...data };
       Object.entries(data).forEach(([key, value]) => {

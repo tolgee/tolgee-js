@@ -1,7 +1,14 @@
-import type { TolgeeOptions } from './Controller/State/initState';
+import type {
+  TolgeeOptions,
+  TolgeeStaticData,
+} from './Controller/State/initState';
 import type { ObserverOptions } from './Controller/State/initObserverOptions';
 
-export type { State, TolgeeOptions } from './Controller/State/initState';
+export type {
+  State,
+  TolgeeOptions,
+  TolgeeStaticData,
+} from './Controller/State/initState';
 export type {
   ObserverOptions,
   ModifierKey,
@@ -36,8 +43,9 @@ export type TolgeeInstance = Readonly<{
   getPendingLanguage: () => string | undefined;
   /**
    * Change current language.
-   * - if tolgee is not running sets `pendingLanguage`, `language` to the new value
-   * - if tolgee is running sets `pendingLanguage` to the value, fetches necessary data and then changes `language`
+   * - if not running sets `pendingLanguage`, `language` to the new value
+   * - if running sets `pendingLanguage` to the value, fetches necessary data and then changes `language`
+   *
    * @return Promise which is resolved when `language` is changed.
    */
   changeLanguage: (language: string) => Promise<void>;
@@ -48,38 +56,74 @@ export type TolgeeInstance = Readonly<{
   addActiveNs: (ns: FallbackNsTranslation, forget?: boolean) => Promise<void>;
   /**
    * Remove namespace(s) from active namespaces.
-   * Tolgee internally counts how many times was each active namespace added, so this method will remove namespace only if the counter goes down to 0.
    *
-   * ```
-   * tolgee.addActiveNs('common');
-   * tolgee.addActiveNs(['common', 'component']);
-   * // active namespaces: {common: 2, component: 1}
-   * tolgee.removeActiveNs(['common', 'component']);
-   * // active namespaces: {common: 1}
-   * tolgee.removeActiveNs('common');
-   * // active namespaces: {}
-   * ```
-   *
-   * This is used in component lifecycles, where we want to keep track which namespaces are needed, when language changes.
+   * Tolgee internally counts how many times was each active namespace added,
+   * so this method will remove namespace only if the counter goes down to 0.
    */
   removeActiveNs: (ns: FallbackNsTranslation) => void;
-  loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
+  /**
+   * Manually load record from `Backend` (or `DevBackend` when in dev mode)
+   */
   loadRecord: (descriptors: CacheDescriptor) => Promise<TranslationsFlat>;
-  addStaticData: (data: TolgeeOptions['staticData']) => void;
+  /**
+   * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)
+   *
+   * It loads data together and adds them to cache in one operation, to prevent partly loaded state.
+   */
+  loadRecords: (descriptors: CacheDescriptor[]) => Promise<TranslationsFlat[]>;
+  /**
+   *
+   */
+  addStaticData: (data: TolgeeStaticData) => void;
+  /**
+   * Get record from cache.
+   */
   getRecord: (descriptor: CacheDescriptor) => TranslationsFlat | undefined;
+  /**
+   * Get all records from cache.
+   */
   getAllRecords: () => CachePublicRecord[];
+  /**
+   * @return `true` if tolgee is loading initial data (triggered by `run`).
+   */
   isInitialLoading: () => boolean;
+  /**
+   * @param ns optional list of namespaces that you are interested in
+   * @return `true` if tolgee is loading some translations for the first time.
+   */
   isLoading: (ns?: FallbackNsTranslation) => boolean;
+  /**
+   * @param ns optional list of namespaces that you are interested in
+   * @return `true` if there are data that need to be fetched.
+   */
   isLoaded: (ns?: FallbackNsTranslation) => boolean;
+  /**
+   * @param ns optional list of namespaces that you are interested in
+   * @return `true` if tolgee is fetching some translations.
+   */
   isFetching: (ns?: FallbackNsTranslation) => boolean;
+  /**
+   * @return `true` if tolgee is running.
+   */
   isRunning: () => boolean;
+  /**
+   * Highlight keys that match selection.
+   */
   highlight: HighlightInterface;
+  /**
+   * @return current Tolgee options.
+   */
   getInitialOptions: () => TolgeeOptions;
+  /**
+   * Tolgee is in dev mode if `DevTools` plugin is used and `apiKey` + `apiUrl` are specified.
+   * @return `true` if tolgee is in dev mode.
+   */
   isDev: () => boolean;
   /**
    * Updates options after instance creation. Extends existing options,
    * so it only changes the fields, that are listed.
-   * Useful when using with plugins. When called in running state, tolgee stops and runs again.
+   *
+   * When called in running state, tolgee stops and runs again.
    */
   init: (options: Partial<TolgeeOptions>) => TolgeeInstance;
   /**
@@ -96,8 +140,17 @@ export type TolgeeInstance = Readonly<{
    * If Observer is present and tolgee is running, wraps result to be identifiable in the DOM.
    */
   t: TFnType;
+  /**
+   * Wraps translation if there is `Observer` plugin
+   */
   wrap: (params: TranslatePropsInternal) => string | undefined;
+  /**
+   * Unwrap translation
+   */
   unwrap: (text: string) => Unwrapped;
+  /**
+   * Options which will be passed to observer
+   */
   setObserverOptions: (options: Partial<ObserverOptions>) => TolgeeInstance;
 }>;
 
@@ -273,12 +326,14 @@ export type ObserverProps = {
   options: ObserverOptions;
 };
 
+export type Highlighter = {
+  unhighlight(): void;
+};
+
 export type HighlightInterface = (
   key?: string,
   ns?: FallbackNsTranslation
-) => {
-  unhighlight(): void;
-};
+) => Highlighter;
 
 export type ObserverRunProps = {
   mouseHighlight: boolean;
@@ -319,7 +374,7 @@ export type DevCredentials =
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
-  projectId?: number;
+  projectId?: number | string;
 };
 
 export type BackendGetRecordProps = {

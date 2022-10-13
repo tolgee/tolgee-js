@@ -13,7 +13,10 @@ const DevBackendCreator = (): BackendDevInterface => ({
         : `${apiUrl}/v2/projects/translations/${language}`;
 
     return fetch(url, {
-      headers: { 'X-API-Key': apiKey || '' },
+      headers: {
+        'X-API-Key': apiKey || '',
+        'Content-Type': 'application/json',
+      },
     }).then((r) => {
       if (r.ok) {
         return r.json().then((data) => data[language]);
