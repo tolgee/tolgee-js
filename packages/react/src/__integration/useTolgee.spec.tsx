@@ -10,7 +10,7 @@ import { FormatIcu } from '@tolgee/format-icu';
 const API_URL = 'http://localhost';
 
 const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => setTimeout(() => resolve(data), 10));
+  new Promise<any>((resolve) => setTimeout(() => resolve(data), 50));
 
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
