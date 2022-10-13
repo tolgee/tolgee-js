@@ -99,7 +99,7 @@ export async function client<
   const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
 
-  const projectId = getProjectIdFromApiKey(options.apiKey);
+  const projectId = getProjectIdFromApiKey(options.apiKey) || options.projectId;
   if (projectId !== undefined) {
     pathParams.projectId = projectId;
     urlResult = addProjectIdToUrl(urlResult);

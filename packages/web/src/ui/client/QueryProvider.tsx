@@ -4,6 +4,7 @@ import { QueryClientProvider, QueryClient } from 'react-query';
 export type GlobalOptions = {
   apiKey: string;
   apiUrl: string;
+  projectId: string | number | undefined;
 };
 
 const queryClient = new QueryClient({
@@ -20,18 +21,16 @@ const queryClient = new QueryClient({
 
 export const QueryContext = React.createContext({} as GlobalOptions);
 
-type Props = {
-  apiKey: string;
-  apiUrl: string;
-};
+type Props = GlobalOptions;
 
 export const QueryProvider: React.FC<Props> = ({
   children,
   apiUrl,
   apiKey,
+  projectId,
 }) => {
   return (
-    <QueryContext.Provider value={{ apiUrl, apiKey }}>
+    <QueryContext.Provider value={{ apiUrl, apiKey, projectId }}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </QueryContext.Provider>
   );

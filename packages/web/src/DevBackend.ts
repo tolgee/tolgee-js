@@ -1,5 +1,5 @@
 import { BackendDevInterface, TolgeePlugin } from '@tolgee/core';
-import { getProjectIdFromApiKey } from './tools/decodeApiKey';
+import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
 
 const DevBackendCreator = (): BackendDevInterface => ({
   getRecord({ apiUrl, apiKey, language, namespace, projectId }) {
@@ -12,6 +12,9 @@ const DevBackendCreator = (): BackendDevInterface => ({
         ? `${apiUrl}/v2/projects/${pId}/translations/${language}`
         : `${apiUrl}/v2/projects/translations/${language}`;
 
+    if (getApiKeyType(apiKey) === 'tgpat' && projectId === undefined) {
+      throw new Error("You need to specify 'projectId' when using PAT key");
+    }
     return fetch(url, {
       headers: {
         'X-API-Key': apiKey || '',

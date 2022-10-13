@@ -72,3 +72,17 @@ export function getProjectIdFromApiKey(
   }
   return undefined;
 }
+
+export function getApiKeyType(key: string | undefined) {
+  if (!key) {
+    return undefined;
+  }
+  const [prefix] = key.split('_');
+  if (prefix === 'tgpak') {
+    return 'tgpak';
+  } else if (prefix === 'tgpat') {
+    return 'tgpat';
+  }
+
+  return 'legacy';
+}

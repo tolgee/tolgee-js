@@ -66,9 +66,11 @@ export const PluginService = (
 
   const run = (isDev: boolean) => {
     if (!instances.ui && plugins.ui) {
+      const { apiKey, apiUrl, projectId } = getInitialOptions();
       instances.ui = new plugins.ui({
-        apiKey: getInitialOptions().apiKey!,
-        apiUrl: getInitialOptions().apiUrl!,
+        apiKey: apiKey!,
+        apiUrl: apiUrl!,
+        projectId,
         highlight,
         changeTranslation,
       });

@@ -44,7 +44,11 @@ export class KeyDialog extends React.Component<Props, State> {
 
   public render = () => (
     <BodyEnd>
-      <QueryProvider apiUrl={this.props.apiUrl} apiKey={this.props.apiKey}>
+      <QueryProvider
+        apiUrl={this.props.apiUrl}
+        apiKey={this.props.apiKey}
+        projectId={this.props.projectId}
+      >
         {this.state.dialogOpened && (
           <DialogProvider
             uiProps={this.props}

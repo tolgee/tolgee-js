@@ -9,6 +9,7 @@ import { useApiMutation, useApiQuery } from '../../ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
 import { detectExtension, takeScreenshot } from '../../tools/extension';
+import { getApiKeyType } from '../../tools/decodeApiKey';
 
 export interface ScreenshotInterface {
   id: number;
@@ -66,10 +67,14 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const [selectedNs, setSelectedNs] = useState<string>(
       getFallbackArray(props.ns)[0]
     );
+    const isPat = getApiKeyType(props.uiProps.apiKey) === 'tgpat';
 
     const scopesLoadable = useApiQuery({
       url: '/v2/api-keys/current',
       method: 'get',
+      options: {
+        enabled: !isPat,
+      },
     });
 
     useEffect(() => {
@@ -424,10 +429,11 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const scopes = scopesLoadable.data?.scopes;
 
     const formDisabled =
-      loading ||
-      (translationsLoadable.data?._embedded?.keys?.length
-        ? !isAuthorizedTo('translations.edit', scopes)
-        : !isAuthorizedTo('keys.edit', scopes));
+      !isPat &&
+      (loading ||
+        (translationsLoadable.data?._embedded?.keys?.length
+          ? !isAuthorizedTo('translations.edit', scopes)
+          : !isAuthorizedTo('keys.edit', scopes)));
 
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length

@@ -15,6 +15,7 @@ test('it selects the key', async () => {
   const ui = new UI({
     apiKey: 'test',
     apiUrl: 'test',
+    projectId: undefined,
     highlight: () => ({ unhighlight: () => {} }),
     changeTranslation: () => ({ revert: () => {} }),
   });
