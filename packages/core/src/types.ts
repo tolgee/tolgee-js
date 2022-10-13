@@ -214,14 +214,50 @@ export type TolgeeEvent =
   | 'keyUpdate';
 
 export type TolgeeOn = {
-  (event: 'pendingLanguage', handler: ListenerHandler<string>): Listener;
+  /**
+   * Emitted on language change.
+   */
   (event: 'language', handler: ListenerHandler<string>): Listener;
+
+  /**
+   * Emitted on pendingLanguage change.
+   */
+  (event: 'pendingLanguage', handler: ListenerHandler<string>): Listener;
+
+  /**
+   * Emitted on single key change.
+   */
   (event: 'key', handler: ListenerHandler<string>): Listener;
+
+  /**
+   * Emitted on loading change. Changes when tolgee is loading some data for the first time.
+   */
   (event: 'loading', handler: ListenerHandler<boolean>): Listener;
+
+  /**
+   * Emitted on fetching change. Changes when tolgee is fetching any data.
+   */
   (event: 'fetching', handler: ListenerHandler<boolean>): Listener;
+
+  /**
+   * Emitted when `tolgee.run` method finishes.
+   */
   (event: 'initialLoad', handler: ListenerHandler<void>): Listener;
+
+  /**
+   * Emitted when internal `running` state changes.
+   */
   (event: 'running', handler: ListenerHandler<boolean>): Listener;
+
+  /**
+   * Emitted when cache changes.
+   */
   (event: 'cache', handler: ListenerHandler<CacheDescriptorWithKey>): Listener;
+
+  /**
+   * Emitted when any key needs (or might need) to be re-rendered.
+   * Similar to tolgee.onKeyUpdate, except we intercept all events, not just selection.
+   */
   (event: 'keyUpdate', handler: ListenerHandler<void>): Listener;
   (event: TolgeeEvent, handler: ListenerHandler<any>): Listener;
 };

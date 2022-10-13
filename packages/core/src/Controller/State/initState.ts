@@ -13,34 +13,64 @@ export type TolgeeOptions = {
    * Initial language
    */
   language?: string;
+
+  /**
+   * Tolgee instance url (e.g. https://app.tolgee.io)
+   */
   apiUrl?: string;
+
+  /**
+   * Project API key (PAK) or Personal Access Token (PAT)
+   */
   apiKey?: string;
+
+  /**
+   * Project id is necessary if you are using PAT
+   */
   projectId?: number | string;
+
   /**
    * Used when auto detection is not available or is turned off
    */
   defaultLanguage?: string;
+
   /**
    * Languages which can be used for language detection
    * and also limits which values can be stored
    */
   availableLanguages?: string[];
+
   /**
    * Language which is used when no translation is available for current one
    */
   fallbackLanguage?: FallbackLanguageOption;
+
   /**
    * Namespaces which should be always fetched
    */
   ns?: string[];
+
   /**
    * Namespaces to be used to find translation when no explicit namespace set.
    */
   fallbackNs?: FallbackNs;
+
   /**
    * Default namespace when no namespace defined (default: '')
    */
   defaultNs: string;
+
+  /**
+   * These data go directly to cache or you can specify async
+   * function which will be used to get the data. Use `:` to add namespace:
+   *
+   * ```ts
+   * {
+   *   'locale': <translations | async function>
+   *   'locale:namespace': <translations | async function>
+   * }
+   * ```
+   */
   staticData?: TolgeeStaticData;
 };
 
