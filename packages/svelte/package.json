@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test": "jest src",
+    "test": "jest src --collect-coverage",
     "lint": "prettier --cache --check . && eslint .",
     "format": "prettier --cache --write ."
   },

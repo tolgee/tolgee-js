@@ -1,7 +1,7 @@
 <script lang="ts">
   import { getTolgee } from '@tolgee/svelte';
 
-  const tolgee = getTolgee()
+  const tolgee = getTolgee(['pendingLanguage'])
 
   function handleLanguageChange(e: any) {
     $tolgee.changeLanguage(e.currentTarget!.value)

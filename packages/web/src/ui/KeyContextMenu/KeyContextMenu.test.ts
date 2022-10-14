@@ -20,6 +20,12 @@ test('it selects the key', async () => {
     changeTranslation: () => ({ revert: () => {} }),
   });
   const mouseEvent = new MouseEvent('click');
+
+  Object.defineProperty(mouseEvent, 'target', {
+    writable: false,
+    value: document.body,
+  });
+
   const keys = new Map([
     ['key 1', 'Key 1'],
     ['key 2', 'Key 2'],

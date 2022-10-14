@@ -18,7 +18,6 @@ export const testObserver = (plugin: TolgeePlugin) => {
           language: 'en',
           staticData: { en: { hello: 'world' } },
         });
-      tolgee.run();
     });
 
     afterEach(() => {
@@ -26,9 +25,10 @@ export const testObserver = (plugin: TolgeePlugin) => {
     });
 
     it('runs observer', async () => {
+      tolgee.run();
       document.body.innerHTML = `
-      <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
-    `;
+        <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
+      `;
 
       await waitFor(() => {
         expect(screen.queryByTestId('translation')?.textContent).toEqual(
@@ -38,9 +38,10 @@ export const testObserver = (plugin: TolgeePlugin) => {
     });
 
     it('runs observer', async () => {
+      tolgee.run();
       document.body.innerHTML = `
-      <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
-    `;
+        <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
+      `;
 
       await waitFor(() => {
         expect(screen.queryByTestId('translation')?.textContent).toEqual(
@@ -50,13 +51,16 @@ export const testObserver = (plugin: TolgeePlugin) => {
     });
 
     it('ignoring works', async () => {
+      tolgee.run();
       document.body.innerHTML = `
-      <span data-testid="ignoredTranslation" data-tolgee-restricted="true">
-        ${tolgee.t({ key: 'hello' })}
-        <span data-testid="ignoredInside">${tolgee.t({ key: 'hello' })}</span>  
-      </span>
-      <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
-    `;
+        <span data-testid="ignoredTranslation" data-tolgee-restricted="true">
+          ${tolgee.t({ key: 'hello' })}
+          <span data-testid="ignoredInside">${tolgee.t({
+            key: 'hello',
+          })}</span>  
+        </span>
+        <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
+      `;
 
       await waitFor(() => {
         expect(
@@ -78,9 +82,10 @@ export const testObserver = (plugin: TolgeePlugin) => {
     });
 
     it('key only attribute', async () => {
+      tolgee.run();
       document.body.innerHTML = `
-      <span data-testid="translation" ${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}="hello">Hello</span>
-    `;
+        <span data-testid="translation" ${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}="hello">Hello</span>
+      `;
 
       await waitFor(() => {
         expect(
