@@ -1,11 +1,9 @@
+import { Tolgee, TolgeeInstance, TolgeePlugin } from '@tolgee/core';
+import { screen, waitFor } from '@testing-library/dom';
 import {
-  Tolgee,
-  TolgeeInstance,
-  TolgeePlugin,
   TOLGEE_ATTRIBUTE_NAME,
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
-} from '@tolgee/core';
-import { screen, waitFor } from '@testing-library/dom';
+} from '../constants';
 
 export const testObserver = (plugin: TolgeePlugin) => {
   describe('observer', () => {

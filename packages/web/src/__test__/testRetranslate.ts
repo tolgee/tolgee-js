@@ -1,10 +1,6 @@
 import { screen, waitFor } from '@testing-library/dom';
-import {
-  Tolgee,
-  TolgeeInstance,
-  TolgeePlugin,
-  TOLGEE_ATTRIBUTE_NAME,
-} from '@tolgee/core';
+import { Tolgee, TolgeeInstance, TolgeePlugin } from '@tolgee/core';
+import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
 
 export const testRetranslate = (plugin: TolgeePlugin) => {
   describe('retranslate', () => {

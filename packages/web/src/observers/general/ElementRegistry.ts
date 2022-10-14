@@ -1,9 +1,4 @@
-import {
-  FallbackNsTranslation,
-  getFallback,
-  RESTRICTED_ASCENDANT_ATTRIBUTE,
-  TOLGEE_ATTRIBUTE_NAME,
-} from '@tolgee/core';
+import { FallbackNsTranslation, getFallback } from '@tolgee/core';
 import {
   ElementMeta,
   KeyWithDefault,
@@ -11,6 +6,10 @@ import {
   TranslationOnClick,
   ObserverOptions,
 } from '@tolgee/core';
+import {
+  TOLGEE_RESTRICT_ATTRIBUTE,
+  TOLGEE_ATTRIBUTE_NAME,
+} from '../../constants';
 import { TolgeeElement } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
@@ -70,7 +69,7 @@ export const ElementRegistry = (
     const restrictedElements = options.restrictedElements;
     return (
       restrictedElements.indexOf(element.tagName.toLowerCase()) !== -1 ||
-      element.closest(`[${RESTRICTED_ASCENDANT_ATTRIBUTE}]`) !== null
+      element.closest(`[${TOLGEE_RESTRICT_ATTRIBUTE}]`) !== null
     );
   }
 

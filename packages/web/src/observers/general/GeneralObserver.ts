@@ -1,12 +1,12 @@
 import {
   FallbackNsTranslation,
-  TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TranslationOnClick,
   WrapperInterface,
   ObserverRunProps,
   ObserverOptions,
 } from '@tolgee/core';
 
+import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '../../constants';
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry } from './ElementRegistry';

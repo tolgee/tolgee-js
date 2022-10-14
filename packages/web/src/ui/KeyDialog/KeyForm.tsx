@@ -1,5 +1,4 @@
 import React from 'react';
-import { RESTRICTED_ASCENDANT_ATTRIBUTE } from '@tolgee/core';
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -17,6 +16,7 @@ import {
 } from './TranslationDialogContextProvider';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { NsSelect } from './NsSelect';
+import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -117,7 +117,7 @@ export const KeyForm = () => {
   const ready = !loading && !error;
 
   return (
-    <ScContainer {...{ [RESTRICTED_ASCENDANT_ATTRIBUTE]: 'true' }}>
+    <ScContainer {...{ [TOLGEE_RESTRICT_ATTRIBUTE]: 'true' }}>
       <ScHeading>
         <a
           href={linkToPlatform}

@@ -1,5 +1,6 @@
 import { waitFor, screen } from '@testing-library/dom';
-import { Tolgee, TolgeeInstance, TOLGEE_ATTRIBUTE_NAME } from '@tolgee/core';
+import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
 import { InvisibleObserver, TextObserver } from '../typedIndex';
 
 ['invisible', 'text'].forEach((name) => {

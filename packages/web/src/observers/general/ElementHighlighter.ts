@@ -1,4 +1,5 @@
-import { ElementMeta, TOLGEE_HIGHLIGHTER_CLASS } from '@tolgee/core';
+import { ElementMeta } from '@tolgee/core';
+import { TOLGEE_HIGHLIGHTER_CLASS } from '../../constants';
 import { TolgeeElement } from '../../types';
 
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
