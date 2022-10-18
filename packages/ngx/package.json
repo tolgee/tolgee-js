@@ -10,6 +10,7 @@
     "translation",
     "languages"
   ],
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "develop": "ng build --watch",

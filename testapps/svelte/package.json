@@ -1,6 +1,7 @@
 {
   "name": "@tolgee/svelte-testapp",
   "version": "4.9.2",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "npm run develop",

@@ -15,6 +15,7 @@
     "translation",
     "languages"
   ],
+  "license": "MIT",
   "declaration": true,
   "directories": {
     "lib": "lib",

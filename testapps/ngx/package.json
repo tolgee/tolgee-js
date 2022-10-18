@@ -11,6 +11,7 @@
     "e2e": "ng e2e",
     "serve": "serve -s -p 8101 ./dist/sampleapp"
   },
+  "license": "MIT",
   "private": true,
   "dependencies": {
     "@angular/animations": "~13.1.3",

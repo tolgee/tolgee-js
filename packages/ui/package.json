@@ -10,6 +10,7 @@
     "lib": "lib",
     "test": "test"
   },
+  "license": "MIT",
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --project tsconfig.prod.json",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",

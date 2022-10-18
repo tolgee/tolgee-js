@@ -21,6 +21,7 @@
     "serve": "^13.0.2",
     "typescript": "^4.7.4"
   },
+  "license": "MIT",
   "scripts": {
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "develop": "DISABLE_ESLINT_PLUGIN=true FORCE_COLOR=true react-scripts start | cat -",

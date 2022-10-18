@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "license": "MIT",
   "dependencies": {
     "@tolgee/react": "^4.9.2",
     "next": "12.2.3",

@@ -17,6 +17,7 @@
     "@tolgee/core": "^4.9.2",
     "@tolgee/ui": "^4.9.2"
   },
+  "license": "MIT",
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.0-next.65",
     "@sveltejs/kit": "1.0.0-next.429",

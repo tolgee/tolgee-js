@@ -4,6 +4,7 @@
   "description": "Client library for Tolgee Socket.io server",
   "main": "dist/tolgee-socketio-client.umd.js",
   "types": "./lib/index.d.ts",
+  "license": "MIT",
   "declaration": true,
   "scripts": {
     "build": "webpack --env mode=production && tsc",

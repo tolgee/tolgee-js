@@ -2,6 +2,7 @@
   "name": "@tolgee/vue-i18next-testapp",
   "version": "4.9.3",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "develop": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
