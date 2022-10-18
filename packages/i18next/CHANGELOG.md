@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.9.3](https://github.com/tolgee/tolgee-js/compare/v4.9.2...v4.9.3) (2022-10-18)
+
+
+### Bug Fixes
+
+* tolgee i18next export also tolgeeProcessor ([a719911](https://github.com/tolgee/tolgee-js/commit/a71991189247c0798c4a8c82cf96e9da6411c46d))
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/i18next
