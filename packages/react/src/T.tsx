@@ -11,6 +11,7 @@ type TProps = {
   noWrap?: boolean;
   keyName?: string;
   ns?: FallbackNsTranslation;
+  defaultValue?: string;
 };
 
 export const T: FunctionComponent<TProps> = (props: TProps) => {
@@ -19,7 +20,8 @@ export const T: FunctionComponent<TProps> = (props: TProps) => {
     // eslint-disable-next-line no-console
     console.error('T component: keyName not defined');
   }
-  const defaultValue = props.keyName ? props.children : undefined;
+  const defaultValue =
+    props.defaultValue || (props.keyName ? props.children : undefined);
 
   const { t } = useTranslateInternal();
 

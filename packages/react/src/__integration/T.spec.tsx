@@ -42,6 +42,9 @@ describe('T component integration', () => {
         <div data-testid="non_existant">
           <T keyName="non_existant">Non existant</T>
         </div>
+        <div data-testid="default_value_in_params">
+          <T keyName="non_existant" defaultValue="Non existant" />
+        </div>
         <div data-testid="with_tags">
           <T keyName="with_tags" params={{ b: <b />, i: <i /> }} />
         </div>
@@ -105,6 +108,15 @@ describe('T component integration', () => {
   it('works with default value', async () => {
     expect(screen.queryByTestId('non_existant')).toContainHTML('Non existant');
     expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
+  });
+
+  it('works with default value in params', async () => {
+    expect(screen.queryByTestId('default_value_in_params')).toContainHTML(
+      'Non existant'
+    );
+    expect(screen.queryByTestId('default_value_in_params')).toHaveAttribute(
+      '_tolgee'
+    );
   });
 
   it('works with tags', () => {
