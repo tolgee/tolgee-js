@@ -50,6 +50,10 @@ export const EventEmitterSelective = (
         getFallbackArray(ns).forEach((val) =>
           handlerWrapper.namespaces.add(val)
         );
+        if (ns === undefined) {
+          // subscribing to all namespaces
+          handlerWrapper.namespaces.add(undefined);
+        }
         return result;
       },
       subscribeKey: (descriptor: KeyDescriptor) => {

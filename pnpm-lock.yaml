@@ -260,7 +260,7 @@ importers:
       jest: 27.5.1_ts-node@10.9.1
       jest-environment-jsdom: 27.5.1
       socket.io-client: 2.5.0
-      ts-jest: 27.1.5_zgo3ukr7wfsrfu7w73hol4lxpy
+      ts-jest: 27.1.5_h2mjkler2cwtrz56xjx3qgassu
       ts-loader: 9.4.1_qqxisngxjbp7lstdk7boexbu3e
       ts-node: 10.9.1_p2zphemn5bk5inasc666rmprwi
       typescript: 4.8.4
@@ -698,9 +698,9 @@ importers:
   testapps/vue-i18next:
     specifiers:
       '@panter/vue-i18next': ^0.15.2
-      '@tolgee/core': ^4.8.0
+      '@tolgee/core': ^4.9.2
       '@tolgee/format-icu': ^4.8.0
-      '@tolgee/i18next': ^4.8.0
+      '@tolgee/i18next': ^4.9.3
       '@vue/cli-plugin-babel': ~5.0.8
       '@vue/cli-plugin-eslint': ~5.0.8
       '@vue/cli-service': ~5.0.8
@@ -9390,7 +9390,7 @@ packages:
   /axios/0.21.4_debug@3.2.7:
     resolution: {integrity: sha512-ut5vewkiu8jjGBdqpM44XxjuCjq9LAKeHVmoVfHVzy8eHgxxq8SbAVQNovDA8mVi05kP0Ea/n/UzcSHcTJQfNg==}
     dependencies:
-      follow-redirects: 1.15.2_debug@4.3.4
+      follow-redirects: 1.15.2
     transitivePeerDependencies:
       - debug
     dev: false
@@ -15545,6 +15545,7 @@ packages:
         optional: true
     dependencies:
       debug: 4.3.4
+    dev: true
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -27561,7 +27562,7 @@ packages:
       '@types/jest': 27.5.2
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 27.5.1
+      jest: 27.5.1_ts-node@10.9.1
       jest-util: 27.5.1
       json5: 2.2.1
       lodash.memoize: 4.1.2

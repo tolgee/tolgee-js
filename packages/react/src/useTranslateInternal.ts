@@ -34,33 +34,29 @@ export const useTranslateInternal = (
   const subscriptionRef = useRef<ListenerSelective>();
 
   const subscriptionQueue = useRef([] as KeyDescriptor[]);
+  subscriptionQueue.current = [];
 
   const subscribeToKey = (key: KeyDescriptor) => {
-    if (subscriptionRef.current) {
-      subscriptionRef.current.subscribeKey(key);
-    } else {
-      subscriptionQueue.current.push(key);
-    }
+    subscriptionQueue.current.push(key);
+    subscriptionRef.current?.subscribeKey(key);
   };
 
   const isLoaded = tolgee.isLoaded(namespaces);
 
   useEffect(() => {
-    subscriptionRef.current = tolgee.onKeyUpdate(forceRerender);
-    subscriptionQueue.current.forEach((key) => {
-      subscriptionRef.current!.subscribeKey(key);
-    });
-    subscriptionQueue.current = [];
-    return () => {
-      subscriptionRef.current!.unsubscribe();
-    };
-  }, []);
-
-  useEffect(() => {
+    const subscription = tolgee.onKeyUpdate(forceRerender);
+    subscriptionRef.current = subscription;
     if (!isLoaded) {
-      subscriptionRef.current!.subscribeNs(namespaces);
+      subscription.subscribeNs(namespaces);
     }
-  }, [namespacesJoined, isLoaded]);
+    subscriptionQueue.current.forEach((key) => {
+      subscription!.subscribeKey(key);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [isLoaded, namespacesJoined]);
 
   useEffect(() => {
     tolgee.addActiveNs(namespaces);

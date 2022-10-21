@@ -11,6 +11,7 @@ export const TolgeeProviderContext = React.createContext<
 >(undefined);
 
 type Props = {
+  children?: React.ReactNode;
   tolgee: TolgeeInstance;
   options?: ReactOptions;
   fallback?: React.ReactNode;

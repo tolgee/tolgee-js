@@ -1,8 +1,11 @@
+import { TranslateParams } from '@tolgee/web';
 import React from 'react';
 
 import { ParamsTags } from './types';
 
-export const wrapTagHandlers = (params: ParamsTags) => {
+export const wrapTagHandlers = (
+  params: TranslateParams<ParamsTags> | undefined
+) => {
   if (!params) {
     return undefined;
   }
