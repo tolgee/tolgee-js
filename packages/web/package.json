@@ -2,8 +2,8 @@
   "name": "@tolgee/web",
   "version": "4.8.0",
   "description": "Tolgee for web",
-  "main": "./dist/tolgee-web.cjs.js",
-  "module": "./dist/tolgee-web.esm.js",
+  "main": "./dist/tolgee-web.main.cjs.js",
+  "module": "./dist/tolgee-web.main.esm.js",
   "types": "./types/index.d.ts",
   "declaration": true,
   "directories": {
@@ -70,8 +70,8 @@
     "url": "git+https://github.com/tolgee/tolgee-js.git"
   },
   "exports": {
-    "require": "./dist/tolgee-web.cjs.js",
-    "import": "./dist/tolgee-web.esm.js"
+    "require": "./dist/tolgee-web.main.cjs.js",
+    "import": "./dist/tolgee-web.main.esm.js"
   },
   "keywords": [
     "localization",

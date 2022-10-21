@@ -1,7 +1,6 @@
 import { buildMain, buildMinified } from './rollup.common';
 
 export default [
-  buildMain(),
-  buildMinified('src/index.ts', 'web'),
+  ...buildMain(),
   // skipping vanilla modules, so it's faster in development mode
 ];

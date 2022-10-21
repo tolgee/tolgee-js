@@ -1,5 +1,5 @@
-import * as umd from '../../node_modules/@tolgee/web/dist/tolgee-web.umd';
-import * as commonjs from '../../node_modules/@tolgee/web/dist/tolgee-web.cjs';
+import * as umd from '../../node_modules/@tolgee/web/dist/tolgee-web.main.umd';
+import * as commonjs from '../../node_modules/@tolgee/web/dist/tolgee-web.main.cjs';
 import { TextObserver, ContextUi, BackendFetch } from '@tolgee/web';
 
 [umd, commonjs].forEach((bundle) => {
