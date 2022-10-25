@@ -150,6 +150,23 @@ describe('cache', () => {
     expect(tolgee.isFetching()).toBeFalsy();
   });
 
+  it('works with namespaces containing colon', async () => {
+    const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
+    tolgee.init({
+      language: 'en',
+      staticData: {
+        'en:common:test': () => promiseEn,
+      },
+    });
+    await tolgee.run();
+    expect(tolgee.t('test.sub', { ns: 'common:test' })).toEqual('test.sub');
+    const nsPromise = tolgee.addActiveNs('common:test');
+    expect(tolgee.isLoading('common:test')).toBeTruthy();
+    resolveEn({ test: { sub: 'Test' } });
+    await nsPromise;
+    expect(tolgee.t('test.sub', { ns: 'common:test' })).toEqual('Test');
+  });
+
   it("pending requests won't rewrite cache when reinitialized", async () => {
     const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
     tolgee = Tolgee({

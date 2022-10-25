@@ -21,7 +21,9 @@ export const flattenTranslations = (
 };
 
 export const decodeCacheKey = (key: string): CacheDescriptorInternal => {
-  const [firstPart, secondPart] = key.split(':');
+  const [firstPart, ...rest] = key.split(':');
+  // if namespaces contains ":" it won't get lost
+  const secondPart = rest.join(':');
   return { language: firstPart, namespace: secondPart || '' };
 };
 
