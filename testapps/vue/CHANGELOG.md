@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.10.0-rc.66ab647.0 (2022-10-26)
+
+
+### Features
+
+* remove multiple namespaces option at t function ([66ab647](https://github.com/tolgee/tolgee-js/commit/66ab647a22c8d144a4f9ef425a3430bc90c8d3df))
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
