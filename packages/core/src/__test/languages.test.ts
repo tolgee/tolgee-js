@@ -109,4 +109,22 @@ describe('language changes', () => {
 
     expect(() => tolgee.run()).toThrow(/'language'/);
   });
+
+  it('loads fallback languages and namespaces', async () => {
+    const loadNs = jest.fn(() => Promise.resolve(undefined as any));
+    const tolgee = Tolgee({
+      language: 'en',
+      fallbackNs: ['fallback'],
+      staticData: {
+        en: loadNs,
+        'en:fallback': loadNs,
+        cs: loadNs,
+        'cs:fallback': loadNs,
+      },
+    });
+    tolgee.run();
+    expect(loadNs).toBeCalledTimes(2);
+    await tolgee.changeLanguage('cs');
+    expect(loadNs).toBeCalledTimes(4);
+  });
 });

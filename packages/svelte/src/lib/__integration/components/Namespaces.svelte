@@ -15,9 +15,6 @@
     {$t('non_existant', 'Non existant')}
   </div>
   <div data-testid="ns_fallback">
-    {$t('hello_world', { ns: ['test', ''] })}
-  </div>
-  <div data-testid="ns_double_fallback">
-    {$t('test_english_fallback', { ns: ['test', ''] })}
+    {$t('fallback', { ns: 'invalid' })}
   </div>
 </div>

@@ -10,9 +10,9 @@ import {
   useTranslate,
   TolgeeProvider,
   Tolgee,
-  VuePlugin,
+  DevTools,
   TolgeeInstance,
-  TolgeeVue,
+  VueTolgee,
 } from '..';
 import { FormatIcu } from '@tolgee/format-icu';
 
@@ -69,7 +69,7 @@ describe('composition api', () => {
   let tolgee: TolgeeInstance;
   beforeEach(async () => {
     fetch.enableMocks();
-    tolgee = Tolgee().use(VuePlugin()).use(FormatIcu()).init({
+    tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
       apiKey: API_KEY,
       apiUrl: API_URL,
       defaultLanguage: 'cs',
@@ -81,7 +81,7 @@ describe('composition api', () => {
         tolgee,
         fallback: 'Loading...',
       },
-      global: { plugins: [[TolgeeVue, { tolgee }]] },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
 
     await waitFor(() => {

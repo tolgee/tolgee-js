@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ListenerSelective,
-  KeyDescriptor,
   TranslateProps,
   FallbackNsTranslation,
   getFallbackArray,
   getFallback,
+  KeyDescriptor,
 } from '@tolgee/web';
 
 import { useTolgeeContext } from './useTolgeeContext';

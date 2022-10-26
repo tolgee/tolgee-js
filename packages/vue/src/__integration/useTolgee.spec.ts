@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import mockTranslations from './mockTranslations';
-import { VuePlugin, useTolgee, TolgeeVue } from '..';
+import { DevTools, useTolgee, VueTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/vue';
 import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
@@ -41,7 +41,7 @@ describe('useTranslation hook integration', () => {
 
   beforeEach(async () => {
     tolgee = Tolgee()
-      .use(VuePlugin())
+      .use(DevTools())
       .use(FormatIcu())
       .init({
         apiUrl: API_URL,
@@ -63,7 +63,7 @@ describe('useTranslation hook integration', () => {
   it('updates initialLoading', async () => {
     render(TestComponent, {
       props: { events: ['initialLoad'] },
-      global: { plugins: [[TolgeeVue, { tolgee }]] },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
 
     checkState({ initialLoad: 'true' });
@@ -80,7 +80,7 @@ describe('useTranslation hook integration', () => {
   it('updates language', async () => {
     render(TestComponent, {
       props: { events: ['language'] },
-      global: { plugins: [[TolgeeVue, { tolgee }]] },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
     await runPromise;
     checkState({ language: 'cs' });
@@ -91,7 +91,7 @@ describe('useTranslation hook integration', () => {
   it('updates pending language', async () => {
     render(TestComponent, {
       props: { events: ['pendingLanguage'] },
-      global: { plugins: [[TolgeeVue, { tolgee }]] },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
     await runPromise;
     checkState({ language: 'cs', pendingLanguage: 'cs' });
@@ -104,7 +104,7 @@ describe('useTranslation hook integration', () => {
   it('updates fetching and loading', async () => {
     render(TestComponent, {
       props: { events: ['loading', 'fetching'] },
-      global: { plugins: [[TolgeeVue, { tolgee }]] },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
 
     checkState({ loading: 'true', fetching: 'true' });

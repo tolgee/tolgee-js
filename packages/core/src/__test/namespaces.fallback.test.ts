@@ -54,11 +54,11 @@ describe('namespaces fallback', () => {
     expect(tolgee.t({ key: '4', orEmpty: true })).toEqual('');
   });
 
-  test('works with override', () => {
+  test('works with default', () => {
     const tolgee = Tolgee({
       language: 'en',
       staticData: {
-        en: { '0': 'noNamespace' },
+        en: { '0': 'empty' },
         'en:first': { '1': 'first' },
         'en:second': { '2': 'second' },
       },
@@ -66,9 +66,10 @@ describe('namespaces fallback', () => {
     });
 
     expect(tolgee.t({ key: '1' })).toEqual('1');
+    expect(tolgee.t({ key: '0' })).toEqual('empty');
     expect(tolgee.t({ key: '1', ns: 'first' })).toEqual('first');
     expect(tolgee.t({ key: '0', ns: 'first' })).toEqual('0');
-    expect(tolgee.t({ key: '2', ns: 'first' })).toEqual('2');
+    expect(tolgee.t({ key: '2', ns: 'first' })).toEqual('second');
     expect(tolgee.t({ key: '2', ns: 'second' })).toEqual('second');
   });
 });

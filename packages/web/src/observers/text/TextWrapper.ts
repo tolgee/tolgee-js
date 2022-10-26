@@ -38,16 +38,13 @@ export const TextWrapper = ({
 
     const result = {
       key: '',
-      ns: undefined as string[] | undefined,
+      ns: undefined as string | undefined,
       params: {},
       defaultValue: undefined as string | undefined,
     } as KeyAndParams;
 
     const addNamespace = (ns: string) => {
-      if (!result.ns) {
-        result.ns = [];
-      }
-      (result.ns as string[]).push(ns);
+      result.ns = ns;
     };
 
     for (const char of unwrappedString) {
@@ -69,12 +66,6 @@ export const TextWrapper = ({
       if (readingState === 'KEY' && char === '|') {
         readingState = 'NAMESPACE';
         result.key = actual;
-        actual = '';
-        continue;
-      }
-      if (readingState === 'NAMESPACE' && char === '|') {
-        readingState = 'NAMESPACE';
-        addNamespace(actual);
         actual = '';
         continue;
       }

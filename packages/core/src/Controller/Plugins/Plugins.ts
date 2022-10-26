@@ -20,8 +20,8 @@ import {
   ChangeTranslationInterface,
   WrapperWrapProps,
   Unwrapped,
+  KeyAndNamespacesInternal,
 } from '../../types';
-import { getFallbackArray } from '../State/helpers';
 import { ObserverOptions } from '../State/initObserverOptions';
 
 export const PluginService = (
@@ -29,8 +29,8 @@ export const PluginService = (
   getInitialOptions: () => TolgeeOptions,
   getObserverOptions: () => ObserverOptions,
   getAvailableLanguages: () => string[] | undefined,
-  getTranslationNs: (props: TranslatePropsInternal) => string[] | string,
-  getTranslation: (props: TranslatePropsInternal) => string | undefined,
+  getTranslationNs: (props: KeyAndNamespacesInternal) => string[] | string,
+  getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface
 ) => {
   const plugins = {
@@ -51,15 +51,17 @@ export const PluginService = (
 
   const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
     const withNs: UiKeyOption[] = keysAndDefaults.map(
-      ({ key, ns, defaultValue }) => ({
-        key,
-        defaultValue,
-        ns: getFallbackArray(getTranslationNs({ key, ns, defaultValue })),
-        translation: getTranslation({
+      ({ key, ns, defaultValue }) => {
+        return {
           key,
-          ns,
-        }),
-      })
+          defaultValue,
+          ns: getTranslationNs({ key, ns }),
+          translation: getTranslation({
+            key,
+            ns,
+          }),
+        };
+      }
     );
     instances.ui?.handleElementClick(event, withNs);
   };
@@ -95,7 +97,10 @@ export const PluginService = (
   };
 
   const translate = (props: TranslatePropsInternal) => {
-    const translation = getTranslation(props);
+    const translation = getTranslation({
+      key: props.key,
+      ns: props.ns,
+    });
     return formatTranslation({ ...props, translation, formatEnabled: true });
   };
 

@@ -10,8 +10,8 @@ import {
   TolgeeProvider,
   TolgeeInstance,
   Tolgee,
-  VuePlugin,
-  TolgeeVue,
+  DevTools,
+  VueTolgee,
 } from '..';
 import { FormatIcu } from '@tolgee/format-icu';
 
@@ -85,7 +85,7 @@ describe('TolgeeProvider integration', () => {
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
 
-      tolgee = Tolgee().use(VuePlugin()).use(FormatIcu()).init({
+      tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
         apiKey: API_KEY,
         apiUrl: API_URL,
         defaultLanguage: 'cs',
@@ -97,7 +97,7 @@ describe('TolgeeProvider integration', () => {
           tolgee,
           fallback: 'Loading...',
         },
-        global: { plugins: [[TolgeeVue, { tolgee }]] },
+        global: { plugins: [[VueTolgee, { tolgee }]] },
       });
     });
 
