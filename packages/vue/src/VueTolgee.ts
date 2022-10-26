@@ -10,7 +10,7 @@ type Options = {
   tolgee?: TolgeeInstance;
 };
 
-export const TolgeeVue = {
+export const VueTolgee = {
   install(app: App, options?: Options) {
     const tolgee = options?.tolgee;
 

@@ -1,8 +1,4 @@
-import {
-  FallbackNsTranslation,
-  TranslateParams,
-  TranslateProps,
-} from '@tolgee/web';
+import { NsType, TranslateParams, TranslateProps } from '@tolgee/web';
 import { defineComponent, PropType } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 
@@ -16,7 +12,7 @@ export const T = defineComponent({
       type: Boolean,
       default: false,
     },
-    ns: { type: Object as PropType<FallbackNsTranslation> },
+    ns: { type: Object as PropType<NsType> },
   },
   setup() {
     const { t } = useTranslateInternal();

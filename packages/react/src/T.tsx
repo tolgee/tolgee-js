@@ -1,4 +1,4 @@
-import { FallbackNsTranslation, TranslateParams } from '@tolgee/web';
+import { NsType, TranslateParams } from '@tolgee/web';
 import React, { FunctionComponent } from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
 
@@ -10,7 +10,7 @@ type TProps = {
   children?: string;
   noWrap?: boolean;
   keyName?: string;
-  ns?: FallbackNsTranslation;
+  ns?: NsType;
   defaultValue?: string;
 };
 

@@ -4,6 +4,7 @@ import {
   DevCredentials,
   EventEmitterInstance,
   FallbackNsTranslation,
+  NsType,
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
@@ -95,6 +96,7 @@ export const State = (
   function getRequiredNamespaces() {
     return unique([
       ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
+      ...getFallbackArray(state.initialOptions.fallbackNs),
       ...state.activeNamespaces.keys(),
     ]);
   }
@@ -110,11 +112,12 @@ export const State = (
     ]);
   }
 
-  function getFallbackNamespaces() {
-    const defaultNs = state.initialOptions.defaultNs;
-    const fallbackNs = state.initialOptions.fallbackNs;
-    const fallbackNamespaces = typeof defaultNs === 'string' ? [defaultNs] : [];
-    return unique([...fallbackNamespaces, ...getFallbackArray(fallbackNs)]);
+  function getFallbackNs() {
+    return getFallbackArray(state.initialOptions.fallbackNs);
+  }
+
+  function getDefaultNs(ns?: NsType) {
+    return ns === undefined ? state.initialOptions.defaultNs : ns;
   }
 
   function getAvailableLanguages() {
@@ -165,7 +168,8 @@ export const State = (
     removeActiveNs,
     getRequiredNamespaces,
     getFallbackLangs,
-    getFallbackNamespaces,
+    getFallbackNs,
+    getDefaultNs,
     getAvailableLanguages,
     withDefaultNs,
     overrideCredentials,

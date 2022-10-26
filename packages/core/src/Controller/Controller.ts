@@ -4,7 +4,8 @@ import {
   FallbackNsTranslation,
   TolgeeOptions,
   TFnType,
-  TranslatePropsInternal,
+  NsType,
+  KeyAndNamespacesInternal,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from './State/helpers';
@@ -19,7 +20,7 @@ type StateServiceProps = {
 };
 
 export const Controller = ({ options }: StateServiceProps) => {
-  const events = Events(getFallbackNamespaces);
+  const events = Events(getFallbackNs, getDefaultNs);
   const fetchingObserver = ValueObserver<boolean>(
     false,
     () => cache.isFetching(),
@@ -67,6 +68,18 @@ export const Controller = ({ options }: StateServiceProps) => {
     }
   });
 
+  function getFallbackNs() {
+    return state.getFallbackNs();
+  }
+
+  function getDefaultNs(ns?: NsType) {
+    return state.getDefaultNs(ns);
+  }
+
+  function getDefaultAndFallbackNs(ns?: NsType) {
+    return [getDefaultNs(ns), ...getFallbackNs()];
+  }
+
   function changeTranslation(
     descriptor: CacheDescriptor,
     key: string,
@@ -80,10 +93,6 @@ export const Controller = ({ options }: StateServiceProps) => {
         cache.changeTranslation(keyObject, key, previousValue);
       },
     };
-  }
-
-  function getFallbackNamespaces() {
-    return state.getFallbackNamespaces();
   }
 
   function init(options: Partial<TolgeeOptions>) {
@@ -114,8 +123,7 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   function getRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
     const languages = state.getFallbackLangs(lang);
-    const namespaces =
-      ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
+    const namespaces = state.getRequiredNamespaces();
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
@@ -174,22 +182,14 @@ export const Controller = ({ options }: StateServiceProps) => {
     }
   }
 
-  function getTranslationNs({
-    key,
-    ns,
-  }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
-    const namespaces =
-      ns !== undefined ? getFallbackArray(ns) : state.getFallbackNamespaces();
+  function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
     const languages = state.getFallbackLangs();
+    const namespaces = getDefaultAndFallbackNs(ns);
     return cache.getTranslationNs(namespaces, languages, key);
   }
 
-  function getTranslation({
-    key,
-    ns,
-  }: Pick<TranslatePropsInternal, 'key' | 'ns'>) {
-    const namespaces =
-      ns !== undefined ? getFallbackArray(ns) : state.getFallbackNamespaces();
+  function getTranslation({ key, ns }: KeyAndNamespacesInternal) {
+    const namespaces = getDefaultAndFallbackNs(ns);
     const languages = state.getFallbackLangs();
     return cache.getTranslationFallback(namespaces, languages, key);
   }

@@ -1,5 +1,9 @@
 <template>
-  <select :value="language" v-on:change="changeLanguage" class="lang-selector">
+  <select
+    :value="tolgee.getLanguage()"
+    v-on:change="changeLanguage"
+    class="lang-selector"
+  >
     <option value="en">🇬🇧 English</option>
     <option value="cs">🇨🇿 Česky</option>
     <option value="fr">🇫🇷 Français</option>
@@ -7,16 +11,12 @@
   </select>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { useTolgee } from '@tolgee/vue';
-import { computed } from 'vue';
 
-const tolgee = useTolgee(['language']);
+const tolgee = useTolgee(['language', 'pendingLanguage']);
 
-// @ts-ignore
 const changeLanguage = (e) => {
   tolgee.value.changeLanguage(e.target.value);
 };
-
-const language = computed(() => tolgee.value.getLanguage());
 </script>

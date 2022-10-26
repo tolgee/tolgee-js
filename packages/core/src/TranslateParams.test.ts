@@ -5,7 +5,7 @@ const testParams: TranslateProps = {
   key: 'test',
   defaultValue: 'Test',
   noWrap: true,
-  ns: [],
+  ns: 'test',
   orEmpty: true,
   params: { yo: 'yo' },
 };
@@ -29,7 +29,7 @@ describe('getTranslateParams', () => {
   it('manages key default and options', () => {
     const result = getTranslateParams('test', 'Test', {
       noWrap: true,
-      ns: [],
+      ns: 'test',
       orEmpty: true,
       yo: 'yo',
     });

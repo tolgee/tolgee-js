@@ -4,7 +4,7 @@ import type {
   Unwrapped,
   WrapperInterface,
   WrapperWrapFunction,
-  TranslateProps,
+  TranslatePropsInternal,
 } from '@tolgee/core';
 import {
   decodeFromText,
@@ -20,7 +20,7 @@ type EncodeValue = {
   // key
   k: string;
   // namespaces
-  n: string[] | string | undefined;
+  n: string | undefined;
   // default value
   d: string | undefined;
 };
@@ -48,7 +48,7 @@ export const InvisibleWrapper = (): WrapperInterface => {
     return { text: result, keys: keysAndParams };
   };
 
-  const encodeValue = (data: TranslateProps) => {
+  const encodeValue = (data: TranslatePropsInternal) => {
     const value: EncodeValue = {
       k: data.key,
       n: data.ns,

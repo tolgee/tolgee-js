@@ -1,7 +1,7 @@
 import { FallbackNsTranslation, getFallback } from '@tolgee/core';
 import {
   ElementMeta,
-  KeyWithDefault,
+  KeyAndParams,
   NodeMeta,
   TranslationOnClick,
   ObserverOptions,
@@ -128,7 +128,7 @@ export const ElementRegistry = (
     elementStore.remove(element);
   }
 
-  function getKeyOptions(meta: ElementMeta): KeyWithDefault[] {
+  function getKeyOptions(meta: ElementMeta): KeyAndParams[] {
     const nodes = Array.from(meta.nodes.values());
     return nodes.reduce(
       (acc, curr) => [
@@ -139,11 +139,11 @@ export const ElementRegistry = (
           ns: k.ns,
         })),
       ],
-      [] as KeyWithDefault[]
+      [] as KeyAndParams[]
     );
   }
 
-  function getKeysAndDefaults(meta: ElementMeta): KeyWithDefault[] {
+  function getKeysAndDefaults(meta: ElementMeta): KeyAndParams[] {
     return getKeyOptions(meta);
   }
 

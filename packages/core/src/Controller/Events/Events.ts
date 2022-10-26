@@ -7,14 +7,17 @@ import {
   TolgeeOn,
 } from '../../types';
 
-export const Events = (getFallbackNamespaces: () => string[]) => {
+export const Events = (
+  getFallbackNs: () => string[],
+  getDefaultNs: () => string
+) => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
   const onKeyChange = EventEmitter<KeyDescriptorInternal>();
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onKeyUpdate = EventEmitterSelective(getFallbackNamespaces);
+  const onKeyUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
   const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
 

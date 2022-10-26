@@ -7,16 +7,23 @@ import {
   ListenerHandler,
   ListenerHandlerEvent,
   ListenerSelective,
+  NsType,
 } from '../../types';
+
+const DEFAULT_NS = 0;
+const FALLBACK_NS = 1;
+
+type NsListType = string | typeof DEFAULT_NS | typeof FALLBACK_NS;
 
 type HandlerWrapperType = {
   fn: ListenerHandler<undefined>;
   keys: Set<string>;
-  namespaces: Set<string | undefined>;
+  namespaces: Set<NsListType>;
 };
 
 export const EventEmitterSelective = (
-  getFallbackNamespaces: () => string[]
+  getFallbackNs: () => string[],
+  getDefaultNs: () => string
 ): EventEmitterSelectiveInstance => {
   const listeners: Set<ListenerHandler<undefined>> = new Set();
   const partialListeners: Set<HandlerWrapperType> = new Set();
@@ -37,7 +44,7 @@ export const EventEmitterSelective = (
         handler(e);
       },
       keys: new Set<string>(),
-      namespaces: new Set<string | undefined>(),
+      namespaces: new Set<NsListType>(),
     };
 
     partialListeners.add(handlerWrapper);
@@ -51,9 +58,10 @@ export const EventEmitterSelective = (
           handlerWrapper.namespaces.add(val)
         );
         if (ns === undefined) {
-          // subscribing to all namespaces
-          handlerWrapper.namespaces.add(undefined);
+          // subscribing to default ns
+          handlerWrapper.namespaces.add(DEFAULT_NS);
         }
+
         return result;
       },
       subscribeKey: (descriptor: KeyDescriptor) => {
@@ -62,10 +70,13 @@ export const EventEmitterSelective = (
         getFallbackArray(ns).forEach((val) =>
           handlerWrapper.namespaces.add(val)
         );
+
         if (ns === undefined) {
-          // subscribing to all namespaces
-          handlerWrapper.namespaces.add(undefined);
+          // subscribing to default ns
+          handlerWrapper.namespaces.add(DEFAULT_NS);
         }
+        // always subscribe to fallback namespaces
+        handlerWrapper.namespaces.add(FALLBACK_NS);
         return result;
       },
     };
@@ -74,23 +85,32 @@ export const EventEmitterSelective = (
   };
 
   const namespacesWithFallbacks = (
-    namespaces: Map<string | undefined, number> | Set<string | undefined>
+    namespaces: Map<NsListType, number> | Set<NsListType>
   ) => {
-    if (namespaces.has(undefined)) {
+    if (namespaces.has(FALLBACK_NS) || namespaces.has(DEFAULT_NS)) {
       const result = new Set(namespaces.keys());
-      result.delete(undefined);
-      getFallbackNamespaces().forEach((ns) => result.add(ns));
+      if (namespaces.has(FALLBACK_NS)) {
+        result.delete(FALLBACK_NS);
+        getFallbackNs().forEach((ns) => result.add(ns));
+      }
+      if (namespaces.has(DEFAULT_NS)) {
+        result.delete(DEFAULT_NS);
+        result.add(getDefaultNs());
+      }
       return result as Set<string>;
     }
     return namespaces as Map<string, number>;
   };
 
-  const callHandlers = (key: string | undefined, ns: string[] | undefined) => {
+  const callHandlers = (
+    key: string | undefined,
+    ns: Array<string> | undefined
+  ) => {
     partialListeners.forEach((handler) => {
       const handlerNamespaces = namespacesWithFallbacks(handler.namespaces);
       const nsMatches =
         ns === undefined ||
-        ns?.findIndex((ns) => handlerNamespaces.has(ns)) !== -1;
+        ns?.findIndex((ns) => handlerNamespaces.has(ns!)) !== -1;
       const keyMatches =
         key === undefined || handler.keys.has(key) || handler.keys.size === 0;
       if (nsMatches && keyMatches) {
@@ -109,14 +129,14 @@ export const EventEmitterSelective = (
       handler({ value: undefined as any });
     });
 
-    const namespaces = new Set<string | undefined>();
+    let namespaces: Set<NsType> | undefined = new Set<NsType>();
     let keys: Set<string> | undefined = new Set<string>();
     queue.forEach((descriptor) => {
       if (descriptor?.ns === undefined) {
-        // when no ns specified, it affets all fallback namespaces
-        namespaces.add(undefined);
-      } else {
-        descriptor.ns.forEach((ns) => namespaces.add(ns));
+        // when no ns specified, it affects all namespaces
+        namespaces = undefined;
+      } else if (namespaces !== undefined) {
+        descriptor.ns.forEach((ns) => namespaces!.add(ns));
       }
       if (descriptor?.key === undefined) {
         // when no key specified, it affects all keys
@@ -125,9 +145,9 @@ export const EventEmitterSelective = (
         keys.add(descriptor.key);
       }
     });
-    const namespacesArray = Array.from(
-      namespacesWithFallbacks(namespaces).keys()
-    );
+    const namespacesArray = namespaces
+      ? Array.from(namespaces.keys())
+      : undefined;
     (keys || [undefined]).forEach((key) => {
       callHandlers(key, namespacesArray);
     });

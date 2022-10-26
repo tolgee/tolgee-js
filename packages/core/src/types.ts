@@ -284,7 +284,7 @@ export type FallbackLanguageObject = Record<string, FallbackLanguage>;
 export type FallbackLanguageOption = FallbackLanguage | FallbackLanguageObject;
 
 export type TranslateOptions = {
-  ns?: FallbackNsTranslation;
+  ns?: NsType;
   noWrap?: boolean;
   orEmpty?: boolean;
 };
@@ -298,6 +298,11 @@ export type TranslateProps<T = DefaultParamType> = {
 export type TranslatePropsInternal = TranslateProps & {
   translation?: string;
 };
+
+export type KeyAndNamespacesInternal = Pick<
+  TranslatePropsInternal,
+  'key' | 'ns'
+>;
 
 export type TranslationValue = string | undefined | null;
 
@@ -330,7 +335,7 @@ export type KeyAndParams = {
   key: string;
   params?: TranslateParams;
   defaultValue?: string;
-  ns?: FallbackNsTranslation;
+  ns?: NsType;
 };
 
 export type Unwrapped = { text: string; keys: KeyAndParams[] };
@@ -532,16 +537,10 @@ export type UiKeyOption = {
   translation: string | undefined;
 };
 
-export type KeyWithDefault = {
-  key: string;
-  defaultValue?: string;
-  ns: FallbackNsTranslation;
-};
-
 export type TranslationOnClick = (
   event: MouseEvent,
   data: {
-    keysAndDefaults: KeyWithDefault[];
+    keysAndDefaults: KeyAndParams[];
     el: Element;
     meta: ElementMeta;
   }
@@ -558,12 +557,18 @@ export type KeyDescriptorInternal = {
 
 export type KeyDescriptor = {
   key: string;
-  ns?: string | string[];
+  ns?: NsType | undefined;
 };
 
 export type ListenerSelective = {
   unsubscribe: () => void;
-  subscribeNs: (ns: FallbackNsTranslation) => ListenerSelective;
+  /**
+   * Subscribes to namespace(s) (if not specified to defaultNs)
+   */
+  subscribeNs: (ns?: FallbackNsTranslation) => ListenerSelective;
+  /**
+   * Subscribes to namespace (if not specified to defaultNs)
+   */
   subscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
 };
 

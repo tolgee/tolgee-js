@@ -31,11 +31,13 @@ describe('useTranslations namespaces', () => {
         apiUrl: API_URL,
         language: 'cs',
         fallbackLanguage: 'en',
+        fallbackNs: 'fallback',
         staticData: {
           cs: wrapInPromise(mockTranslations.cs),
           'cs:test': wrapInPromise(mockTranslations['cs:test']),
           en: wrapInPromise(mockTranslations.en),
           'en:test': wrapInPromise(mockTranslations['en:test']),
+          'cs:fallback': wrapInPromise(mockTranslations['cs:fallback']),
         },
       });
 
@@ -68,32 +70,20 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with ns fallback', async () => {
-    expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
-      'test_english_fallback'
-    );
+    expect(screen.queryByTestId('ns_fallback')).toContainHTML('fallback');
     resolvePending();
     await waitFor(() => {
-      expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
-        'Test english fallback'
-      );
-      expect(screen.queryByTestId('ns_double_fallback')).toHaveAttribute(
-        '_tolgee'
-      );
+      expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
+      expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
     });
   });
 
   it('works with language and ns fallback', async () => {
-    expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
-      'test_english_fallback'
-    );
+    tolgee.changeLanguage('en');
     resolvePending();
     await waitFor(() => {
-      expect(screen.queryByTestId('ns_double_fallback')).toContainHTML(
-        'Test english fallback'
-      );
-      expect(screen.queryByTestId('ns_double_fallback')).toHaveAttribute(
-        '_tolgee'
-      );
+      expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
+      expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
     });
   });
 
