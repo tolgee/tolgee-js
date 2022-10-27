@@ -6,7 +6,7 @@
 </script>
 
 <TolgeeProvider tolgee={tolgee}>
-  <div slot="loading-fallback">loading</div>
+  <div slot="fallback">loading</div>
   <div slot="default">
     It's rendered!
   </div>

@@ -8,5 +8,5 @@
 
 <TolgeeProvider tolgee={tolgee}>
   <TestTranslateComponentInside />
-  <span slot="loading-fallback">Loading...</span>
+  <span slot="fallback">Loading...</span>
 </TolgeeProvider>

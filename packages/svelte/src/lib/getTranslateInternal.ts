@@ -1,4 +1,4 @@
-import { writable, type Readable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 import {
   getFallback,
@@ -52,8 +52,8 @@ const getTranslateInternal = (ns?: FallbackNsTranslation) => {
   }
 
   return {
-    t: { subscribe: t.subscribe, value: t },
-    isLoading: { subscribe: isLoading.subscribe } as Readable<boolean>,
+    t: t,
+    isLoading,
   };
 };
 

@@ -28,6 +28,6 @@
   {#if fallback}
     {fallback}
   {:else}
-    <slot name="loading-fallback" />
+    <slot name="fallback" />
   {/if}
 {/if}

@@ -15,6 +15,6 @@
 </script>
 
 <TolgeeProvider tolgee={tolgee}>
-  <div slot="loading-fallback">Loading...</div>
+  <div slot="fallback">Loading...</div>
   <slot />
 </TolgeeProvider>

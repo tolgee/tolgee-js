@@ -15,7 +15,7 @@ const getTranslate = (ns?: FallbackNsTranslation) => {
     return value(props);
   }) as Readable<TFnType>;
 
-  return { t, isLoading };
+  return { t, isLoading: isLoading as Readable<boolean> };
 };
 
 export default getTranslate;
