@@ -1,4 +1,4 @@
-import { TolgeePlugin, DevTools, BrowserExtensionPlugin } from '@tolgee/web';
+import { TolgeePlugin, DevTools } from '@tolgee/web';
 
 export const I18nextPlugin = (): TolgeePlugin => (tolgee) =>
-  tolgee.use(BrowserExtensionPlugin()).use(DevTools()).init({ ns: [] });
+  tolgee.use(DevTools()).init({ ns: [] });
