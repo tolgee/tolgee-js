@@ -8,8 +8,14 @@ import { PropType } from 'vue';
 
 const API_URL = 'http://localhost';
 
+let pending = [] as (() => void)[];
+const resolvePending = () => {
+  pending.forEach((resolve) => resolve());
+  pending = [];
+};
+
 const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => setTimeout(() => resolve(data), 10));
+  new Promise<any>((resolve) => pending.push(() => resolve(data)));
 
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
@@ -67,11 +73,13 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ initialLoad: 'true' });
+    resolvePending();
     await runPromise;
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
     tolgee.changeLanguage('en');
+    resolvePending();
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
@@ -82,10 +90,14 @@ describe('useTranslation hook integration', () => {
       props: { events: ['language'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
+    resolvePending();
     await runPromise;
     checkState({ language: 'cs' });
-    await tolgee.changeLanguage('en');
-    checkState({ language: 'en' });
+    tolgee.changeLanguage('en');
+    resolvePending();
+    await waitFor(() => {
+      checkState({ language: 'en' });
+    });
   });
 
   it('updates pending language', async () => {
@@ -93,9 +105,11 @@ describe('useTranslation hook integration', () => {
       props: { events: ['pendingLanguage'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
+    resolvePending();
     await runPromise;
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     tolgee.changeLanguage('en');
+    resolvePending();
     await waitFor(async () => {
       checkState({ language: 'cs', pendingLanguage: 'en' });
     });
@@ -108,6 +122,7 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ loading: 'true', fetching: 'true' });
+    resolvePending();
     await runPromise;
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
@@ -116,6 +131,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'false', fetching: 'true' });
     });
+    resolvePending();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });
@@ -123,6 +139,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'true', fetching: 'true' });
     });
+    resolvePending();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });

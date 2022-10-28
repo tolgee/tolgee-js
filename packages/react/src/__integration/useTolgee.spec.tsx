@@ -9,8 +9,14 @@ import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 
+let pending = [] as (() => void)[];
+const resolvePending = () => {
+  pending.forEach((resolve) => resolve());
+  pending = [];
+};
+
 const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => setTimeout(() => resolve(data), 50));
+  new Promise<any>((resolve) => pending.push(() => resolve(data)));
 
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
@@ -67,64 +73,89 @@ describe('useTranslation hook integration', () => {
   });
 
   it('updates initialLoading', async () => {
+    render(<TestComponent events={['initialLoad']} />);
+    checkState({ initialLoad: 'true' });
+
     await act(async () => {
-      render(<TestComponent events={['initialLoad']} />);
-      checkState({ initialLoad: 'true' });
+      resolvePending();
       await runPromise;
-      await waitFor(() => {
-        checkState({ initialLoad: 'false' });
-      });
+    });
+    await waitFor(() => {
+      checkState({ initialLoad: 'false' });
+    });
+    await act(async () => {
       tolgee.changeLanguage('en');
-      await waitFor(() => {
-        checkState({ initialLoad: 'false' });
-      });
+      resolvePending();
+    });
+    await waitFor(() => {
+      checkState({ initialLoad: 'false' });
     });
   });
 
   it('updates language', async () => {
     render(<TestComponent events={['language']} />);
-    await runPromise;
+    await act(async () => {
+      resolvePending();
+      await runPromise;
+    });
     checkState({ language: 'cs' });
     await act(async () => {
-      await tolgee.changeLanguage('en');
+      tolgee.changeLanguage('en');
+      resolvePending();
     });
     checkState({ language: 'en' });
   });
 
   it('updates pending language', async () => {
     render(<TestComponent events={['pendingLanguage']} />);
-    await runPromise;
+    await act(async () => {
+      resolvePending();
+      await runPromise;
+    });
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     await act(async () => {
       tolgee.changeLanguage('en');
-      await waitFor(async () => {
-        checkState({ language: 'cs', pendingLanguage: 'en' });
-      });
+      resolvePending();
+    });
+    await waitFor(async () => {
+      checkState({ language: 'cs', pendingLanguage: 'en' });
     });
   });
 
   it('updates fetching and loading', async () => {
+    render(<TestComponent events={['fetching', 'loading']} />);
+    checkState({ loading: 'true', fetching: 'true' });
+
     await act(async () => {
-      render(<TestComponent events={['fetching', 'loading']} />);
-      checkState({ loading: 'true', fetching: 'true' });
+      resolvePending();
       await runPromise;
-      await waitFor(async () => {
-        checkState({ loading: 'false', fetching: 'false' });
-      });
+    });
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
+    });
+    await act(async () => {
       tolgee.changeLanguage('en');
-      await waitFor(() => {
-        checkState({ loading: 'false', fetching: 'true' });
-      });
-      await waitFor(async () => {
-        checkState({ loading: 'false', fetching: 'false' });
-      });
+    });
+    await waitFor(() => {
+      checkState({ loading: 'false', fetching: 'true' });
+    });
+    await act(async () => {
+      resolvePending();
+    });
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
+    });
+    await act(async () => {
       tolgee.addActiveNs('test');
-      await waitFor(() => {
-        checkState({ loading: 'true', fetching: 'true' });
-      });
-      await waitFor(async () => {
-        checkState({ loading: 'false', fetching: 'false' });
-      });
+    });
+    await waitFor(() => {
+      checkState({ loading: 'true', fetching: 'true' });
+    });
+    await act(async () => {
+      resolvePending();
+    });
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
     });
   });
 });
