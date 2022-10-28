@@ -204,6 +204,7 @@ export type PluginTools = Readonly<{
   setLanguageStorage: (
     languageStorage: LanguageStorageInterface | undefined
   ) => void;
+  onPrepare: (callback: () => void) => void;
 }>;
 
 export type TolgeeEvent =

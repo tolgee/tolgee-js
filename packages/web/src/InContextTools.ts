@@ -8,18 +8,20 @@ export const InContextTools =
   (overrideCredentials?: DevCredentials): TolgeePlugin =>
   (tolgee, tools) => {
     tolgee.use(DevBackend());
-    if (!tools.hasObserver()) {
-      if (tolgee.getInitialOptions().observerType === 'text') {
-        tolgee.use(TextObserver());
-      } else {
-        tolgee.use(InvisibleObserver());
-      }
-    }
     if (!tools.hasUi()) {
       tolgee.use(ContextUi());
     }
     if (overrideCredentials) {
       tolgee.overrideCredentials(overrideCredentials);
     }
+    tools.onPrepare(() => {
+      if (!tools.hasObserver()) {
+        if (tolgee.getInitialOptions().observerType === 'text') {
+          tolgee.use(TextObserver());
+        } else {
+          tolgee.use(InvisibleObserver());
+        }
+      }
+    });
     return tolgee;
   };

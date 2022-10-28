@@ -35,6 +35,8 @@ export const PluginService = (
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface
 ) => {
+  let prepared = false;
+  let onPrepareQueue: (() => void)[] = [];
   const plugins = {
     ui: undefined as UiConstructor | undefined,
     observer: undefined as ObserverInterface | undefined,
@@ -234,8 +236,12 @@ export const PluginService = (
     instances.observer?.retranslate();
   };
 
-  function getPluginTools() {
-    return Object.freeze({
+  const onPrepare = (callback: () => void) => {
+    onPrepareQueue.push(callback);
+  };
+
+  function addPlugin(tolgeeInstance: TolgeeInstance, plugin: TolgeePlugin) {
+    const pluginTools = Object.freeze({
       setFinalFormatter,
       addFormatter,
       setObserver,
@@ -246,11 +252,12 @@ export const PluginService = (
       addBackend,
       setLanguageDetector,
       setLanguageStorage,
+      onPrepare,
     });
-  }
-
-  function addPlugin(tolgeeInstance: TolgeeInstance, plugin: TolgeePlugin) {
-    plugin(tolgeeInstance, getPluginTools());
+    plugin(tolgeeInstance, pluginTools);
+    if (prepared) {
+      prepare();
+    }
   }
 
   function formatTranslation({
@@ -314,7 +321,17 @@ export const PluginService = (
     return params.translation;
   };
 
+  function prepare() {
+    prepared = true;
+    while (onPrepareQueue.length) {
+      const queue = onPrepareQueue;
+      onPrepareQueue = [];
+      queue.forEach((callback) => callback());
+    }
+  }
+
   return Object.freeze({
+    prepare,
     addPlugin,
     formatTranslation,
     getDevBackend,

@@ -8,48 +8,28 @@ import {
 } from './types';
 
 export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
+  const prepared = false;
   const controller = Controller({
     options,
   });
-
-  // plugins are added to queue
-  // applied on `init` or `run`
-  let pluginsQueue: (() => void)[] | undefined = [];
-
-  function addPlugin(tolgee: TolgeeInstance, plugin: TolgeePlugin) {
-    if (pluginsQueue) {
-      pluginsQueue.push(() => controller.addPlugin(tolgee, plugin));
-    } else {
-      controller.addPlugin(tolgee, plugin);
-    }
-  }
-
-  function lazyInitializePlugins() {
-    if (pluginsQueue?.length) {
-      const queue = pluginsQueue;
-      // disable queue, so nested plugins are applied immediately
-      pluginsQueue = undefined;
-      queue.forEach((initializer) => initializer());
-      pluginsQueue = [];
-    }
-  }
-
-  // plugins initialization
-  // applied lazily
-  const lazilyPrepare = <T extends (...args: any[]) => any>(func: T): T => {
-    return ((...args: any[]) => {
-      lazyInitializePlugins();
-      return func(...args);
-    }) as T;
-  };
 
   // restarts tolgee while applying callback
   const withRestart = (callback: () => void) => {
     const wasRunning = controller.isRunning();
     wasRunning && controller.stop();
     callback();
-    wasRunning && lazilyPrepare(controller.run)();
+    wasRunning && controller.run();
   };
+
+  function withPrepare<T extends (...args: any[]) => any>(value: T) {
+    if (prepared) {
+      return value;
+    }
+    return ((...args: any[]) => {
+      controller.prepare();
+      return value(...args);
+    }) as T;
+  }
 
   const tolgee: TolgeeInstance = Object.freeze({
     // event listeners
@@ -63,8 +43,8 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     changeTranslation: controller.changeTranslation,
     addActiveNs: controller.addActiveNs,
     removeActiveNs: controller.removeActiveNs,
-    loadRecords: controller.loadRecords,
-    loadRecord: controller.loadRecord,
+    loadRecords: withPrepare(controller.loadRecords),
+    loadRecord: withPrepare(controller.loadRecord),
     addStaticData: controller.addStaticData,
     getRecord: controller.getRecord,
     getAllRecords: controller.getAllRecords,
@@ -73,9 +53,9 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     isLoading: controller.isLoading,
     isFetching: controller.isFetching,
     isRunning: controller.isRunning,
-    run: lazilyPrepare(controller.run),
+    run: withPrepare(controller.run),
     stop: controller.stop,
-    t: controller.t,
+    t: withPrepare(controller.t),
     highlight: controller.highlight,
     getInitialOptions: controller.getInitialOptions,
     isDev: controller.isDev,
@@ -91,16 +71,16 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     },
     use: (plugin: TolgeePlugin | undefined) => {
       if (plugin) {
-        withRestart(() => addPlugin(tolgee, plugin));
+        withRestart(() => controller.addPlugin(tolgee, plugin));
       }
       return tolgee;
     },
-    init: lazilyPrepare((options?: Partial<TolgeeOptions>) => {
+    init: (options?: Partial<TolgeeOptions>) => {
       if (options) {
         withRestart(() => controller.init(options));
       }
       return tolgee;
-    }),
+    },
   });
 
   return tolgee;
