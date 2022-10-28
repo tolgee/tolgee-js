@@ -106,9 +106,7 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   function isDev() {
     return Boolean(
-      state.getInitialOptions().apiKey &&
-        state.getInitialOptions().apiUrl &&
-        pluginService.getDevBackend()
+      state.getInitialOptions().apiKey && state.getInitialOptions().apiUrl
     );
   }
 
@@ -295,7 +293,6 @@ export const Controller = ({ options }: StateServiceProps) => {
     getTranslation,
     changeTranslation,
     addActiveNs,
-    loadRequiredRecords,
     loadRecords,
     loadRecord,
     isLoading,

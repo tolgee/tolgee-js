@@ -6,7 +6,7 @@ import {
 import { BrowserExtensionPlugin } from './BrowserExtensionPlugin/BrowserExtensionPlugin';
 
 export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
-  return TolgeeCore(options).use(BrowserExtensionPlugin());
+  return TolgeeCore(options).use(BrowserExtensionPlugin()).init();
 };
 
 export { TolgeeCore };

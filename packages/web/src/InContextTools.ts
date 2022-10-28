@@ -2,19 +2,24 @@ import type { DevCredentials, TolgeePlugin } from '@tolgee/core';
 import { InvisibleObserver } from './InvisibleObserver';
 import { DevBackend } from './DevBackend';
 import { ContextUi } from './ContextUi';
+import { TextObserver } from './TextObserver';
 
 export const InContextTools =
   (overrideCredentials?: DevCredentials): TolgeePlugin =>
   (tolgee, tools) => {
     tolgee.use(DevBackend());
     if (!tools.hasObserver()) {
-      tolgee.use(InvisibleObserver());
+      if (tolgee.getInitialOptions().observerType === 'text') {
+        tolgee.use(TextObserver());
+      } else {
+        tolgee.use(InvisibleObserver());
+      }
     }
     if (!tools.hasUi()) {
       tolgee.use(ContextUi());
     }
     if (overrideCredentials) {
-      tools.overrideCredentials(overrideCredentials);
+      tolgee.overrideCredentials(overrideCredentials);
     }
     return tolgee;
   };

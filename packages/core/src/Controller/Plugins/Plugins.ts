@@ -21,6 +21,8 @@ import {
   WrapperWrapProps,
   Unwrapped,
   KeyAndNamespacesInternal,
+  TolgeePlugin,
+  TolgeeInstance,
 } from '../../types';
 import { ObserverOptions } from '../State/initObserverOptions';
 
@@ -64,27 +66,6 @@ export const PluginService = (
       }
     );
     instances.ui?.handleElementClick(event, withNs);
-  };
-
-  const run = (isDev: boolean) => {
-    if (!instances.ui && plugins.ui) {
-      const { apiKey, apiUrl, projectId } = getInitialOptions();
-      instances.ui = new plugins.ui({
-        apiKey: apiKey!,
-        apiUrl: apiUrl!,
-        projectId,
-        highlight,
-        changeTranslation,
-      });
-    }
-    if (!instances.observer) {
-      instances.observer = plugins.observer?.({
-        translate,
-        onClick,
-        options: getObserverOptions(),
-      });
-    }
-    instances.observer?.run({ mouseHighlight: isDev });
   };
 
   const stop = () => {
@@ -138,10 +119,6 @@ export const PluginService = (
     instances.languageStorage = storage;
   };
 
-  const getLanguageStorage = () => {
-    return instances.languageStorage;
-  };
-
   const setStoredLanguage = (language: string) => {
     instances.languageStorage?.setLanguage(language);
   };
@@ -193,6 +170,27 @@ export const PluginService = (
     instances.devBackend = backend;
   };
 
+  const run = (isDev: boolean) => {
+    if (!instances.ui && plugins.ui) {
+      const { apiKey, apiUrl, projectId } = getInitialOptions();
+      instances.ui = new plugins.ui({
+        apiKey: apiKey!,
+        apiUrl: apiUrl!,
+        projectId,
+        highlight,
+        changeTranslation,
+      });
+    }
+    if (!instances.observer) {
+      instances.observer = plugins.observer?.({
+        translate,
+        onClick,
+        options: getObserverOptions(),
+      });
+    }
+    instances.observer?.run({ mouseHighlight: isDev });
+  };
+
   const getDevBackend = () => {
     return instances.devBackend;
   };
@@ -225,7 +223,37 @@ export const PluginService = (
     return undefined;
   };
 
-  const formatTranslation = ({
+  const unwrap = (text: string): Unwrapped => {
+    if (instances.observer) {
+      return instances.observer?.unwrap(text);
+    }
+    return { text, keys: [] };
+  };
+
+  const retranslate = () => {
+    instances.observer?.retranslate();
+  };
+
+  function getPluginTools() {
+    return Object.freeze({
+      setFinalFormatter,
+      addFormatter,
+      setObserver,
+      hasObserver,
+      setUi,
+      hasUi,
+      setDevBackend,
+      addBackend,
+      setLanguageDetector,
+      setLanguageStorage,
+    });
+  }
+
+  function addPlugin(tolgeeInstance: TolgeeInstance, plugin: TolgeePlugin) {
+    plugin(tolgeeInstance, getPluginTools());
+  }
+
+  function formatTranslation({
     key,
     translation,
     defaultValue,
@@ -234,7 +262,7 @@ export const PluginService = (
     orEmpty,
     ns,
     formatEnabled,
-  }: TranslatePropsInternal & { formatEnabled?: boolean }) => {
+  }: TranslatePropsInternal & { formatEnabled?: boolean }) {
     const formattableTranslation = translation || defaultValue;
     let result = formattableTranslation || (orEmpty ? '' : key);
     if (instances.observer && !noWrap) {
@@ -273,7 +301,11 @@ export const PluginService = (
       });
     }
     return result;
-  };
+  }
+
+  function hasDevBackend() {
+    return Boolean(getDevBackend());
+  }
 
   const wrap = (params: WrapperWrapProps) => {
     if (instances.observer) {
@@ -282,42 +314,22 @@ export const PluginService = (
     return params.translation;
   };
 
-  const unwrap = (text: string): Unwrapped => {
-    if (instances.observer) {
-      return instances.observer?.unwrap(text);
-    }
-    return { text, keys: [] };
-  };
-
-  const retranslate = () => {
-    instances.observer?.retranslate();
-  };
-
   return Object.freeze({
-    setFinalFormatter,
-    addFormatter,
+    addPlugin,
     formatTranslation,
-    setObserver,
-    hasObserver,
-    setUi,
-    hasUi,
-    addBackend,
-    setDevBackend,
     getDevBackend,
     getBackendRecord,
     getBackendDevRecord,
-    setLanguageDetector,
     getLanguageDetector,
-    setLanguageStorage,
-    getLanguageStorage,
     getInitialLanguage,
     setStoredLanguage,
     run,
     stop,
     retranslate,
     highlight,
-    wrap,
     unwrap,
+    wrap,
+    hasDevBackend,
   });
 };
 

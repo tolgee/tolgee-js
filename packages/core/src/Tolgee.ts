@@ -4,6 +4,7 @@ import {
   TolgeeInstance,
   TolgeePlugin,
   ObserverOptions,
+  DevCredentials,
 } from './types';
 
 export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
@@ -11,25 +12,43 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     options,
   });
 
-  const pluginTools = Object.freeze({
-    setFinalFormatter: controller.setFinalFormatter,
-    addFormatter: controller.addFormatter,
-    setObserver: controller.setObserver,
-    hasObserver: controller.hasObserver,
-    setUi: controller.setUi,
-    hasUi: controller.hasUi,
-    setDevBackend: controller.setDevBackend,
-    addBackend: controller.addBackend,
-    setLanguageDetector: controller.setLanguageDetector,
-    setLanguageStorage: controller.setLanguageStorage,
-    overrideCredentials: controller.overrideCredentials,
-  });
+  // plugins are added to queue
+  // applied on `init` or `run`
+  let pluginsQueue: (() => void)[] | undefined = [];
 
+  function addPlugin(tolgee: TolgeeInstance, plugin: TolgeePlugin) {
+    if (pluginsQueue) {
+      pluginsQueue.push(() => controller.addPlugin(tolgee, plugin));
+    } else {
+      controller.addPlugin(tolgee, plugin);
+    }
+  }
+
+  function lazyInitializePlugins() {
+    if (pluginsQueue?.length) {
+      const queue = pluginsQueue;
+      // disable queue, so nested plugins are applied immediately
+      pluginsQueue = undefined;
+      queue.forEach((initializer) => initializer());
+      pluginsQueue = [];
+    }
+  }
+
+  // plugins initialization
+  // applied lazily
+  const lazilyPrepare = <T extends (...args: any[]) => any>(func: T): T => {
+    return ((...args: any[]) => {
+      lazyInitializePlugins();
+      return func(...args);
+    }) as T;
+  };
+
+  // restarts tolgee while applying callback
   const withRestart = (callback: () => void) => {
     const wasRunning = controller.isRunning();
     wasRunning && controller.stop();
     callback();
-    wasRunning && controller.run();
+    wasRunning && lazilyPrepare(controller.run)();
   };
 
   const tolgee: TolgeeInstance = Object.freeze({
@@ -54,7 +73,7 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     isLoading: controller.isLoading,
     isFetching: controller.isFetching,
     isRunning: controller.isRunning,
-    run: controller.run,
+    run: lazilyPrepare(controller.run),
     stop: controller.stop,
     t: controller.t,
     highlight: controller.highlight,
@@ -62,7 +81,9 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     isDev: controller.isDev,
     wrap: controller.wrap,
     unwrap: controller.unwrap,
-
+    overrideCredentials(credentials: DevCredentials) {
+      withRestart(() => controller.overrideCredentials(credentials));
+    },
     // plugins
     setObserverOptions: (options: Partial<ObserverOptions>) => {
       controller.setObserverOptions(options);
@@ -70,14 +91,16 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     },
     use: (plugin: TolgeePlugin | undefined) => {
       if (plugin) {
-        withRestart(() => plugin(tolgee, pluginTools));
+        withRestart(() => addPlugin(tolgee, plugin));
       }
       return tolgee;
     },
-    init: (options: Partial<TolgeeOptions>) => {
-      withRestart(() => controller.init(options));
+    init: lazilyPrepare((options?: Partial<TolgeeOptions>) => {
+      if (options) {
+        withRestart(() => controller.init(options));
+      }
       return tolgee;
-    },
+    }),
   });
 
   return tolgee;

@@ -72,6 +72,11 @@ export type TolgeeOptions = {
    * ```
    */
   staticData?: TolgeeStaticData;
+
+  /**
+   * Type of observer loaded by DevTools or InContextTools (Default: 'invisible')
+   */
+  observerType: 'invisible' | 'text';
 };
 
 export type State = {
@@ -85,6 +90,7 @@ export type State = {
 
 const defaultValues: TolgeeOptions = {
   defaultNs: '',
+  observerType: 'invisible',
 };
 
 export const initState = (

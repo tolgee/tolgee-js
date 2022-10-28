@@ -149,7 +149,7 @@ export type TolgeeInstance = Readonly<{
    *
    * When called in running state, tolgee stops and runs again.
    */
-  init: (options: Partial<TolgeeOptions>) => TolgeeInstance;
+  init: (options?: Partial<TolgeeOptions>) => TolgeeInstance;
 
   /**
    * Changes internal state to running: true and loads initial files.
@@ -182,6 +182,11 @@ export type TolgeeInstance = Readonly<{
    * Options which will be passed to observer
    */
   setObserverOptions: (options: Partial<ObserverOptions>) => TolgeeInstance;
+
+  /**
+   * Override creadentials passed on initialization
+   */
+  overrideCredentials: (credentials: DevCredentials) => void;
 }>;
 
 export type PluginTools = Readonly<{
@@ -199,7 +204,6 @@ export type PluginTools = Readonly<{
   setLanguageStorage: (
     languageStorage: LanguageStorageInterface | undefined
   ) => void;
-  overrideCredentials: (credentials: DevCredentials) => void;
 }>;
 
 export type TolgeeEvent =
