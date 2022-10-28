@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.9.4-rc.bc0a538.0 (2022-10-28)
+
+**Note:** Version bump only for package root
+
+
+
+
+
 ## [4.9.3](https://github.com/tolgee/tolgee-js/compare/v4.9.2...v4.9.3) (2022-10-18)
 
 
