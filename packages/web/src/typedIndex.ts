@@ -14,5 +14,3 @@ export {
 
 export * from './types';
 export * from '@tolgee/core';
-// Tolgee with injected browser extension plugin
-export { Tolgee, TolgeeCore } from './WebTolgee';

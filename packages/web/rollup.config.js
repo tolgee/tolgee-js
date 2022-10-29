@@ -9,7 +9,6 @@ export default [
   ...buildVanilla('src/InvisibleObserver.ts', 'invisible-observer'),
   ...buildVanilla('src/LanguageStorage.ts', 'language-storage'),
   ...buildVanilla('src/LanguageDetector.ts', 'language-detector'),
-  ...buildVanilla('src/WebTolgee.ts', 'web-tolgee'),
   ...buildVanilla('src/BackendFetch.ts', 'backend-fetch'),
   ...buildVanilla('src/BackendFetch.ts', 'backend-fetch'),
   ...buildVanilla('src/LanguageDetector.ts', 'language-detector'),

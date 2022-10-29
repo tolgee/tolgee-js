@@ -4,13 +4,12 @@ import {
   KeyAndParams,
   NodeMeta,
   TranslationOnClick,
-  ObserverOptions,
 } from '@tolgee/core';
 import {
   TOLGEE_RESTRICT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
 } from '../../constants';
-import { TolgeeElement } from '../../types';
+import { TolgeeElement, ObserverOptions } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';

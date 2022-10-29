@@ -1,15 +1,17 @@
 import { waitFor, screen } from '@testing-library/dom';
 import { Tolgee, TolgeeInstance } from '@tolgee/core';
 import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
-import { InvisibleObserver, TextObserver } from '../typedIndex';
+import { InContextTools } from '../InContextTools';
 
-['invisible', 'text'].forEach((name) => {
-  describe(`observer ${name}`, () => {
+(['invisible', 'text'] as const).forEach((type) => {
+  describe(`observer ${type}`, () => {
     let tolgee: TolgeeInstance;
+
     beforeEach(() => {
-      tolgee = Tolgee()
-        .use(name === 'text' ? TextObserver() : InvisibleObserver())
-        .init({ language: 'en', staticData: { en: { test: 'Hello world' } } });
+      tolgee = Tolgee().init({
+        language: 'en',
+        staticData: { en: { test: 'Hello world' } },
+      });
     });
 
     afterEach(() => {
@@ -17,9 +19,12 @@ import { InvisibleObserver, TextObserver } from '../typedIndex';
     });
 
     it('pass to parent', async () => {
-      tolgee.setObserverOptions({
-        passToParent: ['b'],
-      });
+      tolgee.use(
+        InContextTools({
+          type,
+          passToParent: ['b'],
+        })
+      );
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -33,9 +38,12 @@ import { InvisibleObserver, TextObserver } from '../typedIndex';
     });
 
     it('pass to parent function', async () => {
-      tolgee.setObserverOptions({
-        passToParent: (e) => e.tagName.toLowerCase() === 'b',
-      });
+      tolgee.use(
+        InContextTools({
+          type,
+          passToParent: (e) => e.tagName.toLowerCase() === 'b',
+        })
+      );
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -55,9 +63,12 @@ import { InvisibleObserver, TextObserver } from '../typedIndex';
     });
 
     it('restricted elements', async () => {
-      tolgee.setObserverOptions({
-        restrictedElements: ['main'],
-      });
+      tolgee.use(
+        InContextTools({
+          type,
+          restrictedElements: ['main'],
+        })
+      );
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -75,12 +86,16 @@ import { InvisibleObserver, TextObserver } from '../typedIndex';
     });
 
     it('tag attributes', async () => {
-      tolgee.setObserverOptions({
-        tagAttributes: {
-          main: ['test'],
-          '*': ['title'],
-        },
-      });
+      tolgee.use(
+        InContextTools({
+          type,
+          tagAttributes: {
+            main: ['test'],
+            '*': ['title'],
+          },
+        })
+      );
+
       await tolgee.run();
       document.body.innerHTML = `
         <div>

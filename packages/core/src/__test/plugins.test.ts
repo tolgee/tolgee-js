@@ -6,15 +6,11 @@ import {
   ObserverInterface,
   TolgeePlugin,
   WrapperWrapFunction,
-  ObserverOptions,
 } from '../types';
 
 const testObserver =
-  (
-    outputNotFormattable: boolean,
-    onCreate?: (options: ObserverOptions) => void
-  ): ObserverInterface =>
-  ({ options }) => {
+  (outputNotFormattable: boolean): ObserverInterface =>
+  () => {
     const wrap: WrapperWrapFunction = ({ key, translation }) => {
       return `${key}|${translation}`;
     };
@@ -27,8 +23,6 @@ const testObserver =
     const run = () => {};
 
     const retranslate = () => {};
-
-    onCreate?.(options);
 
     return Object.freeze({
       wrap,
@@ -60,12 +54,9 @@ const testFinalFormatter: FinalFormatterInterface = {
 };
 
 const observerPlugin =
-  (
-    outputNotFormattable: boolean,
-    onCreate?: (options: ObserverOptions) => void
-  ): TolgeePlugin =>
+  (outputNotFormattable: boolean): TolgeePlugin =>
   (tolgee, tools) => {
-    tools.setObserver(testObserver(outputNotFormattable, onCreate));
+    tools.setObserver(testObserver(outputNotFormattable));
     return tolgee;
   };
 
@@ -114,23 +105,5 @@ describe('plugins', () => {
     expect(tolgee.t({ key: 'hello' })).toEqual('world');
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
-  });
-
-  it('observer recieves options', () => {
-    const tolgee = Tolgee({
-      language: 'en',
-      staticData: { en: { hello: 'world' } },
-    });
-    const restrictedElements = ['test'];
-    tolgee.setObserverOptions({
-      restrictedElements,
-    });
-    const onCreate = jest.fn();
-    tolgee.use(observerPlugin(false, onCreate));
-    tolgee.run();
-    expect(onCreate).toBeCalledTimes(1);
-    expect(onCreate.mock.calls[0][0].restrictedElements).toEqual(
-      restrictedElements
-    );
   });
 });

@@ -24,12 +24,10 @@ import {
   TolgeePlugin,
   TolgeeInstance,
 } from '../../types';
-import { ObserverOptions } from '../State/initObserverOptions';
 
 export const PluginService = (
   getLanguage: () => string | undefined,
   getInitialOptions: () => TolgeeOptions,
-  getObserverOptions: () => ObserverOptions,
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[] | string,
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
@@ -187,7 +185,6 @@ export const PluginService = (
       instances.observer = plugins.observer?.({
         translate,
         onClick,
-        options: getObserverOptions(),
       });
     }
     instances.observer?.run({ mouseHighlight: isDev });

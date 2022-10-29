@@ -2,17 +2,12 @@ import type {
   TolgeeOptions,
   TolgeeStaticData,
 } from './Controller/State/initState';
-import type { ObserverOptions } from './Controller/State/initObserverOptions';
 
 export type {
   State,
   TolgeeOptions,
   TolgeeStaticData,
 } from './Controller/State/initState';
-export type {
-  ObserverOptions,
-  ModifierKey,
-} from './Controller/State/initObserverOptions';
 
 export type { EventEmitterInstance } from './Controller/Events/EventEmitter';
 export type { EventEmitterSelectiveInstance } from './Controller/Events/EventEmitterSelective';
@@ -177,11 +172,6 @@ export type TolgeeInstance = Readonly<{
    * Unwrap translation
    */
   unwrap: (text: string) => Unwrapped;
-
-  /**
-   * Options which will be passed to observer
-   */
-  setObserverOptions: (options: Partial<ObserverOptions>) => TolgeeInstance;
 
   /**
    * Override creadentials passed on initialization
@@ -399,7 +389,6 @@ export type FinalFormatterInterface = {
 export type ObserverProps = {
   translate: (params: TranslatePropsInternal) => string;
   onClick: TranslationOnClick;
-  options: ObserverOptions;
 };
 
 export type Highlighter = {

@@ -3,7 +3,6 @@ import {
   TolgeeOptions,
   TolgeeInstance,
   TolgeePlugin,
-  ObserverOptions,
   DevCredentials,
 } from './types';
 
@@ -64,11 +63,7 @@ export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
     overrideCredentials(credentials: DevCredentials) {
       withRestart(() => controller.overrideCredentials(credentials));
     },
-    // plugins
-    setObserverOptions: (options: Partial<ObserverOptions>) => {
-      controller.setObserverOptions(options);
-      return tolgee;
-    },
+
     use: (plugin: TolgeePlugin | undefined) => {
       if (plugin) {
         withRestart(() => controller.addPlugin(tolgee, plugin));

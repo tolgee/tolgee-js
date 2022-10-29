@@ -41,7 +41,6 @@ export const Controller = ({ options }: StateServiceProps) => {
   const pluginService = PluginService(
     state.getLanguage,
     state.getInitialOptions,
-    state.getObserverOptions,
     state.getAvailableLanguages,
     getTranslationNs,
     getTranslation,

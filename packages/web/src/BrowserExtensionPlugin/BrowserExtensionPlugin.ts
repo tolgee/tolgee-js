@@ -1,4 +1,5 @@
 import type { TolgeePlugin } from '@tolgee/core';
+import { ObserverOptions } from '../types';
 import { Handshaker } from '../tools/extension';
 import { loadInContextLib } from './loadInContextLib';
 
@@ -41,58 +42,62 @@ export type BrowserExtensionProps = {
   noReload?: boolean;
 };
 
-let BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => tolgee;
+let BrowserExtensionPlugin: (
+  options?: Partial<ObserverOptions>
+) => TolgeePlugin = () => (tolgee) => tolgee;
 
 if (typeof window !== 'undefined') {
-  BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
-    const handshaker = Handshaker();
-    const getConfig = () =>
-      ({
-        // prevent extension downloading ui library
-        uiPresent: true,
-        uiVersion: undefined,
-        // tolgee mode
-        mode: tolgee.isDev() ? 'development' : 'production',
-        // pass credentials
-        config: {
-          apiUrl: tolgee.getInitialOptions().apiUrl || '',
-          apiKey: tolgee.getInitialOptions().apiKey || '',
-        },
-      } as const);
+  BrowserExtensionPlugin =
+    (options?: Partial<ObserverOptions>): TolgeePlugin =>
+    (tolgee) => {
+      const handshaker = Handshaker();
+      const getConfig = () =>
+        ({
+          // prevent extension downloading ui library
+          uiPresent: true,
+          uiVersion: undefined,
+          // tolgee mode
+          mode: tolgee.isDev() ? 'development' : 'production',
+          // pass credentials
+          config: {
+            apiUrl: tolgee.getInitialOptions().apiUrl || '',
+            apiKey: tolgee.getInitialOptions().apiKey || '',
+          },
+        } as const);
 
-    const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
-      const InContextTools = await loadInContextLib(
-        process.env.TOLGEE_UI_VERSION || 'rc'
-      );
-      return (tolgee) => {
-        const credentials = getCredentials()!;
-        tolgee.use(InContextTools(credentials));
-        return tolgee;
+      const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
+        const InContextTools = await loadInContextLib(
+          process.env.TOLGEE_UI_VERSION || 'rc'
+        );
+        return (tolgee) => {
+          const credentials = getCredentials()!;
+          tolgee.use(InContextTools({ credentials, ...options }));
+          return tolgee;
+        };
       };
-    };
 
-    tolgee.on('running', ({ value: isRunning }) => {
-      if (isRunning) {
-        onDocumentReady(() => {
-          handshaker.update(getConfig()).catch(clearSessionStorage);
-        });
+      tolgee.on('running', ({ value: isRunning }) => {
+        if (isRunning) {
+          onDocumentReady(() => {
+            handshaker.update(getConfig()).catch(clearSessionStorage);
+          });
+        }
+      });
+
+      const credentials = getCredentials();
+      if (credentials) {
+        getTolgeePlugin()
+          .then((plugin) => {
+            tolgee.use(plugin);
+          })
+          .catch(() => {
+            // eslint-disable-next-line no-console
+            console.error('Tolgee: Failed to load in-context tools');
+          });
       }
-    });
 
-    const credentials = getCredentials();
-    if (credentials) {
-      getTolgeePlugin()
-        .then((plugin) => {
-          tolgee.use(plugin);
-        })
-        .catch(() => {
-          // eslint-disable-next-line no-console
-          console.error('Tolgee: Failed to load in-context tools');
-        });
-    }
-
-    return tolgee;
-  };
+      return tolgee;
+    };
 }
 
 export { BrowserExtensionPlugin };

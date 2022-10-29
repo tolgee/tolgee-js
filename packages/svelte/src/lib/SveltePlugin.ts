@@ -1,5 +1,11 @@
-import { type TolgeePlugin, DevTools } from '@tolgee/web';
+import {
+  type TolgeePlugin,
+  DevTools,
+  type InContextOptions,
+} from '@tolgee/web';
 import { GlobalContextPlugin } from './GlobalContextPlugin';
 
-export const SveltePlugin = (): TolgeePlugin => (tolgee) =>
-  tolgee.use(DevTools()).use(GlobalContextPlugin());
+export const SveltePlugin =
+  (options?: InContextOptions): TolgeePlugin =>
+  (tolgee) =>
+    tolgee.use(DevTools(options)).use(GlobalContextPlugin());

@@ -1,3 +1,20 @@
+export {
+  ObserverOptions,
+  ModifierKey,
+} from './observers/general/initObserverOptions';
+
+import type {
+  BackendGetRecordProps,
+  DevCredentials,
+  TreeTranslationsData,
+} from '@tolgee/core';
+import { ObserverOptions } from './observers/general/initObserverOptions';
+
+export type InContextOptions = Partial<ObserverOptions> & {
+  credentials?: DevCredentials;
+  type?: 'text' | 'invisible';
+};
+
 export type NodeLock = {
   locked?: boolean;
 };
@@ -6,8 +23,6 @@ export type TolgeeElement = Element &
   ElementCSSInlineStyle & {
     _tolgee?: boolean;
   };
-
-import type { BackendGetRecordProps, TreeTranslationsData } from '@tolgee/core';
 
 export type BackendOptions = Omit<RequestInit, 'headers'> & {
   /**

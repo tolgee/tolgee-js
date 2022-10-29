@@ -8,7 +8,6 @@ import {
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
 import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
-import { initObserverOptions, ObserverOptions } from './initObserverOptions';
 import { initState, TolgeeOptions } from './initState';
 
 export const State = (
@@ -17,7 +16,6 @@ export const State = (
   onRunningChange: EventEmitterInstance<boolean>
 ) => {
   let state = initState();
-  let observerOptions = initObserverOptions();
   let devCredentials: DevCredentials = undefined;
 
   function init(options?: Partial<TolgeeOptions>) {
@@ -145,14 +143,6 @@ export const State = (
     devCredentials = credentials;
   }
 
-  function setObserverOptions(options: Partial<ObserverOptions>) {
-    observerOptions = initObserverOptions(options);
-  }
-
-  function getObserverOptions() {
-    return observerOptions;
-  }
-
   return Object.freeze({
     init,
     isRunning,
@@ -173,7 +163,5 @@ export const State = (
     getAvailableLanguages,
     withDefaultNs,
     overrideCredentials,
-    setObserverOptions,
-    getObserverOptions,
   });
 };

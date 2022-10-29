@@ -1,4 +1,9 @@
-import { Tolgee, TextObserver, BackendFetch } from '@tolgee/web';
+import {
+  Tolgee,
+  BackendFetch,
+  InContextTools,
+  TextObserver,
+} from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
 document.body = document.createElement('body');
@@ -11,19 +16,14 @@ initialTextsToTranslate.innerHTML =
 document.body.append(initialTextsToTranslate);
 
 const tolgee = Tolgee()
-  .use(TextObserver())
+  .use(TextObserver({ inputPrefix: '{{', inputSuffix: '}}' }))
   .use(FormatIcu())
   .use(BackendFetch({ prefix: 'i18n' }))
-  .setObserverOptions({
-    inputPrefix: '{{',
-    inputSuffix: '}}',
-  })
   .init({
-    currentLanguage: 'cs',
+    language: 'cs',
     fallbackLanguage: 'en',
   });
 
-tolgee.changeLanguage('cs');
 tolgee.on('keyUpdate', () => {
   refresh();
 });

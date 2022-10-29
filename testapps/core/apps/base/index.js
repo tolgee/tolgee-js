@@ -1,15 +1,19 @@
 import * as umd from '../../node_modules/@tolgee/web/dist/tolgee-web.main.umd';
 import * as commonjs from '../../node_modules/@tolgee/web/dist/tolgee-web.main.cjs';
-import { TextObserver, ContextUi, BackendFetch } from '@tolgee/web';
+import {
+  TextObserver,
+  ContextUi,
+  BackendFetch,
+  InContextTools,
+} from '@tolgee/web';
 
 [umd, commonjs].forEach((bundle) => {
   const bundleDivElement = document.createElement('div');
 
   const tolgee = bundle
     .Tolgee()
+    .use(InContextTools({ type: 'text' }))
     .use(BackendFetch({ prefix: 'i18n' }))
-    .use(TextObserver())
-    .use(ContextUi())
     .init({
       defaultLanguage: 'en',
       targetElement: bundleDivElement,
