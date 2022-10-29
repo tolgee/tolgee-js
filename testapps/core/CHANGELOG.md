@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.10.0-rc.801e910.0 (2022-10-29)
+
+
+### Features
+
+* reorganize plugins logic and remove need for setObserverOptions ([801e910](https://github.com/tolgee/tolgee-js/commit/801e910d5b0522ef4460a786ef559db8c3db8878))
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/core-testapp

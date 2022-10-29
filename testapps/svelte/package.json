@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte-testapp",
-  "version": "4.9.2",
+  "version": "4.10.0-rc.801e910.0",
   "private": true,
   "scripts": {
     "dev": "npm run develop",
@@ -18,8 +18,8 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "1.0.0-next.39",
     "@sveltejs/kit": "1.0.0-next.429",
-    "@tolgee/format-icu": "^4.8.0",
-    "@tolgee/svelte": "^4.8.0",
+    "@tolgee/format-icu": "4.10.0-rc.801e910.0",
+    "@tolgee/svelte": "4.10.0-rc.801e910.0",
     "@tsconfig/svelte": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
