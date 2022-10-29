@@ -66,12 +66,12 @@ if (typeof window !== 'undefined') {
         } as const);
 
       const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
-        const InContextTools = await loadInContextLib(
+        const InContextProduction = await loadInContextLib(
           process.env.TOLGEE_UI_VERSION || 'rc'
         );
         return (tolgee) => {
           const credentials = getCredentials()!;
-          tolgee.use(InContextTools({ credentials, ...options }));
+          tolgee.use(InContextProduction({ credentials, ...options }));
           return tolgee;
         };
       };
@@ -90,9 +90,11 @@ if (typeof window !== 'undefined') {
           .then((plugin) => {
             tolgee.use(plugin);
           })
-          .catch(() => {
+          .catch((e) => {
             // eslint-disable-next-line no-console
             console.error('Tolgee: Failed to load in-context tools');
+            // eslint-disable-next-line no-console
+            console.error(e);
           });
       }
 

@@ -5,6 +5,7 @@ export default [
   // separately built modules intended for vanilla usage
   ...buildVanilla('src/index.ts', 'web'),
   ...buildVanilla('src/InContextTools.ts', 'in-context-tools'),
+  ...buildVanilla('src/InContextProduction.ts', 'in-context-production'),
   ...buildVanilla('src/TextObserver.ts', 'text-observer'),
   ...buildVanilla('src/InvisibleObserver.ts', 'invisible-observer'),
   ...buildVanilla('src/LanguageStorage.ts', 'language-storage'),
