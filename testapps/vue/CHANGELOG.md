@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.9.4-rc.b877d55.0 (2022-10-29)
+
+
+### Bug Fixes
+
+* plugins recursion ([b877d55](https://github.com/tolgee/tolgee-js/commit/b877d552dfad52f329321425a4b57a33bb18a823))
+
+
+
+
+
 ## [4.9.2](https://github.com/tolgee/tolgee-js/compare/v4.9.1...v4.9.2) (2022-09-07)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
