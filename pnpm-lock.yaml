@@ -198,7 +198,7 @@ importers:
       '@angular/router': ~13.1.3
       '@testing-library/angular': ^10.11.1
       '@testing-library/jest-dom': 5.16.4
-      '@tolgee/core': ^4.9.2
+      '@tolgee/web': ^4.9.2
       '@types/jasmine': ~3.10.3
       '@types/jasminewd2': ~2.0.3
       '@types/jest': 27.5.0
@@ -224,7 +224,7 @@ importers:
       '@angular/platform-browser': 13.1.3_i677nmmanarre66im33nqxl4de
       '@angular/platform-browser-dynamic': 13.3.11_qvskiyprvflnvkqf2pu3tr4u7i
       '@angular/router': 13.1.3_i3bz7rxcxi5pj533wakiahpxvi
-      '@tolgee/core': link:../core
+      '@tolgee/web': link:../web
       rxjs: 7.5.7
       tslib: 2.4.0
       zone.js: 0.11.8
@@ -7465,7 +7465,7 @@ packages:
       '@parcel/diagnostic': 2.6.2
       '@parcel/fs': 2.6.2_@parcel+core@2.6.2
       '@parcel/logger': 2.6.2
-      '@parcel/types': 2.6.2
+      '@parcel/types': 2.6.2_@parcel+core@2.6.2
       '@parcel/utils': 2.6.2
       '@parcel/workers': 2.6.2_@parcel+core@2.6.2
       semver: 5.7.1
@@ -7560,18 +7560,6 @@ packages:
       nullthrows: 1.1.1
       regenerator-runtime: 0.13.9
       semver: 5.7.1
-    dev: false
-
-  /@parcel/types/2.6.2:
-    resolution: {integrity: sha512-MV8BFpCIs2jMUvK2RHqzkoiuOQ//JIbrD1zocA2YRW3zuPL/iABvbAABJoXpoPCKikVWOoCWASgBfWQo26VvJQ==}
-    dependencies:
-      '@parcel/cache': 2.6.2_@parcel+core@2.6.2
-      '@parcel/diagnostic': 2.6.2
-      '@parcel/fs': 2.6.2_@parcel+core@2.6.2
-      '@parcel/package-manager': 2.6.2_@parcel+core@2.6.2
-      '@parcel/source-map': 2.1.1
-      '@parcel/workers': 2.6.2_@parcel+core@2.6.2
-      utility-types: 3.10.0
     dev: false
 
   /@parcel/types/2.6.2_@parcel+core@2.6.2:
