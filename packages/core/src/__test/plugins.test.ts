@@ -4,9 +4,9 @@ import {
   FormatterInterface,
   FormatterInterfaceFormatParams,
   ObserverInterface,
-  TolgeePlugin,
   WrapperWrapFunction,
 } from '../types';
+import { TolgeePlugin } from '../types/plugin';
 
 const testObserver =
   (outputNotFormattable: boolean): ObserverInterface =>

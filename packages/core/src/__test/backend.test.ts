@@ -1,5 +1,6 @@
 import { Tolgee } from '../Tolgee';
-import { BackendInterface, TolgeePlugin } from '../types';
+import { BackendInterface } from '../types';
+import { TolgeePlugin } from '../types/plugin';
 
 const data = {
   en: {

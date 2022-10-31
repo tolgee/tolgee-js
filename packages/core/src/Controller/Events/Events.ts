@@ -4,8 +4,8 @@ import {
   CacheDescriptorWithKey,
   KeyDescriptorInternal,
   ListenerHandler,
-  TolgeeOn,
 } from '../../types';
+import { TolgeeOn } from '../../types/event';
 
 export const Events = (
   getFallbackNs: () => string[],
@@ -30,25 +30,21 @@ export const Events = (
   const on: TolgeeOn = (event, handler): any => {
     switch (event) {
       case 'pendingLanguage':
-        return onPendingLanguageChange.listen(
-          handler as ListenerHandler<string>
-        );
+        return onPendingLanguageChange.listen(handler as any);
       case 'language':
-        return onLanguageChange.listen(handler as ListenerHandler<string>);
+        return onLanguageChange.listen(handler as any);
       case 'loading':
-        return onLoadingChange.listen(handler as ListenerHandler<boolean>);
+        return onLoadingChange.listen(handler as any);
       case 'fetching':
-        return onFetchingChange.listen(handler as ListenerHandler<boolean>);
+        return onFetchingChange.listen(handler as any);
       case 'initialLoad':
-        return onInitialLoaded.listen(handler as ListenerHandler<void>);
+        return onInitialLoaded.listen(handler as any);
       case 'running':
-        return onRunningChange.listen(handler as ListenerHandler<boolean>);
+        return onRunningChange.listen(handler as any);
       case 'cache':
-        return onCacheChange.listen(
-          handler as ListenerHandler<CacheDescriptorWithKey>
-        );
+        return onCacheChange.listen(handler as any);
       case 'keyUpdate':
-        return onKeyUpdate.listen(handler as ListenerHandler<void>);
+        return onKeyUpdate.listen(handler as any);
     }
   };
 
