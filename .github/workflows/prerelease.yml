@@ -34,7 +34,7 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --frozen-lockfile
 
       - name: Update version locally
         run: |
