@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "4.9.2",
+  "version": "4.10.0-rc.4a0f1a6.0",
   "description": "Tolgee for web",
   "main": "./dist/tolgee-web.cjs.js",
   "module": "./dist/tolgee-web.esm.js",
@@ -27,7 +27,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "^4.9.2"
+    "@tolgee/core": "4.10.0-rc.4a0f1a6.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
