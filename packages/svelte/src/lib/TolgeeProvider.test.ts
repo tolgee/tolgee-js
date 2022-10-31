@@ -11,7 +11,7 @@ describe('TolgeeProvider', () => {
 
   beforeEach(() => {
     mockedTolgee = {
-      ...Tolgee({ language: 'en' }),
+      ...Tolgee().init({ language: 'en' }),
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       run: jest.fn(() => new Promise<void>(() => {})),
       stop: jest.fn(),

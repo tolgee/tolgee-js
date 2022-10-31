@@ -11,16 +11,20 @@ import { InContextOptions } from './types';
 export const InContextProduction =
   (props?: InContextOptions): TolgeePlugin =>
   (tolgee, tools) => {
-    const { credentials, type = 'invisible', ...observerOptions } = props || {};
-    tolgee.use(DevBackend());
+    const {
+      credentials,
+      observerType = 'invisible',
+      ...observerOptions
+    } = props || {};
+    tolgee.addPlugin(DevBackend());
     if (!tools.hasUi()) {
-      tolgee.use(ContextUi());
+      tolgee.addPlugin(ContextUi());
     }
     if (!tools.hasObserver()) {
-      if (type === 'text') {
-        tolgee.use(TextObserver(observerOptions));
+      if (observerType === 'text') {
+        tolgee.addPlugin(TextObserver(observerOptions));
       } else {
-        tolgee.use(InvisibleObserver(observerOptions));
+        tolgee.addPlugin(InvisibleObserver(observerOptions));
       }
     }
     if (credentials) {

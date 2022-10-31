@@ -8,7 +8,7 @@ const tolgeeWithNamespaces = () => {
     Promise.resolve({ cancel: 'Cancellar' })
   );
 
-  return Tolgee({
+  return Tolgee().init({
     language: 'en',
     ns: ['common'],
     staticData: {
@@ -22,7 +22,7 @@ const tolgeeWithNamespaces = () => {
 
 describe('language changes', () => {
   it('returns correct translation from namespace', () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: { hello: 'World' },
@@ -35,7 +35,7 @@ describe('language changes', () => {
   });
 
   it('uses defaultNs', async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       defaultNs: 'common',
       staticData: {

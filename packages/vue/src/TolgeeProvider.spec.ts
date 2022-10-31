@@ -8,7 +8,7 @@ describe('Tolgee Provider Component', function () {
 
   beforeEach(() => {
     mockedTolgee = {
-      ...Tolgee({ language: 'en' }),
+      ...Tolgee().init({ language: 'en' }),
       run: jest.fn(() => new Promise<void>(() => {})),
       stop: jest.fn(),
     };

@@ -1,6 +1,7 @@
 import {
   FallbackLanguageOption,
   FallbackNs,
+  TolgeePlugin,
   TreeTranslationsData,
 } from '../../types';
 
@@ -73,10 +74,7 @@ export type TolgeeOptions = {
    */
   staticData?: TolgeeStaticData;
 
-  /**
-   * Type of observer loaded by DevTools or InContextTools (Default: 'invisible')
-   */
-  observerType: 'invisible' | 'text';
+  plugins?: TolgeePlugin[];
 };
 
 export type State = {
@@ -90,7 +88,6 @@ export type State = {
 
 const defaultValues: TolgeeOptions = {
   defaultNs: '',
-  observerType: 'invisible',
 };
 
 export const initState = (

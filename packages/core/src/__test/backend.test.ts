@@ -41,7 +41,7 @@ describe('backend plugins', () => {
     await tolgee.run();
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
     tolgee.stop();
-    tolgee.init({ apiUrl: 'asdfasdf', apiKey: 'test' });
+    tolgee.overrideCredentials({ apiUrl: 'asdfasdf', apiKey: 'test' });
     await tolgee.run();
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Dev');
   });

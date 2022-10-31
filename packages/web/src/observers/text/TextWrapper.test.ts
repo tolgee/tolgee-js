@@ -52,6 +52,12 @@ describe('Text wrapper', () => {
     );
   });
 
+  test('correctly parses namespace', () => {
+    const text = 'This is text: {{key|namespace}}';
+    const replaced = wrapper.unwrap(text);
+    expect(replaced.keys[0].ns).toEqual('namespace');
+  });
+
   test('replace function does not translate when params have escaped , or :', () => {
     const text =
       'This is text: {{text:param1:param 1 with\\,and \\:.,param2:hello \\:}}. Text continues';

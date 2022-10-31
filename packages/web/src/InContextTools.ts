@@ -6,7 +6,7 @@ import { BrowserExtensionPlugin } from './BrowserExtensionPlugin/BrowserExtensio
 export const InContextTools =
   (props?: InContextOptions): TolgeePlugin =>
   (tolgee) => {
-    tolgee.use(BrowserExtensionPlugin(props));
-    tolgee.use(InContextProduction(props));
+    tolgee.addPlugin(BrowserExtensionPlugin(props));
+    tolgee.addPlugin(InContextProduction(props));
     return tolgee;
   };

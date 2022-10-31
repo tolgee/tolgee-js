@@ -71,7 +71,7 @@ if (typeof window !== 'undefined') {
         );
         return (tolgee) => {
           const credentials = getCredentials()!;
-          tolgee.use(InContextProduction({ credentials, ...options }));
+          tolgee.addPlugin(InContextProduction({ credentials, ...options }));
           return tolgee;
         };
       };
@@ -88,7 +88,7 @@ if (typeof window !== 'undefined') {
       if (credentials) {
         getTolgeePlugin()
           .then((plugin) => {
-            tolgee.use(plugin);
+            tolgee.addPlugin(plugin);
           })
           .catch((e) => {
             // eslint-disable-next-line no-console

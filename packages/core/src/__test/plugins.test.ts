@@ -69,39 +69,39 @@ const formattersPlugin: TolgeePlugin = (tolgee, tools) => {
 
 describe('plugins', () => {
   it('wraps and formats translation', () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.use(observerPlugin(false));
+    tolgee.addPlugin(observerPlugin(false));
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
 
-    tolgee.use(formattersPlugin);
+    tolgee.addPlugin(formattersPlugin);
     expect(tolgee.t({ key: 'hello' })).toEqual({ final: '(2(1hello|world))' });
     tolgee.stop();
   });
 
   it("won't format when observer doesn't return formattable text", () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.use(observerPlugin(true));
+    tolgee.addPlugin(observerPlugin(true));
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
 
-    tolgee.use(formattersPlugin);
+    tolgee.addPlugin(formattersPlugin);
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
     tolgee.stop();
   });
 
   it("won't wrap before run", () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
-    tolgee.use(observerPlugin(false));
+    tolgee.addPlugin(observerPlugin(false));
     expect(tolgee.t({ key: 'hello' })).toEqual('world');
     tolgee.run();
     expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');

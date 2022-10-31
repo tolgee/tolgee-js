@@ -34,7 +34,7 @@ const Home: NextPage = () => {
   );
 
   useEffect(() => {
-    tolgee.init({ apiKey });
+    tolgee.updateOptions({ apiKey });
   }, [apiKey]);
 
   useEffect(() => {

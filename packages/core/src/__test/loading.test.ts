@@ -7,7 +7,7 @@ describe('loading', () => {
     const [promiseEs, resolveEs] = resolvablePromise<TreeTranslationsData>();
     const onLoadHandler = jest.fn(() => {});
     const onFetchingHandler = jest.fn(() => {});
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: () => promiseEn,

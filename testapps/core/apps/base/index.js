@@ -12,7 +12,7 @@ import {
 
   const tolgee = bundle
     .Tolgee()
-    .use(InContextTools({ type: 'text' }))
+    .use(InContextTools({ observerType: 'text' }))
     .use(BackendFetch({ prefix: 'i18n' }))
     .init({
       defaultLanguage: 'en',

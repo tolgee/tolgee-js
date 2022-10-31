@@ -11,7 +11,7 @@ describe('initialization behavior', () => {
       Promise.resolve({ cancel: 'Cancellar' })
     );
 
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       ns: ['common'],
       staticData: {
@@ -48,7 +48,7 @@ describe('initialization behavior', () => {
   });
 
   it("won't start loading when nothing to load", async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: { test: 'Test' },
@@ -72,7 +72,7 @@ describe('initialization behavior', () => {
   });
 
   it('emits keyUpdate on initialLoad', async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });

@@ -9,8 +9,7 @@ export const ReactPlugin =
   (props?: Props): TolgeePlugin =>
   (tolgee) => {
     const { useSuspense, ...observerOptions } = props || {};
-    tolgee
-      .use(DevTools(observerOptions))
-      .use(GlobalContextPlugin({ useSuspense }));
+    tolgee.addPlugin(DevTools(observerOptions));
+    tolgee.addPlugin(GlobalContextPlugin({ useSuspense }));
     return tolgee;
   };

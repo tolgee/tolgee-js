@@ -2,7 +2,7 @@ import { Tolgee } from '../index';
 
 describe('events', () => {
   it('emits language change event', async () => {
-    const tolgee = Tolgee({ language: 'en' });
+    const tolgee = Tolgee().init({ language: 'en' });
     const handler = jest.fn((lang) => {});
     tolgee.on('language', handler);
     await tolgee.changeLanguage('es');
@@ -10,7 +10,7 @@ describe('events', () => {
   });
 
   it('correctly emits translation change listeners', async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: { hello: 'World', language: 'English' },

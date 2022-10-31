@@ -3,8 +3,8 @@ import { Tolgee, TolgeeInstance } from '@tolgee/core';
 import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
 import { InContextTools } from '../InContextTools';
 
-(['invisible', 'text'] as const).forEach((type) => {
-  describe(`observer ${type}`, () => {
+(['invisible', 'text'] as const).forEach((observerType) => {
+  describe(`observer ${observerType}`, () => {
     let tolgee: TolgeeInstance;
 
     beforeEach(() => {
@@ -19,9 +19,9 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('pass to parent', async () => {
-      tolgee.use(
+      tolgee.addPlugin(
         InContextTools({
-          type,
+          observerType,
           passToParent: ['b'],
         })
       );
@@ -38,9 +38,9 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('pass to parent function', async () => {
-      tolgee.use(
+      tolgee.addPlugin(
         InContextTools({
-          type,
+          observerType,
           passToParent: (e) => e.tagName.toLowerCase() === 'b',
         })
       );
@@ -63,9 +63,9 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('restricted elements', async () => {
-      tolgee.use(
+      tolgee.addPlugin(
         InContextTools({
-          type,
+          observerType,
           restrictedElements: ['main'],
         })
       );
@@ -86,9 +86,9 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('tag attributes', async () => {
-      tolgee.use(
+      tolgee.addPlugin(
         InContextTools({
-          type,
+          observerType,
           tagAttributes: {
             main: ['test'],
             '*': ['title'],

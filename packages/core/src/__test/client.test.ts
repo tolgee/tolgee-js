@@ -11,7 +11,7 @@ describe('using tolgee as client', () => {
       Promise.resolve({ cancel: 'Cancellar' })
     );
 
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       ns: ['common'],
       staticData: {

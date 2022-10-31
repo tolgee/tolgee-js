@@ -13,7 +13,7 @@ describe('Tolgee Provider Component', () => {
 
   beforeEach(() => {
     mockedTolgee = {
-      ...Tolgee({ language: 'en' }),
+      ...Tolgee().init({ language: 'en' }),
       run: jest.fn(() => new Promise<void>(() => {})),
       stop: jest.fn(),
     };
@@ -48,7 +48,7 @@ describe('Tolgee Provider Component', () => {
   });
 
   test("doesn't render when everything is already fetched", async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: {},

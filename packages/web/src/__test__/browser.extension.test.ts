@@ -31,8 +31,8 @@ describe('compatibility with browser extension', () => {
   });
 
   it('sends correct data to extension', async () => {
-    const tolgee = Tolgee({ language: 'en', apiUrl: 'test' });
-    tolgee.use(BrowserExtensionPlugin());
+    const tolgee = Tolgee().init({ language: 'en', apiUrl: 'test' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
     await tolgee.run();
     expect(handshakerUpdate).toBeCalledTimes(1);
     expect(handshakerUpdate).toBeCalledWith({
@@ -50,8 +50,8 @@ describe('compatibility with browser extension', () => {
     sessionStorage.setItem(API_KEY_LOCAL_STORAGE, 'test');
     sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
 
-    const tolgee = Tolgee({ language: 'en' });
-    tolgee.use(BrowserExtensionPlugin());
+    const tolgee = Tolgee().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
     await tolgee.run();
 
     expect(loadInContextLib).toBeCalledTimes(1);

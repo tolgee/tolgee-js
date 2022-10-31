@@ -3,14 +3,14 @@ import { resolvablePromise } from './testTools';
 
 describe('language changes', () => {
   it('changes language', async () => {
-    const tolgee = Tolgee({ language: 'en' });
+    const tolgee = Tolgee().init({ language: 'en' });
     expect(tolgee.getLanguage()).toEqual('en');
     await tolgee.changeLanguage('es');
     expect(tolgee.getLanguage()).toEqual('es');
   });
 
   it('returns correct translation', async () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: { en: { hello: 'World' }, es: { hello: 'Mundo' } },
     });
@@ -24,7 +24,7 @@ describe('language changes', () => {
   it('fetches language data correctly', async () => {
     const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
     const [promiseEs, resolveEs] = resolvablePromise<TreeTranslationsData>();
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: () => promiseEn,
@@ -53,7 +53,7 @@ describe('language changes', () => {
     const [promiseEnIn, resolveEnIn] =
       resolvablePromise<TreeTranslationsData>();
 
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'es',
       staticData: {
         en: () => promiseEn,
@@ -95,7 +95,7 @@ describe('language changes', () => {
   });
 
   it('will fallback to default value', () => {
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       defaultLanguage: 'en',
     });
 
@@ -105,14 +105,14 @@ describe('language changes', () => {
   });
 
   it('will throw error when no language specified', () => {
-    const tolgee = Tolgee({});
+    const tolgee = Tolgee().init({});
 
     expect(() => tolgee.run()).toThrow(/'language'/);
   });
 
   it('loads fallback languages and namespaces', async () => {
     const loadNs = jest.fn(() => Promise.resolve(undefined as any));
-    const tolgee = Tolgee({
+    const tolgee = Tolgee().init({
       language: 'en',
       fallbackNs: ['fallback'],
       staticData: {

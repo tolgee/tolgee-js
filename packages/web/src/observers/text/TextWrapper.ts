@@ -157,6 +157,7 @@ export const TextWrapper = ({
         key: translated.key,
         params: translated.params,
         defaultValue: translated.defaultValue,
+        ns: translated.ns,
       });
       matched = true;
       result += pre + translated.translated;
@@ -208,7 +209,7 @@ export const TextWrapper = ({
       ns,
       noWrap: true,
     });
-    return { translated, key, params, defaultValue };
+    return { translated, key, params, defaultValue, ns };
   }
 
   const escapeForRegExp = (string: string) => {

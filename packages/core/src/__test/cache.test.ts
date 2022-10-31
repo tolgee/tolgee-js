@@ -13,7 +13,7 @@ const waitForInitialLoad = (tolgee: TolgeeInstance) =>
 const DevToolsPlugin =
   (postfix = ''): TolgeePlugin =>
   (tolgee, tools) => {
-    tolgee.init({ apiKey: 'test', apiUrl: 'test' });
+    tolgee.updateOptions({ apiKey: 'test', apiUrl: 'test' });
     tools.setDevBackend({
       getRecord({ language, namespace }) {
         return Promise.resolve({
@@ -25,7 +25,7 @@ const DevToolsPlugin =
   };
 
 const DevToolsThrow = (): TolgeePlugin => (tolgee, tools) => {
-  tolgee.init({ apiKey: 'test', apiUrl: 'test' });
+  tolgee.updateOptions({ apiKey: 'test', apiUrl: 'test' });
   tools.setDevBackend({
     getRecord() {
       return Promise.reject();
@@ -38,7 +38,7 @@ describe('cache', () => {
   let tolgee: TolgeeInstance;
 
   beforeEach(async () => {
-    tolgee = Tolgee({
+    tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: { test: { sub: 'subtestEn' } },
@@ -68,7 +68,7 @@ describe('cache', () => {
 
   it('returns correct data when in dev mode', async () => {
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     await tolgee.run();
     expect(tolgee.t('test.sub')).toEqual('en.default');
     const changeLangPromise = tolgee.changeLanguage('cs');
@@ -80,7 +80,7 @@ describe('cache', () => {
   it('invalidates the cache when switching to dev', async () => {
     await tolgee.run();
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
 
     await new Promise<void>((resolve) => {
@@ -93,10 +93,10 @@ describe('cache', () => {
   });
 
   it('works with switching to different dev backend', async () => {
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     await tolgee.run();
     expect(tolgee.t('test.sub')).toEqual('en.default');
-    tolgee.use(DevToolsPlugin('.new'));
+    tolgee.addPlugin(DevToolsPlugin('.new'));
     expect(tolgee.t('test.sub')).toEqual('en.default');
 
     await waitForInitialLoad(tolgee);
@@ -109,7 +109,7 @@ describe('cache', () => {
     await tolgee.run();
     expect(keyUpdateHandler).toBeCalledTimes(1);
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
-    tolgee.use(DevToolsThrow());
+    tolgee.addPlugin(DevToolsThrow());
     await waitForInitialLoad(tolgee);
     expect(keyUpdateHandler).toBeCalledTimes(2);
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
@@ -123,7 +123,7 @@ describe('cache', () => {
   });
 
   it('ignores new initial data when already in dev mode', async () => {
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     await tolgee.run();
     expect(tolgee.t('test.sub')).toEqual('en.default');
     tolgee.addStaticData({ en: { test: { sub: 'newSubtestEn' } } });
@@ -136,7 +136,7 @@ describe('cache', () => {
   });
 
   it('fetching works with namespaces', async () => {
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     const runPromise = tolgee.run();
     expect(tolgee.isFetching()).toBeTruthy();
     await runPromise;
@@ -152,7 +152,7 @@ describe('cache', () => {
 
   it('works with namespaces containing colon', async () => {
     const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
-    tolgee.init({
+    tolgee.updateOptions({
       language: 'en',
       staticData: {
         'en:common:test': () => promiseEn,
@@ -169,7 +169,7 @@ describe('cache', () => {
 
   it("pending requests won't rewrite cache when reinitialized", async () => {
     const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
-    tolgee = Tolgee({
+    tolgee = Tolgee().init({
       language: 'en',
       staticData: {
         en: () => promiseEn,
@@ -177,7 +177,7 @@ describe('cache', () => {
     });
     tolgee.run();
     await Promise.resolve();
-    tolgee.use(DevToolsPlugin());
+    tolgee.addPlugin(DevToolsPlugin());
     await waitForInitialLoad(tolgee);
     expect(tolgee.t('test.sub')).toEqual('en.default');
     resolveEn({ test: { sub: 'Invalid' } });

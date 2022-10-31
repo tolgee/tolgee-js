@@ -12,7 +12,7 @@ import { ObserverOptions } from './observers/general/initObserverOptions';
 
 export type InContextOptions = Partial<ObserverOptions> & {
   credentials?: DevCredentials;
-  type?: 'text' | 'invisible';
+  observerType?: 'text' | 'invisible';
 };
 
 export type NodeLock = {
