@@ -4,10 +4,10 @@ import {
   FormatterInterface,
   FormatterInterfaceFormatParams,
   ObserverInterface,
-  TolgeePlugin,
   WrapperWrapFunction,
   ObserverOptions,
 } from '../types';
+import { TolgeePlugin } from '../types/plugin';
 
 const testObserver =
   (

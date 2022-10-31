@@ -1,10 +1,7 @@
 import { Controller } from './Controller/Controller';
-import {
-  TolgeeOptions,
-  TolgeeInstance,
-  TolgeePlugin,
-  ObserverOptions,
-} from './types';
+import { TolgeeOptions, ObserverOptions } from './types';
+import { TolgeeInstance } from './types/TolgeeInstance';
+import { TolgeePlugin } from './types/plugin';
 
 export const Tolgee = (options?: Partial<TolgeeOptions>): TolgeeInstance => {
   const controller = Controller({
