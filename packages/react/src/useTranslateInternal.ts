@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
   ListenerSelective,
   TranslateProps,
@@ -10,6 +10,7 @@ import {
 
 import { useTolgeeContext } from './useTolgeeContext';
 import { ReactOptions } from './types';
+import { useRerender } from './hooks';
 
 export const useTranslateInternal = (
   ns?: FallbackNsTranslation,
@@ -25,11 +26,7 @@ export const useTranslateInternal = (
   };
 
   // dummy state to enable re-rendering
-  const [instance, setInstance] = useState(0);
-
-  const forceRerender = useCallback(() => {
-    setInstance((v) => v + 1);
-  }, [setInstance]);
+  const { rerender, instance } = useRerender();
 
   const subscriptionRef = useRef<ListenerSelective>();
 
@@ -44,7 +41,7 @@ export const useTranslateInternal = (
   const isLoaded = tolgee.isLoaded(namespaces);
 
   useEffect(() => {
-    const subscription = tolgee.onKeyUpdate(forceRerender);
+    const subscription = tolgee.onKeyUpdate(rerender);
     subscriptionRef.current = subscription;
     if (!isLoaded) {
       subscription.subscribeNs(namespaces);
@@ -72,7 +69,7 @@ export const useTranslateInternal = (
     [tolgee, instance]
   );
 
-  if (currentOptions?.useSuspense && !isLoaded) {
+  if (currentOptions.useSuspense && !isLoaded) {
     throw tolgee.addActiveNs(namespaces, true);
   }
 

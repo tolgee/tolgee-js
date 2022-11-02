@@ -6,7 +6,7 @@ import { useTolgeeContext } from './useTolgeeContext';
 export const useTolgee = (events?: TolgeeEvent[]): TolgeeInstance => {
   const { tolgee } = useTolgeeContext();
 
-  const rerender = useRerender();
+  const { rerender } = useRerender();
 
   useEffect(() => {
     const listeners = events?.map((e) => tolgee.on(e, rerender));
