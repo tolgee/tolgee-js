@@ -39,7 +39,7 @@ jobs:
             turbo-${{ github.job }}-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build all packages
         run: pnpm build || pnpm build
@@ -84,7 +84,7 @@ jobs:
             turbo-cypress-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build
         run: pnpm build || pnpm build
@@ -143,7 +143,7 @@ jobs:
             turbo-cypress-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build
         run: pnpm build || pnpm build
@@ -194,7 +194,7 @@ jobs:
             ${{ runner.os }}-pnpm-eslint-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
         working-directory: ./
 
       - name: Eslint
