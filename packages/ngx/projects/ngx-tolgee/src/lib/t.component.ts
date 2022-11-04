@@ -1,51 +1,43 @@
 import {
   Component,
   ElementRef,
-  Inject,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
-  Optional,
-  Type,
-  ViewContainerRef,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
-import { TOLGEE_LOADING_TEMPLATE } from './loading-template';
-import { TemplateHandler } from './template-handler';
+import { TranslateParams } from '@tolgee/web';
 
 @Component({
   selector: '[t]',
   template: ``,
 })
 export class TComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() params?: Record<string, any>;
   @Input() key: string;
   @Input() ns: string;
+  @Input() params?: TranslateParams<any>;
   @Input() default?: string;
-  @Input() noWrap?: boolean;
+  @Input() noWrap?: boolean = false;
+
+  /**
+   * When true, innerHTML property of element is set.
+   * Use only when you're sure the HTML is sanitized.
+   */
+  @Input() isHtml?: boolean = false;
 
   private subscription: Subscription;
   private initialized: boolean;
-  private loaderTplHandler: TemplateHandler | undefined;
 
   constructor(
     private ref: ElementRef,
-    private translateService: TranslateService,
-    @Optional()
-    @Inject(TOLGEE_LOADING_TEMPLATE)
-    private loadingTemplate: Type<unknown> | string,
-    private vcr: ViewContainerRef
+    private translateService: TranslateService
   ) {}
 
   ngOnInit(): void {
     // noinspection JSIgnoredPromiseFromCall
     this.subscribe();
-    if (this.shouldRenderLoading()) {
-      this.renderLoading();
-      return;
-    }
     this.renderInstantValue();
   }
 
@@ -55,16 +47,16 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.unsubscribe();
   }
 
   private renderInstantValue() {
-    // set safe at first
-    this.getElement().textContent = this.translateService.instant(
-      this.getTranslateParams()
-    );
+    // get initial value first
+    const translated = this.translateService.instant({
+      ...this.getTranslateParams(),
+      orEmpty: true,
+    });
+    this.setElementContent(translated);
   }
 
   private getTranslateParams() {
@@ -77,31 +69,26 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
     };
   }
 
-  private renderLoading() {
-    this.loaderTplHandler = new TemplateHandler(this.loadingTemplate, this.vcr);
-    this.loaderTplHandler.attachView();
-  }
-
-  private shouldRenderLoading() {
-    return !this.isNamespaceLoaded() && this.loadingTemplate;
-  }
-
-  private isNamespaceLoaded() {
-    return this.translateService.tolgee.isLoaded(this.ns);
+  private unsubscribe() {
+    this.subscription?.unsubscribe();
   }
 
   private async subscribe() {
-    this.subscription?.unsubscribe();
-
-    await this.translateService.tolgee.addActiveNs(this.ns);
-
+    this.unsubscribe();
     this.subscription = this.translateService
       .translate(this.getTranslateParams())
       .subscribe((translated) => {
-        this.loaderTplHandler?.detachView();
-        this.getElement().textContent = translated;
+        this.setElementContent(translated);
         this.initialized = true;
       });
+  }
+
+  private setElementContent(translated: string) {
+    if (this.isHtml) {
+      this.getElement().innerHTML = translated;
+      return;
+    }
+    this.getElement().textContent = translated;
   }
 
   private getElement() {

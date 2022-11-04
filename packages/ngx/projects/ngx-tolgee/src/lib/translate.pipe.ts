@@ -8,8 +8,8 @@ import { getTranslateParams, TFnType, TranslateProps } from '@tolgee/web';
   pure: false,
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
-  value = '';
-  params: any;
+  private value = '';
+  private previousHash: string;
 
   private subscription: Subscription;
 
@@ -19,7 +19,7 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.unsubscribe();
   }
 
-  readonly transform: TFnType = (...args) => {
+  readonly transform: TFnType<string> = (...args) => {
     // @ts-ignore
     const params = getTranslateParams(...args);
     const { key } = params;
@@ -28,28 +28,33 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
       return key;
     }
 
-    if (JSON.stringify(this.params) === JSON.stringify(params)) {
+    const newHash = this.hash(params);
+    if (this.previousHash === newHash) {
       return this.value;
     }
 
-    this.params = params;
+    this.previousHash = newHash;
 
-    // unsubscribe first
-    this.unsubscribe();
-
-    // asynchronously translate and assign subscription
-    this.subscription = this.translate(params);
+    this.translate(params);
 
     return this.value;
   };
 
+  private hash(props: TranslateProps) {
+    return JSON.stringify([props, this.translateService.tolgee.getLanguage()]);
+  }
+
   private unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription?.unsubscribe();
   }
 
   private translate(props: TranslateProps) {
+    this.value = this.translateService.instant({ ...props, orEmpty: true });
+    this.subscribe(props);
+  }
+
+  private subscribe(props: TranslateProps) {
+    this.unsubscribe();
     return this.translateService.translate(props).subscribe((r) => {
       this.value = r;
     });

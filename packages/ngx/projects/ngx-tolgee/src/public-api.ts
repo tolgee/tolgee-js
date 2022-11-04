@@ -8,6 +8,6 @@ export * from './lib/NgxPlugin';
 
 export * from './lib/ngx-tolgee.module';
 export * from './lib/tolgee-instance-token';
-export * from './lib/loading-template';
 
 export * from '@tolgee/web';
+export * from './lib/namespace.resolver';

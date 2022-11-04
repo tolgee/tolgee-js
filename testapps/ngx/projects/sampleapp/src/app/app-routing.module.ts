@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslationMethodsComponent } from './pages/translation-methods/translation-methods.component';
 import { IndexComponent } from './pages/index/index.component';
+import { NamespaceResolver } from '@tolgee/ngx';
 
 const routes: Routes = [
   { path: 'translation-methods', component: TranslationMethodsComponent },
@@ -9,6 +10,10 @@ const routes: Routes = [
   {
     path: 'lazy',
     loadChildren: () => import('./lazy/lazy.module').then((m) => m.LazyModule),
+    data: { tolgeeNamespace: 'submodule' },
+    resolve: {
+      _namespace: NamespaceResolver,
+    },
   },
 ];
 

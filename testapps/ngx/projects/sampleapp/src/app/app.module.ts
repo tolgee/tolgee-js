@@ -18,7 +18,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormatIcu } from '@tolgee/format-icu';
 import { FormsModule } from '@angular/forms';
 import { wait } from './wait';
-import { TOLGEE_LOADING_TEMPLATE } from '@tolgee/ngx';
 import { CommonModule } from '@angular/common';
 
 @NgModule({
@@ -39,10 +38,6 @@ import { CommonModule } from '@angular/common';
   exports: [AppRoutingModule, NavbarComponent],
   providers: [
     {
-      provide: TOLGEE_LOADING_TEMPLATE,
-      useValue: '<p>loading...</p>',
-    },
-    {
       provide: TOLGEE_INSTANCE,
       useFactory: () => {
         return Tolgee()
@@ -52,11 +47,7 @@ import { CommonModule } from '@angular/common';
           .init({
             availableLanguages: ['en', 'cs', 'fr', 'de'],
             staticData: {
-              'en:submodule': async () => {
-                const data = import('../i18n/submodule/en.json');
-                await wait(1000);
-                return data;
-              },
+              'en:submodule': () => import('../i18n/submodule/en.json'),
               en: () => import('../i18n/en.json'),
               cs: () => import('../i18n/cs.json'),
               de: () => import('../i18n/de.json'),

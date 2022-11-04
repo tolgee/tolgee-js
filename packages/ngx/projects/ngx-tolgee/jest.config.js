@@ -1,5 +1,7 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const { compilerOptions } = require('../../tsconfig.json');
+
 module.exports = {
-  automock: true,
   preset: 'ts-jest',
   resolver: 'jest-preset-angular/build/resolvers/ng-jest-resolver.js',
   transformIgnorePatterns: ['node_modules/.*/node_modules/(?!@angular)'],
@@ -9,9 +11,9 @@ module.exports = {
   testEnvironment: 'jsdom',
   unmockedModulePathPatterns: ['/node_modules/*', '/ngx-tolgee/src/__mocks'],
   modulePathIgnorePatterns: ['cypress'],
-  moduleNameMapper: {
-    '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
-  },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/../../',
+  }),
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',

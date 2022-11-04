@@ -1,4 +1,4 @@
-export const testConfig = {
+export const currentApiKeyMock = {
   id: 42,
   key: 'asdfasdsfasdfasdfasdf',
   username: 'john@toe@tolgee.com',

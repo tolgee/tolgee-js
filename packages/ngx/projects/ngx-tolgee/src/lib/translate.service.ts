@@ -31,7 +31,6 @@ export class TranslateService implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // stop it!
     this.tolgee.stop();
   }
 
@@ -41,21 +40,32 @@ export class TranslateService implements OnDestroy {
         const subscription = this.tolgee.on(event, (value) => {
           subscriber.next(value as any);
         });
-        return () => {
-          subscription.unsubscribe;
-        };
+        return () => subscription.unsubscribe();
       }
     );
   }
 
-  language: Observable<string> = new Observable((subscriber) => {
-    subscriber.next(this.tolgee.getLanguage());
-    const subscription = this.on('language').subscribe((value) => {
-      subscriber.next(value.value);
-    });
+  /**
+   * Returns current language
+   */
+  get language(): string {
+    return this.tolgee.getLanguage();
+  }
 
-    return () => subscription.unsubscribe();
-  });
+  /**
+   * Returns an observable emitting current language.
+   * It instantly emits current language
+   */
+  get languageAsync(): Observable<string> {
+    return new Observable((subscriber) => {
+      subscriber.next(this.tolgee.getLanguage());
+      const subscription = this.on('language').subscribe((value) => {
+        subscriber.next(value.value);
+      });
+
+      return () => subscription.unsubscribe();
+    });
+  }
 
   /**
    * Changes the current language
@@ -63,23 +73,32 @@ export class TranslateService implements OnDestroy {
    * @return Promise<void> Resolves when translations
    * for given language are loaded
    */
-  public setLang(lang: string) {
+  public changeLanguage(lang: string) {
     return this.tolgee.changeLanguage(lang);
   }
 
+  /**
+   * Instantly returns translated value. May return undefined or outdated value.
+   * Use only when you cannot use translate.
+   */
   public readonly instant: TFnType = (...args) => {
     // @ts-ignore
     const params = getTranslateParams(...args);
     return this.tolgee.t(params);
   };
 
+  /**
+   * Returns translation asynchronously, this method always return
+   */
   readonly translate: TFnType<DefaultParamType, Observable<string>> = (
     ...args
   ) => {
     // @ts-ignore
     const params = getTranslateParams(...args);
     return new Observable<string>((subscriber) => {
+      const loadPromise = this.tolgee.addActiveNs(params.ns);
       const translate = async () => {
+        await loadPromise;
         const translated = this.tolgee.t(params);
         subscriber.next(translated);
       };
@@ -92,6 +111,7 @@ export class TranslateService implements OnDestroy {
         .subscribeKey({ key: params.key, ns: params.ns });
 
       return () => {
+        this.tolgee.removeActiveNs(params.ns);
         subscription.unsubscribe();
       };
     });

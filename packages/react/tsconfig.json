@@ -2,20 +2,32 @@
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
-    "rootDir": "src",
     "declaration": true,
     "outDir": "./lib",
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "lib": ["es2018", "es2020", "dom"],
+    "lib": [
+      "es2018",
+      "es2020",
+      "dom"
+    ],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "strict": true,
     "jsx": "react",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "paths": {
+      "@testing/*": [
+        "../testing/*"
+      ]
+    }
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

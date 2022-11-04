@@ -8,7 +8,7 @@
       "node",
       "@testing-library/jest-dom"
     ],
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
   },
   "files": [
     "src/test-setup.ts"
