@@ -1,12 +1,5 @@
-import { Tolgee, TranslationParams } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 
-export type TranslateFnProps = {
-  key: string;
-  parameters?: TranslationParams;
-  noWrap?: boolean;
-  defaultValue?: string;
-};
-
-export type TolgeeContext = {
-  tolgee: Tolgee;
+export type TolgeeVueContext = {
+  tolgee: TolgeeInstance;
 };

@@ -1,15 +1,14 @@
 import React from 'react';
-import { useSetLanguage, useCurrentLanguage } from '@tolgee/react';
+import { useTolgee } from '@tolgee/react';
 
 export const LangSelector: React.FC = () => {
-  const setLanguage = useSetLanguage();
-  const getLang = useCurrentLanguage();
+  const tolgee = useTolgee(['pendingLanguage']);
 
   return (
     <select
       className="lang-selector"
-      onChange={(e) => setLanguage(e.target.value)}
-      value={getLang()}
+      onChange={(e) => tolgee.changeLanguage(e.target.value)}
+      value={tolgee.getPendingLanguage()}
     >
       <option value="en">🇬🇧 English</option>
       <option value="cs">🇨🇿 Česky</option>

@@ -1,10 +1,13 @@
-<script>
-  import { TolgeeProvider } from "../index";
+<script lang="ts">
+  import type { TolgeeInstance } from "@tolgee/web";
+  import { TolgeeProvider } from "$lib";
+
+  export let tolgee: TolgeeInstance
 </script>
 
-<TolgeeProvider config={{}}>
-  <div slot="loading-fallback">Custom loading fallback</div>
+<TolgeeProvider tolgee={tolgee}>
+  <div slot="fallback">loading</div>
   <div slot="default">
-    Default slot
+    It's rendered!
   </div>
 </TolgeeProvider>

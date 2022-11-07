@@ -1,13 +1,17 @@
-jest.autoMockOff();
-
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
 
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, useTranslate } from '..';
+import {
+  TolgeeProvider,
+  useTranslate,
+  Tolgee,
+  TolgeeInstance,
+  DevTools,
+} from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 
 const API_URL = 'http://localhost';
@@ -32,9 +36,9 @@ export const createFetchMock = () => {
     if (req.url.includes('/v2/api-keys/current')) {
       return JSON.stringify(testConfig);
     } else if (req.url.includes('/v2/projects/translations/en')) {
-      return englishPromise;
+      return englishPromise as any;
     } else if (req.url.includes('/v2/projects/translations/cs')) {
-      return czechPromise;
+      return czechPromise as any;
     }
     throw new Error('Invalid request');
   });
@@ -43,7 +47,7 @@ export const createFetchMock = () => {
 
 describe('TolgeeProvider integration', () => {
   const TestComponent = () => {
-    const t = useTranslate();
+    const { t } = useTranslate();
     return (
       <>
         <div data-testid="hello_world">{t('hello_world')}</div>
@@ -58,27 +62,33 @@ describe('TolgeeProvider integration', () => {
   };
 
   describe('regular settings', () => {
-    let resolveEnglish;
-    let resolveCzech;
+    let resolveEnglish: any;
+    let resolveCzech: any;
+    let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       const fetchMock = createFetchMock();
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
+      tolgee = Tolgee().use(DevTools()).init({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        language: 'cs',
+        fallbackLanguage: 'en',
+      });
+
       act(() => {
         render(
-          <TolgeeProvider
-            apiUrl={API_URL}
-            apiKey={API_KEY}
-            loadingFallback="Loading..."
-            defaultLanguage="cs"
-            fallbackLanguage="en"
-          >
+          <TolgeeProvider tolgee={tolgee} fallback="Loading...">
             <TestComponent />
           </TolgeeProvider>
         );
       });
+    });
+
+    afterEach(() => {
+      tolgee.stop();
     });
 
     it('shows correctly loading, fallback and default value', async () => {
@@ -87,15 +97,7 @@ describe('TolgeeProvider integration', () => {
         resolveCzech();
       });
       await waitFor(() => {
-        expect(screen.queryByTestId('hello_world')).toContainHTML(
-          'Ahoj světe!'
-        );
-        expect(screen.queryByTestId('english_fallback')).not.toContainHTML(
-          'Default value'
-        );
-        expect(screen.queryByTestId('non_existant')).not.toContainHTML(
-          'Default value'
-        );
+        expect(screen.queryByText('Loading...')).toBeInTheDocument();
       });
       act(() => {
         resolveEnglish();
@@ -114,25 +116,25 @@ describe('TolgeeProvider integration', () => {
     });
   });
 
-  describe('with preloadFallback', () => {
-    let resolveEnglish;
-    let resolveCzech;
+  describe('with fallback', () => {
+    let resolveEnglish: any;
+    let resolveCzech: any;
+    let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       const fetchMock = createFetchMock();
       resolveCzech = fetchMock.resolveCzech;
       resolveEnglish = fetchMock.resolveEnglish;
       fetchMock.fetch.enableMocks();
+      tolgee = Tolgee().use(DevTools()).init({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        language: 'cs',
+        fallbackLanguage: 'en',
+      });
       act(() => {
         render(
-          <TolgeeProvider
-            apiUrl={API_URL}
-            apiKey={API_KEY}
-            loadingFallback="Loading..."
-            defaultLanguage="cs"
-            fallbackLanguage="en"
-            preloadFallback
-          >
+          <TolgeeProvider tolgee={tolgee} fallback="Loading...">
             <TestComponent />
           </TolgeeProvider>
         );

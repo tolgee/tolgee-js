@@ -1,6 +1,6 @@
 <script>
   import { getTranslate } from '$lib';
-  const t = getTranslate();
+  const { t } = getTranslate();
 </script>
 
 <div>

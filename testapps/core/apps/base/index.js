@@ -1,14 +1,18 @@
-import * as umd from '../../node_modules/@tolgee/core/dist/tolgee.umd';
-import * as commonjs from '../../node_modules/@tolgee/core/dist/tolgee.cjs';
-import { IcuFormatter } from '@tolgee/core';
+import * as umd from '../../node_modules/@tolgee/web/dist/tolgee-web.main.umd';
+import * as commonjs from '../../node_modules/@tolgee/web/dist/tolgee-web.main.cjs';
+import { BackendFetch, InContextTools } from '@tolgee/web';
 
 [umd, commonjs].forEach((bundle) => {
   const bundleDivElement = document.createElement('div');
 
-  const tolgee = new bundle.Tolgee.use(IcuFormatter).init({
-    watch: true,
-    targetElement: bundleDivElement,
-  });
+  const tolgee = bundle
+    .Tolgee()
+    .use(InContextTools())
+    .use(BackendFetch({ prefix: 'i18n' }))
+    .init({
+      defaultLanguage: 'en',
+      observerType: 'text',
+    });
 
   bundleDivElement.setAttribute('id', bundle);
 
@@ -19,9 +23,8 @@ import { IcuFormatter } from '@tolgee/core';
   bundleDivElement.append(htmlParagraphElement);
 
   tolgee.run().then(() => {
-    tolgee.translate('test').then((t) => {
-      htmlParagraphElement.append(t);
-      bundleDivElement.append('%-%tolgee:test%-%');
-    });
+    const translation = tolgee.t('test');
+    htmlParagraphElement.append(translation);
+    bundleDivElement.append('%-%tolgee:test%-%');
   });
 });

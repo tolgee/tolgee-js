@@ -5,17 +5,16 @@
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
     "build": "svelte-kit sync && svelte-package",
-    "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit",
+    "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test": "jest src",
+    "test": "jest src --collect-coverage",
     "lint": "prettier --cache --check . && eslint .",
     "format": "prettier --cache --write ."
   },
   "dependencies": {
-    "@tolgee/core": "^4.9.2",
-    "@tolgee/ui": "^4.9.2"
+    "@tolgee/web": "^4.8.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.0-next.65",
@@ -23,6 +22,8 @@
     "@sveltejs/package": "1.0.0-next.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.1",
+    "@tolgee/format-icu": "^4.8.0",
+    "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
     "@typescript-eslint/parser": "^5.34.0",

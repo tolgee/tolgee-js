@@ -1,15 +1,13 @@
-jest.autoMockOff();
-
 import React from 'react';
-import '@testing-library/jest-dom/extend-expect';
+import '@testing-library/jest-dom';
 import mockTranslations from './mockTranslations';
 import fetchMock from 'jest-fetch-mock';
 import { testConfig } from './testConfig';
-import { TolgeeProvider, useTranslate } from '..';
+import { ReactPlugin, useTranslate } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { Tolgee } from '@tolgee/core';
-import { useTolgeeContext } from '../useTolgeeContext';
+import { Tolgee, TolgeeInstance } from '@tolgee/web';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -26,11 +24,10 @@ const fetch = fetchMock.mockResponse(async (req) => {
   throw new Error('Invalid request');
 });
 
-describe('useTolgee integration', () => {
-  let tolgee: Tolgee;
+describe('useTranslation hook integration', () => {
+  let tolgee: TolgeeInstance;
   const TestComponent = () => {
-    const t = useTranslate();
-    tolgee = useTolgeeContext().tolgee;
+    const { t } = useTranslate();
 
     expect(typeof t('peter_dogs', { dogsCount: '5' })).toEqual('string');
     expect(typeof t('non_existant', '<i>non_formatted</i>')).toEqual('string');
@@ -50,23 +47,6 @@ describe('useTolgee integration', () => {
         <div data-testid="non_existant">
           {t('non_existant', 'Non existant')}
         </div>
-        <div data-testid="with_tags">
-          {t('with_tags', { b: <b />, i: <i /> })}
-        </div>
-        <div data-testid="with_tag_default">
-          {t(
-            'non_existant',
-            { b: <b />, i: (chunks: any) => <i>{chunks}</i> },
-            '<b><i>default</i></b>'
-          )}
-        </div>
-        <div data-testid="with_tags_default">
-          {t(
-            'non_existant',
-            { b: <b />, i: <i /> },
-            '<b>default</b><i>value</i>'
-          )}
-        </div>
         <div data-testid="non_formatted">
           {t('non_existant', '<i>non_formatted</i>')}
         </div>
@@ -76,80 +56,67 @@ describe('useTolgee integration', () => {
 
   beforeEach(async () => {
     fetch.enableMocks();
+    tolgee = Tolgee()
+      .use(ReactPlugin({ useSuspense: false }))
+      .use(FormatIcu())
+      .init({
+        apiUrl: API_URL,
+        apiKey: API_KEY,
+        language: 'cs',
+        fallbackLanguage: 'en',
+      });
+    tolgee.run();
     act(() => {
-      render(
-        <TolgeeProvider
-          apiUrl={API_URL}
-          apiKey={API_KEY}
-          loadingFallback="Loading..."
-          defaultLanguage="cs"
-          fallbackLanguage="en"
-        >
-          <TestComponent />
-        </TolgeeProvider>
-      );
+      render(<TestComponent />);
     });
     await waitFor(() => {
       expect(screen.queryByTestId('hello_world')).toContainHTML('Ahoj světe!');
     });
   });
 
+  afterEach(() => {
+    tolgee.stop();
+  });
+
   it('wraps translation correctly', async () => {
-    expect(screen.queryByTestId('hello_world')).toContainHTML('Ahoj světe!');
-    expect(screen.queryByTestId('hello_world')).toHaveProperty('_tolgee');
+    await waitFor(() => {
+      expect(screen.queryByTestId('hello_world')).toContainHTML('Ahoj světe!');
+      expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
+    });
   });
 
-  it('works with noWrap', () => {
-    expect(screen.queryByTestId('hello_world_no_wrap')).toContainHTML(
-      'Ahoj světe!'
-    );
-    expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveProperty(
-      '_tolgee'
-    );
+  it('works with noWrap', async () => {
+    await waitFor(() => {
+      expect(screen.queryByTestId('hello_world_no_wrap')).toContainHTML(
+        'Ahoj světe!'
+      );
+      expect(screen.queryByTestId('hello_world_no_wrap')).not.toHaveAttribute(
+        '_tolgee'
+      );
+    });
   });
 
-  it('works with parameters', () => {
-    expect(screen.queryByTestId('peter_dogs')).toContainHTML('Petr má 5 psů.');
-    expect(screen.queryByTestId('peter_dogs')).toHaveProperty('_tolgee');
+  it('works with parameters', async () => {
+    await waitFor(() => {
+      expect(screen.queryByTestId('peter_dogs')).toContainHTML(
+        'Petr má 5 psů.'
+      );
+      expect(screen.queryByTestId('peter_dogs')).toHaveAttribute('_tolgee');
+    });
   });
 
   it('works with default value', async () => {
     expect(screen.queryByTestId('non_existant')).toContainHTML('Non existant');
-    expect(screen.queryByTestId('non_existant')).toHaveProperty('_tolgee');
-  });
-
-  it('works with tags', () => {
-    expect(screen.queryByTestId('with_tags')).toContainHTML(
-      'Tento <b>text <i>je</i> formátovaný</b>'
-    );
-    expect(screen.queryByTestId('with_tags')).toHaveProperty('_tolgee');
-  });
-
-  it('works with one tag in default value', async () => {
-    await waitFor(() => {
-      expect(screen.queryByTestId('with_tag_default')).toContainHTML(
-        '<b><i>default</i></b>'
-      );
-    });
-    expect(screen.queryByTestId('with_tag_default')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
   });
 
   it('works with tags in default value', async () => {
     await waitFor(() => {
-      expect(screen.queryByTestId('with_tags_default')).toContainHTML(
-        '<b>default</b><i>value</i>'
-      );
-    });
-    expect(screen.queryByTestId('with_tags_default')).toHaveProperty('_tolgee');
-  });
-
-  it('works with tags in default value', async () => {
-    await waitFor(() => {
-      expect(screen.queryByTestId('non_formatted').textContent).toContain(
+      expect(screen.queryByTestId('non_formatted')?.textContent).toContain(
         '<i>non_formatted</i>'
       );
     });
-    expect(screen.queryByTestId('non_formatted')).toHaveProperty('_tolgee');
+    expect(screen.queryByTestId('non_formatted')).toHaveAttribute('_tolgee');
   });
 
   describe('language switch', () => {
@@ -159,11 +126,9 @@ describe('useTolgee integration', () => {
       });
     });
 
-    it('changes translation with tags', () => {
-      expect(screen.queryByTestId('with_tags')).toContainHTML(
-        'This <b>text <i>is</i> formatted</b>'
-      );
-      expect(screen.queryByTestId('with_tags')).toHaveProperty('_tolgee');
+    it('changes translation', async () => {
+      expect(screen.queryByTestId('hello_world')).toContainHTML('Hello world!');
+      expect(screen.queryByTestId('hello_world')).toHaveAttribute('_tolgee');
     });
   });
 });

@@ -1,335 +1,232 @@
-import { TolgeeConfig } from './TolgeeConfig';
-import {
-  InstantProps,
-  InstantPropsTags,
-  TolgeeModule,
-  TranslateProps,
-  TranslatePropsTags,
-  TranslationTags,
-  TranslationParams,
-  TranslationParamsTags,
-} from './types';
+import { Controller } from './Controller/Controller';
+import { combineOptions } from './Controller/State/initState';
+import { TolgeeOptions, TolgeePlugin, DevCredentials } from './types';
 
-import { EventEmitterImpl } from './services/EventEmitter';
-import { DependencyService } from './services/DependencyService';
+const TolgeeInstanceCreator = (options: TolgeeOptions) => {
+  const controller = Controller({
+    options,
+  });
 
-export class Tolgee {
-  private dependencyService: DependencyService;
-
-  private constructor() {
-    this.dependencyService = new DependencyService();
-  }
-
-  get properties() {
-    return this.dependencyService.properties;
-  }
-
-  public get lang() {
-    return this.properties.currentLanguage;
-  }
-
-  /**
-   * This sets a new language.
-   *
-   * Using this setter can behave buggy when you change languages
-   * too fast, since it changes the language property before
-   * translations are actually loaded.
-   * @deprecated use asynchronous changeLanguage method.
-   */
-  public set lang(newLanguage) {
-    this.properties.currentLanguage = newLanguage;
-
-    this.dependencyService.translationService
-      .loadTranslations(newLanguage)
-      .then(() => {
-        this.emitLangChangeEvent(newLanguage);
-      });
-  }
-
-  public get defaultLanguage() {
-    return this.properties.config.defaultLanguage;
-  }
-
-  public get onLangChange() {
-    return this.dependencyService.eventService.LANGUAGE_CHANGED;
-  }
-
-  public get onTranslationChange() {
-    return this.dependencyService.eventService.TRANSLATION_CHANGED;
-  }
-
-  /**
-   * Is emitted when language is loaded for the first time
-   */
-  public get onLangLoaded() {
-    return this.dependencyService.eventService.LANGUAGE_LOADED;
-  }
-
-  /**
-   * True if loading is needed to wait for Tolgee init.
-   * When translation data are provided statically (using import
-   * as staticData config property) then there is no need for translation
-   * fetching so initial loading is not needed at all.
-   */
-  get initialLoading(): boolean {
-    const currentLang = this.properties.currentLanguage;
-    const fallbackLang = this.properties.config.fallbackLanguage;
-    const fallbackPreloading = this.properties.config.preloadFallback;
-    const isStaticDataProvided = (data?: any) => {
-      return data !== undefined && typeof data !== 'function';
-    };
-
-    return (
-      !isStaticDataProvided(this.properties.config.staticData?.[currentLang]) ||
-      (!!fallbackPreloading &&
-        !isStaticDataProvided(
-          this.properties.config.staticData?.[fallbackLang]
-        ))
-    );
-  }
-
-  private get coreService() {
-    return this.dependencyService.coreService;
-  }
-
-  static use(module: TolgeeModule) {
-    return new Tolgee().use(module);
-  }
-
-  static init(config: TolgeeConfig) {
-    return new Tolgee().init(config);
-  }
-
-  /**
-   * Sets the new language.
-   *
-   * Emits the onLangChange and onLangChangeAndLoad events after
-   * the translations are loaded.
-   *
-   * @return Promise<void> Resolves when translations are loaded
-   */
-  public async changeLanguage(newLanguage: string): Promise<void> {
-    await this.dependencyService.translationService.loadTranslations(
-      newLanguage
-    );
-    this.properties.currentLanguage = newLanguage;
-    this.emitLangChangeEvent(newLanguage);
-  }
-
-  use(module: TolgeeModule) {
-    this.dependencyService.moduleService.addModule(module);
-    return this;
-  }
-
-  init(config: TolgeeConfig) {
-    this.dependencyService.init(config);
-    const { apiKey, apiUrl } = this.dependencyService.properties.config;
-    this.dependencyService.properties.mode =
-      apiKey && apiUrl ? 'development' : 'production';
-
-    return this;
-  }
-
-  public async run(): Promise<void> {
-    this.dependencyService.run();
-    if (this.properties.mode === 'development') {
-      try {
-        await this.coreService.loadApiKeyDetails();
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error("Couldn't connect to Tolgee");
-        // eslint-disable-next-line no-console
-        console.error(e);
-        this.properties.mode = 'production';
-      }
-    }
-
-    await this.dependencyService.translationService.loadTranslations();
-    await this.dependencyService.pluginManager.run();
-
-    if (this.properties.config.preloadFallback) {
-      await this.dependencyService.translationService.loadTranslations(
-        this.properties.config.fallbackLanguage
-      );
-    }
-
-    await this.refresh();
-
-    if (this.properties.config.watch) {
-      this.dependencyService.observer.observe();
-    }
-  }
-
-  public async refresh() {
-    return this.dependencyService.wrapper.handleSubtree(
-      this.properties.config.targetElement
-    );
-  }
-
-  async translate(props: TranslateProps): Promise<string>;
-  async translate<T>(props: TranslatePropsTags<T>): Promise<TranslationTags<T>>;
-
-  async translate(
-    key: string,
-    params?: TranslationParams,
-    noWrap?: boolean,
-    defaultValue?: string
-  ): Promise<string>;
-  async translate<T>(
-    key: string,
-    params?: TranslationParamsTags<T>,
-    noWrap?: boolean,
-    defaultValue?: string
-  ): Promise<TranslationTags<T>>;
-
-  async translate(
-    keyOrProps: string | TranslatePropsTags<any>,
-    params: TranslationParamsTags<any> = {},
-    noWrap = false,
-    defaultValue: string | undefined = undefined
-  ): Promise<TranslationTags<any>> {
-    const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
-    let orEmpty = undefined;
-    if (typeof keyOrProps === 'object') {
-      const props = keyOrProps as TranslateProps;
-      // if values are not provided in props object, get them from function
-      // params defaults
-      params = props.params !== undefined ? props.params : params;
-      noWrap = props.noWrap !== undefined ? props.noWrap : noWrap;
-      defaultValue =
-        props.defaultValue !== undefined ? props.defaultValue : defaultValue;
-      orEmpty = props.orEmpty;
-    }
-
-    const translation = await this.dependencyService.textService.translate(
-      key,
-      params,
-      undefined,
-      orEmpty,
-      defaultValue
-    );
-
-    if (this.properties.mode === 'development' && !noWrap) {
-      await this.coreService.loadApiKeyDetails();
-      return this.dependencyService.wrapper.wrap(
-        key,
-        params,
-        defaultValue,
-        translation
-      );
-    }
-
-    return translation;
-  }
-
-  wrap(
-    key: string,
-    params?: TranslationParams,
-    defaultValue?: string | undefined,
-    translation?: string
-  ): string;
-  wrap<T>(
-    key: string,
-    params?: TranslationTags<T>,
-    defaultValue?: string | undefined,
-    translation?: TranslationTags<T>
-  ): TranslationTags<T>;
-
-  wrap(
-    key: string,
-    params?: any,
-    defaultValue?: string | undefined,
-    translation?: TranslationTags<any>
-  ): TranslationTags<any> {
-    if (this.properties.mode === 'development') {
-      return this.dependencyService.wrapper.wrap(
-        key,
-        params,
-        defaultValue,
-        translation
-      );
-    } else {
-      return translation || defaultValue;
-    }
-  }
-
-  instant(
-    key: string,
-    params?: TranslationParams,
-    noWrap?: boolean,
-    orEmpty?: boolean,
-    defaultValue?: string
-  ): string;
-  instant<T>(
-    key: string,
-    params?: TranslationParamsTags<T>,
-    noWrap?: boolean,
-    orEmpty?: boolean,
-    defaultValue?: string
-  ): TranslationTags<T>;
-
-  instant(props: InstantProps): string;
-  instant<T>(props: InstantPropsTags<T>): TranslationTags<T>;
-
-  instant(
-    keyOrProps: string | InstantPropsTags<any>,
-    params: TranslationParams = {},
-    noWrap = false,
-    orEmpty?: boolean,
-    defaultValue?: string
-  ) {
-    const key = typeof keyOrProps === 'string' ? keyOrProps : keyOrProps.key;
-    if (typeof keyOrProps === 'object') {
-      const props = keyOrProps as InstantProps;
-      // if values are not provided in props object, get them from function
-      // params defaults
-      params = props.params !== undefined ? props.params : params;
-      noWrap = props.noWrap !== undefined ? props.noWrap : noWrap;
-      defaultValue =
-        props.defaultValue !== undefined ? props.defaultValue : defaultValue;
-      orEmpty = props.orEmpty !== undefined ? props.orEmpty : orEmpty;
-    }
-
-    const translation = this.dependencyService.textService.instant(
-      key,
-      params,
-      undefined,
-      orEmpty,
-      defaultValue
-    );
-
-    if (this.properties.mode === 'development' && !noWrap) {
-      return this.dependencyService.wrapper.wrap(
-        key,
-        params,
-        defaultValue,
-        translation
-      );
-    }
-    return translation;
-  }
-
-  /**
-   * Get currently cached translations for all languages
-   */
-  public getCachedTranslations() {
-    return this.dependencyService.translationService.getCachedTranslations();
-  }
-
-  /**
-   * Loads translations for given language or returns them from cache
-   * @returns Loaded translations
-   */
-  public loadTranslations(lang: string) {
-    return this.dependencyService.translationService.loadTranslations(lang);
-  }
-
-  public stop = () => {
-    this.dependencyService.stop();
+  // restarts tolgee while applying callback
+  const withRestart = (callback: () => void) => {
+    const wasRunning = controller.isRunning();
+    wasRunning && controller.stop();
+    callback();
+    wasRunning && controller.run();
   };
 
-  private emitLangChangeEvent(value: string) {
-    const langChangedEmitter = this.onLangChange as EventEmitterImpl<any>;
-    langChangedEmitter.emit(value);
-  }
-}
+  const tolgee = Object.freeze({
+    // event listeners
+    /**
+     * Listen to tolgee events.
+     */
+    on: controller.on,
+
+    /**
+     * Listen for specific keys/namespaces changes.
+     */
+    onKeyUpdate: controller.onKeyUpdate.listenSome,
+
+    // state
+    /**
+     * @return current language if set.
+     */
+    getLanguage: controller.getLanguage,
+
+    /**
+     * `pendingLanguage` represents language which is currently being loaded.
+     * @return current `pendingLanguage` if set.
+     */
+    getPendingLanguage: controller.getPendingLanguage,
+
+    /**
+     * Change current language.
+     * - if not running sets `pendingLanguage`, `language` to the new value
+     * - if running sets `pendingLanguage` to the value, fetches necessary data and then changes `language`
+     *
+     * @return Promise which is resolved when `language` is changed.
+     */
+    changeLanguage: controller.changeLanguage,
+
+    /**
+     * Temporarily change translation in cache.
+     * @return object with revert method.
+     */
+    changeTranslation: controller.changeTranslation,
+
+    /**
+     * Adds namespace(s) list of active namespaces. And if tolgee is running, loads required data.
+     */
+    addActiveNs: controller.addActiveNs,
+
+    /**
+     * Remove namespace(s) from active namespaces.
+     *
+     * Tolgee internally counts how many times was each active namespace added,
+     * so this method will remove namespace only if the counter goes down to 0.
+     */
+    removeActiveNs: controller.removeActiveNs,
+
+    /**
+     * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)
+     *
+     * It loads data together and adds them to cache in one operation, to prevent partly loaded state.
+     */
+    loadRecords: controller.loadRecords,
+
+    /**
+     * Manually load record from `Backend` (or `DevBackend` when in dev mode)
+     */
+    loadRecord: controller.loadRecord,
+
+    /**
+     *
+     */
+    addStaticData: controller.addStaticData,
+
+    /**
+     * Get record from cache.
+     */
+    getRecord: controller.getRecord,
+
+    /**
+     * Get all records from cache.
+     */
+    getAllRecords: controller.getAllRecords,
+
+    /**
+     * @param ns optional list of namespaces that you are interested in
+     * @return `true` if there are data that need to be fetched.
+     */
+    isLoaded: controller.isLoaded,
+
+    /**
+     * @return `true` if tolgee is loading initial data (triggered by `run`).
+     */
+    isInitialLoading: controller.isInitialLoading,
+
+    /**
+     * @param ns optional list of namespaces that you are interested in
+     * @return `true` if tolgee is loading some translations for the first time.
+     */
+    isLoading: controller.isLoading,
+
+    /**
+     * @param ns optional list of namespaces that you are interested in
+     * @return `true` if tolgee is fetching some translations.
+     */
+    isFetching: controller.isFetching,
+
+    /**
+     * @return `true` if tolgee is running.
+     */
+    isRunning: controller.isRunning,
+
+    /**
+     * Changes internal state to running: true and loads initial files.
+     * Runs runnable plugins mainly Observer if present.
+     */
+    run: controller.run,
+
+    /**
+     * Changes internal state to running: false and stops runnable plugins.
+     */
+    stop: controller.stop,
+
+    /**
+     * Returns translated and formatted key.
+     * If Observer is present and tolgee is running, wraps result to be identifiable in the DOM.
+     */
+    t: controller.t,
+
+    /**
+     * Highlight keys that match selection.
+     */
+    highlight: controller.highlight,
+
+    /**
+     * @return current Tolgee options.
+     */
+    getInitialOptions: controller.getInitialOptions,
+
+    /**
+     * Tolgee is in dev mode if `DevTools` plugin is used and `apiKey` + `apiUrl` are specified.
+     * @return `true` if tolgee is in dev mode.
+     */
+    isDev: controller.isDev,
+
+    /**
+     * Wraps translation if there is `Observer` plugin
+     */
+    wrap: controller.wrap,
+
+    /**
+     * Unwrap translation
+     */
+    unwrap: controller.unwrap,
+
+    /**
+     * Override creadentials passed on initialization
+     */
+    overrideCredentials(credentials: DevCredentials) {
+      withRestart(() => controller.overrideCredentials(credentials));
+    },
+
+    /**
+     * Add tolgee plugin.
+     */
+    addPlugin(plugin: TolgeePlugin | undefined) {
+      if (plugin) {
+        withRestart(() => controller.addPlugin(tolgee, plugin));
+      }
+    },
+
+    /**
+     * Updates options after instance creation. Extends existing options,
+     * so it only changes the fields, that are listed.
+     *
+     * When called in running state, tolgee stops and runs again.
+     */
+    updateOptions(options?: TolgeeOptions) {
+      if (options) {
+        withRestart(() => controller.init(options));
+      }
+    },
+  });
+
+  return tolgee;
+};
+
+export type TolgeeInstance = ReturnType<typeof TolgeeInstanceCreator>;
+
+export type TolgeeChainer = {
+  use: (plugin: TolgeePlugin | undefined) => TolgeeChainer;
+  updateDefaults: (options: TolgeeOptions) => TolgeeChainer;
+  init(options?: TolgeeOptions): TolgeeInstance;
+};
+
+export const Tolgee = (): TolgeeChainer => {
+  const state = {
+    plugins: [] as (TolgeePlugin | undefined)[],
+    options: {} as TolgeeOptions,
+  };
+
+  const tolgeeChain = Object.freeze({
+    use(plugin: TolgeePlugin | undefined) {
+      state.plugins.push(plugin);
+      return tolgeeChain;
+    },
+    updateDefaults(options: TolgeeOptions) {
+      state.options = combineOptions(state.options, options);
+      return tolgeeChain;
+    },
+    init(options?: TolgeeOptions) {
+      const tolgee = TolgeeInstanceCreator(
+        combineOptions(state.options, options)
+      );
+      state.plugins.forEach(tolgee.addPlugin);
+      return tolgee;
+    },
+  });
+  return tolgeeChain;
+};

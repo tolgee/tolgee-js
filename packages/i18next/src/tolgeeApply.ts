@@ -1,17 +1,18 @@
-import { Tolgee } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { i18n } from 'i18next';
 
-export const tolgeeApply = (tolgee: Tolgee, i18n: i18n) => {
+export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
   const updateTranslations = () => {
-    tolgee.getCachedTranslations().forEach((translations, lang) => {
-      i18n.removeResourceBundle(lang, 'translation');
-      i18n.addResources(lang, 'translation', translations);
+    tolgee.getAllRecords().forEach(({ language, namespace, data }) => {
+      const ns = namespace || 'translation';
+      i18n.removeResourceBundle(language, ns);
+      i18n.addResources(language, ns, Object.fromEntries(data));
     });
   };
 
-  tolgee.onTranslationChange.subscribe(updateTranslations);
+  tolgee.onKeyUpdate(updateTranslations);
   i18n.on('languageChanged', (lang) => {
-    if (lang && tolgee.lang !== lang) {
+    if (lang && tolgee.getLanguage() !== lang) {
       tolgee.changeLanguage(lang);
     }
   });
@@ -21,6 +22,6 @@ export const tolgeeApply = (tolgee: Tolgee, i18n: i18n) => {
 
 declare module 'i18next' {
   interface i18n {
-    tolgee: Tolgee;
+    tolgee: TolgeeInstance;
   }
 }

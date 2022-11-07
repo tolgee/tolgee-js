@@ -58,9 +58,12 @@ context('UI Dialog', () => {
     cy.intercept({ path: '/v2/api-keys/current**', method: 'get' }, (req) => {
       req.reply(testApiKey);
     });
-    cy.intercept({ path: '/v2/projects/languages**', method: 'get' }, (req) => {
-      req.reply(testLanguages);
-    });
+    cy.intercept(
+      { path: '/v2/projects/*/languages**', method: 'get' },
+      (req) => {
+        req.reply(testLanguages);
+      }
+    );
     visitWithApiKey([
       'translations.view',
       'translations.edit',
@@ -80,8 +83,15 @@ context('UI Dialog', () => {
   });
 
   function assertCanEditEnglish() {
-    getDevUi().find('textarea').contains('On the road').type('Hello world');
-    cy.intercept({ path: '/v2/projects/keys/**', method: 'put' }, (req) => {
+    getDevUi()
+      .find('textarea')
+      .contains('On the road')
+      .should('not.be.disabled');
+    getDevUi()
+      .find('textarea')
+      .contains('On the road')
+      .type('{selectAll}{del}Hello world', { force: true });
+    cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
           id: 1000000706,

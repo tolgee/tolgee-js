@@ -1,9 +1,8 @@
 module.exports = {
-  automock: true,
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   unmockedModulePathPatterns: ['/node_modules/*'],
   modulePathIgnorePatterns: ['cypress'],
-  transformIgnorePatterns: ['node_modules/(?!@tolgee/core)'],
+  transformIgnorePatterns: ['node_modules/(?!@tolgee/web)'],
   roots: ['src'],
 };
