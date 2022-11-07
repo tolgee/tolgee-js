@@ -4,7 +4,6 @@ const tolgee = Tolgee()
   .use(BackendFetch({ prefix: 'i18n' }))
   .use(LanguageStorage())
   .init({
-    targetElement: document.body,
     highlightColor: 'yellow',
     defaultLanguage: 'en',
     fallbackLanguage: 'en',
