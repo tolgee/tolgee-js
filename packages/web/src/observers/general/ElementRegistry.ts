@@ -1,4 +1,8 @@
-import { FallbackNsTranslation, getFallback } from '@tolgee/core';
+import {
+  FallbackNsTranslation,
+  getFallback,
+  ObserverOptionsInternal,
+} from '@tolgee/core';
 import {
   ElementMeta,
   KeyAndParams,
@@ -9,7 +13,7 @@ import {
   TOLGEE_RESTRICT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
 } from '../../constants';
-import { TolgeeElement, ObserverOptions } from '../../types';
+import { TolgeeElement } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
@@ -18,7 +22,7 @@ import { compareDescriptors, nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export const ElementRegistry = (
-  options: ObserverOptions,
+  options: ObserverOptionsInternal,
   onClick: TranslationOnClick
 ) => {
   const elementStore = ElementStore();

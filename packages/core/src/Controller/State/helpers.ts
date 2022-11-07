@@ -39,3 +39,7 @@ export function getFallbackFromStruct(
 export function unique<T>(arr: T[]) {
   return Array.from(new Set(arr));
 }
+
+export function sanitizeUrl(url: string | undefined) {
+  return url ? url.replace(/\/+$/, '') : url;
+}

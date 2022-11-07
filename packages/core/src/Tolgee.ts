@@ -1,7 +1,8 @@
 import { Controller } from './Controller/Controller';
+import { combineOptions } from './Controller/State/initState';
 import { TolgeeOptions, TolgeePlugin, DevCredentials } from './types';
 
-const TolgeeInstanceCreator = (options: Partial<TolgeeOptions>) => {
+const TolgeeInstanceCreator = (options: TolgeeOptions) => {
   const controller = Controller({
     options,
   });
@@ -186,7 +187,7 @@ const TolgeeInstanceCreator = (options: Partial<TolgeeOptions>) => {
      *
      * When called in running state, tolgee stops and runs again.
      */
-    updateOptions(options?: Partial<TolgeeOptions>) {
+    updateOptions(options?: TolgeeOptions) {
       if (options) {
         withRestart(() => controller.init(options));
       }
@@ -200,14 +201,14 @@ export type TolgeeInstance = ReturnType<typeof TolgeeInstanceCreator>;
 
 export type TolgeeChainer = {
   use: (plugin: TolgeePlugin | undefined) => TolgeeChainer;
-  updateDefaults: (options: Partial<TolgeeOptions>) => TolgeeChainer;
-  init(options?: Partial<TolgeeOptions>): TolgeeInstance;
+  updateDefaults: (options: TolgeeOptions) => TolgeeChainer;
+  init(options?: TolgeeOptions): TolgeeInstance;
 };
 
 export const Tolgee = (): TolgeeChainer => {
   const state = {
     plugins: [] as (TolgeePlugin | undefined)[],
-    options: {} as Partial<TolgeeOptions>,
+    options: {} as TolgeeOptions,
   };
 
   const tolgeeChain = Object.freeze({
@@ -215,15 +216,14 @@ export const Tolgee = (): TolgeeChainer => {
       state.plugins.push(plugin);
       return tolgeeChain;
     },
-    updateDefaults(options: Partial<TolgeeOptions>) {
-      state.options = {
-        ...state.options,
-        ...options,
-      };
+    updateDefaults(options: TolgeeOptions) {
+      state.options = combineOptions(state.options, options);
       return tolgeeChain;
     },
-    init(options?: Partial<TolgeeOptions>) {
-      const tolgee = TolgeeInstanceCreator({ ...state.options, ...options });
+    init(options?: TolgeeOptions) {
+      const tolgee = TolgeeInstanceCreator(
+        combineOptions(state.options, options)
+      );
       state.plugins.forEach(tolgee.addPlugin);
       return tolgee;
     },

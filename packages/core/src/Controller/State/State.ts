@@ -7,7 +7,12 @@ import {
   NsType,
 } from '../../types';
 import { decodeCacheKey } from '../Cache/helpers';
-import { getFallbackArray, getFallbackFromStruct, unique } from './helpers';
+import {
+  getFallbackArray,
+  getFallbackFromStruct,
+  sanitizeUrl,
+  unique,
+} from './helpers';
 import { initState, TolgeeOptions } from './initState';
 
 export const State = (
@@ -140,7 +145,14 @@ export const State = (
   }
 
   function overrideCredentials(credentials: DevCredentials) {
-    devCredentials = credentials;
+    if (credentials) {
+      devCredentials = {
+        ...credentials,
+        apiUrl: sanitizeUrl(credentials.apiUrl),
+      };
+    } else {
+      devCredentials = undefined;
+    }
   }
 
   return Object.freeze({

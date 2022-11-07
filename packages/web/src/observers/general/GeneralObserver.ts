@@ -3,9 +3,9 @@ import {
   TranslationOnClick,
   WrapperInterface,
   ObserverRunProps,
+  ObserverOptionsInternal,
 } from '@tolgee/core';
 
-import { ObserverOptions } from './initObserverOptions';
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '../../constants';
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
@@ -15,7 +15,7 @@ import { NodeHandler } from './NodeHandler';
 
 export const GeneralObserver = (
   wrapper: WrapperInterface,
-  options: ObserverOptions,
+  options: ObserverOptionsInternal,
   onClick: TranslationOnClick
 ) => {
   let isObserving = false;

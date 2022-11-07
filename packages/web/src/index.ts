@@ -6,3 +6,5 @@ export {
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
   DEVTOOLS_ID,
 } from './constants';
+
+export { Tolgee, TolgeeCore } from './WebTolgee';

@@ -1,17 +1,19 @@
 import { screen, waitFor } from '@testing-library/dom';
-import { Tolgee, TolgeeInstance, TolgeePlugin } from '@tolgee/core';
+import { Tolgee, TolgeeInstance } from '@tolgee/core';
 import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
+import { ObserverPlugin } from '../ObserverPlugin';
 
-export const testRetranslate = (plugin: TolgeePlugin) => {
+export const testRetranslate = (observerType: 'invisible' | 'text') => {
   describe('retranslate', () => {
     let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
       tolgee = Tolgee()
-        .use(plugin)
+        .use(ObserverPlugin())
         .init({
           language: 'en',
           staticData: { en: { hello: 'world' }, es: { hello: 'mundo' } },
+          observerType,
         });
       await tolgee.run();
     });

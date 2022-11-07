@@ -1,16 +1,11 @@
-import type { ObserverInterface, TolgeePlugin } from '@tolgee/core';
-import {
-  initObserverOptions,
-  ObserverOptions,
-} from './observers/general/initObserverOptions';
+import type { ObserverInterface } from '@tolgee/core';
 import { GeneralObserver } from './observers/general/GeneralObserver';
 import { setNodeText } from './observers/general/helpers';
 import { TextWrapper } from './observers/text/TextWrapper';
 
-const TextObserverCreator =
-  (inputOptions?: Partial<ObserverOptions>): ObserverInterface =>
-  ({ translate, onClick }) => {
-    const options = initObserverOptions(inputOptions);
+export const TextObserver =
+  (): ObserverInterface =>
+  ({ translate, onClick, options }) => {
     const wrapper = TextWrapper({
       inputPrefix: options.inputPrefix,
       inputSuffix: options.inputSuffix,
@@ -42,11 +37,4 @@ const TextObserverCreator =
       highlight,
       outputNotFormattable: true,
     };
-  };
-
-export const TextObserver =
-  (options?: Partial<ObserverOptions>): TolgeePlugin =>
-  (tolgee, tools) => {
-    tools.setObserver(TextObserverCreator(options));
-    return tolgee;
   };

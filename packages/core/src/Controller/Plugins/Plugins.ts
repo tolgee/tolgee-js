@@ -16,7 +16,6 @@ import {
   UiKeyOption,
   LanguageDetectorInterface,
   LanguageStorageInterface,
-  TolgeeOptions,
   ChangeTranslationInterface,
   WrapperWrapProps,
   Unwrapped,
@@ -24,10 +23,11 @@ import {
   TolgeePlugin,
   TolgeeInstance,
 } from '../../types';
+import { TolgeeOptionsInternal } from '../State/initState';
 
 export const PluginService = (
   getLanguage: () => string | undefined,
-  getInitialOptions: () => TolgeeOptions,
+  getInitialOptions: () => TolgeeOptionsInternal,
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[] | string,
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
@@ -185,6 +185,7 @@ export const PluginService = (
       instances.observer = plugins.observer?.({
         translate,
         onClick,
+        options: getInitialOptions().observerOptions,
       });
     }
     instances.observer?.run({ mouseHighlight: isDev });

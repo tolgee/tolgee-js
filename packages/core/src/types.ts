@@ -1,11 +1,19 @@
 import { TolgeeInstance } from './Tolgee';
 export type { TolgeeChainer, TolgeeInstance } from './Tolgee';
+import type { ObserverOptionsInternal } from './Controller/State/observerOptions';
 
 export type {
   State,
   TolgeeOptions,
+  TolgeeOptionsInternal,
   TolgeeStaticData,
 } from './Controller/State/initState';
+
+export type {
+  ObserverOptions,
+  ObserverOptionsInternal,
+  ModifierKey,
+} from './Controller/State/observerOptions';
 
 export type { EventEmitterInstance } from './Controller/Events/EventEmitter';
 export type { EventEmitterSelectiveInstance } from './Controller/Events/EventEmitterSelective';
@@ -220,6 +228,7 @@ export type FinalFormatterInterface = {
 export type ObserverProps = {
   translate: (params: TranslatePropsInternal) => string;
   onClick: TranslationOnClick;
+  options: ObserverOptionsInternal;
 };
 
 export type Highlighter = {

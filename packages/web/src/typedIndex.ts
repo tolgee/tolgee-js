@@ -1,5 +1,4 @@
-export { InvisibleObserver } from './InvisibleObserver';
-export { TextObserver } from './TextObserver';
+export { ObserverPlugin } from './ObserverPlugin';
 export { DevBackend } from './DevBackend';
 export { getProjectIdFromApiKey } from './tools/decodeApiKey';
 export { BrowserExtensionPlugin } from './BrowserExtensionPlugin/BrowserExtensionPlugin';

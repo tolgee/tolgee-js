@@ -1,15 +1,20 @@
 import {
   FallbackLanguageOption,
   FallbackNs,
-  TolgeePlugin,
   TreeTranslationsData,
 } from '../../types';
+import { sanitizeUrl } from './helpers';
+import {
+  defaultObserverOptions,
+  ObserverOptions,
+  ObserverOptionsInternal,
+} from './observerOptions';
 
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
 };
 
-export type TolgeeOptions = {
+export type TolgeeOptionsInternal = {
   /**
    * Initial language
    */
@@ -74,11 +79,19 @@ export type TolgeeOptions = {
    */
   staticData?: TolgeeStaticData;
 
-  plugins?: TolgeePlugin[];
+  observerOptions: ObserverOptionsInternal;
+
+  observerType: 'invisible' | 'text';
+};
+
+export type TolgeeOptions = Partial<
+  Omit<TolgeeOptionsInternal, 'observerOptions'>
+> & {
+  observerOptions?: ObserverOptions;
 };
 
 export type State = {
-  initialOptions: TolgeeOptions;
+  initialOptions: TolgeeOptionsInternal;
   activeNamespaces: Map<string, number>;
   language: string | undefined;
   pendingLanguage: string | undefined;
@@ -86,23 +99,41 @@ export type State = {
   isRunning: boolean;
 };
 
-const defaultValues: TolgeeOptions = {
+const defaultValues: TolgeeOptionsInternal = {
   defaultNs: '',
+  observerOptions: defaultObserverOptions,
+  observerType: 'invisible',
+};
+
+export const combineOptions = <T extends TolgeeOptions>(
+  ...states: (T | undefined)[]
+) => {
+  let result = {} as T;
+  states.forEach((state) => {
+    result = {
+      ...result,
+      ...state,
+      observerOptions: {
+        ...result.observerOptions,
+        ...state?.observerOptions,
+      },
+    };
+  });
+  return result;
 };
 
 export const initState = (
   options?: Partial<TolgeeOptions>,
   previousState?: State
 ): State => {
-  const initialOptions = {
-    ...defaultValues,
-    ...previousState?.initialOptions,
-    ...options,
-  };
+  const initialOptions = combineOptions(
+    defaultValues,
+    previousState?.initialOptions,
+    options
+  ) as TolgeeOptionsInternal;
 
   // remove extra '/' from url end
-  const apiUrl = initialOptions.apiUrl;
-  initialOptions.apiUrl = apiUrl ? apiUrl.replace(/\/+$/, '') : apiUrl;
+  initialOptions.apiUrl = sanitizeUrl(initialOptions.apiUrl);
 
   return {
     initialOptions,

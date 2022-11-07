@@ -5,26 +5,23 @@ import { InContextTools } from '../InContextTools';
 
 (['invisible', 'text'] as const).forEach((observerType) => {
   describe(`observer ${observerType}`, () => {
-    let tolgee: TolgeeInstance;
+    const MyTolgee = () =>
+      Tolgee()
+        .use(InContextTools())
+        .updateDefaults({
+          language: 'en',
+          staticData: { en: { test: 'Hello world' } },
+          observerType,
+        });
 
-    beforeEach(() => {
-      tolgee = Tolgee().init({
-        language: 'en',
-        staticData: { en: { test: 'Hello world' } },
-      });
-    });
+    let tolgee: TolgeeInstance;
 
     afterEach(() => {
       tolgee.stop();
     });
 
     it('pass to parent', async () => {
-      tolgee.addPlugin(
-        InContextTools({
-          observerType,
-          passToParent: ['b'],
-        })
-      );
+      tolgee = MyTolgee().init({ observerOptions: { passToParent: ['b'] } });
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -38,12 +35,12 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('pass to parent function', async () => {
-      tolgee.addPlugin(
-        InContextTools({
-          observerType,
+      tolgee = MyTolgee().init({
+        observerOptions: {
           passToParent: (e) => e.tagName.toLowerCase() === 'b',
-        })
-      );
+        },
+      });
+
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -63,12 +60,12 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('restricted elements', async () => {
-      tolgee.addPlugin(
-        InContextTools({
-          observerType,
+      tolgee = MyTolgee().init({
+        observerOptions: {
           restrictedElements: ['main'],
-        })
-      );
+        },
+      });
+
       await tolgee.run();
       document.body.innerHTML = `
         <div data-testid="parent">
@@ -86,15 +83,14 @@ import { InContextTools } from '../InContextTools';
     });
 
     it('tag attributes', async () => {
-      tolgee.addPlugin(
-        InContextTools({
-          observerType,
+      tolgee = MyTolgee().init({
+        observerOptions: {
           tagAttributes: {
             main: ['test'],
             '*': ['title'],
           },
-        })
-      );
+        },
+      });
 
       await tolgee.run();
       document.body.innerHTML = `

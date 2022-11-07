@@ -1,4 +1,4 @@
-export type ObserverOptions = {
+export type ObserverOptionsInternal = {
   tagAttributes: Record<string, string[]>;
   highlightKeys: ModifierKey[];
   highlightColor: string;
@@ -10,9 +10,11 @@ export type ObserverOptions = {
   passToParent: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean);
 };
 
+export type ObserverOptions = Partial<ObserverOptionsInternal>;
+
 export type ModifierKey = 'Alt' | 'Control' | 'Shift' | 'Meta';
 
-const defaultValues: ObserverOptions = {
+export const defaultObserverOptions: ObserverOptionsInternal = {
   tagAttributes: {
     textarea: ['placeholder'],
     input: ['value', 'placeholder'],
@@ -26,13 +28,4 @@ const defaultValues: ObserverOptions = {
   inputPrefix: '%-%tolgee:',
   inputSuffix: '%-%',
   passToParent: ['option', 'optgroup'],
-};
-
-export const initObserverOptions = (
-  options?: Partial<ObserverOptions>
-): ObserverOptions => {
-  return {
-    ...defaultValues,
-    ...options,
-  };
 };

@@ -1,4 +1,5 @@
-import { TolgeeElement, ModifierKey } from '../../types';
+import { ModifierKey } from '@tolgee/core';
+import { TolgeeElement } from '../../types';
 import { DEVTOOLS_ID } from '../../constants';
 import { ElementStoreType } from './ElementStore';
 

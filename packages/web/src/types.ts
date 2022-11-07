@@ -1,18 +1,11 @@
-export {
-  ObserverOptions,
-  ModifierKey,
-} from './observers/general/initObserverOptions';
-
 import type {
   BackendGetRecordProps,
   DevCredentials,
   TreeTranslationsData,
 } from '@tolgee/core';
-import { ObserverOptions } from './observers/general/initObserverOptions';
 
-export type InContextOptions = Partial<ObserverOptions> & {
+export type InContextOptions = {
   credentials?: DevCredentials;
-  observerType?: 'text' | 'invisible';
 };
 
 export type NodeLock = {
