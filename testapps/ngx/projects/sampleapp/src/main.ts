@@ -10,15 +10,13 @@ if (environment.production) {
 
 function bootstrap() {
   platformBrowserDynamic()
-  .bootstrapModule(AppModule)
-  // eslint-disable-next-line no-console
-  .catch((err) => console.error(err));
-};
-
+    .bootstrapModule(AppModule)
+    // eslint-disable-next-line no-console
+    .catch((err) => console.error(err));
+}
 
 if (document.readyState === 'complete') {
   bootstrap();
 } else {
   document.addEventListener('DOMContentLoaded', bootstrap);
 }
-

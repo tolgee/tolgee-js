@@ -1,17 +1,15 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { act } from 'react-dom/test-utils';
-
-import mockTranslations from '@testing/mockTranslations';
 import {
-  TolgeeProvider,
-  useTranslate,
+  DevTools,
   Tolgee,
   TolgeeInstance,
-  DevTools,
+  TolgeeProvider,
+  useTranslate,
 } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
-import { mockCoreFetch, mockCoreFetchAsync } from '@testing/fetchMock';
+import { mockCoreFetchAsync } from '@testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';

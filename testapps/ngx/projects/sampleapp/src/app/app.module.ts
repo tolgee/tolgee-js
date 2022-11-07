@@ -9,15 +9,14 @@ import { LangSelectorComponent } from './component/lang-selector/lang-selector.c
 
 import {
   BackendFetch,
+  NgxPlugin,
   NgxTolgeeModule,
   Tolgee,
-  NgxPlugin,
   TOLGEE_INSTANCE,
 } from '@tolgee/ngx';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormatIcu } from '@tolgee/format-icu';
 import { FormsModule } from '@angular/forms';
-import { wait } from './wait';
 import { CommonModule } from '@angular/common';
 
 @NgModule({

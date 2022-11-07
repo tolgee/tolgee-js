@@ -1,10 +1,6 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import {
-  CacheDescriptorWithKey,
-  KeyDescriptorInternal,
-  ListenerHandler,
-} from '../../types';
+import { CacheDescriptorWithKey, KeyDescriptorInternal } from '../../types';
 import { TolgeeOn } from '../../types/event';
 
 export const Events = (
