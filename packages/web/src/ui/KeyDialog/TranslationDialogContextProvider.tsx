@@ -4,7 +4,7 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
-import { UiProps } from '@tolgee/core';
+import { getFallback, UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
@@ -181,12 +181,15 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
     const translations = translationsLoadable.data?._embedded?.keys?.[0];
 
+    const nsFallback = getFallback(namespaces || props.ns)?.[0];
+    const namespace = typeof nsFallback === 'string' ? nsFallback : undefined;
+
     const linkToPlatform =
       scopesLoadable.data?.projectId !== undefined
         ? `${props.uiProps.apiUrl}/projects/${
             scopesLoadable.data?.projectId
           }/translations/single?key=${props.keyName}${
-            selectedNs !== undefined ? `&ns=${selectedNs}` : ''
+            namespace !== undefined ? `&ns=${namespace}` : ''
           }`
         : undefined;
 
