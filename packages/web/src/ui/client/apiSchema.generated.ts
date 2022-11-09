@@ -37,6 +37,10 @@ export interface paths {
     /** Resets existing language paired with language to import. */
     put: operations["resetExistingLanguage_1"];
   };
+  "/v2/projects/import/result/files/{fileId}/select-namespace": {
+    /** Sets namespace for file to import. */
+    put: operations["selectNamespace_1"];
+  };
   "/v2/projects/import/apply": {
     /** Imports the data prepared in previous step */
     put: operations["applyImport_1"];
@@ -50,7 +54,7 @@ export interface paths {
   "/v2/projects/translations/{translationId}/comments/{commentId}": {
     get: operations["get_4"];
     put: operations["update_1"];
-    delete: operations["delete_5"];
+    delete: operations["delete_6"];
   };
   "/v2/projects/translations/{translationId}/dismiss-auto-translated-state": {
     put: operations["dismissAutoTranslatedState_1"];
@@ -73,16 +77,12 @@ export interface paths {
      */
     put: operations["autoTranslate_1"];
   };
-  "/api/project/translations": {
-    put: operations["setTranslations_3"];
-    post: operations["createOrUpdateTranslations_3"];
-  };
   "/v2/projects/keys/create": {
     post: operations["create_2"];
   };
   "/v2/projects/keys": {
     post: operations["create_3"];
-    delete: operations["delete_3"];
+    delete: operations["delete_4"];
   };
   "/v2/projects/import": {
     /** Prepares provided files to import. */
@@ -112,24 +112,14 @@ export interface paths {
     post: operations["createLanguage_1"];
   };
   "/v2/projects/keys/{keyId}/screenshots": {
-    get: operations["getKeyScreenshots_2"];
+    get: operations["getKeyScreenshots"];
     post: operations["uploadScreenshot"];
   };
   "/v2/image-upload": {
     post: operations["upload"];
   };
-  "/api/project/keys/translations/{languages}": {
-    /** Key name must be provided in method body, since it can be long and can contain characters hard to encode */
-    post: operations["getKeyTranslationsPost_2"];
-  };
   "/v2/projects/tags": {
     get: operations["getAll_2"];
-  };
-  "/v2/projects/stats/daily-activity": {
-    get: operations["getProjectDailyActivity_1"];
-  };
-  "/v2/projects/stats": {
-    get: operations["getProjectStats_1"];
   };
   "/v2/projects/activity": {
     get: operations["getActivity_1"];
@@ -152,6 +142,10 @@ export interface paths {
     /** Returns the result of preparation. */
     get: operations["getImportResult_1"];
   };
+  "/v2/projects/import/all-namespaces": {
+    /** Returns all existing and imported namespaces */
+    get: operations["getAllNamespaces_2"];
+  };
   "/v2/projects/translations/{translationId}/history": {
     get: operations["getTranslationHistory_1"];
   };
@@ -161,17 +155,17 @@ export interface paths {
   "/v2/projects/translations/select-all": {
     get: operations["getSelectAllKeyIds_1"];
   };
+  "/v2/projects/stats/daily-activity": {
+    get: operations["getProjectDailyActivity_1"];
+  };
+  "/v2/projects/stats": {
+    get: operations["getProjectStats_1"];
+  };
   "/v2/api-keys/current": {
     get: operations["getCurrent"];
   };
-  "/api/project/keys/{id}": {
-    get: operations["getDeprecated_2"];
-  };
   "/api/project/export/jsonZip": {
     get: operations["doExportJsonZip_1"];
-  };
-  "/api/project/translations/{languages}": {
-    get: operations["getTranslations_3"];
   };
   "/api/apiKeys/scopes": {
     get: operations["getApiKeyScopes"];
@@ -180,13 +174,13 @@ export interface paths {
     delete: operations["removeTag_1"];
   };
   "/v2/projects/keys/{ids}": {
-    delete: operations["delete_1"];
+    delete: operations["delete_2"];
   };
   "/v2/projects/keys/{keyId}/screenshots/{ids}": {
     delete: operations["deleteScreenshots"];
   };
   "/v2/image-upload/{ids}": {
-    delete: operations["delete_9"];
+    delete: operations["delete_10"];
   };
 }
 
@@ -195,15 +189,6 @@ export interface components {
     Avatar: {
       large: string;
       thumbnail: string;
-    };
-    UserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      emailAwaitingVerification?: string;
-      avatar?: components["schemas"]["Avatar"];
-      globalServerRole: "USER" | "ADMIN";
     };
     LanguageModel: {
       /** Format: int64 */
@@ -242,6 +227,8 @@ export interface components {
     ComplexEditKeyDto: {
       /** @description Name of the key */
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
       /** @description Translations to update */
       translations?: { [key: string]: string };
       /** @description Tags of the key. If not provided tags won't be modified */
@@ -262,6 +249,11 @@ export interface components {
        * @example this_is_super_key
        */
       name: string;
+      /**
+       * @description Namespace of key
+       * @example homepage
+       */
+      namespace?: string;
       /**
        * @description Translations object containing values updated in this request
        * @example [object Object]
@@ -316,6 +308,8 @@ export interface components {
     };
     EditKeyDto: {
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
     };
     KeyModel: {
       /**
@@ -328,6 +322,14 @@ export interface components {
        * @example this_is_super_key
        */
       name: string;
+      /**
+       * @description Namespace of key
+       * @example homepage
+       */
+      namespace?: string;
+    };
+    SetFileNamespaceRequest: {
+      namespace?: string;
     };
     TranslationCommentModel: {
       /**
@@ -351,6 +353,17 @@ export interface components {
        */
       updatedAt: string;
     };
+    /** @description User who created the comment */
+    UserAccountModel: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      name?: string;
+      emailAwaitingVerification?: string;
+      avatar?: components["schemas"]["Avatar"];
+      globalServerRole: "USER" | "ADMIN";
+      deleted: boolean;
+    };
     TranslationCommentDto: {
       text: string;
       state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
@@ -361,6 +374,8 @@ export interface components {
        * @example what_a_key_to_translate
        */
       key: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
       /**
        * @description Object mapping language tag to translation
        * @example [object Object]
@@ -386,6 +401,11 @@ export interface components {
        * @example this_is_super_key
        */
       keyName: string;
+      /**
+       * @description The namespace of the key
+       * @example homepage
+       */
+      keyNamespace?: string;
       /**
        * @description Translations object containing values updated in this request
        * @example [object Object]
@@ -419,12 +439,13 @@ export interface components {
     CreateKeyDto: {
       /** @description Name of the key */
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
       translations?: { [key: string]: string };
       tags?: string[];
       /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
       screenshotUploadedImageIds?: number[];
     };
-    StreamingResponseBody: { [key: string]: unknown };
     ErrorResponseBody: {
       code: string;
       params?: { [key: string]: unknown }[];
@@ -447,6 +468,7 @@ export interface components {
       importFileId: number;
       /** Format: int32 */
       importFileIssueCount: number;
+      namespace?: string;
       /** Format: int32 */
       totalCount: number;
       /** Format: int32 */
@@ -473,17 +495,16 @@ export interface components {
     ExportParams: {
       languages?: string[];
       format: "JSON" | "XLIFF";
-      splitByScope: boolean;
-      splitByScopeDelimiter: string;
-      /** Format: int32 */
-      splitByScopeDepth: number;
+      structureDelimiter?: string;
       filterKeyId?: number[];
       filterKeyIdNot?: number[];
       filterTag?: string;
       filterKeyPrefix?: string;
       filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED")[];
+      filterNamespace?: string[];
       zip: boolean;
     };
+    StreamingResponseBody: { [key: string]: unknown };
     TranslationCommentWithLangKeyDto: {
       /** Format: int64 */
       keyId: number;
@@ -550,59 +571,11 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
-    GetKeyTranslationsReqDto: {
-      key?: string;
-    };
     PagedModelTagModel: {
       _embedded?: {
         tags?: components["schemas"]["TagModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
-    };
-    LanguageStatsModel: {
-      /** Format: int64 */
-      languageId?: number;
-      languageTag?: string;
-      languageName?: string;
-      languageOriginalName?: string;
-      languageFlagEmoji?: string;
-      /** Format: int64 */
-      translatedKeyCount: number;
-      /** Format: int64 */
-      translatedWordCount: number;
-      /** Format: double */
-      translatedPercentage: number;
-      /** Format: int64 */
-      reviewedKeyCount: number;
-      /** Format: int64 */
-      reviewedWordCount: number;
-      /** Format: double */
-      reviewedPercentage: number;
-      /** Format: int64 */
-      untranslatedKeyCount: number;
-      /** Format: int64 */
-      untranslatedWordCount: number;
-      /** Format: double */
-      untranslatedPercentage: number;
-    };
-    ProjectStatsModel: {
-      /** Format: int64 */
-      projectId: number;
-      /** Format: int32 */
-      languageCount: number;
-      /** Format: int64 */
-      keyCount: number;
-      /** Format: int64 */
-      baseWordsCount: number;
-      /** Format: double */
-      translatedPercentage: number;
-      /** Format: double */
-      reviewedPercentage: number;
-      /** Format: int64 */
-      membersCount: number;
-      /** Format: int64 */
-      tagCount: number;
-      languageStats: components["schemas"]["LanguageStatsModel"][];
     };
     EntityDescriptionWithRelations: {
       entityClass: string;
@@ -644,6 +617,7 @@ export interface components {
       username?: string;
       name?: string;
       avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
     };
     ProjectActivityModel: {
       /** Format: int64 */
@@ -734,6 +708,21 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
+    CollectionModelImportNamespaceModel: {
+      _embedded?: {
+        namespaces?: components["schemas"]["ImportNamespaceModel"][];
+      };
+    };
+    ImportNamespaceModel: {
+      /**
+       * Format: int64
+       * @description The id of namespace. When null, namespace doesn't exist and will be created by import.
+       * @example 10000048
+       */
+      id?: number;
+      /** @example homepage */
+      name: string;
+    };
     PagedModelTranslationCommentModel: {
       _embedded?: {
         translationComments?: components["schemas"]["TranslationCommentModel"][];
@@ -753,6 +742,7 @@ export interface components {
       username: string;
       name?: string;
       avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
     };
     TranslationHistoryModel: {
       /** @description Modified fields */
@@ -781,6 +771,11 @@ export interface components {
        * @example this_is_super_key
        */
       keyName: string;
+      /**
+       * @description The namespace of the key
+       * @example homepage
+       */
+      keyNamespace?: string;
       /** @description Tags of key */
       keyTags: components["schemas"]["TagModel"][];
       /**
@@ -859,6 +854,51 @@ export interface components {
       /** @description Was translation memory used to translate this? */
       fromTranslationMemory: boolean;
     };
+    LanguageStatsModel: {
+      /** Format: int64 */
+      languageId?: number;
+      languageTag?: string;
+      languageName?: string;
+      languageOriginalName?: string;
+      languageFlagEmoji?: string;
+      /** Format: int64 */
+      translatedKeyCount: number;
+      /** Format: int64 */
+      translatedWordCount: number;
+      /** Format: double */
+      translatedPercentage: number;
+      /** Format: int64 */
+      reviewedKeyCount: number;
+      /** Format: int64 */
+      reviewedWordCount: number;
+      /** Format: double */
+      reviewedPercentage: number;
+      /** Format: int64 */
+      untranslatedKeyCount: number;
+      /** Format: int64 */
+      untranslatedWordCount: number;
+      /** Format: double */
+      untranslatedPercentage: number;
+    };
+    ProjectStatsModel: {
+      /** Format: int64 */
+      projectId: number;
+      /** Format: int32 */
+      languageCount: number;
+      /** Format: int64 */
+      keyCount: number;
+      /** Format: int64 */
+      baseWordsCount: number;
+      /** Format: double */
+      translatedPercentage: number;
+      /** Format: double */
+      reviewedPercentage: number;
+      /** Format: int64 */
+      membersCount: number;
+      /** Format: int64 */
+      tagCount: number;
+      languageStats: components["schemas"]["LanguageStatsModel"][];
+    };
     PagedModelLanguageModel: {
       _embedded?: {
         languages?: components["schemas"]["LanguageModel"][];
@@ -879,21 +919,17 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
-      username?: string;
-      /** Format: int64 */
-      expiresAt?: number;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
       lastUsedAt?: number;
+      /** Format: int64 */
+      expiresAt?: number;
+      username?: string;
       description: string;
       userFullName?: string;
       projectName: string;
       scopes: string[];
-    };
-    DeprecatedKeyDto: {
-      /** @description This means name of key. Will be renamed in v2 */
-      fullPathString: string;
     };
     DeleteKeysDto: {
       /** @description IDs of keys to delete */
@@ -1218,6 +1254,43 @@ export interface operations {
       };
     };
   };
+  /** Sets namespace for file to import. */
+  selectNamespace_1: {
+    parameters: {
+      path: {
+        fileId: number;
+      };
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetFileNamespaceRequest"];
+      };
+    };
+  };
   /** Imports the data prepared in previous step */
   applyImport_1: {
     parameters: {
@@ -1396,7 +1469,7 @@ export interface operations {
       };
     };
   };
-  delete_5: {
+  delete_6: {
     parameters: {
       path: {
         commentId: number;
@@ -1499,6 +1572,12 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /**
+         * Filter namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNamespace?: string[];
         /** Selects only keys with provided tag */
         filterTag?: string[];
         /** Zero-based page index (0..N) */
@@ -1725,72 +1804,6 @@ export interface operations {
       };
     };
   };
-  setTranslations_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetTranslationsWithKeyDto"];
-      };
-    };
-  };
-  createOrUpdateTranslations_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetTranslationsWithKeyDto"];
-      };
-    };
-  };
   create_2: {
     parameters: {
       query: {
@@ -1865,7 +1878,7 @@ export interface operations {
       };
     };
   };
-  delete_3: {
+  delete_4: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -1978,22 +1991,14 @@ export interface operations {
         languages?: string[];
         /** Format to export to */
         format?: "JSON" | "XLIFF";
-        /** When true translations are split to directories by scopes */
-        splitByScope?: boolean;
         /**
-         * Scope delimiter.
+         * Delimiter to structure file content.
          *
-         * e.g. For key "home.header.title" scopes would result in "home" -> "header", when splitByScopeDepth is greater than 1.
+         * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+         *
+         * When null, resulting file won't be structured.
          */
-        splitByScopeDelimiter?: string;
-        /**
-         * Maximum depth of scoping.
-         *
-         * e.g. For key "home.header.title" and depth 1, resulting scope is  "home".
-         *
-         * For depth 2, resulting scopes are  "home" -> "header".
-         */
-        splitByScopeDepth?: number;
+        structureDelimiter?: string;
         /** Filter key IDs to be contained in export */
         filterKeyId?: number[];
         /** Filter key IDs not to be contained in export */
@@ -2004,6 +2009,8 @@ export interface operations {
         filterKeyPrefix?: string;
         /** Filter translations with state. By default, everything except untranslated is exported. */
         filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED")[];
+        /** Select one ore multiple namespaces to export */
+        filterNamespace?: string[];
         /**
          * If false, it doesn't return zip of files, but it returns single file.
          *
@@ -2349,7 +2356,7 @@ export interface operations {
       };
     };
   };
-  getKeyScreenshots_2: {
+  getKeyScreenshots: {
     parameters: {
       path: {
         keyId: number;
@@ -2467,47 +2474,6 @@ export interface operations {
       };
     };
   };
-  /** Key name must be provided in method body, since it can be long and can contain characters hard to encode */
-  getKeyTranslationsPost_2: {
-    parameters: {
-      path: {
-        languages: string[];
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": { [key: string]: string };
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["GetKeyTranslationsReqDto"];
-      };
-    };
-  };
   getAll_2: {
     parameters: {
       query: {
@@ -2531,70 +2497,6 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["PagedModelTagModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  getProjectDailyActivity_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/hal+json": { [key: string]: number };
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  getProjectStats_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["ProjectStatsModel"];
         };
       };
       /** Bad Request */
@@ -2843,6 +2745,39 @@ export interface operations {
       };
     };
   };
+  /** Returns all existing and imported namespaces */
+  getAllNamespaces_2: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["CollectionModelImportNamespaceModel"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
   getTranslationHistory_1: {
     parameters: {
       path: {
@@ -2890,6 +2825,8 @@ export interface operations {
         languages: string[];
       };
       query: {
+        /** Namespace to return */
+        ns?: string;
         /** API key provided via query parameter. Will be deprecated in the future. */
         ak?: string;
       };
@@ -2954,6 +2891,12 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /**
+         * Filter namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNamespace?: string[];
         /** Selects only keys with provided tag */
         filterTag?: string[];
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -2969,6 +2912,70 @@ export interface operations {
       200: {
         content: {
           "*/*": components["schemas"]["SelectAllResponse"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getProjectDailyActivity_1: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/hal+json": { [key: string]: number };
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  getProjectStats_1: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/hal+json": components["schemas"]["ProjectStatsModel"];
         };
       };
       /** Bad Request */
@@ -3017,41 +3024,6 @@ export interface operations {
       };
     };
   };
-  getDeprecated_2: {
-    parameters: {
-      path: {
-        id: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["DeprecatedKeyDto"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
   doExportJsonZip_1: {
     parameters: {
       query: {
@@ -3068,41 +3040,6 @@ export interface operations {
       200: {
         content: {
           "application/zip": components["schemas"]["StreamingResponseBody"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
-  getTranslations_3: {
-    parameters: {
-      path: {
-        languages: string[];
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": { [key: string]: { [key: string]: unknown } };
         };
       };
       /** Bad Request */
@@ -3183,7 +3120,7 @@ export interface operations {
       };
     };
   };
-  delete_1: {
+  delete_2: {
     parameters: {
       path: {
         ids: number[];
@@ -3245,7 +3182,7 @@ export interface operations {
       };
     };
   };
-  delete_9: {
+  delete_10: {
     parameters: {
       path: {
         ids: number[];

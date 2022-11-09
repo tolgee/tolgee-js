@@ -1,11 +1,6 @@
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
-import type {
-  FallbackNsTranslation,
-  UiProps,
-  UiInterface,
-  UiKeyOption,
-} from '@tolgee/core';
+import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
@@ -46,7 +41,7 @@ export class UI implements UiInterface {
   public renderViewer(
     key: string,
     defaultValue: string | undefined,
-    ns: FallbackNsTranslation
+    ns: string[]
   ) {
     this.viewerComponent.translationEdit(key, defaultValue, ns);
   }

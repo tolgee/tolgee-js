@@ -4,12 +4,7 @@ import { sleep } from '../tools/sleep';
 import { createProvider } from '../tools/createProvider';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from './languageHelpers';
-import {
-  FallbackNsTranslation,
-  getFallback,
-  getFallbackArray,
-  UiProps,
-} from '@tolgee/core';
+import { UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../ui/client/useQueryApi';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { getInitialLanguages, setPreferredLanguages } from './tools';
@@ -35,7 +30,7 @@ type DialogProps = {
   open: boolean;
   onClose: () => void;
   uiProps: UiProps;
-  ns: FallbackNsTranslation;
+  ns: string[];
 };
 
 type Actions =
@@ -58,7 +53,6 @@ type Actions =
 
 export const [DialogProvider, useDialogDispatch, useDialogContext] =
   createProvider((props: DialogProps) => {
-    const [namespaces, setNamespaces] = useState<undefined | string[]>();
     const [success, setSuccess] = useState<boolean>(false);
     const [takingScreenshot, setTakingScreenshot] = useState(false);
     const [translationsForm, setTranslationsForm] = useState<FormTranslations>(
@@ -69,9 +63,8 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     );
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
-    const [selectedNs, setSelectedNs] = useState<string>(
-      getFallbackArray(props.ns)[0]
-    );
+
+    const [selectedNs, setSelectedNs] = useState<string>(props.ns[0]);
     const isPat = getApiKeyType(props.uiProps.apiKey) === 'tgpat';
 
     const scopesLoadable = useApiQuery({
@@ -125,6 +118,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       method: 'get',
       query: {
         filterKeyName: [props.keyName],
+        filterNamespace: props.ns,
         languages: selectedLanguages,
       },
       options: {
@@ -147,6 +141,15 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
         },
       },
     });
+
+    const namespaces = useMemo(() => {
+      const keys = translationsLoadable.data?._embedded?.keys;
+      if (keys?.length) {
+        return [keys[0].keyNamespace || ''];
+      } else {
+        return props.ns;
+      }
+    }, [translationsLoadable.data]);
 
     const uploadImage = useApiMutation({
       url: '/v2/image-upload',
@@ -178,15 +181,12 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
 
     const translations = translationsLoadable.data?._embedded?.keys?.[0];
 
-    const nsFallback = getFallback(namespaces || props.ns)?.[0];
-    const namespace = typeof nsFallback === 'string' ? nsFallback : undefined;
-
     const linkToPlatform =
       scopesLoadable.data?.projectId !== undefined
         ? `${props.uiProps.apiUrl}/projects/${
             scopesLoadable.data?.projectId
           }/translations/single?key=${props.keyName}${
-            namespace !== undefined ? `&ns=${namespace}` : ''
+            selectedNs !== undefined ? `&ns=${selectedNs}` : ''
           }`
         : undefined;
 
@@ -214,7 +214,6 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
             ...translationsForm,
             [action.payload.key]: action.payload.value,
           });
-          setSelectedNs(getFallbackArray(props.ns)[0]);
           break;
 
         case 'HANDLE_UPLOAD_IMAGES':
@@ -280,6 +279,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 content: {
                   'application/json': {
                     name: props.keyName,
+                    namespace: selectedNs,
                     translations: newTranslations,
                     screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
                   },
@@ -290,6 +290,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 content: {
                   'application/json': {
                     name: props.keyName,
+                    namespace: selectedNs,
                     translations: newTranslations,
                     screenshotIdsToDelete: getRemovedScreenshots(),
                     screenshotUploadedImageIds: getJustUploadedScreenshots(),
@@ -299,7 +300,6 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
               });
             }
             changeInCache(Object.entries(newTranslations));
-            setNamespaces([selectedNs]);
             translationsLoadable.refetch();
             setSuccess(true);
             if (useBrowserWindow) {
@@ -454,7 +454,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const contextValue = {
       input: props.keyName,
       open: props.open,
-      ns: namespaces || props.ns,
+      ns: namespaces,
       selectedNs,
       loading,
       saving,
@@ -476,7 +476,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
       keyExists,
       scopes,
       permittedLanguageIds,
-    };
+    } as const;
 
     return [contextValue, dispatch];
   });
