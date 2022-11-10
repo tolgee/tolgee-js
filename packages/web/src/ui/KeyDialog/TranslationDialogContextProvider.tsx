@@ -279,7 +279,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 content: {
                   'application/json': {
                     name: props.keyName,
-                    namespace: selectedNs,
+                    namespace: selectedNs || undefined,
                     translations: newTranslations,
                     screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
                   },
@@ -290,7 +290,7 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
                 content: {
                   'application/json': {
                     name: props.keyName,
-                    namespace: selectedNs,
+                    namespace: selectedNs || undefined,
                     translations: newTranslations,
                     screenshotIdsToDelete: getRemovedScreenshots(),
                     screenshotUploadedImageIds: getJustUploadedScreenshots(),
@@ -434,7 +434,11 @@ export const [DialogProvider, useDialogDispatch, useDialogContext] =
     const error =
       languagesLoadable.error ||
       translationsLoadable.error ||
-      scopesLoadable.error;
+      scopesLoadable.error ||
+      createKey.error ||
+      updateKey.error ||
+      deleteImage.error ||
+      uploadImage.error;
 
     const screenshotsUploading = uploadImage.isLoading;
 
