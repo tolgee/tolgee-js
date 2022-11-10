@@ -8,7 +8,7 @@
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "lint": "vue-cli-service lint",
-    "serve": "serve -p 3002 -s dist"
+    "serve": "serve -s dist"
   },
   "dependencies": {
     "@panter/vue-i18next": "^0.15.2",
@@ -25,7 +25,7 @@
     "@vue/cli-plugin-eslint": "~5.0.8",
     "@vue/cli-service": "~5.0.8",
     "babel-eslint": "^10.1.0",
-    "serve": "^14.0.1",
+    "serve": "^14.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [

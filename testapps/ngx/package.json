@@ -4,15 +4,12 @@
   "scripts": {
     "ng": "ng",
     "develop": "sleep 10 && ng serve --configuration=stage",
-    "startE2e": "ng serve --configuration=e2e --host 0.0.0.0",
+    "startE2e": "ng serve --configuration=e2e",
     "build": "ng build --configuration=production",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "serve -s -p 8101 ./dist/sampleapp",
-    "dev:ssr": "ng run sampleapp:serve-ssr",
-    "serve:ssr": "node dist/sampleapp/server/main.js",
-    "build:ssr": "ng build && ng run sampleapp:server",
+    "serve": "serve -s ./dist/sampleapp",
     "prerender": "ng run sampleapp:prerender"
   },
   "private": true,

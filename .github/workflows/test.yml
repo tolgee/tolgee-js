@@ -152,13 +152,7 @@ jobs:
         run: pnpm build:e2e
 
       - name: Cypress
-        run: pnpm --prefix=e2e run start
-        env:
-          E2E_APP: ${{matrix.app}}
-
-      - name: Cypress cleanup
-        if: always()
-        run: pnpm --prefix=e2e run services:stop
+        run: pnpm run e2e run ${{matrix.app}}
 
       - uses: actions/upload-artifact@v2
         if: failure()
