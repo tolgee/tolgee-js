@@ -16,7 +16,6 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
   };
 
   const tolgee = Object.freeze({
-    // event listeners
     /**
      * Listen to tolgee events.
      */
@@ -27,7 +26,6 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
      */
     onKeyUpdate: controller.onKeyUpdate.listenSome,
 
-    // state
     /**
      * @return current language if set.
      */
@@ -200,11 +198,31 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
 export type TolgeeInstance = ReturnType<typeof TolgeeInstanceCreator>;
 
 export type TolgeeChainer = {
+  /**
+   * Add plugin, plugins are applied when `init` method is called.
+   */
   use: (plugin: TolgeePlugin | undefined) => TolgeeChainer;
+
+  /**
+   * Update default options before tolgee is initialized.
+   */
   updateDefaults: (options: TolgeeOptions) => TolgeeChainer;
+
+  /**
+   * Initialize tolgee options and apply plugins
+   * @returns tolgee instance
+   */
   init(options?: TolgeeOptions): TolgeeInstance;
 };
 
+/**
+ * Tolgee chainable constructor.
+ *
+ * Usage:
+ * ```
+ * const tolgee = Tolgee().use(...).init(...)
+ * ```
+ */
 export const Tolgee = (): TolgeeChainer => {
   const state = {
     plugins: [] as (TolgeePlugin | undefined)[],
