@@ -6,8 +6,10 @@
     "url": "https://github.com/tolgee/tolgee-js"
   },
   "dependencies": {
-    "@tolgee/core": "^4.9.2",
     "@tolgee/web": "^4.8.0"
+  },
+  "devDependencies": {
+    "@tolgee/ngx-workspace": "4.9.2"
   },
   "version": "4.9.2",
   "publishConfig": {

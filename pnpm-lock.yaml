@@ -259,11 +259,12 @@ importers:
 
   packages/ngx/projects/ngx-tolgee:
     specifiers:
-      '@tolgee/core': ^4.9.2
+      '@tolgee/ngx-workspace': 4.9.2
       '@tolgee/web': ^4.8.0
     dependencies:
-      '@tolgee/core': link:../../../core
       '@tolgee/web': link:../../../web
+    devDependencies:
+      '@tolgee/ngx-workspace': link:../..
 
   packages/react:
     specifiers:
@@ -6948,7 +6949,7 @@ packages:
       lru-cache: 6.0.0
       mkdirp: 1.0.4
       npm-pick-manifest: 6.1.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       promise-retry: 2.0.1
       semver: 7.3.8
       which: 2.0.2
@@ -7414,7 +7415,7 @@ packages:
       '@parcel/diagnostic': 2.6.2
       '@parcel/fs': 2.6.2_@parcel+core@2.6.2
       '@parcel/logger': 2.6.2
-      '@parcel/types': 2.6.2
+      '@parcel/types': 2.6.2_@parcel+core@2.6.2
       '@parcel/utils': 2.6.2
       '@parcel/workers': 2.6.2_@parcel+core@2.6.2
       semver: 5.7.1
@@ -7509,18 +7510,6 @@ packages:
       nullthrows: 1.1.1
       regenerator-runtime: 0.13.9
       semver: 5.7.1
-    dev: false
-
-  /@parcel/types/2.6.2:
-    resolution: {integrity: sha512-MV8BFpCIs2jMUvK2RHqzkoiuOQ//JIbrD1zocA2YRW3zuPL/iABvbAABJoXpoPCKikVWOoCWASgBfWQo26VvJQ==}
-    dependencies:
-      '@parcel/cache': 2.6.2_@parcel+core@2.6.2
-      '@parcel/diagnostic': 2.6.2
-      '@parcel/fs': 2.6.2_@parcel+core@2.6.2
-      '@parcel/package-manager': 2.6.2_@parcel+core@2.6.2
-      '@parcel/source-map': 2.1.1
-      '@parcel/workers': 2.6.2_@parcel+core@2.6.2
-      utility-types: 3.10.0
     dev: false
 
   /@parcel/types/2.6.2_@parcel+core@2.6.2:
@@ -12533,7 +12522,7 @@ packages:
       mississippi: 3.0.0
       mkdirp: 0.5.6
       move-concurrently: 1.0.1
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 2.7.1
       ssri: 6.0.2
       unique-filename: 1.1.1
@@ -12557,7 +12546,7 @@ packages:
       minipass-pipeline: 1.2.4
       mkdirp: 1.0.4
       p-map: 4.0.0
-      promise-inflight: 1.0.1_bluebird@3.7.2
+      promise-inflight: 1.0.1
       rimraf: 3.0.2
       ssri: 8.0.1
       tar: 6.1.11
@@ -27630,17 +27619,6 @@ packages:
     peerDependenciesMeta:
       bluebird:
         optional: true
-    dev: true
-
-  /promise-inflight/1.0.1_bluebird@3.7.2:
-    resolution: {integrity: sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==}
-    peerDependencies:
-      bluebird: '*'
-    peerDependenciesMeta:
-      bluebird:
-        optional: true
-    dependencies:
-      bluebird: 3.7.2
     dev: true
 
   /promise-polyfill/8.2.3:

@@ -1,7 +1,7 @@
 import { CommandLineServiceConfig, DockerComposeServiceConfig } from '../types';
 import { ServiceMonitor } from '../serviceMonitor';
 import { CommandLineServiceRunner } from './CommandLineServiceRunner';
-import { DockerComposeRunner } from './dockerComposeRunner';
+import { DockerComposeRunner } from './DockerComposeRunner';
 
 export const ServicesRunner = ({
   dockerComposeServices = {},
