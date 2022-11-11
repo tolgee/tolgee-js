@@ -53,6 +53,7 @@ export const DockerComposeRunner = ({
   };
 
   return {
+    config,
     async run() {
       await forceRemoveService();
       return runService();

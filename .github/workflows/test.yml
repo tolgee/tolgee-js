@@ -146,9 +146,9 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Cypress
-        run: pnpm run e2e run ${{matrix.app}}
+        run: pnpm run e2e run ${{matrix.app}} --stdout prod,dev
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v2c
         if: failure()
         with:
           name: cypress

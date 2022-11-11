@@ -29,6 +29,9 @@ export const ServiceMonitor = (toRun: string[], onAllRunning: () => void) => {
   };
 
   return {
+    isRunning(service: string) {
+      return state[service].running;
+    },
     log(service: string, output: string) {
       log('info', output, {
         serviceName: service,

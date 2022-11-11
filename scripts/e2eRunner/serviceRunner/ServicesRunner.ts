@@ -1,5 +1,5 @@
 import { CommandLineServiceConfig, DockerComposeServiceConfig } from '../types';
-import { ServiceMonitor } from '../serviceMonitor';
+import { ServiceMonitor } from '../ServiceMonitor';
 import { CommandLineServiceRunner } from './CommandLineServiceRunner';
 import { DockerComposeRunner } from './DockerComposeRunner';
 
@@ -20,7 +20,7 @@ export const ServicesRunner = ({
   const runners: Record<
     string,
     | ReturnType<typeof CommandLineServiceRunner>
-    | ReturnType<typeof CommandLineServiceRunner>
+    | ReturnType<typeof DockerComposeRunner>
   > = {};
 
   const stdOutServicesArray = stdoutServices?.split(',') || [];
@@ -73,6 +73,11 @@ export const ServicesRunner = ({
       });
 
       Object.entries(runners).forEach(([serviceName, runner]) => {
+        setTimeout(() => {
+          if (!serviceMonitor.isRunning(serviceName)) {
+            throw Error(`Service ${serviceName} timed out...`);
+          }
+        }, runner.config.timeout || 3 * 60 * 1000);
         runner
           .run()
           .then(() => {

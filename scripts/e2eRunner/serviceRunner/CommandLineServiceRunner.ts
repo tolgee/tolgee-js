@@ -42,6 +42,7 @@ export const CommandLineServiceRunner = ({
     });
 
   return {
+    config,
     async run() {
       return runService();
     },
