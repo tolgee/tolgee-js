@@ -11,7 +11,7 @@ import {
   BackendGetRecord,
   BackendGetDevRecord,
 } from '../../types';
-import { getFallbackArray } from '../State/helpers';
+import { getFallbackArray, unique } from '../State/helpers';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
@@ -105,11 +105,11 @@ export const Cache = (
           .get(encodeCacheKey({ language, namespace }))
           ?.data.get(key);
         if (value !== undefined && value !== null) {
-          return namespace;
+          return [namespace];
         }
       }
     }
-    return Array.from(new Set(namespaces));
+    return unique(namespaces);
   }
 
   function getTranslationFallback(

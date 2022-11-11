@@ -75,8 +75,19 @@ export const Controller = ({ options }: StateServiceProps) => {
     return state.getDefaultNs(ns);
   }
 
+  // gets all namespaces where translation could be located
+  // takes (ns|default, fallback ns)
   function getDefaultAndFallbackNs(ns?: NsType) {
-    return [getDefaultNs(ns), ...getFallbackNs()];
+    return [...getFallbackArray(getDefaultNs(ns)), ...getFallbackNs()];
+  }
+
+  // gets all namespaces which need to be loaded
+  // takes (ns|default, initial ns, fallback ns, active ns)
+  function getRequiredNamespaces(ns: FallbackNsTranslation) {
+    return [
+      ...getFallbackArray(ns || getDefaultNs()),
+      ...state.getRequiredNamespaces(),
+    ];
   }
 
   function changeTranslation(
@@ -120,7 +131,7 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   function getRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
     const languages = state.getFallbackLangs(lang);
-    const namespaces = state.getRequiredNamespaces();
+    const namespaces = getRequiredNamespaces(ns);
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
@@ -138,8 +149,7 @@ export const Controller = ({ options }: StateServiceProps) => {
       return false;
     }
     const languages = state.getFallbackLangs(language);
-    const namespaces =
-      ns !== undefined ? getFallbackArray(ns) : state.getRequiredNamespaces();
+    const namespaces = getRequiredNamespaces(ns);
     const result: CacheDescriptor[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {

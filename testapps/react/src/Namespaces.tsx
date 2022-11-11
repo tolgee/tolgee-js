@@ -23,7 +23,7 @@ export const Namespaces = () => {
 };
 
 export const Test1 = () => {
-  const { t, isLoading } = useTranslate(['', 'base', 'test1']);
+  const { t, isLoading } = useTranslate();
   if (isLoading) {
     return <>Loading1</>;
   }

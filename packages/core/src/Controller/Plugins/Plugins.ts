@@ -29,7 +29,7 @@ export const PluginService = (
   getLanguage: () => string | undefined,
   getInitialOptions: () => TolgeeOptionsInternal,
   getAvailableLanguages: () => string[] | undefined,
-  getTranslationNs: (props: KeyAndNamespacesInternal) => string[] | string,
+  getTranslationNs: (props: KeyAndNamespacesInternal) => string[],
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface
 ) => {

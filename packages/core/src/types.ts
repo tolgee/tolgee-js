@@ -367,7 +367,7 @@ export type UiType = UiConstructor | UiLibInterface;
 export type UiKeyOption = {
   key: string;
   defaultValue?: string;
-  ns: FallbackNsTranslation;
+  ns: string[];
   translation: string | undefined;
 };
 

@@ -11,6 +11,7 @@ const tolgeeWithNamespaces = () => {
   return Tolgee().init({
     language: 'en',
     ns: ['common'],
+    defaultNs: 'common',
     staticData: {
       'en:common': promiseEnCommon,
       'en:test': promiseEnTest,
@@ -76,22 +77,22 @@ describe('language changes', () => {
 
   it('removing active namespaces', async () => {
     const tolgee = tolgeeWithNamespaces();
-    await tolgee.run();
     const handler = jest.fn();
     tolgee.on('cache', handler);
+    await tolgee.run();
 
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
     expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
 
     await tolgee.addActiveNs('test');
-    expect(handler).toBeCalledTimes(1);
+    expect(handler).toBeCalledTimes(2);
 
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancel');
     expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('Test');
 
     tolgee.removeActiveNs('test');
     await tolgee.changeLanguage('es');
-    expect(handler).toBeCalledTimes(2);
+    expect(handler).toBeCalledTimes(3);
 
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancellar');
     expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
