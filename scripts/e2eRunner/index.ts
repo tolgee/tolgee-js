@@ -29,20 +29,20 @@ function createBaseRunCommand(commandName) {
 function addIntegrationCommands(command: Command, commandName) {
   Object.entries(config.tests).forEach(([integration, integrationConfig]) => {
     command.command(integration).action(async () => {
+      let code = 0;
       try {
         await downloadExtension();
         await buildE2e();
         const opts = command.opts();
         await runServices(integrationConfig, opts.stdout);
-        await runCypress(commandName, integration, opts.headed);
+        code = await runCypress(commandName, integration, opts.headed);
       } catch (e) {
         log('error', e);
-        log('error', e.stack);
         servicesRunner?.exit();
         process.exit(1);
       } finally {
         servicesRunner?.exit();
-        process.exit(0);
+        process.exit(code);
       }
     });
   });
@@ -94,7 +94,7 @@ async function runCypress(command, integration, headed: boolean) {
     spec: integration,
     headed,
   });
-  await cypressRunner.run();
+  return await cypressRunner.run();
 }
 
 async function runServices(integrationConfig, stdoutServices: string) {

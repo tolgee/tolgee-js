@@ -5,11 +5,11 @@
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
   },
+  "scripts": {
+    "build": "ng build --configuration production"
+  },
   "dependencies": {
     "@tolgee/web": "^4.8.0"
-  },
-  "devDependencies": {
-    "@tolgee/ngx-workspace": "4.9.2"
   },
   "version": "4.9.2",
   "publishConfig": {

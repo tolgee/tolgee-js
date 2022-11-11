@@ -3,13 +3,11 @@ import { log } from './log';
 import path from 'path';
 
 export const CypressRunner = ({
-  onClose,
   runType,
   spec,
   headed,
 }: {
   spec?: string;
-  onClose?: (code: number) => void;
   runType: 'run' | 'open';
   headed: boolean;
 }) => {
@@ -20,7 +18,7 @@ export const CypressRunner = ({
   const args = isRun ? `--browser chrome ${headedParam}` : '';
 
   const run = () =>
-    new Promise((resolve, reject) => {
+    new Promise<number>((resolve, reject) => {
       cypress = spawn(`cypress ${runType} ${args} ${specParam}`, {
         cwd: path.resolve(__dirname, '../../e2e'),
         shell: true,
@@ -40,7 +38,6 @@ export const CypressRunner = ({
 
       cypress.on('close', (code) => {
         resolve(code);
-        onClose?.(code);
       });
     });
 
