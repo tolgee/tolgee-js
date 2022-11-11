@@ -3,7 +3,7 @@ import { config } from './config';
 import { log, setDebug } from './log';
 import { CommandRunner } from './CommandRunner';
 import path from 'path';
-import { CypressRunner } from './cypressRunner';
+import { CypressRunner } from './CypressRunner';
 import { ServicesRunner } from './serviceRunner/ServicesRunner';
 import fs from 'fs';
 

@@ -19,7 +19,7 @@ export default {
   'cs:test': {
     test: 'Český test',
   },
-  'cs:fallback': {
-    fallback: 'Fallback',
+  'en:fallback': {
+    fallback: 'Fallback fallback',
   },
 };
