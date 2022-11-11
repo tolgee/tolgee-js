@@ -7,22 +7,22 @@ context('Angular app in prod mode', () => {
   exampleAppTest(url);
   translationMethodsTest(url, {
     en: [
-      { text: 'This is default', count: 4 },
+      { text: 'This is default', count: 3 },
       {
         text: 'This is a key',
         count: 5,
       },
-      { text: 'This is key with params value value2', count: 4 },
+      { text: 'This is key with params value value2', count: 2 },
     ],
     de: [
-      { text: 'This is default', count: 4 },
+      { text: 'This is default', count: 3 },
       {
         text: 'Dies ist ein Schlüssel',
         count: 5,
       },
       {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
-        count: 4,
+        count: 2,
       },
     ],
   });

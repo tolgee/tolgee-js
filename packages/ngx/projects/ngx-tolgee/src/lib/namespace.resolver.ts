@@ -15,7 +15,10 @@ export class NamespaceResolver implements Resolve<void> {
     state: RouterStateSnapshot
   ): Promise<void> {
     const ns = this.getNamespace(route);
-    await this.service.tolgee.addActiveNs(ns, true);
+    await this.service.tolgee.addActiveNs(ns, true).then(() => {
+      console.log(this.service.tolgee.getAllRecords());
+      console.log('loaded');
+    });
   }
 
   private getNamespace(route: ActivatedRouteSnapshot) {

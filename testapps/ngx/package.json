@@ -9,7 +9,7 @@
     "clean": "rm -rf build build-e2e dist dist-e2e lib .angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "serve": "serve -s ./dist/sampleapp",
+    "serve": "serve -s ./dist/sampleapp/browser",
     "prerender": "ng run sampleapp:prerender"
   },
   "private": true,

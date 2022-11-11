@@ -15,8 +15,6 @@ export class TranslationMethodsComponent implements OnInit, OnDestroy {
   translatedWithDefaultValueSubscription: Subscription;
   translatedWithParamsValueSubscription: Subscription;
 
-  changingParamValue = 'value';
-
   constructor(private translateService: TranslateService) {}
 
   ngOnInit(): void {
@@ -31,10 +29,6 @@ export class TranslationMethodsComponent implements OnInit, OnDestroy {
     this.translatedWithParamsValueSubscription = this.translateService
       .translate('this_is_a_key_with_params', { key: 'value', key2: 'value2' })
       .subscribe((val) => (this.translatedWithParamsValue = val));
-  }
-
-  onChangeParams() {
-    this.changingParamValue = 'new value';
   }
 
   ngOnDestroy(): void {
