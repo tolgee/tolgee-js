@@ -1,6 +1,5 @@
 import { formatter } from './formatter';
-import { FinalFormatterInterface } from '../types';
-import { TolgeePlugin } from '../types/plugin';
+import { FinalFormatterInterface, TolgeePlugin } from '../types';
 
 export function FormatSimpleCreator(): FinalFormatterInterface {
   return {

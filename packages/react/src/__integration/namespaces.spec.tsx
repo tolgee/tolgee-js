@@ -42,6 +42,7 @@ describe('useTranslations namespaces', () => {
         apiUrl: API_URL,
         language: 'cs',
         fallbackLanguage: 'en',
+        fallbackNs: 'fallback',
         staticData: staticDataMock.promises,
       });
 
@@ -49,6 +50,7 @@ describe('useTranslations namespaces', () => {
       const runPromise = tolgee.run();
       staticDataMock.resolvablePromises.cs.resolve();
       staticDataMock.resolvablePromises.en.resolve();
+      staticDataMock.resolvablePromises['cs:fallback'].resolve();
       await runPromise;
       render(<TestComponent />);
     });
@@ -90,8 +92,10 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with language and ns fallback', async () => {
-    tolgee.changeLanguage('en');
+    expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
+    const changePromise = tolgee.changeLanguage('en');
     staticDataMock.resolveAll();
+    await changePromise;
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');

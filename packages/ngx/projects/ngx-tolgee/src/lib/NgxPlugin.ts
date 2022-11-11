@@ -1,5 +1,6 @@
 import { TolgeePlugin, DevTools } from '@tolgee/web';
 
 export const NgxPlugin = (): TolgeePlugin => (tolgee) => {
-  return tolgee.use(DevTools());
+  tolgee.addPlugin(DevTools());
+  return tolgee;
 };

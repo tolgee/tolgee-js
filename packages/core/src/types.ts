@@ -18,6 +18,24 @@ export type {
 export type { EventEmitterInstance } from './Controller/Events/EventEmitter';
 export type { EventEmitterSelectiveInstance } from './Controller/Events/EventEmitterSelective';
 
+export type PluginTools = Readonly<{
+  setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
+  addFormatter: (formatter: FormatterInterface | undefined) => void;
+  setObserver: (observer: ObserverInterface | undefined) => void;
+  hasObserver: () => boolean;
+  setUi: (ui: UiLibInterface | undefined) => void;
+  hasUi: () => boolean;
+  addBackend: (backend: BackendInterface | undefined) => void;
+  setDevBackend: (backend: BackendInterface | undefined) => void;
+  setLanguageDetector: (
+    languageDetector: LanguageDetectorInterface | undefined
+  ) => void;
+  setLanguageStorage: (
+    languageStorage: LanguageStorageInterface | undefined
+  ) => void;
+  onPrepare: (callback: () => void) => void;
+}>;
+
 export type TolgeePlugin = (
   tolgee: TolgeeInstance,
   tools: PluginTools
