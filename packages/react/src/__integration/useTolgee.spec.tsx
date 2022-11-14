@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import mockTranslations from './mockTranslations';
+import mockTranslations from '@testing/mockTranslations';
 import { ReactPlugin, useTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';

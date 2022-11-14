@@ -5,14 +5,14 @@ const path = require('path');
 // so when library uses separate package.json in build folder we need to redirect
 // symlink directly there
 
-// {
-//   const target = './packages/ngx/dist/ngx-tolgee';
-//   const locationDir = './testapps/ngx/node_modules/@tolgee';
-//   const location = path.join(locationDir, 'ngx');
+{
+  const target = './packages/ngx/dist/ngx-tolgee';
+  const locationDir = './testapps/ngx/node_modules/@tolgee';
+  const location = path.join(locationDir, 'ngx');
 
-//   fs.rmSync(location, { recursive: true, force: true });
-//   fs.symlinkSync(path.relative(locationDir, target), location);
-// }
+  fs.rmSync(location, { recursive: true, force: true });
+  fs.symlinkSync(path.relative(locationDir, target), location);
+}
 
 {
   const target = './packages/svelte/package';

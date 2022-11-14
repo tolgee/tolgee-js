@@ -1,5 +1,5 @@
-import { Tolgee } from '../Tolgee';
-import { TolgeeInstance, TolgeePlugin, TreeTranslationsData } from '../types';
+import { Tolgee, TolgeeInstance } from '../Tolgee';
+import { TolgeePlugin, TreeTranslationsData } from '../types';
 import { resolvablePromise } from './testTools';
 
 const waitForInitialLoad = (tolgee: TolgeeInstance) =>

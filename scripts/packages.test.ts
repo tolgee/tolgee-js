@@ -22,20 +22,34 @@ const assertFileExists = (dir, filePath, message) => {
   }
 };
 
+const checkedPackages = [];
+
 const checkPackage = (filePath) => {
   const folder = path.dirname(filePath);
   const f = JSON.parse(fs.readFileSync(filePath).toString());
+
+  if (f.private == true) {
+    return;
+  }
+
   if (f.publishConfig?.directory) {
     describe(`${f.name} -> ${f.publishConfig.directory}`, () => {
       assertFileExists(folder, f.publishConfig.directory, 'exists');
       if (fileExists(folder, f.publishConfig.directory)) {
-        checkPackage(
-          path.join(folder, f.publishConfig.directory, 'package.json')
+        const pckg = path.join(
+          folder,
+          f.publishConfig.directory,
+          'package.json'
         );
+        if (!checkedPackages.includes(pckg)) {
+          checkedPackages.push(pckg);
+          checkPackage(pckg);
+        }
       }
     });
     return;
   }
+
   describe(f.name, () => {
     assertExpr(f.name.startsWith('@tolgee/'), 'Has correct name');
     assertExpr(f.publishConfig?.access, 'Is public');
@@ -63,7 +77,7 @@ const checkPackage = (filePath) => {
   });
 };
 
-const files = searchRecursively('./packages', 'package.json', [], 2);
+const files = searchRecursively('./packages', 'package.json', [], 4);
 files.forEach((filePath) => {
   checkPackage(filePath);
 });

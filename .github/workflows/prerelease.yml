@@ -9,20 +9,20 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
 
       - name: Build
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.4.0
           run_install: false
 
       - name: Create branch
@@ -34,7 +34,7 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Update version locally
         run: |

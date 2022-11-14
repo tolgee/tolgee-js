@@ -28,7 +28,7 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "eject": "react-scripts eject",
-    "serve": "serve -p 8101 -s build"
+    "serve": "serve -s build"
   },
   "browserslist": {
     "production": [
