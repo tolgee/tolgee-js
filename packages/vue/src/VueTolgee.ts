@@ -32,8 +32,8 @@ export const VueTolgee = {
         $t(...props) {
           // @ts-ignore
           const params = getTranslateParams(...props);
-          const { key, ns } = params;
-          this.$options.__keySubscription.subscribeKey({ key, ns: ns });
+          const { ns } = params;
+          this.$options.__keySubscription.subscribeNs(ns);
           return tolgee.t(params);
         },
       },

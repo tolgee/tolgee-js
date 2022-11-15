@@ -1,6 +1,6 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { CacheDescriptorWithKey, KeyDescriptorInternal } from '../../types';
+import { CacheDescriptorWithKey } from '../../types';
 import { TolgeeOn } from '../../types/event';
 
 export const Events = (
@@ -9,7 +9,6 @@ export const Events = (
 ) => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
-  const onKeyChange = EventEmitter<KeyDescriptorInternal>();
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
@@ -20,7 +19,7 @@ export const Events = (
   onInitialLoaded.listen(() => onKeyUpdate.emit());
   onLanguageChange.listen(() => onKeyUpdate.emit());
   onCacheChange.listen(({ value }) => {
-    onKeyUpdate.emit({ ns: [value.namespace], key: value.key }, true);
+    onKeyUpdate.emit([value.namespace], true);
   });
 
   const on: TolgeeOn = (event, handler): any => {
@@ -47,7 +46,6 @@ export const Events = (
   return Object.freeze({
     onPendingLanguageChange,
     onLanguageChange,
-    onKeyChange,
     onKeyUpdate,
     onLoadingChange,
     onFetchingChange,

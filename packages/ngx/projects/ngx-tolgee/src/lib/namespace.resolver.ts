@@ -1,10 +1,9 @@
 import {
   ActivatedRouteSnapshot,
   Resolve,
-  RouterStateSnapshot,
 } from '@angular/router';
 import { TranslateService } from './translate.service';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class NamespaceResolver implements Resolve<void> {
@@ -12,13 +11,9 @@ export class NamespaceResolver implements Resolve<void> {
 
   async resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
   ): Promise<void> {
     const ns = this.getNamespace(route);
-    await this.service.tolgee.addActiveNs(ns, true).then(() => {
-      console.log(this.service.tolgee.getAllRecords());
-      console.log('loaded');
-    });
+    await this.service.tolgee.addActiveNs(ns, true)
   }
 
   private getNamespace(route: ActivatedRouteSnapshot) {

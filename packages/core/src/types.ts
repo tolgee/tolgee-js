@@ -324,26 +324,12 @@ export type Listener = {
   unsubscribe: () => void;
 };
 
-export type KeyDescriptorInternal = {
-  key?: string;
-  ns?: string[] | undefined;
-};
-
-export type KeyDescriptor = {
-  key: string;
-  ns?: NsType | undefined;
-};
-
 export type ListenerSelective = {
   unsubscribe: () => void;
   /**
    * Subscribes to namespace(s) (if not specified to defaultNs)
    */
   subscribeNs: (ns?: FallbackNsTranslation) => ListenerSelective;
-  /**
-   * Subscribes to namespace (if not specified to defaultNs)
-   */
-  subscribeKey: (descriptor: KeyDescriptor) => ListenerSelective;
 };
 
 export type ListenerHandlerEvent<T> = { value: T };

@@ -2,7 +2,6 @@ import {
   ListenerSelective,
   TolgeeInstance,
   TranslateProps,
-  KeyDescriptor,
   FallbackNsTranslation,
   getFallback,
 } from '@tolgee/web';
@@ -46,14 +45,14 @@ export const useTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const isLoading = ref(!tolgee.isLoaded(namespaces));
 
-  const subscribeToKey = (key: KeyDescriptor) => {
-    subscription.subscribeKey(key);
+  const subscribeToNs = (ns: FallbackNsTranslation) => {
+    subscription.subscribeNs(ns);
   };
 
   function createTFunction() {
     return (props: TranslateProps<any>) => {
       const fallbackNs = props.ns || namespaces?.[0];
-      subscribeToKey({ key: props.key, ns: fallbackNs });
+      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     };
   }

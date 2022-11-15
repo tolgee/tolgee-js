@@ -1,4 +1,4 @@
-import { KeyDescriptorInternal } from '@tolgee/core';
+import { KeyDescriptorInternal } from '../../types';
 
 export function xPathEvaluate<T extends Node>(
   expression: string,

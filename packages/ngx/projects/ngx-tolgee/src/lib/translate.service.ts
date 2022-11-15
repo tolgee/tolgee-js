@@ -108,7 +108,7 @@ export class TranslateService implements OnDestroy {
 
       const subscription = this.tolgee
         .onKeyUpdate(translate)
-        .subscribeKey({ key: params.key, ns: params.ns });
+        .subscribeNs(params.ns);
 
       return () => {
         this.tolgee.removeActiveNs(params.ns);

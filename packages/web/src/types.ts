@@ -39,3 +39,8 @@ export type BackendOptions = Omit<RequestInit, 'headers'> & {
 export type GetPath = (
   options: BackendGetRecordProps & { prefix: string }
 ) => string;
+
+export type KeyDescriptorInternal = {
+  key?: string;
+  ns?: string[] | undefined;
+};
