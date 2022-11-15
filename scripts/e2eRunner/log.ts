@@ -23,7 +23,15 @@ export const log = (
       /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
       ''
     )
-    .replace(/^/gm, `${Date()} ${serviceStr}: `);
+    .replace(
+      /^/gm,
+      `${new Date().toLocaleString('en-US', {
+        hour12: false,
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+      })} ${serviceStr}: `
+    );
   if (!str) {
     return;
   }
