@@ -1,5 +1,11 @@
-import { Inject, Injectable, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  ChangeDetectorRef,
+  Inject,
+  Injectable,
+  NgZone,
+  OnDestroy,
+} from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import {
   DefaultParamType,
   EventType,
@@ -14,7 +20,10 @@ import { TOLGEE_INSTANCE } from './tolgee-instance-token';
 export class TranslateService implements OnDestroy {
   private runPromise: Promise<void>;
 
-  constructor(@Inject(TOLGEE_INSTANCE) private _tolgee: TolgeeInstance) {}
+  constructor(
+    @Inject(TOLGEE_INSTANCE) private _tolgee: TolgeeInstance,
+    private _ngZone: NgZone
+  ) {}
 
   get tolgee() {
     return this._tolgee;
@@ -25,7 +34,7 @@ export class TranslateService implements OnDestroy {
    */
   public async start(): Promise<void> {
     if (!this.runPromise) {
-      this.runPromise = this.tolgee.run();
+      this.runPromise = this._ngZone.runOutsideAngular(() => this.tolgee.run());
     }
     await this.runPromise;
   }
@@ -38,7 +47,9 @@ export class TranslateService implements OnDestroy {
     return new Observable<ListenerHandlerEvent<EventType[Event]>>(
       (subscriber) => {
         const subscription = this.tolgee.on(event, (value) => {
-          subscriber.next(value as any);
+          this._ngZone.run(() => {
+            subscriber.next(value as any);
+          });
         });
         return () => subscription.unsubscribe();
       }
@@ -100,7 +111,9 @@ export class TranslateService implements OnDestroy {
       const translate = async () => {
         await loadPromise;
         const translated = this.tolgee.t(params);
-        subscriber.next(translated);
+        this._ngZone.run(() => {
+          subscriber.next(translated);
+        });
       };
 
       // noinspection JSIgnoredPromiseFromCall

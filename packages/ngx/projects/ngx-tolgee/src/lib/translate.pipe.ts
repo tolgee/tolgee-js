@@ -1,4 +1,4 @@
-import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import { NgZone, OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from './translate.service';
 import { Subscription } from 'rxjs';
 import { getTranslateParams, TFnType, TranslateProps } from '@tolgee/web';
@@ -36,6 +36,7 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.previousHash = newHash;
 
     this.translate(params);
+    this.subscribe(params);
 
     return this.value;
   };
@@ -50,7 +51,6 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
   private translate(props: TranslateProps) {
     this.value = this.translateService.instant({ ...props, orEmpty: true });
-    this.subscribe(props);
   }
 
   private subscribe(props: TranslateProps) {
