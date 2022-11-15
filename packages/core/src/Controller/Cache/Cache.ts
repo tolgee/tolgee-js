@@ -1,5 +1,4 @@
 import {
-  CacheAsyncRequests,
   CacheDescriptor,
   CacheDescriptorInternal,
   CacheDescriptorWithKey,
@@ -16,6 +15,11 @@ import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
+
+type CacheAsyncRequests = Map<
+  string,
+  Promise<TreeTranslationsData | undefined> | undefined
+>;
 
 type CacheRecord = {
   version: number;

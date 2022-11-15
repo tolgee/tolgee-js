@@ -18,6 +18,32 @@ export type {
 export type { EventEmitterInstance } from './Controller/Events/EventEmitter';
 export type { EventEmitterSelectiveInstance } from './Controller/Events/EventEmitterSelective';
 
+export type TolgeeEvent =
+  | 'pendingLanguage'
+  | 'language'
+  | 'loading'
+  | 'fetching'
+  | 'initialLoad'
+  | 'running'
+  | 'cache'
+  | 'update';
+
+export interface EventType {
+  pendingLanguage: string;
+  language: string;
+  loading: boolean;
+  fetching: boolean;
+  initialLoad: void;
+  running: boolean;
+  cache: CacheDescriptorWithKey;
+  update: void;
+}
+
+export type TolgeeOn<E extends keyof EventType = keyof EventType> = (
+  event: E,
+  handler: Listener<[EventType[E]]>
+) => Subscription;
+
 export type PluginTools = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterInterface | undefined) => void;
   addFormatter: (formatter: FormatterInterface | undefined) => void;
@@ -81,11 +107,6 @@ export type TranslationsFlat = Map<string, TranslationValue>;
 export type TreeTranslationsData = {
   [key: string]: TranslationValue | TreeTranslationsData;
 };
-
-export type CacheAsyncRequests = Map<
-  string,
-  Promise<TreeTranslationsData | undefined> | undefined
->;
 
 export type CacheDescriptor = {
   language: string;
@@ -260,7 +281,6 @@ export type ElementMeta = {
    * Triggering highlight needs the metadata stored on element, so
    * we need the ability to prevent clean.
    */
-
   preventClean?: boolean;
 };
 

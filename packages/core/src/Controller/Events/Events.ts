@@ -1,7 +1,6 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { CacheDescriptorWithKey } from '../../types';
-import { TolgeeOn } from '../../types/event';
+import { CacheDescriptorWithKey, TolgeeOn } from '../../types';
 
 export const Events = (
   getFallbackNs: () => string[],
@@ -12,9 +11,9 @@ export const Events = (
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onNsUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
-  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
+  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
+  const onNsUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
 
   onInitialLoaded.listen(() => onNsUpdate.emit());
   onLanguageChange.listen(() => onNsUpdate.emit());
@@ -46,12 +45,12 @@ export const Events = (
   return Object.freeze({
     onPendingLanguageChange,
     onLanguageChange,
-    onNsUpdate,
     onLoadingChange,
     onFetchingChange,
     onInitialLoaded,
     onRunningChange,
     onCacheChange,
+    onNsUpdate,
     on,
   });
 };
