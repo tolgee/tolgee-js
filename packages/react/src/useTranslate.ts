@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { TFnType, getTranslateParams, DefaultParamType } from '@tolgee/web';
+import { TFnType, getTranslateProps, DefaultParamType } from '@tolgee/web';
 
 import { useTranslateInternal } from './useTranslateInternal';
 import { ReactOptions } from './types';
@@ -13,7 +13,7 @@ export const useTranslate = (
   const t: TFnType<DefaultParamType, string> = useCallback(
     (...params: any) => {
       // @ts-ignore
-      const props = getTranslateParams(...params);
+      const props = getTranslateProps(...params);
       return tInternal(props);
     },
     [tInternal]

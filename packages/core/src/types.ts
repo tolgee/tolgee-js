@@ -43,19 +43,15 @@ export type TolgeePlugin = (
 
 export type FallbackGeneral = undefined | false | string | string[];
 
-export type FallbackNs = FallbackGeneral;
-
 export type NsType = string;
 
 export type KeyType = string;
 
-export type FallbackNsTranslation = undefined | NsType | NsType[];
+export type NsFallback = undefined | NsType | NsType[];
 
-export type FallbackLanguage = FallbackGeneral;
+export type FallbackLanguageObject = Record<string, FallbackGeneral>;
 
-export type FallbackLanguageObject = Record<string, FallbackLanguage>;
-
-export type FallbackLanguageOption = FallbackLanguage | FallbackLanguageObject;
+export type FallbackLanguageOption = FallbackGeneral | FallbackLanguageObject;
 
 export type TranslateOptions = {
   ns?: NsType;
@@ -175,10 +171,7 @@ export type Highlighter = {
   unhighlight(): void;
 };
 
-export type HighlightInterface = (
-  key?: string,
-  ns?: FallbackNsTranslation
-) => Highlighter;
+export type HighlightInterface = (key?: string, ns?: NsFallback) => Highlighter;
 
 export type ObserverRunProps = {
   mouseHighlight: boolean;
@@ -320,20 +313,20 @@ export type TranslationOnClick = (
   }
 ) => void;
 
-export type Listener = {
+export type Subscription = {
   unsubscribe: () => void;
 };
 
-export type ListenerSelective = {
+export type SubscriptionSelective = {
   unsubscribe: () => void;
   /**
    * Subscribes to namespace(s) (if not specified to defaultNs)
    */
-  subscribeNs: (ns?: FallbackNsTranslation) => ListenerSelective;
+  subscribeNs: (ns?: NsFallback) => SubscriptionSelective;
 };
 
-export type ListenerHandlerEvent<T> = { value: T };
-export type ListenerHandler<T> = (e: ListenerHandlerEvent<T>) => void;
+export type ListenerEvent<T> = { value: T };
+export type Listener<T> = (e: ListenerEvent<T>) => void;
 
 export type CachePublicRecord = {
   data: TranslationsFlat;

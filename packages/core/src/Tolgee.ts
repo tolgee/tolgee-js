@@ -22,9 +22,9 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
     on: controller.on,
 
     /**
-     * Listen for specific keys/namespaces changes.
+     * Listen for specific namespaces changes.
      */
-    onKeyUpdate: controller.onKeyUpdate.listenSome,
+    onNsUpdate: controller.onNsUpdate.listenSome,
 
     /**
      * @return current language if set.

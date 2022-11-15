@@ -77,7 +77,7 @@ describe('initialization behavior', () => {
       staticData: { en: { hello: 'world' } },
     });
     const onKeyChange = jest.fn();
-    tolgee.on('keyUpdate', onKeyChange);
+    tolgee.on('update', onKeyChange);
     expect(onKeyChange).toBeCalledTimes(0);
     await tolgee.run();
     expect(onKeyChange).toBeCalledTimes(1);

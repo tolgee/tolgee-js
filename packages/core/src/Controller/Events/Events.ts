@@ -12,14 +12,14 @@ export const Events = (
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onKeyUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
+  const onNsUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
   const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
 
-  onInitialLoaded.listen(() => onKeyUpdate.emit());
-  onLanguageChange.listen(() => onKeyUpdate.emit());
+  onInitialLoaded.listen(() => onNsUpdate.emit());
+  onLanguageChange.listen(() => onNsUpdate.emit());
   onCacheChange.listen(({ value }) => {
-    onKeyUpdate.emit([value.namespace], true);
+    onNsUpdate.emit([value.namespace], true);
   });
 
   const on: TolgeeOn = (event, handler): any => {
@@ -38,15 +38,15 @@ export const Events = (
         return onRunningChange.listen(handler as any);
       case 'cache':
         return onCacheChange.listen(handler as any);
-      case 'keyUpdate':
-        return onKeyUpdate.listen(handler as any);
+      case 'update':
+        return onNsUpdate.listen(handler as any);
     }
   };
 
   return Object.freeze({
     onPendingLanguageChange,
     onLanguageChange,
-    onKeyUpdate,
+    onNsUpdate,
     onLoadingChange,
     onFetchingChange,
     onInitialLoaded,

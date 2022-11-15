@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import {
   DefaultParamType,
   EventType,
-  getTranslateParams,
-  ListenerHandlerEvent,
+  getTranslateProps,
+  ListenerEvent,
   TFnType,
   TolgeeInstance,
 } from '@tolgee/web';
@@ -35,7 +35,7 @@ export class TranslateService implements OnDestroy {
   }
 
   on<Event extends keyof EventType>(event: Event) {
-    return new Observable<ListenerHandlerEvent<EventType[Event]>>(
+    return new Observable<ListenerEvent<EventType[Event]>>(
       (subscriber) => {
         const subscription = this.tolgee.on(event, (value) => {
           subscriber.next(value as any);
@@ -83,7 +83,7 @@ export class TranslateService implements OnDestroy {
    */
   public readonly instant: TFnType = (...args) => {
     // @ts-ignore
-    const params = getTranslateParams(...args);
+    const params = getTranslateProps(...args);
     return this.tolgee.t(params);
   };
 
@@ -94,7 +94,7 @@ export class TranslateService implements OnDestroy {
     ...args
   ) => {
     // @ts-ignore
-    const params = getTranslateParams(...args);
+    const params = getTranslateProps(...args);
     return new Observable<string>((subscriber) => {
       const loadPromise = this.tolgee.addActiveNs(params.ns);
       const translate = async () => {
@@ -107,7 +107,7 @@ export class TranslateService implements OnDestroy {
       translate();
 
       const subscription = this.tolgee
-        .onKeyUpdate(translate)
+        .onNsUpdate(translate)
         .subscribeNs(params.ns);
 
       return () => {

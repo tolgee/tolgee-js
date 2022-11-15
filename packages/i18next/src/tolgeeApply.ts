@@ -10,7 +10,7 @@ export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
     });
   };
 
-  tolgee.onKeyUpdate(updateTranslations);
+  tolgee.onNsUpdate(updateTranslations);
   i18n.on('languageChanged', (lang) => {
     if (lang && tolgee.getLanguage() !== lang) {
       tolgee.changeLanguage(lang);

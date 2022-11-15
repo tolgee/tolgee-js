@@ -1,6 +1,6 @@
 import {
+  FallbackGeneral,
   FallbackLanguageOption,
-  FallbackNs,
   TreeTranslationsData,
 } from '../../types';
 import { sanitizeUrl } from './helpers';
@@ -59,7 +59,7 @@ export type TolgeeOptionsInternal = {
   /**
    * Namespaces to be used to find translation when no explicit namespace set.
    */
-  fallbackNs?: FallbackNs;
+  fallbackNs?: FallbackGeneral;
 
   /**
    * Default namespace when no namespace defined (default: '')

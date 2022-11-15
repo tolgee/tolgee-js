@@ -21,7 +21,7 @@ const tolgee = Tolgee()
     observerOptions: { inputPrefix: '{{', inputSuffix: '}}' },
   });
 
-tolgee.on('keyUpdate', () => {
+tolgee.on('update', () => {
   refresh();
 });
 

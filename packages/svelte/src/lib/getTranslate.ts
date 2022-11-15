@@ -1,17 +1,13 @@
 import { derived, type Readable } from 'svelte/store';
-import {
-  getTranslateParams,
-  type FallbackNsTranslation,
-  type TFnType,
-} from '@tolgee/web';
+import { getTranslateProps, type NsFallback, type TFnType } from '@tolgee/web';
 import getTranslateInternal from './getTranslateInternal';
 
-const getTranslate = (ns?: FallbackNsTranslation) => {
+const getTranslate = (ns?: NsFallback) => {
   const { t: tInternal, isLoading } = getTranslateInternal(ns);
 
   const t = derived(tInternal, (value) => (...params) => {
     //@ts-ignore
-    const props = getTranslateParams(...params);
+    const props = getTranslateProps(...params);
     return value(props);
   }) as Readable<TFnType>;
 

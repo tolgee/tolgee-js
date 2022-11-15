@@ -1,7 +1,7 @@
 import { Events } from './Events/Events';
 import {
   CacheDescriptor,
-  FallbackNsTranslation,
+  NsFallback,
   TolgeeOptions,
   TFnType,
   NsType,
@@ -13,7 +13,7 @@ import { PluginService } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
 import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
-import { getTranslateParams } from '../TranslateParams';
+import { getTranslateProps } from '../TranslateParams';
 
 type StateServiceProps = {
   options?: Partial<TolgeeOptions>;
@@ -61,7 +61,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     init(options);
   }
 
-  events.onKeyUpdate.listen(() => {
+  events.onNsUpdate.listen(() => {
     if (state.isRunning()) {
       pluginService.retranslate();
     }
@@ -83,7 +83,7 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   // gets all namespaces which need to be loaded
   // takes (ns|default, initial ns, fallback ns, active ns)
-  function getRequiredNamespaces(ns: FallbackNsTranslation) {
+  function getRequiredNamespaces(ns: NsFallback) {
     return [
       ...getFallbackArray(ns || getDefaultNs()),
       ...state.getRequiredNamespaces(),
@@ -110,7 +110,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     cache.addStaticData(state.getInitialOptions().staticData);
   }
 
-  function isLoading(ns?: FallbackNsTranslation) {
+  function isLoading(ns?: NsFallback) {
     return cache.isLoading(state.getLanguage()!, ns);
   }
 
@@ -120,7 +120,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     );
   }
 
-  async function addActiveNs(ns: FallbackNsTranslation, forget?: boolean) {
+  async function addActiveNs(ns: NsFallback, forget?: boolean) {
     if (!forget) {
       state.addActiveNs(ns);
     }
@@ -129,7 +129,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     }
   }
 
-  function getRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
+  function getRequiredRecords(lang?: string, ns?: NsFallback) {
     const languages = state.getFallbackLangs(lang);
     const namespaces = getRequiredNamespaces(ns);
     const result: CacheDescriptor[] = [];
@@ -143,7 +143,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     return result;
   }
 
-  function isLoaded(ns?: FallbackNsTranslation) {
+  function isLoaded(ns?: NsFallback) {
     const language = state.getLanguage();
     if (!language) {
       return false;
@@ -161,7 +161,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     return result.length === 0;
   }
 
-  function loadRequiredRecords(lang?: string, ns?: FallbackNsTranslation) {
+  function loadRequiredRecords(lang?: string, ns?: NsFallback) {
     const descriptors = getRequiredRecords(lang, ns);
     if (descriptors.length) {
       return valueOrPromise(loadRecords(descriptors), () => {});
@@ -287,7 +287,7 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   const t: TFnType = (...args) => {
     // @ts-ignore
-    const params = getTranslateParams(...args);
+    const params = getTranslateProps(...args);
     const translation = getTranslation(params);
     return pluginService.formatTranslation({ ...params, translation });
   };

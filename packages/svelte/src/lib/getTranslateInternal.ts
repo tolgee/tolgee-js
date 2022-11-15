@@ -2,13 +2,13 @@ import { writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 import {
   getFallback,
-  type FallbackNsTranslation,
+  type NsFallback,
   type TolgeeInstance,
   type TranslateProps,
 } from '@tolgee/web';
 import { getTolgeeContext } from '$lib/index';
 
-const getTranslateInternal = (ns?: FallbackNsTranslation) => {
+const getTranslateInternal = (ns?: NsFallback) => {
   const namespaces = getFallback(ns);
   const tolgeeContext = getTolgeeContext();
 
@@ -22,7 +22,7 @@ const getTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const t = writable(tFunction);
 
-  const subscription = tolgee.onKeyUpdate(() => {
+  const subscription = tolgee.onNsUpdate(() => {
     t.set(createTFunction());
     isLoading.set(!tolgee.isLoaded(namespaces));
   });
@@ -37,7 +37,7 @@ const getTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const isLoading = writable(!tolgee.isLoaded(namespaces));
 
-  const subscribeToNs = (ns: FallbackNsTranslation) => {
+  const subscribeToNs = (ns: NsFallback) => {
     subscription.subscribeNs(ns);
   };
 

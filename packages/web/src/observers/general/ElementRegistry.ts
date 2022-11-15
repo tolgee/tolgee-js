@@ -1,8 +1,4 @@
-import {
-  FallbackNsTranslation,
-  getFallback,
-  ObserverOptionsInternal,
-} from '@tolgee/core';
+import { NsFallback, getFallback, ObserverOptionsInternal } from '@tolgee/core';
 import {
   ElementMeta,
   KeyAndParams,
@@ -88,7 +84,7 @@ export const ElementRegistry = (
     });
   }
 
-  function findAll(key?: string, ns?: FallbackNsTranslation) {
+  function findAll(key?: string, ns?: NsFallback) {
     const result: ElementMeta[] = [];
     elementStore.forEachElement((_, meta) => {
       for (const nodeMeta of meta.nodes.values()) {

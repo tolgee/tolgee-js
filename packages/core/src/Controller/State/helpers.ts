@@ -1,6 +1,5 @@
 import {
   FallbackGeneral,
-  FallbackLanguage,
   FallbackLanguageObject,
   FallbackLanguageOption,
 } from '../../types';
@@ -32,7 +31,7 @@ export function getFallbackFromStruct(
       (fallbackLanguage as FallbackLanguageObject)?.[language]
     );
   } else {
-    return getFallbackArray(fallbackLanguage as FallbackLanguage);
+    return getFallbackArray(fallbackLanguage as FallbackGeneral);
   }
 }
 

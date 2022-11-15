@@ -1,5 +1,5 @@
 import {
-  FallbackNsTranslation,
+  NsFallback,
   TranslationOnClick,
   WrapperInterface,
   ObserverRunProps,
@@ -109,7 +109,7 @@ export const GeneralObserver = (
     observer.disconnect();
   };
 
-  const highlight = (key?: string, ns?: FallbackNsTranslation) => {
+  const highlight = (key?: string, ns?: NsFallback) => {
     const elements = elementRegistry.findAll(key, ns);
     elements.forEach((el) => el.highlight?.());
 

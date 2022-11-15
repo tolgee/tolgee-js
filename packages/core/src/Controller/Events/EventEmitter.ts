@@ -1,10 +1,10 @@
-import { Listener, ListenerHandler } from '../../types';
+import { Subscription, Listener } from '../../types';
 
 export const EventEmitter = <T>(): EventEmitterInstance<T> => {
-  let handlers: ListenerHandler<T>[] = [];
+  let handlers: Listener<T>[] = [];
 
-  const listen = (handler: ListenerHandler<T>): Listener => {
-    const handlerWrapper: ListenerHandler<T> = (e) => {
+  const listen = (handler: Listener<T>): Subscription => {
+    const handlerWrapper: Listener<T> = (e) => {
       handler(e);
     };
 
@@ -25,6 +25,6 @@ export const EventEmitter = <T>(): EventEmitterInstance<T> => {
 };
 
 export type EventEmitterInstance<T> = {
-  readonly listen: (handler: ListenerHandler<T>) => Listener;
+  readonly listen: (handler: Listener<T>) => Subscription;
   readonly emit: (data: T) => void;
 };

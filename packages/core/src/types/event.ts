@@ -1,4 +1,4 @@
-import { CacheDescriptorWithKey, Listener, ListenerHandler } from '../types';
+import { CacheDescriptorWithKey, Subscription, Listener } from '../types';
 
 export type TolgeeEvent =
   | 'pendingLanguage'
@@ -9,7 +9,7 @@ export type TolgeeEvent =
   | 'initialLoad'
   | 'running'
   | 'cache'
-  | 'keyUpdate';
+  | 'update';
 
 export interface EventType {
   pendingLanguage: string;
@@ -20,10 +20,10 @@ export interface EventType {
   initialLoad: void;
   running: boolean;
   cache: CacheDescriptorWithKey;
-  keyUpdate: void;
+  update: void;
 }
 
 export type TolgeeOn<E extends keyof EventType = keyof EventType> = (
   event: E,
-  handler: ListenerHandler<[EventType[E]]>
-) => Listener;
+  handler: Listener<[EventType[E]]>
+) => Subscription;

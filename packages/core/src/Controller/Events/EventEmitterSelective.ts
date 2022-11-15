@@ -1,17 +1,17 @@
 import { getFallbackArray } from '../State/helpers';
 import {
-  FallbackNsTranslation,
+  NsFallback,
+  Subscription,
   Listener,
-  ListenerHandler,
-  ListenerHandlerEvent,
-  ListenerSelective,
+  ListenerEvent,
+  SubscriptionSelective,
   NsType,
 } from '../../types';
 
 type NsListType = string;
 
 type HandlerWrapperType = {
-  fn: ListenerHandler<undefined>;
+  fn: Listener<undefined>;
   namespaces: Set<string>;
 };
 
@@ -19,10 +19,10 @@ export const EventEmitterSelective = (
   getFallbackNs: () => string[],
   getDefaultNs: () => string
 ): EventEmitterSelectiveInstance => {
-  const listeners: Set<ListenerHandler<undefined>> = new Set();
+  const listeners: Set<Listener<undefined>> = new Set();
   const partialListeners: Set<HandlerWrapperType> = new Set();
 
-  const listen = (handler: ListenerHandler<undefined>) => {
+  const listen = (handler: Listener<undefined>) => {
     listeners.add(handler);
     const result = {
       unsubscribe: () => {
@@ -32,9 +32,9 @@ export const EventEmitterSelective = (
     return result;
   };
 
-  const listenSome = (handler: ListenerHandler<undefined>) => {
+  const listenSome = (handler: Listener<undefined>) => {
     const handlerWrapper = {
-      fn: (e: ListenerHandlerEvent<undefined>) => {
+      fn: (e: ListenerEvent<undefined>) => {
         handler(e);
       },
       namespaces: new Set<NsListType>(),
@@ -46,7 +46,7 @@ export const EventEmitterSelective = (
       unsubscribe: () => {
         partialListeners.delete(handlerWrapper);
       },
-      subscribeNs: (ns: FallbackNsTranslation) => {
+      subscribeNs: (ns: NsFallback) => {
         getFallbackArray(ns).forEach((val) =>
           handlerWrapper.namespaces.add(val)
         );
@@ -123,9 +123,7 @@ export const EventEmitterSelective = (
 };
 
 export type EventEmitterSelectiveInstance = {
-  readonly listenSome: (
-    handler: ListenerHandler<undefined>
-  ) => ListenerSelective;
-  readonly listen: (handler: ListenerHandler<undefined>) => Listener;
+  readonly listenSome: (handler: Listener<undefined>) => SubscriptionSelective;
+  readonly listen: (handler: Listener<undefined>) => Subscription;
   readonly emit: (ns?: string[], delayed?: boolean) => void;
 };
