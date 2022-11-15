@@ -293,4 +293,4 @@ export const Cache = (
   });
 };
 
-export type CacheType = ReturnType<typeof Cache>;
+export type CacheInstance = ReturnType<typeof Cache>;

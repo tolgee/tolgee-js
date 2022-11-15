@@ -56,4 +56,4 @@ export const Events = (
   });
 };
 
-export type EventServiceType = ReturnType<typeof Events>;
+export type EventsInstance = ReturnType<typeof Events>;

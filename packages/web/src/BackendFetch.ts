@@ -27,7 +27,7 @@ const DEFAULT_OPTIONS = {
   },
 };
 
-export const BackendFetchCreator = (
+const createBackendFetch = (
   options?: Partial<BackendOptions>
 ): BackendInterface => {
   const { prefix, getPath, getData, headers, ...fetchOptions }: BackendOptions =
@@ -59,6 +59,6 @@ export const BackendFetchCreator = (
 export const BackendFetch =
   (options?: Partial<BackendOptions>): TolgeePlugin =>
   (tolgee, tools) => {
-    tools.addBackend(BackendFetchCreator(options));
+    tools.addBackend(createBackendFetch(options));
     return tolgee;
   };

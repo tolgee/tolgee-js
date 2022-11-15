@@ -2,7 +2,7 @@ import { Controller } from './Controller/Controller';
 import { combineOptions } from './Controller/State/initState';
 import { TolgeeOptions, TolgeePlugin, DevCredentials } from './types';
 
-const TolgeeInstanceCreator = (options: TolgeeOptions) => {
+const createTolgee = (options: TolgeeOptions) => {
   const controller = Controller({
     options,
   });
@@ -195,7 +195,7 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
   return tolgee;
 };
 
-export type TolgeeInstance = ReturnType<typeof TolgeeInstanceCreator>;
+export type TolgeeInstance = ReturnType<typeof createTolgee>;
 
 export type TolgeeChainer = {
   /**
@@ -239,9 +239,7 @@ export const Tolgee = (): TolgeeChainer => {
       return tolgeeChain;
     },
     init(options?: TolgeeOptions) {
-      const tolgee = TolgeeInstanceCreator(
-        combineOptions(state.options, options)
-      );
+      const tolgee = createTolgee(combineOptions(state.options, options));
       state.plugins.forEach(tolgee.addPlugin);
       return tolgee;
     },

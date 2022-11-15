@@ -25,7 +25,7 @@ import {
 } from '../../types';
 import { TolgeeOptionsInternal } from '../State/initState';
 
-export const PluginService = (
+export const Plugins = (
   getLanguage: () => string | undefined,
   getInitialOptions: () => TolgeeOptionsInternal,
   getAvailableLanguages: () => string[] | undefined,
@@ -348,4 +348,4 @@ export const PluginService = (
   });
 };
 
-export type PluginServiceType = ReturnType<typeof PluginService>;
+export type PluginsInstance = ReturnType<typeof Plugins>;

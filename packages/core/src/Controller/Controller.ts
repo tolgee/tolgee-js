@@ -9,7 +9,7 @@ import {
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from './State/helpers';
-import { PluginService } from './Plugins/Plugins';
+import { Plugins } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
 import { isPromise, missingOptionError, valueOrPromise } from '../helpers';
@@ -38,7 +38,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     events.onRunningChange
   );
 
-  const pluginService = PluginService(
+  const pluginService = Plugins(
     state.getLanguage,
     state.getInitialOptions,
     state.getAvailableLanguages,
@@ -313,4 +313,4 @@ export const Controller = ({ options }: StateServiceProps) => {
   });
 };
 
-export type StateServiceType = ReturnType<typeof Controller>;
+export type ControllerInstance = ReturnType<typeof Controller>;

@@ -177,3 +177,5 @@ export const State = (
     overrideCredentials,
   });
 };
+
+export type StateInstance = ReturnType<typeof State>;
