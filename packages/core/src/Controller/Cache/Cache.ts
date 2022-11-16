@@ -1,21 +1,25 @@
 import {
-  CacheAsyncRequests,
   CacheDescriptor,
   CacheDescriptorInternal,
   CacheDescriptorWithKey,
-  EventEmitterInstance,
-  FallbackNsTranslation,
+  NsFallback,
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
   BackendGetRecord,
   BackendGetDevRecord,
 } from '../../types';
-import { getFallbackArray, unique } from '../State/helpers';
+import { getFallbackArray, unique } from '../../helpers';
+import { EventEmitterInstance } from '../Events/EventEmitter';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
+
+type CacheAsyncRequests = Map<
+  string,
+  Promise<TreeTranslationsData | undefined> | undefined
+>;
 
 type CacheRecord = {
   version: number;
@@ -140,7 +144,7 @@ export const Cache = (
     onCacheChange.emit({ ...descriptor, key });
   }
 
-  function isFetching(ns?: FallbackNsTranslation) {
+  function isFetching(ns?: NsFallback) {
     if (isInitialLoading()) {
       return true;
     }
@@ -156,7 +160,7 @@ export const Cache = (
     );
   }
 
-  function isLoading(language: string | undefined, ns?: FallbackNsTranslation) {
+  function isLoading(language: string | undefined, ns?: NsFallback) {
     const namespaces = getFallbackArray(ns);
 
     return Boolean(
@@ -174,7 +178,10 @@ export const Cache = (
     );
   }
 
-  function fetchNormal(keyObject: CacheDescriptorInternal) {
+  /**
+   * Fetches production data
+   */
+  function fetchProd(keyObject: CacheDescriptorInternal) {
     let dataPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
@@ -200,13 +207,13 @@ export const Cache = (
       dataPromise = backendGetDevRecord(keyObject)?.catch(() => {
         // eslint-disable-next-line no-console
         console.warn(`Tolgee: Failed to fetch data from dev backend`);
-        // fallback to normal fetch if dev fails
-        return fetchNormal(keyObject);
+        // fallback to prod fetch if dev fails
+        return fetchProd(keyObject);
       });
     }
 
     if (!dataPromise) {
-      dataPromise = fetchNormal(keyObject);
+      dataPromise = fetchProd(keyObject);
     }
 
     return dataPromise;
@@ -290,4 +297,4 @@ export const Cache = (
   });
 };
 
-export type CacheType = ReturnType<typeof Cache>;
+export type CacheInstance = ReturnType<typeof Cache>;

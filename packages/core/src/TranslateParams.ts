@@ -25,7 +25,7 @@ function parseCombinedOptions({
   };
 }
 
-export const getTranslateParams: TFnType<any, TranslateProps<any>> = (
+export const getTranslateProps: TFnType<any, TranslateProps<any>> = (
   keyOrProps,
   ...params
 ) => {

@@ -2,17 +2,18 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   DevCredentials,
-  EventEmitterInstance,
-  FallbackNsTranslation,
+  NsFallback,
   NsType,
 } from '../../types';
+
 import { decodeCacheKey } from '../Cache/helpers';
+import { EventEmitterInstance } from '../Events/EventEmitter';
 import {
   getFallbackArray,
   getFallbackFromStruct,
   sanitizeUrl,
   unique,
-} from './helpers';
+} from '../../helpers';
 import { initState, TolgeeOptions } from './initState';
 
 export const State = (
@@ -72,7 +73,7 @@ export const State = (
     return { ...state.initialOptions, ...devCredentials };
   }
 
-  function addActiveNs(ns: FallbackNsTranslation) {
+  function addActiveNs(ns: NsFallback) {
     const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);
@@ -84,7 +85,7 @@ export const State = (
     });
   }
 
-  function removeActiveNs(ns: FallbackNsTranslation) {
+  function removeActiveNs(ns: NsFallback) {
     const namespaces = getFallbackArray(ns);
     namespaces.forEach((namespace) => {
       const value = state.activeNamespaces.get(namespace);
@@ -177,3 +178,5 @@ export const State = (
     overrideCredentials,
   });
 };
+
+export type StateInstance = ReturnType<typeof State>;

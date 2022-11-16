@@ -1,9 +1,8 @@
 import {
-  ListenerSelective,
+  SubscriptionSelective,
   TolgeeInstance,
   TranslateProps,
-  KeyDescriptor,
-  FallbackNsTranslation,
+  NsFallback,
   getFallback,
 } from '@tolgee/web';
 import {
@@ -15,7 +14,7 @@ import {
 } from 'vue';
 import { TolgeeVueContext } from './types';
 
-export const useTranslateInternal = (ns?: FallbackNsTranslation) => {
+export const useTranslateInternal = (ns?: NsFallback) => {
   const namespaces = getFallback(ns);
   const tolgeeContext = inject('tolgeeContext', {
     tolgee: getCurrentInstance().proxy.$tolgee,
@@ -28,10 +27,10 @@ export const useTranslateInternal = (ns?: FallbackNsTranslation) => {
   }
   const t = ref(createTFunction());
 
-  let subscription: ListenerSelective;
+  let subscription: SubscriptionSelective;
   onBeforeMount(() => {
     const tolgee = tolgeeContext.tolgee as TolgeeInstance;
-    subscription = tolgee.onKeyUpdate(() => {
+    subscription = tolgee.onNsUpdate(() => {
       t.value = createTFunction();
       isLoading.value = !tolgee.isLoaded(namespaces);
     });
@@ -46,14 +45,14 @@ export const useTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const isLoading = ref(!tolgee.isLoaded(namespaces));
 
-  const subscribeToKey = (key: KeyDescriptor) => {
-    subscription.subscribeKey(key);
+  const subscribeToNs = (ns: NsFallback) => {
+    subscription.subscribeNs(ns);
   };
 
   function createTFunction() {
     return (props: TranslateProps<any>) => {
       const fallbackNs = props.ns || namespaces?.[0];
-      subscribeToKey({ key: props.key, ns: fallbackNs });
+      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     };
   }

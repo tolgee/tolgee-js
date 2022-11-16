@@ -2,14 +2,13 @@ import { writable } from 'svelte/store';
 import { onDestroy } from 'svelte';
 import {
   getFallback,
-  type FallbackNsTranslation,
-  type KeyDescriptor,
+  type NsFallback,
   type TolgeeInstance,
   type TranslateProps,
 } from '@tolgee/web';
 import { getTolgeeContext } from '$lib/index';
 
-const getTranslateInternal = (ns?: FallbackNsTranslation) => {
+const getTranslateInternal = (ns?: NsFallback) => {
   const namespaces = getFallback(ns);
   const tolgeeContext = getTolgeeContext();
 
@@ -23,7 +22,7 @@ const getTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const t = writable(tFunction);
 
-  const subscription = tolgee.onKeyUpdate(() => {
+  const subscription = tolgee.onNsUpdate(() => {
     t.set(createTFunction());
     isLoading.set(!tolgee.isLoaded(namespaces));
   });
@@ -38,15 +37,15 @@ const getTranslateInternal = (ns?: FallbackNsTranslation) => {
 
   const isLoading = writable(!tolgee.isLoaded(namespaces));
 
-  const subscribeToKey = (key: KeyDescriptor) => {
-    subscription.subscribeKey(key);
+  const subscribeToNs = (ns: NsFallback) => {
+    subscription.subscribeNs(ns);
   };
 
   function createTFunction() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props: TranslateProps<any>) => {
       const fallbackNs = props.ns || namespaces?.[0];
-      subscribeToKey({ key: props.key, ns: fallbackNs });
+      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs });
     };
   }

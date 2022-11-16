@@ -1,6 +1,6 @@
 import type { App } from 'vue';
 import {
-  getTranslateParams,
+  getTranslateProps,
   TolgeeInstance,
   TFnType,
   DefaultParamType,
@@ -20,7 +20,7 @@ export const VueTolgee = {
 
     app.mixin({
       beforeCreate() {
-        this.$options.__keySubscription = tolgee.onKeyUpdate(() => {
+        this.$options.__keySubscription = tolgee.onNsUpdate(() => {
           this.$forceUpdate();
         });
       },
@@ -31,9 +31,9 @@ export const VueTolgee = {
         // @ts-ignore
         $t(...props) {
           // @ts-ignore
-          const params = getTranslateParams(...props);
-          const { key, ns } = params;
-          this.$options.__keySubscription.subscribeKey({ key, ns: ns });
+          const params = getTranslateProps(...props);
+          const { ns } = params;
+          this.$options.__keySubscription.subscribeNs(ns);
           return tolgee.t(params);
         },
       },

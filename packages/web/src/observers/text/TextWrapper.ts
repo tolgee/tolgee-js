@@ -2,7 +2,7 @@ import type {
   KeyAndParams,
   TranslatePropsInternal,
   WrapperAttributeXPathGetter,
-  WrapperInterface,
+  WrapperMiddleware,
   WrapperUnwrapFunction,
   WrapperWrapFunction,
 } from '@tolgee/core';
@@ -18,7 +18,7 @@ export const TextWrapper = ({
   inputPrefix,
   inputSuffix,
   translate,
-}: Props): WrapperInterface => {
+}: Props): WrapperMiddleware => {
   function getRawUnWrapRegex(): string {
     const escapedPrefix = escapeForRegExp(inputPrefix);
     const escapedSuffix = escapeForRegExp(inputSuffix);

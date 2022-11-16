@@ -13,52 +13,10 @@ describe('event emitter selective', () => {
     listener.subscribeNs();
 
     // emmit
-    emitter.emit({ key: 'test' });
-    emitter.emit({ ns: ['default'] });
+    emitter.emit(['default']);
     // should be ignored
-    emitter.emit({ ns: ['c'] });
+    emitter.emit(['c']);
 
-    expect(handler).toBeCalledTimes(2);
-  });
-
-  it('subscribes to key only', () => {
-    const emitter = EventEmitterSelective(
-      () => [],
-      () => ''
-    );
-    const handler = jest.fn();
-    const listener = emitter.listenSome(handler);
-    listener.subscribeKey({ key: 'test' });
-    listener.subscribeKey({ key: 'abcd' });
-
-    emitter.emit({ key: 'test' });
-    emitter.emit({ key: 'youda' });
-    expect(handler).toBeCalledTimes(1);
-    listener.unsubscribe();
-    emitter.emit();
-    expect(handler).toBeCalledTimes(1);
-  });
-
-  it('subscribes to key with namespaces', () => {
-    const emitter = EventEmitterSelective(
-      () => [],
-      () => ''
-    );
-    const handler = jest.fn();
-    const listener = emitter.listenSome(handler);
-
-    listener.subscribeKey({ key: 'test', ns: 'common' });
-    listener.subscribeKey({ key: 'abcd', ns: 'test' });
-
-    emitter.emit({ key: 'youda', ns: ['common'] });
-    emitter.emit({ key: 'test', ns: ['youda'] });
-    expect(handler).toBeCalledTimes(0);
-
-    emitter.emit({ key: 'abcd', ns: ['abcd'] });
-    emitter.emit({ ns: ['test'] });
-    expect(handler).toBeCalledTimes(1);
-    listener.unsubscribe();
-    emitter.emit();
     expect(handler).toBeCalledTimes(1);
   });
 
@@ -87,18 +45,19 @@ describe('event emitter selective', () => {
     const listener = emitter.listenSome(handler);
     const listenerAll = emitter.listen(hanlderAll);
 
-    listener.subscribeKey({ key: 'abcd', ns: 'test' });
+    listener.subscribeNs('test');
 
-    emitter.emit({ key: 'abcd' }, true);
-    emitter.emit({ ns: ['opqrst'] }, true);
+    // is fallback should always call handler
+    emitter.emit(['opqrst'], true);
 
     await new Promise((resolve) => setTimeout(resolve));
 
     expect(hanlderAll).toBeCalledTimes(1);
     expect(handler).toBeCalledTimes(1);
 
-    emitter.emit({ key: 'youda', ns: ['test'] }, true);
-    emitter.emit({ key: 'filda', ns: ['test'] });
+    // these should be merged together
+    emitter.emit(['abcd'], true);
+    emitter.emit(['abcd']);
 
     expect(hanlderAll).toBeCalledTimes(2);
     expect(handler).toBeCalledTimes(1);
@@ -110,23 +69,19 @@ describe('event emitter selective', () => {
 
   it('always subscribes to fallback ns', async () => {
     const emitter = EventEmitterSelective(
-      () => ['test', 'youda'],
+      () => ['fallback1', 'fallback2'],
       () => ''
     );
     const handler = jest.fn();
-    const listener = emitter.listenSome(handler);
-    listener.subscribeNs('test');
+    emitter.listenSome(handler);
 
-    emitter.emit({ key: 'youda' });
+    emitter.emit(['fallback1']);
     expect(handler).toBeCalledTimes(1);
 
-    emitter.emit({ ns: ['test'] });
+    emitter.emit(['fallback2']);
     expect(handler).toBeCalledTimes(2);
 
-    emitter.emit({ ns: ['youda'] });
-    expect(handler).toBeCalledTimes(2);
-
-    emitter.emit({ key: 'youda', ns: ['youda'] });
+    emitter.emit(['test']);
     expect(handler).toBeCalledTimes(2);
   });
 });

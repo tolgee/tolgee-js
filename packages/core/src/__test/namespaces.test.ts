@@ -97,4 +97,26 @@ describe('language changes', () => {
     expect(tolgee.t({ key: 'cancel', ns: 'common' })).toEqual('Cancellar');
     expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
   });
+
+  it('add active namespace with forget', async () => {
+    const tolgee = tolgeeWithNamespaces();
+    const handler = jest.fn();
+    tolgee.on('cache', handler);
+    await tolgee.run();
+
+    // test ns is not loaded
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
+
+    await tolgee.addActiveNs('test', true);
+    expect(handler).toBeCalledTimes(2);
+
+    // test ns is loaded
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('Test');
+
+    await tolgee.changeLanguage('es');
+    expect(handler).toBeCalledTimes(3);
+
+    // test ns is not loaded for spanish
+    expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
+  });
 });

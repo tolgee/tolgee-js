@@ -1,9 +1,9 @@
-import type { ObserverInterface } from '@tolgee/core';
+import type { ObserverMiddleware } from '@tolgee/core';
 import { GeneralObserver } from './observers/general/GeneralObserver';
 import { InvisibleWrapper } from './observers/invisible/InvisibleWrapper';
 
 export const InvisibleObserver =
-  (): ObserverInterface =>
+  (): ObserverMiddleware =>
   ({ onClick, options }) => {
     const wrapper = InvisibleWrapper();
     const observer = GeneralObserver(wrapper, options, onClick);

@@ -105,7 +105,7 @@ describe('cache', () => {
 
   it('keeps data when dev backend throws', async () => {
     const keyUpdateHandler = jest.fn();
-    tolgee.on('keyUpdate', keyUpdateHandler);
+    tolgee.on('update', keyUpdateHandler);
     await tolgee.run();
     expect(keyUpdateHandler).toBeCalledTimes(1);
     expect(tolgee.t('test.sub')).toEqual('subtestEn');

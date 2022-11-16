@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react';
 import {
-  ListenerSelective,
+  SubscriptionSelective,
   TranslateProps,
-  FallbackNsTranslation,
+  NsFallback,
   getFallbackArray,
   getFallback,
-  KeyDescriptor,
 } from '@tolgee/web';
 
 import { useTolgeeContext } from './useTolgeeContext';
@@ -13,7 +12,7 @@ import { ReactOptions } from './types';
 import { useRerender } from './hooks';
 
 export const useTranslateInternal = (
-  ns?: FallbackNsTranslation,
+  ns?: NsFallback,
   options?: ReactOptions
 ) => {
   const { tolgee, options: defaultOptions } = useTolgeeContext();
@@ -28,26 +27,26 @@ export const useTranslateInternal = (
   // dummy state to enable re-rendering
   const { rerender, instance } = useRerender();
 
-  const subscriptionRef = useRef<ListenerSelective>();
+  const subscriptionRef = useRef<SubscriptionSelective>();
 
-  const subscriptionQueue = useRef([] as KeyDescriptor[]);
+  const subscriptionQueue = useRef([] as NsFallback[]);
   subscriptionQueue.current = [];
 
-  const subscribeToKey = (key: KeyDescriptor) => {
-    subscriptionQueue.current.push(key);
-    subscriptionRef.current?.subscribeKey(key);
+  const subscribeToNs = (ns: NsFallback) => {
+    subscriptionQueue.current.push(ns);
+    subscriptionRef.current?.subscribeNs(ns);
   };
 
   const isLoaded = tolgee.isLoaded(namespaces);
 
   useEffect(() => {
-    const subscription = tolgee.onKeyUpdate(rerender);
+    const subscription = tolgee.onNsUpdate(rerender);
     subscriptionRef.current = subscription;
     if (!isLoaded) {
       subscription.subscribeNs(namespaces);
     }
-    subscriptionQueue.current.forEach((key) => {
-      subscription!.subscribeKey(key);
+    subscriptionQueue.current.forEach((ns) => {
+      subscription!.subscribeNs(ns);
     });
 
     return () => {
@@ -63,7 +62,7 @@ export const useTranslateInternal = (
   const t = useCallback(
     (props: TranslateProps<any>) => {
       const fallbackNs = props.ns || namespaces?.[0];
-      subscribeToKey({ key: props.key, ns: fallbackNs });
+      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },
     [tolgee, instance]

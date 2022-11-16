@@ -1,7 +1,6 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { CacheDescriptorWithKey, KeyDescriptorInternal } from '../../types';
-import { TolgeeOn } from '../../types/event';
+import { CacheDescriptorWithKey, TolgeeOn } from '../../types';
 
 export const Events = (
   getFallbackNs: () => string[],
@@ -9,18 +8,17 @@ export const Events = (
 ) => {
   const onPendingLanguageChange = EventEmitter<string>();
   const onLanguageChange = EventEmitter<string>();
-  const onKeyChange = EventEmitter<KeyDescriptorInternal>();
   const onLoadingChange = EventEmitter<boolean>();
   const onFetchingChange = EventEmitter<boolean>();
   const onInitialLoaded = EventEmitter<void>();
-  const onKeyUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
-  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
   const onRunningChange = EventEmitter<boolean>();
+  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
+  const onUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
 
-  onInitialLoaded.listen(() => onKeyUpdate.emit());
-  onLanguageChange.listen(() => onKeyUpdate.emit());
+  onInitialLoaded.listen(() => onUpdate.emit());
+  onLanguageChange.listen(() => onUpdate.emit());
   onCacheChange.listen(({ value }) => {
-    onKeyUpdate.emit({ ns: [value.namespace], key: value.key }, true);
+    onUpdate.emit([value.namespace], true);
   });
 
   const on: TolgeeOn = (event, handler): any => {
@@ -39,23 +37,22 @@ export const Events = (
         return onRunningChange.listen(handler as any);
       case 'cache':
         return onCacheChange.listen(handler as any);
-      case 'keyUpdate':
-        return onKeyUpdate.listen(handler as any);
+      case 'update':
+        return onUpdate.listen(handler as any);
     }
   };
 
   return Object.freeze({
     onPendingLanguageChange,
     onLanguageChange,
-    onKeyChange,
-    onKeyUpdate,
     onLoadingChange,
     onFetchingChange,
     onInitialLoaded,
     onRunningChange,
     onCacheChange,
+    onUpdate,
     on,
   });
 };
 
-export type EventServiceType = ReturnType<typeof Events>;
+export type EventsInstance = ReturnType<typeof Events>;

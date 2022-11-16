@@ -1,5 +1,4 @@
-import type { ElementMeta } from '@tolgee/core';
-import { TolgeeElement } from '../../types';
+import { TolgeeElement, ElementMeta } from '../../types';
 
 export type RegistredElementsMap = Map<TolgeeElement, ElementMeta>;
 

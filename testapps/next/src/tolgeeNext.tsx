@@ -1,6 +1,6 @@
 import { FormatIcu } from '@tolgee/format-icu';
 import {
-  FallbackNsTranslation,
+  NsFallback,
   ReactPlugin,
   Tolgee,
   getFallback,
@@ -36,7 +36,7 @@ export const useTolgeeSSR = (staticLocales: any) => {
 
 export const getServerLocales = async (
   locale: string | undefined,
-  ns?: FallbackNsTranslation
+  ns?: NsFallback
 ) => {
   const namespaces = getFallback(ns) || [''];
   const result: Record<string, any> = {};

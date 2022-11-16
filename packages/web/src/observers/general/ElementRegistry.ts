@@ -1,19 +1,10 @@
-import {
-  FallbackNsTranslation,
-  getFallback,
-  ObserverOptionsInternal,
-} from '@tolgee/core';
-import {
-  ElementMeta,
-  KeyAndParams,
-  NodeMeta,
-  TranslationOnClick,
-} from '@tolgee/core';
+import { NsFallback, getFallback, ObserverOptionsInternal } from '@tolgee/core';
+import { KeyAndParams, TranslationOnClick } from '@tolgee/core';
 import {
   TOLGEE_RESTRICT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
 } from '../../constants';
-import { TolgeeElement } from '../../types';
+import { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
@@ -35,9 +26,8 @@ export const ElementRegistry = (
     elementStore,
     onClick: (event, el) => {
       const meta = elementStore.get(el)!;
-      onClick(event, {
-        el,
-        meta,
+      onClick({
+        event,
         keysAndDefaults: getKeysAndDefaults(meta),
       });
     },
@@ -88,7 +78,7 @@ export const ElementRegistry = (
     });
   }
 
-  function findAll(key?: string, ns?: FallbackNsTranslation) {
+  function findAll(key?: string, ns?: NsFallback) {
     const result: ElementMeta[] = [];
     elementStore.forEachElement((_, meta) => {
       for (const nodeMeta of meta.nodes.values()) {

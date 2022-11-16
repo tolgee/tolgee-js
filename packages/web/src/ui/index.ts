@@ -1,12 +1,12 @@
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
-import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
+import type { UiProps, UiMiddleware, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { DEVTOOLS_ID } from '../constants';
 
-export class UI implements UiInterface {
+export class UI implements UiMiddleware {
   private viewerComponent: KeyDialog;
   private keyContextMenu: KeyContextMenu;
 
@@ -47,8 +47,8 @@ export class UI implements UiInterface {
   }
 
   public async getKey(props: {
-    openEvent: MouseEvent;
     keys: Map<string, string | undefined>;
+    openEvent: MouseEvent;
   }): Promise<string | undefined> {
     return await new Promise<string | undefined>((resolve) => {
       this.keyContextMenu.show({
@@ -59,8 +59,8 @@ export class UI implements UiInterface {
   }
 
   public async handleElementClick(
-    event: MouseEvent,
-    keysAndDefaults: UiKeyOption[]
+    keysAndDefaults: UiKeyOption[],
+    event: MouseEvent
   ) {
     let key = keysAndDefaults[0].key as string | undefined;
     if (keysAndDefaults.length > 1) {
@@ -71,8 +71,8 @@ export class UI implements UiInterface {
         ])
       );
       key = await this.getKey({
-        openEvent: event,
         keys,
+        openEvent: event,
       });
     }
     if (key) {

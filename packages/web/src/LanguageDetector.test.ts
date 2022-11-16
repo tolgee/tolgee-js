@@ -1,5 +1,5 @@
 jest.autoMockOff();
-import { LanguageDetectorCreator } from './LanguageDetector';
+import { createLanguageDetector } from './LanguageDetector';
 
 describe('language detector', () => {
   beforeEach(() => {
@@ -8,7 +8,7 @@ describe('language detector', () => {
   });
 
   it('detects language', () => {
-    const detector = LanguageDetectorCreator();
+    const detector = createLanguageDetector();
 
     const result = detector.getLanguage({
       availableLanguages: ['cs', 'sk'],

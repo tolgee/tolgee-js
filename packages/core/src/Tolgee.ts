@@ -2,7 +2,7 @@ import { Controller } from './Controller/Controller';
 import { combineOptions } from './Controller/State/initState';
 import { TolgeeOptions, TolgeePlugin, DevCredentials } from './types';
 
-const TolgeeInstanceCreator = (options: TolgeeOptions) => {
+const createTolgee = (options: TolgeeOptions) => {
   const controller = Controller({
     options,
   });
@@ -22,9 +22,19 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
     on: controller.on,
 
     /**
-     * Listen for specific keys/namespaces changes.
+     * Listen for specific namespaces changes.
+     *
+     * ```
+     * const sub = tolgee.onUpdate(handler)
+     *
+     * // subscribe to selected namespace
+     * sub.subscribeNs(['common'])
+     *
+     * // unsubscribe
+     * sub.unsubscribe()
+     * ```
      */
-    onKeyUpdate: controller.onKeyUpdate.listenSome,
+    onNsUpdate: controller.onUpdate.listenSome,
 
     /**
      * @return current language if set.
@@ -195,7 +205,7 @@ const TolgeeInstanceCreator = (options: TolgeeOptions) => {
   return tolgee;
 };
 
-export type TolgeeInstance = ReturnType<typeof TolgeeInstanceCreator>;
+export type TolgeeInstance = ReturnType<typeof createTolgee>;
 
 export type TolgeeChainer = {
   /**
@@ -239,9 +249,7 @@ export const Tolgee = (): TolgeeChainer => {
       return tolgeeChain;
     },
     init(options?: TolgeeOptions) {
-      const tolgee = TolgeeInstanceCreator(
-        combineOptions(state.options, options)
-      );
+      const tolgee = createTolgee(combineOptions(state.options, options));
       state.plugins.forEach(tolgee.addPlugin);
       return tolgee;
     },

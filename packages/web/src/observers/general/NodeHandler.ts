@@ -1,9 +1,9 @@
-import { ObserverOptionsInternal, WrapperInterface } from '@tolgee/core';
+import { ObserverOptionsInternal, WrapperMiddleware } from '@tolgee/core';
 import { xPathEvaluate } from './helpers';
 
 export const NodeHandler = (
   options: ObserverOptionsInternal,
-  wrapper: WrapperInterface
+  wrapper: WrapperMiddleware
 ) => {
   const handleText = (node: Node) => {
     const xPath = wrapper.getTextXPath();

@@ -1,13 +1,13 @@
 import { formatter } from './formatter';
-import { FinalFormatterInterface, TolgeePlugin } from '../types';
+import { FinalFormatterMiddleware, TolgeePlugin } from '../types';
 
-export function FormatSimpleCreator(): FinalFormatterInterface {
+function createFormatSimple(): FinalFormatterMiddleware {
   return {
     format: ({ translation, params }) => formatter(translation, params),
   };
 }
 
 export const FormatSimple = (): TolgeePlugin => (tolgee, tools) => {
-  tools.setFinalFormatter(FormatSimpleCreator());
+  tools.setFinalFormatter(createFormatSimple());
   return tolgee;
 };

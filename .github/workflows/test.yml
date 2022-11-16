@@ -18,7 +18,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.4.0
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -61,7 +61,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.4.0
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -120,7 +120,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.4.0
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -170,7 +170,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.4.0
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3

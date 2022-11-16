@@ -53,13 +53,13 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
   private renderInstantValue() {
     // get initial value first
     const translated = this.translateService.instant({
-      ...this.getTranslateParams(),
+      ...this.getTranslateProps(),
       orEmpty: true,
     });
     this.setElementContent(translated);
   }
 
-  private getTranslateParams() {
+  private getTranslateProps() {
     return {
       key: this.key,
       ns: this.ns,
@@ -76,7 +76,7 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
   private async subscribe() {
     this.unsubscribe();
     this.subscription = this.translateService
-      .translate(this.getTranslateParams())
+      .translate(this.getTranslateProps())
       .subscribe((translated) => {
         this.setElementContent(translated);
         this.initialized = true;
