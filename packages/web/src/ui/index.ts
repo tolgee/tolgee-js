@@ -47,8 +47,8 @@ export class UI implements UiMiddleware {
   }
 
   public async getKey(props: {
-    openEvent: MouseEvent;
     keys: Map<string, string | undefined>;
+    openEvent: MouseEvent;
   }): Promise<string | undefined> {
     return await new Promise<string | undefined>((resolve) => {
       this.keyContextMenu.show({
@@ -59,8 +59,8 @@ export class UI implements UiMiddleware {
   }
 
   public async handleElementClick(
-    event: MouseEvent,
-    keysAndDefaults: UiKeyOption[]
+    keysAndDefaults: UiKeyOption[],
+    event: MouseEvent
   ) {
     let key = keysAndDefaults[0].key as string | undefined;
     if (keysAndDefaults.length > 1) {
@@ -71,8 +71,8 @@ export class UI implements UiMiddleware {
         ])
       );
       key = await this.getKey({
-        openEvent: event,
         keys,
+        openEvent: event,
       });
     }
     if (key) {

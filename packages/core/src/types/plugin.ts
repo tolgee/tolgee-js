@@ -111,40 +111,10 @@ export type FormatterMiddleware = {
   format: (props: FormatterMiddlewareFormatParams) => string;
 };
 
-export type NodeMeta = {
-  oldTextContent: string;
-  keys: KeyAndParams[];
-  keyAttributeOnly?: boolean;
-};
-
-export type ElementMeta = {
-  wrappedWithElementOnlyKey?: string;
-  wrappedWithElementOnlyDefaultHtml?: string;
-  nodes: Map<Node, NodeMeta>;
-  highlightEl?: HTMLDivElement;
-  highlight?: () => void;
-  unhighlight?: () => void;
-  /**
-   * Stops removing of element's inactive nodes and
-   * unregistering from ElementRegistrar.
-   *
-   * It's used when user has mouse on the element, so there is
-   * potential, that element highlight will be triggered.
-   *
-   * Triggering highlight needs the metadata stored on element, so
-   * we need the ability to prevent clean.
-   */
-  preventClean?: boolean;
-};
-
-export type TranslationOnClick = (
-  event: MouseEvent,
-  data: {
-    keysAndDefaults: KeyAndParams[];
-    el: Element;
-    meta: ElementMeta;
-  }
-) => void;
+export type TranslationOnClick = (data: {
+  keysAndDefaults: KeyAndParams[];
+  event: any;
+}) => void;
 
 export type ObserverProps = {
   translate: (params: TranslatePropsInternal) => string;
@@ -176,10 +146,7 @@ export type UiKeyOption = {
 };
 
 export interface UiMiddleware {
-  handleElementClick(
-    event: MouseEvent,
-    keysAndDefaults: UiKeyOption[]
-  ): Promise<void>;
+  handleElementClick(keysAndDefaults: UiKeyOption[], event: any): Promise<void>;
 }
 
 export type UiConstructor = new (props: UiProps) => UiMiddleware;

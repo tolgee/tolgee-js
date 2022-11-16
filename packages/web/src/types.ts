@@ -1,6 +1,7 @@
 import type {
   BackendGetRecordProps,
   DevCredentials,
+  KeyAndParams,
   TreeTranslationsData,
 } from '@tolgee/core';
 
@@ -43,4 +44,30 @@ export type GetPath = (
 export type KeyDescriptorInternal = {
   key?: string;
   ns?: string[] | undefined;
+};
+
+export type NodeMeta = {
+  oldTextContent: string;
+  keys: KeyAndParams[];
+  keyAttributeOnly?: boolean;
+};
+
+export type ElementMeta = {
+  wrappedWithElementOnlyKey?: string;
+  wrappedWithElementOnlyDefaultHtml?: string;
+  nodes: Map<Node, NodeMeta>;
+  highlightEl?: HTMLDivElement;
+  highlight?: () => void;
+  unhighlight?: () => void;
+  /**
+   * Stops removing of element's inactive nodes and
+   * unregistering from ElementRegistrar.
+   *
+   * It's used when user has mouse on the element, so there is
+   * potential, that element highlight will be triggered.
+   *
+   * Triggering highlight needs the metadata stored on element, so
+   * we need the ability to prevent clean.
+   */
+  preventClean?: boolean;
 };

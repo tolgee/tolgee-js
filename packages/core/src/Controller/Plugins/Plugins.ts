@@ -51,7 +51,7 @@ export const Plugins = (
     languageStorage: undefined as LanguageStorageMiddleware | undefined,
   };
 
-  const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
+  const onClick: TranslationOnClick = async ({ keysAndDefaults, event }) => {
     const withNs: UiKeyOption[] = keysAndDefaults.map(
       ({ key, ns, defaultValue }) => {
         return {
@@ -65,7 +65,7 @@ export const Plugins = (
         };
       }
     );
-    instances.ui?.handleElementClick(event, withNs);
+    instances.ui?.handleElementClick(withNs, event);
   };
 
   const stop = () => {

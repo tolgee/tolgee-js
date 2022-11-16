@@ -1,4 +1,5 @@
-import type { ElementMeta, KeyAndParams, NodeMeta } from '@tolgee/core';
+import type { KeyAndParams } from '@tolgee/core';
+import type { ElementMeta, NodeMeta } from '../../types';
 
 export function initElementMeta(): ElementMeta {
   return {
