@@ -22,8 +22,8 @@ import {
   KeyAndNamespacesInternal,
   TolgeePlugin,
   TolgeeInstance,
+  TolgeeOptionsInternal,
 } from '../../types';
-import { TolgeeOptionsInternal } from '../State/initState';
 
 export const Plugins = (
   getLanguage: () => string | undefined,

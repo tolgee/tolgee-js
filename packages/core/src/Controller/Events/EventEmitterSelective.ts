@@ -1,4 +1,4 @@
-import { getFallbackArray } from '../State/helpers';
+import { getFallbackArray } from '../../helpers';
 import {
   NsFallback,
   Subscription,

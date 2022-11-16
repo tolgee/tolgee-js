@@ -3,7 +3,7 @@ import {
   FallbackLanguageOption,
   TreeTranslationsData,
 } from '../../types';
-import { sanitizeUrl } from './helpers';
+import { sanitizeUrl } from '../../helpers';
 import {
   defaultObserverOptions,
   ObserverOptions,

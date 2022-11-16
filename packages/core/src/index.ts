@@ -1,5 +1,5 @@
+export { getFallback, getFallbackArray } from './helpers';
 export { Tolgee } from './Tolgee';
 export * from './types';
 export { getTranslateProps } from './TranslateParams';
-export { getFallback, getFallbackArray } from './Controller/State/helpers';
 export { FormatSimple } from './FormatSimple/FormatSimple';

@@ -8,7 +8,7 @@ import {
   KeyAndNamespacesInternal,
 } from '../types';
 import { Cache } from './Cache/Cache';
-import { getFallbackArray } from './State/helpers';
+import { getFallbackArray } from '../helpers';
 import { Plugins } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';

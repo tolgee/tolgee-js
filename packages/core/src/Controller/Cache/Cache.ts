@@ -9,8 +9,8 @@ import {
   BackendGetRecord,
   BackendGetDevRecord,
 } from '../../types';
+import { getFallbackArray, unique } from '../../helpers';
 import { EventEmitterInstance } from '../Events/EventEmitter';
-import { getFallbackArray, unique } from '../State/helpers';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 

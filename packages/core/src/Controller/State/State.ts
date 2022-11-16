@@ -13,7 +13,7 @@ import {
   getFallbackFromStruct,
   sanitizeUrl,
   unique,
-} from './helpers';
+} from '../../helpers';
 import { initState, TolgeeOptions } from './initState';
 
 export const State = (
