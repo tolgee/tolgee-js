@@ -1,15 +1,15 @@
 import { Tolgee } from '../Tolgee';
 import {
-  FinalFormatterInterface,
-  FormatterInterface,
-  FormatterInterfaceFormatParams,
-  ObserverInterface,
+  FinalFormatterMiddleware,
+  FormatterMiddleware,
+  FormatterMiddlewareFormatParams,
+  ObserverMiddleware,
   TolgeePlugin,
   WrapperWrapFunction,
 } from '../types';
 
 const testObserver =
-  (outputNotFormattable: boolean): ObserverInterface =>
+  (outputNotFormattable: boolean): ObserverMiddleware =>
   () => {
     const wrap: WrapperWrapFunction = ({ key, translation }) => {
       return `${key}|${translation}`;
@@ -35,20 +35,20 @@ const testObserver =
     });
   };
 
-const testFormatter1: FormatterInterface = {
-  format: ({ translation }: FormatterInterfaceFormatParams) => {
+const testFormatter1: FormatterMiddleware = {
+  format: ({ translation }: FormatterMiddlewareFormatParams) => {
     return `(1${translation})`;
   },
 };
 
-const testFormatter2: FormatterInterface = {
-  format: ({ translation }: FormatterInterfaceFormatParams) => {
+const testFormatter2: FormatterMiddleware = {
+  format: ({ translation }: FormatterMiddlewareFormatParams) => {
     return `(2${translation})`;
   },
 };
 
-const testFinalFormatter: FinalFormatterInterface = {
-  format: ({ translation }: FormatterInterfaceFormatParams) => {
+const testFinalFormatter: FinalFormatterMiddleware = {
+  format: ({ translation }: FormatterMiddlewareFormatParams) => {
     return { final: translation };
   },
 };

@@ -1,4 +1,4 @@
-import type { BackendInterface, TolgeePlugin } from '@tolgee/core';
+import type { BackendMiddleware, TolgeePlugin } from '@tolgee/core';
 import { GetPath, BackendOptions } from './types';
 
 const trimSlashes = (path: string) => {
@@ -29,7 +29,7 @@ const DEFAULT_OPTIONS = {
 
 const createBackendFetch = (
   options?: Partial<BackendOptions>
-): BackendInterface => {
+): BackendMiddleware => {
   const { prefix, getPath, getData, headers, ...fetchOptions }: BackendOptions =
     {
       ...DEFAULT_OPTIONS,

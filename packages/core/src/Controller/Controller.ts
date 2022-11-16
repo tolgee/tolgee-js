@@ -61,7 +61,7 @@ export const Controller = ({ options }: StateServiceProps) => {
     init(options);
   }
 
-  events.onNsUpdate.listen(() => {
+  events.onUpdate.listen(() => {
     if (state.isRunning()) {
       pluginService.retranslate();
     }

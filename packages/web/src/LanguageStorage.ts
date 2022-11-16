@@ -1,8 +1,8 @@
-import type { LanguageStorageInterface, TolgeePlugin } from '@tolgee/core';
+import type { LanguageStorageMiddleware, TolgeePlugin } from '@tolgee/core';
 
 const CURRENT_LANGUAGE_LOCAL_STORAGE_KEY = '__tolgee_currentLanguage';
 
-export const createLanguageStorage = (): LanguageStorageInterface => {
+export const createLanguageStorage = (): LanguageStorageMiddleware => {
   return {
     getLanguage() {
       const storedLanguage = localStorage.getItem(

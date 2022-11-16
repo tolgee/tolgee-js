@@ -1,7 +1,7 @@
 import {
   NsFallback,
   TranslationOnClick,
-  WrapperInterface,
+  WrapperMiddleware,
   ObserverRunProps,
   ObserverOptionsInternal,
 } from '@tolgee/core';
@@ -14,7 +14,7 @@ import { getNodeText, setNodeText, xPathEvaluate } from './helpers';
 import { NodeHandler } from './NodeHandler';
 
 export const GeneralObserver = (
-  wrapper: WrapperInterface,
+  wrapper: WrapperMiddleware,
   options: ObserverOptionsInternal,
   onClick: TranslationOnClick
 ) => {

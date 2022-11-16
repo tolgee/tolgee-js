@@ -1,7 +1,7 @@
 import IntlMessageFormat from 'intl-messageformat';
-import type { FinalFormatterInterface } from '@tolgee/core';
+import type { FinalFormatterMiddleware } from '@tolgee/core';
 
-export const createFormatIcu = (): FinalFormatterInterface => {
+export const createFormatIcu = (): FinalFormatterMiddleware => {
   const locales = new Map() as Map<string, string>;
 
   function isLocaleValid(locale: string) {
@@ -24,7 +24,7 @@ export const createFormatIcu = (): FinalFormatterInterface => {
     return locales.get(language);
   }
 
-  const format: FinalFormatterInterface['format'] = ({
+  const format: FinalFormatterMiddleware['format'] = ({
     translation,
     language,
     params,

@@ -13,12 +13,12 @@ export const Events = (
   const onInitialLoaded = EventEmitter<void>();
   const onRunningChange = EventEmitter<boolean>();
   const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
-  const onNsUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
+  const onUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
 
-  onInitialLoaded.listen(() => onNsUpdate.emit());
-  onLanguageChange.listen(() => onNsUpdate.emit());
+  onInitialLoaded.listen(() => onUpdate.emit());
+  onLanguageChange.listen(() => onUpdate.emit());
   onCacheChange.listen(({ value }) => {
-    onNsUpdate.emit([value.namespace], true);
+    onUpdate.emit([value.namespace], true);
   });
 
   const on: TolgeeOn = (event, handler): any => {
@@ -38,7 +38,7 @@ export const Events = (
       case 'cache':
         return onCacheChange.listen(handler as any);
       case 'update':
-        return onNsUpdate.listen(handler as any);
+        return onUpdate.listen(handler as any);
     }
   };
 
@@ -50,7 +50,7 @@ export const Events = (
     onInitialLoaded,
     onRunningChange,
     onCacheChange,
-    onNsUpdate,
+    onUpdate,
     on,
   });
 };

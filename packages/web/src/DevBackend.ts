@@ -1,7 +1,7 @@
-import { BackendDevInterface, TolgeePlugin } from '@tolgee/core';
+import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
 import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
 
-const createDevBackend = (): BackendDevInterface => ({
+const createDevBackend = (): BackendDevMiddleware => ({
   getRecord({ apiUrl, apiKey, language, namespace, projectId }) {
     const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
     let url =

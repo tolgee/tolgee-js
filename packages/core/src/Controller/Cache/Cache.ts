@@ -2,7 +2,6 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   CacheDescriptorWithKey,
-  EventEmitterInstance,
   NsFallback,
   TranslationsFlat,
   TranslationValue,
@@ -10,6 +9,7 @@ import {
   BackendGetRecord,
   BackendGetDevRecord,
 } from '../../types';
+import { EventEmitterInstance } from '../Events/EventEmitter';
 import { getFallbackArray, unique } from '../State/helpers';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';

@@ -1,5 +1,5 @@
 import { Tolgee } from '../Tolgee';
-import { BackendInterface, TolgeePlugin } from '../types';
+import { BackendMiddleware, TolgeePlugin } from '../types';
 
 const data = {
   en: {
@@ -12,13 +12,13 @@ const data = {
   },
 } as any;
 
-const backendNormal: BackendInterface = {
+const backendNormal: BackendMiddleware = {
   getRecord({ language, namespace = '' }) {
     return data[language]?.[namespace];
   },
 };
 
-const backendDev: BackendInterface = {
+const backendDev: BackendMiddleware = {
   getRecord() {
     return Promise.resolve({ cancel: 'Dev' });
   },

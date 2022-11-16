@@ -1,8 +1,8 @@
-import { WrapperInterface } from '@tolgee/core';
+import { WrapperMiddleware } from '@tolgee/core';
 import { TextWrapper } from './TextWrapper';
 
 describe('Text wrapper', () => {
-  let wrapper: WrapperInterface;
+  let wrapper: WrapperMiddleware;
   beforeEach(() => {
     wrapper = TextWrapper({
       inputPrefix: '{{',

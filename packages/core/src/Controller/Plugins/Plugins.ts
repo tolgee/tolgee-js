@@ -1,21 +1,21 @@
 import { isPromise, valueOrPromise } from '../../helpers';
 import {
-  BackendDevInterface,
+  BackendDevMiddleware,
   BackendGetRecord,
-  BackendInterface,
-  FormatterInterface,
-  ObserverInterface,
+  BackendMiddleware,
+  FormatterMiddleware,
+  ObserverMiddleware,
   TranslatePropsInternal,
   TranslationOnClick,
-  UiInterface,
-  UiLibInterface,
+  UiMiddleware,
+  UiLibMiddleware,
   UiType,
-  FinalFormatterInterface,
+  FinalFormatterMiddleware,
   HighlightInterface,
   UiConstructor,
   UiKeyOption,
-  LanguageDetectorInterface,
-  LanguageStorageInterface,
+  LanguageDetectorMiddleware,
+  LanguageStorageMiddleware,
   ChangeTranslationInterface,
   WrapperWrapProps,
   Unwrapped,
@@ -37,18 +37,18 @@ export const Plugins = (
   let onPrepareQueue: (() => void)[] = [];
   const plugins = {
     ui: undefined as UiConstructor | undefined,
-    observer: undefined as ObserverInterface | undefined,
+    observer: undefined as ObserverMiddleware | undefined,
   };
 
   const instances = {
-    formatters: [] as FormatterInterface[],
-    finalFormatter: undefined as FinalFormatterInterface | undefined,
-    observer: undefined as ReturnType<ObserverInterface> | undefined,
-    devBackend: undefined as BackendDevInterface | undefined,
-    backends: [] as BackendInterface[],
-    ui: undefined as UiInterface | undefined,
-    languageDetector: undefined as LanguageDetectorInterface | undefined,
-    languageStorage: undefined as LanguageStorageInterface | undefined,
+    formatters: [] as FormatterMiddleware[],
+    finalFormatter: undefined as FinalFormatterMiddleware | undefined,
+    observer: undefined as ReturnType<ObserverMiddleware> | undefined,
+    devBackend: undefined as BackendDevMiddleware | undefined,
+    backends: [] as BackendMiddleware[],
+    ui: undefined as UiMiddleware | undefined,
+    languageDetector: undefined as LanguageDetectorMiddleware | undefined,
+    languageStorage: undefined as LanguageStorageMiddleware | undefined,
   };
 
   const onClick: TranslationOnClick = async (event, { keysAndDefaults }) => {
@@ -85,7 +85,7 @@ export const Plugins = (
     return formatTranslation({ ...props, translation, formatEnabled: true });
   };
 
-  const setObserver = (observer: ObserverInterface | undefined) => {
+  const setObserver = (observer: ObserverMiddleware | undefined) => {
     plugins.observer = observer;
   };
 
@@ -93,20 +93,20 @@ export const Plugins = (
     return Boolean(plugins.observer);
   };
 
-  const addFormatter = (formatter: FormatterInterface | undefined) => {
+  const addFormatter = (formatter: FormatterMiddleware | undefined) => {
     if (formatter) {
       instances.formatters.push(formatter);
     }
   };
 
   const setFinalFormatter = (
-    formatter: FinalFormatterInterface | undefined
+    formatter: FinalFormatterMiddleware | undefined
   ) => {
     instances.finalFormatter = formatter;
   };
 
   const setUi = (ui: UiType | undefined) => {
-    plugins.ui = (ui as UiLibInterface)?.UI || ui;
+    plugins.ui = (ui as UiLibMiddleware)?.UI || ui;
   };
 
   const hasUi = () => {
@@ -114,7 +114,7 @@ export const Plugins = (
   };
 
   const setLanguageStorage = (
-    storage: LanguageStorageInterface | undefined
+    storage: LanguageStorageMiddleware | undefined
   ) => {
     instances.languageStorage = storage;
   };
@@ -124,7 +124,7 @@ export const Plugins = (
   };
 
   const setLanguageDetector = (
-    detector: LanguageDetectorInterface | undefined
+    detector: LanguageDetectorMiddleware | undefined
   ) => {
     instances.languageDetector = detector;
   };
@@ -160,13 +160,13 @@ export const Plugins = (
     });
   };
 
-  const addBackend = (backend: BackendInterface | undefined) => {
+  const addBackend = (backend: BackendMiddleware | undefined) => {
     if (backend) {
       instances.backends.push(backend);
     }
   };
 
-  const setDevBackend = (backend: BackendDevInterface | undefined) => {
+  const setDevBackend = (backend: BackendDevMiddleware | undefined) => {
     instances.devBackend = backend;
   };
 

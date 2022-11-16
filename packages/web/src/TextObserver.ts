@@ -1,10 +1,10 @@
-import type { ObserverInterface } from '@tolgee/core';
+import type { ObserverMiddleware } from '@tolgee/core';
 import { GeneralObserver } from './observers/general/GeneralObserver';
 import { setNodeText } from './observers/general/helpers';
 import { TextWrapper } from './observers/text/TextWrapper';
 
 export const TextObserver =
-  (): ObserverInterface =>
+  (): ObserverMiddleware =>
   ({ translate, onClick, options }) => {
     const wrapper = TextWrapper({
       inputPrefix: options.inputPrefix,

@@ -2,11 +2,12 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   DevCredentials,
-  EventEmitterInstance,
   NsFallback,
   NsType,
 } from '../../types';
+
 import { decodeCacheKey } from '../Cache/helpers';
+import { EventEmitterInstance } from '../Events/EventEmitter';
 import {
   getFallbackArray,
   getFallbackFromStruct,

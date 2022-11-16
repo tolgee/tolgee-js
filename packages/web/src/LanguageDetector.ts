@@ -1,6 +1,6 @@
-import type { LanguageDetectorInterface, TolgeePlugin } from '@tolgee/core';
+import type { LanguageDetectorMiddleware, TolgeePlugin } from '@tolgee/core';
 
-export const createLanguageDetector = (): LanguageDetectorInterface => {
+export const createLanguageDetector = (): LanguageDetectorMiddleware => {
   return {
     getLanguage({ availableLanguages }) {
       if (typeof window !== 'undefined' && availableLanguages) {

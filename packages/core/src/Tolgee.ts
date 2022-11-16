@@ -23,8 +23,18 @@ const createTolgee = (options: TolgeeOptions) => {
 
     /**
      * Listen for specific namespaces changes.
+     *
+     * ```
+     * const sub = tolgee.onUpdate(handler)
+     *
+     * // subscribe to selected namespace
+     * sub.subscribeNs(['common'])
+     *
+     * // unsubscribe
+     * sub.unsubscribe()
+     * ```
      */
-    onNsUpdate: controller.onNsUpdate.listenSome,
+    onNsUpdate: controller.onUpdate.listenSome,
 
     /**
      * @return current language if set.

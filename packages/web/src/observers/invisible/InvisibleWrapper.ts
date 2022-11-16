@@ -2,7 +2,7 @@ import type {
   WrapperAttributeXPathGetter,
   KeyAndParams,
   Unwrapped,
-  WrapperInterface,
+  WrapperMiddleware,
   WrapperWrapFunction,
   TranslatePropsInternal,
 } from '@tolgee/core';
@@ -25,7 +25,7 @@ type EncodeValue = {
   d: string | undefined;
 };
 
-export const InvisibleWrapper = (): WrapperInterface => {
+export const InvisibleWrapper = (): WrapperMiddleware => {
   const keyMemory = ValueMemory();
 
   const unwrap = (text: string): Unwrapped => {
