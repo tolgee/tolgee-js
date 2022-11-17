@@ -1,24 +1,23 @@
-import { Inject, Injectable, OnDestroy, NgZone } from "@angular/core";
-import { Observable } from "rxjs";
+import { Inject, Injectable, OnDestroy, NgZone } from '@angular/core';
+import { Observable } from 'rxjs';
 import {
   DefaultParamType,
   EventType,
   getTranslateProps,
   ListenerEvent,
   TFnType,
-  TolgeeInstance
-} from "@tolgee/web";
-import { TOLGEE_INSTANCE } from "./tolgee-instance-token";
+  TolgeeInstance,
+} from '@tolgee/web';
+import { TOLGEE_INSTANCE } from './tolgee-instance-token';
 
-@Injectable({ providedIn: "root" })
+@Injectable({ providedIn: 'root' })
 export class TranslateService implements OnDestroy {
   private runPromise: Promise<void>;
 
   constructor(
     @Inject(TOLGEE_INSTANCE) private _tolgee: TolgeeInstance,
     private _ngZone: NgZone
-  ) {
-  }
+  ) {}
 
   get tolgee() {
     return this._tolgee;
@@ -76,7 +75,7 @@ export class TranslateService implements OnDestroy {
    */
   public readonly instant: TFnType = (...args) => {
     // @ts-ignore
-    const params = getTranslateParams(...args);
+    const params = getTranslateProps(...args);
     return this.tolgee.t(params);
   };
 
@@ -94,7 +93,7 @@ export class TranslateService implements OnDestroy {
   get languageAsync(): Observable<string> {
     return new Observable((subscriber) => {
       subscriber.next(this.tolgee.getLanguage());
-      const subscription = this.on("language").subscribe((value) => {
+      const subscription = this.on('language').subscribe((value) => {
         subscriber.next(value.value);
       });
 
@@ -121,16 +120,14 @@ export class TranslateService implements OnDestroy {
    * @param event the event to listen
    */
   on<Event extends keyof EventType>(event: Event) {
-    return new Observable<ListenerEvent<EventType[Event]>>(
-      (subscriber) => {
-        const subscription = this.tolgee.on(event, (value) => {
-          this._ngZone.run(() => {
-            subscriber.next(value as any);
-          });
+    return new Observable<ListenerEvent<EventType[Event]>>((subscriber) => {
+      const subscription = this.tolgee.on(event, (value) => {
+        this._ngZone.run(() => {
+          subscriber.next(value as any);
         });
-        return () => subscription.unsubscribe();
-      }
-    );
+      });
+      return () => subscription.unsubscribe();
+    });
   }
 
   ngOnDestroy(): void {
@@ -147,6 +144,6 @@ export class TranslateService implements OnDestroy {
   }
 
   private isSSR() {
-    return typeof window === "undefined";
+    return typeof window === 'undefined';
   }
 }

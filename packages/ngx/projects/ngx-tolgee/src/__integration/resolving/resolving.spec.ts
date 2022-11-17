@@ -9,6 +9,7 @@ import { RootComponent } from './root.component';
 import { wait } from '@testing/wait';
 import { NgxTolgeeModule } from '../../lib/ngx-tolgee.module';
 import { mockStaticDataAsync } from '@testing/mockStaticData';
+import { TOLGEE_INSTANCE } from '../../lib/tolgee-instance-token';
 
 let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
@@ -25,13 +26,13 @@ const getFixture = async ({ preloadedNs } = { preloadedNs: 'test' }) => {
 
   fixture = await render(RootComponent, {
     declarations: [],
+    imports: [NgxTolgeeModule],
     providers: [
       {
-        provide: TranslateService,
-        useFactory: () => new TranslateService(tolgee),
+        provide: TOLGEE_INSTANCE,
+        useFactory: () => tolgee,
       },
     ],
-    imports: [NgxTolgeeModule],
     routes: [
       {
         path: '',

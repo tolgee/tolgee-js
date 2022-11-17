@@ -17,7 +17,10 @@ describe('translation service', () => {
         language: 'en',
       }),
     };
-    service = new TranslateService(tolgee);
+    service = new TranslateService(tolgee, {
+      runOutsideAngular: jest.fn((fn) => fn()),
+      run: jest.fn((fn) => fn()),
+    } as any);
     onSpy = jest.spyOn(tolgee, 'on');
     staticDataMock.resolvablePromises.en.resolve();
     await tolgee.run();
