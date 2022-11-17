@@ -15,8 +15,5 @@
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
     "access": "public"
-  },
-  "devDependencies": {
-    "@tolgee/testing": "^4.9.2"
   }
 }
