@@ -46,6 +46,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.2",
     "@tolgee/format-icu": "^4.8.0",
+    "@tolgee/testing": "^4.9.2",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.8",
     "@types/react": "^17.0.1",

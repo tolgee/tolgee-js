@@ -1,7 +1,7 @@
 import { TranslateService } from '../lib/translate.service';
 import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { NgxPlugin } from '../lib/NgxPlugin';
-import { mockStaticDataAsync } from '@testing/mockStaticData';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 
 let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 

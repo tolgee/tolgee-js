@@ -8,7 +8,8 @@ import { act } from 'react-dom/test-utils';
 import { Tolgee } from '@tolgee/web';
 import { NgxPlugin } from '../lib/NgxPlugin';
 import { FormatIcu } from '@tolgee/format-icu';
-import { mockCoreFetch } from '@testing/fetchMock';
+
+import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 import { NgxTolgeeModule } from '../lib/ngx-tolgee.module';
 import { TOLGEE_INSTANCE } from '../lib/tolgee-instance-token';
 

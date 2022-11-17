@@ -1,34 +1,21 @@
-import fetchMock from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
 
-import mockTranslations from './data/mockTranslations';
-import { testConfig } from './data/testConfig';
 import TestTranslateComponent from './components/TestTranslateComponent.svelte';
 import { Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { SveltePlugin } from '$lib/SveltePlugin';
 import { FormatIcu } from '@tolgee/format-icu';
+import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
 
-const fetch = fetchMock.mockResponse(async (req) => {
-  if (req.url.includes('/v2/api-keys/current')) {
-    return JSON.stringify(testConfig);
-  } else if (req.url.includes('/v2/projects/translations/en')) {
-    return JSON.stringify({ en: mockTranslations.en });
-  } else if (req.url.includes('/v2/projects/translations/cs')) {
-    return JSON.stringify({ cs: mockTranslations.cs });
-  }
-
-  throw new Error('Invalid request');
-});
+const fetch = mockCoreFetch();
 
 describe('getTranslate', () => {
   let tolgee: TolgeeInstance;
   beforeEach(async () => {
     fetch.enableMocks();
-
     tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
       apiKey: API_KEY,
       apiUrl: API_URL,

@@ -1,9 +1,7 @@
 jest.autoMockOff();
 
 import '@testing-library/jest-dom';
-import mockTranslations from './mockTranslations';
-import fetchMock from 'jest-fetch-mock';
-import { testConfig } from './testConfig';
+import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 import i18n from 'i18next';
 import { Tolgee } from '@tolgee/web';
 import { withTolgee, I18nextPlugin } from '..';
@@ -11,15 +9,7 @@ import { withTolgee, I18nextPlugin } from '..';
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
 
-const fetch = fetchMock.mockResponse(async (req) => {
-  if (req.url.includes('/v2/api-keys/current')) {
-    return JSON.stringify(testConfig);
-  } else if (req.url.includes('/v2/projects/translations/en')) {
-    return JSON.stringify(mockTranslations);
-  }
-
-  throw new Error('Invalid request');
-});
+const fetch = mockCoreFetch();
 
 describe('withTolgee', () => {
   let i18next: typeof i18n;

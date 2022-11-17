@@ -1,21 +1,12 @@
 import '@testing-library/jest-dom';
-import mockTranslations from './mockTranslations';
 import { DevTools, useTolgee, VueTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/vue';
 import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { PropType } from 'vue';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 
 const API_URL = 'http://localhost';
-
-let pending = [] as (() => void)[];
-const resolvePending = () => {
-  pending.forEach((resolve) => resolve());
-  pending = [];
-};
-
-const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => pending.push(() => resolve(data)));
 
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
@@ -28,6 +19,7 @@ const checkState = (props: CheckStateProps) => {
 describe('useTranslation hook integration', () => {
   let tolgee: TolgeeInstance;
   let runPromise: Promise<void>;
+  let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
   const TestComponent = {
     props: { events: Array as PropType<TolgeeEvent[]> },
@@ -46,19 +38,12 @@ describe('useTranslation hook integration', () => {
   };
 
   beforeEach(async () => {
-    tolgee = Tolgee()
-      .use(DevTools())
-      .use(FormatIcu())
-      .init({
-        apiUrl: API_URL,
-        language: 'cs',
-        staticData: {
-          cs: wrapInPromise(mockTranslations.cs),
-          'cs:test': wrapInPromise(mockTranslations['cs:test']),
-          en: wrapInPromise(mockTranslations.en),
-          'en:test': wrapInPromise(mockTranslations['en:test']),
-        },
-      });
+    staticDataMock = mockStaticDataAsync();
+    tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
+      apiUrl: API_URL,
+      language: 'cs',
+      staticData: staticDataMock.promises,
+    });
     runPromise = tolgee.run();
   });
 
@@ -73,13 +58,13 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ initialLoad: 'true' });
-    resolvePending();
+    staticDataMock.resolveAll();
     await runPromise;
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
     tolgee.changeLanguage('en');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
@@ -90,11 +75,11 @@ describe('useTranslation hook integration', () => {
       props: { events: ['language'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
-    resolvePending();
+    staticDataMock.resolveAll();
     await runPromise;
     checkState({ language: 'cs' });
     tolgee.changeLanguage('en');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       checkState({ language: 'en' });
     });
@@ -105,11 +90,11 @@ describe('useTranslation hook integration', () => {
       props: { events: ['pendingLanguage'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
-    resolvePending();
+    staticDataMock.resolveAll();
     await runPromise;
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     tolgee.changeLanguage('en');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(async () => {
       checkState({ language: 'cs', pendingLanguage: 'en' });
     });
@@ -122,7 +107,7 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ loading: 'true', fetching: 'true' });
-    resolvePending();
+    staticDataMock.resolveAll();
     await runPromise;
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
@@ -131,7 +116,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'false', fetching: 'true' });
     });
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });
@@ -139,7 +124,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'true', fetching: 'true' });
     });
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });

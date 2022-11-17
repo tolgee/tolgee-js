@@ -4,52 +4,33 @@ import Namespaces from './components/Namespaces.svelte';
 import { render, screen, waitFor } from '@testing-library/svelte';
 import { Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
-
-import mockTranslations from './data/mockTranslations';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 
 const API_URL = 'http://localhost';
 
-let pending = [] as (() => void)[];
-const resolvePending = () => {
-  pending.forEach((resolve) => resolve());
-  pending = [];
-};
-
-const wrapInPromise =
-  <T>(data: T) =>
-  () =>
-    new Promise<T>((resolve) => pending.push(() => resolve(data)));
-
 describe('useTranslations namespaces', () => {
   let tolgee: TolgeeInstance;
+  let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
   beforeEach(async () => {
-    tolgee = Tolgee()
-      .use(SveltePlugin())
-      .use(FormatIcu())
-      .init({
-        apiUrl: API_URL,
-        language: 'cs',
-        fallbackLanguage: 'en',
-        fallbackNs: 'fallback',
-        staticData: {
-          cs: wrapInPromise(mockTranslations.cs),
-          'cs:test': wrapInPromise(mockTranslations['cs:test']),
-          en: wrapInPromise(mockTranslations.en),
-          'en:test': wrapInPromise(mockTranslations['en:test']),
-          'cs:fallback': wrapInPromise(mockTranslations['cs:fallback']),
-        },
-      });
+    staticDataMock = mockStaticDataAsync();
+    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
+      apiUrl: API_URL,
+      language: 'cs',
+      fallbackLanguage: 'en',
+      fallbackNs: 'fallback',
+      staticData: staticDataMock.promises,
+    });
 
     const runPromise = tolgee.run();
-    resolvePending();
+    staticDataMock.resolveAll();
     await runPromise;
     render(Namespaces);
   });
 
   it('loads namespace after render', async () => {
     expect(screen.queryByTestId('loading')).toContainHTML('Loading...');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).toBeFalsy();
       expect(screen.queryByTestId('test')).toContainHTML('Český test');
@@ -58,7 +39,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with english fallback', async () => {
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       expect(screen.queryByTestId('test_english_fallback')).toContainHTML(
         'Test english fallback'
@@ -71,7 +52,7 @@ describe('useTranslations namespaces', () => {
 
   it('works with ns fallback', async () => {
     expect(screen.queryByTestId('ns_fallback')).toContainHTML('fallback');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
@@ -80,7 +61,7 @@ describe('useTranslations namespaces', () => {
 
   it('works with language and ns fallback', async () => {
     tolgee.changeLanguage('en');
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
@@ -88,7 +69,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with default value', async () => {
-    resolvePending();
+    staticDataMock.resolveAll();
     await waitFor(() => {
       expect(screen.queryByTestId('non_existant')).toContainHTML(
         'Non existant'

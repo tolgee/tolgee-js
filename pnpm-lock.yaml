@@ -148,6 +148,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
+      '@tolgee/testing': ^4.9.2
       '@tolgee/web': ^4.8.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
@@ -170,6 +171,7 @@ importers:
       '@rollup/plugin-typescript': 8.3.4_xwhsf76p4ysrvxbjgnmc6wmmq4
       '@testing-library/dom': 8.18.1
       '@testing-library/jest-dom': 5.16.5
+      '@tolgee/testing': link:../testing
       '@types/jest': 28.1.8
       '@types/node': 18.8.2
       concurrently: 7.3.0
@@ -259,9 +261,12 @@ importers:
 
   packages/ngx/projects/ngx-tolgee:
     specifiers:
+      '@tolgee/testing': ^4.9.2
       '@tolgee/web': ^4.9.2
     dependencies:
       '@tolgee/web': link:../../../web
+    devDependencies:
+      '@tolgee/testing': link:../../../testing
     publishDirectory: ../../dist/ngx-tolgee
 
   packages/react:
@@ -272,6 +277,7 @@ importers:
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^12.1.2
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/testing': ^4.9.2
       '@tolgee/web': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
@@ -302,6 +308,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 12.1.5_sfoxds7t5ydpegc3knd667wn6m
       '@tolgee/format-icu': link:../format-icu
+      '@tolgee/testing': link:../testing
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/react': 17.0.50
@@ -331,6 +338,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.5
       '@testing-library/svelte': ^3.2.1
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/testing': ^4.9.2
       '@tolgee/web': ^4.8.0
       '@tsconfig/svelte': ^3.0.0
       '@types/jest': ^28.1.7
@@ -363,6 +371,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/svelte': 3.2.1_svelte@3.50.1
       '@tolgee/format-icu': link:../format-icu
+      '@tolgee/testing': link:../testing
       '@tsconfig/svelte': 3.0.0
       '@types/jest': 28.1.8
       '@typescript-eslint/eslint-plugin': 5.39.0_xyciw6oqjoiiono4dhv3uhn5my
@@ -394,6 +403,7 @@ importers:
       '@testing-library/jest-dom': ^5.16.2
       '@testing-library/vue': ^6.6.1
       '@tolgee/format-icu': ^4.8.0
+      '@tolgee/testing': ^4.9.2
       '@tolgee/web': ^4.8.0
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
@@ -418,6 +428,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/vue': 6.6.1_s5ljmfbyjcorxzsah2scwznsai
       '@tolgee/format-icu': link:../format-icu
+      '@tolgee/testing': link:../testing
       '@types/jest': 27.5.2
       '@types/testing-library__jest-dom': 5.14.5
       '@vue/vue3-jest': 27.0.0_tglnwy4fnsoz773mswst57nlr4

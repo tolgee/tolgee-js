@@ -1,11 +1,8 @@
 jest.autoMockOff();
 
-import fetchMock from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/vue';
 
-import mockTranslations from './mockTranslations';
-import { testConfig } from './testConfig';
 import {
   TolgeeProvider,
   TolgeeInstance,
@@ -14,37 +11,10 @@ import {
   VueTolgee,
 } from '..';
 import { FormatIcu } from '@tolgee/format-icu';
+import { mockCoreFetchAsync } from '@tolgee/testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
-
-export const createFetchMock = () => {
-  let resolveCzech;
-  let resolveEnglish;
-  const czechPromise = new Promise((resolve) => {
-    resolveCzech = () => {
-      resolve(JSON.stringify({ cs: mockTranslations.cs }));
-    };
-  });
-
-  const englishPromise = new Promise((resolve) => {
-    resolveEnglish = () => {
-      resolve(JSON.stringify({ en: mockTranslations.en }));
-    };
-  });
-
-  const fetch = fetchMock.mockResponse(async (req) => {
-    if (req.url.includes('/v2/api-keys/current')) {
-      return JSON.stringify(testConfig);
-    } else if (req.url.includes('/v2/projects/translations/en')) {
-      return englishPromise;
-    } else if (req.url.includes('/v2/projects/translations/cs')) {
-      return czechPromise;
-    }
-    throw new Error('Invalid request');
-  });
-  return { fetch, resolveCzech, resolveEnglish };
-};
 
 const TestComponent = {
   template: `
@@ -80,9 +50,9 @@ describe('TolgeeProvider integration', () => {
     let resolveEnglish;
     let resolveCzech;
     beforeEach(async () => {
-      const fetchMock = createFetchMock();
-      resolveCzech = fetchMock.resolveCzech;
-      resolveEnglish = fetchMock.resolveEnglish;
+      const fetchMock = mockCoreFetchAsync();
+      resolveCzech = fetchMock.csTranslations.resolve;
+      resolveEnglish = fetchMock.enTranslations.resolve;
       fetchMock.fetch.enableMocks();
 
       tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
