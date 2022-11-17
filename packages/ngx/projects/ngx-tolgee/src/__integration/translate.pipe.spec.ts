@@ -4,13 +4,13 @@ import {
   screen,
   waitFor,
 } from '@testing-library/angular';
-import { TranslateService } from '../lib/translate.service';
 import { act } from 'react-dom/test-utils';
 import { Tolgee } from '@tolgee/web';
 import { NgxPlugin } from '../lib/NgxPlugin';
 import { FormatIcu } from '@tolgee/format-icu';
-import { TranslatePipe } from '../lib/translate.pipe';
 import { mockCoreFetch } from '@testing/fetchMock';
+import { NgxTolgeeModule } from '../lib/ngx-tolgee.module';
+import { TOLGEE_INSTANCE } from '../lib/tolgee-instance-token';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
@@ -29,11 +29,11 @@ const getFixture = async (html: string) => {
   await tolgee.run();
 
   fixture = await render(html, {
-    declarations: [TranslatePipe],
+    imports: [NgxTolgeeModule],
     providers: [
       {
-        provide: TranslateService,
-        useFactory: () => new TranslateService(tolgee),
+        provide: TOLGEE_INSTANCE,
+        useFactory: () => tolgee,
       },
     ],
   });
