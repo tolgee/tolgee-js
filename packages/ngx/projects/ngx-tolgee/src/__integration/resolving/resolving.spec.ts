@@ -1,5 +1,4 @@
 import { render, RenderResult, screen } from '@testing-library/angular';
-import { TranslateService } from '../../lib/translate.service';
 import { Tolgee } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 

@@ -1,4 +1,3 @@
-import { TComponent } from '../lib/t.component';
 import {
   render,
   RenderResult,
