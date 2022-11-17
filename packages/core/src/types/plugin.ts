@@ -165,7 +165,7 @@ export type PluginTools = Readonly<{
   setUi: (ui: UiLibMiddleware | undefined) => void;
   hasUi: () => boolean;
   addBackend: (backend: BackendMiddleware | undefined) => void;
-  setDevBackend: (backend: BackendMiddleware | undefined) => void;
+  setDevBackend: (backend: BackendDevMiddleware | undefined) => void;
   setLanguageDetector: (
     languageDetector: LanguageDetectorMiddleware | undefined
   ) => void;
