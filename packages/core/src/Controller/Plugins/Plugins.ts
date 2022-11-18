@@ -8,11 +8,8 @@ import {
   TranslatePropsInternal,
   TranslationOnClick,
   UiMiddleware,
-  UiLibMiddleware,
-  UiType,
   FinalFormatterMiddleware,
   HighlightInterface,
-  UiConstructor,
   UiKeyOption,
   LanguageDetectorMiddleware,
   LanguageStorageMiddleware,
@@ -36,7 +33,7 @@ export const Plugins = (
   let prepared = false;
   let onPrepareQueue: (() => void)[] = [];
   const plugins = {
-    ui: undefined as UiConstructor | undefined,
+    ui: undefined as UiMiddleware | undefined,
     observer: undefined as ObserverMiddleware | undefined,
   };
 
@@ -46,7 +43,7 @@ export const Plugins = (
     observer: undefined as ReturnType<ObserverMiddleware> | undefined,
     devBackend: undefined as BackendDevMiddleware | undefined,
     backends: [] as BackendMiddleware[],
-    ui: undefined as UiMiddleware | undefined,
+    ui: undefined as ReturnType<UiMiddleware> | undefined,
     languageDetector: undefined as LanguageDetectorMiddleware | undefined,
     languageStorage: undefined as LanguageStorageMiddleware | undefined,
   };
@@ -105,8 +102,8 @@ export const Plugins = (
     instances.finalFormatter = formatter;
   };
 
-  const setUi = (ui: UiType | undefined) => {
-    plugins.ui = (ui as UiLibMiddleware)?.UI || ui;
+  const setUi = (ui: UiMiddleware | undefined) => {
+    plugins.ui = ui as UiMiddleware;
   };
 
   const hasUi = () => {
@@ -171,9 +168,9 @@ export const Plugins = (
   };
 
   const run = (isDev: boolean) => {
-    if (!instances.ui && plugins.ui) {
+    if (!instances.ui) {
       const { apiKey, apiUrl, projectId } = getInitialOptions();
-      instances.ui = new plugins.ui({
+      instances.ui = plugins.ui?.({
         apiKey: apiKey!,
         apiUrl: apiUrl!,
         projectId,

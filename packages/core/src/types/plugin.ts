@@ -145,24 +145,18 @@ export type UiKeyOption = {
   translation: string | undefined;
 };
 
-export interface UiMiddleware {
+export type UiMiddleware = (props: UiProps) => UiInterface;
+
+export interface UiInterface {
   handleElementClick(keysAndDefaults: UiKeyOption[], event: any): Promise<void>;
 }
-
-export type UiConstructor = new (props: UiProps) => UiMiddleware;
-
-export type UiLibMiddleware = {
-  UI: UiConstructor;
-};
-
-export type UiType = UiConstructor | UiLibMiddleware;
 
 export type PluginTools = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterMiddleware | undefined) => void;
   addFormatter: (formatter: FormatterMiddleware | undefined) => void;
   setObserver: (observer: ObserverMiddleware | undefined) => void;
   hasObserver: () => boolean;
-  setUi: (ui: UiLibMiddleware | undefined) => void;
+  setUi: (ui: UiMiddleware | undefined) => void;
   hasUi: () => boolean;
   addBackend: (backend: BackendMiddleware | undefined) => void;
   setDevBackend: (backend: BackendDevMiddleware | undefined) => void;

@@ -1,6 +1,8 @@
 import { Subscription, Listener } from '../../types';
 
-export const EventEmitter = <T>(): EventEmitterInstance<T> => {
+export const EventEmitter = <T>(
+  isActive: () => boolean
+): EventEmitterInstance<T> => {
   let handlers: Listener<T>[] = [];
 
   const listen = (handler: Listener<T>): Subscription => {
@@ -18,7 +20,9 @@ export const EventEmitter = <T>(): EventEmitterInstance<T> => {
   };
 
   const emit = (data: T) => {
-    handlers.forEach((handler) => handler({ value: data }));
+    if (isActive()) {
+      handlers.forEach((handler) => handler({ value: data }));
+    }
   };
 
   return Object.freeze({ listen, emit });

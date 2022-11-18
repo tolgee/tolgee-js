@@ -17,8 +17,8 @@ describe('events', () => {
         es: { hello: 'Mundo', language: 'Spanish' },
       },
     });
-    const helloHandler = jest.fn((data) => {});
-    const languageHandler = jest.fn((data) => {});
+    const helloHandler = jest.fn(() => {});
+    const languageHandler = jest.fn(() => {});
 
     tolgee.onNsUpdate(helloHandler);
     tolgee.onNsUpdate(languageHandler);
@@ -29,5 +29,30 @@ describe('events', () => {
     await Promise.resolve();
     expect(helloHandler).toHaveBeenCalledTimes(1);
     expect(languageHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it('stop emitting when turned off', async () => {
+    const tolgee = Tolgee().init({
+      language: 'en',
+      staticData: {
+        en: { hello: 'World', language: 'English' },
+        es: { hello: 'Mundo', language: 'Spanish' },
+      },
+    });
+    const eventHandler = jest.fn(() => {});
+
+    tolgee.on('language', eventHandler);
+    tolgee.on('pendingLanguage', eventHandler);
+
+    await tolgee.changeLanguage('es');
+    expect(eventHandler).toBeCalledTimes(2);
+
+    tolgee.setEmmiterActive(false);
+    await tolgee.changeLanguage('en');
+    expect(eventHandler).toBeCalledTimes(2);
+
+    tolgee.setEmmiterActive(true);
+    await tolgee.changeLanguage('es');
+    expect(eventHandler).toBeCalledTimes(4);
   });
 });

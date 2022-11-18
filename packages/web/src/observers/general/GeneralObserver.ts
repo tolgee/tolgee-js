@@ -7,6 +7,7 @@ import {
 } from '@tolgee/core';
 
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '../../constants';
+import { isSSR } from '../../tools/isSSR';
 import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry } from './ElementRegistry';
@@ -83,6 +84,9 @@ export const GeneralObserver = (
   let observer: MutationObserver;
 
   const run = ({ mouseHighlight }: ObserverRunProps) => {
+    if (isSSR()) {
+      return;
+    }
     if (!observer) {
       observer = createMutationObserver();
     }

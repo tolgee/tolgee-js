@@ -16,6 +16,7 @@ type HandlerWrapperType = {
 };
 
 export const EventEmitterSelective = (
+  isActive: () => boolean,
   getFallbackNs: () => string[],
   getDefaultNs: () => string
 ): EventEmitterSelectiveInstance => {
@@ -111,11 +112,13 @@ export const EventEmitterSelective = (
   };
 
   const emit = (ns?: string[], delayed?: boolean) => {
-    queue.push(ns);
-    if (!delayed) {
-      solveQueue();
-    } else {
-      setTimeout(solveQueue, 0);
+    if (isActive()) {
+      queue.push(ns);
+      if (!delayed) {
+        solveQueue();
+      } else {
+        setTimeout(solveQueue, 0);
+      }
     }
   };
 

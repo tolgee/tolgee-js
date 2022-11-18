@@ -1,4 +1,3 @@
-jest.autoMockOff();
 import { createLanguageDetector } from './LanguageDetector';
 
 describe('language detector', () => {
