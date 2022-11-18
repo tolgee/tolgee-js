@@ -1,4 +1,4 @@
-import { mockStaticDataAsync } from '@testing/mockStaticData';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 import React from 'react';
 import '@testing-library/jest-dom';
 import { ReactPlugin, useTranslate } from '..';
@@ -95,9 +95,11 @@ describe('useTranslations namespaces', () => {
     expect(screen.queryByTestId('ns_fallback')).toContainHTML(
       'Fallback fallback'
     );
-    const changePromise = tolgee.changeLanguage('en');
-    staticDataMock.resolveAll();
-    await changePromise;
+    await act(async () => {
+      const changePromise = tolgee.changeLanguage('en');
+      staticDataMock.resolveAll();
+      await changePromise;
+    });
     expect(screen.queryByTestId('ns_fallback')).toContainHTML(
       'Fallback fallback'
     );

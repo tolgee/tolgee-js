@@ -5,7 +5,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
-import { mockCoreFetch } from '@testing/fetchMock';
+import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';

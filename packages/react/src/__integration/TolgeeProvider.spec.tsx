@@ -9,7 +9,7 @@ import {
   useTranslate,
 } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
-import { mockCoreFetchAsync } from '@testing/fetchMock';
+import { mockCoreFetchAsync } from '@tolgee/testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';

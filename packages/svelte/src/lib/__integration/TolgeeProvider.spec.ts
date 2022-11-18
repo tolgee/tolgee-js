@@ -1,53 +1,23 @@
-import fetchMock from 'jest-fetch-mock';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
 
-import mockTranslations from './data/mockTranslations';
-import { testConfig } from './data/testConfig';
 import TestProviderComponent from './components/TestProviderComponent.svelte';
 import { Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { SveltePlugin } from '$lib/SveltePlugin';
 import { FormatIcu } from '@tolgee/format-icu';
+import { mockCoreFetchAsync } from '@tolgee/testing/fetchMock';
 
 const API_URL = 'http://localhost';
 const API_KEY = 'dummyApiKey';
-
-const createFetchMock = () => {
-  let resolveCzech;
-  let resolveEnglish;
-  const czechPromise = new Promise((resolve) => {
-    resolveCzech = () => {
-      resolve(JSON.stringify({ cs: mockTranslations.cs }));
-    };
-  });
-
-  const englishPromise = new Promise((resolve) => {
-    resolveEnglish = () => {
-      resolve(JSON.stringify({ en: mockTranslations.en }));
-    };
-  });
-
-  const fetch = fetchMock.mockResponse(async (req) => {
-    if (req.url.includes('/v2/api-keys/current')) {
-      return JSON.stringify(testConfig);
-    } else if (req.url.includes('/v2/projects/translations/en')) {
-      return englishPromise;
-    } else if (req.url.includes('/v2/projects/translations/cs')) {
-      return czechPromise;
-    }
-    throw new Error('Invalid request');
-  });
-  return { fetch, resolveCzech, resolveEnglish };
-};
 
 describe('TolgeeProvider integration', () => {
   let tolgee: TolgeeInstance;
   let resolveEnglish;
   let resolveCzech;
   beforeEach(async () => {
-    const fetchMock = createFetchMock();
-    resolveCzech = fetchMock.resolveCzech;
-    resolveEnglish = fetchMock.resolveEnglish;
+    const fetchMock = mockCoreFetchAsync();
+    resolveCzech = fetchMock.csTranslations.resolve;
+    resolveEnglish = fetchMock.enTranslations.resolve;
     fetchMock.fetch.enableMocks();
 
     tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({

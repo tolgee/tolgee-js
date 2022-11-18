@@ -45,6 +45,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/vue": "^6.6.1",
     "@tolgee/format-icu": "^4.8.0",
+    "@tolgee/testing": "^4.9.2",
     "@types/jest": "^27.0.2",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vue/vue3-jest": "^27.0.0-alpha.3",

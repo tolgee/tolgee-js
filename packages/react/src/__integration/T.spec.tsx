@@ -4,7 +4,7 @@ import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import { TolgeeProvider, ReactPlugin, TolgeeInstance, Tolgee } from '../index';
 import { FormatIcu } from '@tolgee/format-icu';
-import { mockCoreFetch } from '@testing/fetchMock';
+import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
 import { T } from '../index';
 

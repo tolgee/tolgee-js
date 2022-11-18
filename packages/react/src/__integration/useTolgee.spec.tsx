@@ -1,22 +1,13 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import mockTranslations from '@testing/mockTranslations';
 import { ReactPlugin, useTolgee } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 
 const API_URL = 'http://localhost';
-
-let pending = [] as (() => void)[];
-const resolvePending = () => {
-  pending.forEach((resolve) => resolve());
-  pending = [];
-};
-
-const wrapInPromise = (data: any) => () =>
-  new Promise<any>((resolve) => pending.push(() => resolve(data)));
 
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
@@ -29,6 +20,7 @@ const checkState = (props: CheckStateProps) => {
 describe('useTranslation hook integration', () => {
   let tolgee: TolgeeInstance;
   let runPromise: Promise<void>;
+  let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
   const TestComponent = ({ events }: { events?: TolgeeEvent[] }) => {
     const {
       getLanguage,
@@ -52,18 +44,15 @@ describe('useTranslation hook integration', () => {
   };
 
   beforeEach(async () => {
+    staticDataMock = mockStaticDataAsync();
+
     tolgee = Tolgee()
       .use(ReactPlugin({ useSuspense: false }))
       .use(FormatIcu())
       .init({
         apiUrl: API_URL,
         language: 'cs',
-        staticData: {
-          cs: wrapInPromise(mockTranslations.cs),
-          'cs:test': wrapInPromise(mockTranslations['cs:test']),
-          en: wrapInPromise(mockTranslations.en),
-          'en:test': wrapInPromise(mockTranslations['en:test']),
-        },
+        staticData: staticDataMock.promises,
       });
     runPromise = tolgee.run();
   });
@@ -77,7 +66,7 @@ describe('useTranslation hook integration', () => {
     checkState({ initialLoad: 'true' });
 
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises.cs.resolve();
       await runPromise;
     });
     await waitFor(() => {
@@ -85,7 +74,7 @@ describe('useTranslation hook integration', () => {
     });
     await act(async () => {
       tolgee.changeLanguage('en');
-      resolvePending();
+      staticDataMock.resolvablePromises.en.resolve();
     });
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
@@ -95,13 +84,13 @@ describe('useTranslation hook integration', () => {
   it('updates language', async () => {
     render(<TestComponent events={['language']} />);
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises.cs.resolve();
       await runPromise;
     });
     checkState({ language: 'cs' });
     await act(async () => {
       tolgee.changeLanguage('en');
-      resolvePending();
+      staticDataMock.resolvablePromises.en.resolve();
     });
     checkState({ language: 'en' });
   });
@@ -109,13 +98,13 @@ describe('useTranslation hook integration', () => {
   it('updates pending language', async () => {
     render(<TestComponent events={['pendingLanguage']} />);
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises.cs.resolve();
       await runPromise;
     });
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     await act(async () => {
       tolgee.changeLanguage('en');
-      resolvePending();
+      staticDataMock.resolvablePromises.en.resolve();
     });
     await waitFor(async () => {
       checkState({ language: 'cs', pendingLanguage: 'en' });
@@ -127,7 +116,7 @@ describe('useTranslation hook integration', () => {
     checkState({ loading: 'true', fetching: 'true' });
 
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises.cs.resolve();
       await runPromise;
     });
     await waitFor(async () => {
@@ -140,7 +129,7 @@ describe('useTranslation hook integration', () => {
       checkState({ loading: 'false', fetching: 'true' });
     });
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises.en.resolve();
     });
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
@@ -152,7 +141,7 @@ describe('useTranslation hook integration', () => {
       checkState({ loading: 'true', fetching: 'true' });
     });
     await act(async () => {
-      resolvePending();
+      staticDataMock.resolvablePromises['en:test'].resolve();
     });
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });

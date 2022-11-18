@@ -23,6 +23,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.1",
     "@tolgee/format-icu": "^4.8.0",
+    "@tolgee/testing": "^4.9.2",
     "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",

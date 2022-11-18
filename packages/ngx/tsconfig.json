@@ -24,9 +24,6 @@
       ],
       "ngx-tolgee/*": [
         "dist/ngx-tolgee/*"
-      ],
-      "@testing/*": [
-        "../testing/*"
       ]
     }
   },

@@ -5,10 +5,10 @@ import { FormatIcu } from '@tolgee/format-icu';
 import { NgxPlugin } from '../../lib/NgxPlugin';
 import { NamespaceResolver } from '../../lib/namespace.resolver';
 import { RootComponent } from './root.component';
-import { wait } from '@testing/wait';
+import { wait } from '@tolgee/testing/wait';
 import { NgxTolgeeModule } from '../../lib/ngx-tolgee.module';
-import { mockStaticDataAsync } from '@testing/mockStaticData';
 import { TOLGEE_INSTANCE } from '../../lib/tolgee-instance-token';
+import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 
 let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
