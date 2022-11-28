@@ -5,6 +5,11 @@ describe('helper functions', () => {
     const div = document.createElement('div');
     expect(closestElement(div)).toEqual(div);
 
+    expect(closestElement(document)).toEqual(document);
+    expect(closestElement(document.documentElement)).toEqual(
+      document.documentElement
+    );
+
     expect(closestElement(document.body)).toEqual(document.body);
   });
 

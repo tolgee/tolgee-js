@@ -4,7 +4,6 @@ export function xPathEvaluate<T extends Node>(
   expression: string,
   targetNode: Node
 ): Node[] {
-  let evaluated: XPathResult | undefined = undefined;
   const searchableElement = closestElement(targetNode);
 
   const result: Node[] = [];
@@ -12,7 +11,7 @@ export function xPathEvaluate<T extends Node>(
     return result;
   }
 
-  evaluated = document?.evaluate(
+  const evaluated = document?.evaluate(
     expression,
     searchableElement,
     undefined,
