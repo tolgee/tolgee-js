@@ -4,25 +4,40 @@ export function xPathEvaluate<T extends Node>(
   expression: string,
   targetNode: Node
 ): Node[] {
-  let node: Node | null;
+  const searchableElement = closestElement(targetNode);
+
+  const result: Node[] = [];
+  if (!searchableElement) {
+    return result;
+  }
+
   const evaluated = document?.evaluate(
     expression,
-    targetNode,
+    searchableElement,
     undefined,
     XPathResult.ANY_TYPE
   );
-  const result: Node[] = [];
+
+  let node: Node | null | undefined;
   while ((node = evaluated?.iterateNext?.())) {
     result.push(node as T);
   }
   return result;
 }
 
-export function closestElement(node: Element | Text) {
-  if (node instanceof Text) {
-    return node.parentElement;
+export function closestElement(node: Node): Element | undefined {
+  switch (node.nodeType) {
+    case Node.ATTRIBUTE_NODE:
+      return (node as Attr).ownerElement || undefined;
+    case Node.TEXT_NODE:
+      return (node.parentElement as Element) || undefined;
+    case Node.DOCUMENT_NODE:
+    case Node.ELEMENT_NODE:
+      return node as Element;
+    default:
+      // we are not interested in other nodes
+      return undefined;
   }
-  return node;
 }
 
 export function getNodeText(node: Node) {
