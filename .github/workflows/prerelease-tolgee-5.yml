@@ -1,0 +1,62 @@
+name: Prerelease Tolgee v5
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The prerelease version (5.0.0-<this>)'
+        required: true
+        default: nil
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          ref: tolgee-5
+
+      - name: Build
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.15.1'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Update version locally
+        run: lerna version --yes --conventional-commits  --force-publish --no-push --no-git-tag-version 5.0.0-${{ github.event.inputs.version }}
+
+      # Set TOLGEE_UI_VERSION for @tolgee/core build
+      - name: Set env
+        run: echo "TOLGEE_UI_VERSION=$(npm run --silent ui-version)" >> $GITHUB_ENV
+
+      - name: Build all packages
+        run: pnpm build || pnpm build
+
+      - name: Recreate release with push
+        run: |
+          git stash
+          lerna version --yes --conventional-commits --force-publish --exact --create-release github 5.0.0-${{ github.event.inputs.version }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
+
+      - name: Publish
+        run: lerna publish from-package --yes --dist-tag rc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
