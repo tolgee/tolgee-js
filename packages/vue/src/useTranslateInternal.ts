@@ -51,7 +51,7 @@ export const useTranslateInternal = (ns?: NsFallback) => {
 
   function createTFunction() {
     return (props: TranslateProps<any>) => {
-      const fallbackNs = props.ns || namespaces?.[0];
+      const fallbackNs = props.ns ?? namespaces?.[0];
       subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     };

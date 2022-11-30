@@ -6,9 +6,6 @@
     <template v-if="currentRoute === '/'">
       <Todos />
     </template>
-    <template v-else-if="currentRoute === '/namespaces'">
-      <Namespaces />
-    </template>
     <template v-else>
       <TranslationMethods />
     </template>
@@ -18,7 +15,6 @@
 <script lang="ts" setup>
 import Todos from './Todos.vue';
 import TranslationMethods from './TranslationMethods.vue';
-import Namespaces from './Namespaces.vue';
 
 import { TolgeeProvider } from '@tolgee/vue';
 

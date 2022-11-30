@@ -10,7 +10,7 @@ export const tolgeeBackend = (tolgee: TolgeeInstance): Module => {
       try {
         const translations = await tolgee.loadRecord({
           language,
-          namespace: ns === 'translation' ? '' : undefined,
+          namespace: ns === 'translation' ? '' : ns,
         });
         callback(null, Object.fromEntries(translations));
       } catch (e) {

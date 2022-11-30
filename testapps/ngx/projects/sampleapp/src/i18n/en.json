@@ -9,5 +9,5 @@
   "share-button" : "Share",
   "this_is_a_key" : "This is a key",
   "this_is_a_key_with_params" : "This is key with params {key} {key2}",
-  "with_tags" : "Hello <b>My friend!</b>"
+  "this_is_a_key_with_tags" : "This is a key with tags <b>bold</b> <b><i>{key}</i></b>"
 }

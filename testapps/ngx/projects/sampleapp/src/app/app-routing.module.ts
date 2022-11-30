@@ -10,7 +10,7 @@ const routes: Routes = [
   {
     path: 'lazy',
     loadChildren: () => import('./lazy/lazy.module').then((m) => m.LazyModule),
-    data: { tolgeeNamespace: 'submodule' },
+    data: { tolgeeNamespace: 'namespaced' },
     resolve: {
       _namespace: NamespaceResolver,
     },
