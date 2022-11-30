@@ -32,7 +32,7 @@ export const TolgeeProvider: React.FC<Props> = ({
     return () => {
       tolgee.stop();
     };
-  }, []);
+  }, [tolgee]);
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
 

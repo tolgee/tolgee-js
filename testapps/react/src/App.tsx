@@ -8,7 +8,6 @@ import {
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
-import { Namespaces } from './Namespaces';
 import { FormatIcu } from '@tolgee/format-icu';
 
 const tolgee = Tolgee()
@@ -31,8 +30,6 @@ export const App = () => {
     <TolgeeProvider tolgee={tolgee} fallback="Loading...">
       {currentRoute === '/translation-methods' ? (
         <TranslationMethods />
-      ) : currentRoute === '/namespaces' ? (
-        <Namespaces />
       ) : (
         <Todos />
       )}

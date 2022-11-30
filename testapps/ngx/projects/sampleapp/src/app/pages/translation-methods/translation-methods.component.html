@@ -1,9 +1,3 @@
-<script>
-  import { getTranslate } from "@tolgee/svelte";
-
-  const t = getTranslate();
-</script>
-
 <main class="translation-methods">
   <app-navbar>
     <a routerLink="/">The example app</a>
@@ -20,40 +14,46 @@
     </div>
     <div>
       <h1>t selector component with params</h1>
-      <div t key="this_is_a_key_with_params" [params]="{key: 'value', key2: 'value2'}"></div>
+      <div
+        t
+        key="this_is_a_key_with_params"
+        [params]="{ key: 'value', key2: 'value2' }"
+      ></div>
     </div>
 
     <div>
       <h1>translate pipe with default</h1>
-      <div>{{ 'this_key_does_not_exist' | translate:'This is default'}}</div>
+      <div>{{ 'this_key_does_not_exist' | translate: 'This is default' }}</div>
     </div>
     <div>
       <h1>translate pipe without default</h1>
-      <div>{{ 'this_is_a_key' | translate}}</div>
+      <div>{{ 'this_is_a_key' | translate }}</div>
     </div>
     <div>
       <h1>translate pipe with noWrap</h1>
-      <div>{{ 'this_is_a_key' | translate:{ noWrap: true } }}</div>
+      <div>{{ 'this_is_a_key' | translate: { noWrap: true } }}</div>
     </div>
     <div>
       <h1>translate pipe without default</h1>
-      <div>{{ { key: 'this_is_a_key', defaultValue: 'Jeeey!' } | translate}}</div>
+      <div>
+        {{ { key: 'this_is_a_key', defaultValue: 'Jeeey!' } | translate }}
+      </div>
     </div>
     <div>
       <h1>service get without default</h1>
-      <div>{{translatedWithoutParamsValue}}</div>
+      <div>{{ translatedWithoutParamsValue }}</div>
     </div>
     <div>
       <h1>service get with default</h1>
-      <div>{{translatedWithDefaultValue}}</div>
+      <div>{{ translatedWithDefaultValue }}</div>
     </div>
     <div>
       <h1>service get with params</h1>
-      <div>{{translatedWithParamsValue}}</div>
+      <div>{{ translatedWithParamsValue }}</div>
     </div>
     <div>
-      <h1>component in namespace</h1>
-      <div t key="submodule-key" ns="submodule"></div>
+      <h1>key in namespace</h1>
+      <div t key="this_is_a_key" ns="namespaced"></div>
     </div>
     <div>
       <h1>with tags</h1>

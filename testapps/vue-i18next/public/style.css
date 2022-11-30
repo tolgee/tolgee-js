@@ -250,3 +250,9 @@ header h2 {
   text-overflow: '';
   cursor: pointer;
 }
+
+.load-more-section {
+  display: flex;
+  margin-top: 20px;
+  justify-content: center;
+}

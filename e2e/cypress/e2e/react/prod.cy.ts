@@ -1,4 +1,5 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
+import { namespacesTest } from '../../common/namespacesTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('React app in prod mode', () => {
@@ -33,6 +34,16 @@ context('React app in prod mode', () => {
         count: 1,
         testId: 'translationWithTags',
       },
+    ],
+  });
+  namespacesTest(url, {
+    en: [
+      { text: 'This is a key in namespace', count: 2 },
+      { text: 'This is a key', count: 1 },
+    ],
+    cs: [
+      { text: 'Toto je klíč v namespace', count: 2 },
+      { text: 'Toto je klíč', count: 1 },
     ],
   });
 });

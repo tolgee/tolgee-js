@@ -93,10 +93,19 @@
         </div>
       </div>
     </div>
+
+    <div v-if="!revealed" class="load-more-section">
+      <button class="button" @click="revealed = true">Load more</button>
+    </div>
+    <Namespaces v-else />
   </main>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue';
 import { T } from '@tolgee/vue';
 import Navbar from './components/Navbar.vue';
+import Namespaces from './components/Namespaces.vue';
+
+const revealed = ref(false);
 </script>

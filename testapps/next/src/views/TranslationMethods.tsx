@@ -1,9 +1,12 @@
+import { Suspense, useState } from 'react';
 import { T, useTranslate } from '@tolgee/react';
 import Link from 'next/link';
 import { Navbar } from '../components/Navbar';
+import Namespaces from '../components/Namespaces';
 
 export const TranslationMethods = () => {
   const { t } = useTranslate();
+  const [revealed, setRevealed] = useState(false);
 
   return (
     <main className="translation-methods">
@@ -106,6 +109,17 @@ export const TranslationMethods = () => {
           </div>
         </div>
       </div>
+      {!revealed ? (
+        <div className="load-more-section">
+          <button className="button" onClick={() => setRevealed(true)}>
+            Load more
+          </button>
+        </div>
+      ) : (
+        <Suspense fallback="Loading namespace...">
+          <Namespaces />
+        </Suspense>
+      )}
     </main>
   );
 };

@@ -1,8 +1,11 @@
+import { Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Namespaces from './components/Namespaces';
 import { Navbar } from './components/Navbar';
 
 export const TranslationMethods = () => {
   const { t } = useTranslation();
+  const [revealed, setRevealed] = useState(false);
 
   return (
     <main className="translation-methods">
@@ -28,6 +31,17 @@ export const TranslationMethods = () => {
           </div>
         </div>
       </div>
+      {!revealed ? (
+        <div className="load-more-section">
+          <button className="button" onClick={() => setRevealed(true)}>
+            Load more
+          </button>
+        </div>
+      ) : (
+        <Suspense fallback="Loading namespace...">
+          <Namespaces />
+        </Suspense>
+      )}
     </main>
   );
 };

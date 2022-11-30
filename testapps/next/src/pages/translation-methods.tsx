@@ -5,7 +5,7 @@ import { TranslationMethods } from '../views/TranslationMethods';
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      locales: await getServerLocales(context.locale),
+      locales: await getServerLocales(context.locale, ['', 'namespaced']),
     },
   };
 };

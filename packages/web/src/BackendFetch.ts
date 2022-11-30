@@ -10,7 +10,7 @@ const trimSlashes = (path: string) => {
 
 const defaultGetPath: GetPath = ({ namespace, language, prefix }) => {
   if (namespace) {
-    return `${trimSlashes(prefix)}/${language}/${namespace}.json`;
+    return `${trimSlashes(prefix)}/${namespace}/${language}.json`;
   } else {
     return `${trimSlashes(prefix)}/${language}.json`;
   }

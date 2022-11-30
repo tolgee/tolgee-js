@@ -46,7 +46,10 @@ import { CommonModule } from '@angular/common';
           .init({
             availableLanguages: ['en', 'cs', 'fr', 'de'],
             staticData: {
-              'en:submodule': () => import('../i18n/submodule/en.json'),
+              'en:namespaced': () => import('../i18n/namespaced/en.json'),
+              'cs:namespaced': () => import('../i18n/namespaced/cs.json'),
+              'de:namespaced': () => import('../i18n/namespaced/de.json'),
+              'fr:namespaced': () => import('../i18n/namespaced/fr.json'),
               en: () => import('../i18n/en.json'),
               cs: () => import('../i18n/cs.json'),
               de: () => import('../i18n/de.json'),

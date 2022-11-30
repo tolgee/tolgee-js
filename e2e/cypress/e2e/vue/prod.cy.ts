@@ -1,4 +1,5 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
+import { namespacesTest } from '../../common/namespacesTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('Vue app in prod mode', () => {
@@ -23,6 +24,17 @@ context('Vue app in prod mode', () => {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
         count: 3,
       },
+    ],
+  });
+
+  namespacesTest(url, {
+    en: [
+      { text: 'This is a key in namespace', count: 2 },
+      { text: 'This is a key', count: 1 },
+    ],
+    cs: [
+      { text: 'Toto je klíč v namespace', count: 2 },
+      { text: 'Toto je klíč', count: 1 },
     ],
   });
 });
