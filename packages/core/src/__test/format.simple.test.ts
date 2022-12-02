@@ -1,9 +1,9 @@
 import { FormatSimple } from '../FormatSimple/FormatSimple';
-import { Tolgee } from '../Tolgee';
+import { TolgeeCore } from '../Tolgee';
 
 describe('format simple', () => {
   it('works with parameters', () => {
-    const tolgee = Tolgee()
+    const tolgee = TolgeeCore()
       .use(FormatSimple())
       .init({
         language: 'en',
@@ -13,7 +13,7 @@ describe('format simple', () => {
   });
 
   it('throws an error when parameter missing', () => {
-    const tolgee = Tolgee()
+    const tolgee = TolgeeCore()
       .use(FormatSimple())
       .init({
         language: 'en',

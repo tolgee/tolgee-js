@@ -1,4 +1,4 @@
-import { Tolgee, TreeTranslationsData } from '../index';
+import { TolgeeCore, TreeTranslationsData } from '../index';
 import { resolvablePromise } from './testTools';
 
 describe('loading', () => {
@@ -7,7 +7,7 @@ describe('loading', () => {
     const [promiseEs, resolveEs] = resolvablePromise<TreeTranslationsData>();
     const onLoadHandler = jest.fn(() => {});
     const onFetchingHandler = jest.fn(() => {});
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: () => promiseEn,

@@ -1,4 +1,4 @@
-import { Tolgee, TolgeePlugin, TolgeeInstance } from '../index';
+import { TolgeeCore, TolgeePlugin, TolgeeInstance } from '../index';
 
 const DetectionPlugin =
   (value: any): TolgeePlugin =>
@@ -19,7 +19,7 @@ describe('language detection plugin', () => {
   });
 
   it('will detect language without loading', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(DetectionPlugin('en'))
       .init({
         defaultLanguage: 'es',
@@ -43,7 +43,7 @@ describe('language detection plugin', () => {
   });
 
   it('will detect language async', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(DetectionPlugin(Promise.resolve('en')))
       .init({
         defaultLanguage: 'es',
@@ -69,7 +69,7 @@ describe('language detection plugin', () => {
   });
 
   it('will fallback correctly', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(DetectionPlugin(Promise.resolve(undefined)))
       .init({
         defaultLanguage: 'es',
@@ -85,7 +85,7 @@ describe('language detection plugin', () => {
   });
 
   it('will return key before language is loaded', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(DetectionPlugin(Promise.resolve('en')))
       .init({
         defaultLanguage: 'es',
@@ -102,7 +102,7 @@ describe('language detection plugin', () => {
   });
 
   it('will throw error when no avaliableLanguages are set', () => {
-    tolgee = Tolgee().use(DetectionPlugin('en')).init({
+    tolgee = TolgeeCore().use(DetectionPlugin('en')).init({
       defaultLanguage: 'es',
     });
 
@@ -110,7 +110,7 @@ describe('language detection plugin', () => {
   });
 
   it('will throw error when no defaultLanguage specified', () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(DetectionPlugin('en'))
       .init({
         staticData: {
@@ -122,7 +122,7 @@ describe('language detection plugin', () => {
   });
 
   it('will throw error when no available languages specified', () => {
-    tolgee = Tolgee().use(DetectionPlugin('en')).init({});
+    tolgee = TolgeeCore().use(DetectionPlugin('en')).init({});
 
     expect(() => tolgee.run()).toThrow(/'availableLanguages'/);
   });

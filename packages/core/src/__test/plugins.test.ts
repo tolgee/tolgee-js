@@ -1,4 +1,4 @@
-import { Tolgee } from '../Tolgee';
+import { TolgeeCore } from '../Tolgee';
 import {
   FinalFormatterMiddleware,
   FormatterMiddleware,
@@ -69,7 +69,7 @@ const formattersPlugin: TolgeePlugin = (tolgee, tools) => {
 
 describe('plugins', () => {
   it('wraps and formats translation', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
@@ -83,7 +83,7 @@ describe('plugins', () => {
   });
 
   it("won't format when observer doesn't return formattable text", () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });
@@ -97,7 +97,7 @@ describe('plugins', () => {
   });
 
   it("won't wrap before run", () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: { en: { hello: 'world' } },
     });

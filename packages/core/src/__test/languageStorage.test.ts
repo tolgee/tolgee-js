@@ -1,4 +1,4 @@
-import { Tolgee, TolgeePlugin, TolgeeInstance } from '../index';
+import { TolgeeCore, TolgeePlugin, TolgeeInstance } from '../index';
 
 describe('language storage plugin', () => {
   let tolgee: TolgeeInstance;
@@ -22,7 +22,7 @@ describe('language storage plugin', () => {
   });
 
   it('will restore language without loading', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin('en'))
       .init({
         defaultLanguage: 'es',
@@ -46,7 +46,7 @@ describe('language storage plugin', () => {
   });
 
   it('will restore language async', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin(Promise.resolve('en')))
       .init({
         defaultLanguage: 'es',
@@ -72,7 +72,7 @@ describe('language storage plugin', () => {
   });
 
   it('will fallback correctly', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin(Promise.resolve(undefined)))
       .init({
         defaultLanguage: 'es',
@@ -88,7 +88,7 @@ describe('language storage plugin', () => {
   });
 
   it('will return key before language is loaded', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin(Promise.resolve('en')))
       .init({
         defaultLanguage: 'es',
@@ -105,7 +105,7 @@ describe('language storage plugin', () => {
   });
 
   it('will store language value on language change', async () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin(Promise.resolve('en')))
       .init({
         defaultLanguage: 'es',
@@ -122,7 +122,7 @@ describe('language storage plugin', () => {
   });
 
   it('will ignore invalid values', () => {
-    tolgee = Tolgee()
+    tolgee = TolgeeCore()
       .use(StoragePlugin('eq'))
       .init({
         defaultLanguage: 'es',
@@ -136,7 +136,7 @@ describe('language storage plugin', () => {
   });
 
   it('will return invalid value if no available languages', () => {
-    tolgee = Tolgee().use(StoragePlugin('eq')).init({
+    tolgee = TolgeeCore().use(StoragePlugin('eq')).init({
       defaultLanguage: 'es',
     });
     tolgee.run();

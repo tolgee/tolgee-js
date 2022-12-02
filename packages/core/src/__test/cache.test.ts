@@ -1,4 +1,4 @@
-import { Tolgee, TolgeeInstance } from '../Tolgee';
+import { TolgeeCore, TolgeeInstance } from '../Tolgee';
 import { TolgeePlugin, TreeTranslationsData } from '../types';
 import { resolvablePromise } from './testTools';
 
@@ -38,7 +38,7 @@ describe('cache', () => {
   let tolgee: TolgeeInstance;
 
   beforeEach(async () => {
-    tolgee = Tolgee().init({
+    tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { test: { sub: 'subtestEn' } },
@@ -169,7 +169,7 @@ describe('cache', () => {
 
   it("pending requests won't rewrite cache when reinitialized", async () => {
     const [promiseEn, resolveEn] = resolvablePromise<TreeTranslationsData>();
-    tolgee = Tolgee().init({
+    tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: () => promiseEn,

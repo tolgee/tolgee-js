@@ -1,8 +1,8 @@
-import { Tolgee } from '../Tolgee';
+import { TolgeeCore } from '../Tolgee';
 
 describe('initial options', () => {
   it('combines options correctly', () => {
-    const tolgee = Tolgee()
+    const tolgee = TolgeeCore()
       .updateDefaults({
         observerType: 'text',
         observerOptions: { highlightColor: 'red', restrictedElements: ['a'] },
@@ -45,7 +45,7 @@ describe('initial options', () => {
   });
 
   it('sanitizes url', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'cs',
       apiUrl: 'http://localhost:8080/',
       observerOptions: { highlightWidth: 90 },

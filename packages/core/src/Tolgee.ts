@@ -238,7 +238,7 @@ export type TolgeeChainer = {
  * const tolgee = Tolgee().use(...).init(...)
  * ```
  */
-export const Tolgee = (): TolgeeChainer => {
+export const TolgeeCore = (): TolgeeChainer => {
   const state = {
     plugins: [] as (TolgeePlugin | undefined)[],
     options: {} as TolgeeOptions,
