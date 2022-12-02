@@ -6,7 +6,7 @@ import {
   TranslatePropsInternal,
 } from './general';
 import type { ObserverOptionsInternal } from '../Controller/State/observerOptions';
-import { TolgeeInstance } from '../Tolgee';
+import { TolgeeInstance } from '../TolgeeCore';
 
 export type BackendDevProps = {
   apiUrl?: string;

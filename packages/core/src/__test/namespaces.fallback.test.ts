@@ -1,4 +1,4 @@
-import { TolgeeCore } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 
 describe('namespaces fallback', () => {
   test('works with multiple and default', () => {

@@ -16,4 +16,4 @@ export type {
   ModifierKey,
 } from '../Controller/State/observerOptions';
 
-export type { TolgeeChainer, TolgeeInstance } from '../Tolgee';
+export type { TolgeeChainer, TolgeeInstance } from '../TolgeeCore';

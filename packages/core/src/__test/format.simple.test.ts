@@ -1,5 +1,5 @@
 import { FormatSimple } from '../FormatSimple/FormatSimple';
-import { TolgeeCore } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 
 describe('format simple', () => {
   it('works with parameters', () => {

@@ -1,4 +1,4 @@
-import { TolgeeCore } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 
 describe('initial options', () => {
   it('combines options correctly', () => {

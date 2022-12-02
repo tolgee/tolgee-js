@@ -1,4 +1,4 @@
-import { TolgeeCore } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 import { BackendMiddleware, TolgeePlugin } from '../types';
 
 const data = {

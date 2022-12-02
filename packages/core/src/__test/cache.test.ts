@@ -1,4 +1,4 @@
-import { TolgeeCore, TolgeeInstance } from '../Tolgee';
+import { TolgeeCore, TolgeeInstance } from '../TolgeeCore';
 import { TolgeePlugin, TreeTranslationsData } from '../types';
 import { resolvablePromise } from './testTools';
 
