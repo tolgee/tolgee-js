@@ -1,4 +1,6 @@
+import { useMemo } from 'react';
 import { FormatIcu } from '@tolgee/format-icu';
+import { useRouter } from 'next/router';
 import {
   NsFallback,
   ReactPlugin,
@@ -6,29 +8,31 @@ import {
   getFallback,
   TolgeeProvider,
 } from '@tolgee/react';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 const apiKey = process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 const apiUrl = process.env.NEXT_PUBLIC_TOLGEE_API_URL;
 
+const tolgee = Tolgee()
+  .use(ReactPlugin())
+  .use(FormatIcu())
+  .init({
+    availableLanguages: ['en', 'cs'],
+    defaultLanguage: 'en',
+    apiKey: apiKey,
+    apiUrl: apiUrl,
+  });
+
 export const useTolgeeSSR = (staticLocales: any) => {
   const router = useRouter();
 
-  const [tolgee] = useState(
-    Tolgee().use(ReactPlugin()).use(FormatIcu()).init({
-      apiKey: apiKey,
-      apiUrl: apiUrl,
-      language: router.locale,
-      staticData: staticLocales,
-    })
-  );
-
-  useEffect(() => {
-    // add data to cache
+  useMemo(() => {
+    // we have to prepare tolgee before rendering children
+    // so translations are available right away
+    // events emitting must be off, to not trigger re-render while rendering
+    tolgee.setEmmiterActive(false);
     tolgee.addStaticData(staticLocales);
-    // change language (order is important)
     tolgee.changeLanguage(router.locale!);
+    tolgee.setEmmiterActive(true);
   }, [router.locale, staticLocales]);
 
   return tolgee;
@@ -62,6 +66,7 @@ type Props = {
 
 export const TolgeeNextProvider: React.FC<Props> = ({ locales, children }) => {
   const tolgee = useTolgeeSSR(locales);
+
   return (
     <TolgeeProvider
       tolgee={tolgee}

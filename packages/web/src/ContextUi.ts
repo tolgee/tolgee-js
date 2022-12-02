@@ -1,7 +1,13 @@
-import { TolgeePlugin } from '@tolgee/core';
+import { TolgeePlugin, UiMiddleware } from '@tolgee/core';
+import { isSSR } from './tools/isSSR';
 import { UI } from './ui/index';
 
 export const ContextUi = (): TolgeePlugin => (tolgee, tools) => {
-  tools.setUi(UI as any);
+  let ui: UiMiddleware | undefined = undefined;
+
+  if (!isSSR()) {
+    ui = (props) => new UI(props);
+  }
+  tools.setUi(ui);
   return tolgee;
 };

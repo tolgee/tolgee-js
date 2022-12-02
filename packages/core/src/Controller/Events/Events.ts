@@ -6,14 +6,20 @@ export const Events = (
   getFallbackNs: () => string[],
   getDefaultNs: () => string
 ) => {
-  const onPendingLanguageChange = EventEmitter<string>();
-  const onLanguageChange = EventEmitter<string>();
-  const onLoadingChange = EventEmitter<boolean>();
-  const onFetchingChange = EventEmitter<boolean>();
-  const onInitialLoaded = EventEmitter<void>();
-  const onRunningChange = EventEmitter<boolean>();
-  const onCacheChange = EventEmitter<CacheDescriptorWithKey>();
-  const onUpdate = EventEmitterSelective(getFallbackNs, getDefaultNs);
+  let emitterActive = true;
+
+  function isActive() {
+    return emitterActive;
+  }
+
+  const onPendingLanguageChange = EventEmitter<string>(isActive);
+  const onLanguageChange = EventEmitter<string>(isActive);
+  const onLoadingChange = EventEmitter<boolean>(isActive);
+  const onFetchingChange = EventEmitter<boolean>(isActive);
+  const onInitialLoaded = EventEmitter<void>(isActive);
+  const onRunningChange = EventEmitter<boolean>(isActive);
+  const onCacheChange = EventEmitter<CacheDescriptorWithKey>(isActive);
+  const onUpdate = EventEmitterSelective(isActive, getFallbackNs, getDefaultNs);
 
   onInitialLoaded.listen(() => onUpdate.emit());
   onLanguageChange.listen(() => onUpdate.emit());
@@ -42,6 +48,10 @@ export const Events = (
     }
   };
 
+  function setEmmiterActive(active: boolean) {
+    emitterActive = active;
+  }
+
   return Object.freeze({
     onPendingLanguageChange,
     onLanguageChange,
@@ -51,6 +61,7 @@ export const Events = (
     onRunningChange,
     onCacheChange,
     onUpdate,
+    setEmmiterActive,
     on,
   });
 };

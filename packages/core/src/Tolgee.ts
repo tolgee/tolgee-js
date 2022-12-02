@@ -37,6 +37,11 @@ const createTolgee = (options: TolgeeOptions) => {
     onNsUpdate: controller.onUpdate.listenSome,
 
     /**
+     * Turn off/on events emitting. Is on by default.
+     */
+    setEmmiterActive: controller.setEmmiterActive,
+
+    /**
      * @return current language if set.
      */
     getLanguage: controller.getLanguage,

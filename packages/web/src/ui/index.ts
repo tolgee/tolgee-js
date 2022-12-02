@@ -1,12 +1,12 @@
 import { createElement } from 'react';
 import * as ReactDOM from 'react-dom';
-import type { UiProps, UiMiddleware, UiKeyOption } from '@tolgee/core';
+import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { DEVTOOLS_ID } from '../constants';
 
-export class UI implements UiMiddleware {
+export class UI implements UiInterface {
   private viewerComponent: KeyDialog;
   private keyContextMenu: KeyContextMenu;
 

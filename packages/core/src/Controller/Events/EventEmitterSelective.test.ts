@@ -3,6 +3,7 @@ import { EventEmitterSelective } from './EventEmitterSelective';
 describe('event emitter selective', () => {
   it('handles correctly default namespace', () => {
     const emitter = EventEmitterSelective(
+      () => true,
       () => [],
       () => 'default'
     );
@@ -22,6 +23,7 @@ describe('event emitter selective', () => {
 
   it('unsubscribes', () => {
     const emitter = EventEmitterSelective(
+      () => true,
       () => [],
       () => ''
     );
@@ -37,6 +39,7 @@ describe('event emitter selective', () => {
 
   it('groups events correctly', async () => {
     const emitter = EventEmitterSelective(
+      () => true,
       () => ['test', 'opqrst'],
       () => ''
     );
@@ -69,6 +72,7 @@ describe('event emitter selective', () => {
 
   it('always subscribes to fallback ns', async () => {
     const emitter = EventEmitterSelective(
+      () => true,
       () => ['fallback1', 'fallback2'],
       () => ''
     );
@@ -83,5 +87,24 @@ describe('event emitter selective', () => {
 
     emitter.emit(['test']);
     expect(handler).toBeCalledTimes(2);
+  });
+
+  it('switches off emitting', () => {
+    const emitter = EventEmitterSelective(
+      () => false,
+      () => ['fallback1', 'fallback2'],
+      () => ''
+    );
+    const handler = jest.fn();
+    emitter.listenSome(handler);
+
+    emitter.emit(['fallback1']);
+    expect(handler).toBeCalledTimes(0);
+
+    emitter.emit(['fallback2']);
+    expect(handler).toBeCalledTimes(0);
+
+    emitter.emit(['']);
+    expect(handler).toBeCalledTimes(0);
   });
 });
