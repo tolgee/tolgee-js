@@ -79,9 +79,15 @@ export type TolgeeOptionsInternal = {
    */
   staticData?: TolgeeStaticData;
 
-  observerOptions: ObserverOptionsInternal;
-
+  /**
+   * Switches between invisible and text observer. (Default: invisible)
+   */
   observerType: 'invisible' | 'text';
+
+  /**
+   * Observer options object.
+   */
+  observerOptions: ObserverOptionsInternal;
 };
 
 export type TolgeeOptions = Partial<

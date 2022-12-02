@@ -179,14 +179,18 @@ const createTolgee = (options: TolgeeOptions) => {
     unwrap: controller.unwrap,
 
     /**
-     * Override creadentials passed on initialization
+     * Override creadentials passed on initialization.
+     *
+     * When called in running state, tolgee stops and runs again.
      */
     overrideCredentials(credentials: DevCredentials) {
       withRestart(() => controller.overrideCredentials(credentials));
     },
 
     /**
-     * Add tolgee plugin.
+     * Add tolgee plugin after initialization.
+     *
+     * When called in running state, tolgee stops and runs again.
      */
     addPlugin(plugin: TolgeePlugin | undefined) {
       if (plugin) {
