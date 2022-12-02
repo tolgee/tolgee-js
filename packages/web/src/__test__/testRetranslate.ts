@@ -1,5 +1,5 @@
 import { screen, waitFor } from '@testing-library/dom';
-import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { TolgeeCore, TolgeeInstance } from '@tolgee/core';
 import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
 import { ObserverPlugin } from '../ObserverPlugin';
 
@@ -8,7 +8,7 @@ export const testRetranslate = (observerType: 'invisible' | 'text') => {
     let tolgee: TolgeeInstance;
 
     beforeEach(async () => {
-      tolgee = Tolgee()
+      tolgee = TolgeeCore()
         .use(ObserverPlugin())
         .init({
           language: 'en',

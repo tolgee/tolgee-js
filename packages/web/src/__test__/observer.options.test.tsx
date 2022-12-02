@@ -1,12 +1,12 @@
 import { waitFor, screen } from '@testing-library/dom';
-import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { TolgeeCore, TolgeeInstance } from '@tolgee/core';
 import { TOLGEE_ATTRIBUTE_NAME } from '../constants';
 import { InContextTools } from '../InContextTools';
 
 (['invisible', 'text'] as const).forEach((observerType) => {
   describe(`observer ${observerType}`, () => {
     const MyTolgee = () =>
-      Tolgee()
+      TolgeeCore()
         .use(InContextTools())
         .updateDefaults({
           language: 'en',

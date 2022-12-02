@@ -16,7 +16,7 @@ jest.mock('../BrowserExtensionPlugin/loadInContextLib', () => ({
   loadInContextLib,
 }));
 
-import { Tolgee } from '@tolgee/core';
+import { TolgeeCore } from '@tolgee/core';
 import { BrowserExtensionPlugin } from '../typedIndex';
 import {
   API_KEY_LOCAL_STORAGE,
@@ -31,7 +31,7 @@ describe('compatibility with browser extension', () => {
   });
 
   it('sends correct data to extension', async () => {
-    const tolgee = Tolgee().init({ language: 'en', apiUrl: 'test' });
+    const tolgee = TolgeeCore().init({ language: 'en', apiUrl: 'test' });
     tolgee.addPlugin(BrowserExtensionPlugin());
     await tolgee.run();
     expect(handshakerUpdate).toBeCalledTimes(1);
@@ -50,7 +50,7 @@ describe('compatibility with browser extension', () => {
     sessionStorage.setItem(API_KEY_LOCAL_STORAGE, 'test');
     sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
 
-    const tolgee = Tolgee().init({ language: 'en' });
+    const tolgee = TolgeeCore().init({ language: 'en' });
     tolgee.addPlugin(BrowserExtensionPlugin());
     await tolgee.run();
 
