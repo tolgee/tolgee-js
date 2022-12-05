@@ -1,32 +1,35 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
 import { FormatIcu } from '@tolgee/format-icu';
 import { useIntl } from 'gatsby-plugin-react-intl';
 import '../style/style.css';
 
+const tolgee = Tolgee()
+  .use(ReactPlugin())
+  .use(FormatIcu())
+  .init({
+    defaultLanguage: 'en',
+    apiKey: process.env.GATSBY_TOLGEE_API_KEY,
+    apiUrl: process.env.GATSBY_TOLGEE_API_URL,
+    staticData: {
+      de: () => import('../i18n/de.json'),
+      cs: () => import('../i18n/cs.json'),
+      fr: () => import('../i18n/fr.json'),
+      en: () => import(`../i18n/en.json`),
+    },
+  });
+
 export const AppWrapper: React.FC = ({ children }) => {
   const { locale, messages } = useIntl();
 
-  const [tolgee] = useState(
-    Tolgee()
-      .use(ReactPlugin())
-      .use(FormatIcu())
-      .init({
-        language: locale,
-        apiKey: process.env.GATSBY_TOLGEE_API_KEY,
-        apiUrl: process.env.GATSBY_TOLGEE_API_URL,
-        fallbackLanguage: 'en',
-        staticData: {
-          de: () => import('../i18n/de.json'),
-          cs: () => import('../i18n/cs.json'),
-          fr: () => import('../i18n/fr.json'),
-          en: () => import(`../i18n/en.json`),
-          // translations provided by intl plugin
-          [locale]: messages as Record<string, string>,
-        },
-      })
-  );
+  useMemo(() => {
+    // set language and static data, without emitting events
+    tolgee.setEmmiterActive(false);
+    tolgee.changeLanguage(locale);
+    tolgee.addStaticData({ [locale]: messages as Record<string, string> });
+    tolgee.setEmmiterActive(true);
+  }, [locale, messages]);
 
   return (
     <TolgeeProvider
