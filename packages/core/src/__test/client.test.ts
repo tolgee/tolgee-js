@@ -1,4 +1,4 @@
-import { Tolgee } from '../index';
+import { TolgeeCore } from '../index';
 
 describe('using tolgee as client', () => {
   it('fetch data without running', async () => {
@@ -11,7 +11,7 @@ describe('using tolgee as client', () => {
       Promise.resolve({ cancel: 'Cancellar' })
     );
 
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       ns: ['common'],
       staticData: {

@@ -1,4 +1,4 @@
-import { Tolgee } from '../index';
+import { TolgeeCore } from '../index';
 
 const tolgeeWithNamespaces = () => {
   const promiseEnTest = jest.fn(() => Promise.resolve({ test: 'Test' }));
@@ -8,7 +8,7 @@ const tolgeeWithNamespaces = () => {
     Promise.resolve({ cancel: 'Cancellar' })
   );
 
-  return Tolgee().init({
+  return TolgeeCore().init({
     language: 'en',
     ns: ['common'],
     defaultNs: 'common',
@@ -23,7 +23,7 @@ const tolgeeWithNamespaces = () => {
 
 describe('language changes', () => {
   it('returns correct translation from namespace', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { hello: 'World' },
@@ -36,7 +36,7 @@ describe('language changes', () => {
   });
 
   it('uses defaultNs', async () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       defaultNs: 'common',
       staticData: {

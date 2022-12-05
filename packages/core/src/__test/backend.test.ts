@@ -1,4 +1,4 @@
-import { Tolgee } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 import { BackendMiddleware, TolgeePlugin } from '../types';
 
 const data = {
@@ -32,7 +32,7 @@ const backendPlugin: TolgeePlugin = (tolgee, tools) => {
 
 describe('backend plugins', () => {
   it('uses plugin to fetch', async () => {
-    const tolgee = Tolgee()
+    const tolgee = TolgeeCore()
       .use(backendPlugin)
       .init({
         ns: ['common', 'test'],

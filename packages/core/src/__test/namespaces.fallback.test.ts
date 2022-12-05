@@ -1,8 +1,8 @@
-import { Tolgee } from '../Tolgee';
+import { TolgeeCore } from '../TolgeeCore';
 
 describe('namespaces fallback', () => {
   test('works with multiple and default', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
@@ -20,7 +20,7 @@ describe('namespaces fallback', () => {
   });
 
   test('works when no fallback specified', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
@@ -37,7 +37,7 @@ describe('namespaces fallback', () => {
   });
 
   test('works when data present but no fallback', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { '0': 'noNamespace' },
@@ -55,7 +55,7 @@ describe('namespaces fallback', () => {
   });
 
   test('works with default', () => {
-    const tolgee = Tolgee().init({
+    const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
         en: { '0': 'empty' },

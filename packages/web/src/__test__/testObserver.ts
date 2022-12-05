@@ -1,4 +1,4 @@
-import { Tolgee, TolgeeInstance } from '@tolgee/core';
+import { TolgeeCore, TolgeeInstance } from '@tolgee/core';
 import { screen, waitFor } from '@testing-library/dom';
 import {
   TOLGEE_ATTRIBUTE_NAME,
@@ -11,7 +11,7 @@ export const testObserver = (observerType: 'invisible' | 'text') => {
     let tolgee: TolgeeInstance;
 
     beforeEach(() => {
-      tolgee = Tolgee()
+      tolgee = TolgeeCore()
         .use(ObserverPlugin())
         .init({
           language: 'en',

@@ -13,3 +13,4 @@ export {
 
 export * from './types';
 export * from '@tolgee/core';
+export { Tolgee } from './Tolgee';

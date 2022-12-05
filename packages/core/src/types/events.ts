@@ -20,8 +20,8 @@ export type ListenerEvent<T> = { value: T };
 export type Listener<T> = (e: ListenerEvent<T>) => void;
 
 export type TolgeeEvent =
-  | 'pendingLanguage'
   | 'language'
+  | 'pendingLanguage'
   | 'loading'
   | 'fetching'
   | 'initialLoad'
@@ -30,8 +30,8 @@ export type TolgeeEvent =
   | 'update';
 
 export interface EventType {
-  pendingLanguage: string;
   language: string;
+  pendingLanguage: string;
   loading: boolean;
   fetching: boolean;
   initialLoad: void;
