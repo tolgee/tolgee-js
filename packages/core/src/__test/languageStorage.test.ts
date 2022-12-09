@@ -135,11 +135,10 @@ describe('language storage plugin', () => {
     expect(tolgee.getLanguage()).toEqual('es');
   });
 
-  it('will return invalid value if no available languages', () => {
+  it('will throw an error when no available languages are specified', () => {
     tolgee = TolgeeCore().use(StoragePlugin('eq')).init({
       defaultLanguage: 'es',
     });
-    tolgee.run();
-    expect(tolgee.getLanguage()).toEqual('eq');
+    expect(() => tolgee.run()).toThrowError('availableLanguages');
   });
 });

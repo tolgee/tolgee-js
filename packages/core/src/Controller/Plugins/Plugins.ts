@@ -30,8 +30,6 @@ export const Plugins = (
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface
 ) => {
-  let prepared = false;
-  let onPrepareQueue: (() => void)[] = [];
   const plugins = {
     ui: undefined as UiMiddleware | undefined,
     observer: undefined as ObserverMiddleware | undefined,
@@ -114,6 +112,10 @@ export const Plugins = (
     storage: LanguageStorageMiddleware | undefined
   ) => {
     instances.languageStorage = storage;
+  };
+
+  const getLanguageStorage = () => {
+    return instances.languageStorage;
   };
 
   const setStoredLanguage = (language: string) => {
@@ -231,10 +233,6 @@ export const Plugins = (
     instances.observer?.retranslate();
   };
 
-  const onPrepare = (callback: () => void) => {
-    onPrepareQueue.push(callback);
-  };
-
   function addPlugin(tolgeeInstance: TolgeeInstance, plugin: TolgeePlugin) {
     const pluginTools = Object.freeze({
       setFinalFormatter,
@@ -247,12 +245,8 @@ export const Plugins = (
       addBackend,
       setLanguageDetector,
       setLanguageStorage,
-      onPrepare,
     });
     plugin(tolgeeInstance, pluginTools);
-    if (prepared) {
-      prepare();
-    }
   }
 
   function formatTranslation({
@@ -316,23 +310,14 @@ export const Plugins = (
     return params.translation;
   };
 
-  function prepare() {
-    prepared = true;
-    while (onPrepareQueue.length) {
-      const queue = onPrepareQueue;
-      onPrepareQueue = [];
-      queue.forEach((callback) => callback());
-    }
-  }
-
   return Object.freeze({
-    prepare,
     addPlugin,
     formatTranslation,
     getDevBackend,
     getBackendRecord,
     getBackendDevRecord,
     getLanguageDetector,
+    getLanguageStorage,
     getInitialLanguage,
     setStoredLanguage,
     run,

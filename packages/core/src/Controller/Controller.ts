@@ -248,15 +248,16 @@ export const Controller = ({ options }: StateServiceProps) => {
   }
 
   const checkCorrectConfiguration = () => {
-    const languageDetector = pluginService.getLanguageDetector();
-    if (languageDetector) {
+    const languageComputable =
+      pluginService.getLanguageDetector() || pluginService.getLanguageStorage();
+    if (languageComputable) {
       const availableLanguages = state.getAvailableLanguages();
       if (!availableLanguages) {
         throw new Error(missingOptionError('availableLanguages'));
       }
     }
     if (!state.getLanguage() && !state.getInitialOptions().defaultLanguage) {
-      if (languageDetector) {
+      if (languageComputable) {
         throw new Error(missingOptionError('defaultLanguage'));
       } else {
         throw new Error(missingOptionError('language'));
