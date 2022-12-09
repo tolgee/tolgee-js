@@ -1,12 +1,13 @@
 jest.autoMockOff();
 
-import { Tolgee, TolgeeInstance } from '@tolgee/web';
+import { Tolgee, TolgeeInstance, TolgeePlugin } from '@tolgee/web';
 
 import '@testing-library/jest-dom';
 import React from 'react';
 import { TolgeeProvider } from './TolgeeProvider';
 
 import { act, render, screen, waitFor } from '@testing-library/react';
+import { createResolvablePromise } from '@tolgee/testing/createResolvablePromise';
 
 describe('Tolgee Provider Component', () => {
   let mockedTolgee: TolgeeInstance;
@@ -66,5 +67,40 @@ describe('Tolgee Provider Component', () => {
       const loading = screen.queryByText('loading');
       expect(loading).toBeNull();
     });
+  });
+
+  test('renders fallback when language is being fetched', async () => {
+    const language = createResolvablePromise('en');
+
+    const storagePlugin: TolgeePlugin = (tolgee, { setLanguageStorage }) => {
+      setLanguageStorage({
+        getLanguage() {
+          return language.promise;
+        },
+        setLanguage() {},
+      });
+      return tolgee;
+    };
+    const tolgee = Tolgee()
+      .use(storagePlugin)
+      .init({
+        defaultLanguage: 'en',
+        staticData: {
+          en: {},
+        },
+      });
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        It's rendered!
+      </TolgeeProvider>
+    );
+    await waitFor(async () => {
+      expect(screen.getByText('Loading...')).toBeTruthy();
+    });
+    await act(async () => {
+      language.resolve();
+      await language.promise;
+    });
+    expect(screen.getByText("It's rendered!")).toBeTruthy();
   });
 });

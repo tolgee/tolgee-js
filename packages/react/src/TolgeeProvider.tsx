@@ -41,7 +41,11 @@ export const TolgeeProvider: React.FC<Props> = ({
       <TolgeeProviderContext.Provider
         value={{ tolgee, options: optionsWithDefault }}
       >
-        <Suspense fallback={fallback || null}>{children}</Suspense>
+        {loading ? (
+          fallback
+        ) : (
+          <Suspense fallback={fallback || null}>{children}</Suspense>
+        )}
       </TolgeeProviderContext.Provider>
     );
   }
@@ -50,7 +54,7 @@ export const TolgeeProvider: React.FC<Props> = ({
     <TolgeeProviderContext.Provider
       value={{ tolgee, options: optionsWithDefault }}
     >
-      {fallback && loading ? fallback : children}
+      {loading ? fallback : children}
     </TolgeeProviderContext.Provider>
   );
 };
