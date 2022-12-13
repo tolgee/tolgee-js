@@ -8,12 +8,11 @@
 # Tolgee for React
 
 React integration library of Tolgee. For more information about using Tolgee with React, visit our
-[documentation website 📖](https://tolgee.io/docs/web/using_with_react/installation).
+[documentation website 📖](https://tolgee.io/js-sdk).
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
-Lokalize (translate) your CRA, Gatsby, Next.js or other React projects to multiple languages with Tolgee. Integration of
-Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
+Localize (translate) your CRA, Gatsby, Next.js or other React projects to multiple languages with Tolgee. Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
 ## Features
 
@@ -27,18 +26,27 @@ Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫�
 
 First, install the package.
 
-    npm install @tolgee/react
+```
+npm install @tolgee/react
+```
 
 Then use the library in your app:
 
 ```typescript jsx
-import { TolgeeProvider } from "@tolgee/react";
+import { TolgeeProvider, ReactPlugin, FormatSimple } from "@tolgee/react";
 
-...
+const tolgee = Tolgee()
+  .use(ReactPlugin())
+  .use(FormatSimple())
+  .init({
+    language: 'en',
+    apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
+    apiKey: process.env.REACT_APP_TOLGEE_API_KEY
+  });
+
 
 <TolgeeProvider
-  apiUrl={process.env.REACT_APP_TOLGEE_API_URL}
-  apiKey={process.env.REACT_APP_TOLGEE_API_KEY}
+  tolgee={tolgee}
 >
   <Your app components>
 </TolgeeProvider>
@@ -73,7 +81,7 @@ import { useTranslate } from "@tolgee/react";
 
 ...
 
-const t = useTranslate();
+const { t } = useTranslate();
 
 ...
 
@@ -89,4 +97,4 @@ t("key_to_translate")
 
 ![react-integrate-infinite](https://user-images.githubusercontent.com/18496315/137310546-d4addbe2-4825-4262-bd18-b731b1941bce.gif)
 
-Learn more at our [documentation website 📖](https://tolgee.io).
+Learn more at our [documentation website 📖](https://tolgee.io/js-sdk).

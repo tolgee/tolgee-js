@@ -10,7 +10,7 @@
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
 Localize (translate) your Angular app to multiple languages with Tolgee. For more information about using Tolgee with
-Angular, visit our [documentation website](https://toolkit.tolgee.io/docs/web/using_with_angular/installation).
+Angular, visit our [documentation website](https://tolgee.io/js-sdk).
 Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
 ## Features
@@ -25,37 +25,51 @@ Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 �
 
 First, install the package.
 
-    npm install @tolgee/ngx --save
+```
+npm install @tolgee/ngx
+```
 
 Then import `NgxTolgeeModule` in your app.
 
 ```typescript
-import { NgxTolgeeModule } from "@tolgee/ngx";
-import { NgModule } from '@angular/core';
-import { environment } from '../environments/environment';
+...
 
+import {
+  NgxPlugin,
+  NgxTolgeeModule,
+  Tolgee,
+  TOLGEE_INSTANCE,
+  FormatSimple
+} from '@tolgee/ngx';
+
+...
 
 @NgModule({
   declarations: [
     ...
   ],
   imports: [
-    ...,
-  NgxTolgeeModule.forRoot({
-    apiUrl: environment.tolgeeApiUrl,
-    apiKey: environment.tolgeeApiKey,
-    ui:
-      process.env.NODE_ENV === 'development'
-        ? require('@tolgee/ui')
-        : undefined,
-  }),
-  ...,
-],
-...,
+    NgxTolgeeModule,
+    ...
+  ],
+  providers: [
+    {
+      provide: TOLGEE_INSTANCE,
+      useFactory: () => {
+        return Tolgee()
+          .use(NgxPlugin())
+          .use(FormatSimple())
+          .init({
+            apiUrl: environment.tolgeeApiUrl,
+            apiKey: environment.tolgeeApiKey,
+            language: 'en'
+          });
+      },
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-
-export class AppModule {
-}
+export class AppModule {}
 ```
 
 ## Usage
@@ -80,7 +94,8 @@ this.translateService
 
 ```html
 <h1 t key="providing_default_values"></h1>
-<p t key="Peter has n dogs" [params]="params"></p>
+<p t key="user_account_title" [params]="{name: 'John Doe'}"></p>
+<p t key="using_t_with_default" default="This is default"></p>
 ```
 
 ## Prerequisites
@@ -91,4 +106,5 @@ this.translateService
 ## Quick integration guide
 
 ![Integrate](https://user-images.githubusercontent.com/18496315/137345763-c318df07-2de0-4c35-a28d-bf1e93b42997.gif)
-Learn more at our [documentation website 📖](https://tolgee.io).
+
+Learn more at our [documentation website 📖](https://tolgee.io/js-sdk).

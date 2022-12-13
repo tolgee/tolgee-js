@@ -8,8 +8,7 @@
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
-Tolgee i18next integration. For more information about Tolgee Toolkit, visit our documentation website
-[tolgee.io](https://tolgee.io).
+Tolgee i18next integration. For more information about Tolgee Toolkit, visit our [documentation](https://tolgee.io/js-sdk).
 
 ## Installation
 
@@ -19,34 +18,22 @@ npm install i18next @tolgee/i18next
 
 ## Usage
 
-First, create a Tolgee instance and initialize it.
+First, create a Tolgee instance and wrap your i18next instance withTolgee.
 
 ```ts
-import i18next from 'i18next';
-import { withTolgee } from "@tolgee/i18next";
+import i18n from 'i18next';
+import { withTolgee, Tolgee, I18nextPlugin, FormatSimple } from '@tolgee/i18next';
 
-withTolgee(i18n, { ... tolgee config ... })
-  .init({ ... i18next config ... })
-```
+const tolgee = Tolgee()
+  .use(I18nextPlugin())
+  .use(FormatSimple())
+  .init({
+    apiUrl: ...,
+    apiKey: ...,
+  });
 
-This will:
-
-- use add `tolgeeBackend` as backend plugin
-- use `tolgeeProcessor` for wrapping translations (with invivisible wrapperMode)
-- will call `tolgeeApply` on i18n instance to apply listeners and register tolgee (`i18n.tolgee`)
-- will wrap `.init` function with custom function, which will use `tolgeeOptions` to merge config with our custom config that is needed for in-context to work
-
-We also recommend using `ICU message format`, which is supported by Tolgee platform.
-
-```
-npm install i18next-icu
-```
-
-```ts
-import ICU from 'i18next-icu';
-
-withTolgee(i18n, ...)
-  .use(ICU)
+withTolgee(i18n, tolgee)
+  .use(...)
   .init(...)
 ```
 
@@ -64,4 +51,4 @@ To set language:
 i18n.changeLanguage(lang);
 ```
 
-To learn more, check [Tolgee docs](https://toolkit.tolgee.io/docs).
+To learn more, check [Tolgee documentation](https://toolkit.tolgee.io/js-sdk).

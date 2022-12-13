@@ -7,8 +7,7 @@
 [![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
 
-Svelte integration library (SDK) of Tolgee. For more information about using Tolgee with Svelte, visit our
-[documentation website 📖](https://tolgee.io/docs).
+Svelte integration library (SDK) of Tolgee. For more information about using Tolgee with Svelte, visit our [documentation](https://tolgee.io/js-sdk).
 
 [<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
 
@@ -28,27 +27,33 @@ Lokalize (translate) your Svelte projects to multiple languages with Tolgee. Int
 
 First, install the package.
 
-    npm install @tolgee/svelte
+```
+npm install @tolgee/svelte
+```
 
 Then use the library in your app:
 
-```sveltehtml
-
+```svelte
 <script lang="ts">
-  import { TolgeeProvider } from "@tolgee/svelte";
-  import type { TolgeeConfig } from "@tolgee/web";
+  import {
+    TolgeeProvider,
+    Tolgee,
+    SveltePlugin,
+    FormatSimple,
+  } from '@tolgee/svelte';
 
-  const tolgeeConfig = {
-    preloadFallback: true,
-
-    // when using SvelteKit and .env, otherwise you can set those params directly or use some dotenv library
-    apiUrl: import.meta.env.VITE_TOLGEE_API_KEY,
-    apiKey: import.meta.env.VITE_TOLGEE_API_KEY
-  } as TolgeeConfig;
+  const tolgee = Tolgee()
+    .use(SveltePlugin())
+    .use(FormatSimple())
+    .init({
+      apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
+      apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
+      language: 'en',
+    });
 </script>
 
-<TolgeeProvider config={tolgeeConfig}>
-  <div slot="loading-fallback">Loading...</div>
+<TolgeeProvider {tolgee}>
+  <div slot="fallback">Loading...</div>
   <slot />
 </TolgeeProvider>
 ```
@@ -59,12 +64,10 @@ To translate texts using Tolgee Svelte integration, you can use `T` component or
 
 ### T component
 
-```sveltehtml
-
+```svelte
 <script>
-  import { T } from "@tolgee/svelte";
+  import { T } from '@tolgee/svelte';
 </script>
-
 
 <T keyName="key" defaultValue="This is default" />
 ```
@@ -73,33 +76,33 @@ To translate texts using Tolgee Svelte integration, you can use `T` component or
 
 The `getTranslate` function returns store containing the function, which actually translates your key.
 
-```sveltehtml
+```svelte
 <script>
-  import { getTranslate } from "@tolgee/svelte";
+  import { getTranslate } from '@tolgee/svelte';
 
-  const t = getTranslate();
+  const { t } = getTranslate();
 </script>
 
-
-{$t({ key: "this_is_a_key", parameters: { key: "value", key2: "value2" } })}
+{$t('this_is_a_key', { key: 'value', key2: 'value2' })}
 ```
 
 ### Changing the language
 
 To change the current language, use `getLanguageStore` method. For example, you can bind it to select value.
 
-```sveltehtml
+```svelte
 <script lang="ts">
-  import { getLanguageStore } from "@tolgee/svelte";
+  import { getTolgee } from '@tolgee/svelte';
 
-  const languageStore = getLanguageStore();
+  const tolgee = getTolgee(['language']);
+
+  function handleLanguageChange(e) {
+    $tolgee.changeLanguage(e.currentTarget.value);
+  }
 </script>
 
-<select bind:value={$languageStore} class="lang-selector">
-  <option value="en">🇬🇧 English</option>
-  <option value="cs">🇨🇿 česky</option>
-  <option value="fr">🇫🇷 français</option>
-  <option value="de">🇩🇪 Deutsch</option>
+<select value={$tolgee.getLanguage()} on:change={handleLanguageChange}>
+  ...
 </select>
 ```
 
@@ -110,4 +113,4 @@ To change the current language, use `getLanguageStore` method. For example, you 
 
 ## Quick integration guide
 
-Learn more at our [documentation website 📖](https://tolgee.io).
+Learn more at our [documentation](https://tolgee.io/js-sdk).

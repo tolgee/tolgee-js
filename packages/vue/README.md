@@ -7,7 +7,11 @@
 ![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)
 [![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
 
-Vue integration library of Tolgee.
+# Tolgee for Vue
+
+Vue integration library of Tolgee. For more information about using Tolgee with Vue, visit our
+[documentation website 📖](https://tolgee.io/js-sdk).
+
 
 > Currently we support vue v3 only
 
@@ -25,41 +29,43 @@ Vue integration library of Tolgee.
 
 First, install the package.
 
-    npm install @tolgee/vue
+```
+npm install @tolgee/vue
+```
+
+Initialize tolgee
+
+```ts
+import { Tolgee, VuePlugin, VueTolgee, FormatSimple } from '@tolgee/vue';
+
+const tolgee = Tolgee()
+  .use(VuePlugin())
+  .use(FormatSimple())
+  .init({
+    language: 'en',
+    apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
+    apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
+  });
+
+...
+
+app.use(VueTolgee, { tolgee });
+```
 
 Then use the library in your app:
 
 ```html
 <template>
-  <TolgeeProvider :config="config">
-    <YourApp />
+  <TolgeeProvider>
+    <template v-slot:fallback>
+      <div>Loading...</div>
+    </template>
+    <App />
   </TolgeeProvider>
 </template>
-
-<script>
-  import { TolgeeProvider } from '@tolgee/vue';
-
-  ...
-
-  export default {
-    ...
-    data() {
-      return {
-        config: {
-          apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
-          apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
-        },
-      };
-    },
-  };
-</script>
 ```
 
-<!-- ## Usage -->
 
-<!-- coding gif -->
-
-<!-- To translate texts using Tolgee React integration, you can use `T` component or `useTranslate` hook. -->
 
 ### T component
 
@@ -68,12 +74,8 @@ Then use the library in your app:
   <T keyName="translation_key" />
 </template>
 
-<script>
+<script setup>
   import { T } from '@tolgee/vue';
-
-  export default {
-    components: { T },
-  };
 </script>
 ```
 
@@ -93,7 +95,7 @@ or with default value
 <script setup>
   import { useTranslate } from '@tolgee/vue';
 
-  const t = useTranslate();
+  const { t } = useTranslate();
 </script>
 ```
 
@@ -101,16 +103,23 @@ or for language switching
 
 ```html
 <template>
-  <select v-model="language">
+  <select
+    :value="tolgee.getLanguage()"
+    v-on:change="changeLanguage"
+  >
     <option value="en">en</option>
     <option value="de">de</option>
   </select>
 </template>
 
 <script setup>
-  import { useLanguage } from '@tolgee/vue';
+  import { useTolgee } from '@tolgee/vue';
 
-  const language = useLanguage();
+  const tolgee = useTolgee(['language']);
+
+  const changeLanguage = (e) => {
+    tolgee.value.changeLanguage(e.target.value);
+  };
 </script>
 ```
 
@@ -119,8 +128,4 @@ or for language switching
 1. You have some Vue based project
 2. You have generated API key from [Tolgee Cloud](https://app.tolgee.io) or self-hosted Tolgee instance.
 
-<!-- ## Quick integration guide -->
-
-<!-- integration guide gif -->
-
-<!-- Learn more at our [documentation website 📖](https://tolgee.io). -->
+Learn more at our [documentation website 📖](https://tolgee.io/js-sdk).
