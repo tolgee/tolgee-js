@@ -273,7 +273,7 @@ export const Controller = ({ options }: StateServiceProps) => {
         cache.invalidate();
       }
       state.setRunning(true);
-      pluginService.run(isDev());
+      pluginService.run();
       result = loadInitial();
     }
     return Promise.resolve(result);

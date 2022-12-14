@@ -169,7 +169,7 @@ export const Plugins = (
     instances.devBackend = backend;
   };
 
-  const run = (isDev: boolean) => {
+  const run = () => {
     if (!instances.ui) {
       const { apiKey, apiUrl, projectId } = getInitialOptions();
       instances.ui = plugins.ui?.({
@@ -187,7 +187,7 @@ export const Plugins = (
         options: getInitialOptions().observerOptions,
       });
     }
-    instances.observer?.run({ mouseHighlight: isDev });
+    instances.observer?.run({ mouseHighlight: true });
   };
 
   const getDevBackend = () => {
