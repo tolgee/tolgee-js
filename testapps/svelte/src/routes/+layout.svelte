@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { TolgeeProvider, Tolgee, SveltePlugin, BackendFetch } from '@tolgee/svelte';
+  import { TolgeeProvider, Tolgee, DevTools, BackendFetch } from '@tolgee/svelte';
   import { FormatIcu } from '@tolgee/format-icu'
 
   const tolgee = Tolgee()
-    .use(SveltePlugin())
+    .use(DevTools())
     .use(FormatIcu())
     .use(BackendFetch())
     .init({

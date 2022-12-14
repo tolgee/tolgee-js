@@ -1,8 +1,7 @@
 import { render, RenderResult, screen } from '@testing-library/angular';
-import { Tolgee } from '@tolgee/web';
+import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
-import { NgxPlugin } from '../../lib/NgxPlugin';
 import { NamespaceResolver } from '../../lib/namespace.resolver';
 import { RootComponent } from './root.component';
 import { wait } from '@tolgee/testing/wait';
@@ -15,7 +14,7 @@ let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 let fixture: RenderResult<any>;
 
 const getFixture = async ({ preloadedNs } = { preloadedNs: 'test' }) => {
-  const tolgee = Tolgee().use(NgxPlugin()).use(FormatIcu()).init({
+  const tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
     staticData: staticDataMock.promises,
     language: 'cs',
     fallbackLanguage: 'en',

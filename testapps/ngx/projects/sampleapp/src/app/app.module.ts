@@ -9,7 +9,7 @@ import { LangSelectorComponent } from './component/lang-selector/lang-selector.c
 
 import {
   BackendFetch,
-  NgxPlugin,
+  DevTools,
   NgxTolgeeModule,
   Tolgee,
   TOLGEE_INSTANCE,
@@ -41,7 +41,7 @@ import { CommonModule } from '@angular/common';
       useFactory: () => {
         return Tolgee()
           .use(FormatIcu())
-          .use(NgxPlugin())
+          .use(DevTools())
           .use(BackendFetch({}))
           .init({
             availableLanguages: ['en', 'cs', 'fr', 'de'],

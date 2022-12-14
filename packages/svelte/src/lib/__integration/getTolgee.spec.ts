@@ -2,11 +2,16 @@
 import '@testing-library/jest-dom';
 import { screen, waitFor, render } from '@testing-library/svelte';
 
-import { Tolgee, type TolgeeEvent, type TolgeeInstance } from '@tolgee/web';
-import { SveltePlugin } from '$lib/SveltePlugin';
+import {
+  Tolgee,
+  type TolgeeEvent,
+  type TolgeeInstance,
+  DevTools,
+} from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import TestComponent from './components/TestGetTolgee.svelte';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
+import { GlobalContextPlugin } from '$lib/GlobalContextPlugin';
 
 const API_URL = 'http://localhost';
 
@@ -25,11 +30,15 @@ describe('getTranslate', () => {
 
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
-    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
-      apiUrl: API_URL,
-      language: 'cs',
-      staticData: staticDataMock.promises,
-    });
+    tolgee = Tolgee()
+      .use(GlobalContextPlugin())
+      .use(DevTools())
+      .use(FormatIcu())
+      .init({
+        apiUrl: API_URL,
+        language: 'cs',
+        staticData: staticDataMock.promises,
+      });
     runPromise = tolgee.run();
   });
 

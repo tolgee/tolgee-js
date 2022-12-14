@@ -2,8 +2,7 @@ import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
 
 import TestTComponent from './components/TestTComponent.svelte';
-import { Tolgee, type TolgeeInstance } from '@tolgee/web';
-import { SveltePlugin } from '$lib/SveltePlugin';
+import { DevTools, Tolgee, type TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
@@ -18,7 +17,7 @@ describe('T component integration', () => {
   beforeEach(async () => {
     fetch.enableMocks();
 
-    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
+    tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
       apiKey: API_KEY,
       apiUrl: API_URL,
       defaultLanguage: 'cs',

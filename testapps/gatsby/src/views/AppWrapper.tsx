@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React, { useMemo } from 'react';
-import { ReactPlugin, Tolgee, TolgeeProvider } from '@tolgee/react';
+import { DevTools, Tolgee, TolgeeProvider } from '@tolgee/react';
 import { FormatIcu } from '@tolgee/format-icu';
 import { useIntl } from 'gatsby-plugin-react-intl';
 import '../style/style.css';
 
 const tolgee = Tolgee()
-  .use(ReactPlugin())
+  .use(DevTools())
   .use(FormatIcu())
   .init({
     defaultLanguage: 'en',

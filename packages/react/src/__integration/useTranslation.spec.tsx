@@ -1,6 +1,6 @@
 import React from 'react';
 import '@testing-library/jest-dom';
-import { ReactPlugin, useTranslate } from '..';
+import { DevTools, useTranslate, GlobalContextPlugin } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeInstance } from '@tolgee/web';
@@ -45,7 +45,8 @@ describe('useTranslation hook integration', () => {
   beforeEach(async () => {
     fetch.enableMocks();
     tolgee = Tolgee()
-      .use(ReactPlugin({ useSuspense: false }))
+      .use(DevTools())
+      .use(GlobalContextPlugin({ useSuspense: false }))
       .use(FormatIcu())
       .init({
         apiUrl: API_URL,

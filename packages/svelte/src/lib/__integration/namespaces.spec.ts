@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
-import { SveltePlugin } from '..';
 import Namespaces from './components/Namespaces.svelte';
 import { render, screen, waitFor } from '@testing-library/svelte';
-import { Tolgee, type TolgeeInstance } from '@tolgee/web';
+import { Tolgee, DevTools, type TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
+import { GlobalContextPlugin } from '$lib/GlobalContextPlugin';
 
 const API_URL = 'http://localhost';
 
@@ -14,13 +14,17 @@ describe('useTranslations namespaces', () => {
 
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
-    tolgee = Tolgee().use(SveltePlugin()).use(FormatIcu()).init({
-      apiUrl: API_URL,
-      language: 'cs',
-      fallbackLanguage: 'en',
-      fallbackNs: 'fallback',
-      staticData: staticDataMock.promises,
-    });
+    tolgee = Tolgee()
+      .use(DevTools())
+      .use(GlobalContextPlugin())
+      .use(FormatIcu())
+      .init({
+        apiUrl: API_URL,
+        language: 'cs',
+        fallbackLanguage: 'en',
+        fallbackNs: 'fallback',
+        staticData: staticDataMock.promises,
+      });
 
     const runPromise = tolgee.run();
     staticDataMock.resolveAll();

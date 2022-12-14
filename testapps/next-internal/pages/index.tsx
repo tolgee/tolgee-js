@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { ReactPlugin, T, Tolgee } from '@tolgee/react';
+import { DevTools, T, Tolgee } from '@tolgee/react';
 import enLocale from '../i18n/en.json';
 import deLocale from '../i18n/de.json';
 import { useRouter } from 'next/router';
@@ -21,7 +21,7 @@ const Home: NextPage = () => {
 
   const [tolgee] = useState(
     Tolgee()
-      .use(ReactPlugin())
+      .use(DevTools())
       .init({
         language: activeLocale,
         apiKey: apiKey,

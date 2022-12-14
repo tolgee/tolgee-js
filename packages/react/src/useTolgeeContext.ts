@@ -6,7 +6,7 @@ export const useTolgeeContext = () => {
   const context = useContext(TolgeeProviderContext) || getGlobalContext();
   if (!context) {
     throw new Error(
-      "Couldn't find tolgee instance, did you forgot to use `ReactPlugin`?"
+      "Couldn't find tolgee instance, did you forgot to use `TolgeeProvider`?"
     );
   }
   return context;

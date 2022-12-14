@@ -5,8 +5,7 @@ import {
   waitFor,
 } from '@testing-library/angular';
 import { act } from 'react-dom/test-utils';
-import { Tolgee } from '@tolgee/web';
-import { NgxPlugin } from '../lib/NgxPlugin';
+import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
@@ -19,7 +18,7 @@ const API_KEY = 'dummyApiKey';
 const fetch = mockCoreFetch();
 let fixture: RenderResult<any>;
 
-const tolgee = Tolgee().use(NgxPlugin()).use(FormatIcu()).init({
+const tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
   apiUrl: API_URL,
   apiKey: API_KEY,
   language: 'cs',
