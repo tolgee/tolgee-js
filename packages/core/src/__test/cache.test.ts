@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { TolgeeCore, TolgeeInstance } from '../TolgeeCore';
 import { TolgeePlugin, TreeTranslationsData } from '../types';
 import { resolvablePromise } from './testTools';
@@ -104,6 +105,7 @@ describe('cache', () => {
   });
 
   it('keeps data when dev backend throws', async () => {
+    console.warn = jest.fn();
     const keyUpdateHandler = jest.fn();
     tolgee.on('update', keyUpdateHandler);
     await tolgee.run();
@@ -113,6 +115,7 @@ describe('cache', () => {
     await waitForInitialLoad(tolgee);
     expect(keyUpdateHandler).toBeCalledTimes(2);
     expect(tolgee.t('test.sub')).toEqual('subtestEn');
+    expect(console.warn).toBeCalledTimes(1);
   });
 
   it('updates initial data correctly', async () => {

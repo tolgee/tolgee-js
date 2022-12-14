@@ -172,3 +172,10 @@ export type TolgeePlugin = (
   tolgee: TolgeeInstance,
   tools: PluginTools
 ) => TolgeeInstance;
+
+export type FormatErrorHandler = (
+  error: string,
+  info: TranslatePropsInternal
+) => string;
+
+export type OnFormatError = string | FormatErrorHandler;
