@@ -4,7 +4,6 @@
 export * from './lib/translate.service';
 export * from './lib/translate.pipe';
 export * from './lib/t.component';
-export * from './lib/NgxPlugin';
 
 export * from './lib/ngx-tolgee.module';
 export * from './lib/tolgee-instance-token';

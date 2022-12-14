@@ -1,11 +1,11 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { Tolgee, VuePlugin, VueTolgee } from '@tolgee/vue';
+import { Tolgee, DevTools, VueTolgee } from '@tolgee/vue';
 import { FormatIcu } from '@tolgee/format-icu';
 import { BackendFetch } from '@tolgee/web';
 
 const tolgee = Tolgee()
-  .use(VuePlugin())
+  .use(DevTools())
   .use(FormatIcu())
   .use(BackendFetch())
   .init({

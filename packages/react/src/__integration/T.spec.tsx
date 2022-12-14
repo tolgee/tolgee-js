@@ -2,7 +2,7 @@ import { act } from 'react-dom/test-utils';
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
-import { TolgeeProvider, ReactPlugin, TolgeeInstance, Tolgee } from '../index';
+import { TolgeeProvider, DevTools, TolgeeInstance, Tolgee } from '../index';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
@@ -50,7 +50,7 @@ describe('T component integration', () => {
 
   beforeEach(async () => {
     fetch.enableMocks();
-    tolgee = Tolgee().use(ReactPlugin()).use(FormatIcu()).init({
+    tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
       apiUrl: API_URL,
       apiKey: API_KEY,
       language: 'cs',

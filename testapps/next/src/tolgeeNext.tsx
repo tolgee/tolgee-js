@@ -3,7 +3,7 @@ import { FormatIcu } from '@tolgee/format-icu';
 import { useRouter } from 'next/router';
 import {
   NsFallback,
-  ReactPlugin,
+  DevTools,
   Tolgee,
   getFallback,
   TolgeeProvider,
@@ -13,7 +13,7 @@ const apiKey = process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 const apiUrl = process.env.NEXT_PUBLIC_TOLGEE_API_URL;
 
 const tolgee = Tolgee()
-  .use(ReactPlugin())
+  .use(DevTools())
   .use(FormatIcu())
   .init({
     availableLanguages: ['en', 'cs'],

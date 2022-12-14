@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import {
-  Tolgee,
-  TolgeeProvider,
-  BackendFetch,
-  ReactPlugin,
-} from '@tolgee/react';
+import { Tolgee, TolgeeProvider, BackendFetch, DevTools } from '@tolgee/react';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
@@ -12,7 +7,7 @@ import { Namespaces } from './Namespaces';
 import { FormatIcu } from '@tolgee/format-icu';
 
 const tolgee = Tolgee()
-  .use(ReactPlugin())
+  .use(DevTools())
   .use(FormatIcu())
   .use(BackendFetch())
   .init({

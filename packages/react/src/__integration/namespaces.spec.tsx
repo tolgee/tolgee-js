@@ -1,11 +1,12 @@
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 import React from 'react';
 import '@testing-library/jest-dom';
-import { ReactPlugin, useTranslate } from '..';
+import { DevTools, useTranslate } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
+import { GlobalContextPlugin } from '../GlobalContextPlugin';
 
 jest.autoMockOff();
 
@@ -36,7 +37,8 @@ describe('useTranslations namespaces', () => {
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
     tolgee = Tolgee()
-      .use(ReactPlugin({ useSuspense: false }))
+      .use(GlobalContextPlugin({ useSuspense: false }))
+      .use(DevTools())
       .use(FormatIcu())
       .init({
         apiUrl: API_URL,
