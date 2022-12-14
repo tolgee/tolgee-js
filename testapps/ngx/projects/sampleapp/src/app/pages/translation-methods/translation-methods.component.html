@@ -36,28 +36,41 @@
       <div>{{ 'this_is_a_key' | translate:{ noWrap: true } }}</div>
     </div>
     <div>
+      <h1>translate pipe with params</h1>
+      <div>{{ 'this_is_a_key_with_params' | translate:{ key: 'value', key2: 'value2' } }}</div>
+    </div>
+    <div>
       <h1>translate pipe without default</h1>
       <div>{{ { key: 'this_is_a_key', defaultValue: 'Jeeey!' } | translate}}</div>
     </div>
     <div>
       <h1>service get without default</h1>
-      <div>{{translatedWithoutParamsValue}}</div>
+      <div>{{translatedWithoutParams | async}}</div>
     </div>
     <div>
       <h1>service get with default</h1>
-      <div>{{translatedWithDefaultValue}}</div>
+      <div>{{translatedWithDefault | async}}</div>
     </div>
     <div>
       <h1>service get with params</h1>
-      <div>{{translatedWithParamsValue}}</div>
+      <div>{{translatedWithParams | async}}</div>
     </div>
     <div>
       <h1>component in namespace</h1>
       <div t key="submodule-key" ns="submodule"></div>
     </div>
     <div>
-      <h1>with tags</h1>
+      <h1>pipe with tags</h1>
       <div [innerHTML]="'with_tags' | translate"></div>
+    </div>
+
+    <div>
+      <h1>t component with tags</h1>
+      <div t key="with_tags"></div>
+    </div>
+    <div>
+      <h1>t component with tags</h1>
+      <div t key="with_tags" [isHtml]="true"></div>
     </div>
   </div>
 </main>

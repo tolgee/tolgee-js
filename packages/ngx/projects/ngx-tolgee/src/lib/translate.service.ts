@@ -87,13 +87,27 @@ export class TranslateService implements OnDestroy {
   }
 
   /**
-   * Returns an observable emitting current language.
+   * Returns an observable emitting current language after language is loaded.
    * It instantly emits current language
    */
   get languageAsync(): Observable<string> {
+    return this.getLanguageChangeObservable('language');
+  }
+
+  /**
+   * Returns an observable emitting current language before language was loaded.
+   * It instantly emits current language
+   */
+  get pendingLanguageAsync(): Observable<string> {
+    return this.getLanguageChangeObservable('language');
+  }
+
+  private getLanguageChangeObservable(
+    event: 'language' | 'pendingLanguage'
+  ): Observable<string> {
     return new Observable((subscriber) => {
       subscriber.next(this.tolgee.getLanguage());
-      const subscription = this.on('language').subscribe((value) => {
+      const subscription = this.on(event).subscribe((value) => {
         subscriber.next(value.value);
       });
 

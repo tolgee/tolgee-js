@@ -5,10 +5,12 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  SecurityContext,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
 import { TranslateParams } from '@tolgee/web';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: '[t]',
@@ -32,7 +34,8 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private ref: ElementRef,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private domSanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +88,10 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
 
   private setElementContent(translated: string) {
     if (this.isHtml) {
-      this.getElement().innerHTML = translated;
+      this.getElement().innerHTML = this.domSanitizer.sanitize(
+        SecurityContext.HTML,
+        translated
+      );
       return;
     }
     this.getElement().textContent = translated;
