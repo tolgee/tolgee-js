@@ -2,6 +2,7 @@ import {
   FallbackGeneral,
   FallbackLanguageOption,
   TreeTranslationsData,
+  OnFormatError,
 } from '../../types';
 import { sanitizeUrl } from '../../helpers';
 import {
@@ -9,6 +10,8 @@ import {
   ObserverOptions,
   ObserverOptionsInternal,
 } from './observerOptions';
+
+export const DEFAULT_FORMAT_ERROR = 'invalid';
 
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
@@ -88,6 +91,11 @@ export type TolgeeOptionsInternal = {
    * Observer options object.
    */
   observerOptions: ObserverOptionsInternal;
+
+  /**
+   * Define what to display in case of formatting error. (Default: 'invalid')
+   */
+  onFormatError: OnFormatError;
 };
 
 export type TolgeeOptions = Partial<
@@ -109,6 +117,7 @@ const defaultValues: TolgeeOptionsInternal = {
   defaultNs: '',
   observerOptions: defaultObserverOptions,
   observerType: 'invisible',
+  onFormatError: DEFAULT_FORMAT_ERROR,
 };
 
 export const combineOptions = <T extends TolgeeOptions>(

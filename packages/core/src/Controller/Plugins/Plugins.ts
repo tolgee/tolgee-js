@@ -1,4 +1,4 @@
-import { isPromise, valueOrPromise } from '../../helpers';
+import { getErrorMessage, isPromise, valueOrPromise } from '../../helpers';
 import {
   BackendDevMiddleware,
   BackendGetRecord,
@@ -20,7 +20,9 @@ import {
   TolgeePlugin,
   TolgeeInstance,
   TolgeeOptionsInternal,
+  FormatErrorHandler,
 } from '../../types';
+import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
 export const Plugins = (
   getLanguage: () => string | undefined,
@@ -250,52 +252,71 @@ export const Plugins = (
   }
 
   function formatTranslation({
-    key,
-    translation,
-    defaultValue,
-    noWrap,
-    params,
-    orEmpty,
-    ns,
     formatEnabled,
+    ...props
   }: TranslatePropsInternal & { formatEnabled?: boolean }) {
+    const { key, translation, defaultValue, noWrap, params, orEmpty, ns } =
+      props;
     const formattableTranslation = translation || defaultValue;
     let result = formattableTranslation || (orEmpty ? '' : key);
-    if (instances.observer && !noWrap) {
-      result = instances.observer.wrap({
-        key,
-        translation: result,
-        defaultValue,
-        params,
-        ns,
-      });
-    }
 
     const language = getLanguage();
     const isFormatEnabled =
       formatEnabled || !instances.observer?.outputNotFormattable;
-    if (formattableTranslation && language && isFormatEnabled) {
-      for (const formatter of instances.formatters) {
-        result = formatter.format({
+
+    const wrap = (result: string) => {
+      if (instances.observer && !noWrap) {
+        return instances.observer.wrap({
+          key,
+          translation: result,
+          defaultValue,
+          params,
+          ns,
+        });
+      }
+      return result;
+    };
+
+    result = wrap(result);
+    try {
+      if (formattableTranslation && language && isFormatEnabled) {
+        for (const formatter of instances.formatters) {
+          result = formatter.format({
+            translation: result,
+            language,
+            params,
+          });
+        }
+      }
+      if (
+        instances.finalFormatter &&
+        formattableTranslation &&
+        language &&
+        isFormatEnabled
+      ) {
+        result = instances.finalFormatter.format({
           translation: result,
           language,
           params,
         });
       }
+    } catch (e: any) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      const errorMessage = getErrorMessage(e) || DEFAULT_FORMAT_ERROR;
+      const onFormatError = getInitialOptions().onFormatError;
+      const formatErrorType = typeof onFormatError;
+      if (formatErrorType === 'string') {
+        result = onFormatError as string;
+      } else if (formatErrorType === 'function') {
+        result = (onFormatError as FormatErrorHandler)(errorMessage, props);
+      } else {
+        result = DEFAULT_FORMAT_ERROR;
+      }
+      // wrap error message, so it's detectable
+      result = wrap(result);
     }
 
-    if (
-      instances.finalFormatter &&
-      formattableTranslation &&
-      language &&
-      isFormatEnabled
-    ) {
-      result = instances.finalFormatter.format({
-        translation: result,
-        language,
-        params,
-      });
-    }
     return result;
   }
 

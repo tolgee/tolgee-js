@@ -60,3 +60,11 @@ export function unique<T>(arr: T[]) {
 export function sanitizeUrl(url: string | undefined) {
   return url ? url.replace(/\/+$/, '') : url;
 }
+
+export function getErrorMessage(error: any): string | undefined {
+  if (typeof error === 'string') {
+    return error;
+  } else if (typeof error?.message === 'string') {
+    return error.message;
+  }
+}
