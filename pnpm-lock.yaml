@@ -487,7 +487,6 @@ importers:
       use-debounce: ^9.0.2
     dependencies:
       '@tolgee/core': link:../core
-      use-debounce: 9.0.2_react@17.0.2
     devDependencies:
       '@babel/preset-typescript': 7.18.6_@babel+core@7.19.3
       '@emotion/react': 11.10.4_e5jlcwkuouknzfjrwezo3gnujm
@@ -523,6 +522,7 @@ importers:
       ts-loader: 9.4.1_kb3egcnme7w23lfa5xodfjfhge
       typescript: 4.8.3
       use-context-selector: 1.4.1_qk4xdcnums2nm3ug6wdoc4p2ca
+      use-debounce: 9.0.2_react@17.0.2
 
   testapps/core:
     specifiers:
@@ -32858,7 +32858,7 @@ packages:
       react: '>=16.8.0'
     dependencies:
       react: 17.0.2
-    dev: false
+    dev: true
 
   /use-sync-external-store/1.2.0_react@17.0.2:
     resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}

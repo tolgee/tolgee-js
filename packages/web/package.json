@@ -27,8 +27,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "5.0.0-alpha.1",
-    "use-debounce": "^9.0.2"
+    "@tolgee/core": "5.0.0-alpha.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
@@ -64,7 +63,8 @@
     "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.6",
     "typescript": "4.8.3",
-    "use-context-selector": "^1.4.1"
+    "use-context-selector": "^1.4.1",
+    "use-debounce": "^9.0.2"
   },
   "repository": {
     "type": "git",
