@@ -1,7 +1,7 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import { styled } from '@mui/material/styles';
-import { ScreenshotInterface } from '../TranslationDialogContextProvider';
+import { ScreenshotInterface } from '../dialogContext/useGallery';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
 
 const ScImg = styled('img')`

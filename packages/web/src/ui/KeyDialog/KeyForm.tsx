@@ -10,13 +10,11 @@ import { LanguageSelect } from './LanguageSelect';
 import { LoadingButton } from '../common/LoadingButton';
 import { ScreenshotGallery } from './ScreenshotGallery/ScreenshotGallery';
 import { ScFieldTitle } from '../common/FieldTitle';
-import {
-  useDialogContext,
-  useDialogDispatch,
-} from './TranslationDialogContextProvider';
+import { useDialogContext, useDialogActions } from './dialogContext';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
+import { Tags } from './Tags/Tags';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -59,6 +57,10 @@ const ScFieldsWrapper = styled('div')`
   margin-top: 20px;
 `;
 
+const ScTagsWrapper = styled('div')`
+  margin-top: 5px;
+`;
+
 const ScGalleryWrapper = styled('div')`
   margin-top: 10px;
 `;
@@ -80,7 +82,8 @@ const ScError = styled('div')`
 `;
 
 export const KeyForm = () => {
-  const dispatch = useDialogDispatch();
+  const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
+    useDialogActions();
 
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
@@ -97,22 +100,6 @@ export const KeyForm = () => {
   const selectedNs = useDialogContext((c) => c.selectedNs);
 
   const screenshotsView = isAuthorizedTo('screenshots.view', scopes);
-
-  const setUseBrowserWindow = (value: boolean) => {
-    dispatch({ type: 'SET_USE_BROWSER_WINDOW', payload: value });
-  };
-
-  const onClose = () => {
-    dispatch({ type: 'ON_CLOSE' });
-  };
-
-  const onSave = () => {
-    dispatch({ type: 'ON_SAVE' });
-  };
-
-  const onNamespaceChange = (ns: string) => {
-    dispatch({ type: 'SELECTED_NS_CHANGE', payload: { ns } });
-  };
 
   const ready = !loading && !error;
 
@@ -165,7 +152,14 @@ export const KeyForm = () => {
         </ScKeyHint>
       </ScKey>
 
-      <NsSelect options={ns} value={selectedNs} onChange={onNamespaceChange} />
+      <NsSelect options={ns} value={selectedNs} onChange={setSelectedNs} />
+
+      {ready && (
+        <ScTagsWrapper>
+          <ScFieldTitle>Tags</ScFieldTitle>
+          <Tags />
+        </ScTagsWrapper>
+      )}
 
       <ScFieldsWrapper>
         <TranslationFields />

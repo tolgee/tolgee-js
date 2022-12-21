@@ -9,17 +9,14 @@ import FormControl from '@mui/material/FormControl';
 import { styled } from '@mui/material/styles';
 
 import { DEVTOOLS_Z_INDEX } from '../../constants';
-import {
-  useDialogContext,
-  useDialogDispatch,
-} from './TranslationDialogContextProvider';
+import { useDialogContext, useDialogActions } from './dialogContext';
 
 const ScFormControl = styled(FormControl)`
   min-width: 200px;
 `;
 
 export const LanguageSelect: React.FC = () => {
-  const dispatch = useDialogDispatch();
+  const { onSelectedLanguagesChange } = useDialogActions();
   const availableLanguages = useDialogContext((c) => c.availableLanguages);
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
 
@@ -34,10 +31,7 @@ export const LanguageSelect: React.FC = () => {
   const onChange = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
     const languages = typeof value === 'string' ? value.split(',') : value;
-    dispatch({
-      type: 'ON_SELECTED_LANGUAGES_CHANGE',
-      payload: { languages },
-    });
+    onSelectedLanguagesChange(languages);
   };
 
   return (

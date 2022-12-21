@@ -2,23 +2,13 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import {
-  useDialogContext,
-  useDialogDispatch,
-} from './TranslationDialogContextProvider';
+import { useDialogContext, useDialogActions } from './dialogContext';
 
 export const NewWindow: FC = (props) => {
   const newWindow = useRef<Window>(null);
   const [popup, setPopup] = useState<Window | null>(null);
-  const dispatch = useDialogDispatch();
+  const { setContainer, onClose } = useDialogActions();
   const container = useDialogContext((c) => c.container);
-
-  const setContainer = (el: Element | undefined) => {
-    dispatch({ type: 'SET_CONTAINER', payload: el });
-  };
-  const onClose = () => {
-    dispatch({ type: 'ON_CLOSE' });
-  };
 
   useEffect(() => {
     // Create container element on client-side
@@ -62,7 +52,7 @@ export const NewWindow: FC = (props) => {
 
       const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          dispatch({ type: 'ON_CLOSE' });
+          onClose();
         }
       };
 
