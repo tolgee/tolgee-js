@@ -88,7 +88,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       return putBaseLangFirst(languagesLoadable.data?._embedded?.languages);
     }, [languagesLoadable.data]);
 
-    const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+    const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
+      getInitialLanguages(
+        languagesLoadable.data?._embedded?.languages?.map((l) => l.tag) || []
+      )
+    );
 
     const translationsLoadable = useApiQuery({
       url: '/v2/projects/translations',
