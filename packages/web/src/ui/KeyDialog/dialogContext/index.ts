@@ -10,6 +10,7 @@ import { isAuthorizedTo } from '../ScreenshotGallery/utils';
 import {
   changeInTolgeeCache,
   getInitialLanguages,
+  getPreferredLanguages,
   setPreferredLanguages,
 } from './tools';
 import { getApiKeyType } from '../../../tools/decodeApiKey';
@@ -70,11 +71,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'get',
       options: {
         onSuccess(data) {
-          setSelectedLanguages(
-            getInitialLanguages(
-              data._embedded?.languages?.map((l) => l.tag) || []
-            )
+          const selectedLanguages = getInitialLanguages(
+            data._embedded?.languages?.map((l) => l.tag) || []
           );
+          setSelectedLanguages(selectedLanguages);
+          setPreferredLanguages(selectedLanguages);
         },
       },
     });
@@ -89,9 +90,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     }, [languagesLoadable.data]);
 
     const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
-      getInitialLanguages(
-        languagesLoadable.data?._embedded?.languages?.map((l) => l.tag) || []
-      )
+      getPreferredLanguages()
     );
 
     const translationsLoadable = useApiQuery({
@@ -104,7 +103,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       },
       options: {
         keepPreviousData: true,
-        enabled: Boolean(selectedLanguages.length),
         onSuccess(data) {
           const result: FormTranslations = {};
           const firstKey = data._embedded?.keys?.[0];
