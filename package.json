@@ -14,7 +14,7 @@
     "testRoot": "jest",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "develop": "turbo run develop --parallel --include-dependencies --cache-dir='.turbo'",
-    "develop:core": "npm run develop -- --scope=@tolgee/core-testapp",
+    "develop:web": "npm run develop -- --scope=@tolgee/web-testapp",
     "develop:react": "npm run develop -- --scope=@tolgee/react-testapp",
     "develop:vue": "npm run develop -- --scope=@tolgee/vue-testapp",
     "develop:svelte": "npm run develop -- --scope=@tolgee/svelte-testapp",
@@ -36,7 +36,8 @@
     "postinstall": "npm run custom-links",
     "version": "pnpm i --no-frozen-lockfile && git add pnpm-lock.yaml",
     "builder": "docker compose --project-directory e2e run builder pnpm",
-    "e2e": "ts-node scripts/e2eRunner/index.ts"
+    "e2e": "ts-node scripts/e2eRunner/index.ts",
+    "generate-readmes": "ts-node scripts/generateReadmes.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
@@ -46,6 +47,7 @@
     "@typescript-eslint/parser": "^5.30.6",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^11.0.0",
+    "commander": "^9.4.1",
     "eslint": "8.22.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-svelte3": "4.0.0",
@@ -55,10 +57,11 @@
     "lerna": "^5.3.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "2.7.0",
+    "ts-node": "^10.9.1",
     "turbo": "1.5.5",
     "typescript": "^4.7.4",
-    "ts-node": "^10.9.1",
-    "commander": "^9.4.1"
+    "glob": "8.0.3",
+    "nunjucks": "3.2.3"
   },
   "commitlint": {
     "extends": [

@@ -7,9 +7,9 @@
 
 <h1 align="center" style="border-bottom: none">
     <b>
-        <a href="https://tolgee.io">Tolgee JS Web</a><br>
+        <a href="https://tolgee.io">Tolgee ICU Format Plugin</a><br>
     </b>
-    The base of Tolgee JS integrations for Web platform
+    The ICU Formatter Plugin for Tolgee JS integrations
     <br>
 </h1>
 
@@ -21,7 +21,7 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 
-![@tolgee/web version](https://img.shields.io/npm/v/@tolgee/web?label=@tolgee/web)
+![@tolgee/format-icu version](https://img.shields.io/npm/v/@tolgee/format-icu?label=@tolgee/format-icu)
 
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 ![typescript](https://img.shields.io/github/languages/top/tolgee/tolgee-js)
@@ -43,9 +43,9 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 
 
 
-## What is Tolgee JS Web?
-It's the core library of Tolgee JS integrations containing the parts supporting the web platform.
-For more information about Tolgee JS integrations, visit the [docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/).
+## What is Icu Format Plugin?
+It's a plugin for Tolgee JS, which enables the rendering of messages in [ICU message format](https://tolgee.io/platform/icu_message_format).
+For more information about the Tolgee ICU Format plugin, visit the [docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/formatting#icu-formatter).
 
 
 ## Quick links
@@ -70,7 +70,7 @@ For more information about Tolgee JS integrations, visit the [docs](https://tolg
 ## Installation
 
 ```
-npm install @tolgee/web
+npm install @tolgee/format-icu
 ```
 
 
@@ -79,26 +79,23 @@ npm install @tolgee/web
 First, create a Tolgee instance and run it.
 
 ```ts
-import { Tolgee, DevTools, FormatSimple } from "@tolgee/web";
+import { FormatIcu } from "@tolgee/format-icu";
 
-const tg = Tolgee()
-  .use(DevTools())
-  .use(FormatSimple())
-  .init({
-    apiKey: "your_api_key",
-    apiUrl: "https://app.tolgee.io",
-  })
+const tolgee = Tolgee()
+  .use(FormatIcu())
+  .init(...)
 
-tg.run();
+...
 ```
 
-Then, use it to translate your strings.
+Now you can use ICU format in your translations. Example:
 
 ```ts
-tg.onLangLoaded.subscribe(() => {
-  document.title = tg.translate("hello_world");
-});
+tolgee.t('test', 'Hello, I am {name}.', { name: 'John' })
+// 'Hello, I am John.'
 ```
+
+Check our [ICU format documentation](https://tolgee.io/platform/icu_message_format) to learn more.
 
 
 ## Why to use Tolgee?
@@ -148,26 +145,8 @@ To run Jest tests of this package, execute
 ```
 npm run test
 ```
-In the `/packages/core` directory.
+In the `/packages/format-icu` directory.
 
-
-### End-to-end (e2e) testing
-
-Each integration is end-to-end tested via cypress. The tests are defined in `/e2e/cypress/e2e` directory.
-
-To run the e2e tests, simply run the following:
-```
-pnpm run e2e run <integration>
-```
-E.g.
-```
-pnpm run e2e run web
-```
-
-To open and play with e2e tests, run:
-```
-pnpm run e2e open <integration>
-```
 
 
 ## Contributors

@@ -7,9 +7,9 @@
 
 <h1 align="center" style="border-bottom: none">
     <b>
-        <a href="https://tolgee.io">Tolgee JS Web</a><br>
+        <a href="https://tolgee.io">Tolgee JS Core</a><br>
     </b>
-    The base of Tolgee JS integrations for Web platform
+    The Core of Tolgee JS integrations
     <br>
 </h1>
 
@@ -21,7 +21,7 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
 
-![@tolgee/web version](https://img.shields.io/npm/v/@tolgee/web?label=@tolgee/web)
+![@tolgee/core version](https://img.shields.io/npm/v/@tolgee/core?label=@tolgee/core)
 
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 ![typescript](https://img.shields.io/github/languages/top/tolgee/tolgee-js)
@@ -43,8 +43,8 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 
 
 
-## What is Tolgee JS Web?
-It's the core library of Tolgee JS integrations containing the parts supporting the web platform.
+## What is Tolgee JS Core?
+It's the core library of Tolgee JS integrations containing the platform-agnostic parts of the Tolgee JS.
 For more information about Tolgee JS integrations, visit the [docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/).
 
 
@@ -66,11 +66,17 @@ For more information about Tolgee JS integrations, visit the [docs](https://tolg
 - [Tolgee platform docs](https://tolgee.io/platform)
   
 
+## You should not use this package directly for usage in the web browser
+
+If you use Tolgee on the web, use [@tolgee/web](https://github.com/tolgee/tolgee-js/tree/main/packages/web) package, which extends this package with web-related functionality.
+
+This package is platform-agnostic, so it contains only the most general functionality.
+
 
 ## Installation
 
 ```
-npm install @tolgee/web
+npm install @tolgee/core
 ```
 
 
@@ -79,26 +85,16 @@ npm install @tolgee/web
 First, create a Tolgee instance and run it.
 
 ```ts
-import { Tolgee, DevTools, FormatSimple } from "@tolgee/web";
+import { TolgeeCore } from "@tolgee/core";
 
-const tg = Tolgee()
-  .use(DevTools())
-  .use(FormatSimple())
-  .init({
-    apiKey: "your_api_key",
-    apiUrl: "https://app.tolgee.io",
-  })
+const tg = TolgeeCore()
+  .use(...)
+  .init(...)
 
 tg.run();
 ```
 
-Then, use it to translate your strings.
-
-```ts
-tg.onLangLoaded.subscribe(() => {
-  document.title = tg.translate("hello_world");
-});
-```
+To learn more, check [the docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/).
 
 
 ## Why to use Tolgee?
@@ -155,7 +151,7 @@ In the `/packages/core` directory.
 
 Each integration is end-to-end tested via cypress. The tests are defined in `/e2e/cypress/e2e` directory.
 
-To run the e2e tests, simply run the following:
+To run the e2e tests, run
 ```
 pnpm run e2e run <integration>
 ```
