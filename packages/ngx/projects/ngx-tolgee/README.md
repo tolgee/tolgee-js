@@ -1,49 +1,84 @@
-# Tolgee for Angular
+<!-- This file was generated using pnpm generate-readmes script 
+        
+        Don't edit this file. Edit the README.md.njk. Macros can be found in readmeMacros/macros.njk
+        
+        -->
+
+<h1 align="center" style="border-bottom: none">
+    <b>
+        <a href="https://tolgee.io">Tolgee for Angular</a><br>
+    </b>
+    The Tolgee i18n SDK for Angular
+    <br>
+</h1>
+
+<div align="center">
+
+[![Logo](https://user-images.githubusercontent.com/18496315/188628892-33fcc282-26f1-4035-8105-95952bd93de9.svg)](https://tolgee.io)
+
+Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its very own revolutionary integrations.
 
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
-![@tolgee/ngx version](https://img.shields.io/npm/v/@tolgee/ngx?label=%40tolgee%2Fngx)
+
+![@tolgee/ngx version](https://img.shields.io/npm/v/@tolgee/ngx?label=@tolgee/ngx)
+
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
+![typescript](https://img.shields.io/github/languages/top/tolgee/tolgee-js)
 ![licence](https://img.shields.io/github/license/tolgee/tolgee-js)
-[![twitter](https://img.shields.io/twitter/follow/Tolgee_i18n?style=social)](https://twitter.com/Tolgee_i18n)
-[![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social)](https://github.com/tolgee/tolgee-js)
+[![github stars](https://img.shields.io/github/stars/tolgee/tolgee-js?style=social&label=Tolgee%20JS)](https://github.com/tolgee/tolgee-js)
+[![github stars](https://img.shields.io/github/stars/tolgee/server?style=social&label=Tolgee%20Server)](https://github.com/tolgee/server)
+[![Github discussions](https://img.shields.io/github/discussions/tolgee/tolgee-platform)](https://github.com/tolgee/tolgee-platform/discussions)
+</div>
 
-[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="200" />](https://tolgee.io)
+<div align="center">
 
-Localize (translate) your Angular app to multiple languages with Tolgee. For more information about using Tolgee with
-Angular, visit our [documentation website](https://tolgee.io/js-sdk).
-Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
+[<img src="https://img.shields.io/badge/-Facebook-424549?style=social&logo=facebook" height=25 />](https://www.facebook.com/Tolgee.i18n)
+[<img src="https://img.shields.io/badge/-Twitter-424549?style=social&logo=twitter" height=25 />](https://twitter.com/Tolgee_i18n)
+[<img src="https://img.shields.io/badge/-Linkedin-424549?style=social&logo=linkedin" height=25 />](https://www.linkedin.com/company/tolgee)
 
-## Features
+**Become part of the family. Join [slack channel <img src="https://img.shields.io/badge/-Tolgee Comunity-424549?style=social&logo=slack" height=25 />](https://join.slack.com/t/tolgeecommunity/shared_invite/zt-195isb5u8-_RcSRgVJfvgsPpOBIok~IQ)**
 
-- All in One localization solution for your JS application 🙌
-- Out of box in-context localization 🎉
-- Automated screenshot generation 📷
-- Translation management platform 🎈
-- Open-source 🔥
+</div>
+
+
+
+# What's Tolgee for Angular?
+Angular integration library of Tolgee. With this package. It's super simple to add i18n to your Angular app!
+For more information about using Tolgee with Angular, visit the [docs 📖](https://tolgee.io/integrations/angular).
+
+
+## Quick links
+- [Tolgee for Angular docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/integrations/angular/installation)
+- [Tolgee JS SDK docs](https://tolgee.io/js-sdk)
+- [Tolgee Website](https://tolgee.io)
+    - Product (Learn more about the great features)
+        - [Dev tools](https://tolgee.io/features/dev-tools)
+        - [Translation assistance](https://tolgee.io/features/translation-assistance)
+        - [Collaboration](https://tolgee.io/features/collaboration)
+- [Tolgee platform docs](https://tolgee.io/platform)
+  
+
 
 ## Installation
-
-First, install the package.
 
 ```
 npm install @tolgee/ngx
 ```
 
-Then import `NgxTolgeeModule` in your app.
+
+Then use the library in your `app.module.ts`. You have to add `NgxTolgeeModule` to your imports section and
+add factory provider for `TOLGEE_INSTANCE` token returning your Tolgee instance.
 
 ```typescript
 ...
-
 import {
-  NgxPlugin,
+  DevTools,
   NgxTolgeeModule,
   Tolgee,
   TOLGEE_INSTANCE,
   FormatSimple
 } from '@tolgee/ngx';
-
 ...
-
 @NgModule({
   declarations: [
     ...
@@ -57,12 +92,19 @@ import {
       provide: TOLGEE_INSTANCE,
       useFactory: () => {
         return Tolgee()
-          .use(NgxPlugin())
+          .use(DevTools())
           .use(FormatSimple())
           .init({
+            language: 'en'
+
+            // for development
             apiUrl: environment.tolgeeApiUrl,
             apiKey: environment.tolgeeApiKey,
-            language: 'en'
+
+            // for production
+            staticData: {
+              ...
+            }
           });
       },
     },
@@ -73,38 +115,88 @@ export class AppModule {}
 ```
 
 ## Usage
-
-![ngx-example-infinite](https://user-images.githubusercontent.com/18496315/137347353-9622c944-d021-4f02-a629-b411bc744c36.gif)
-
-### Using pipe
-
-```angular2html
-<h1>{{'hello_world' | translate}}</h1>
+Translating using pipe:
+```html
+<h1>{{&#39;hello_world&#39; | translate}}</h1>
 ```
 
-### Using translateService
-
-```ts
-this.translateService
-  .get('hello_world')
-  .subscribe((r) => (this.helloWorld = r));
-```
-
-### Element with t attribute
-
+Or using t attribute
 ```html
 <h1 t key="providing_default_values"></h1>
-<p t key="user_account_title" [params]="{name: 'John Doe'}"></p>
-<p t key="using_t_with_default" default="This is default"></p>
 ```
+
 
 ## Prerequisites
 
-1. You have some Angular based project
-2. You have generated API key from [Tolgee Cloud](https://app.tolgee.io) or self-hosted Tolgee instance.
+1. You have some Angular-based project
+2. You have generated an API key from [Tolgee Cloud](https://app.tolgee.io) or a self-hosted Tolgee instance.
+   
 
-## Quick integration guide
 
-![Integrate](https://user-images.githubusercontent.com/18496315/137345763-c318df07-2de0-4c35-a28d-bf1e93b42997.gif)
+## Why to use Tolgee?
+Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
 
-Learn more at our [documentation website 📖](https://tolgee.io/js-sdk).
+### Features
+
+- All-in-one localization solution for your JS application 🙌
+- Out-of-box in-context localization 🎉
+- Automated screenshot generation 📷
+- Translation management platform 🎈
+- Open-source 🔥
+
+![Frame 47](https://user-images.githubusercontent.com/18496315/188637819-ac4eb02d-7859-4ca8-9807-27818a52782d.png)
+Read more on the [Tolgee website](https://tolgee.io)
+
+
+## Development
+
+We welcome your PRs.
+
+To develop the package locally:
+1. Clone [the repository](https://github.com/tolgee/tolgee-js)
+1. Install the packages in the repository root
+```
+pnpm install
+```
+
+
+1. Run the development script
+```
+pnpm develop:ngx
+```
+This runs the development suite of this monorepo for the `ngx` integration. The changes in each dependency package are
+automatically built and propagated to the test application, which you can open and play within the browser.
+
+
+
+
+### Testing
+
+To run Jest tests of this package, execute
+```
+npm run test
+```
+In the `/packages/ngx` directory.
+
+
+
+
+### End-to-end (e2e) testing
+To run the e2e tests, simply execute
+```
+pnpm run e2e run ngx
+```
+
+To open and play with e2e tests, run:
+```
+pnpm run e2e open ngx
+```
+
+
+
+## Contributors
+
+<a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
+  <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
+</a>
+

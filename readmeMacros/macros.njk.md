@@ -1,15 +1,9 @@
-<!-- This file was generated using pnpm generate-readmes script 
-        
-        Don't edit this file. Edit the README.md.njk. Macros can be found in readmeMacros/macros.njk
-        
-        -->
-
-
+{% macro header(name, subline, packageName) %}
 <h1 align="center" style="border-bottom: none">
     <b>
-        <a href="https://tolgee.io">Tolgee JS Web</a><br>
+        <a href="https://tolgee.io">{{name}}</a><br>
     </b>
-    The base of Tolgee JS integrations for Web platform
+    {{subline}}
     <br>
 </h1>
 
@@ -20,9 +14,9 @@
 Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its very own revolutionary integrations.
 
 ![test workflow](https://github.com/tolgee/tolgee-js/actions/workflows/test.yml/badge.svg)
-
-![@tolgee/web version](https://img.shields.io/npm/v/@tolgee/web?label=@tolgee/web)
-
+{% if packageName %}
+![{{packageName}} version](https://img.shields.io/npm/v/{{packageName}}?label={{packageName}})
+{% endif %}
 ![types typescript](https://img.shields.io/badge/Types-Typescript-blue)
 ![typescript](https://img.shields.io/github/languages/top/tolgee/tolgee-js)
 ![licence](https://img.shields.io/github/license/tolgee/tolgee-js)
@@ -41,13 +35,9 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 
 </div>
 
+{% endmacro %}
 
-
-## What is Tolgee JS Web?
-It's the core library of Tolgee JS integrations containing the parts supporting the web platform.
-For more information about Tolgee JS integrations, visit the [docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/).
-
-
+{% macro links() %}
 ## Quick links
 - [Tolgee JS SDK docs](https://tolgee.io/js-sdk)
 - [Tolgee Website](https://tolgee.io)
@@ -64,43 +54,29 @@ For more information about Tolgee JS integrations, visit the [docs](https://tolg
     - [Gatsby](https://tolgee.io/integrations/gatsby)
     - [More...](https://tolgee.io/integrations/all)
 - [Tolgee platform docs](https://tolgee.io/platform)
-  
+  {% endmacro %}
 
+{% macro integrationLinks(firstLinkName, firstLinkUrl) %}
+## Quick links
+- [{{firstLinkName}}]({{firstLinkUrl}})
+- [Tolgee JS SDK docs](https://tolgee.io/js-sdk)
+- [Tolgee Website](https://tolgee.io)
+    - Product (Learn more about the great features)
+        - [Dev tools](https://tolgee.io/features/dev-tools)
+        - [Translation assistance](https://tolgee.io/features/translation-assistance)
+        - [Collaboration](https://tolgee.io/features/collaboration)
+- [Tolgee platform docs](https://tolgee.io/platform)
+  {% endmacro %}
 
+{% macro installation(package) %}
 ## Installation
 
 ```
-npm install @tolgee/web
+npm install @tolgee/{{package}}
 ```
+{% endmacro %}
 
-
-## Usage
-
-First, create a Tolgee instance and run it.
-
-```ts
-import { Tolgee, DevTools, FormatSimple } from "@tolgee/web";
-
-const tg = Tolgee()
-  .use(DevTools())
-  .use(FormatSimple())
-  .init({
-    apiKey: "your_api_key",
-    apiUrl: "https://app.tolgee.io",
-  })
-
-tg.run();
-```
-
-Then, use it to translate your strings.
-
-```ts
-tg.onLangLoaded.subscribe(() => {
-  document.title = tg.translate("hello_world");
-});
-```
-
-
+{% macro why() %}
 ## Why to use Tolgee?
 Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
 
@@ -114,10 +90,17 @@ Because it saves a lot of time, you would spend on localization tasks without it
 
 ![Frame 47](https://user-images.githubusercontent.com/18496315/188637819-ac4eb02d-7859-4ca8-9807-27818a52782d.png)
 Read more on the [Tolgee website](https://tolgee.io)
+{% endmacro %}
 
+{% macro contributions() %}
+## Contributors
 
-## Development
+<a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
+  <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
+</a>
+{% endmacro %}
 
+{% macro developmentInstallation() %}
 We welcome your PRs.
 
 To develop the package locally:
@@ -126,8 +109,9 @@ To develop the package locally:
 ```
 pnpm install
 ```
+{% endmacro %}
 
-
+{% macro developmentCore() %}
 1. Run web or any integration development script
 ```
 pnpm develop:react
@@ -138,9 +122,19 @@ pnpm develop:web
 ```
 This runs the development suite of this monorepo for the specific integration. The changes in each dependency package are
 automatically built and propagated to the test application, which you can open and play within the browser.
+{% endmacro %}
 
 
+{% macro development(package) %}
+1. Run the development script
+```
+pnpm develop:{{package}}
+```
+This runs the development suite of this monorepo for the `{{package}}` integration. The changes in each dependency package are
+automatically built and propagated to the test application, which you can open and play within the browser.
+{% endmacro %}
 
+{% macro developmentTesting(packagePath) %}
 
 ### Testing
 
@@ -148,31 +142,37 @@ To run Jest tests of this package, execute
 ```
 npm run test
 ```
-In the `/packages/core` directory.
+In the `{{packagePath}}` directory.
+{% endmacro %}
 
+{% macro prereq(integration) %}
+## Prerequisites
+
+1. You have some {{integration}}-based project
+2. You have generated an API key from [Tolgee Cloud](https://app.tolgee.io) or a self-hosted Tolgee instance.
+   {% endmacro %}
+
+
+{% macro e2eTesting(integration) %}
 
 ### End-to-end (e2e) testing
-
-Each integration is end-to-end tested via cypress. The tests are defined in `/e2e/cypress/e2e` directory.
-
-To run the e2e tests, simply run the following:
+To run the e2e tests, simply execute
 ```
-pnpm run e2e run <integration>
-```
-E.g.
-```
-pnpm run e2e run web
+pnpm run e2e run {{integration}}
 ```
 
 To open and play with e2e tests, run:
 ```
-pnpm run e2e open <integration>
+pnpm run e2e open {{integration}}
 ```
+{% endmacro %}
 
-
+{% macro contributors() %}
 ## Contributors
 
 <a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
   <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
 </a>
+{% endmacro %}
 
+{% macro v5link(path) %}https://tolgee.io/js-sdk/5.0.0-alpha.1/{{path}}{% endmacro %}

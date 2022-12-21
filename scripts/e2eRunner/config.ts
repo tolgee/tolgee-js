@@ -29,11 +29,11 @@ export const config: Config = {
         },
       },
     },
-    core: {
+    web: {
       commandLineServices: {
         core: {
           command: 'npm run serve',
-          cwd: path.resolve(__dirname, '../../testapps/core/'),
+          cwd: path.resolve(__dirname, '../../testapps/web/'),
           waitForOutput: 'INFO: Accepting connections',
         },
       },
