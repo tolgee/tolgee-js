@@ -1,54 +1,45 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { createContext, useContextSelector } from 'use-context-selector';
-
-type DispatchType<ActionType, DispatchReturn> = (
-  action: ActionType
-) => DispatchReturn;
 
 type SelectorType<StateType, ReturnType> = (state: StateType) => ReturnType;
 
-export const createProvider = <
-  StateType,
-  ActionType,
-  DispatchReturn,
-  ProviderProps
->(
-  body: (
-    props: ProviderProps
-  ) => [state: StateType, dispatch: DispatchType<ActionType, DispatchReturn>]
+export const createProvider = <StateType, Actions, ProviderProps>(
+  controller: (props: ProviderProps) => [state: StateType, actions: Actions]
 ) => {
   const StateContext = createContext<StateType>(null as any);
-  const DispatchContext = React.createContext<
-    DispatchType<ActionType, DispatchReturn>
-  >(null as any);
+  const DispatchContext = React.createContext<Actions>(null as any);
 
   const Provider: React.FC<ProviderProps> = ({ children, ...props }) => {
-    const [state, _dispatch] = body(props as any);
-    const dispatchRef = useRef(_dispatch);
+    const [state, _actions] = controller(props as any);
+    const actionsRef = useRef(_actions);
 
-    dispatchRef.current = _dispatch;
+    actionsRef.current = _actions;
 
-    // stable dispatch function
-    const dispatch = useCallback(
-      (action: ActionType) => dispatchRef.current?.(action),
-      [dispatchRef]
-    );
+    // stable actions
+    const actions = useMemo(() => {
+      const result = {};
+      Object.keys(actionsRef.current as any).map((key) => {
+        // @ts-ignore
+        result[key] = (...args) => actionsRef.current[key]?.(...args);
+      });
+      return result as Actions;
+    }, [actionsRef]);
 
     return (
       <StateContext.Provider value={state}>
-        <DispatchContext.Provider value={dispatch}>
+        <DispatchContext.Provider value={actions}>
           {children}
         </DispatchContext.Provider>
       </StateContext.Provider>
     );
   };
 
-  const useDispatch = () => React.useContext(DispatchContext);
+  const useActions = () => React.useContext(DispatchContext);
   const useStateContext = function <SelectorReturn>(
     selector: SelectorType<StateType, SelectorReturn>
   ) {
     return useContextSelector(StateContext, selector);
   };
 
-  return [Provider, useDispatch, useStateContext] as const;
+  return [Provider, useActions, useStateContext] as const;
 };

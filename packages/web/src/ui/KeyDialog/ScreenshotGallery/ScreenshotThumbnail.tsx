@@ -4,7 +4,7 @@ import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import Clear from '@mui/icons-material/Clear';
 import clsx from 'clsx';
-import { ScreenshotInterface } from '../TranslationDialogContextProvider';
+import { ScreenshotInterface } from '../dialogContext/useGallery';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
 
 const Screenshot = styled('img')`

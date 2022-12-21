@@ -1,15 +1,12 @@
 import React from 'react';
 import { FunctionComponent } from 'react';
-import {
-  useDialogContext,
-  useDialogDispatch,
-} from './TranslationDialogContextProvider';
+import { useDialogContext, useDialogActions } from './dialogContext';
 import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
-import { getPreferredLanguages } from './tools';
+import { getPreferredLanguages } from './dialogContext/tools';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -47,7 +44,7 @@ const LoadingTextArea = styled('div')`
 `;
 
 export const TranslationFields: FunctionComponent = () => {
-  const dispatch = useDialogDispatch();
+  const { onInputChange } = useDialogActions();
 
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
   const langFields = selectedLanguages.length
@@ -60,10 +57,7 @@ export const TranslationFields: FunctionComponent = () => {
   const permittedLanguageIds = useDialogContext((c) => c.permittedLanguageIds);
 
   const onChange = (key: string) => (e: any) => {
-    dispatch({
-      type: 'ON_INPUT_CHANGE',
-      payload: { key, value: e.target.value },
-    });
+    onInputChange(key, e.target.value);
   };
 
   const Loading = () => (

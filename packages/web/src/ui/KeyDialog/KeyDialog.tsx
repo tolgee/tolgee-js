@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BodyEnd } from '../common/BodyEnd';
-import { DialogProvider } from './TranslationDialogContextProvider';
+import { DialogProvider } from './dialogContext';
 import { TranslationDialog } from './TranslationDialog';
 import type { UiProps } from '@tolgee/core';
 import { QueryProvider } from '../../ui/client/QueryProvider';

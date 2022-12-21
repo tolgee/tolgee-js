@@ -9,10 +9,7 @@ import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
 import { isAuthorizedTo, MAX_FILE_COUNT } from './utils';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
-import {
-  useDialogContext,
-  useDialogDispatch,
-} from '../TranslationDialogContextProvider';
+import { useDialogContext, useDialogActions } from '../dialogContext';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
 import { ExtensionPrompt } from './ExtensionPrompt';
@@ -56,26 +53,19 @@ const ALLOWED_UPLOAD_TYPES = ['image/png', 'image/jpeg', 'image/gif'];
 
 export const ScreenshotGallery: React.FC = () => {
   const fileRef = useRef<HTMLInputElement>(null);
-  const dispatch = useDialogDispatch();
+  const {
+    handleUploadImages,
+    handleRemoveScreenshot,
+    handleTakeScreenshot,
+    setScreenshotDetail,
+  } = useDialogActions();
 
   const screenshots = useDialogContext((c) => c.screenshots);
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
-  const pluginAvailable = useDialogContext((c) => c.pluginAvailable);
+  const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
   const scopes = useDialogContext((c) => c.scopes);
-
-  const uploadImages = (files: File[]) => {
-    dispatch({ type: 'HANDLE_UPLOAD_IMAGES', payload: { files } });
-  };
-
-  const removeScreenshot = (id: number) => {
-    dispatch({ type: 'HANDLE_REMOVE_SCREENSHOT', payload: { id } });
-  };
-
-  const takeScreenshot = () => {
-    dispatch({ type: 'HANDLE_TAKE_SCREENSHOT' });
-  };
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
@@ -119,7 +109,7 @@ export const ScreenshotGallery: React.FC = () => {
   const validateAndUpload = (files: File[]) => {
     const { valid } = validate(files);
     if (valid) {
-      uploadImages(files);
+      handleUploadImages(files);
     }
   };
 
@@ -127,7 +117,7 @@ export const ScreenshotGallery: React.FC = () => {
     fileRef.current?.dispatchEvent(new MouseEvent('click'));
   };
 
-  const ableToTakeScreenshot = pluginAvailable;
+  const ableToTakeScreenshot = canTakeScreenshots;
 
   // @ts-ignore
   const isChrome = Boolean(window.chrome);
@@ -159,7 +149,7 @@ export const ScreenshotGallery: React.FC = () => {
                   <IconButton
                     onClick={
                       ableToTakeScreenshot
-                        ? takeScreenshot
+                        ? handleTakeScreenshot
                         : () => setExtensionPrompt(true)
                     }
                   >
@@ -193,12 +183,10 @@ export const ScreenshotGallery: React.FC = () => {
               <ScreenshotThumbnail
                 key={ss.id}
                 data={ss}
-                onClick={() =>
-                  dispatch({ type: 'OPEN_SCREENSHOT_DETAIL', payload: ss })
-                }
+                onClick={() => setScreenshotDetail(ss)}
                 onDelete={
                   deleteEnabled || ss.justUploaded
-                    ? removeScreenshot
+                    ? handleRemoveScreenshot
                     : undefined
                 }
               />
@@ -229,7 +217,7 @@ export const ScreenshotGallery: React.FC = () => {
       {screenshotDetails && (
         <ScreenshotDetail
           screenshot={screenshotDetails}
-          onClose={() => dispatch({ type: 'CLOSE_SCREENSHOT_DETAIL' })}
+          onClose={() => setScreenshotDetail(null)}
         />
       )}
       {extensionPrompt && (

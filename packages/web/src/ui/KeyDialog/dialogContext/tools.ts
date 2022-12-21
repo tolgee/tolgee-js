@@ -1,7 +1,8 @@
+import { ChangeTranslationInterface } from '@tolgee/core';
 import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
-} from '../../constants';
+} from '../../../constants';
 
 export function getPreferredLanguages(): string[] {
   try {
@@ -28,3 +29,22 @@ export function getInitialLanguages(available: string[]) {
   }
   return langs.slice(0, MAX_LANGUAGES_SELECTED);
 }
+
+export const changeInTolgeeCache = (
+  key: string,
+  ns: string | undefined,
+  values: [language: string, value: string][],
+  changeTranslation: ChangeTranslationInterface
+) => {
+  const changers = values.map(([language, value]) =>
+    changeTranslation(
+      {
+        language,
+        namespace: ns,
+      },
+      key,
+      value
+    )
+  );
+  return { revert: () => changers.forEach((ch) => ch.revert()) };
+};
