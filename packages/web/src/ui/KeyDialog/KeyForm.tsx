@@ -58,7 +58,7 @@ const ScFieldsWrapper = styled('div')`
 `;
 
 const ScTagsWrapper = styled('div')`
-  margin-top: 10px;
+  margin-top: 5px;
 `;
 
 const ScGalleryWrapper = styled('div')`

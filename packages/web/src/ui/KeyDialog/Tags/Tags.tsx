@@ -8,12 +8,11 @@ const StyledTags = styled('div')`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
+  position: relative;
 
   & > * {
     margin: 0px 3px 3px 0px;
   }
-
-  position: relative;
 `;
 
 export function Tags() {
@@ -45,6 +44,7 @@ export function Tags() {
           placeholder="Add tag..."
         />
       )}
+      {!tags.length && !canEditTags && 'No tags'}
     </StyledTags>
   );
 }
