@@ -39,6 +39,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       useState(false);
 
     const [selectedNs, setSelectedNs] = useState<string>(props.ns[0]);
+    const [tags, setTags] = useState<string[]>([]);
     const isPat = getApiKeyType(props.uiProps.apiKey) === 'tgpat';
 
     const {
@@ -102,14 +103,16 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         enabled: Boolean(selectedLanguages.length),
         onSuccess(data) {
           const result: FormTranslations = {};
-          Object.entries(data._embedded?.keys?.[0].translations || {}).forEach(
+          const firstKey = data._embedded?.keys?.[0];
+          Object.entries(firstKey?.translations || {}).forEach(
             ([key, value]) => {
               result[key] = value.text || '';
             }
           );
           setTranslationsForm(result);
+          setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           setScreenshots(
-            data._embedded?.keys?.[0].screenshots?.map((sc) => ({
+            firstKey?.screenshots?.map((sc) => ({
               ...sc,
               justUploaded: false,
             })) || []
@@ -182,6 +185,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 namespace: selectedNs || undefined,
                 translations: newTranslations,
                 screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
+                tags,
               },
             },
           });
@@ -194,6 +198,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 translations: newTranslations,
                 screenshotIdsToDelete: getRemovedScreenshots(),
                 screenshotUploadedImageIds: getJustUploadedScreenshots(),
+                tags,
               },
             },
             path: { id: translations.keyId },
@@ -336,6 +341,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           ? !isAuthorizedTo('translations.edit', scopes)
           : !isAuthorizedTo('keys.edit', scopes)));
 
+    const canEditTags = !formDisabled && isAuthorizedTo('keys.edit', scopes);
+
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length
     );
@@ -365,6 +372,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       keyExists,
       scopes,
       permittedLanguageIds,
+      tags,
+      canEditTags,
     } as const;
 
     const actions = {
@@ -379,6 +388,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       setUseBrowserWindow,
       setScreenshotDetail,
       setSelectedNs,
+      setTags,
     };
 
     return [contextValue, actions];

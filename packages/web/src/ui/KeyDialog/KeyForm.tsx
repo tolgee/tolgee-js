@@ -14,6 +14,7 @@ import { useDialogContext, useDialogActions } from './dialogContext';
 import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
+import { Tags } from './Tags/Tags';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -54,6 +55,10 @@ const ScKeyHint = styled('span')`
 
 const ScFieldsWrapper = styled('div')`
   margin-top: 20px;
+`;
+
+const ScTagsWrapper = styled('div')`
+  margin-top: 10px;
 `;
 
 const ScGalleryWrapper = styled('div')`
@@ -148,6 +153,13 @@ export const KeyForm = () => {
       </ScKey>
 
       <NsSelect options={ns} value={selectedNs} onChange={setSelectedNs} />
+
+      {ready && (
+        <ScTagsWrapper>
+          <ScFieldTitle>Tags</ScFieldTitle>
+          <Tags />
+        </ScTagsWrapper>
+      )}
 
       <ScFieldsWrapper>
         <TranslationFields />

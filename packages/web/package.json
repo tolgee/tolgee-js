@@ -27,7 +27,8 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "5.0.0-alpha.1"
+    "@tolgee/core": "5.0.0-alpha.1",
+    "use-debounce": "^9.0.2"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
