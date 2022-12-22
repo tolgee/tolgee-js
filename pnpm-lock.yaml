@@ -28,8 +28,6 @@ importers:
       turbo: 1.5.5
       typescript: ^4.7.4
     dependencies:
-      glob: 8.0.3
-      nunjucks: 3.2.3
       ts-jest: 29.0.3_jxje2hcbylcap4trrcwjnopnr4
     devDependencies:
       '@commitlint/cli': 17.1.2
@@ -44,9 +42,11 @@ importers:
       eslint-plugin-prettier: 4.2.1_2xd4q2tc5cqa5as7uugqhp6oue
       eslint-plugin-svelte3: 4.0.0_lzv2a64qs7cjynrwfadrhbcpky
       eslint-plugin-vue: 9.6.0_eslint@8.22.0
+      glob: 8.0.3
       husky: 8.0.1
       jest: 29.1.2_texb6yekbdrurkf2spvwkwkdam
       lerna: 5.5.4
+      nunjucks: 3.2.3
       prettier: 2.7.1
       prettier-plugin-svelte: 2.7.0_nk6d2fkgcllkkdynqbuearcure
       ts-node: 10.9.1_p2zphemn5bk5inasc666rmprwi
@@ -10808,7 +10808,7 @@ packages:
 
   /a-sync-waterfall/1.0.1:
     resolution: {integrity: sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==}
-    dev: false
+    dev: true
 
   /abab/2.0.6:
     resolution: {integrity: sha512-j2afSsaIENvHZN2B8GOpF566vZ5WVk5opAiMTvWgaQT8DkbOqsTfvNAvHoRGU2zzP8cPoqys+xHTRDWW8L+/BA==}
@@ -10833,13 +10833,6 @@ packages:
     dependencies:
       acorn: 7.4.1
       acorn-walk: 7.2.0
-
-  /acorn-import-assertions/1.8.0_acorn@8.8.1:
-    resolution: {integrity: sha512-m7VZ3jwz4eK6A4Vtt8Ew1/mNbP24u0FhdyfA7fSvnJR6LMdfOYnmuIrrJAgrYfYJ10F/otaHTtrtrtmHdMNzEw==}
-    peerDependencies:
-      acorn: ^8
-    dependencies:
-      acorn: 8.8.1
 
   /acorn-import-assertions/1.8.0_acorn@8.8.1:
     resolution: {integrity: sha512-m7VZ3jwz4eK6A4Vtt8Ew1/mNbP24u0FhdyfA7fSvnJR6LMdfOYnmuIrrJAgrYfYJ10F/otaHTtrtrtmHdMNzEw==}
@@ -13396,6 +13389,7 @@ packages:
   /commander/5.1.0:
     resolution: {integrity: sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==}
     engines: {node: '>= 6'}
+    dev: true
 
   /commander/7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -19599,6 +19593,7 @@ packages:
       inherits: 2.0.4
       minimatch: 5.1.0
       once: 1.4.0
+    dev: true
 
   /global-dirs/0.1.1:
     resolution: {integrity: sha512-NknMLn7F2J7aflwFOlGdNIuCDpN3VGoSoB+aap3KABFWbHVn1TCgFC+np23J8W2BiZbjfEw3BFBycSMv1AFblg==}
@@ -25291,7 +25286,7 @@ packages:
       a-sync-waterfall: 1.0.1
       asap: 2.0.6
       commander: 5.1.0
-    dev: false
+    dev: true
 
   /nwsapi/2.2.2:
     resolution: {integrity: sha512-90yv+6538zuvUMnN+zCr8LuV6bPFdq50304114vJYJ8RDyK8D5O9Phpbd6SZWgI7PwzmmfN1upeOJlvybDSgCw==}
