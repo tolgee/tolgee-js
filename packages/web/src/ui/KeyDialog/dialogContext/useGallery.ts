@@ -67,7 +67,7 @@ export const useGallery = (uiProps: UiProps) => {
       Object.entries(translationsForm),
       uiProps.changeTranslation
     );
-    await sleep(100);
+    await sleep(200);
     let screenshot: string;
     try {
       screenshot = await takeScreenshot();
