@@ -1,0 +1,194 @@
+name: Report intermittent E2E Tests
+
+# on:
+#   schedule:
+#     - cron: '42 04 * * *'
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: 'Test'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.15.1'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: .pnpm-store/v3
+          key: ${{ runner.os }}-pnpm-test-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-test-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-${{ github.job }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ github.job }}-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm build || pnpm build
+
+      - name: Test
+        run: pnpm run test
+
+  cypress-prepare:
+    name: 'Cypress prepare'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.15.1'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-cypress-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Build
+        run: pnpm build || pnpm build
+
+      - name: Build e2e
+        run: pnpm build:e2e
+
+      - id: set-dirs
+        run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
+        working-directory: e2e/cypress/e2e
+
+    outputs:
+      dirs: ${{ steps.set-dirs.outputs.dirs }}
+
+  cypress:
+    name: 'Cypress'
+    # cypress-prepare will install and build everything into cache
+    needs: cypress-prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.15.1'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-cypress-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Cypress
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress
+          path: |
+            e2e/cypress/videos/**/*
+            e2e/cypress/screenshots/**/*
+
+  code-checks:
+    name: Eslint 🪲
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.15.1'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: .pnpm-store/v3
+          key: ${{ runner.os }}-pnpm-eslint-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-eslint-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+        working-directory: ./
+
+      - name: Eslint
+        run: pnpm run eslint
+        working-directory: ./
