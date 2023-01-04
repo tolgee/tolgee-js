@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "5.0.0-alpha.1",
+  "version": "5.0.0-rc.704ada9.0",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
@@ -14,7 +14,7 @@
     "format": "prettier --cache --write ."
   },
   "dependencies": {
-    "@tolgee/web": "5.0.0-alpha.1"
+    "@tolgee/web": "5.0.0-rc.704ada9.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.0-next.65",
@@ -22,8 +22,8 @@
     "@sveltejs/package": "1.0.0-next.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.1",
-    "@tolgee/format-icu": "5.0.0-alpha.1",
-    "@tolgee/testing": "5.0.0-alpha.1",
+    "@tolgee/format-icu": "5.0.0-rc.704ada9.0",
+    "@tolgee/testing": "5.0.0-rc.704ada9.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",
