@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 5.0.0-rc.8558283.0 (2023-01-04)
+
+
+### Bug Fixes
+
+* screenshot taking wait longer ([8558283](https://github.com/tolgee/tolgee-js/commit/855828340a7732d11aeb6eaeb06211c57aad172a))
+
+
+
+
+
 # 5.0.0-alpha.1 (2022-11-29)
 
 
