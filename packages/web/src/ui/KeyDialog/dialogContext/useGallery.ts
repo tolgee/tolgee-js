@@ -71,6 +71,7 @@ export const useGallery = (uiProps: UiProps) => {
     let screenshot: string;
     try {
       screenshot = await takeScreenshot();
+      await sleep(100);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
