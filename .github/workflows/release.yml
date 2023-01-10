@@ -9,12 +9,11 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
-
-      - run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          # fetch full history for lerna version to work
+          fetch-depth: 0
 
       - name: Build
         uses: actions/setup-node@v1

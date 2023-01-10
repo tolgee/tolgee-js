@@ -16,6 +16,8 @@ jobs:
         with:
           token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
           ref: tolgee-5
+          # fetch full history for lerna version to work
+          fetch-depth: 0
 
       - name: Build
         uses: actions/setup-node@v2
