@@ -40,7 +40,9 @@ jobs:
         run: pnpm install --no-frozen-lockfile
 
       - name: Update version locally
-        run: lerna version --yes --conventional-commits  --force-publish --no-push --no-git-tag-version 5.0.0-${{ github.event.inputs.version }}
+        run:
+          lerna version --yes --conventional-commits --force-publish --exact \
+          --no-push --no-git-tag-version 5.0.0-${{ github.event.inputs.version }}
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
@@ -52,7 +54,8 @@ jobs:
       - name: Recreate release with push
         run: |
           git stash
-          lerna version --yes --conventional-commits --force-publish --exact --create-release github 5.0.0-${{ github.event.inputs.version }}
+          lerna version --yes --conventional-commits --force-publish --exact \
+            --create-release github 5.0.0-${{ github.event.inputs.version }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
