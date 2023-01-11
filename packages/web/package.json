@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "5.0.0-alpha.3",
+  "version": "5.0.0",
   "description": "Tolgee for web",
   "main": "./dist/tolgee-web.main.cjs.js",
   "module": "./dist/tolgee-web.main.esm.js",
@@ -27,7 +27,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "5.0.0-alpha.3"
+    "@tolgee/core": "5.0.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
