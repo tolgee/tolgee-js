@@ -1,12 +1,15 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - 'main'
+  workflow_run:
+    workflows: [ "Test" ]
+    branches: [ "main"]
+    types:
+      - completed
 
 jobs:
   main:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -46,19 +49,6 @@ jobs:
 
       - name: Build all packages
         run: pnpm build || pnpm build
-
-      - name: Test
-        run: pnpm test
-
-      - name: Build for cypress
-        run: pnpm build:e2e
-
-      - name: Cypress
-        run: pnpm --prefix=e2e run start
-
-      - name: Cypress cleanup
-        if: always()
-        run: pnpm --prefix=e2e run services:stop
 
       - name: Recreate release with push
         run: |
