@@ -46,3 +46,4 @@ testem.log
 .DS_Store
 Thumbs.db
 tolgeeRestructure.ngx-tolgee.iml
+projects/ngx-tolgee/coverage

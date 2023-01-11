@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-i18next-testapp",
-  "version": "4.9.3",
+  "version": "5.0.0-alpha.2",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -8,23 +8,24 @@
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "lint": "vue-cli-service lint",
-    "serve": "serve -p 3002 -s dist"
+    "serve": "serve -s dist"
   },
   "dependencies": {
     "@panter/vue-i18next": "^0.15.2",
-    "@tolgee/core": "^4.9.2",
-    "@tolgee/i18next": "^4.9.3",
-    "core-js": "^3.6.5",
-    "i18next": "^21.6.3",
+    "@tolgee/core": "5.0.0-alpha.2",
+    "@tolgee/format-icu": "5.0.0-alpha.2",
+    "@tolgee/i18next": "5.0.0-alpha.2",
+    "core-js": "^3.25.3",
+    "i18next": "^21.9.2",
     "i18next-icu": "^2.0.3",
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
     "babel-eslint": "^10.1.0",
-    "serve": "^13.0.2",
+    "serve": "^14.1.1",
     "vue-template-compiler": "^2.6.11"
   },
   "browserslist": [

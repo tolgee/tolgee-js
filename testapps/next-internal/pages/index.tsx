@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { T } from '@tolgee/react';
+import { DevTools, T, Tolgee } from '@tolgee/react';
 import enLocale from '../i18n/en.json';
 import deLocale from '../i18n/de.json';
 import { useRouter } from 'next/router';
@@ -8,27 +8,41 @@ import { TolgeeProvider } from '@tolgee/react';
 
 import styles from '../styles/Home.module.css';
 import LocaleSwitcher from '../component/LanguageSwitcher';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Home: NextPage = () => {
   const { locale: activeLocale } = useRouter();
 
   const router = useRouter();
 
+  const apiKey =
+    (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
+
+  const [tolgee] = useState(
+    Tolgee()
+      .use(DevTools())
+      .init({
+        language: activeLocale,
+        apiKey: apiKey,
+        apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
+        staticData: {
+          en: enLocale,
+          de: deLocale,
+        },
+      })
+  );
+
+  useEffect(() => {
+    tolgee.updateOptions({ apiKey });
+  }, [apiKey]);
+
+  useEffect(() => {
+    tolgee.changeLanguage(activeLocale!);
+  }, [activeLocale]);
+
   return router.isReady ? (
-    <TolgeeProvider
-      forceLanguage={activeLocale}
-      apiKey={
-        (router.query.api_key as string) ||
-        process.env.NEXT_PUBLIC_TOLGEE_API_KEY
-      }
-      apiUrl={process.env.NEXT_PUBLIC_TOLGEE_API_URL}
-      staticData={{
-        en: enLocale,
-        de: deLocale,
-      }}
-      // remove this to enable language auto detection
-      enableLanguageDetection={false}
-    >
+    <TolgeeProvider tolgee={tolgee}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>

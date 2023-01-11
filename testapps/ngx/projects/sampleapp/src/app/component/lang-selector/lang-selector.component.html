@@ -1,6 +1,6 @@
 <select
-  [value]="translateService.getCurrentLang()"
-  (change)="translateService.setLang($event.target.value)"
+  [value]="translateService.languageAsync | async"
+  (change)="translateService.changeLanguage($event.target.value)"
   class="lang-selector">
   <option value="en">🇬🇧 English</option>
   <option value="cs">🇨🇿 česky</option>

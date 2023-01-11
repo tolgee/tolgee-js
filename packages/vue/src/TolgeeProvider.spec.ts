@@ -1,29 +1,29 @@
-jest.dontMock('./mocks/ProviderComponent.vue');
-jest.dontMock('./mocks/ProviderComponentSlot.vue');
-jest.dontMock('./mocks/ComponentUsingProvider.vue');
-jest.dontMock('./TolgeeProvider');
-jest.dontMock('./mocks/mockTolgee');
-
-jest.mock('@tolgee/core');
-
-import * as tolgee from '@tolgee/core';
-
 import { render, screen, waitFor } from '@testing-library/vue';
-import { mockTolgee } from './mocks/mockTolgee';
 import ProviderComponent from './mocks/ProviderComponent.vue';
 import ProviderComponentSlot from './mocks/ProviderComponentSlot.vue';
+import { TolgeeInstance, Tolgee } from '@tolgee/web';
 
 describe('Tolgee Provider Component', function () {
-  let mockedTolgee: ReturnType<typeof mockTolgee>;
-  beforeEach(async () => {
-    mockedTolgee = mockTolgee();
-    // @ts-ignore
-    tolgee.Tolgee = mockedTolgee.tolgeeClass;
-    jest.clearAllMocks();
+  let mockedTolgee: TolgeeInstance;
+
+  beforeEach(() => {
+    mockedTolgee = {
+      ...Tolgee().init({ language: 'en' }),
+      run: jest.fn(() => new Promise<void>(() => {})),
+      stop: jest.fn(),
+    };
   });
 
   test('provides context', async () => {
-    render(ProviderComponent, { props: { config: {} } });
+    render(ProviderComponent, {
+      props: {
+        tolgee: {
+          ...mockedTolgee,
+          isLoaded: () => true,
+          getLanguage: () => 'mocked-lang',
+        },
+      },
+    });
     await waitFor(() => {
       screen.getByText("It's rendered!");
       screen.getByText('mocked-lang');
@@ -32,16 +32,22 @@ describe('Tolgee Provider Component', function () {
 
   test('runs tolgee', async () => {
     render(ProviderComponent, {
-      props: { config: {} },
+      props: { tolgee: mockedTolgee },
     });
-    expect(mockedTolgee.tolgee.run).toHaveBeenCalledTimes(1);
+    expect(mockedTolgee.run).toHaveBeenCalledTimes(1);
   });
 
-  test('renders loadingFallback with slot', async () => {
-    // @ts-ignore
-    mockedTolgee.tolgee.initialLoading = true;
+  test('stops tolgee', () => {
+    const { unmount } = render(ProviderComponent, {
+      props: { tolgee: mockedTolgee },
+    });
+    unmount();
+    expect(mockedTolgee.stop).toHaveBeenCalledTimes(1);
+  });
+
+  test('renders fallback with slot', async () => {
     render(ProviderComponentSlot, {
-      props: { config: {} },
+      props: { tolgee: mockedTolgee },
     });
     await waitFor(() => {
       screen.getByText('loading');
@@ -50,11 +56,12 @@ describe('Tolgee Provider Component', function () {
     });
   });
 
-  test("doesn't render loadingFallback when initialLoading is false", async () => {
-    // @ts-ignore
-    mockedTolgee.tolgee.initialLoading = false;
+  test("doesn't render fallback when initialLoading is false", async () => {
     render(ProviderComponent, {
-      props: { config: {}, loadingFallback: 'loading' },
+      props: {
+        tolgee: { ...mockedTolgee, isLoaded: () => true },
+        fallback: 'loading',
+      },
     });
     await waitFor(async () => {
       screen.getByText("It's rendered!");

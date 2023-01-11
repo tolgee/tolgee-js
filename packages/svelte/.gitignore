@@ -5,3 +5,5 @@ node_modules
 /package
 .env.local
 .env.*.local
+
+/coverage

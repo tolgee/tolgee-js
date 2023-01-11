@@ -1,17 +1,34 @@
-import { Component, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
-import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '@tolgee/core';
+import { TranslateParams } from '@tolgee/web';
 
 @Component({
   selector: '[t]',
   template: ``,
 })
-export class TComponent implements OnInit, OnDestroy {
-  @Input() params?: Record<string, any>;
+export class TComponent implements OnInit, OnDestroy, OnChanges {
   @Input() key: string;
+  @Input() ns: string;
+  @Input() params?: TranslateParams<any>;
   @Input() default?: string;
-  subscription: Subscription;
+  @Input() noWrap?: boolean = false;
+
+  /**
+   * When true, innerHTML property of element is set.
+   * Use only when you're sure the HTML is sanitized.
+   */
+  @Input() isHtml?: boolean = false;
+
+  private subscription: Subscription;
+  private initialized: boolean;
 
   constructor(
     private ref: ElementRef,
@@ -19,27 +36,62 @@ export class TComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    const element = this.ref.nativeElement as HTMLElement;
-    element.setAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE, this.key);
+    // noinspection JSIgnoredPromiseFromCall
+    this.subscribe();
+    this.renderInstantValue();
+  }
 
-    // set safe at first
-    element.textContent = this.translateService.instantSafe(
-      this.key,
-      this.params,
-      this.default
-    );
-
-    // then do the async translation
-    this.subscription = this.translateService
-      .getSafe(this.key, this.params, this.default)
-      .subscribe((translated) => {
-        return (element.textContent = translated);
-      });
+  ngOnChanges(): void {
+    // noinspection JSIgnoredPromiseFromCall
+    this.subscribe();
   }
 
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
+    this.unsubscribe();
+  }
+
+  private renderInstantValue() {
+    // get initial value first
+    const translated = this.translateService.instant({
+      ...this.getTranslateProps(),
+      orEmpty: true,
+    });
+    this.setElementContent(translated);
+  }
+
+  private getTranslateProps() {
+    return {
+      key: this.key,
+      ns: this.ns,
+      params: this.params,
+      defaultValue: this.default,
+      noWrap: this.noWrap,
+    };
+  }
+
+  private unsubscribe() {
+    this.subscription?.unsubscribe();
+  }
+
+  private async subscribe() {
+    this.unsubscribe();
+    this.subscription = this.translateService
+      .translate(this.getTranslateProps())
+      .subscribe((translated) => {
+        this.setElementContent(translated);
+        this.initialized = true;
+      });
+  }
+
+  private setElementContent(translated: string) {
+    if (this.isHtml) {
+      this.getElement().innerHTML = translated;
+      return;
     }
+    this.getElement().textContent = translated;
+  }
+
+  private getElement() {
+    return this.ref.nativeElement as HTMLElement;
   }
 }

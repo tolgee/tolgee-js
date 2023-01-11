@@ -1,59 +1,60 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-import React, {
-  FunctionComponent,
-  PropsWithChildren,
-  ReactNode,
-  useEffect,
-  useState,
-} from 'react';
-import { IcuFormatter, Tolgee, TolgeeConfig } from '@tolgee/core';
+import React, { Suspense, useEffect, useState } from 'react';
+import { TolgeeInstance } from '@tolgee/web';
+import { ReactOptions, TolgeeReactContext } from './types';
 
-type ContextValueType = TolgeeConfig & { tolgee: Tolgee };
-export const TolgeeProviderContext =
-  React.createContext<ContextValueType>(null);
-type TolgeeProviderProps = TolgeeConfig & { loadingFallback?: ReactNode };
+export const DEFAULT_REACT_OPTIONS: ReactOptions = {
+  useSuspense: true,
+};
 
-export const TolgeeProvider: FunctionComponent<
-  PropsWithChildren<TolgeeProviderProps>
-> = (props) => {
-  const config = { ...props };
-  delete config.children;
-  delete config.loadingFallback;
+export const TolgeeProviderContext = React.createContext<
+  TolgeeReactContext | undefined
+>(undefined);
 
-  const [tolgee] = useState(
-    Tolgee.use(IcuFormatter).init({
-      wrapperMode: 'invisible',
-      ui:
-        process.env.NODE_ENV !== 'development'
-          ? undefined
-          : typeof require !== 'undefined'
-          ? require('@tolgee/ui')
-          : import('@tolgee/ui'),
-      ...config,
-    })
-  );
+type Props = {
+  children?: React.ReactNode;
+  tolgee: TolgeeInstance;
+  options?: ReactOptions;
+  fallback?: React.ReactNode;
+};
 
-  const [loading, setLoading] = useState(tolgee.initialLoading);
-
-  //rerender components on forceLanguage change
-  useEffect(() => {
-    if (config.forceLanguage !== undefined) {
-      tolgee.properties.config.forceLanguage = config.forceLanguage;
-      tolgee.lang = config.forceLanguage;
-    }
-  }, [config.forceLanguage]);
+export const TolgeeProvider: React.FC<Props> = ({
+  tolgee,
+  options,
+  children,
+  fallback,
+}) => {
+  const [loading, setLoading] = useState(!tolgee.isLoaded());
 
   useEffect(() => {
-    tolgee.run().then(() => setLoading(false));
-
+    tolgee.run().then(() => {
+      setLoading(false);
+    });
     return () => {
       tolgee.stop();
     };
   }, []);
 
+  const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
+
+  if (optionsWithDefault.useSuspense) {
+    return (
+      <TolgeeProviderContext.Provider
+        value={{ tolgee, options: optionsWithDefault }}
+      >
+        {loading ? (
+          fallback
+        ) : (
+          <Suspense fallback={fallback || null}>{children}</Suspense>
+        )}
+      </TolgeeProviderContext.Provider>
+    );
+  }
+
   return (
-    <TolgeeProviderContext.Provider value={{ ...props, tolgee }}>
-      {!loading ? props.children : props.loadingFallback}
+    <TolgeeProviderContext.Provider
+      value={{ tolgee, options: optionsWithDefault }}
+    >
+      {loading ? fallback : children}
     </TolgeeProviderContext.Provider>
   );
 };

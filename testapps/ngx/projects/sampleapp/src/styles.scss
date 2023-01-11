@@ -74,7 +74,14 @@ button[disabled],
 
 .navbar {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
+}
+
+.navbar nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: row;
 }
 
 .navbar a {

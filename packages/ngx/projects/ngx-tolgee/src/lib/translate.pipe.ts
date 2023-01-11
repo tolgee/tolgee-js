@@ -1,89 +1,61 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from './translate.service';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { getTranslateProps, TFnType, TranslateProps } from '@tolgee/web';
 
 @Pipe({
   name: 'translate',
   pure: false,
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
-  value = '';
-  key: string;
-  params: Record<string, any>;
-  defaultValue: string;
-  private;
+  private value = '';
+  private previousHash: string;
+
   private subscription: Subscription;
 
   constructor(protected translateService: TranslateService) {}
-
-  protected get resultProvider(): (
-    key,
-    params,
-    defaultValue: string
-  ) => Observable<string> {
-    return (key, params, defaultValue) =>
-      this.translateService.get(key, params, defaultValue);
-  }
 
   ngOnDestroy(): void {
     this.unsubscribe();
   }
 
-  transform(key: any, params?: Record<string, any>): string;
+  readonly transform: TFnType<string> = (...args) => {
+    // @ts-ignore
+    const params = getTranslateProps(...args);
+    const { key } = params;
 
-  transform(
-    key: any,
-    defaultValue?: string,
-    params?: Record<string, any>
-  ): string;
-
-  transform(
-    key: any,
-    paramsOrDefaultValue?: Record<string, any> | string,
-    params?: Record<string, any>
-  ): string {
     if (!key || key.length === 0) {
       return key;
     }
 
-    const defaultValue =
-      typeof paramsOrDefaultValue !== 'object'
-        ? paramsOrDefaultValue
-        : undefined;
-
-    if (typeof paramsOrDefaultValue === 'object') {
-      params = paramsOrDefaultValue;
-    }
-
-    if (
-      this.key === key &&
-      JSON.stringify(this.params) === JSON.stringify(params) &&
-      this.defaultValue === defaultValue
-    ) {
+    const newHash = this.hash(params);
+    if (this.previousHash === newHash) {
       return this.value;
     }
 
-    this.key = key;
-    this.params = params;
-    this.defaultValue = defaultValue;
+    this.previousHash = newHash;
 
-    // unsubscribe first
-    this.unsubscribe();
-
-    // asynchronously translate and assign subscription
-    this.subscription = this.translate(key, params, defaultValue);
+    this.translate(params);
 
     return this.value;
+  };
+
+  private hash(props: TranslateProps) {
+    return JSON.stringify([props, this.translateService.tolgee.getLanguage()]);
   }
 
   private unsubscribe() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription?.unsubscribe();
   }
 
-  private translate(key, params, defaultValue) {
-    return this.resultProvider(key, params, defaultValue).subscribe((r) => {
+  private translate(props: TranslateProps) {
+    this.value = this.translateService.instant({ ...props, orEmpty: true });
+    this.subscribe(props);
+  }
+
+  private subscribe(props: TranslateProps) {
+    this.unsubscribe();
+    return this.translateService.translate(props).subscribe((r) => {
       this.value = r;
     });
   }

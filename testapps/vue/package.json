@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-testapp",
-  "version": "4.9.2",
+  "version": "5.0.0-alpha.2",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -8,10 +8,12 @@
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "lint": "vue-cli-service lint",
-    "serve": "serve -p 3002 -s dist"
+    "serve": "serve -s dist"
   },
   "dependencies": {
-    "@tolgee/vue": "^4.9.2",
+    "@tolgee/format-icu": "5.0.0-alpha.2",
+    "@tolgee/vue": "5.0.0-alpha.2",
+    "@tolgee/web": "5.0.0-alpha.2",
     "core-js": "^3.23.0",
     "vue": "^3.2.37"
   },

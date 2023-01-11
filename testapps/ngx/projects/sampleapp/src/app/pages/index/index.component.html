@@ -1,9 +1,8 @@
 <div class="background-wrapper">
   <div class="example">
     <app-navbar>
-      <div slot="menu-items">
-        <a href="/translation-methods" t key="menu-item-translation-methods" default="Translation methods"></a>
-      </div>
+      <a routerLink="/translation-methods" t key="menu-item-translation-methods" default="Translation methods"></a>
+      <a routerLink="/lazy" t key="lazy-module" default="Lazy module"></a>
     </app-navbar>
 
     <header>
@@ -13,8 +12,7 @@
     <section class="items">
       <div class="items__new-item">
         <input
-          [(ngModel)]="newItemValue"
-          placeholder="{{ 'add-item-input-placeholder' | translate:'New list item' }}"
+          [(ngModel)]="newItemValue" placeholder="{{ 'add-item-input-placeholder' | translate:'New list item' }}"
         />
         <button (click)="onAdd()"
                 [disabled]="!newItemValue"

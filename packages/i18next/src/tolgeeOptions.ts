@@ -1,8 +1,11 @@
-import { Tolgee } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { InitOptions } from 'i18next';
 import { TOLGEE_PROCESSOR_NAME } from './tolgeeProcessor';
 
-export const tolgeeOptions = (tolgee: Tolgee, options?: InitOptions) => {
+export const tolgeeOptions = (
+  tolgee: TolgeeInstance,
+  options?: InitOptions
+) => {
   let processors: string[];
   if (typeof options.postProcess === 'string') {
     processors = [options.postProcess, TOLGEE_PROCESSOR_NAME];

@@ -8,17 +8,17 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -39,7 +39,7 @@ jobs:
             turbo-${{ github.job }}-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build all packages
         run: pnpm build || pnpm build
@@ -51,17 +51,17 @@ jobs:
     name: 'Cypress prepare'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -84,7 +84,7 @@ jobs:
             turbo-cypress-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
 
       - name: Build
         run: pnpm build || pnpm build
@@ -110,17 +110,17 @@ jobs:
         app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -143,22 +143,10 @@ jobs:
             turbo-cypress-
 
       - name: Install
-        run: pnpm i
-
-      - name: Build
-        run: pnpm build || pnpm build
-
-      - name: Build e2e
-        run: pnpm build:e2e
+        run: pnpm install --no-frozen-lockfile
 
       - name: Cypress
-        run: pnpm --prefix=e2e run start
-        env:
-          E2E_APP: ${{matrix.app}}
-
-      - name: Cypress cleanup
-        if: always()
-        run: pnpm --prefix=e2e run services:stop
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -172,17 +160,17 @@ jobs:
     name: Eslint 🪲
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.16.0
           run_install: false
 
       - uses: actions/cache@v3
@@ -194,7 +182,7 @@ jobs:
             ${{ runner.os }}-pnpm-eslint-
 
       - name: Install
-        run: pnpm i
+        run: pnpm install --no-frozen-lockfile
         working-directory: ./
 
       - name: Eslint

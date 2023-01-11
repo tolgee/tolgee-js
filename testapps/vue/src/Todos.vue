@@ -61,14 +61,13 @@
 
 <script lang="tsx">
 import { defineComponent } from 'vue';
-import { T, TolgeeMixin } from '@tolgee/vue';
+import { T } from '@tolgee/vue';
 
 import Navbar from './components/Navbar.vue';
 
 export default defineComponent({
-  mixins: [TolgeeMixin],
   components: { T, Navbar },
-  name: 'Todos',
+  name: 'TodosComponent',
   data() {
     let items: string[] | undefined = undefined;
     try {

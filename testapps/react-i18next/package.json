@@ -1,13 +1,13 @@
 {
   "name": "@tolgee/react-i18next-testapp",
-  "version": "4.9.3",
+  "version": "5.0.0-alpha.2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@tolgee/core": "^4.9.2",
-    "@tolgee/i18next": "^4.9.3",
+    "@tolgee/core": "5.0.0-alpha.2",
+    "@tolgee/i18next": "5.0.0-alpha.2",
     "concurrently": "^7.3.0",
     "i18next": "^21.5.4",
     "i18next-icu": "^2.0.3",
@@ -15,7 +15,7 @@
     "react-dom": "^17.0.2",
     "react-i18next": "^11.14.3",
     "react-scripts": "5.0.1",
-    "serve": "^14.0.1",
+    "serve": "^14.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -24,7 +24,7 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "eject": "react-scripts eject",
-    "serve": "serve -p 8101 -s build"
+    "serve": "serve -s build"
   },
   "browserslist": {
     "production": [

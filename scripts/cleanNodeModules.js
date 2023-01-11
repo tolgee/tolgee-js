@@ -49,5 +49,3 @@ const packageLocks = searchRecursively('.', 'package-lock.json', [], 5);
 packageLocks.forEach((file) => {
   deleteFile(file);
 });
-
-deleteFile('.pnpm-store', true);

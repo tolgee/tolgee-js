@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-testapp",
-  "version": "4.9.2",
+  "version": "5.0.0-alpha.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -9,7 +9,8 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^13.3.0",
-    "@tolgee/react": "^4.9.2",
+    "@tolgee/format-icu": "5.0.0-alpha.2",
+    "@tolgee/react": "5.0.0-alpha.2",
     "@types/jest": "^27.5.1",
     "@types/node": "^17.0.41",
     "@types/react": "17.0.43",
@@ -27,7 +28,7 @@
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",
     "eject": "react-scripts eject",
-    "serve": "serve -p 8101 -s build"
+    "serve": "serve -s build"
   },
   "browserslist": {
     "production": [

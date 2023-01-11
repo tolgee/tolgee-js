@@ -2,7 +2,7 @@
   import { T, getTranslate } from '@tolgee/svelte';
   import Navbar from '../component/Navbar.svelte';
 
-  const t = getTranslate();
+  const { t } = getTranslate();
 
   let items: string[] = [];
   let newItemValue: string;

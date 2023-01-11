@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Navbar } from '../components/Navbar';
 
 export const TranslationMethods = () => {
-  const t = useTranslate();
+  const { t } = useTranslate();
 
   return (
     <main className="translation-methods">
@@ -31,7 +31,7 @@ export const TranslationMethods = () => {
           <div>
             <T
               keyName="this_is_a_key_with_params"
-              parameters={{ key: 'value', key2: 'value2' }}
+              params={{ key: 'value', key2: 'value2' }}
             />
           </div>
         </div>
@@ -41,7 +41,7 @@ export const TranslationMethods = () => {
           <div>
             <T
               keyName="this_is_a_key_with_params"
-              parameters={{ key: 'value', key2: 'value2' }}
+              params={{ key: 'value', key2: 'value2' }}
               noWrap
             />
           </div>
@@ -52,7 +52,7 @@ export const TranslationMethods = () => {
           <div data-cy="translationWithTags">
             <T
               keyName="this_is_a_key_with_tags"
-              parameters={{
+              params={{
                 b: <b />,
                 i: <i />,
                 key: 'value',
@@ -77,14 +77,12 @@ export const TranslationMethods = () => {
 
         <div>
           <h1>t function with noWrap</h1>
-          <div>{t('this_is_a_key', undefined, true)}</div>
+          <div>{t('this_is_a_key', { noWrap: true })}</div>
         </div>
 
         <div>
           <h1>t function with default</h1>
-          <div>
-            {t('this_key_does_not_exist', undefined, false, 'This is default')}
-          </div>
+          <div>{t('this_key_does_not_exist', 'This is default')}</div>
         </div>
 
         <div>
@@ -92,7 +90,7 @@ export const TranslationMethods = () => {
           <div>
             {t({
               key: 'this_is_a_key',
-              parameters: { key: 'value', key2: 'value2' },
+              params: { key: 'value', key2: 'value2' },
             })}
           </div>
         </div>
@@ -102,26 +100,9 @@ export const TranslationMethods = () => {
           <div>
             {t({
               key: 'this_is_a_key',
-              parameters: { key: 'value', key2: 'value2' },
+              params: { key: 'value', key2: 'value2' },
               noWrap: true,
             })}
-          </div>
-        </div>
-
-        <div>
-          <h1>t function with interpolation</h1>
-          <div>
-            <div data-cy="translationWithTags">
-              {t({
-                key: 'this_is_a_key_with_tags',
-                parameters: {
-                  b: <b />,
-                  i: <i />,
-                  key: 'value',
-                },
-                defaultValue: 'Hey',
-              })}
-            </div>
           </div>
         </div>
       </div>

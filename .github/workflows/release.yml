@@ -16,15 +16,15 @@ jobs:
           fetch-depth: 0
 
       - name: Build
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
-          node-version: '16.x'
+          node-version: '16.15.1'
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7
+          version: 7.16.0
           run_install: false
 
       - name: Set git globals
@@ -37,7 +37,7 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version --yes --conventional-commits \
+          lerna version --yes --conventional-commits --exact \
             --no-push --no-git-tag-version
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
@@ -63,7 +63,7 @@ jobs:
       - name: Recreate release with push
         run: |
           git stash
-          lerna version --yes --conventional-commits\
+          lerna version --yes --conventional-commits --exact \
             --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,14 +1,8 @@
-import { useTranslate } from './useTranslate';
-import { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
-import { useSetLanguage } from './useSetLanguage';
-import { T } from './T';
-import { useCurrentLanguage } from './useCurrentLanguage';
+export { useTranslate } from './useTranslate';
+export { TolgeeProvider, TolgeeProviderContext } from './TolgeeProvider';
+export { T } from './T';
+export { useTolgee } from './useTolgee';
+export { GlobalContextPlugin } from './GlobalContextPlugin';
+export * from './types';
 
-export {
-  T,
-  TolgeeProvider,
-  TolgeeProviderContext,
-  useSetLanguage,
-  useTranslate,
-  useCurrentLanguage,
-};
+export * from '@tolgee/web';

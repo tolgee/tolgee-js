@@ -2,49 +2,26 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslationMethodsComponent } from './pages/translation-methods/translation-methods.component';
 import { IndexComponent } from './pages/index/index.component';
-import { AppComponent } from './app.component';
-import { NavbarComponent } from './component/navbar/navbar.component';
-import { LangSelectorComponent } from './component/lang-selector/lang-selector.component';
-import { NgxTolgeeModule } from '@tolgee/ngx';
-import { environment } from '../environments/environment';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser'; // CLI imports router
+import { NamespaceResolver } from '@tolgee/ngx';
 
 const routes: Routes = [
   { path: 'translation-methods', component: TranslationMethodsComponent },
   { path: '', component: IndexComponent },
+  {
+    path: 'lazy',
+    loadChildren: () => import('./lazy/lazy.module').then((m) => m.LazyModule),
+    data: { tolgeeNamespace: 'submodule' },
+    resolve: {
+      _namespace: NamespaceResolver,
+    },
+  },
 ];
 
-// configures NgModule imports and exports
 @NgModule({
-  declarations: [
-    IndexComponent,
-    AppComponent,
-    TranslationMethodsComponent,
-    NavbarComponent,
-    LangSelectorComponent,
-  ],
   imports: [
-    BrowserModule,
-    FormsModule,
-    NgxTolgeeModule.forRoot({
-      staticData: {
-        en: () => import('../i18n/en.json'),
-        cs: () => import('../i18n/cs.json'),
-        de: () => import('../i18n/de.json'),
-        fr: () => import('../i18n/fr.json'),
-      },
-      // remove this to enable language auto detection
-      enableLanguageDetection: false,
-      preloadFallback: true,
-      apiUrl: environment.tolgeeApiUrl,
-      apiKey: environment.tolgeeApiKey,
-      ui:
-        process.env.NODE_ENV === 'development'
-          ? require('@tolgee/ui')
-          : undefined,
+    RouterModule.forRoot(routes, {
+      initialNavigation: 'enabledBlocking',
     }),
-    RouterModule.forRoot(routes),
   ],
   exports: [RouterModule],
 })

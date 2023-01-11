@@ -2,6 +2,9 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
+  "cli": {
+    "packageManager": "pnpm"
+  },
   "projects": {
     "sampleapp": {
       "projectType": "application",
@@ -17,12 +20,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sampleapp",
+            "outputPath": "dist/sampleapp/browser",
             "index": "projects/sampleapp/src/index.html",
             "main": "projects/sampleapp/src/main.ts",
             "polyfills": "projects/sampleapp/src/polyfills.ts",
             "tsConfig": "projects/sampleapp/tsconfig.app.json",
-            "preserveSymlinks": true,
             "aot": true,
             "assets": [
               "projects/sampleapp/src/favicon.ico",
@@ -143,6 +145,70 @@
               "**/node_modules/**"
             ]
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/sampleapp/server",
+            "main": "projects/sampleapp/server.ts",
+            "tsConfig": "projects/sampleapp/tsconfig.server.json",
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "projects/sampleapp/src/environments/environment.ts",
+                  "with": "projects/sampleapp/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "sourceMap": false,
+              "extractLicenses": true
+            },
+            "stage": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/sampleapp/src/environments/environment.ts",
+                  "with": "projects/sampleapp/src/environments/environment.stage.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            },
+            "e2e": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/sampleapp/src/environments/environment.ts",
+                  "with": "projects/sampleapp/src/environments/environment.e2e.ts"
+                }
+              ],
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "stage": {
+              "browserTarget": "sampleapp:build:stage",
+              "serverTarget": "sampleapp:server:stage"
+            },
+            "development": {
+              "browserTarget": "sampleapp:build:development",
+              "serverTarget": "sampleapp:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }

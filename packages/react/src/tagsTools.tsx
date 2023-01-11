@@ -1,24 +1,28 @@
+import { TranslateParams } from '@tolgee/web';
 import React from 'react';
-import { TranslationParamsTags } from '@tolgee/core';
 
 import { ParamsTags } from './types';
 
-export const wrapTagHandlers = (params: ParamsTags) => {
+export const wrapTagHandlers = (
+  params: TranslateParams<ParamsTags> | undefined
+) => {
   if (!params) {
     return undefined;
   }
 
-  const result: TranslationParamsTags<React.ReactNode> = {};
+  const result: any = {};
 
   Object.entries(params || {}).forEach(([key, value]) => {
     if (typeof value === 'function') {
-      result[key] = (chunk) => {
+      result[key] = (chunk: any) => {
         return value(addReactKeys(chunk));
       };
-    } else if (React.isValidElement(value)) {
+    } else if (React.isValidElement(value as any)) {
       const el = value as React.ReactElement;
-      result[key] = (chunk) => {
-        return { ...el, props: { ...el.props, children: addReactKeys(chunk) } };
+      result[key] = (chunk: any) => {
+        return el.props.children !== undefined
+          ? React.cloneElement(el)
+          : React.cloneElement(el, {}, addReactKeys(chunk));
       };
     } else {
       result[key] = value;

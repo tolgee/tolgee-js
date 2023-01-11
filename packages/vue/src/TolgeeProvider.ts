@@ -1,56 +1,52 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { defineComponent, PropType } from 'vue';
-import { Tolgee, TolgeeConfig, IcuFormatter } from '@tolgee/core';
-import { TolgeeContext } from './types';
+import {
+  defineComponent,
+  PropType,
+  getCurrentInstance,
+  provide,
+  onBeforeMount,
+  onUnmounted,
+  ref,
+} from 'vue';
+import { TolgeeInstance } from '@tolgee/web';
+import { TolgeeVueContext } from './types';
 
 export const TolgeeProvider = defineComponent({
   name: 'TolgeeProvider',
   props: {
-    config: { type: Object as PropType<TolgeeConfig>, required: true },
-    loadingFallback: {
+    tolgee: { type: Object as PropType<TolgeeInstance>, required: false },
+    fallback: {
       type: [Object, String] as PropType<JSX.Element | string>,
     },
   },
-  created() {
-    const tolgee = Tolgee.use(IcuFormatter).init({
-      wrapperMode: 'invisible',
-      ui:
-        process.env.NODE_ENV !== 'development'
-          ? undefined
-          : typeof require !== 'undefined'
-          ? require('@tolgee/ui')
-          : import('@tolgee/ui'),
-      ...this.$props.config,
+
+  setup(props) {
+    const tolgee: TolgeeInstance | undefined =
+      props.tolgee || getCurrentInstance().proxy.$tolgee;
+
+    if (!tolgee) {
+      throw new Error('Tolgee instance not provided');
+    }
+
+    provide('tolgeeContext', { tolgee } as TolgeeVueContext);
+
+    const isLoading = ref(!tolgee.isLoaded());
+
+    onBeforeMount(() => {
+      tolgee.run().then(() => {
+        isLoading.value = false;
+      });
     });
 
-    this.tolgeeContext.tolgee = tolgee;
-
-    this.loading = tolgee.initialLoading;
-
-    tolgee.run().then(() => {
-      this.loading = false;
+    onUnmounted(() => {
+      tolgee.stop();
     });
+    return { isLoading };
   },
-  data() {
-    return {
-      tolgeeContext: {
-        tolgee: null as Tolgee | null,
-      } as unknown as TolgeeContext,
-      loading: null as boolean | null,
-    };
-  },
-  provide() {
-    return {
-      tolgeeContext: this.tolgeeContext as TolgeeContext,
-    };
-  },
-  beforeUnmount() {
-    this.tolgeeContext.tolgee?.stop();
-    this.$options.langSubscription?.unsubscribe();
-  },
+
   render() {
-    return !this.loading
+    return !this.isLoading
       ? this.$slots.default?.()
-      : this.$slots.fallback?.() || this.loadingFallback || null;
+      : this.$slots.fallback?.() || this.fallback || null;
   },
 });

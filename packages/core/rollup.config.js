@@ -1,7 +1,8 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
+import sizes from 'rollup-plugin-bundle-size';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default {
   input: 'src/index.ts',
@@ -19,7 +20,7 @@ export default {
       sourcemap: true,
     },
     {
-      file: 'dist/tolgee.esm.mjs',
+      file: 'dist/tolgee.esm.js',
       format: 'esm',
       sourcemap: true,
     },
@@ -47,16 +48,13 @@ export default {
     clearScreen: false,
   },
   plugins: [
-    replace({
-      'process.env.TOLGEE_UI_VERSION': JSON.stringify(
-        process.env.TOLGEE_UI_VERSION
-      ),
-      preventAssignment: true,
-    }),
     typescript({
       outDir: './lib',
       sourceMap: true,
+      noEmit: true,
     }),
     nodeResolve(),
+    sizes(),
+    visualizer(),
   ],
 };

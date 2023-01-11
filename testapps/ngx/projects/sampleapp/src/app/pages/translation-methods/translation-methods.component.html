@@ -1,12 +1,12 @@
 <script>
-  import {getTranslate} from "@tolgee/svelte";
+  import { getTranslate } from "@tolgee/svelte";
 
   const t = getTranslate();
 </script>
 
 <main class="translation-methods">
   <app-navbar>
-    <a href="/">The example app</a>
+    <a routerLink="/">The example app</a>
   </app-navbar>
 
   <div class="tiles">
@@ -32,19 +32,12 @@
       <div>{{ 'this_is_a_key' | translate}}</div>
     </div>
     <div>
-      <h1>translate pipe with params</h1>
-      <div>{{ 'this_is_a_key_with_params' | translate:{key: 'value', key2: 'value2'} }}</div>
-    </div>
-
-    <div>
-      <h1>stranslate pipe without default</h1>
-      <div>{{ 'this_is_a_key' | stranslate}}</div>
+      <h1>translate pipe with noWrap</h1>
+      <div>{{ 'this_is_a_key' | translate:{ noWrap: true } }}</div>
     </div>
     <div>
-      <h1>stranslate pipe with params</h1>
-      <div>
-        {{ 'this_is_a_key_with_params' | stranslate:{key: 'value', key2: 'value2'} }}
-      </div>
+      <h1>translate pipe without default</h1>
+      <div>{{ { key: 'this_is_a_key', defaultValue: 'Jeeey!' } | translate}}</div>
     </div>
     <div>
       <h1>service get without default</h1>
@@ -58,18 +51,13 @@
       <h1>service get with params</h1>
       <div>{{translatedWithParamsValue}}</div>
     </div>
-
     <div>
-      <h1>service getSafe without default</h1>
-      <div>{{translatedSafeWithoutParamsValue}}</div>
+      <h1>component in namespace</h1>
+      <div t key="submodule-key" ns="submodule"></div>
     </div>
     <div>
-      <h1>service getSafe with default</h1>
-      <div>{{translatedSafeWithDefaultValue}}</div>
-    </div>
-    <div>
-      <h1>service getSafe with params</h1>
-      <div>{{translatedSafeWithParamsValue}}</div>
+      <h1>with tags</h1>
+      <div [innerHTML]="'with_tags' | translate"></div>
     </div>
   </div>
 </main>

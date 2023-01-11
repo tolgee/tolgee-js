@@ -1,24 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { Tolgee, TolgeeConfig } from '@tolgee/core';
+import { TolgeeInstance } from '@tolgee/web';
 import { Callback, i18n, InitOptions } from 'i18next';
 import { tolgeeApply } from './tolgeeApply';
 import { tolgeeBackend } from './tolgeeBackend';
 import { tolgeeOptions } from './tolgeeOptions';
 import { tolgeeProcessor } from './tolgeeProcessor';
 
-export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
-  const tolgee = Tolgee.init({
-    wrapperMode: 'invisible',
-    enableLanguageDetection: false,
-    enableLanguageStore: false,
-    ui:
-      process.env.NODE_ENV !== 'development'
-        ? undefined
-        : typeof require !== 'undefined'
-        ? require('@tolgee/ui')
-        : import('@tolgee/ui'),
-    ...config,
-  });
+export const withTolgee = (i18n: i18n, tolgee: TolgeeInstance) => {
   i18n.use(tolgeeBackend(tolgee));
   i18n.use(tolgeeProcessor(tolgee));
 
@@ -38,7 +26,7 @@ export const withTolgee = (i18n: i18n, config: TolgeeConfig) => {
     const result = originalInit(newOptions, callback);
     const language = i18n.language || options.lng;
     if (language) {
-      tolgee.lang = language;
+      tolgee.changeLanguage(language);
     }
     tolgee.run();
     return result;

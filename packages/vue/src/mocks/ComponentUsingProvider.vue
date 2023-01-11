@@ -1,6 +1,6 @@
 <template>
   <div v-if="tolgeeContext">
-    {{ tolgeeContext.tolgee.lang }}
+    {{ tolgeeContext.tolgee.getLanguage() }}
   </div>
 </template>
 

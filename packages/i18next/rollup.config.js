@@ -1,6 +1,7 @@
 import typescript from '@rollup/plugin-typescript';
 import { terser } from 'rollup-plugin-terser';
 import sourcemaps from 'rollup-plugin-sourcemaps';
+import sizes from 'rollup-plugin-bundle-size';
 
 export default {
   input: 'src/index.ts',
@@ -22,11 +23,17 @@ export default {
       sourcemap: true,
     },
     {
+      file: 'dist/tolgee-i18next.esm.min.mjs',
+      format: 'esm',
+      plugins: [terser()],
+      sourcemap: true,
+    },
+    {
       name: '@tolgee/i18next',
       file: 'dist/tolgee-i18next.umd.js',
       format: 'umd',
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
       },
       sourcemap: true,
     },
@@ -35,7 +42,7 @@ export default {
       file: 'dist/tolgee-i18next.umd.min.js',
       format: 'umd',
       globals: {
-        '@tolgee/core': '@tolgee/core',
+        '@tolgee/web': '@tolgee/web',
       },
       plugins: [terser()],
       sourcemap: true,
@@ -44,12 +51,13 @@ export default {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/core', '@tolgee/ui'],
+  external: ['@tolgee/web'],
   plugins: [
     typescript({
       outDir: './lib',
       sourceMap: true,
     }),
     sourcemaps(),
+    sizes(),
   ],
 };

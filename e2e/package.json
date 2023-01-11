@@ -5,7 +5,7 @@
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {
     "start": "npm run services:start && npm run download-extension && npm run services:wait-for-start && npm run cy:run",
-    "cy:run": "sh scripts/startCypress.sh",
+    "cy:run": "cypress run",
     "cy:open": "cypress open --browser chrome",
     "cy:folders-json": "node scripts/listTests.js",
     "download-extension": "sh scripts/downloadTolgeeExtension.sh",
