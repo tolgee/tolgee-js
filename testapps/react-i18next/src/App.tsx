@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Suspense } from 'react';
-import { Tolgee, withTolgee, I18nextPlugin, DevTools, BackendFetch } from '@tolgee/i18next';
+import {
+  Tolgee,
+  withTolgee,
+  I18nextPlugin,
+  DevTools,
+  BackendFetch,
+} from '@tolgee/i18next';
 import i18n from 'i18next';
 import ICU from 'i18next-icu';
 import { initReactI18next } from 'react-i18next';
@@ -8,10 +14,14 @@ import { initReactI18next } from 'react-i18next';
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
 
-const tolgee = Tolgee().use(DevTools()).use(I18nextPlugin()).use(BackendFetch()).init({
-  apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
-  apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
-});
+const tolgee = Tolgee()
+  .use(DevTools())
+  .use(I18nextPlugin())
+  .use(BackendFetch())
+  .init({
+    apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
+    apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
+  });
 
 withTolgee(i18n, tolgee)
   .use(ICU)
