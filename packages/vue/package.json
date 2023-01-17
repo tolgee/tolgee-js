@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Vue implementation for tolgee localization framework",
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
@@ -37,7 +37,7 @@
     "vue": "^3.0.0"
   },
   "dependencies": {
-    "@tolgee/web": "5.0.0"
+    "@tolgee/web": "5.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^14.1.0",
