@@ -44,7 +44,7 @@ const getTranslateInternal = (ns?: NsFallback) => {
   function createTFunction() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props: TranslateProps<any>) => {
-      const fallbackNs = props.ns || namespaces?.[0];
+      const fallbackNs = props.ns ?? namespaces?.[0];
       subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs });
     };

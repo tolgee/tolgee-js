@@ -52,16 +52,16 @@ export const useTranslateInternal = (
     return () => {
       subscription.unsubscribe();
     };
-  }, [isLoaded, namespacesJoined]);
+  }, [isLoaded, namespacesJoined, tolgee]);
 
   useEffect(() => {
     tolgee.addActiveNs(namespaces);
     return () => tolgee.removeActiveNs(namespaces);
-  }, [namespacesJoined]);
+  }, [namespacesJoined, tolgee]);
 
   const t = useCallback(
     (props: TranslateProps<any>) => {
-      const fallbackNs = props.ns || namespaces?.[0];
+      const fallbackNs = props.ns ?? namespaces?.[0];
       subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },

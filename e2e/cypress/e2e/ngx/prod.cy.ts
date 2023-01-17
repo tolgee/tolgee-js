@@ -10,7 +10,7 @@ context('Angular app in prod mode', () => {
       { text: 'This is default', count: 3 },
       {
         text: 'This is a key',
-        count: 5,
+        count: 4,
       },
       { text: 'This is key with params value value2', count: 2 },
     ],
@@ -18,7 +18,7 @@ context('Angular app in prod mode', () => {
       { text: 'This is default', count: 3 },
       {
         text: 'Dies ist ein Schlüssel',
-        count: 5,
+        count: 4,
       },
       {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',

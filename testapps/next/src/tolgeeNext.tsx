@@ -5,8 +5,9 @@ import {
   NsFallback,
   DevTools,
   Tolgee,
-  getFallback,
   TolgeeProvider,
+  BackendFetch,
+  getFallbackArray,
 } from '@tolgee/react';
 
 const apiKey = process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
@@ -15,6 +16,7 @@ const apiUrl = process.env.NEXT_PUBLIC_TOLGEE_API_URL;
 const tolgee = Tolgee()
   .use(DevTools())
   .use(FormatIcu())
+  .use(BackendFetch())
   .init({
     availableLanguages: ['en', 'cs'],
     defaultLanguage: 'en',
@@ -42,17 +44,19 @@ export const getServerLocales = async (
   locale: string | undefined,
   ns?: NsFallback
 ) => {
-  const namespaces = getFallback(ns) || [''];
+  const namespaces = ['', ...getFallbackArray(ns)];
   const result: Record<string, any> = {};
 
   if (locale) {
     for (const namespace of namespaces) {
       if (namespace) {
         result[`${locale}:${namespace}`] = (
-          await import(`./i18n/${locale}/${namespace}.json`)
+          await import(`../public/i18n/${namespace}/${locale}.json`)
         ).default;
       } else {
-        result[`${locale}`] = (await import(`./i18n/${locale}.json`)).default;
+        result[`${locale}`] = (
+          await import(`../public/i18n/${locale}.json`)
+        ).default;
       }
     }
   }

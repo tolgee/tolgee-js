@@ -2,22 +2,12 @@ import { login } from '../../common/apiCalls';
 import { getByAriaLabel } from '../../common/selectors';
 import testApiKey from '../../common/testApiKey';
 import testLanguages from '../../common/testLanguages';
-import {
-  openUI,
-  removeScreenshots,
-  visitWithApiKey,
-} from '../../common/nextInternalCommon';
+import { openUI, visitWithApiKey } from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
 
 context('UI Dialog', () => {
   beforeEach(() => {
-    login().then(() => {
-      removeScreenshots();
-    });
-  });
-
-  afterEach(() => {
-    removeScreenshots();
+    login();
   });
 
   it('it opens UI', () => {
