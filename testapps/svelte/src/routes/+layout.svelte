@@ -2,8 +2,6 @@
   import { TolgeeProvider, Tolgee, DevTools, BackendFetch } from '@tolgee/svelte';
   import { FormatIcu } from '@tolgee/format-icu'
 
-  export const prerender = true
-
   const tolgee = Tolgee()
     .use(DevTools())
     .use(FormatIcu())
