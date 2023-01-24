@@ -5,6 +5,7 @@
   "main": "./dist/tolgee-web.main.cjs.js",
   "module": "./dist/tolgee-web.main.esm.js",
   "types": "./types/index.d.ts",
+  "svelte": "./dist/tolgee-web.main.esm.js",
   "declaration": true,
   "directories": {
     "lib": "lib",
