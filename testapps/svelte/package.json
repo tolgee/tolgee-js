@@ -8,7 +8,7 @@
     "build": "vite build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
     "preview": "vite preview",
-    "serve": "serve ./build",
+    "serve": "serve -s ./build",
     "dev:e2e": "vite dev --port 8110",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
