@@ -14,13 +14,9 @@ const config = {
       // default options are shown
       pages: distDir || 'build',
       assets: distDir || 'build',
-      fallback: undefined,
+      fallback: 'index.html',
       precompress: false,
     }),
-    prerender: {
-      // This can be false if you're using a fallback (i.e. SPA mode)
-      default: true,
-    },
   },
 };
 

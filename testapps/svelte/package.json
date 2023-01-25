@@ -8,7 +8,7 @@
     "build": "vite build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
     "preview": "vite preview",
-    "serve": "serve ./build",
+    "serve": "serve -s ./build",
     "dev:e2e": "vite dev --port 8110",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -16,8 +16,8 @@
     "format": "prettier --cache --write ."
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "1.0.0-next.39",
-    "@sveltejs/kit": "1.0.0-next.429",
+    "@sveltejs/adapter-static": "1.0.5",
+    "@sveltejs/kit": "1.2.6",
     "@tolgee/format-icu": "5.0.0",
     "@tolgee/svelte": "5.0.1",
     "@tsconfig/svelte": "^3.0.0",
@@ -28,12 +28,12 @@
     "eslint-plugin-svelte3": "^4.0.0",
     "prettier": "^2.7.1",
     "prettier-plugin-svelte": "^2.7.0",
-    "svelte": "^3.48.0",
-    "svelte-check": "^2.8.0",
-    "svelte-preprocess": "^4.10.7",
+    "svelte": "^3.55.1",
+    "svelte-check": "^3.0.3",
+    "svelte-preprocess": "^5.0.1",
     "tslib": "^2.4.0",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.4"
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4"
   },
   "type": "module"
 }
