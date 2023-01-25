@@ -101,7 +101,7 @@ export const config: Config = {
           },
         },
         prod: {
-          command: 'npm run serve -- -p 8109',
+          command: 'npm run preview -- --port 8109',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
           waitForOutput: 'Accepting connections at',
         },
