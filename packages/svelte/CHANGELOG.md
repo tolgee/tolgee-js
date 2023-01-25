@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.0.2](https://github.com/tolgee/tolgee-js/compare/v5.0.1...v5.0.2) (2023-01-25)
+
+
+### Bug Fixes
+
+* make svelte work vite 4 ([#3145](https://github.com/tolgee/tolgee-js/issues/3145)) ([19df629](https://github.com/tolgee/tolgee-js/commit/19df629719b423ee87b873670627f3bf45bc9c23))
+
+
+
+
+
 ## [5.0.1](https://github.com/tolgee/tolgee-js/compare/v5.0.0...v5.0.1) (2023-01-17)
 
 **Note:** Version bump only for package @tolgee/svelte
