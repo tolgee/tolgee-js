@@ -48,9 +48,7 @@ export const Todos = () => {
       <div className="example">
         <Navbar>
           <a href="/translation-methods">
-            {t('menu-item-translation-methods', {
-              defaultValue: 'Translation methods',
-            })}
+            {t('menu-item-translation-methods')}
           </a>
         </Navbar>
 

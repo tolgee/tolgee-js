@@ -4,13 +4,14 @@ import { i18n } from 'i18next';
 export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
   const updateTranslations = () => {
     tolgee.getAllRecords().forEach(({ language, namespace, data }) => {
-      const ns = namespace || 'translation';
-      i18n.removeResourceBundle(language, ns);
-      i18n.addResources(language, ns, Object.fromEntries(data));
+      if (i18n.getResourceBundle(language, namespace)) {
+        i18n.removeResourceBundle(language, namespace);
+        i18n.addResources(language, namespace, Object.fromEntries(data));
+      }
     });
   };
 
-  tolgee.on('initialLoad', updateTranslations);
+  tolgee.on('update', updateTranslations);
   i18n.on('languageChanged', (lang) => {
     if (lang && tolgee.getLanguage() !== lang) {
       tolgee.changeLanguage(lang);
