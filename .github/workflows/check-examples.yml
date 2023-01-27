@@ -1,10 +1,10 @@
-name: Publish examples
+name: Check examples
 
 on:
   pull_request:
 
 jobs:
-  publish:
+  check:
     strategy:
       fail-fast: false
       matrix:
@@ -57,11 +57,4 @@ jobs:
           npm install --package-lock-only --force
         working-directory: testapps/${{ matrix.project }}
 
-      # - name: Commit & Push files
-      #   run: |
-      #     git add .
-      #     git config --local user.email "machine@tolgee.io"
-      #     git config --local user.name "Tolgee Automation Machine"
-      #     git commit -m "${{ steps.get-commit-message.outputs.COMMIT }} (published from monorepo)" -a || true
-      #     git push
-      #   working-directory: testapps/${{ matrix.project }}
+      # NOT publishing here
