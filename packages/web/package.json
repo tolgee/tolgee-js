@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "5.0.1",
+  "version": "5.2.0-rc.d8d91b51.0",
   "description": "Tolgee for web",
   "declaration": true,
   "main": "./dist/tolgee-web.universal.cjs.js",
@@ -53,7 +53,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "5.0.0"
+    "@tolgee/core": "5.2.0-rc.d8d91b51.0"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",

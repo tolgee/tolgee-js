@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0-rc.d8d91b51.0](https://github.com/tolgee/tolgee-js/compare/v5.1.0...v5.2.0-rc.d8d91b51.0) (2023-01-27)
+
+
+### Features
+
+* DevTools correctly ommitted at production ([d8d91b5](https://github.com/tolgee/tolgee-js/commit/d8d91b51b38a0a4d2696113c1bc3b19aaa339943))
+* DevTools correctly ommitted at production ([e37535f](https://github.com/tolgee/tolgee-js/commit/e37535f94e3533073832c9553cea5a293a1026b1))
+
+
+
+
+
 # [5.1.0](https://github.com/tolgee/tolgee-js/compare/v5.0.2...v5.1.0) (2023-01-27)
 
 
