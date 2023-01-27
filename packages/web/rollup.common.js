@@ -69,7 +69,7 @@ const packageOutput = (name, format, ext) => {
   ];
 };
 
-const buildPackage = ({ input, name, plugins = [], umdName }) => ({
+export const buildPackage = ({ input, name }) => ({
   ...commonConfig,
   input,
   output: [
@@ -78,30 +78,5 @@ const buildPackage = ({ input, name, plugins = [], umdName }) => ({
     ...packageOutput(name, 'esm', 'mjs'),
     ...packageOutput(name, 'umd', 'js'),
   ],
-  plugins: [...plugins, ...commonPlugins],
+  plugins: commonPlugins,
 });
-
-export const buildMain = () => [
-  buildPackage({
-    input: 'src/entry-development.ts',
-    name: 'web.development',
-    umdName: 'web',
-  }),
-  buildPackage({
-    input: 'src/entry-production.ts',
-    name: 'web.production',
-    umdName: 'web',
-  }),
-  buildPackage({
-    input: 'src/entry-universal.ts',
-    name: 'web.universal',
-    umdName: 'web',
-  }),
-
-  // dev tools
-  buildPackage({
-    input: 'src/entry-tools.ts',
-    name: 'in-context-tools',
-    umdName: 'tools',
-  }),
-];
