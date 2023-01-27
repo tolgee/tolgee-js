@@ -39,7 +39,7 @@ export const commonPlugins = [
     preventAssignment: true,
   }),
   replace({
-    'process.env.NODE_ENV': JSON.stringify('productionuction'),
+    'process.env.NODE_ENV': JSON.stringify('production'),
     include: ['node_modules/**', '../../node_modules/**'],
     preventAssignment: true,
   }),
@@ -51,7 +51,6 @@ export const commonPlugins = [
  * @param {string} format
  * @param {string} ext
  */
-
 const packageOutput = (name, format, ext) => {
   return [
     {
