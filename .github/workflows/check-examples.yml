@@ -2,9 +2,12 @@ name: Check examples
 
 on:
   pull_request:
+    types:
+      - labeled
 
 jobs:
   check:
+    if: ${{ github.event.label.name == 'check-examples' }}
     strategy:
       fail-fast: false
       matrix:
