@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.2.0-rc.762d61f8.0](https://github.com/tolgee/tolgee-js/compare/v5.1.0...v5.2.0-rc.762d61f8.0) (2023-01-27)
+
+
+### Features
+
+* DevTools correctly ommitted at production ([2352f83](https://github.com/tolgee/tolgee-js/commit/2352f838f10877ee597d7a7945a44c76fc5df6de))
+
+
+
+
+
 # [5.1.0](https://github.com/tolgee/tolgee-js/compare/v5.0.2...v5.1.0) (2023-01-27)
 
 **Note:** Version bump only for package @tolgee/ngx-workspace
