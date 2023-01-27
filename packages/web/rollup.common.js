@@ -84,27 +84,24 @@ const buildPackage = ({ input, name, plugins = [], umdName }) => ({
 
 export const buildMain = () => [
   buildPackage({
-    input: 'src/entrypoints/development.ts',
+    input: 'src/entry-development.ts',
     name: 'web.development',
     umdName: 'web',
   }),
-
   buildPackage({
-    input: 'src/entrypoints/production.ts',
+    input: 'src/entry-production.ts',
     name: 'web.production',
     umdName: 'web',
   }),
-
   buildPackage({
-    input: 'src/entrypoints/universal.ts',
+    input: 'src/entry-universal.ts',
     name: 'web.universal',
     umdName: 'web',
   }),
 
   // dev tools
-
   buildPackage({
-    input: 'src/entrypoints/tools.ts',
+    input: 'src/entry-tools.ts',
     name: 'in-context-tools',
     umdName: 'tools',
   }),

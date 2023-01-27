@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-export * from './production';
+export * from './entry-production';
 import { TolgeeInstance } from '@tolgee/core';
 
 export const DevTools =
