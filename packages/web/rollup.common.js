@@ -8,9 +8,11 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 
 export const commonConfig = {
-  input: 'src/index.ts',
   watch: {
     clearScreen: false,
+  },
+  treeshake: {
+    moduleSideEffects: false,
   },
 };
 
@@ -36,91 +38,74 @@ export const commonPlugins = [
     ),
     preventAssignment: true,
   }),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify('productionuction'),
+    include: ['node_modules/**', '../../node_modules/**'],
+    preventAssignment: true,
+  }),
 ];
 
-const replaceEnv = (value, modulesOnly) =>
-  replace({
-    'process.env.NODE_ENV': JSON.stringify(value),
-    include: modulesOnly
-      ? ['node_modules/**', '../../node_modules/**']
-      : undefined,
-    preventAssignment: true,
-  });
+/**
+ *
+ * @param {string} name
+ * @param {string} format
+ * @param {string} ext
+ */
 
-const buildMin = ({ input, name, plugins = [], umdName, esmExt = 'mjs' }) => ({
+const packageOutput = (name, format, ext) => {
+  return [
+    {
+      name: `@tolgee/${name}`,
+      file: `dist/tolgee-${name}.${format}.${ext}`,
+      format,
+      sourcemap: true,
+    },
+    {
+      name: `@tolgee/${name}`,
+      file: `dist/tolgee-${name}.${format}.min.${ext}`,
+      format,
+      sourcemap: true,
+      plugins: [terser()],
+    },
+  ];
+};
+
+const buildPackage = ({ input, name, plugins = [], umdName }) => ({
   ...commonConfig,
   input,
   output: [
-    {
-      file: `dist/tolgee-${name}.cjs.min.js`,
-      format: 'cjs',
-      sourcemap: true,
-    },
-    {
-      file: `dist/tolgee-${name}.esm.min.${esmExt}`,
-      format: 'esm',
-      sourcemap: true,
-    },
-    {
-      name: `@tolgee/${umdName || name}`,
-      file: `dist/tolgee-${name}.umd.min.js`,
-      format: 'umd',
-      sourcemap: true,
-    },
-  ],
-  plugins: [...plugins, terser(), ...commonPlugins],
-});
-
-const buildDev = ({ input, name, plugins = [], umdName, esmExt = 'mjs' }) => ({
-  ...commonConfig,
-  input,
-  output: [
-    {
-      file: `dist/tolgee-${name}.cjs.js`,
-      format: 'cjs',
-      sourcemap: true,
-    },
-    {
-      file: `dist/tolgee-${name}.esm.${esmExt}`,
-      format: 'esm',
-      sourcemap: true,
-    },
-    {
-      name: `@tolgee/${umdName || name}`,
-      file: `dist/tolgee-${name}.umd.js`,
-      format: 'umd',
-      sourcemap: true,
-    },
+    ...packageOutput(name, 'cjs', 'js'),
+    ...packageOutput(name, 'esm', 'js'),
+    ...packageOutput(name, 'esm', 'mjs'),
+    ...packageOutput(name, 'umd', 'js'),
   ],
   plugins: [...plugins, ...commonPlugins],
 });
-/**
- * Template for rollup configuration for production minified build
- * @param {string} input Input file name
- * @param {string} name Name of the package
- */
-export const buildVanilla = (input, name) => [
-  buildDev({
-    input,
-    name,
-    plugins: [replaceEnv('production', true), replaceEnv('development')],
-  }),
-  buildMin({ input, name, plugins: [replaceEnv('production')] }),
-];
 
 export const buildMain = () => [
-  buildDev({
-    input: 'src/index.ts',
-    name: 'web.main',
-    plugins: [replaceEnv('production', true)],
+  buildPackage({
+    input: 'src/entrypoints/development.ts',
+    name: 'web.development',
     umdName: 'web',
-    esmExt: 'js',
   }),
-  buildMin({
-    input: 'src/index.ts',
-    name: 'web.main',
-    plugins: [replaceEnv('production', true)],
+
+  buildPackage({
+    input: 'src/entrypoints/production.ts',
+    name: 'web.production',
     umdName: 'web',
-    esmExt: 'js',
+  }),
+
+  buildPackage({
+    input: 'src/entrypoints/universal.ts',
+    name: 'web.universal',
+    umdName: 'web',
+  }),
+
+  // dev tools
+
+  buildPackage({
+    input: 'src/entrypoints/tools.ts',
+    name: 'in-context-tools',
+    umdName: 'tools',
   }),
 ];

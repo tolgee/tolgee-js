@@ -2,11 +2,35 @@
   "name": "@tolgee/web",
   "version": "5.0.1",
   "description": "Tolgee for web",
-  "main": "./dist/tolgee-web.main.cjs.js",
-  "module": "./dist/tolgee-web.main.esm.js",
-  "types": "./types/index.d.ts",
-  "svelte": "./dist/tolgee-web.main.esm.js",
   "declaration": true,
+  "main": "./dist/tolgee-web.universal.cjs.js",
+  "module": "./dist/tolgee-web.universal.esm.js",
+  "types": "./types/index.d.ts",
+  "exports": {
+    ".": {
+      "production": {
+        "require": "./dist/tolgee-web.production.cjs.js",
+        "import": "./dist/tolgee-web.production.esm.js",
+        "svelte": "./dist/tolgee-web.production.esm.js"
+      },
+      "development": {
+        "require": "./dist/tolgee-web.development.cjs.js",
+        "import": "./dist/tolgee-web.development.esm.js",
+        "svelte": "./dist/tolgee-web.development.esm.js"
+      },
+      "require": "./dist/tolgee-web.universal.cjs.js",
+      "import": "./dist/tolgee-web.universal.esm.js",
+      "svelte": "./dist/tolgee-web.universal.esm.js",
+      "types": "./types/index.d.ts"
+    },
+    "./tools": {
+      "require": "./dist/tolgee-in-context-tools.cjs.js",
+      "import": "./dist/tolgee-in-context-tools.esm.js",
+      "svelte": "./dist/tolgee-in-context-tools.esm.js",
+      "types": "./types/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "directories": {
     "lib": "lib",
     "test": "test"
@@ -25,6 +49,7 @@
     "lib/**/*",
     "dist/**/*",
     "src/**/*",
+    "tools/**/*",
     "index.js"
   ],
   "dependencies": {
@@ -71,10 +96,6 @@
     "type": "git",
     "url": "git+https://github.com/tolgee/tolgee-js.git"
   },
-  "exports": {
-    "require": "./dist/tolgee-web.main.cjs.js",
-    "import": "./dist/tolgee-web.main.esm.js"
-  },
   "keywords": [
     "localization",
     "languages",
@@ -89,5 +110,6 @@
   "gitHead": "d4f5dccf1f3b0017942d862f7be7e9efe093ef08",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "sideEffects": false
 }

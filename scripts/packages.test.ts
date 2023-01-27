@@ -24,6 +24,20 @@ const assertFileExists = (dir, filePath, message) => {
 
 const checkedPackages = [];
 
+const checkExports = (folder, exports: any, keyPath = ['exports']) => {
+  Object.entries(exports || {}).forEach(([key, target]) => {
+    if (typeof target === 'string') {
+      assertFileExists(
+        folder,
+        target,
+        path.join(keyPath.join('.'), key).replace('/', '.')
+      );
+    } else if (typeof target === 'object') {
+      checkExports(folder, exports[key] || {}, [...keyPath, key]);
+    }
+  });
+};
+
 const checkPackage = (filePath) => {
   const folder = path.dirname(filePath);
   const f = JSON.parse(fs.readFileSync(filePath).toString());
@@ -31,6 +45,8 @@ const checkPackage = (filePath) => {
   if (f.private == true) {
     return;
   }
+
+  const isInternal = f.internal === true;
 
   if (f.publishConfig?.directory) {
     describe(`${f.name} -> ${f.publishConfig.directory}`, () => {
@@ -50,10 +66,12 @@ const checkPackage = (filePath) => {
     return;
   }
 
-  describe(f.name, () => {
-    assertExpr(f.name.startsWith('@tolgee/'), 'Has correct name');
-    assertExpr(f.publishConfig?.access, 'Is public');
-    assertExpr(f.main || f.module || f.exports, 'Has entry point');
+  describe(f.name || `${folder}/package.json`, () => {
+    if (!isInternal) {
+      assertExpr(f.name?.startsWith('@tolgee/'), 'Has correct name');
+      assertExpr(f.publishConfig?.access, 'Is public');
+      assertExpr(f.main || f.module || f.exports, 'Has entry point');
+    }
     assertFileExists(folder, f.main, 'main');
     assertFileExists(folder, f.module, 'module');
     if (f.module) {
@@ -61,13 +79,7 @@ const checkPackage = (filePath) => {
       assertExpr(f.module.endsWith('.js'), ' - module ends with .js');
     }
     assertFileExists(folder, f.types, 'types');
-    Object.entries(f.exports || {}).forEach(([key, target]) => {
-      assertFileExists(
-        folder,
-        target,
-        path.join('exports', key).replace('/', '.')
-      );
-    });
+    checkExports(folder, f.exports || {});
 
     assertFileExists(
       folder,
@@ -77,7 +89,9 @@ const checkPackage = (filePath) => {
   });
 };
 
-const files = searchRecursively('./packages', 'package.json', [], 4);
-files.forEach((filePath) => {
-  checkPackage(filePath);
+describe('check package.json files', () => {
+  const files = searchRecursively('./packages', 'package.json', [], 4);
+  files.forEach((filePath) => {
+    checkPackage(filePath);
+  });
 });
