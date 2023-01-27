@@ -34,13 +34,21 @@ export const mockCoreFetchAsync = () => {
   const fetch = fetchMock.mockResponse((req) => {
     if (req.url.includes('/v2/api-keys/current')) {
       return result.currentApiKey.promise;
-    } else if (req.url.includes('/v2/projects/translations/en')) {
+    } else if (
+      req.url.includes('/v2/projects/translations/en?ns=translation')
+    ) {
       return result.enTranslations.promise;
-    } else if (req.url.includes('/v2/projects/translations/cs')) {
+    } else if (
+      req.url.includes('/v2/projects/translations/cs?ns=translation')
+    ) {
       return result.csTranslations.promise;
     } else if (req.url.includes('/v2/projects/translations/en?ns=test')) {
       return result.enTranslations.promise;
     } else if (req.url.includes('/v2/projects/translations/cs?ns=test')) {
+      return result.csTranslations.promise;
+    } else if (req.url.includes('/v2/projects/translations/en')) {
+      return result.enTranslations.promise;
+    } else if (req.url.includes('/v2/projects/translations/cs')) {
       return result.csTranslations.promise;
     }
 

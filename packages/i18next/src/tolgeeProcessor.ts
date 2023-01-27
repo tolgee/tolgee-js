@@ -12,6 +12,7 @@ export const tolgeeProcessor = (tolgee: TolgeeInstance): Module => {
         key: key.join('.'),
         defaultValue: options.defaultValue,
         translation: value,
+        ns: options.ns,
       });
     },
   } as any as Module;
