@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
@@ -24,7 +24,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
     "@tolgee/format-icu": "5.0.0",
-    "@tolgee/testing": "5.0.0",
+    "@tolgee/testing": "5.1.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",

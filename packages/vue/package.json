@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue",
-  "version": "5.0.1",
+  "version": "5.1.0",
   "description": "Vue implementation for tolgee localization framework",
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
@@ -45,7 +45,7 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/vue": "^6.6.1",
     "@tolgee/format-icu": "5.0.0",
-    "@tolgee/testing": "5.0.0",
+    "@tolgee/testing": "5.1.0",
     "@types/jest": "^27.0.2",
     "@types/testing-library__jest-dom": "^5.14.5",
     "@vue/vue3-jest": "^27.0.0-alpha.3",

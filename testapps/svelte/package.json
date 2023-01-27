@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte-testapp",
-  "version": "5.0.2",
+  "version": "5.1.0",
   "private": true,
   "scripts": {
     "dev": "npm run develop",
@@ -19,7 +19,7 @@
     "@sveltejs/adapter-static": "1.0.5",
     "@sveltejs/kit": "1.2.6",
     "@tolgee/format-icu": "5.0.0",
-    "@tolgee/svelte": "5.0.2",
+    "@tolgee/svelte": "5.1.0",
     "@tsconfig/svelte": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",

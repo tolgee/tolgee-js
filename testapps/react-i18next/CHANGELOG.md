@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.1.0](https://github.com/tolgee/tolgee-js/compare/v5.0.2...v5.1.0) (2023-01-27)
+
+
+### Features
+
+* improve i18next integration ([#3146](https://github.com/tolgee/tolgee-js/issues/3146)) ([d305426](https://github.com/tolgee/tolgee-js/commit/d3054268f981de8e014cf9193f94b8b4b0f61278))
+
+
+
+
+
 ## [5.0.1](https://github.com/tolgee/tolgee-js/compare/v5.0.0...v5.0.1) (2023-01-17)
 
 **Note:** Version bump only for package @tolgee/react-i18next-testapp

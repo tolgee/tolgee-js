@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/ngx-workspace",
   "private": true,
-  "version": "5.0.1",
+  "version": "5.1.0",
   "keywords": [
     "localization",
     "internationalization",
@@ -40,7 +40,7 @@
     "@testing-library/angular": "^10.11.1",
     "@testing-library/jest-dom": "5.16.4",
     "@tolgee/format-icu": "5.0.0",
-    "@tolgee/testing": "5.0.0",
+    "@tolgee/testing": "5.1.0",
     "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "~2.0.3",
     "@types/jest": "27.5.0",
