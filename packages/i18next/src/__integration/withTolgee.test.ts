@@ -3,8 +3,7 @@ jest.autoMockOff();
 import '@testing-library/jest-dom';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 import i18n from 'i18next';
-import { Tolgee } from '@tolgee/web';
-import { InContextTools } from '@tolgee/web/tools';
+import { Tolgee, DevTools } from '@tolgee/web';
 import { withTolgee, I18nextPlugin } from '..';
 
 const API_URL = 'http://localhost';
@@ -16,7 +15,7 @@ describe('withTolgee', () => {
   let i18next: typeof i18n;
   beforeEach(async () => {
     fetch.enableMocks();
-    const tolgee = Tolgee().use(InContextTools()).use(I18nextPlugin()).init({
+    const tolgee = Tolgee().use(DevTools()).use(I18nextPlugin()).init({
       apiKey: API_KEY,
       apiUrl: API_URL,
     });
