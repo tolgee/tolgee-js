@@ -573,7 +573,8 @@ importers:
 
   testapps/next-internal:
     specifiers:
-      '@tolgee/react': 5.1.0
+      '@tolgee/react': 5.0.1
+      '@tolgee/web': 5.0.1
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -582,7 +583,8 @@ importers:
       react-dom: 17.0.2
       typescript: 4.7.4
     dependencies:
-      '@tolgee/react': link:../../packages/react
+      '@tolgee/react': 5.0.1_react@17.0.2
+      '@tolgee/web': link:../../packages/web
       next: 12.2.3_sfoxds7t5ydpegc3knd667wn6m
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
@@ -8587,6 +8589,25 @@ packages:
 
   /@tokenizer/token/0.3.0:
     resolution: {integrity: sha512-OvjF+z51L3ov0OyAU0duzsYuvO01PH7x4t6DJx+guahgTnBHkhJdG7soQeTSFLWN3efnHyibZ4Z8l2EuWwJN3A==}
+    dev: false
+
+  /@tolgee/core/5.0.0:
+    resolution: {integrity: sha512-TaxeLN1WxY0gQ3mo68ZnQv/NaCXyQKBTW3Bv2cRP5Craz4HHVF1Q6Sc8FoOCm9K/3jvuX7MD72czQk6Jq4/v+Q==}
+    dev: false
+
+  /@tolgee/react/5.0.1_react@17.0.2:
+    resolution: {integrity: sha512-2RHqqinpVyWBx2zSJCutkjbx9evSY04+BTKTl+LS5ld6VjfHDB5NwCVO+4hwOHax0zV9aULD9Q2eRJQXpSmpYQ==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.1 || ^18.1.0
+    dependencies:
+      '@tolgee/web': 5.0.1
+      react: 17.0.2
+    dev: false
+
+  /@tolgee/web/5.0.1:
+    resolution: {integrity: sha512-zTjF96T/M8oZ84jsNMyaGI9uI+26Qm8k/HBSp7mx9KI7k6BnRwrsBC6kadfXOAJ66ckrC2pgRPhkzrFqtLpgUA==}
+    dependencies:
+      '@tolgee/core': 5.0.0
     dev: false
 
   /@tootallnate/once/1.1.2:

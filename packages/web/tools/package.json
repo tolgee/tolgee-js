@@ -1,0 +1,6 @@
+{
+  "internal": true,
+  "main": "../dist/tolgee-in-context-tools.cjs.js",
+  "module": "../dist/tolgee-in-context-tools.cjs.js",
+  "types": "../types/tools.d.ts"
+}

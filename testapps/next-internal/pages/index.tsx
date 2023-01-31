@@ -1,15 +1,14 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { DevTools, T, Tolgee } from '@tolgee/react';
+import { useState, useEffect } from 'react';
+import { T, Tolgee, TolgeeProvider } from '@tolgee/react';
+import { InContextTools } from '@tolgee/web/tools';
+import { useRouter } from 'next/router';
+
 import enLocale from '../i18n/en.json';
 import deLocale from '../i18n/de.json';
-import { useRouter } from 'next/router';
-import { TolgeeProvider } from '@tolgee/react';
-
 import styles from '../styles/Home.module.css';
 import LocaleSwitcher from '../component/LanguageSwitcher';
-import { useState } from 'react';
-import { useEffect } from 'react';
 
 const Home: NextPage = () => {
   const { locale: activeLocale } = useRouter();
@@ -21,7 +20,7 @@ const Home: NextPage = () => {
 
   const [tolgee] = useState(
     Tolgee()
-      .use(DevTools())
+      .use(InContextTools())
       .init({
         language: activeLocale,
         apiKey: apiKey,

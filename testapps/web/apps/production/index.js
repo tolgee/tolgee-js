@@ -1,4 +1,5 @@
-import { Tolgee, BackendFetch, InContextTools } from '@tolgee/web';
+import { Tolgee, BackendFetch } from '@tolgee/web';
+import { InContextTools } from '@tolgee/web/tools';
 import { FormatIcu } from '@tolgee/format-icu';
 
 document.body = document.createElement('body');

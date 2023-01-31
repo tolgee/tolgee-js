@@ -3,7 +3,7 @@ jest.autoMockOff();
 import '@testing-library/jest-dom';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 import i18n from 'i18next';
-import { DevTools, Tolgee } from '@tolgee/web';
+import { Tolgee, DevTools } from '@tolgee/web';
 import { withTolgee, I18nextPlugin } from '..';
 
 const API_URL = 'http://localhost';

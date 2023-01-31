@@ -52,5 +52,6 @@
   "publishConfig": {
     "directory": "./package",
     "access": "public"
-  }
+  },
+  "sideEffects": false
 }
