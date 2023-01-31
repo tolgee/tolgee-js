@@ -153,7 +153,7 @@ importers:
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
       '@tolgee/testing': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
       concurrently: 7.3.0
@@ -210,7 +210,7 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@tolgee/format-icu': 5.0.0
       '@tolgee/testing': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@types/jasmine': ~3.10.3
       '@types/jasminewd2': ~2.0.3
       '@types/jest': 27.5.0
@@ -267,7 +267,7 @@ importers:
 
   packages/ngx/projects/ngx-tolgee:
     specifiers:
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
     dependencies:
       '@tolgee/web': link:../../../web
     publishDirectory: ../../dist/ngx-tolgee
@@ -281,7 +281,7 @@ importers:
       '@testing-library/react': ^12.1.2
       '@tolgee/format-icu': 5.0.0
       '@tolgee/testing': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^17.0.1
@@ -342,7 +342,7 @@ importers:
       '@testing-library/svelte': ^3.2.2
       '@tolgee/format-icu': 5.0.0
       '@tolgee/testing': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@tsconfig/svelte': ^3.0.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
@@ -410,7 +410,7 @@ importers:
       '@testing-library/vue': ^6.6.1
       '@tolgee/format-icu': 5.0.0
       '@tolgee/testing': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
@@ -531,7 +531,7 @@ importers:
   testapps/gatsby:
     specifiers:
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/react': 5.1.0
+      '@tolgee/react': 5.2.0
       eslint-plugin-flowtype: ^8.0.3
       gatsby: ^4.24.8
       gatsby-plugin-react-intl: ^4.0.0
@@ -551,7 +551,7 @@ importers:
   testapps/next:
     specifiers:
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/react': 5.1.0
+      '@tolgee/react': 5.2.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -574,7 +574,7 @@ importers:
   testapps/next-internal:
     specifiers:
       '@tolgee/react': 5.0.1
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       '@types/react': 17.0.20
       eslint: 7.32.0
       eslint-config-next: 12.0.2
@@ -612,7 +612,7 @@ importers:
       '@nguniversal/builders': ^13.0.2
       '@nguniversal/express-engine': 13.0.2
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/ngx': 5.0.1
+      '@tolgee/ngx': 5.2.0
       '@types/express': ^4.17.0
       '@types/node': ^17.0.35
       '@types/react': ^17.0.43
@@ -670,7 +670,7 @@ importers:
       '@testing-library/react': ^12.1.5
       '@testing-library/user-event': ^13.3.0
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/react': 5.1.0
+      '@tolgee/react': 5.2.0
       '@types/jest': ^27.5.1
       '@types/node': ^17.0.41
       '@types/react': 17.0.43
@@ -712,7 +712,7 @@ importers:
       '@testing-library/react': ^11.1.0
       '@testing-library/user-event': ^12.1.10
       '@tolgee/core': 5.0.0
-      '@tolgee/i18next': 5.1.0
+      '@tolgee/i18next': 5.2.0
       '@types/node': ^17.0.8
       '@types/react': ^17.0.37
       '@types/react-dom': ^17.0.11
@@ -752,7 +752,7 @@ importers:
       '@sveltejs/adapter-static': 1.0.5
       '@sveltejs/kit': 1.2.6
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/svelte': 5.1.0
+      '@tolgee/svelte': 5.2.0
       '@tsconfig/svelte': ^3.0.0
       '@typescript-eslint/eslint-plugin': ^5.30.6
       '@typescript-eslint/parser': ^5.30.6
@@ -790,8 +790,8 @@ importers:
   testapps/vue:
     specifiers:
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/vue': 5.1.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/vue': 5.2.0
+      '@tolgee/web': 5.2.0
       '@vue/cli-plugin-babel': ~4.5.0
       '@vue/cli-plugin-eslint': ~4.5.0
       '@vue/cli-plugin-typescript': ~4.5.0
@@ -823,7 +823,7 @@ importers:
       '@panter/vue-i18next': ^0.15.2
       '@tolgee/core': 5.0.0
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/i18next': 5.1.0
+      '@tolgee/i18next': 5.2.0
       '@vue/cli-plugin-babel': ~5.0.8
       '@vue/cli-plugin-eslint': ~5.0.8
       '@vue/cli-service': ~5.0.8
@@ -854,7 +854,7 @@ importers:
   testapps/web:
     specifiers:
       '@tolgee/format-icu': 5.0.0
-      '@tolgee/web': 5.0.1
+      '@tolgee/web': 5.2.0
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0

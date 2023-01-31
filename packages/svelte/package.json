@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "scripts": {
     "dev": "npm run develop",
     "develop": "sleep 5 && nodemon --exec svelte-package",
@@ -15,7 +15,7 @@
     "format": "prettier --cache --write ."
   },
   "dependencies": {
-    "@tolgee/web": "5.0.1"
+    "@tolgee/web": "5.2.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.2",
