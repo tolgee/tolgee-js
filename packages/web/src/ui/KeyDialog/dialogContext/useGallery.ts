@@ -60,13 +60,14 @@ export const useGallery = (uiProps: UiProps) => {
     translationsForm: Record<string, string>
   ) {
     setTakingScreenshot(true);
-    const { unhighlight } = uiProps.highlight(key, ns);
     const { revert } = changeInTolgeeCache(
       key,
       ns,
       Object.entries(translationsForm),
       uiProps.changeTranslation
     );
+    await sleep(100);
+    const { unhighlight } = uiProps.highlight(key, ns);
     await sleep(100);
     let screenshot: string;
     try {
