@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.1](https://github.com/tolgee/tolgee-js/compare/v5.2.0...v5.2.1) (2023-02-07)
+
+
+### Bug Fixes
+
+* add default apiUrl + allown null namespace ([#3151](https://github.com/tolgee/tolgee-js/issues/3151)) ([ce754a1](https://github.com/tolgee/tolgee-js/commit/ce754a1acb2302e69138535ba320c0e02812ff3f))
+
+
+
+
+
 # [5.0.0](https://github.com/tolgee/tolgee-js/compare/v5.0.0-alpha.3...v5.0.0) (2023-01-11)
 
 **Note:** Version bump only for package @tolgee/core

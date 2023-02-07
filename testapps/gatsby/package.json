@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/gatsby-testapp",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "private": true,
   "description": "Tolgee Gatsby TestApp",
   "author": "Jan Cizmar",
@@ -15,8 +15,8 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.0.0",
-    "@tolgee/react": "5.2.0",
+    "@tolgee/format-icu": "5.2.1",
+    "@tolgee/react": "5.2.1",
     "eslint-plugin-flowtype": "^8.0.3",
     "gatsby": "^4.24.8",
     "gatsby-plugin-react-intl": "^4.0.0",
