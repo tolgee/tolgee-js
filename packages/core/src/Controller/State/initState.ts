@@ -12,6 +12,7 @@ import {
 } from './observerOptions';
 
 export const DEFAULT_FORMAT_ERROR = 'invalid';
+export const DEFAULT_API_URL = 'https://app.tolgee.io';
 
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
@@ -24,7 +25,7 @@ export type TolgeeOptionsInternal = {
   language?: string;
 
   /**
-   * Tolgee instance url (e.g. https://app.tolgee.io)
+   * Tolgee instance url (default: https://app.tolgee.io)
    */
   apiUrl?: string;
 
@@ -118,6 +119,7 @@ const defaultValues: TolgeeOptionsInternal = {
   observerOptions: defaultObserverOptions,
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
+  apiUrl: DEFAULT_API_URL,
 };
 
 export const combineOptions = <T extends TolgeeOptions>(
