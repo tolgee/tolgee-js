@@ -51,7 +51,7 @@ export const InvisibleWrapper = (): WrapperMiddleware => {
   const encodeValue = (data: TranslatePropsInternal) => {
     const value: EncodeValue = {
       k: data.key,
-      n: data.ns,
+      n: data.ns || undefined,
       d: data.defaultValue,
     };
     return JSON.stringify(value);

@@ -17,7 +17,7 @@ export type TranslateParams<T = DefaultParamType> = {
 };
 
 export type TranslateOptions = {
-  ns?: NsType;
+  ns?: NsType | null;
   noWrap?: boolean;
   orEmpty?: boolean;
 };

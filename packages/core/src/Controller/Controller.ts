@@ -191,12 +191,12 @@ export const Controller = ({ options }: StateServiceProps) => {
 
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
     const languages = state.getFallbackLangs();
-    const namespaces = getDefaultAndFallbackNs(ns);
+    const namespaces = getDefaultAndFallbackNs(ns || undefined);
     return cache.getTranslationNs(namespaces, languages, key);
   }
 
   function getTranslation({ key, ns }: KeyAndNamespacesInternal) {
-    const namespaces = getDefaultAndFallbackNs(ns);
+    const namespaces = getDefaultAndFallbackNs(ns || undefined);
     const languages = state.getFallbackLangs();
     return cache.getTranslationFallback(namespaces, languages, key);
   }
