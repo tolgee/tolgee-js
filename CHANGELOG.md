@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.2-rc.cb7c4656.0](https://github.com/tolgee/tolgee-js/compare/v5.2.1...v5.2.2-rc.cb7c4656.0) (2023-02-09)
+
+
+### Bug Fixes
+
+* package.json in exports and update svelte kit ([cb7c465](https://github.com/tolgee/tolgee-js/commit/cb7c465687632c728fb58082fb4b55338441a281))
+* package.json in exports and update svelte kit ([c3b64f8](https://github.com/tolgee/tolgee-js/commit/c3b64f8f8a6cbf089dbd2ab1bedc3df0a134d392))
+* package.json in exports and update svelte kit ([e7520e8](https://github.com/tolgee/tolgee-js/commit/e7520e82bb0ea53f6079d4cce3459d751452f36a))
+* package.json in exports and update svelte kit ([6181a13](https://github.com/tolgee/tolgee-js/commit/6181a13a1e82508fcda8766507991cdabe956e03))
+* package.json in exports and update svelte kit ([e744c9f](https://github.com/tolgee/tolgee-js/commit/e744c9f038ab4323a77394ae580f6e6335145d2a))
+* package.json in exports and update svelte kit ([7bf1f75](https://github.com/tolgee/tolgee-js/commit/7bf1f7537bb46a2bb9802bce593824594f1966d1))
+* package.json in exports and update svelte kit ([e6ecb28](https://github.com/tolgee/tolgee-js/commit/e6ecb2846d82590686063245d53dae814852217f))
+* package.json in exports and update svelte kit ([1bd3244](https://github.com/tolgee/tolgee-js/commit/1bd324423c05bb6240da8223a9a688542521cba5))
+* package.json in exports and update svelte kit ([a79976d](https://github.com/tolgee/tolgee-js/commit/a79976d33af16d0454c7489a7126f55c32dbe1c7))
+
+
+
+
+
 ## [5.2.1](https://github.com/tolgee/tolgee-js/compare/v5.2.0...v5.2.1) (2023-02-07)
 
 
