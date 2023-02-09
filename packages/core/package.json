@@ -20,8 +20,11 @@
   ],
   "declaration": true,
   "exports": {
-    "require": "./dist/tolgee.cjs.js",
-    "import": "./dist/tolgee.esm.js"
+    ".": {
+      "require": "./dist/tolgee.cjs.js",
+      "import": "./dist/tolgee.esm.js"
+    },
+    "./package.json": "./package.json"
   },
   "directories": {
     "lib": "lib",

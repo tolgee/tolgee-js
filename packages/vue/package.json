@@ -63,8 +63,11 @@
     "vue": "^3.0.0"
   },
   "exports": {
-    "require": "./dist/tolgee-vue.cjs.js",
-    "import": "./dist/tolgee-vue.esm.js"
+    ".": {
+      "require": "./dist/tolgee-vue.cjs.js",
+      "import": "./dist/tolgee-vue.esm.js"
+    },
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"

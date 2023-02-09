@@ -2,11 +2,13 @@
 	"name": "svelte",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite dev",
+		"dev": "npm run develop",
+		"develop": "vite dev --port 5000",
 		"build": "vite build",
+		"clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
 		"preview": "vite preview",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"serve": "serve -s ./build",
+		"dev:e2e": "vite dev --port 8110",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
@@ -29,5 +31,9 @@
 		"typescript": "^4.9.3",
 		"vite": "^4.0.0"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"@tolgee/format-icu": "5.2.1",
+		"@tolgee/svelte": "^5.2.1"
+	}
 }

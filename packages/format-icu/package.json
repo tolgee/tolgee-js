@@ -24,8 +24,11 @@
     "dist": "dist"
   },
   "exports": {
-    "require": "./dist/tolgee-format-icu.cjs.js",
-    "import": "./dist/tolgee-format-icu.esm.js"
+    ".": {
+      "require": "./dist/tolgee-format-icu.cjs.js",
+      "import": "./dist/tolgee-format-icu.esm.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "rollup -c rollup.config.js && tsc --declaration --emitDeclarationOnly --project tsconfig.prod.json",
