@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.2.2-rc.e7520e82.0](https://github.com/tolgee/tolgee-js/compare/v5.2.1...v5.2.2-rc.e7520e82.0) (2023-02-09)
+
+**Note:** Version bump only for package @tolgee/vue-i18next-testapp
+
+
+
+
+
 ## [5.2.1](https://github.com/tolgee/tolgee-js/compare/v5.2.0...v5.2.1) (2023-02-07)
 
 **Note:** Version bump only for package @tolgee/vue-i18next-testapp
