@@ -14,6 +14,9 @@
     "lint": "prettier --cache --check . && eslint .",
     "format": "prettier --cache --write ."
   },
+  "peerDependencies": {
+    "svelte": "^3.29.0"
+  },
   "dependencies": {
     "@tolgee/web": "5.2.1"
   },
