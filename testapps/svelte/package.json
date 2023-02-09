@@ -1,5 +1,5 @@
 {
-	"name": "svelte",
+	"name": "@tolgee/svelte-testapp",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "npm run develop",
