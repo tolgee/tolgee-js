@@ -94,16 +94,16 @@ export const config: Config = {
         dev: {
           command: 'npm run dev:e2e',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
-          waitForOutput: 'ready in',
+          waitForOutput: 'Local:',
           environment: {
             VITE_TOLGEE_API_URL: 'http://localhost:8202',
             VITE_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
         },
         prod: {
-          command: 'npm run serve -- -p 8109',
+          command: 'npm run preview -- --port 8109',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
-          waitForOutput: 'Accepting connections at',
+          waitForOutput: 'Local:',
         },
       },
     },

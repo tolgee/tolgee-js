@@ -1,38 +1,34 @@
-# create-svelte
+# Example application of using Svelte with Tolgee
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
 
-## Creating a project
+This application is using SvelteKit. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## To run the app in dev mode
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+To install dependencies, run:
+npm install
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+To run the app in dev mode with in-context translating mode:
 
-## Developing
+1. Create a project on [Tolgee Cloud](https://app.tolgee.io) or use
+   self-hosted [Tolgee Server](https://github.com/tolgee/server).
+2. Generate an API-KEY
+3. Copy file `.env` to `.env.development.local`
+4. Set `VITE_TOLGEE_API_KEY` to API key obtained in previous step
+5. Run `npm run dev`
+6. Have fun
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## To run the app in production mode
 
-```bash
-npm run dev
+To build the app for production run:
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+    npm run build
 
-## Building
+Static website will be generated. To start local server with build app, run:
 
-To create a production version of your app:
+    npm run serve
 
-```bash
-npm run build
-```
+---
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).
