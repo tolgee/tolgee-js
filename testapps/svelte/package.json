@@ -1,6 +1,7 @@
 {
 	"name": "@tolgee/svelte-testapp",
-	"version": "0.0.1",
+	"version": "5.2.1",
+	"private": true,
 	"scripts": {
 		"dev": "npm run develop",
 		"develop": "vite dev --port 5000",
