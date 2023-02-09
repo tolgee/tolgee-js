@@ -1,6 +1,6 @@
 {
 	"name": "@tolgee/svelte-testapp",
-	"version": "0.0.1",
+	"version": "5.2.2-rc.e6ecb284.0",
 	"scripts": {
 		"dev": "npm run develop",
 		"develop": "vite dev --port 5000",
@@ -33,7 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tolgee/format-icu": "5.2.1",
-		"@tolgee/svelte": "^5.2.1"
+		"@tolgee/format-icu": "5.2.2-rc.e6ecb284.0",
+		"@tolgee/svelte": "5.2.2-rc.e6ecb284.0"
 	}
 }
