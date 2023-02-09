@@ -14,11 +14,11 @@ const path = require('path');
   fs.symlinkSync(path.relative(locationDir, target), location);
 }
 
-{
-  const target = './packages/svelte/package';
-  const locationDir = './testapps/svelte/node_modules/@tolgee';
-  const location = path.join(locationDir, 'svelte');
+// {
+//   const target = './packages/svelte/package';
+//   const locationDir = './testapps/svelte/node_modules/@tolgee';
+//   const location = path.join(locationDir, 'svelte');
 
-  fs.rmSync(location, { recursive: true, force: true });
-  fs.symlinkSync(path.relative(locationDir, target), location);
-}
+//   fs.rmSync(location, { recursive: true, force: true });
+//   fs.symlinkSync(path.relative(locationDir, target), location);
+// }
