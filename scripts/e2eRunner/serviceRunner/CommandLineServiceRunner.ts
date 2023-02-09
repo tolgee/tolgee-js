@@ -20,6 +20,10 @@ export const CommandLineServiceRunner = ({
         env: { ...process.env, ...config.environment },
         shell: true,
       });
+
+      if (!config.waitForOutput) {
+        resolve();
+      }
       spawnedProcess.stdout.on('data', (data) => {
         onStdout(data);
         if (checkOutput(data.toString(), config.waitForOutput)) {
