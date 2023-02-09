@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   automock: true,
   preset: 'ts-jest',
   testEnvironment: 'jsdom',

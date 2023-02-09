@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   transformIgnorePatterns: ['<rootDir>/node_modules/(?!@tolgee)', '^.+\\.js$'],

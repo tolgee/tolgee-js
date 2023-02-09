@@ -5,6 +5,7 @@
   "main": "./dist/tolgee-react.cjs.js",
   "module": "./dist/tolgee-react.esm.js",
   "types": "lib/index.d.ts",
+  "type": "module",
   "repository": "https://github.com/tolgee/tolgee-js",
   "homepage": "https://tolgee.io",
   "keywords": [

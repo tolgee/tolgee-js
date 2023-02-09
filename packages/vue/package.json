@@ -5,6 +5,7 @@
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
   "types": "lib/index.d.ts",
+  "type": "module",
   "repository": "https://github.com/tolgee/tolgee-js",
   "homepage": "https://tolgee.io",
   "keywords": [
