@@ -4,19 +4,9 @@
     ".env*"
   ],
   "pipeline": {
-    "build-gatsby": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "public/**",
-        ".cache/**"
-      ]
-    },
     "build": {
       "dependsOn": [
-        "^build",
-        "build-gatsby"
+        "^build"
       ],
       "outputs": [
         "dist/**",

@@ -38,25 +38,6 @@ export const config: Config = {
         },
       },
     },
-    gatsby: {
-      commandLineServices: {
-        dev: {
-          command: 'npm run start -- --host=0.0.0.0 -p 8104',
-          cwd: path.resolve(__dirname, '../../testapps/gatsby/'),
-          environment: {
-            GATSBY_TOLGEE_API_URL: 'http://localhost:8202',
-            GATSBY_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
-          },
-          waitForOutput: /success Building/g,
-        },
-        prod: {
-          cwd: path.resolve(__dirname, '../../testapps/gatsby/'),
-          command: 'npm run serve -- --host=0.0.0.0 -p 8105',
-          waitForOutput: /Local:.*http:\/\/localhost/g,
-        },
-      },
-      dockerComposeServices: {},
-    },
     next: {
       commandLineServices: {
         prod: {

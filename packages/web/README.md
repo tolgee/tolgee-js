@@ -61,7 +61,6 @@ For more information about Tolgee JS integrations, visit the [docs](https://tolg
     - [Vue](https://tolgee.io/integrations/vue)
     - [Svelte](https://tolgee.io/integrations/svelte)
     - [Next.js](https://tolgee.io/integrations/next)
-    - [Gatsby](https://tolgee.io/integrations/gatsby)
     - [More...](https://tolgee.io/integrations/all)
 - [Tolgee platform docs](https://tolgee.io/platform)
   

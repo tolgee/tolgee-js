@@ -46,7 +46,7 @@ Tolgee is an open-source alternative to Crowdin, Phrase, or Lokalise with its ve
 React integration library of Tolgee. This package makes it super simple to add i18n to your React app!
 For more information about using Tolgee with React, visit the [docs 📖](https://tolgee.io/integrations/react).
 
-Localize (translate) your CRA, Gatsby, Next.js, or other React projects to multiple languages with Tolgee. Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
+Localize (translate) your CRA, Next.js, or other React projects to multiple languages with Tolgee. Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
 
 ## Quick links
