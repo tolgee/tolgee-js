@@ -5,6 +5,7 @@
   "main": "./dist/tolgee.cjs.js",
   "module": "./dist/tolgee.esm.js",
   "types": "./lib/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
@@ -20,8 +21,11 @@
   ],
   "declaration": true,
   "exports": {
-    "require": "./dist/tolgee.cjs.js",
-    "import": "./dist/tolgee.esm.js"
+    ".": {
+      "require": "./dist/tolgee.cjs.js",
+      "import": "./dist/tolgee.esm.js"
+    },
+    "./package.json": "./package.json"
   },
   "directories": {
     "lib": "lib",

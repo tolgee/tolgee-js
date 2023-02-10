@@ -6,6 +6,7 @@
   "main": "./dist/tolgee-web.universal.cjs.js",
   "module": "./dist/tolgee-web.universal.esm.js",
   "types": "./types/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "production": {

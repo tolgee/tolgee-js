@@ -5,6 +5,7 @@
   "main": "./dist/tolgee-i18next.cjs.js",
   "module": "./dist/tolgee-i18next.esm.js",
   "types": "./lib/index.d.ts",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/tolgee/tolgee-js"
@@ -64,8 +65,11 @@
     "i18next": "^21.5.4"
   },
   "exports": {
-    "require": "./dist/tolgee-i18next.cjs.js",
-    "import": "./dist/tolgee-i18next.esm.js"
+    ".": {
+      "require": "./dist/tolgee-i18next.cjs.js",
+      "import": "./dist/tolgee-i18next.esm.js"
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "@tolgee/web": "5.2.1"

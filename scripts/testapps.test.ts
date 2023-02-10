@@ -24,11 +24,10 @@ const checkBuildFile = (filePath: string) => {
 const buildFolders = [
   './testapps/react/build',
   './testapps/vue/dist',
-  './testapps/svelte/build',
+  './testapps/svelte/.svelte-kit',
   './testapps/ngx/dist',
   './testapps/react-i18next/build',
   './testapps/vue-i18next/dist',
-  './testapps/gatsby/public',
   './testapps/next/.next',
   // next-internal uses InContextTools so it is there
   // './testapps/next-internal/.next'

@@ -7,8 +7,7 @@ This application is using SvelteKit. To learn more about Tolgee, visit [https://
 ## To run the app in dev mode
 
 To install dependencies, run:
-
-    npm install
+npm install
 
 To run the app in dev mode with in-context translating mode:
 

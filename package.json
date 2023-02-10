@@ -21,7 +21,6 @@
     "develop:ngx": "npm run develop -- --scope=@tolgee/ngx-testapp --scope=@tolgee/ngx-workspace",
     "develop:next": "npm run develop -- --scope=@tolgee/next-testapp",
     "develop:next-internal": "npm run develop -- --scope=@tolgee/next-internal-testapp",
-    "develop:gatsby": "npm run develop -- --scope=@tolgee/gatsby-testapp",
     "develop:react-i18next": "npm run develop -- --scope=@tolgee/react-i18next-testapp",
     "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
     "build:e2e": "turbo run build:e2e --cache-dir='.turbo'",

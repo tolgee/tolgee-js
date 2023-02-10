@@ -38,25 +38,6 @@ export const config: Config = {
         },
       },
     },
-    gatsby: {
-      commandLineServices: {
-        dev: {
-          command: 'npm run start -- --host=0.0.0.0 -p 8104',
-          cwd: path.resolve(__dirname, '../../testapps/gatsby/'),
-          environment: {
-            GATSBY_TOLGEE_API_URL: 'http://localhost:8202',
-            GATSBY_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
-          },
-          waitForOutput: /success Building/g,
-        },
-        prod: {
-          cwd: path.resolve(__dirname, '../../testapps/gatsby/'),
-          command: 'npm run serve -- --host=0.0.0.0 -p 8105',
-          waitForOutput: /Local:.*http:\/\/localhost/g,
-        },
-      },
-      dockerComposeServices: {},
-    },
     next: {
       commandLineServices: {
         prod: {
@@ -94,16 +75,14 @@ export const config: Config = {
         dev: {
           command: 'npm run dev:e2e',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
-          waitForOutput: 'ready in',
           environment: {
             VITE_TOLGEE_API_URL: 'http://localhost:8202',
             VITE_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
         },
         prod: {
-          command: 'npm run serve -- -p 8109',
+          command: 'npm run preview -- --port 8109',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
-          waitForOutput: 'Accepting connections at',
         },
       },
     },
