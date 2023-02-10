@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.3.0-rc.2e513cd9.0](https://github.com/tolgee/tolgee-js/compare/v5.2.1...v5.3.0-rc.2e513cd9.0) (2023-02-10)
+
+
+### Bug Fixes
+
+* package.json in exports and update svelte kit ([0c6befa](https://github.com/tolgee/tolgee-js/commit/0c6befadabae81b8f839c914a179b3eddf21323e))
+
+
+
+
+
 ## [5.2.1](https://github.com/tolgee/tolgee-js/compare/v5.2.0...v5.2.1) (2023-02-07)
 
 **Note:** Version bump only for package @tolgee/web-testapp
