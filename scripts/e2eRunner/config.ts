@@ -73,7 +73,7 @@ export const config: Config = {
     svelte: {
       commandLineServices: {
         dev: {
-          command: 'npm run dev:e2e',
+          command: 'npm run develop -- --port 8110',
           cwd: path.resolve(__dirname, '../../testapps/svelte/'),
           environment: {
             VITE_TOLGEE_API_URL: 'http://localhost:8202',
@@ -91,17 +91,15 @@ export const config: Config = {
         dev: {
           command: 'npm run develop -- --port 8112',
           cwd: path.resolve(__dirname, '../../testapps/vue/'),
-          waitForOutput: 'App running at',
           environment: {
-            VUE_APP_TOLGEE_API_URL: 'http://localhost:8202',
-            VUE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
+            VITE_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
           stdErrEnabled: false,
         },
         prod: {
-          command: 'npm run serve -- -p 8111',
+          command: 'npm run preview -- --port 8111',
           cwd: path.resolve(__dirname, '../../testapps/vue/'),
-          waitForOutput: 'Accepting connections at',
         },
       },
     },

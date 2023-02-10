@@ -4,11 +4,11 @@
 	"private": true,
 	"scripts": {
 		"dev": "npm run develop",
-		"develop": "vite dev --port 5000",
+		"develop": "vite dev",
 		"build": "vite build",
 		"clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
 		"preview": "vite preview",
-		"dev:e2e": "vite dev --port 8110",
+		"dev:e2e": "vite dev",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},

@@ -11,9 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.15.1'
+          node-version: '18'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
@@ -54,9 +54,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.15.1'
+          node-version: '18'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
@@ -94,7 +94,7 @@ jobs:
         run: pnpm build:e2e
 
       - id: set-dirs
-        run: echo "::set-output name=dirs::$(ls | jq -R -s -c 'split("\n")[:-1]')"
+        run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
 
     outputs:
@@ -113,9 +113,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.15.1'
+          node-version: '18'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm

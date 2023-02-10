@@ -28,13 +28,13 @@ jobs:
           path: root
 
       - name: Setup node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.15.1'
+          node-version: '18'
 
       - name: Read last commit
         id: get-commit-message
-        run: echo "::set-output name=COMMIT::$(git show -s --format=%s)"
+        run: echo "COMMIT=$(git show -s --format=%s)" >> $GITHUB_OUTPUT
         working-directory: root
 
       - run: mkdir -p testapps/${{ matrix.project }}

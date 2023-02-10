@@ -2,8 +2,8 @@ name: Release
 
 on:
   workflow_run:
-    workflows: [ "Test" ]
-    branches: [ "main"]
+    workflows: ['Test']
+    branches: ['main']
     types:
       - completed
 
@@ -19,9 +19,9 @@ jobs:
           fetch-depth: 0
 
       - name: Build
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.15.1'
+          node-version: '18'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
