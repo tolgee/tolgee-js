@@ -3,7 +3,7 @@
   "version": "5.3.0",
   "description": "Tolgee for web",
   "declaration": true,
-  "main": "./dist/tolgee-web.universal.cjs.cjs",
+  "main": "./index.cjs",
   "types": "./types/index.d.ts",
   "type": "module",
   "exports": {
@@ -16,7 +16,7 @@
         "require": "./dist/tolgee-web.development.cjs.cjs",
         "import": "./dist/tolgee-web.development.esm.js"
       },
-      "require": "./dist/tolgee-web.universal.cjs.cjs",
+      "require": "./index.cjs",
       "types": "./types/index.d.ts"
     },
     "./tools": {
@@ -45,7 +45,7 @@
     "dist/**/*",
     "src/**/*",
     "tools/**/*",
-    "index.js"
+    "index.cjs"
   ],
   "dependencies": {
     "@tolgee/core": "5.3.0"

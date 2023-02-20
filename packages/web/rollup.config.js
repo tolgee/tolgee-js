@@ -9,10 +9,6 @@ export default [
     input: 'src/entry-production.ts',
     name: 'web.production',
   }),
-  buildPackage({
-    input: 'src/entry-universal.ts',
-    name: 'web.universal',
-  }),
 
   // in-context tools
   buildPackage({
