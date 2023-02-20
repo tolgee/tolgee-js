@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.1-rc.f06e704e.0](https://github.com/tolgee/tolgee-js/compare/v5.3.0...v5.3.1-rc.f06e704e.0) (2023-02-20)
+
+
+### Bug Fixes
+
+* type module causing issues with require ([f06e704](https://github.com/tolgee/tolgee-js/commit/f06e704ed766b0cfca57f9879d18d0b7b40234fd))
+* type module causing issues with require ([6814817](https://github.com/tolgee/tolgee-js/commit/681481711bb5af2559e60ebb91125ff64b29b6e9))
+
+
+
+
+
 # [5.3.0](https://github.com/tolgee/tolgee-js/compare/v5.2.1...v5.3.0) (2023-02-10)
 
 
