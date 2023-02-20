@@ -74,6 +74,7 @@ export const buildPackage = ({ input, name }) => ({
   input,
   output: [
     ...packageOutput(name, 'cjs', 'js'),
+    ...packageOutput(name, 'cjs', 'cjs'),
     ...packageOutput(name, 'esm', 'js'),
     ...packageOutput(name, 'esm', 'mjs'),
     ...packageOutput(name, 'umd', 'js'),
