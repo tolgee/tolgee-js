@@ -3,7 +3,7 @@
   "version": "5.3.0",
   "description": "Tolgee for web",
   "declaration": true,
-  "main": "./dist/tolgee-web.universal.cjs.js",
+  "main": "./index.js",
   "types": "./types/index.d.ts",
   "type": "module",
   "exports": {
@@ -13,12 +13,7 @@
         "import": "./dist/tolgee-web.production.esm.js",
         "svelte": "./dist/tolgee-web.production.esm.js"
       },
-      "development": {
-        "require": "./dist/tolgee-web.development.cjs.js",
-        "import": "./dist/tolgee-web.development.esm.js",
-        "svelte": "./dist/tolgee-web.development.esm.js"
-      },
-      "require": "./dist/tolgee-web.universal.cjs.js",
+      "require": "./index.js",
       "import": "./dist/tolgee-web.development.esm.js",
       "svelte": "./dist/tolgee-web.development.esm.js",
       "types": "./types/index.d.ts"
