@@ -37,3 +37,5 @@ export const NodeHandler = (
     handleText,
   });
 };
+
+export type NodeHandlerInstance = ReturnType<typeof NodeHandler>;

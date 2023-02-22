@@ -83,7 +83,7 @@ export const Plugins = (
   };
 
   const setObserver = (observer: ObserverMiddleware | undefined) => {
-    plugins.observer = observer;
+    instances.observer = observer?.();
   };
 
   const hasObserver = () => {
@@ -172,24 +172,21 @@ export const Plugins = (
   };
 
   const run = () => {
-    if (!instances.ui) {
-      const { apiKey, apiUrl, projectId } = getInitialOptions();
-      instances.ui = plugins.ui?.({
-        apiKey: apiKey!,
-        apiUrl: apiUrl!,
-        projectId,
-        highlight,
-        changeTranslation,
-      });
-    }
-    if (!instances.observer) {
-      instances.observer = plugins.observer?.({
-        translate,
-        onClick,
-        options: getInitialOptions().observerOptions,
-      });
-    }
-    instances.observer?.run({ mouseHighlight: true });
+    const { apiKey, apiUrl, projectId } = getInitialOptions();
+    instances.ui = plugins.ui?.({
+      apiKey: apiKey!,
+      apiUrl: apiUrl!,
+      projectId,
+      highlight,
+      changeTranslation,
+    });
+
+    instances.observer?.run({
+      mouseHighlight: true,
+      options: getInitialOptions().observerOptions,
+      translate,
+      onClick,
+    });
   };
 
   const getDevBackend = () => {

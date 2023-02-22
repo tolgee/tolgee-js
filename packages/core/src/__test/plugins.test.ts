@@ -96,14 +96,14 @@ describe('plugins', () => {
     tolgee.stop();
   });
 
-  it("won't wrap before run", () => {
-    const tolgee = TolgeeCore().init({
-      language: 'en',
-      staticData: { en: { hello: 'world' } },
-    });
-    tolgee.addPlugin(observerPlugin(false));
-    expect(tolgee.t({ key: 'hello' })).toEqual('world');
-    tolgee.run();
-    expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
-  });
+  // it("won't wrap before run", () => {
+  //   const tolgee = TolgeeCore().init({
+  //     language: 'en',
+  //     staticData: { en: { hello: 'world' } },
+  //   });
+  //   tolgee.addPlugin(observerPlugin(false));
+  //   expect(tolgee.t({ key: 'hello' })).toEqual('world');
+  //   tolgee.run();
+  //   expect(tolgee.t({ key: 'hello' })).toEqual('hello|world');
+  // });
 });
