@@ -172,7 +172,7 @@ export const Plugins = (
   };
 
   const run = () => {
-    const { apiKey, apiUrl, projectId } = getInitialOptions();
+    const { apiKey, apiUrl, projectId, observerOptions } = getInitialOptions();
     instances.ui = plugins.ui?.({
       apiKey: apiKey!,
       apiUrl: apiUrl!,
@@ -183,7 +183,7 @@ export const Plugins = (
 
     instances.observer?.run({
       mouseHighlight: true,
-      options: getInitialOptions().observerOptions,
+      options: observerOptions,
       translate,
       onClick,
     });
