@@ -1,8 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import { Tolgee, DevTools, VueTolgee } from '@tolgee/vue';
+import { Tolgee, DevTools, VueTolgee, BackendFetch } from '@tolgee/vue';
 import { FormatIcu } from '@tolgee/format-icu';
-import { BackendFetch } from '@tolgee/web';
 
 const tolgee = Tolgee()
   .use(DevTools())
@@ -10,8 +9,8 @@ const tolgee = Tolgee()
   .use(BackendFetch())
   .init({
     language: 'en',
-    apiUrl: process.env.VUE_APP_TOLGEE_API_URL,
-    apiKey: process.env.VUE_APP_TOLGEE_API_KEY,
+    apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
+    apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
   });
 
 const app = createApp(App);

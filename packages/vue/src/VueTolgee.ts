@@ -42,7 +42,7 @@ export const VueTolgee = {
   },
 };
 
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   export interface ComponentCustomProperties {
     $t: TFnType<DefaultParamType, string>;
     $tolgee: TolgeeInstance;
