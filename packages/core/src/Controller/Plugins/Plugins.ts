@@ -34,7 +34,6 @@ export const Plugins = (
 ) => {
   const plugins = {
     ui: undefined as UiMiddleware | undefined,
-    observer: undefined as ObserverMiddleware | undefined,
   };
 
   const instances = {
@@ -87,7 +86,7 @@ export const Plugins = (
   };
 
   const hasObserver = () => {
-    return Boolean(plugins.observer);
+    return Boolean(instances.observer);
   };
 
   const addFormatter = (formatter: FormatterMiddleware | undefined) => {
