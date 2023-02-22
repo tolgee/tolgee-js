@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.3.2](https://github.com/tolgee/tolgee-js/compare/v5.3.1...v5.3.2) (2023-02-22)
+
+
+### Bug Fixes
+
+* Vue using Vite ([#3157](https://github.com/tolgee/tolgee-js/issues/3157)) ([b0ca4d2](https://github.com/tolgee/tolgee-js/commit/b0ca4d25b2e7f10a973ae19a2cff5ce990ac3e0a))
+
+
+
+
+
 ## [5.3.1](https://github.com/tolgee/tolgee-js/compare/v5.3.0...v5.3.1) (2023-02-20)
 
 **Note:** Version bump only for package @tolgee/vue-testapp

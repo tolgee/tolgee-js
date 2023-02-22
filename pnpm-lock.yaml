@@ -773,7 +773,7 @@ importers:
   testapps/vue:
     specifiers:
       '@tolgee/format-icu': 5.3.0
-      '@tolgee/vue': ^5.3.0
+      '@tolgee/vue': 5.3.2
       '@types/node': ^18.11.12
       '@vitejs/plugin-vue': ^4.0.0
       '@vitejs/plugin-vue-jsx': ^3.0.0
@@ -26537,7 +26537,7 @@ packages:
     dependencies:
       adjust-sourcemap-loader: 4.0.0
       convert-source-map: 1.8.0
-      loader-utils: 2.0.2
+      loader-utils: 2.0.4
       postcss: 8.4.21
       source-map: 0.6.1
     dev: true

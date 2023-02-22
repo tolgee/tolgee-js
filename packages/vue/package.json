@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue",
-  "version": "5.3.1",
+  "version": "5.3.2",
   "description": "Vue implementation for tolgee localization framework",
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
