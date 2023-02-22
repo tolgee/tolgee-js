@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.4.0-rc.210b1663.0](https://github.com/tolgee/tolgee-js/compare/v5.3.1...v5.4.0-rc.210b1663.0) (2023-02-22)
+
+
+### Features
+
+* observer works inside shadowDom ([210b166](https://github.com/tolgee/tolgee-js/commit/210b16639104c1933a45b3fed78ef23247b18833))
+* observer works inside shadowDom ([8482379](https://github.com/tolgee/tolgee-js/commit/84823798ac519ad8d90f5396de2f760e1507142e))
+
+
+
+
+
 ## [5.3.1](https://github.com/tolgee/tolgee-js/compare/v5.3.0...v5.3.1) (2023-02-20)
 
 
