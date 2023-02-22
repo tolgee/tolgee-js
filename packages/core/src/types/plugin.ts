@@ -60,9 +60,12 @@ export type HighlightInterface = (key?: string, ns?: NsFallback) => Highlighter;
 
 export type ObserverRunProps = {
   mouseHighlight: boolean;
+  options: ObserverOptionsInternal;
+  translate: (params: TranslatePropsInternal) => string;
+  onClick: TranslationOnClick;
 };
 
-export type ObserverMiddleware = (props: ObserverProps) => {
+export type ObserverMiddleware = () => {
   unwrap: (text: string) => Unwrapped;
   wrap: WrapperWrapFunction;
   retranslate: () => void;
@@ -115,12 +118,6 @@ export type TranslationOnClick = (data: {
   keysAndDefaults: KeyAndParams[];
   event: any;
 }) => void;
-
-export type ObserverProps = {
-  translate: (params: TranslatePropsInternal) => string;
-  onClick: TranslationOnClick;
-  options: ObserverOptionsInternal;
-};
 
 export type Highlighter = {
   unhighlight(): void;

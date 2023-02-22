@@ -8,15 +8,15 @@ import { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
-import { ElementStore } from './ElementStore';
+import { ElementStoreType } from './ElementStore';
 import { compareDescriptors, nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export const ElementRegistry = (
   options: ObserverOptionsInternal,
+  elementStore: ElementStoreType,
   onClick: TranslationOnClick
 ) => {
-  const elementStore = ElementStore();
   const elementHighlighter = ElementHighlighter({
     highlightColor: options.highlightColor,
     highlightWidth: options.highlightWidth,
@@ -31,6 +31,7 @@ export const ElementRegistry = (
         keysAndDefaults: getKeysAndDefaults(meta),
       });
     },
+    options,
   });
 
   function register(element: Element, node: Node, nodeMeta: NodeMeta) {
@@ -56,6 +57,11 @@ export const ElementRegistry = (
 
   function stop() {
     eventHandler.stop();
+    elementStore.forEachElement((_, meta) => {
+      if (meta.highlightEl) {
+        meta.unhighlight?.();
+      }
+    });
   }
 
   function isRestricted(element: Element) {
@@ -149,3 +155,5 @@ export const ElementRegistry = (
     stop,
   });
 };
+
+export type ElementRegistryInstance = ReturnType<typeof ElementRegistry>;

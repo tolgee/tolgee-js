@@ -58,7 +58,7 @@ export const InvisibleWrapper = (): WrapperMiddleware => {
   };
 
   const decodeValue = (value: string) => {
-    return JSON.parse(value) as EncodeValue;
+    return JSON.parse(value || '{}') as EncodeValue;
   };
 
   const wrap: WrapperWrapFunction = ({
