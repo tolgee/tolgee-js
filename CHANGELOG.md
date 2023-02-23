@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.1-rc.49c54f24.0](https://github.com/tolgee/tolgee-js/compare/v5.4.0...v5.4.1-rc.49c54f24.0) (2023-02-23)
+
+
+### Bug Fixes
+
+* i18next peerDependencies and sourcemaps ([49c54f2](https://github.com/tolgee/tolgee-js/commit/49c54f24d8abccf533700bb8e348f292f75cfff0))
+
+
+
+
+
 # [5.4.0](https://github.com/tolgee/tolgee-js/compare/v5.3.2...v5.4.0) (2023-02-22)
 
 
