@@ -32,7 +32,8 @@
   "files": [
     "index.js",
     "lib/**/*",
-    "dist/**/*"
+    "dist/**/*",
+    "src/**/*"
   ],
   "peerDependencies": {
     "vue": "^3.0.0"
