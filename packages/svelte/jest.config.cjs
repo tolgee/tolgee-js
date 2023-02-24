@@ -17,5 +17,6 @@ module.exports = {
       '<rootDir>/.svelte-kit/build/runtime/app$1',
     ],
   },
+  setupFiles: ['../testing/setupJest.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
 };

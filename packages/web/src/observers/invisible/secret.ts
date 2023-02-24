@@ -1,5 +1,3 @@
-import { Encoder, Decoder } from './encoderPolyfill';
-
 export const INVISIBLE_CHARACTERS = ['\u200C', '\u200D'];
 
 export const INVISIBLE_REGEX = RegExp(
@@ -8,11 +6,11 @@ export const INVISIBLE_REGEX = RegExp(
 );
 
 const toBytes = (text: string) => {
-  return Array.from(new Encoder().encode(text));
+  return Array.from(new TextEncoder().encode(text));
 };
 
 const fromBytes = (bytes: Iterable<number>) => {
-  return new Decoder().decode(new Uint8Array(bytes));
+  return new TextDecoder().decode(new Uint8Array(bytes));
 };
 
 const padToWholeBytes = (binary: string) => {
