@@ -28,7 +28,7 @@ jobs:
           run_install: false
 
       - name: Create branch
-        run: git checkout -b rc.$(git rev-parse --short HEAD)
+        run: git checkout -b prerelease.$(git rev-parse --short HEAD)
 
       - name: Set git globals
         run: |
@@ -40,7 +40,7 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version --yes --conventional-commits --conventional-prerelease --preid rc.$(git rev-parse --short HEAD) \
+          lerna version --yes --conventional-commits --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --no-push --no-git-tag-version --exact
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
