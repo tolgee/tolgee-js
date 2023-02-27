@@ -1,5 +1,5 @@
 {
-  "version": "5.4.1",
+  "version": "5.4.2-prerelease.2f5c8d8f.0",
   "useWorkspaces": true,
   "command": {
     "publish": {
