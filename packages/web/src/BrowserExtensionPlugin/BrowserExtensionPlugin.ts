@@ -62,7 +62,7 @@ if (typeof window !== 'undefined') {
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
       const InContextTools = await loadInContextLib(
-        process.env.TOLGEE_UI_VERSION || 'rc'
+        process.env.TOLGEE_UI_VERSION || 'prerelease'
       );
       return (tolgee) => {
         const credentials = getCredentials()!;
