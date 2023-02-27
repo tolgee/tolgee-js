@@ -45,7 +45,9 @@ jobs:
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
-        run: echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
+        run: |
+          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
+          pnpm run --silent ui-version
 
       - name: Build all packages
         run: pnpm build || pnpm build
