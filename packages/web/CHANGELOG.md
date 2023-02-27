@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.2](https://github.com/tolgee/tolgee-js/compare/v5.4.1...v5.4.2) (2023-02-27)
+
+
+### Bug Fixes
+
+* TolgeeTools ui version missing ([#3169](https://github.com/tolgee/tolgee-js/issues/3169)) ([5003cfe](https://github.com/tolgee/tolgee-js/commit/5003cfe8237350df0bd2d60bfa73d411348124af))
+
+
+
+
+
 ## [5.4.1](https://github.com/tolgee/tolgee-js/compare/v5.4.0...v5.4.1) (2023-02-24)
 
 
