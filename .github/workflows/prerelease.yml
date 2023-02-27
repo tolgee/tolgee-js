@@ -28,7 +28,7 @@ jobs:
           run_install: false
 
       - name: Create branch
-        run: git checkout -b rc.$(git rev-parse --short HEAD)
+        run: git checkout -b prerelease.$(git rev-parse --short HEAD)
 
       - name: Set git globals
         run: |
@@ -40,12 +40,14 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version --yes --conventional-commits --conventional-prerelease --preid rc.$(git rev-parse --short HEAD) \
+          lerna version --yes --conventional-commits --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --no-push --no-git-tag-version --exact
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
-        run: echo "TOLGEE_UI_VERSION=$(npm run --silent ui-version)" >> $GITHUB_ENV
+        run: |
+          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
+          pnpm run --silent ui-version
 
       - name: Build all packages
         run: pnpm build || pnpm build
@@ -54,7 +56,7 @@ jobs:
         run: |
           git stash
           git push --follow-tags -u origin $(git rev-parse --abbrev-ref HEAD)
-          lerna version --yes --conventional-commits --conventional-prerelease --preid rc.$(git rev-parse --short HEAD) \
+          lerna version --yes --conventional-commits --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --exact --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -62,6 +64,6 @@ jobs:
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
       - name: Publish
-        run: lerna publish from-package --yes --dist-tag rc
+        run: lerna publish from-package --yes --dist-tag prerelease
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
