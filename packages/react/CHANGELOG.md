@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.3-prerelease.9ea3f1fa.0](https://github.com/tolgee/tolgee-js/compare/v5.4.2...v5.4.3-prerelease.9ea3f1fa.0) (2023-03-03)
+
+
+### Bug Fixes
+
+* tolgee loading forever if run fails ([9ea3f1f](https://github.com/tolgee/tolgee-js/commit/9ea3f1fa5218441c3bd0a31f268e265e6c9ecfc1))
+
+
+
+
+
 ## [5.4.2](https://github.com/tolgee/tolgee-js/compare/v5.4.1...v5.4.2) (2023-02-27)
 
 **Note:** Version bump only for package @tolgee/react

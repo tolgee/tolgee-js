@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.3-prerelease.9ea3f1fa.0](https://github.com/tolgee/tolgee-js/compare/v5.4.2...v5.4.3-prerelease.9ea3f1fa.0) (2023-03-03)
+
+**Note:** Version bump only for package @tolgee/format-icu
+
+
+
+
+
 # [5.4.0](https://github.com/tolgee/tolgee-js/compare/v5.3.2...v5.4.0) (2023-02-22)
 
 **Note:** Version bump only for package @tolgee/format-icu
