@@ -33,7 +33,7 @@ export const TolgeeProvider = defineComponent({
     const isLoading = ref(!tolgee.isLoaded());
 
     onBeforeMount(() => {
-      tolgee.run().then(() => {
+      tolgee.run().finally(() => {
         isLoading.value = false;
       });
     });
