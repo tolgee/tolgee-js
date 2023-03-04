@@ -14,7 +14,7 @@
 
   if (typeof window !== 'undefined') {
     onMount(() => {
-      tolgee.run().then(() => {
+      tolgee.run().finally(() => {
         isLoading = false
       })
     });
