@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.3](https://github.com/tolgee/tolgee-js/compare/v5.4.2...v5.4.3) (2023-03-04)
+
+
+### Bug Fixes
+
+* tolgee loading forever if run fails ([#3170](https://github.com/tolgee/tolgee-js/issues/3170)) ([01ce148](https://github.com/tolgee/tolgee-js/commit/01ce1487d9fe9c6fafe06a8d4d87a867efdd47d3))
+
+
+
+
+
 ## [5.4.2](https://github.com/tolgee/tolgee-js/compare/v5.4.1...v5.4.2) (2023-02-27)
 
 **Note:** Version bump only for package @tolgee/svelte
