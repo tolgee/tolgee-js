@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.4-prerelease.9b022cf1.0](https://github.com/tolgee/tolgee-js/compare/v5.4.3...v5.4.4-prerelease.9b022cf1.0) (2023-03-08)
+
+
+### Bug Fixes
+
+* revert type: module ([9b022cf](https://github.com/tolgee/tolgee-js/commit/9b022cf1be6fc54dd9402a848536eceed02f2dba))
+* revert type: module ([d720afd](https://github.com/tolgee/tolgee-js/commit/d720afd4f96d3533cfeed0fd3be1e3149cc58715))
+* revert type: module ([6915d8e](https://github.com/tolgee/tolgee-js/commit/6915d8e1f61ea1fa93b0cd11b4985c17e55d30a3))
+
+
+
+
+
 ## [5.4.3](https://github.com/tolgee/tolgee-js/compare/v5.4.2...v5.4.3) (2023-03-04)
 
 
