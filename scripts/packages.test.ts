@@ -78,6 +78,7 @@ const checkPackage = (filePath) => {
     }
     assertFileExists(folder, f.main, 'main');
     assertFileExists(folder, f.module, 'module');
+    assertFileExists(folder, f.svelte, 'svelte');
     if (f.module) {
       // if module field ends with .mjs it causes issues with webpack
       assertExpr(f.module.endsWith('.js'), ' - module ends with .js');
