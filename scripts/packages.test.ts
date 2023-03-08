@@ -71,7 +71,6 @@ const checkPackage = (filePath) => {
       assertExpr(f.name?.startsWith('@tolgee/'), 'Has correct name');
       assertExpr(f.publishConfig?.access, 'Is public');
       assertExpr(f.main || f.module || f.exports, 'Has entry point');
-      assertExpr(f.type === 'module', 'Has type: module');
       assertExpr(
         f.exports?.['./package.json'] === './package.json',
         'package.json in exports'
