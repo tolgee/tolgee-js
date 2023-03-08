@@ -23,6 +23,17 @@ export default {
       sourcemap: true,
     },
     {
+      file: 'dist/tolgee-i18next.esm.min.js',
+      format: 'esm',
+      plugins: [terser()],
+      sourcemap: true,
+    },
+    {
+      file: 'dist/tolgee-i18next.esm.mjs',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
       file: 'dist/tolgee-i18next.esm.min.mjs',
       format: 'esm',
       plugins: [terser()],

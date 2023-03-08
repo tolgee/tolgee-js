@@ -2,11 +2,12 @@
   "internal": true,
   "main": "../dist/tolgee-in-context-tools.cjs.js",
   "module": "../dist/tolgee-in-context-tools.esm.js",
+  "svelte": "../dist/tolgee-in-context-tools.esm.mjs",
   "types": "../types/tools.d.ts",
   "exports": {
     ".": {
       "require": "../dist/tolgee-in-context-tools.cjs.js",
-      "import": "../dist/tolgee-in-context-tools.esm.js",
+      "import": "../dist/tolgee-in-context-tools.esm.mjs",
       "types": "../types/index.d.ts"
     },
     "./package.json": "./package.json"

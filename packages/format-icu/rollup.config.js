@@ -25,6 +25,17 @@ export default {
       sourcemap: true,
     },
     {
+      file: 'dist/tolgee-format-icu.esm.mjs',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      file: 'dist/tolgee-format-icu.esm.min.js',
+      format: 'esm',
+      plugins: [terser()],
+      sourcemap: true,
+    },
+    {
       file: 'dist/tolgee-format-icu.esm.min.mjs',
       format: 'esm',
       plugins: [terser()],

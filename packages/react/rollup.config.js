@@ -46,6 +46,19 @@ export default {
     },
     {
       name: '@tolgee/react',
+      file: 'dist/tolgee-react.esm.min.js',
+      format: 'esm',
+      sourcemap: true,
+      plugins: [terser()],
+    },
+    {
+      name: '@tolgee/react',
+      file: 'dist/tolgee-react.esm.mjs',
+      format: 'esm',
+      sourcemap: true,
+    },
+    {
+      name: '@tolgee/react',
       file: 'dist/tolgee-react.esm.min.mjs',
       format: 'esm',
       sourcemap: true,

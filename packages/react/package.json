@@ -72,7 +72,7 @@
   "exports": {
     ".": {
       "require": "./dist/tolgee-react.cjs.js",
-      "import": "./dist/tolgee-react.esm.js"
+      "import": "./dist/tolgee-react.esm.mjs"
     },
     "./package.json": "./package.json"
   },
