@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { T, Tolgee, TolgeeProvider, useTolgeeSSR } from '@tolgee/react';
 import { InContextTools } from '@tolgee/web/tools';
 import { useRouter } from 'next/router';
@@ -22,20 +22,21 @@ const tolgee = Tolgee()
   });
 
 const Home: NextPage = () => {
-  const { locale: activeLocale } = useRouter();
-
   const router = useRouter();
+
+  const [ready, setReady] = useState(false);
 
   const apiKey =
     (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 
-  const tolgeeSSR = useTolgeeSSR(tolgee, activeLocale);
+  const tolgeeSSR = useTolgeeSSR(tolgee, router.locale);
 
   useEffect(() => {
     tolgeeSSR.updateOptions({ apiKey });
+    setReady(true);
   }, [apiKey]);
 
-  return (
+  return ready ? (
     <TolgeeProvider tolgee={tolgeeSSR}>
       <div className={styles.container}>
         <Head>
@@ -53,7 +54,7 @@ const Home: NextPage = () => {
         </main>
       </div>
     </TolgeeProvider>
-  );
+  ) : null;
 };
 
 export default Home;
