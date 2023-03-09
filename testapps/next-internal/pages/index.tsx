@@ -13,6 +13,7 @@ import LocaleSwitcher from '../component/LanguageSwitcher';
 const tolgee = Tolgee()
   .use(InContextTools())
   .init({
+    apiKey: process.env.NEXT_PUBLIC_TOLGEE_API_KEY,
     apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
     staticData: {
       en: enLocale,
