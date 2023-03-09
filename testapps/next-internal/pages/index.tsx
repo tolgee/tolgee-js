@@ -26,15 +26,16 @@ const Home: NextPage = () => {
 
   const [ready, setReady] = useState(false);
 
-  const apiKey =
-    (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
-
   const tolgeeSSR = useTolgeeSSR(tolgee, router.locale);
 
   useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const apiKey =
+      queryParams.get('api_key') || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
+
     tolgeeSSR.updateOptions({ apiKey });
     setReady(true);
-  }, [apiKey]);
+  }, []);
 
   return ready ? (
     <TolgeeProvider tolgee={tolgeeSSR}>
