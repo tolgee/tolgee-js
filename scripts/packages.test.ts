@@ -71,7 +71,6 @@ const checkPackage = (filePath) => {
       assertExpr(f.name?.startsWith('@tolgee/'), 'Has correct name');
       assertExpr(f.publishConfig?.access, 'Is public');
       assertExpr(f.main || f.module || f.exports, 'Has entry point');
-      assertExpr(f.type === 'module', 'Has type: module');
       assertExpr(
         f.exports?.['./package.json'] === './package.json',
         'package.json in exports'
@@ -79,6 +78,7 @@ const checkPackage = (filePath) => {
     }
     assertFileExists(folder, f.main, 'main');
     assertFileExists(folder, f.module, 'module');
+    assertFileExists(folder, f.svelte, 'svelte');
     if (f.module) {
       // if module field ends with .mjs it causes issues with webpack
       assertExpr(f.module.endsWith('.js'), ' - module ends with .js');
