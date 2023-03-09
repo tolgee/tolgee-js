@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { T, Tolgee, TolgeeProvider } from '@tolgee/react';
+import { useEffect } from 'react';
+import { T, Tolgee, TolgeeProvider, useTolgeeSSR } from '@tolgee/react';
 import { InContextTools } from '@tolgee/web/tools';
 import { useRouter } from 'next/router';
 
@@ -9,6 +9,16 @@ import enLocale from '../i18n/en.json';
 import deLocale from '../i18n/de.json';
 import styles from '../styles/Home.module.css';
 import LocaleSwitcher from '../component/LanguageSwitcher';
+
+const tolgee = Tolgee()
+  .use(InContextTools())
+  .init({
+    apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
+    staticData: {
+      en: enLocale,
+      de: deLocale,
+    },
+  });
 
 const Home: NextPage = () => {
   const { locale: activeLocale } = useRouter();
@@ -18,30 +28,14 @@ const Home: NextPage = () => {
   const apiKey =
     (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 
-  const [tolgee] = useState(
-    Tolgee()
-      .use(InContextTools())
-      .init({
-        language: activeLocale,
-        apiKey: apiKey,
-        apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
-        staticData: {
-          en: enLocale,
-          de: deLocale,
-        },
-      })
-  );
+  const tolgeeSSR = useTolgeeSSR(tolgee, activeLocale);
 
   useEffect(() => {
-    tolgee.updateOptions({ apiKey });
+    tolgeeSSR.updateOptions({ apiKey });
   }, [apiKey]);
 
-  useEffect(() => {
-    tolgee.changeLanguage(activeLocale!);
-  }, [activeLocale]);
-
-  return router.isReady ? (
-    <TolgeeProvider tolgee={tolgee}>
+  return (
+    <TolgeeProvider tolgee={tolgeeSSR}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>
@@ -58,7 +52,7 @@ const Home: NextPage = () => {
         </main>
       </div>
     </TolgeeProvider>
-  ) : null;
+  );
 };
 
 export default Home;
