@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.4.4](https://github.com/tolgee/tolgee-js/compare/v5.4.3...v5.4.4) (2023-03-09)
+
+
+### Bug Fixes
+
+* revert type module ([#3172](https://github.com/tolgee/tolgee-js/issues/3172)) ([165dc98](https://github.com/tolgee/tolgee-js/commit/165dc98c7c0c52f1d38a86fe75754a57bc176fab))
+
+
+
+
+
 ## [5.4.2](https://github.com/tolgee/tolgee-js/compare/v5.4.1...v5.4.2) (2023-02-27)
 
 **Note:** Version bump only for package @tolgee/i18next
