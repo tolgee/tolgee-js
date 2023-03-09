@@ -1,5 +1,6 @@
 cypress/screenshots
 cypress/videos
+cypress/downloads
 node_modules
 testapps/dist
 extension
