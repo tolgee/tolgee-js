@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { FunctionComponent, useState } from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { green, red } from '@mui/material/colors';
 import Backup from '@mui/icons-material/Backup';
@@ -62,11 +62,11 @@ const ScInvalidIcon = styled(HighlightOff)`
   color: ${({ theme }) => theme.palette.common.white};
 `;
 
-export const ScreenshotDropzone: FunctionComponent<ScreenshotDropzoneProps> = ({
+export const ScreenshotDropzone = ({
   validateAndUpload,
   enabled,
   ...props
-}) => {
+}: React.PropsWithChildren<ScreenshotDropzoneProps>) => {
   const [dragOver, setDragOver] = useState(null as null | 'valid' | 'invalid');
   const [dragEnterTarget, setDragEnterTarget] = useState(
     null as EventTarget | null

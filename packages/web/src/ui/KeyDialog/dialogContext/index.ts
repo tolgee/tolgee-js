@@ -27,6 +27,7 @@ type DialogProps = {
   onClose: () => void;
   uiProps: UiProps;
   ns: string[];
+  children: React.ReactNode;
 };
 
 export const [DialogProvider, useDialogActions, useDialogContext] =

@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { useDialogContext, useDialogActions } from './dialogContext';
 
-export const NewWindow: FC = (props) => {
+export const NewWindow = (props: React.PropsWithChildren) => {
   const newWindow = useRef<Window>(null);
   const [popup, setPopup] = useState<Window | null>(null);
   const { setContainer, onClose } = useDialogActions();

@@ -54,7 +54,7 @@ theme = createTheme(theme, {
   },
 });
 
-export const ThemeProvider: React.FC = ({ children }) => {
+export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
   const cache = useRef(
     createCache({
       key: 'css',

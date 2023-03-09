@@ -9,7 +9,10 @@ export const createProvider = <StateType, Actions, ProviderProps>(
   const StateContext = createContext<StateType>(null as any);
   const DispatchContext = React.createContext<Actions>(null as any);
 
-  const Provider: React.FC<ProviderProps> = ({ children, ...props }) => {
+  const Provider = ({
+    children,
+    ...props
+  }: React.PropsWithChildren<ProviderProps>) => {
     const [state, _actions] = controller(props as any);
     const actionsRef = useRef(_actions);
 

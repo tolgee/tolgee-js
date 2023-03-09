@@ -21,12 +21,12 @@ export const QueryContext = React.createContext({} as GlobalOptions);
 
 type Props = GlobalOptions;
 
-export const QueryProvider: React.FC<Props> = ({
+export const QueryProvider = ({
   children,
   apiUrl,
   apiKey,
   projectId,
-}) => {
+}: React.PropsWithChildren<Props>) => {
   return (
     <QueryContext.Provider value={{ apiUrl, apiKey, projectId }}>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
