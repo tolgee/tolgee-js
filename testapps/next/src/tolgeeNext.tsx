@@ -6,7 +6,6 @@ import {
   DevTools,
   Tolgee,
   TolgeeProvider,
-  BackendFetch,
   getFallbackArray,
 } from '@tolgee/react';
 
@@ -16,7 +15,6 @@ const apiUrl = process.env.NEXT_PUBLIC_TOLGEE_API_URL;
 const tolgee = Tolgee()
   .use(DevTools())
   .use(FormatIcu())
-  .use(BackendFetch())
   .init({
     availableLanguages: ['en', 'cs'],
     defaultLanguage: 'en',
@@ -68,14 +66,17 @@ type Props = {
   locales: any;
 };
 
-export const TolgeeNextProvider: React.FC<Props> = ({ locales, children }) => {
+export const TolgeeNextProvider = ({
+  locales,
+  children,
+}: React.PropsWithChildren<Props>) => {
   const tolgee = useTolgeeSSR(locales);
 
   return (
     <TolgeeProvider
       tolgee={tolgee}
       fallback="Loading..."
-      options={{ useSuspense: false }}
+      options={{ useSuspense: true }}
     >
       {children}
     </TolgeeProvider>
