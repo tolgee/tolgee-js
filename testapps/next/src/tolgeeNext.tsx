@@ -55,11 +55,11 @@ export const TolgeeNextProvider = ({
   children,
 }: React.PropsWithChildren<Props>) => {
   const router = useRouter();
-  const ssrInstance = useTolgeeSSR(tolgee, router.locale, locales);
+  const tolgeeSSR = useTolgeeSSR(tolgee, router.locale, locales);
 
   return (
     <TolgeeProvider
-      tolgee={ssrInstance}
+      tolgee={tolgeeSSR}
       fallback="Loading..."
       options={{ useSuspense: true }}
     >
