@@ -1,6 +1,6 @@
 import { LangSelector } from './LangSelector';
 
-export const Navbar: React.FC = ({ children }) => {
+export const Navbar = ({ children }: React.PropsWithChildren) => {
   return (
     <div className="navbar">
       {children}

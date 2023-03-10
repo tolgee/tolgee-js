@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import { T, Tolgee, TolgeeProvider } from '@tolgee/react';
+import { useEffect, useState } from 'react';
+import { T, Tolgee, TolgeeProvider, useTolgeeSSR } from '@tolgee/react';
 import { InContextTools } from '@tolgee/web/tools';
 import { useRouter } from 'next/router';
 
@@ -10,38 +10,35 @@ import deLocale from '../i18n/de.json';
 import styles from '../styles/Home.module.css';
 import LocaleSwitcher from '../component/LanguageSwitcher';
 
-const Home: NextPage = () => {
-  const { locale: activeLocale } = useRouter();
+const tolgee = Tolgee()
+  .use(InContextTools())
+  .init({
+    apiKey: process.env.NEXT_PUBLIC_TOLGEE_API_KEY,
+    apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
+    staticData: {
+      en: enLocale,
+      de: deLocale,
+    },
+  });
 
+const Home: NextPage = () => {
   const router = useRouter();
 
-  const apiKey =
-    (router.query.api_key as string) || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
+  const [ready, setReady] = useState(false);
 
-  const [tolgee] = useState(
-    Tolgee()
-      .use(InContextTools())
-      .init({
-        language: activeLocale,
-        apiKey: apiKey,
-        apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
-        staticData: {
-          en: enLocale,
-          de: deLocale,
-        },
-      })
-  );
+  const tolgeeSSR = useTolgeeSSR(tolgee, router.locale);
 
   useEffect(() => {
-    tolgee.updateOptions({ apiKey });
-  }, [apiKey]);
+    const queryParams = new URLSearchParams(window.location.search);
+    const apiKey =
+      queryParams.get('api_key') || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 
-  useEffect(() => {
-    tolgee.changeLanguage(activeLocale!);
-  }, [activeLocale]);
+    tolgeeSSR.updateOptions({ apiKey });
+    setReady(true);
+  }, []);
 
-  return router.isReady ? (
-    <TolgeeProvider tolgee={tolgee}>
+  return ready ? (
+    <TolgeeProvider tolgee={tolgeeSSR}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>

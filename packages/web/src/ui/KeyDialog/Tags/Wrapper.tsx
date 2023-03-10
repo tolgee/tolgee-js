@@ -45,12 +45,12 @@ type Props = {
   className?: string;
 };
 
-export const Wrapper: React.FC<Props> = ({
+export const Wrapper = ({
   children,
   role,
   onClick,
   className,
-}) => {
+}: React.PropsWithChildren<Props>) => {
   switch (role) {
     case 'add':
       return (

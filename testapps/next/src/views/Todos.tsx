@@ -61,9 +61,7 @@ export const Todos = () => {
       <div className="example">
         <Navbar>
           <Link href="/translation-methods">
-            <a>
-              <T keyName="menu-item-translation-methods" />
-            </a>
+            <T keyName="menu-item-translation-methods" />
           </Link>
         </Navbar>
 

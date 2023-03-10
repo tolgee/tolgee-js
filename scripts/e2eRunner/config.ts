@@ -25,7 +25,7 @@ export const config: Config = {
         prod: {
           cwd: path.resolve(__dirname, '../../testapps/react/'),
           command: 'npm run serve -- -p 8102',
-          waitForOutput: 'INFO: Accepting connections at http://localhost:8102',
+          waitForOutput: 'Accepting connections at',
         },
       },
     },

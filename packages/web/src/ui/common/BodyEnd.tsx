@@ -2,7 +2,10 @@ import { DEVTOOLS_ID } from '../../constants';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
-export class BodyEnd extends React.PureComponent<{ document?: Document }> {
+export class BodyEnd extends React.PureComponent<{
+  document?: Document;
+  children: React.ReactNode;
+}> {
   _popup = null as HTMLElement | null;
 
   get document() {

@@ -11,9 +11,7 @@ export const TranslationMethods = () => {
   return (
     <main className="translation-methods">
       <Navbar>
-        <Link href="/">
-          <a>The example app</a>
-        </Link>
+        <Link href="/">The example app</Link>
       </Navbar>
 
       <div className="tiles">

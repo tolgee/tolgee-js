@@ -5,7 +5,9 @@ import { useDialogContext, useDialogActions } from './dialogContext';
 import { NewWindow } from './NewWindow';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
 
-export const TranslationDialogWrapper: React.FC = ({ children }) => {
+export const TranslationDialogWrapper = ({
+  children,
+}: React.PropsWithChildren) => {
   const { onClose } = useDialogActions();
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
   const open = useDialogContext((c) => c.open);
