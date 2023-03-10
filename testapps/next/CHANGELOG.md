@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.5.0](https://github.com/tolgee/tolgee-js/compare/v5.4.4...v5.5.0) (2023-03-10)
+
+
+### Features
+
+* add useTolgeeSSR for compatibility with react 18 and next.js 13 ([#3173](https://github.com/tolgee/tolgee-js/issues/3173)) ([6ee87db](https://github.com/tolgee/tolgee-js/commit/6ee87db17801f7788aafd441dd198e529bafb522))
+
+
+
+
+
 ## [5.4.4](https://github.com/tolgee/tolgee-js/compare/v5.4.3...v5.4.4) (2023-03-09)
 
 **Note:** Version bump only for package @tolgee/next-testapp
