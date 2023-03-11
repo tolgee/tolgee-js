@@ -27,16 +27,12 @@ export const useTranslateInternal = (ns?: NsFallback) => {
   }
   const t = ref(createTFunction());
 
-  let subscription: SubscriptionSelective;
-  onBeforeMount(() => {
-    const tolgee = tolgeeContext.tolgee as TolgeeInstance;
-    subscription = tolgee.onNsUpdate(() => {
-      t.value = createTFunction();
-      isLoading.value = !tolgee.isLoaded(namespaces);
-    });
-    subscription.subscribeNs(namespaces);
-    tolgee.addActiveNs(namespaces);
+  const subscription = tolgee.onNsUpdate(() => {
+    t.value = createTFunction();
+    isLoading.value = !tolgee.isLoaded(namespaces);
   });
+  subscription.subscribeNs(namespaces);
+  tolgee.addActiveNs(namespaces);
 
   onUnmounted(() => {
     subscription?.unsubscribe();
