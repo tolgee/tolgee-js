@@ -1,17 +1,10 @@
 import {
-  SubscriptionSelective,
   TolgeeInstance,
   TranslateProps,
   NsFallback,
   getFallback,
 } from '@tolgee/web';
-import {
-  inject,
-  onBeforeMount,
-  onUnmounted,
-  ref,
-  getCurrentInstance,
-} from 'vue';
+import { inject, onUnmounted, ref, getCurrentInstance } from 'vue';
 import { TolgeeVueContext } from './types';
 
 export const useTranslateInternal = (ns?: NsFallback) => {
