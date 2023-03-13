@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.1](https://github.com/tolgee/tolgee-js/compare/v5.5.0...v5.5.1) (2023-03-13)
+
+
+### Bug Fixes
+
+* vue - move t from onBeforeMount to setup function ([#3174](https://github.com/tolgee/tolgee-js/issues/3174)) ([29c137f](https://github.com/tolgee/tolgee-js/commit/29c137f9a3d5f00d9e8b6da7a4f5ee237106f590))
+
+
+
+
+
 # [5.5.0](https://github.com/tolgee/tolgee-js/compare/v5.4.4...v5.5.0) (2023-03-10)
 
 

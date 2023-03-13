@@ -750,7 +750,7 @@ importers:
   testapps/vue:
     specifiers:
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/vue': 5.5.0
+      '@tolgee/vue': 5.5.1
       '@types/node': ^18.11.12
       '@vitejs/plugin-vue': ^4.0.0
       '@vitejs/plugin-vue-jsx': ^3.0.0
