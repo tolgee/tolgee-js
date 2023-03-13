@@ -63,15 +63,15 @@ export class UI implements UiInterface {
     event: MouseEvent
   ) {
     let key = keysAndDefaults[0].key as string | undefined;
-    if (keysAndDefaults.length > 1) {
-      const keys = new Map(
-        keysAndDefaults.map(({ key, translation, defaultValue }) => [
-          key,
-          translation || defaultValue,
-        ])
-      );
+    const keysMap = new Map(
+      keysAndDefaults.map(({ key, translation, defaultValue }) => [
+        key,
+        translation || defaultValue,
+      ])
+    );
+    if (keysMap.size > 1) {
       key = await this.getKey({
-        keys,
+        keys: keysMap,
         openEvent: event,
       });
     }
