@@ -1,17 +1,10 @@
 import {
-  SubscriptionSelective,
   TolgeeInstance,
   TranslateProps,
   NsFallback,
   getFallback,
 } from '@tolgee/web';
-import {
-  inject,
-  onBeforeMount,
-  onUnmounted,
-  ref,
-  getCurrentInstance,
-} from 'vue';
+import { inject, onUnmounted, ref, getCurrentInstance } from 'vue';
 import { TolgeeVueContext } from './types';
 
 export const useTranslateInternal = (ns?: NsFallback) => {
@@ -27,16 +20,12 @@ export const useTranslateInternal = (ns?: NsFallback) => {
   }
   const t = ref(createTFunction());
 
-  let subscription: SubscriptionSelective;
-  onBeforeMount(() => {
-    const tolgee = tolgeeContext.tolgee as TolgeeInstance;
-    subscription = tolgee.onNsUpdate(() => {
-      t.value = createTFunction();
-      isLoading.value = !tolgee.isLoaded(namespaces);
-    });
-    subscription.subscribeNs(namespaces);
-    tolgee.addActiveNs(namespaces);
+  const subscription = tolgee.onNsUpdate(() => {
+    t.value = createTFunction();
+    isLoading.value = !tolgee.isLoaded(namespaces);
   });
+  subscription.subscribeNs(namespaces);
+  tolgee.addActiveNs(namespaces);
 
   onUnmounted(() => {
     subscription?.unsubscribe();
