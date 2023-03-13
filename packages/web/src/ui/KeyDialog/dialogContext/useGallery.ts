@@ -66,7 +66,7 @@ export const useGallery = (uiProps: UiProps) => {
       Object.entries(translationsForm),
       uiProps.changeTranslation
     );
-    await sleep(100);
+    await sleep(400);
     const { unhighlight } = uiProps.highlight(key, ns);
     await sleep(100);
     let screenshot: string;
