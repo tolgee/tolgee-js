@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.2](https://github.com/tolgee/tolgee-js/compare/v5.5.1...v5.5.2) (2023-03-13)
+
+
+### Bug Fixes
+
+* don't show context menu when element contains same key twice & highliting with longer delay ([#3175](https://github.com/tolgee/tolgee-js/issues/3175)) ([6884bba](https://github.com/tolgee/tolgee-js/commit/6884bbaa44fcd78b39939256fb15052d771bd1b1))
+
+
+
+
+
 ## [5.5.1](https://github.com/tolgee/tolgee-js/compare/v5.5.0...v5.5.1) (2023-03-13)
 
 
