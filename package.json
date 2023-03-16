@@ -27,6 +27,7 @@
     "test:e2e": "pnpm run build:e2e && pnpm --prefix e2e run start",
     "clean": "turbo run clean --cache-dir='.turbo'",
     "clean:all": "npm run clean && npm run clean:turbo && npm run clean:installation",
+    "clean:build": "npm run clean && npm run clean:turbo",
     "clean:installation": "node scripts/cleanNodeModules.js",
     "clean:turbo": "node scripts/cleanTurbo.js",
     "commitmsg": "commitlint -e $GIT_PARAMS",
