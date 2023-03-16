@@ -1,7 +1,7 @@
 <template>
   <select
-    v-bind="$i18n.i18next.language"
-    @change="changeLanguage"
+    :value="$i18next.language"
+    v-on:change="changeLanguage"
     class="lang-selector"
   >
     <option value="en">🇬🇧 English</option>
@@ -16,7 +16,7 @@ export default {
   name: 'LanguageSelect',
   methods: {
     changeLanguage(e) {
-      this.$i18n.i18next.changeLanguage(e.target.value);
+      this.$i18next.changeLanguage(e.target.value);
     },
   },
 };

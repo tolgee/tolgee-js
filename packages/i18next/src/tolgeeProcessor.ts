@@ -7,12 +7,12 @@ export const tolgeeProcessor = (tolgee: TolgeeInstance): Module => {
   return {
     type: 'postProcessor',
     name: 'tolgeeProcessor',
-    process: function (value: string, key: string[], options) {
+    process: function (value: string, key: string[], options, translator) {
       return tolgee.wrap({
         key: key.join('.'),
         defaultValue: options.defaultValue,
         translation: value,
-        ns: options.ns,
+        ns: options.ns || translator?.options?.defaultNS,
       });
     },
   } as any as Module;

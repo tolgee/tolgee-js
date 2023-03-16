@@ -11,14 +11,12 @@
     "serve": "serve -s dist"
   },
   "dependencies": {
-    "@panter/vue-i18next": "^0.15.2",
-    "@tolgee/core": "5.4.4",
-    "@tolgee/format-icu": "5.4.4",
     "@tolgee/i18next": "5.5.2",
     "core-js": "^3.25.3",
-    "i18next": "^21.9.2",
-    "i18next-icu": "^2.0.3",
-    "vue": "^2.6.11"
+    "i18next": "^22.4.11",
+    "i18next-icu": "^2.1.0",
+    "i18next-vue": "^2.1.1",
+    "vue": "^3.2.47"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.8",
@@ -26,7 +24,7 @@
     "@vue/cli-service": "~5.0.8",
     "babel-eslint": "^10.1.0",
     "serve": "^14.1.1",
-    "vue-template-compiler": "^2.6.11"
+    "vue-template-compiler": "^2.7.14"
   },
   "browserslist": [
     "> 1%",
