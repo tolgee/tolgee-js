@@ -1,5 +1,5 @@
 <template>
-  <div v-waitForT>
+  <div v-if="$i18next.isInitialized">
     <template v-if="currentRoute === '/'">
       <Todos />
     </template>
