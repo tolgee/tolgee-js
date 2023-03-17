@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.3](https://github.com/tolgee/tolgee-js/compare/v5.5.2...v5.5.3) (2023-03-17)
+
+
+### Bug Fixes
+
+* i18next use default namespace if not specified ([#3178](https://github.com/tolgee/tolgee-js/issues/3178)) ([a5148a5](https://github.com/tolgee/tolgee-js/commit/a5148a5a33483fde3236c87624ecbfa5927db151))
+
+
+
+
+
 ## [5.5.2](https://github.com/tolgee/tolgee-js/compare/v5.5.1...v5.5.2) (2023-03-13)
 
 **Note:** Version bump only for package @tolgee/vue-i18next-testapp
