@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.5.4](https://github.com/tolgee/tolgee-js/compare/v5.5.3...v5.5.4) (2023-03-20)
+
+
+### Bug Fixes
+
+* root styles leaking to shadow-dom ([#3182](https://github.com/tolgee/tolgee-js/issues/3182)) ([b215948](https://github.com/tolgee/tolgee-js/commit/b21594866977e6331ea80e4c099f9d724fb7360e))
+
+
+
+
+
 ## [5.5.3](https://github.com/tolgee/tolgee-js/compare/v5.5.2...v5.5.3) (2023-03-17)
 
 

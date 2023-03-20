@@ -153,7 +153,7 @@ importers:
       '@testing-library/dom': ^8.7.1
       '@testing-library/jest-dom': ^5.11.4
       '@tolgee/testing': 5.4.1
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       '@types/jest': ^28.1.6
       '@types/node': ^18.6.1
       concurrently: 7.3.0
@@ -210,7 +210,7 @@ importers:
       '@testing-library/jest-dom': 5.16.4
       '@tolgee/format-icu': 5.4.4
       '@tolgee/testing': 5.4.1
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       '@types/jasmine': ~3.10.3
       '@types/jasminewd2': ~2.0.3
       '@types/jest': 27.5.0
@@ -267,7 +267,7 @@ importers:
 
   packages/ngx/projects/ngx-tolgee:
     specifiers:
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
     dependencies:
       '@tolgee/web': link:../../../web
     publishDirectory: ../../dist/ngx-tolgee
@@ -281,7 +281,7 @@ importers:
       '@testing-library/react': ^14.0.0
       '@tolgee/format-icu': 5.4.4
       '@tolgee/testing': 5.4.1
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^18.0.28
@@ -340,7 +340,7 @@ importers:
       '@testing-library/svelte': ^3.2.2
       '@tolgee/format-icu': 5.4.4
       '@tolgee/testing': 5.4.1
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       '@tsconfig/svelte': ^3.0.0
       '@types/jest': ^28.1.7
       '@typescript-eslint/eslint-plugin': ^5.34.0
@@ -408,7 +408,7 @@ importers:
       '@testing-library/vue': ^6.6.1
       '@tolgee/format-icu': 5.4.4
       '@tolgee/testing': 5.4.1
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       '@types/jest': ^27.0.2
       '@types/testing-library__jest-dom': ^5.14.5
       '@vue/vue3-jest': ^27.0.0-alpha.3
@@ -529,7 +529,7 @@ importers:
   testapps/next:
     specifiers:
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/react': 5.5.3
+      '@tolgee/react': 5.5.4
       '@types/react': 18.0.28
       eslint: 8.35.0
       eslint-config-next: 13.2.3
@@ -551,8 +551,8 @@ importers:
 
   testapps/next-internal:
     specifiers:
-      '@tolgee/react': 5.5.3
-      '@tolgee/web': 5.5.3
+      '@tolgee/react': 5.5.4
+      '@tolgee/web': 5.5.4
       '@types/react': 18.0.28
       eslint: 8.35.0
       eslint-config-next: 13.2.3
@@ -590,7 +590,7 @@ importers:
       '@nguniversal/builders': ^13.0.2
       '@nguniversal/express-engine': 13.0.2
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/ngx': 5.5.3
+      '@tolgee/ngx': 5.5.4
       '@types/express': ^4.17.0
       '@types/node': ^17.0.35
       '@types/react': ^17.0.43
@@ -642,7 +642,7 @@ importers:
   testapps/react:
     specifiers:
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/react': 5.5.3
+      '@tolgee/react': 5.5.4
       '@types/node': ^18.14.6
       '@types/react': 18.0.28
       '@types/react-dom': ^18.0.11
@@ -669,7 +669,7 @@ importers:
       '@testing-library/react': ^11.1.0
       '@testing-library/user-event': ^12.1.10
       '@tolgee/core': 5.4.4
-      '@tolgee/i18next': 5.5.3
+      '@tolgee/i18next': 5.5.4
       '@types/node': ^17.0.8
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.0.11
@@ -711,7 +711,7 @@ importers:
       '@sveltejs/adapter-auto': ^2.0.0
       '@sveltejs/kit': ^1.5.0
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/svelte': 5.5.3
+      '@tolgee/svelte': 5.5.4
       '@types/cookie': ^0.5.1
       '@typescript-eslint/eslint-plugin': ^5.45.0
       '@typescript-eslint/parser': ^5.45.0
@@ -750,7 +750,7 @@ importers:
   testapps/vue:
     specifiers:
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/vue': 5.5.3
+      '@tolgee/vue': 5.5.4
       '@types/node': ^18.11.12
       '@vitejs/plugin-vue': ^4.0.0
       '@vitejs/plugin-vue-jsx': ^3.0.0
@@ -776,7 +776,7 @@ importers:
 
   testapps/vue-i18next:
     specifiers:
-      '@tolgee/i18next': 5.5.3
+      '@tolgee/i18next': 5.5.4
       '@vue/cli-plugin-babel': ~5.0.8
       '@vue/cli-plugin-eslint': ~5.0.8
       '@vue/cli-service': ~5.0.8
@@ -806,7 +806,7 @@ importers:
   testapps/web:
     specifiers:
       '@tolgee/format-icu': 5.4.4
-      '@tolgee/web': 5.5.3
+      '@tolgee/web': 5.5.4
       concurrently: ^7.3.0
       copy-webpack-plugin: ^10.2.4
       html-webpack-plugin: ^5.5.0
@@ -14560,12 +14560,12 @@ packages:
     peerDependencies:
       webpack: ^5.0.0
     dependencies:
-      icss-utils: 5.1.0_postcss@8.4.17
-      postcss: 8.4.17
-      postcss-modules-extract-imports: 3.0.0_postcss@8.4.17
-      postcss-modules-local-by-default: 4.0.0_postcss@8.4.17
-      postcss-modules-scope: 3.0.0_postcss@8.4.17
-      postcss-modules-values: 4.0.0_postcss@8.4.17
+      icss-utils: 5.1.0_postcss@8.4.21
+      postcss: 8.4.21
+      postcss-modules-extract-imports: 3.0.0_postcss@8.4.21
+      postcss-modules-local-by-default: 4.0.0_postcss@8.4.21
+      postcss-modules-scope: 3.0.0_postcss@8.4.21
+      postcss-modules-values: 4.0.0_postcss@8.4.21
       postcss-value-parser: 4.2.0
       semver: 7.3.8
       webpack: 5.74.0
@@ -19289,15 +19289,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       safer-buffer: 2.1.2
-
-  /icss-utils/5.1.0_postcss@8.4.17:
-    resolution: {integrity: sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==}
-    engines: {node: ^10 || ^12 || >= 14}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      postcss: 8.4.17
-    dev: true
 
   /icss-utils/5.1.0_postcss@8.4.21:
     resolution: {integrity: sha512-soFhflCVWLfRNOPU3iv5Z9VUdT44xFRbzjLsEzSr5AQmgqPMTHdU3PMT1Cf1ssx8fLNJDA1juftYl+PUcv3MqA==}
@@ -25350,15 +25341,6 @@ packages:
       postcss: 8.4.21
       postcss-selector-parser: 6.0.10
 
-  /postcss-modules-extract-imports/3.0.0_postcss@8.4.17:
-    resolution: {integrity: sha512-bdHleFnP3kZ4NYDhuGlVK+CMrQ/pqUm8bx/oGL93K6gVwiclvX5x0n76fYMKuIGKzlABOy13zsvqjb0f92TEXw==}
-    engines: {node: ^10 || ^12 || >= 14}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      postcss: 8.4.17
-    dev: true
-
   /postcss-modules-extract-imports/3.0.0_postcss@8.4.21:
     resolution: {integrity: sha512-bdHleFnP3kZ4NYDhuGlVK+CMrQ/pqUm8bx/oGL93K6gVwiclvX5x0n76fYMKuIGKzlABOy13zsvqjb0f92TEXw==}
     engines: {node: ^10 || ^12 || >= 14}
@@ -25366,18 +25348,6 @@ packages:
       postcss: ^8.1.0
     dependencies:
       postcss: 8.4.21
-
-  /postcss-modules-local-by-default/4.0.0_postcss@8.4.17:
-    resolution: {integrity: sha512-sT7ihtmGSF9yhm6ggikHdV0hlziDTX7oFoXtuVWeDd3hHObNkcHRo9V3yg7vCAY7cONyxJC/XXCmmiHHcvX7bQ==}
-    engines: {node: ^10 || ^12 || >= 14}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      icss-utils: 5.1.0_postcss@8.4.17
-      postcss: 8.4.17
-      postcss-selector-parser: 6.0.10
-      postcss-value-parser: 4.2.0
-    dev: true
 
   /postcss-modules-local-by-default/4.0.0_postcss@8.4.21:
     resolution: {integrity: sha512-sT7ihtmGSF9yhm6ggikHdV0hlziDTX7oFoXtuVWeDd3hHObNkcHRo9V3yg7vCAY7cONyxJC/XXCmmiHHcvX7bQ==}
@@ -25390,16 +25360,6 @@ packages:
       postcss-selector-parser: 6.0.10
       postcss-value-parser: 4.2.0
 
-  /postcss-modules-scope/3.0.0_postcss@8.4.17:
-    resolution: {integrity: sha512-hncihwFA2yPath8oZ15PZqvWGkWf+XUfQgUGamS4LqoP1anQLOsOJw0vr7J7IwLpoY9fatA2qiGUGmuZL0Iqlg==}
-    engines: {node: ^10 || ^12 || >= 14}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      postcss: 8.4.17
-      postcss-selector-parser: 6.0.10
-    dev: true
-
   /postcss-modules-scope/3.0.0_postcss@8.4.21:
     resolution: {integrity: sha512-hncihwFA2yPath8oZ15PZqvWGkWf+XUfQgUGamS4LqoP1anQLOsOJw0vr7J7IwLpoY9fatA2qiGUGmuZL0Iqlg==}
     engines: {node: ^10 || ^12 || >= 14}
@@ -25408,16 +25368,6 @@ packages:
     dependencies:
       postcss: 8.4.21
       postcss-selector-parser: 6.0.10
-
-  /postcss-modules-values/4.0.0_postcss@8.4.17:
-    resolution: {integrity: sha512-RDxHkAiEGI78gS2ofyvCsu7iycRv7oqw5xMWn9iMoR0N/7mf9D50ecQqUo5BZ9Zh2vH4bCUR/ktCqbB9m8vJjQ==}
-    engines: {node: ^10 || ^12 || >= 14}
-    peerDependencies:
-      postcss: ^8.1.0
-    dependencies:
-      icss-utils: 5.1.0_postcss@8.4.17
-      postcss: 8.4.17
-    dev: true
 
   /postcss-modules-values/4.0.0_postcss@8.4.21:
     resolution: {integrity: sha512-RDxHkAiEGI78gS2ofyvCsu7iycRv7oqw5xMWn9iMoR0N/7mf9D50ecQqUo5BZ9Zh2vH4bCUR/ktCqbB9m8vJjQ==}
