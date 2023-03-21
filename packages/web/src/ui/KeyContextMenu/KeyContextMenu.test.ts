@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
 import { UI } from '../index';
 import { sleep } from '../tools/sleep';
-import { DEVTOOLS_ID } from '../../constants';
+import { getRoot } from '../tools/getRoot';
 
 function getShadowRootElement(testId: string, textContent: string) {
-  const shadowRoot = document.getElementById(DEVTOOLS_ID)!.shadowRoot!;
+  const shadowRoot = getRoot();
 
   return Array.from(
     shadowRoot.querySelectorAll(`*[data-testid="${testId}"]`)

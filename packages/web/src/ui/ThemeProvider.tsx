@@ -4,10 +4,11 @@ import {
   css,
   ThemeProvider as MuiThemeProvider,
 } from '@mui/material/styles';
-import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../constants';
+import { DEVTOOLS_Z_INDEX } from '../constants';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import { getRoot } from './tools/getRoot';
 
 let theme = createTheme({
   typography: {
@@ -67,7 +68,7 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
     createCache({
       key: 'css',
       prepend: true,
-      container: document.getElementById(DEVTOOLS_ID)?.shadowRoot as Node,
+      container: getRoot(),
     })
   );
 
