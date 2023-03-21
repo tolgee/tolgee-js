@@ -31,6 +31,7 @@ const testObserver =
       stop,
       retranslate,
       highlight: () => ({ unhighlight: () => {} }),
+      findPositions: () => [],
       outputNotFormattable,
     });
   };

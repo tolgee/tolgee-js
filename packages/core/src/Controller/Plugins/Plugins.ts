@@ -21,6 +21,7 @@ import {
   TolgeeInstance,
   TolgeeOptionsInternal,
   FormatErrorHandler,
+  FindPositionsInterface,
 } from '../../types';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
@@ -71,6 +72,10 @@ export const Plugins = (
 
   const highlight: HighlightInterface = (key, ns) => {
     return instances.observer?.highlight?.(key, ns) || { unhighlight() {} };
+  };
+
+  const findPositions: FindPositionsInterface = (key, ns) => {
+    return instances.observer?.findPositions(key, ns) || [];
   };
 
   const translate = (props: TranslatePropsInternal) => {
@@ -178,6 +183,7 @@ export const Plugins = (
       projectId,
       highlight,
       changeTranslation,
+      findPositions,
     });
 
     instances.observer?.run({

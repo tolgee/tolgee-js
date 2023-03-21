@@ -1,8 +1,10 @@
 import { ChangeTranslationInterface } from '@tolgee/core';
+
 import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
 } from '../../../constants';
+import { KeyInScreenshot } from './useGallery';
 
 export function getPreferredLanguages(): string[] {
   try {
@@ -48,3 +50,29 @@ export const changeInTolgeeCache = (
   );
   return { revert: () => changers.forEach((ch) => ch.revert()) };
 };
+
+export function mapPosition({ position }: KeyInScreenshot) {
+  return {
+    x: position!.x,
+    y: position!.y,
+    width: position!.width,
+    height: position!.height,
+  };
+}
+
+export type Size = {
+  width: number;
+  height: number;
+};
+
+export function getImgSize(url: string) {
+  return new Promise<Size>((resolve) => {
+    const img = document.createElement('img');
+    img.src = url;
+    img.onload = function () {
+      const width = img.width;
+      const height = img.height;
+      resolve({ width, height });
+    };
+  });
+}

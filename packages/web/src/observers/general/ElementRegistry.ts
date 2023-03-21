@@ -41,7 +41,7 @@ export const ElementRegistry = (
     const tolgeeElement = element as TolgeeElement;
     let elementMeta = elementStore.get(tolgeeElement);
     if (!elementMeta) {
-      elementMeta = initElementMeta();
+      elementMeta = initElementMeta(tolgeeElement);
       elementStore.set(tolgeeElement, elementMeta);
       tolgeeElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, 'true');
     }

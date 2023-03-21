@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
@@ -27,9 +27,8 @@ export const LanguageSelect: React.FC = () => {
       }))
     : [];
 
-  const selected = options.filter((o) => selectedLanguages.includes(o.value));
-  const onChange = (e: SelectChangeEvent<string[]>) => {
-    const value = e.target.value;
+  const selected = options.filter((o) => selectedLanguages.includes(o.value!));
+  const onChange = (value: string | string[]) => {
     const languages = typeof value === 'string' ? value.split(',') : value;
     onSelectedLanguagesChange(languages);
   };
@@ -45,7 +44,7 @@ export const LanguageSelect: React.FC = () => {
           <Select
             multiple
             value={selected.map((o) => o.value)}
-            onChange={(value) => onChange(value)}
+            onChange={(e) => onChange(e.target.value as string | string[])}
             input={<OutlinedInput />}
             renderValue={(selected) => selected.join(', ')}
             MenuProps={{

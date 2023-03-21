@@ -1,8 +1,9 @@
 import type { KeyAndParams } from '@tolgee/core';
-import type { ElementMeta, NodeMeta } from '../../types';
+import type { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 
-export function initElementMeta(): ElementMeta {
+export function initElementMeta(element: TolgeeElement): ElementMeta {
   return {
+    element,
     nodes: new Map(),
   };
 }

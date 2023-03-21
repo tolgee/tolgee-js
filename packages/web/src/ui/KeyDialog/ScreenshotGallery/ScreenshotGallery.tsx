@@ -60,6 +60,7 @@ export const ScreenshotGallery: React.FC = () => {
     setScreenshotDetail,
   } = useDialogActions();
 
+  const keyId = useDialogContext((c) => c.translations?.keyId);
   const screenshots = useDialogContext((c) => c.screenshots);
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);
@@ -182,6 +183,7 @@ export const ScreenshotGallery: React.FC = () => {
           ? screenshots.map((ss) => (
               <ScreenshotThumbnail
                 key={ss.id}
+                keyId={keyId}
                 data={ss}
                 onClick={() => setScreenshotDetail(ss)}
                 onDelete={
@@ -216,6 +218,7 @@ export const ScreenshotGallery: React.FC = () => {
       </ScreenshotDropzone>
       {screenshotDetails && (
         <ScreenshotDetail
+          keyId={keyId}
           screenshot={screenshotDetails}
           onClose={() => setScreenshotDetail(null)}
         />

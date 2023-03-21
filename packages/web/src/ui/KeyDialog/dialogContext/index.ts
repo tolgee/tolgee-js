@@ -11,6 +11,7 @@ import {
   changeInTolgeeCache,
   getInitialLanguages,
   getPreferredLanguages,
+  mapPosition,
   setPreferredLanguages,
 } from './tools';
 import { getApiKeyType } from '../../../tools/decodeApiKey';
@@ -73,7 +74,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       options: {
         onSuccess(data) {
           const selectedLanguages = getInitialLanguages(
-            data._embedded?.languages?.map((l) => l.tag) || []
+            data._embedded?.languages?.map((l) => l.tag!) || []
           );
           setSelectedLanguages(selectedLanguages);
           setPreferredLanguages(selectedLanguages);
@@ -117,6 +118,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           setScreenshots(
             firstKey?.screenshots?.map((sc) => ({
               ...sc,
+              filename: sc.filename!,
               justUploaded: false,
             })) || []
           );
@@ -187,7 +189,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 name: props.keyName,
                 namespace: selectedNs || undefined,
                 translations: newTranslations,
-                screenshotUploadedImageIds: screenshots.map((sc) => sc.id),
+                screenshots: screenshots.map((sc) => ({
+                  uploadedImageId: sc.id,
+                  positions: sc.keyReferences?.map(mapPosition),
+                })),
                 tags,
               },
             },
@@ -200,11 +205,14 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 namespace: selectedNs || undefined,
                 translations: newTranslations,
                 screenshotIdsToDelete: getRemovedScreenshots(),
-                screenshotUploadedImageIds: getJustUploadedScreenshots(),
+                screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
+                  uploadedImageId: sc.id,
+                  positions: sc.keyReferences?.map(mapPosition),
+                })),
                 tags,
               },
             },
-            path: { id: translations.keyId },
+            path: { id: translations.keyId! },
           });
         }
         changeInTolgeeCache(
@@ -238,7 +246,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         setUseBrowserWindow(false);
         const uploadedScreenshots = getJustUploadedScreenshots();
         if (uploadedScreenshots.length) {
-          deleteImages(uploadedScreenshots);
+          deleteImages(uploadedScreenshots.map((sc) => sc.id!));
         }
         setScreenshots([]);
       }
@@ -266,7 +274,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     }, [useBrowserWindow]);
 
     const getJustUploadedScreenshots = () => {
-      return screenshots.filter((sc) => sc.justUploaded).map((sc) => sc.id);
+      return screenshots.filter((sc) => sc.justUploaded);
     };
 
     const getRemovedScreenshots = () => {
@@ -296,20 +304,20 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         const baseLanguageDefinition = availableLanguages.find((l) => l.base);
         if (
           baseLanguageDefinition &&
-          selectedLanguages.includes(baseLanguageDefinition.tag) &&
+          selectedLanguages.includes(baseLanguageDefinition.tag!) &&
           !translationsFormTouched
         ) {
           const wasBaseTranslationProvided =
-            translations?.translations[baseLanguageDefinition.tag] !==
+            translations?.translations?.[baseLanguageDefinition.tag!] !==
             undefined;
 
           if (
-            !translationsForm[baseLanguageDefinition.tag] &&
+            !translationsForm[baseLanguageDefinition.tag!] &&
             !wasBaseTranslationProvided
           ) {
             setTranslationsForm({
               ...translationsForm,
-              [baseLanguageDefinition.tag]: props.defaultValue,
+              [baseLanguageDefinition.tag!]: props.defaultValue,
             });
           }
         }

@@ -1,23 +1,20 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import { styled } from '@mui/material/styles';
 import { ScreenshotInterface } from '../dialogContext/useGallery';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
-
-const ScImg = styled('img')`
-  width: 80vw;
-  height: 80vh;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-`;
+import { ScreenshotWithLabels } from './ScreenshotWithLabels';
 
 type Props = {
   screenshot: ScreenshotInterface;
+  keyId: number | undefined;
   onClose: () => void;
 };
 
-export const ScreenshotDetail: React.FC<Props> = ({ screenshot, onClose }) => {
+export const ScreenshotDetail: React.FC<Props> = ({
+  keyId,
+  screenshot,
+  onClose,
+}) => {
   return (
     <Dialog
       open={true}
@@ -27,7 +24,20 @@ export const ScreenshotDetail: React.FC<Props> = ({ screenshot, onClose }) => {
       style={{ zIndex: DEVTOOLS_Z_INDEX }}
       onClose={onClose}
     >
-      <ScImg src={screenshot.fileUrl} />
+      <div>
+        {screenshot && (
+          <ScreenshotWithLabels
+            showTooltips
+            screenshot={{
+              src: screenshot.fileUrl,
+              width: screenshot.width,
+              height: screenshot.height,
+              highlightedKeyId: keyId ?? -1,
+              keyReferences: screenshot.keyReferences,
+            }}
+          />
+        )}
+      </div>
     </Dialog>
   );
 };

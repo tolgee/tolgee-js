@@ -53,6 +53,7 @@ export type NodeMeta = {
 };
 
 export type ElementMeta = {
+  element: TolgeeElement;
   wrappedWithElementOnlyKey?: string;
   wrappedWithElementOnlyDefaultHtml?: string;
   nodes: Map<Node, NodeMeta>;
