@@ -3,7 +3,12 @@ import { useEffect, useState } from 'react';
 import { detectExtension, takeScreenshot } from '../../../tools/extension';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
-import { changeInTolgeeCache, getImgSize, Size } from './tools';
+import {
+  changeInTolgeeCache,
+  getImgSize,
+  scalePositionsToImg,
+  Size,
+} from './tools';
 
 export type KeyInScreenshot = {
   keyId: number;
@@ -96,10 +101,8 @@ export const useGallery = (uiProps: UiProps) => {
     );
     await sleep(400);
     let screenshot: string;
-    let positions: KeyPosition[];
     try {
       screenshot = await takeScreenshot();
-      positions = uiProps.findPositions(key, ns);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
@@ -109,10 +112,16 @@ export const useGallery = (uiProps: UiProps) => {
       setTakingScreenshot(false);
     }
 
+    const positions = uiProps.findPositions(key, ns);
+    const screenSize = { width: window.innerWidth, height: window.innerHeight };
+    const imgSize = await getImgSize(screenshot);
     const blob = await fetch(screenshot).then((r) => r.blob());
-    const size = await getImgSize(screenshot);
 
-    uploadScreenshot(blob, size, positions);
+    // on hdpi screens, the screenshot can be different than the window size,
+    // so we need to scale the coordinates accordingly
+    const scaledPositions = scalePositionsToImg(screenSize, imgSize, positions);
+
+    uploadScreenshot(blob, imgSize, scaledPositions);
   }
 
   function handleRemoveScreenshot(id: number) {

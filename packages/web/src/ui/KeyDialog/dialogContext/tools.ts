@@ -1,4 +1,4 @@
-import { ChangeTranslationInterface } from '@tolgee/core';
+import { ChangeTranslationInterface, KeyPosition } from '@tolgee/core';
 
 import {
   MAX_LANGUAGES_SELECTED,
@@ -58,6 +58,24 @@ export function mapPosition({ position }: KeyInScreenshot) {
     width: position!.width,
     height: position!.height,
   };
+}
+
+export function scalePositionsToImg(
+  windowSize: Size,
+  imgSize: Size,
+  positions: KeyPosition[]
+) {
+  const xChange = imgSize.width / windowSize.width;
+  const yChange = imgSize.height / windowSize.height;
+  return positions.map(({ position, ...data }) => ({
+    ...data,
+    position: {
+      x: position.x * xChange,
+      y: position.y * yChange,
+      width: position.width * xChange,
+      height: position.height * yChange,
+    },
+  }));
 }
 
 export type Size = {
