@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.6.0-prerelease.b5ab209e.0](https://github.com/tolgee/tolgee-js/compare/v5.5.4...v5.6.0-prerelease.b5ab209e.0) (2023-03-22)
+
+
+### Bug Fixes
+
+* scaling on hdpi screens ([b5ab209](https://github.com/tolgee/tolgee-js/commit/b5ab209efb392f5b47624f16b66a6d02f259fbd9))
+* tooltips on screenshots ([50e8a1b](https://github.com/tolgee/tolgee-js/commit/50e8a1bbd212a663b1fa2e09914788d53404f0b9))
+
+
+### Features
+
+* screenshots with labeled positions of keys ([7678643](https://github.com/tolgee/tolgee-js/commit/7678643bd0e6c3d1c567837e72d7c86e80743d2d))
+
+
+
+
+
 ## [5.5.4](https://github.com/tolgee/tolgee-js/compare/v5.5.3...v5.5.4) (2023-03-20)
 
 
