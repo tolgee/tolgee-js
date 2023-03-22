@@ -1,17 +1,37 @@
-import { UiProps } from '@tolgee/core';
+import { KeyPosition, UiProps } from '@tolgee/core';
 import { useEffect, useState } from 'react';
 import { detectExtension, takeScreenshot } from '../../../tools/extension';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
-import { changeInTolgeeCache } from './tools';
+import {
+  changeInTolgeeCache,
+  getImgSize,
+  scalePositionsToImg,
+  Size,
+} from './tools';
+
+export type KeyInScreenshot = {
+  keyId: number;
+  keyName: string;
+  keyNamespace?: string | undefined;
+  position?: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+};
 
 export interface ScreenshotInterface {
   id: number;
   filename: string;
   fileUrl: string;
+  width?: number | undefined;
+  height?: number | undefined;
   createdAt?: string;
   // is it screenshot or only uploaded image
   justUploaded: boolean;
+  keyReferences?: KeyInScreenshot[];
 }
 
 export const useGallery = (uiProps: UiProps) => {
@@ -35,23 +55,36 @@ export const useGallery = (uiProps: UiProps) => {
   const uploadImage = useApiMutation({
     url: '/v2/image-upload',
     method: 'post',
-    options: {
-      onSuccess(data) {
-        setScreenshots((screenshots) => [
-          ...screenshots,
-          { ...data, justUploaded: true },
-        ]);
-      },
-    },
   });
 
-  const uploadScreenshot = (blob: Blob) =>
-    uploadImage.mutate({
-      content: { 'multipart/form-data': { image: blob as any } },
-    });
+  const uploadScreenshot = (blob: Blob, size: Size, positions: KeyPosition[]) =>
+    uploadImage.mutateAsync(
+      {
+        content: { 'multipart/form-data': { image: blob as any } },
+      },
+      {
+        onSuccess(data) {
+          setScreenshots((screenshots) => [
+            ...screenshots,
+            {
+              ...data,
+              ...size,
+              keyReferences: positions.map((ref) => ({ ...ref, keyId: -1 })),
+              justUploaded: true,
+            },
+          ]);
+        },
+      }
+    );
 
   async function handleUploadImages(files: File[]) {
-    await Promise.all(files.map((content) => uploadScreenshot(content)));
+    await Promise.all(
+      files.map(async (content) => {
+        const url = URL.createObjectURL(content);
+        const size = await getImgSize(url);
+        await uploadScreenshot(content, size, []);
+      })
+    );
   }
 
   async function handleTakeScreenshot(
@@ -67,8 +100,6 @@ export const useGallery = (uiProps: UiProps) => {
       uiProps.changeTranslation
     );
     await sleep(400);
-    const { unhighlight } = uiProps.highlight(key, ns);
-    await sleep(100);
     let screenshot: string;
     try {
       screenshot = await takeScreenshot();
@@ -78,13 +109,19 @@ export const useGallery = (uiProps: UiProps) => {
       return;
     } finally {
       revert();
-      unhighlight();
       setTakingScreenshot(false);
     }
 
+    const positions = uiProps.findPositions(key, ns);
+    const screenSize = { width: window.innerWidth, height: window.innerHeight };
+    const imgSize = await getImgSize(screenshot);
     const blob = await fetch(screenshot).then((r) => r.blob());
 
-    uploadScreenshot(blob);
+    // on hdpi screens, the screenshot can be different than the window size,
+    // so we need to scale the coordinates accordingly
+    const scaledPositions = scalePositionsToImg(screenSize, imgSize, positions);
+
+    uploadScreenshot(blob, imgSize, scaledPositions);
   }
 
   function handleRemoveScreenshot(id: number) {

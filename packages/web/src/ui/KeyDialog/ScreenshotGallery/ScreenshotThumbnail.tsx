@@ -6,17 +6,7 @@ import Clear from '@mui/icons-material/Clear';
 import clsx from 'clsx';
 import { ScreenshotInterface } from '../dialogContext/useGallery';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
-
-const Screenshot = styled('img')`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: 1;
-  transition: transform 0.1s, filter 0.5s;
-  &:hover {
-    transform: scale(1.1);
-  }
-`;
+import { ScreenshotWithLabels } from './ScreenshotWithLabels';
 
 const ScreenshotBox = styled('div')`
   border: 1px solid ${({ theme }) => theme.palette.grey[300]};
@@ -33,6 +23,9 @@ const ScreenshotBox = styled('div')`
 `;
 
 const ScreenshotOverflowWrapper = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   width: 100%;
   height: 100%;
@@ -68,6 +61,7 @@ export type Props = {
   onClick: () => void;
   onDelete?: (id: number) => void;
   data: ScreenshotInterface;
+  keyId: number | undefined;
 };
 
 export const ScreenshotThumbnail: React.FC<Props> = (props) => {
@@ -82,8 +76,10 @@ export const ScreenshotThumbnail: React.FC<Props> = (props) => {
   };
 
   const onDeleteClick = () => {
-    props.onDelete?.(props.data.id);
+    props.onDelete?.(props.data.id!);
   };
+
+  const screenshot = props.data;
 
   return (
     <ScreenshotBox onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
@@ -101,11 +97,19 @@ export const ScreenshotThumbnail: React.FC<Props> = (props) => {
         </Tooltip>
       )}
 
-      <ScreenshotOverflowWrapper key={props.data.id} onClick={props.onClick}>
-        <Screenshot
-          onMouseDown={(e) => e.preventDefault()}
-          src={props.data.fileUrl}
-          aria-label="Screenshot"
+      <ScreenshotOverflowWrapper
+        key={props.data.id}
+        onClick={props.onClick}
+        aria-label="Screenshot"
+      >
+        <ScreenshotWithLabels
+          screenshot={{
+            src: screenshot.fileUrl,
+            width: screenshot.width,
+            height: screenshot.height,
+            highlightedKeyId: props.keyId ?? -1,
+            keyReferences: screenshot.keyReferences,
+          }}
         />
       </ScreenshotOverflowWrapper>
     </ScreenshotBox>

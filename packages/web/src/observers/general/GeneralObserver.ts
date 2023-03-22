@@ -4,6 +4,8 @@ import {
   Unwrapped,
   WrapperMiddleware,
   WrapperWrapProps,
+  KeyPosition,
+  getFallback,
 } from '@tolgee/core';
 
 import { TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE } from '../../constants';
@@ -13,7 +15,12 @@ import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry, ElementRegistryInstance } from './ElementRegistry';
 import { ElementStore } from './ElementStore';
-import { getNodeText, setNodeText, xPathEvaluate } from './helpers';
+import {
+  compareDescriptors,
+  getNodeText,
+  setNodeText,
+  xPathEvaluate,
+} from './helpers';
 import { NodeHandler } from './NodeHandler';
 
 type RunningInstance = {
@@ -146,6 +153,34 @@ export const GeneralObserver = () => {
           elements.forEach((el) => el.unhighlight?.());
         },
       };
+    },
+    findPositions(key?: string, ns?: NsFallback) {
+      const elements = instance?.elementRegistry.findAll(key, ns) || [];
+      const result: KeyPosition[] = [];
+      elements.forEach((meta) => {
+        const shape = meta.element.getBoundingClientRect();
+        meta.nodes.forEach((node) => {
+          node.keys.forEach((val) => {
+            if (
+              compareDescriptors(
+                { key, ns: getFallback(ns) },
+                { key: val.key, ns: getFallback(val.ns) }
+              )
+            )
+              result.push({
+                position: {
+                  x: shape.x,
+                  y: shape.y,
+                  width: shape.width,
+                  height: shape.height,
+                },
+                keyName: val.key,
+                keyNamespace: val.ns || '',
+              });
+          });
+        });
+      });
+      return result;
     },
     unwrap(text: string): Unwrapped {
       if (instance) {

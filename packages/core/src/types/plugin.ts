@@ -57,6 +57,10 @@ export type WrapperAttributeXPathGetter = (props: {
 }) => string;
 
 export type HighlightInterface = (key?: string, ns?: NsFallback) => Highlighter;
+export type FindPositionsInterface = (
+  key?: string,
+  ns?: NsFallback
+) => KeyPosition[];
 
 export type ObserverRunProps = {
   mouseHighlight: boolean;
@@ -73,6 +77,7 @@ export type ObserverMiddleware = () => {
   run: (props: ObserverRunProps) => void;
   highlight: HighlightInterface;
   outputNotFormattable: boolean;
+  findPositions: FindPositionsInterface;
 };
 
 export type LanguageDetectorProps = {
@@ -127,11 +132,23 @@ export type FinalFormatterMiddleware = {
   format: (props: FormatterMiddlewareFormatParams) => any;
 };
 
+export type KeyPosition = {
+  position: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  keyName: string;
+  keyNamespace: string;
+};
+
 export type UiProps = {
   apiUrl: string;
   apiKey: string;
   projectId: number | string | undefined;
   highlight: HighlightInterface;
+  findPositions: (key?: string | undefined, ns?: NsFallback) => KeyPosition[];
   changeTranslation: ChangeTranslationInterface;
 };
 
