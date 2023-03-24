@@ -55,9 +55,9 @@ export interface paths {
     put: operations["setState_1"];
   };
   "/v2/projects/translations/{translationId}/comments/{commentId}": {
-    get: operations["get_4"];
+    get: operations["get_6"];
     put: operations["update_3"];
-    delete: operations["delete_6"];
+    delete: operations["delete_8"];
   };
   "/v2/projects/translations/{translationId}/set-outdated-flag/{state}": {
     put: operations["setOutdated_1"];
@@ -109,6 +109,9 @@ export interface paths {
   "/v2/projects/export": {
     get: operations["export_1"];
     post: operations["exportPost_1"];
+  };
+  "/v2/projects/big-meta": {
+    post: operations["store_1"];
   };
   "/v2/projects/translations/{translationId}/comments": {
     get: operations["getAll_6"];
@@ -205,7 +208,7 @@ export interface paths {
     delete: operations["deleteScreenshots"];
   };
   "/v2/image-upload/{ids}": {
-    delete: operations["delete_9"];
+    delete: operations["delete_11"];
   };
 }
 
@@ -365,9 +368,22 @@ export interface components {
        */
       targetLanguageId?: number;
       /** @description This service will be used for automated translation */
-      primaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      primaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       /** @description List of enabled services */
-      enabledServices?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU")[];
+      enabledServices?: (
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE"
+      )[];
     };
     SetMachineTranslationSettingsDto: {
       settings: components["schemas"]["MachineTranslationLanguagePropsDto"][];
@@ -388,9 +404,22 @@ export interface components {
       /** @description When null, its a default configuration applied to not configured languages */
       targetLanguageName?: string;
       /** @description Service used for automated translating */
-      primaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      primaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       /** @description Services to be used for suggesting */
-      enabledServices?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU")[];
+      enabledServices?: (
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE"
+      )[];
     };
     TagKeyDto: {
       name: string;
@@ -526,7 +555,7 @@ export interface components {
       /** @description Was translated using Translation Memory or Machine translation service? */
       auto?: boolean;
       /** @description Which machine translation service was used to auto translate this */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
     };
     EditKeyDto: {
       name: string;
@@ -826,6 +855,7 @@ export interface components {
       key?: string;
       /** Format: int64 */
       id: number;
+      username?: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
@@ -833,7 +863,6 @@ export interface components {
       /** Format: int64 */
       lastUsedAt?: number;
       description: string;
-      username?: string;
       scopes: string[];
       userFullName?: string;
       projectName: string;
@@ -1008,6 +1037,26 @@ export interface components {
       zip: boolean;
     };
     StreamingResponseBody: { [key: string]: unknown };
+    BigMetaDto: {
+      items: components["schemas"]["BigMetaItemDto"][];
+    };
+    BigMetaItemDto: {
+      namespace?: string;
+      keyName: string;
+      location: string;
+      type: "SCREENSHOT" | "SCRAPE";
+      contextData?: { [key: string]: unknown };
+    };
+    BigMetaModel: {
+      /** Format: int64 */
+      id: number;
+      namespace?: string;
+      keyName: string;
+      location?: string;
+      key?: components["schemas"]["KeyModel"];
+      type: "SCREENSHOT" | "SCRAPE";
+      contextData?: { [key: string]: unknown };
+    };
     TranslationCommentWithLangKeyDto: {
       /** Format: int64 */
       keyId: number;
@@ -1156,7 +1205,13 @@ export interface components {
       defaultEnabledForProject: boolean;
     };
     MtServicesDTO: {
-      defaultPrimaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      defaultPrimaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       services: { [key: string]: components["schemas"]["MtServiceDTO"] };
     };
     OAuthPublicConfigDTO: {
@@ -1371,6 +1426,12 @@ export interface components {
       old?: { [key: string]: unknown };
       new?: { [key: string]: unknown };
     };
+    PagedModelBigMetaModel: {
+      _embedded?: {
+        bigMeta?: components["schemas"]["BigMetaModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
     ImportTranslationModel: {
       /** Format: int64 */
       id: number;
@@ -1562,7 +1623,7 @@ export interface components {
       /** @description Was translated using Translation Memory or Machine translation service? */
       auto?: boolean;
       /** @description Which machine translation service was used to auto translate this */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
       /**
        * Format: int64
        * @description Count of translation comments
@@ -1810,6 +1871,7 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
+      username?: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
@@ -1817,7 +1879,6 @@ export interface components {
       /** Format: int64 */
       lastUsedAt?: number;
       description: string;
-      username?: string;
       scopes: string[];
       userFullName?: string;
       projectName: string;
@@ -2344,7 +2405,7 @@ export interface operations {
       };
     };
   };
-  get_4: {
+  get_6: {
     parameters: {
       path: {
         translationId: number;
@@ -2420,7 +2481,7 @@ export interface operations {
       };
     };
   };
-  delete_6: {
+  delete_8: {
     parameters: {
       path: {
         commentId: number;
@@ -3218,6 +3279,43 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ExportParams"];
+      };
+    };
+  };
+  store_1: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["BigMetaModel"][];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BigMetaDto"];
       };
     };
   };
@@ -4454,7 +4552,7 @@ export interface operations {
       };
     };
   };
-  delete_9: {
+  delete_11: {
     parameters: {
       path: {
         ids: number[];

@@ -140,6 +140,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'put',
     });
 
+    const updateMetadata = useApiMutation({
+      url: '/v2/projects/big-meta',
+      method: 'post',
+    });
+
     const translations = translationsLoadable.data?._embedded?.keys?.[0];
 
     const linkToPlatform =
@@ -182,39 +187,59 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           }
         });
 
-        if (translations === undefined) {
-          await createKey.mutateAsync({
-            content: {
-              'application/json': {
-                name: props.keyName,
-                namespace: selectedNs || undefined,
-                translations: newTranslations,
-                screenshots: screenshots.map((sc) => ({
-                  uploadedImageId: sc.id,
-                  positions: sc.keyReferences?.map(mapPosition),
-                })),
-                tags,
-              },
+        const result =
+          translations === undefined
+            ? await createKey.mutateAsync({
+                content: {
+                  'application/json': {
+                    name: props.keyName,
+                    namespace: selectedNs || undefined,
+                    translations: newTranslations,
+                    screenshots: screenshots.map((sc) => ({
+                      uploadedImageId: sc.id,
+                      positions: sc.keyReferences?.map(mapPosition),
+                    })),
+                    tags,
+                  },
+                },
+              })
+            : await updateKey.mutateAsync({
+                content: {
+                  'application/json': {
+                    name: props.keyName,
+                    namespace: selectedNs || undefined,
+                    translations: newTranslations,
+                    screenshotIdsToDelete: getRemovedScreenshots(),
+                    screenshotsToAdd: getJustUploadedScreenshots().map(
+                      (sc) => ({
+                        uploadedImageId: sc.id,
+                        positions: sc.keyReferences?.map(mapPosition),
+                      })
+                    ),
+                    tags,
+                  },
+                },
+                path: { id: translations.keyId! },
+              });
+
+        await updateMetadata.mutateAsync({
+          content: {
+            'application/json': {
+              items: [
+                {
+                  keyName: result.name!,
+                  namespace: result.namespace,
+                  location: `web:${window.location.pathname}`,
+                  type: getJustUploadedScreenshots().length
+                    ? 'SCREENSHOT'
+                    : 'SCRAPE',
+                  contextData: { pageContent: document.body.innerText },
+                },
+              ],
             },
-          });
-        } else {
-          await updateKey.mutateAsync({
-            content: {
-              'application/json': {
-                name: props.keyName,
-                namespace: selectedNs || undefined,
-                translations: newTranslations,
-                screenshotIdsToDelete: getRemovedScreenshots(),
-                screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
-                  uploadedImageId: sc.id,
-                  positions: sc.keyReferences?.map(mapPosition),
-                })),
-                tags,
-              },
-            },
-            path: { id: translations.keyId! },
-          });
-        }
+          },
+        });
+
         changeInTolgeeCache(
           props.keyName,
           selectedNs,
@@ -341,6 +366,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       scopesLoadable.error ||
       createKey.error ||
       updateKey.error ||
+      updateMetadata.error ||
       galleryError;
 
     const scopes = scopesLoadable.data?.scopes;
