@@ -38,9 +38,9 @@ export type CombinedOptions<T> = TranslateOptions & {
   [key: string]: T | PropType<TranslateOptions>;
 };
 
-export type TFnType<T = DefaultParamType, R = string> = {
-  (key: string, defaultValue?: string, options?: CombinedOptions<T>): R;
-  (key: string, options?: CombinedOptions<T>): R;
+export type TFnType<T = DefaultParamType, R = string, KeyType extends string = string> = {
+  (key: KeyType, defaultValue?: KeyType, options?: CombinedOptions<T>): R;
+  (key: KeyType, options?: CombinedOptions<T>): R;
   (props: TranslateProps<T>): R;
 };
 
