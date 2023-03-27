@@ -1,6 +1,13 @@
 import { Controller } from './Controller/Controller';
 import { combineOptions } from './Controller/State/initState';
-import { TolgeeOptions, TolgeePlugin, DevCredentials } from './types';
+import {
+  TolgeeOptions,
+  TolgeePlugin,
+  DevCredentials,
+  TFnType,
+  DefaultParamType,
+  TranslationKey,
+} from './types';
 
 const createTolgee = (options: TolgeeOptions) => {
   const controller = Controller({
@@ -214,7 +221,10 @@ const createTolgee = (options: TolgeeOptions) => {
   return tolgee;
 };
 
-export type TolgeeInstance = ReturnType<typeof createTolgee>;
+export type TolgeeInstance = Omit<ReturnType<typeof createTolgee>, 't'> & {
+  // enabling generics (when inferred they are lost)
+  t: TFnType<DefaultParamType, string, TranslationKey>;
+};
 
 export type TolgeeChainer = {
   /**

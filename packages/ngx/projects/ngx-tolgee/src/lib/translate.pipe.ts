@@ -1,7 +1,7 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { TranslateService } from './translate.service';
 import { Subscription } from 'rxjs';
-import { getTranslateProps, TFnType, TranslateProps } from '@tolgee/web';
+import { getTranslateProps, TFnType, TranslateProps, TranslationKey } from '@tolgee/web';
 
 @Pipe({
   name: 'translate',
@@ -19,7 +19,7 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.unsubscribe();
   }
 
-  readonly transform: TFnType<string> = (...args) => {
+  readonly transform: TFnType<string, string, TranslationKey> = (...args) => {
     // @ts-ignore
     const params = getTranslateProps(...args);
     const { key } = params;

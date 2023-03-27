@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { TranslateService } from './translate.service';
-import { TranslateParams } from '@tolgee/web';
+import { TranslateParams, TranslationKey } from '@tolgee/web';
 
 @Component({
   selector: '[t]',
   template: ``,
 })
 export class TComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() key: string;
+  @Input() key: TranslationKey;
   @Input() ns: string;
   @Input() params?: TranslateParams<any>;
   @Input() default?: string;

@@ -1,15 +1,15 @@
-import { NsType, TranslateParams } from '@tolgee/web';
+import { NsType, TranslateParams, TranslationKey } from '@tolgee/web';
 import React, { FunctionComponent } from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
-
 import { ParamsTags } from './types';
+
 import { useTranslateInternal } from './useTranslateInternal';
 
 type TProps = {
   params?: TranslateParams<ParamsTags>;
   children?: string;
   noWrap?: boolean;
-  keyName?: string;
+  keyName?: TranslationKey;
   ns?: NsType;
   defaultValue?: string;
 };

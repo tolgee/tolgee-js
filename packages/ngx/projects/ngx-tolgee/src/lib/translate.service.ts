@@ -7,6 +7,7 @@ import {
   ListenerEvent,
   TFnType,
   TolgeeInstance,
+  TranslationKey,
 } from '@tolgee/web';
 import { TOLGEE_INSTANCE } from './tolgee-instance-token';
 
@@ -42,7 +43,7 @@ export class TranslateService implements OnDestroy {
   /**
    * Returns translation asynchronously, this method always return
    */
-  readonly translate: TFnType<DefaultParamType, Observable<string>> = (
+  readonly translate: TFnType<DefaultParamType, Observable<string>, TranslationKey> = (
     ...args
   ) => {
     // @ts-ignore
@@ -73,7 +74,7 @@ export class TranslateService implements OnDestroy {
    * Instantly returns translated value. May return undefined or outdated value.
    * Use only when you cannot use translate.
    */
-  public readonly instant: TFnType = (...args) => {
+  public readonly instant: TFnType<DefaultParamType, string, TranslationKey> = (...args) => {
     // @ts-ignore
     const params = getTranslateProps(...args);
     return this.tolgee.t(params);
