@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.7.0-prerelease.5c23979f.0](https://github.com/tolgee/tolgee-js/compare/v5.6.0...v5.7.0-prerelease.5c23979f.0) (2023-03-27)
+
+
+### Features
+
+* globally typeable key in tolgee core ([5c23979](https://github.com/tolgee/tolgee-js/commit/5c23979f30e590ee489be508666ed21b447a230a))
+
+
+
+
+
 # [5.6.0](https://github.com/tolgee/tolgee-js/compare/v5.5.4...v5.6.0) (2023-03-22)
 
 
