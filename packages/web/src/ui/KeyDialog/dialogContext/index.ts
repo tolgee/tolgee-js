@@ -222,6 +222,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 path: { id: translations.keyId! },
               });
 
+        const surroundingKeys = props.uiProps.findPositions();
         await updateMetadata.mutateAsync({
           content: {
             'application/json': {
@@ -233,7 +234,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   type: getJustUploadedScreenshots().length
                     ? 'SCREENSHOT'
                     : 'SCRAPE',
-                  contextData: { pageContent: document.body.innerText },
+                  contextData: {
+                    surroundingKeys: JSON.stringify(surroundingKeys),
+                  },
                 },
               ],
             },
