@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.6.1-prerelease.998593cd.0](https://github.com/tolgee/tolgee-js/compare/v5.6.0...v5.6.1-prerelease.998593cd.0) (2023-03-28)
+
+
+### Features
+
+* sdk collecting page content data ([fa76111](https://github.com/tolgee/tolgee-js/commit/fa761114ca3168699afba36c061d04cf4a9e84ed))
+* send list of keys instead of page contents ([0950971](https://github.com/tolgee/tolgee-js/commit/09509710ec680319de8f37e0adca7225b68bff00))
+
+
+
+
+
 # [5.6.0](https://github.com/tolgee/tolgee-js/compare/v5.5.4...v5.6.0) (2023-03-22)
 
 
