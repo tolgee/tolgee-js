@@ -161,6 +161,17 @@ export function GeneralObserver() {
     findPositions(key?: string, ns?: NsFallback) {
       const elements = instance?.elementRegistry.findAll(key, ns) || [];
       const result: KeyPosition[] = [];
+      // sort elements by their position in the dom
+      elements.sort((a, b) => {
+        if (
+          a.element.compareDocumentPosition(b.element) &
+          Node.DOCUMENT_POSITION_FOLLOWING
+        ) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
       elements.forEach((meta) => {
         const shape = meta.element.getBoundingClientRect();
         meta.nodes.forEach((node) => {
