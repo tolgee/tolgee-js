@@ -36,6 +36,22 @@ describe('T component integration', () => {
         <div data-testid="with_tags">
           <T keyName="with_tags" params={{ b: <b />, i: <i /> }} />
         </div>
+        <div data-testid="with_empty_tag">
+          <T
+            keyName="with_empty_tag"
+            params={{ br: <br /> }}
+            defaultValue="Here is empty<br></br>tag"
+          />
+        </div>
+        <div data-testid="with_children_conflict">
+          <T
+            keyName="with_children_conflict"
+            params={{
+              b: <b>should</b>,
+            }}
+            defaultValue="This <b>shouldn't</b> be here"
+          />
+        </div>
         <div data-testid="with_tag">
           <T
             keyName="with_tag"
@@ -112,6 +128,22 @@ describe('T component integration', () => {
       'Tento <b>text <i>je</i> formátovaný</b>'
     );
     expect(screen.queryByTestId('with_tags')).toHaveAttribute('_tolgee');
+  });
+
+  it('works with empty tag', () => {
+    expect(screen.queryByTestId('with_empty_tag')).toContainHTML(
+      'Here is empty<br />tag'
+    );
+    expect(screen.queryByTestId('with_empty_tag')).toHaveAttribute('_tolgee');
+  });
+
+  it("won't pass children if the element already has children", () => {
+    expect(screen.queryByTestId('with_children_conflict')).toContainHTML(
+      'This <b>should</b> be here'
+    );
+    expect(screen.queryByTestId('with_children_conflict')).toHaveAttribute(
+      '_tolgee'
+    );
   });
 
   it('works with tag as function', () => {
