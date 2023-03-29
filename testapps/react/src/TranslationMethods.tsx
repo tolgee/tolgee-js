@@ -67,6 +67,19 @@ export const TranslationMethods = () => {
         </div>
 
         <div>
+          <h1>T component with br tag</h1>
+          <div data-cy="translationWithTags">
+            <T
+              keyName="this_is_a_key_with_br_tag"
+              params={{
+                br: <br />,
+              }}
+              defaultValue="Key with br<br></br>tag"
+            />
+          </div>
+        </div>
+
+        <div>
           <h1>t function without default</h1>
           <div>{t('this_is_a_key')}</div>
         </div>
