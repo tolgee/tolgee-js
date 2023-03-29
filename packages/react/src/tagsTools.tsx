@@ -20,7 +20,7 @@ export const wrapTagHandlers = (
     } else if (React.isValidElement(value as any)) {
       const el = value as React.ReactElement;
       result[key] = (chunk: any) => {
-        return chunk?.length
+        return el.props.children === undefined && chunk?.length
           ? React.cloneElement(el, {}, addReactKeys(chunk))
           : React.cloneElement(el);
       };
