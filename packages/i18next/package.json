@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/i18next",
-  "version": "5.6.0",
+  "version": "5.7.0",
   "description": "Tolgee i18n integration.",
   "main": "./dist/tolgee-i18next.cjs.js",
   "module": "./dist/tolgee-i18next.esm.js",
@@ -73,7 +73,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@tolgee/web": "5.6.0"
+    "@tolgee/web": "5.7.0"
   },
   "publishConfig": {
     "access": "public"
