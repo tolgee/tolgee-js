@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.1](https://github.com/tolgee/tolgee-js/compare/v5.7.0...v5.7.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* ngx translate pipe not refreshed when lang changed ([#3189](https://github.com/tolgee/tolgee-js/issues/3189)) ([5381741](https://github.com/tolgee/tolgee-js/commit/538174106eabcc66e36c27bca9b9d47bdf1a4944))
+
+
+
+
+
 # [5.7.0](https://github.com/tolgee/tolgee-js/compare/v5.6.1...v5.7.0) (2023-04-03)
 
 
