@@ -1,27 +1,41 @@
-import { NsType, TranslateParams } from '@tolgee/web';
-import React, { FunctionComponent } from 'react';
+import { NsType, TranslateParams, TranslationKey } from '@tolgee/web';
+import React from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
-
 import { ParamsTags } from './types';
+
 import { useTranslateInternal } from './useTranslateInternal';
 
-type TProps = {
+type PropsWithKeyName = {
   params?: TranslateParams<ParamsTags>;
   children?: string;
   noWrap?: boolean;
-  keyName?: string;
+  keyName: TranslationKey;
   ns?: NsType;
   defaultValue?: string;
 };
 
-export const T: FunctionComponent<TProps> = (props: TProps) => {
-  const key = props.keyName || props.children;
+type PropsWithoutKeyName = {
+  params?: TranslateParams<ParamsTags>;
+  children: TranslationKey;
+  noWrap?: boolean;
+  ns?: NsType;
+  defaultValue?: string;
+};
+
+interface TInterface {
+  (props: PropsWithKeyName): JSX.Element;
+  (props: PropsWithoutKeyName): JSX.Element;
+}
+
+export const T: TInterface = (props) => {
+  const key = (props as PropsWithKeyName).keyName || props.children;
   if (key === undefined) {
     // eslint-disable-next-line no-console
     console.error('T component: keyName not defined');
   }
   const defaultValue =
-    props.defaultValue || (props.keyName ? props.children : undefined);
+    props.defaultValue ||
+    ((props as PropsWithKeyName).keyName ? props.children : undefined);
 
   const { t } = useTranslateInternal();
 

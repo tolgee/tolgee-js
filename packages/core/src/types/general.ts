@@ -2,7 +2,9 @@ export type FallbackGeneral = undefined | false | string | string[];
 
 export type NsType = string;
 
-export type KeyType = string;
+// This prevents typescript to optimize this to 'string'
+// this type needs to be overritable everywhere
+export type TranslationKey = string & Record<never, never>;
 
 export type NsFallback = undefined | NsType | NsType[];
 
@@ -22,8 +24,11 @@ export type TranslateOptions = {
   orEmpty?: boolean;
 };
 
-export type TranslateProps<T = DefaultParamType> = {
-  key: KeyType;
+export type TranslateProps<
+  T = DefaultParamType,
+  K extends string = TranslationKey
+> = {
+  key: K;
   defaultValue?: string;
   params?: TranslateParams<T>;
 } & TranslateOptions;
@@ -38,10 +43,14 @@ export type CombinedOptions<T> = TranslateOptions & {
   [key: string]: T | PropType<TranslateOptions>;
 };
 
-export type TFnType<T = DefaultParamType, R = string> = {
-  (key: string, defaultValue?: string, options?: CombinedOptions<T>): R;
-  (key: string, options?: CombinedOptions<T>): R;
-  (props: TranslateProps<T>): R;
+export type TFnType<
+  T = DefaultParamType,
+  R = string,
+  K extends string = TranslationKey
+> = {
+  (key: K, defaultValue?: string, options?: CombinedOptions<T>): R;
+  (key: K, options?: CombinedOptions<T>): R;
+  (props: TranslateProps<T, K>): R;
 };
 
 export type KeyAndNamespacesInternal = Pick<

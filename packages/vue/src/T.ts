@@ -1,11 +1,16 @@
-import { NsType, TranslateParams, TranslateProps } from '@tolgee/web';
+import {
+  NsType,
+  TranslateParams,
+  TranslateProps,
+  TranslationKey,
+} from '@tolgee/web';
 import { defineComponent, PropType } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 
 export const T = defineComponent({
   name: 'T',
   props: {
-    keyName: { type: String, required: true },
+    keyName: { type: String as PropType<TranslationKey>, required: true },
     params: Object as PropType<TranslateParams>,
     defaultValue: String as PropType<string>,
     noWrap: {

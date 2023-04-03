@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { NsType } from '@tolgee/web';
+    import type { NsType, TranslationKey } from '@tolgee/web';
   import getTranslateInternal from './getTranslateInternal';
 
-  export let keyName: string;
+  export let keyName: TranslationKey;
   export let params: Record<string, unknown> | undefined = undefined;
   export let noWrap = false;
   export let defaultValue = undefined;

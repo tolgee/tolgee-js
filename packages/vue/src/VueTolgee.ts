@@ -4,6 +4,7 @@ import {
   TolgeeInstance,
   TFnType,
   DefaultParamType,
+  TranslationKey,
 } from '@tolgee/web';
 
 type Options = {
@@ -44,7 +45,7 @@ export const VueTolgee = {
 
 declare module 'vue' {
   export interface ComponentCustomProperties {
-    $t: TFnType<DefaultParamType, string>;
+    $t: TFnType<DefaultParamType, string, TranslationKey>;
     $tolgee: TolgeeInstance;
   }
 }
