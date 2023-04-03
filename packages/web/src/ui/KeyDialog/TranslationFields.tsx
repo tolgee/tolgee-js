@@ -7,6 +7,7 @@ import { keyframes } from '@mui/styled-engine';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { getPreferredLanguages } from './dialogContext/tools';
+import { isAuthorizedTo } from './ScreenshotGallery/utils';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -55,6 +56,7 @@ export const TranslationFields: FunctionComponent = () => {
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
   const permittedLanguageIds = useDialogContext((c) => c.permittedLanguageIds);
+  const scopes = useDialogContext((c) => c.scopes);
 
   const onChange = (key: string) => (e: any) => {
     onInputChange(key, e.target.value);
@@ -75,11 +77,14 @@ export const TranslationFields: FunctionComponent = () => {
       ) : (
         [...selectedLanguages].map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
-          const languagePermitted = isLanguagePermitted(
-            key,
-            permittedLanguageIds,
-            availableLanguages
-          );
+          const languagePermitted =
+            isAuthorizedTo('keys.edit', scopes) ||
+            (isAuthorizedTo('translations.edit', scopes) &&
+              isLanguagePermitted(
+                key,
+                permittedLanguageIds,
+                availableLanguages
+              ));
 
           return (
             <React.Fragment key={key}>
