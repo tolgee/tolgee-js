@@ -64,16 +64,13 @@ export const ScreenshotGallery: React.FC = () => {
   const screenshots = useDialogContext((c) => c.screenshots);
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);
-  const formDisabled = useDialogContext((c) => c.formDisabled);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
   const scopes = useDialogContext((c) => c.scopes);
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
-  const uploadEnabled =
-    isAuthorizedTo('screenshots.upload', scopes) && !formDisabled;
-  const deleteEnabled =
-    isAuthorizedTo('screenshots.delete', scopes) && !formDisabled;
+  const uploadEnabled = isAuthorizedTo('screenshots.upload', scopes);
+  const deleteEnabled = isAuthorizedTo('screenshots.delete', scopes);
 
   function onFileSelected(e: React.SyntheticEvent) {
     const files = (e.target as HTMLInputElement).files;

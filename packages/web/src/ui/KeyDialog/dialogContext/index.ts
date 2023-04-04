@@ -345,12 +345,14 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const scopes = scopesLoadable.data?.scopes;
 
-    const formDisabled =
-      !isPat &&
-      (loading ||
-        (translationsLoadable.data?._embedded?.keys?.length
-          ? !isAuthorizedTo('translations.edit', scopes)
-          : !isAuthorizedTo('keys.edit', scopes)));
+    const canEditSomething =
+      isAuthorizedTo('screenshots.upload', scopes) ||
+      isAuthorizedTo('screenshots.delete', scopes) ||
+      (translationsLoadable.data?._embedded?.keys?.length
+        ? isAuthorizedTo('translations.edit', scopes)
+        : isAuthorizedTo('keys.edit', scopes));
+
+    const formDisabled = !isPat && (loading || !canEditSomething);
 
     const canEditTags = !formDisabled && isAuthorizedTo('keys.edit', scopes);
 
