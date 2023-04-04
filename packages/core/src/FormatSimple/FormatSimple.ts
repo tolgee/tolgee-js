@@ -8,6 +8,6 @@ function createFormatSimple(): FinalFormatterMiddleware {
 }
 
 export const FormatSimple = (): TolgeePlugin => (tolgee, tools) => {
-  tools.setFinalFormatter(createFormatSimple());
+  tools.addFormatter(createFormatSimple());
   return tolgee;
 };

@@ -17,7 +17,7 @@ export const TranslationMethods = () => {
       </Navbar>
 
       <div className="tiles">
-        <div>
+        {/* <div>
           <h1>T component with default</h1>
           <div>
             <T keyName="this_key_does_not_exist">This is default</T>
@@ -48,7 +48,7 @@ export const TranslationMethods = () => {
               noWrap
             />
           </div>
-        </div>
+        </div> */}
 
         <div>
           <h1>T component with interpolation</h1>
@@ -65,7 +65,7 @@ export const TranslationMethods = () => {
             </T>
           </div>
         </div>
-
+        {/* 
         <div>
           <h1>T component with br tag</h1>
           <div data-cy="translationWithTags">
@@ -74,7 +74,7 @@ export const TranslationMethods = () => {
               params={{
                 br: <br />,
               }}
-              defaultValue="Key with br<br></br>tag"
+              defaultValue="Key with br<br/>tag"
             />
           </div>
         </div>
@@ -140,7 +140,7 @@ export const TranslationMethods = () => {
               </T>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {!revealed ? (
         <div className="load-more-section">

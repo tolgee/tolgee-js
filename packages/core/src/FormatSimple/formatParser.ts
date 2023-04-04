@@ -3,8 +3,8 @@ import {
   ERROR_PARAM_EMPTY,
   ERROR_UNEXPECTED_CHAR,
   ERROR_UNEXPECTED_END,
-  FormatError,
-} from './FormatError';
+  FormatSimpleError,
+} from './FormatSimpleError';
 
 function isWhitespace(ch: string) {
   return /\s/.test(ch);
@@ -46,7 +46,7 @@ export function formatParser(translation: string) {
   let i = 0;
 
   function parsingError(code: ErrorCode): never {
-    throw new FormatError(code, i, translation);
+    throw new FormatSimpleError(code, i, translation);
   }
 
   const addText = () => {
