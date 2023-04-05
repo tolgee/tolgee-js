@@ -1,9 +1,3 @@
-import {
-  ERROR_UNCLOSED_TAG,
-  ERROR_UNEXPECTED_TAG,
-  ErrorCode,
-  TagParserError,
-} from './TagParserError';
 import { Token } from './tokenizer';
 
 export function handleTag(
@@ -13,7 +7,7 @@ export function handleTag(
   fullText: string
 ) {
   let token: Token | undefined;
-  const content: any[] = [];
+  let content: any[] = [];
 
   function addToContent(item: any) {
     if (
@@ -23,6 +17,14 @@ export function handleTag(
       content[content.length - 1] += item;
     } else {
       content.push(item);
+    }
+  }
+
+  function prependContent(item: any) {
+    if (typeof content[0] === 'string' && typeof item === 'string') {
+      content[0] = item + content[0];
+    } else {
+      content = [item, ...content];
     }
   }
 
@@ -36,8 +38,12 @@ export function handleTag(
     }
   }
 
-  function parsingError(code: ErrorCode): never {
-    throw new TagParserError(code, token!.position, fullText);
+  function getParamFunc(name: string) {
+    const func = params?.[name];
+    if (typeof func === 'function') {
+      return func;
+    }
+    return undefined;
   }
 
   while ((token = stack.shift())) {
@@ -45,28 +51,33 @@ export function handleTag(
       token.type === 'tag' &&
       token.closing &&
       startToken !== undefined &&
-      token.data === startToken.data
+      token.name === startToken.name
     ) {
       // matching tag to startToken - closing
-      const fun = params?.[startToken.data];
+      const fun = getParamFunc(startToken.name);
       return fun(simplifyContent());
-    } else if (token.type === 'tag' && token.selfClosing) {
+    } else if (
+      token.type === 'tag' &&
+      token.selfClosing &&
+      getParamFunc(token.name)
+    ) {
       // self-closing - solve in-place
-      const fun = params?.[token.data];
+      const fun = getParamFunc(token.name);
       addToContent(fun());
-    } else if (token.type === 'tag' && !token.closing) {
+    } else if (
+      token.type === 'tag' &&
+      !token.closing &&
+      getParamFunc(token.name)
+    ) {
       // opening tag - call recursively
       addToContent(handleTag(token, stack, params, fullText));
-    } else if (token.type === 'text') {
-      // text
-      addToContent(token.data);
     } else {
-      parsingError(ERROR_UNEXPECTED_TAG);
+      // treat everything else as text
+      addToContent(token.text);
     }
   }
-  if (startToken === undefined) {
-    // we are in the root, return content itself
-    return simplifyContent();
+  if (startToken !== undefined) {
+    prependContent(startToken.text);
   }
-  parsingError(ERROR_UNCLOSED_TAG);
+  return simplifyContent();
 }

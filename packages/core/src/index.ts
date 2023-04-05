@@ -3,4 +3,3 @@ export { TolgeeCore } from './TolgeeCore';
 export * from './types';
 export { getTranslateProps } from './TranslateParams';
 export { FormatSimple } from './FormatSimple/FormatSimple';
-export { TagParser } from './TagParser/TagParser';

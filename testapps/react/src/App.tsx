@@ -4,16 +4,16 @@ import {
   TolgeeProvider,
   BackendFetch,
   DevTools,
-  FormatSimple,
   TagParser,
 } from '@tolgee/react';
 
 import { Todos } from './Todos';
 import { TranslationMethods } from './TranslationMethods';
+import { FormatIcu } from '@tolgee/format-icu';
 
 const tolgee = Tolgee()
   .use(DevTools())
-  .use(FormatSimple())
+  .use(FormatIcu())
   .use(TagParser())
   .use(BackendFetch())
   .init({

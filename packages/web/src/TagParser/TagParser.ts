@@ -1,4 +1,4 @@
-import { FinalFormatterMiddleware, TolgeePlugin } from '../types';
+import { FinalFormatterMiddleware, TolgeePlugin } from '@tolgee/core';
 import { parser } from './parser';
 
 function createTagParser(): FinalFormatterMiddleware {

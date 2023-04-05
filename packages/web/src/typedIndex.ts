@@ -5,6 +5,7 @@ export { BrowserExtensionPlugin } from './BrowserExtensionPlugin/BrowserExtensio
 export { LanguageStorage } from './LanguageStorage';
 export { LanguageDetector } from './LanguageDetector';
 export { BackendFetch } from './BackendFetch';
+export { TagParser } from './TagParser/TagParser';
 export {
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
