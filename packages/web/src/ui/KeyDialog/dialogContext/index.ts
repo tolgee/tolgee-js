@@ -231,12 +231,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   keyName: result.name!,
                   namespace: result.namespace,
                   location: `web:${window.location.pathname}`,
-                  type: getJustUploadedScreenshots().length
-                    ? 'SCREENSHOT'
-                    : 'SCRAPE',
-                  contextData: {
-                    surroundingKeys: JSON.stringify(surroundingKeys),
-                  },
+                  contextData: surroundingKeys.map(
+                    ({ keyName, keyNamespace }) => ({
+                      name: keyName,
+                      namespace: keyNamespace,
+                    })
+                  ),
                 },
               ],
             },

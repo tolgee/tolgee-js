@@ -747,14 +747,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      description: string;
-      /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
     };
     SetOrganizationRoleDto: {
       roleType: "MEMBER" | "OWNER";
@@ -856,13 +856,13 @@ export interface components {
       /** Format: int64 */
       id: number;
       username?: string;
+      description: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
       scopes: string[];
       userFullName?: string;
       projectName: string;
@@ -1044,8 +1044,11 @@ export interface components {
       namespace?: string;
       keyName: string;
       location: string;
-      type: "SCREENSHOT" | "SCRAPE";
-      contextData?: { [key: string]: unknown };
+      contextData?: components["schemas"]["SurroundingKey"][];
+    };
+    SurroundingKey: {
+      name: string;
+      namespace?: string;
     };
     BigMetaModel: {
       /** Format: int64 */
@@ -1054,7 +1057,6 @@ export interface components {
       keyName: string;
       location?: string;
       key?: components["schemas"]["KeyModel"];
-      type: "SCREENSHOT" | "SCRAPE";
       contextData?: { [key: string]: unknown };
     };
     TranslationCommentWithLangKeyDto: {
@@ -1314,8 +1316,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
       namespace?: string;
+      translation?: string;
       baseTranslation?: string;
     };
     KeySearchSearchResultModel: {
@@ -1323,8 +1325,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
       namespace?: string;
+      translation?: string;
       baseTranslation?: string;
     };
     PagedModelKeySearchSearchResultModel: {
@@ -1786,14 +1788,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      description: string;
-      /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
     };
     OrganizationRequestParamsDto: {
       filterCurrentUserOwner: boolean;
@@ -1872,13 +1874,13 @@ export interface components {
       /** Format: int64 */
       id: number;
       username?: string;
+      description: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
       scopes: string[];
       userFullName?: string;
       projectName: string;
