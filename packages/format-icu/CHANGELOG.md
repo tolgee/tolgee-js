@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.3](https://github.com/tolgee/tolgee-js/compare/v5.7.2...v5.7.3) (2023-04-11)
+
+**Note:** Version bump only for package @tolgee/format-icu
+
+
+
+
+
 # [5.7.0](https://github.com/tolgee/tolgee-js/compare/v5.6.1...v5.7.0) (2023-04-03)
 
 **Note:** Version bump only for package @tolgee/format-icu

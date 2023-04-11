@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.7.3](https://github.com/tolgee/tolgee-js/compare/v5.7.2...v5.7.3) (2023-04-11)
+
+
+### Bug Fixes
+
+* setEmitterActive name fix ([#3195](https://github.com/tolgee/tolgee-js/issues/3195)) ([f585241](https://github.com/tolgee/tolgee-js/commit/f58524165275ad0bcb266339a286b008d6b5972e))
+
+
+
+
+
 # [5.7.0](https://github.com/tolgee/tolgee-js/compare/v5.6.1...v5.7.0) (2023-04-03)
 
 
