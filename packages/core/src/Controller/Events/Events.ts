@@ -48,7 +48,7 @@ export const Events = (
     }
   };
 
-  function setEmmiterActive(active: boolean) {
+  function setEmitterActive(active: boolean) {
     emitterActive = active;
   }
 
@@ -61,7 +61,7 @@ export const Events = (
     onRunningChange,
     onCacheChange,
     onUpdate,
-    setEmmiterActive,
+    setEmitterActive,
     on,
   });
 };

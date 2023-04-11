@@ -47,11 +47,11 @@ describe('events', () => {
     await tolgee.changeLanguage('es');
     expect(eventHandler).toBeCalledTimes(2);
 
-    tolgee.setEmmiterActive(false);
+    tolgee.setEmitterActive(false);
     await tolgee.changeLanguage('en');
     expect(eventHandler).toBeCalledTimes(2);
 
-    tolgee.setEmmiterActive(true);
+    tolgee.setEmitterActive(true);
     await tolgee.changeLanguage('es');
     expect(eventHandler).toBeCalledTimes(4);
   });

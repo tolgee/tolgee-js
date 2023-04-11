@@ -38,10 +38,10 @@ export function useTolgeeSSR(
     // we have to prepare tolgee before rendering children
     // so translations are available right away
     // events emitting must be off, to not trigger re-render while rendering
-    tolgee.setEmmiterActive(false);
+    tolgee.setEmitterActive(false);
     tolgee.addStaticData(staticData);
     tolgee.changeLanguage(locale!);
-    tolgee.setEmmiterActive(true);
+    tolgee.setEmitterActive(true);
   }, [locale, staticData, tolgee]);
 
   return tolgee;
