@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.8.0](https://github.com/tolgee/tolgee-js/compare/v5.7.3...v5.8.0) (2023-04-12)
+
+
+### Features
+
+* add language prop to t function ([#3196](https://github.com/tolgee/tolgee-js/issues/3196)) ([4a2490b](https://github.com/tolgee/tolgee-js/commit/4a2490b45049b04954e5aa02fe014f4ca5b88f41))
+
+
+
+
+
 ## [5.7.3](https://github.com/tolgee/tolgee-js/compare/v5.7.2...v5.7.3) (2023-04-11)
 
 
