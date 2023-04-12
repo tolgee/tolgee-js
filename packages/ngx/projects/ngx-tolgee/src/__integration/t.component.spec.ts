@@ -64,6 +64,7 @@ describe('t component', () => {
         </div>
         <div t key="with_tags" data-testid="with_tags" [isHtml]="true"></div>
         <div t key="with_tags" data-testid="with_tags_disabled"></div>
+        <div t key="hello_world" language="en" data-testid="with_language_prop">
        `);
   });
 
@@ -105,6 +106,15 @@ describe('t component', () => {
     );
     expect(screen.queryByTestId('with_tags_disabled')).not.toContainHTML(
       content
+    );
+  });
+
+  it('works with language prop', () => {
+    expect(screen.queryByTestId('with_language_prop')).toContainHTML(
+      'Hello world!'
+    );
+    expect(screen.queryByTestId('with_language_prop')).toHaveAttribute(
+      '_tolgee'
     );
   });
 

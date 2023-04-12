@@ -12,6 +12,7 @@ type PropsWithKeyName = {
   keyName: TranslationKey;
   ns?: NsType;
   defaultValue?: string;
+  language?: string;
 };
 
 type PropsWithoutKeyName = {
@@ -20,6 +21,7 @@ type PropsWithoutKeyName = {
   noWrap?: boolean;
   ns?: NsType;
   defaultValue?: string;
+  language?: string;
 };
 
 interface TInterface {
@@ -46,6 +48,7 @@ export const T: TInterface = (props) => {
       defaultValue,
       noWrap: props.noWrap,
       ns: props.ns,
+      language: props.language,
     })
   );
 

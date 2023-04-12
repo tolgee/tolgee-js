@@ -10,12 +10,14 @@ function parseCombinedOptions({
   noWrap,
   orEmpty,
   params,
+  language,
   ...rest
 }: Partial<TranslateProps>): Partial<TranslateProps> {
   const options: Required<TranslateOptions> = {
     ns: ns!,
     noWrap: noWrap!,
     orEmpty: orEmpty!,
+    language: language!,
   };
   return {
     ...options,

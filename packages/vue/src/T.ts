@@ -18,6 +18,7 @@ export const T = defineComponent({
       default: false,
     },
     ns: { type: Object as PropType<NsType> },
+    language: { type: String as PropType<string> },
   },
   setup() {
     const { t } = useTranslateInternal();
@@ -30,6 +31,7 @@ export const T = defineComponent({
       defaultValue: this.$props.defaultValue,
       noWrap: this.$props.noWrap,
       ns: this.$props.ns,
+      language: this.$props.language,
     };
     const content = this.t(params);
     return content;

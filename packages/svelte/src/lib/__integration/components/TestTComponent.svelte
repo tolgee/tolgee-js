@@ -19,6 +19,9 @@
     <div data-testid="non_existant">
       <T keyName="non_existant" defaultValue="Non existant" />
     </div>
+    <div data-testid="with_language_prop">
+      <T keyName="hello_world" language="en" />
+    </div>
   </div>
   <span slot="fallback">Loading...</span>
 </TolgeeProvider>

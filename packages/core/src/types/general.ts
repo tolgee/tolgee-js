@@ -22,6 +22,7 @@ export type TranslateOptions = {
   ns?: NsType | null;
   noWrap?: boolean;
   orEmpty?: boolean;
+  language?: string;
 };
 
 export type TranslateProps<
@@ -55,5 +56,5 @@ export type TFnType<
 
 export type KeyAndNamespacesInternal = Pick<
   TranslatePropsInternal,
-  'key' | 'ns'
+  'key' | 'ns' | 'language'
 >;

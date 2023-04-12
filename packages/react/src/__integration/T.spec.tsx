@@ -60,6 +60,9 @@ describe('T component integration', () => {
             }}
           />
         </div>
+        <div data-testid="with_language_prop">
+          <T keyName="hello_world" language="en" />
+        </div>
       </>
     );
   };
@@ -151,6 +154,15 @@ describe('T component integration', () => {
       '<b title="bold">bold</b>'
     );
     expect(screen.queryByTestId('with_tag')).toHaveAttribute('_tolgee');
+  });
+
+  it('works with language prop', () => {
+    expect(screen.queryByTestId('with_language_prop')).toContainHTML(
+      'Hello world!'
+    );
+    expect(screen.queryByTestId('with_language_prop')).toHaveAttribute(
+      '_tolgee'
+    );
   });
 
   describe('language switch', () => {
