@@ -187,4 +187,17 @@ describe('cache', () => {
     await Promise.resolve();
     expect(tolgee.t('test.sub')).toEqual('en.default');
   });
+
+  it('language prop overrides current language', () => {
+    tolgee = TolgeeCore().init({
+      language: 'en',
+      staticData: {
+        en: { hello: 'Hello' },
+        cs: { hello: 'Ahoj' },
+      },
+    });
+
+    expect(tolgee.t('hello')).toEqual('Hello');
+    expect(tolgee.t('hello', { language: 'cs' })).toEqual('Ahoj');
+  });
 });

@@ -65,6 +65,15 @@ describe('T component integration', () => {
     expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
   });
 
+  it('works with language prop', () => {
+    expect(screen.queryByTestId('with_language_prop')).toContainHTML(
+      'Hello world!'
+    );
+    expect(screen.queryByTestId('with_language_prop')).toHaveAttribute(
+      '_tolgee'
+    );
+  });
+
   describe('language switch', () => {
     beforeEach(async () => {
       await tolgee.changeLanguage('en');

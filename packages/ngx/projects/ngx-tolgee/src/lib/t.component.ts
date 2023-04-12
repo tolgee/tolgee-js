@@ -20,6 +20,7 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
   @Input() params?: TranslateParams<any>;
   @Input() default?: string;
   @Input() noWrap?: boolean = false;
+  @Input() language?: string;
 
   /**
    * When true, innerHTML property of element is set.
@@ -66,6 +67,7 @@ export class TComponent implements OnInit, OnDestroy, OnChanges {
       params: this.params,
       defaultValue: this.default,
       noWrap: this.noWrap,
+      language: this.language,
     };
   }
 

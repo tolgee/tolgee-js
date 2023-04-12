@@ -27,6 +27,9 @@ const TestComponent = {
       <div data-testid="non_existant">
         <T keyName="non_existant" defaultValue="Non existant" />
       </div>
+      <div data-testid="with_language_prop">
+        <T keyName="hello_world" language="en" />
+      </div>
     </div>`,
 };
 
@@ -97,6 +100,15 @@ describe('T component integration', () => {
       'Non existant'
     );
     expect(screen.queryByTestId('non_existant')).toHaveAttribute('_tolgee');
+  });
+
+  it('works with language prop', () => {
+    expect(screen.queryByTestId('with_language_prop')).toContainHTML(
+      'Hello world!'
+    );
+    expect(screen.queryByTestId('with_language_prop')).toHaveAttribute(
+      '_tolgee'
+    );
   });
 
   describe('language switch', () => {

@@ -6,7 +6,8 @@
   export let params: Record<string, unknown> | undefined = undefined;
   export let noWrap = false;
   export let defaultValue = undefined;
-  export let ns: NsType = undefined
+  export let ns: NsType = undefined;
+  export let language: string = undefined;
 
   if (!keyName) {
     console.error('Missing keyName prop!');
@@ -21,4 +22,5 @@
   noWrap: noWrap,
   defaultValue: defaultValue,
   ns,
+  language,
 })}
