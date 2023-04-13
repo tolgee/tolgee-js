@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.1-prerelease.16fc4f78.0](https://github.com/tolgee/tolgee-js/compare/v5.8.0...v5.8.1-prerelease.16fc4f78.0) (2023-04-13)
+
+
+### Bug Fixes
+
+* compatibility with react-native ([16fc4f7](https://github.com/tolgee/tolgee-js/commit/16fc4f78662fca57d99a79a8349945a94c6a6057))
+* compatibility with react-native ([cd7d205](https://github.com/tolgee/tolgee-js/commit/cd7d205bf27087d1f84429d6c8d363359868c266))
+
+
+
+
+
 # [5.8.0](https://github.com/tolgee/tolgee-js/compare/v5.7.3...v5.8.0) (2023-04-12)
 
 
