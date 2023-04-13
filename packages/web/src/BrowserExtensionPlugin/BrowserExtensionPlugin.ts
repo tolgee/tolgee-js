@@ -43,7 +43,7 @@ export type BrowserExtensionProps = {
 
 let BrowserExtensionPlugin: () => TolgeePlugin = () => (tolgee) => tolgee;
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && sessionStorage) {
   BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
     const handshaker = Handshaker();
     const getConfig = () =>
