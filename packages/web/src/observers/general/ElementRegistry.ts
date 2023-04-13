@@ -12,11 +12,11 @@ import { ElementStoreType } from './ElementStore';
 import { compareDescriptors, nodeContains } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
-export const ElementRegistry = (
+export function ElementRegistry(
   options: ObserverOptionsInternal,
   elementStore: ElementStoreType,
   onClick: TranslationOnClick
-) => {
+) {
   const elementHighlighter = ElementHighlighter({
     highlightColor: options.highlightColor,
     highlightWidth: options.highlightWidth,
@@ -24,7 +24,7 @@ export const ElementRegistry = (
   const eventHandler = MouseEventHandler({
     highlightKeys: options.highlightKeys,
     elementStore,
-    onClick: (event, el) => {
+    onClick(event, el) {
       const meta = elementStore.get(el)!;
       onClick({
         event,
@@ -34,73 +34,12 @@ export const ElementRegistry = (
     options,
   });
 
-  function register(element: Element, node: Node, nodeMeta: NodeMeta) {
-    if (isRestricted(element)) {
-      return;
-    }
-    const tolgeeElement = element as TolgeeElement;
-    let elementMeta = elementStore.get(tolgeeElement);
-    if (!elementMeta) {
-      elementMeta = initElementMeta(tolgeeElement);
-      elementStore.set(tolgeeElement, elementMeta);
-      tolgeeElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, 'true');
-    }
-    elementMeta.nodes.set(node, nodeMeta);
-    elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
-  }
-
-  function run(mouseHighlight: boolean) {
-    if (mouseHighlight) {
-      eventHandler.run();
-    }
-  }
-
-  function stop() {
-    eventHandler.stop();
-    elementStore.forEachElement((_, meta) => {
-      if (meta.highlightEl) {
-        meta.unhighlight?.();
-      }
-    });
-  }
-
   function isRestricted(element: Element) {
     const restrictedElements = options.restrictedElements;
     return (
       restrictedElements.indexOf(element.tagName.toLowerCase()) !== -1 ||
       element.closest(`[${TOLGEE_RESTRICT_ATTRIBUTE}]`) !== null
     );
-  }
-
-  function refreshAll() {
-    elementStore.forEachElement((element, meta) => {
-      if (meta.preventClean) {
-        return;
-      }
-      cleanElementInactiveNodes(meta);
-      if (meta.nodes.size === 0) {
-        cleanElement(element, meta);
-      }
-    });
-  }
-
-  function findAll(key?: string, ns?: NsFallback) {
-    const result: ElementMeta[] = [];
-    elementStore.forEachElement((_, meta) => {
-      for (const nodeMeta of meta.nodes.values()) {
-        const fits = nodeMeta.keys.find((val) =>
-          compareDescriptors(
-            { key, ns: getFallback(ns) },
-            { key: val.key, ns: getFallback(val.ns) }
-          )
-        );
-        if (fits) {
-          result.push(meta);
-          break;
-        }
-      }
-    });
-    return result;
   }
 
   function cleanElementInactiveNodes(meta: ElementMeta) {
@@ -147,13 +86,69 @@ export const ElementRegistry = (
   }
 
   return Object.freeze({
-    register,
+    register(element: Element, node: Node, nodeMeta: NodeMeta) {
+      if (isRestricted(element)) {
+        return;
+      }
+      const tolgeeElement = element as TolgeeElement;
+      let elementMeta = elementStore.get(tolgeeElement);
+      if (!elementMeta) {
+        elementMeta = initElementMeta(tolgeeElement);
+        elementStore.set(tolgeeElement, elementMeta);
+        tolgeeElement.setAttribute(TOLGEE_ATTRIBUTE_NAME, 'true');
+      }
+      elementMeta.nodes.set(node, nodeMeta);
+      elementHighlighter.initHighlighter(tolgeeElement, elementMeta);
+    },
+
     forEachElement: elementStore.forEachElement,
-    findAll,
-    refreshAll,
-    run,
-    stop,
+
+    refreshAll() {
+      elementStore.forEachElement((element, meta) => {
+        if (meta.preventClean) {
+          return;
+        }
+        cleanElementInactiveNodes(meta);
+        if (meta.nodes.size === 0) {
+          cleanElement(element, meta);
+        }
+      });
+    },
+
+    findAll(key?: string, ns?: NsFallback) {
+      const result: ElementMeta[] = [];
+      elementStore.forEachElement((_, meta) => {
+        for (const nodeMeta of meta.nodes.values()) {
+          const fits = nodeMeta.keys.find((val) =>
+            compareDescriptors(
+              { key, ns: getFallback(ns) },
+              { key: val.key, ns: getFallback(val.ns) }
+            )
+          );
+          if (fits) {
+            result.push(meta);
+            break;
+          }
+        }
+      });
+      return result;
+    },
+
+    run(mouseHighlight: boolean) {
+      if (mouseHighlight) {
+        eventHandler.run();
+      }
+    },
+
+    stop() {
+      eventHandler.stop();
+      elementStore.forEachElement((_, meta) => {
+        if (meta.highlightEl) {
+          meta.unhighlight?.();
+        }
+      });
+    },
   });
-};
+}
 
 export type ElementRegistryInstance = ReturnType<typeof ElementRegistry>;

@@ -53,7 +53,9 @@ export class UI implements UiInterface {
     return await new Promise<string | undefined>((resolve) => {
       this.keyContextMenu.show({
         ...props,
-        onSelect: (key) => resolve(key),
+        onSelect(key) {
+          resolve(key);
+        },
       });
     });
   }

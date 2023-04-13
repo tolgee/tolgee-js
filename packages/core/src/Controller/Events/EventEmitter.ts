@@ -1,32 +1,31 @@
 import { Subscription, Listener } from '../../types';
 
-export const EventEmitter = <T>(
+export function EventEmitter<T>(
   isActive: () => boolean
-): EventEmitterInstance<T> => {
+): EventEmitterInstance<T> {
   let handlers: Listener<T>[] = [];
 
-  const listen = (handler: Listener<T>): Subscription => {
-    const handlerWrapper: Listener<T> = (e) => {
-      handler(e);
-    };
+  return Object.freeze({
+    listen(handler: Listener<T>): Subscription {
+      const handlerWrapper: Listener<T> = (e) => {
+        handler(e);
+      };
 
-    handlers.push(handlerWrapper);
+      handlers.push(handlerWrapper);
 
-    return {
-      unsubscribe: () => {
-        handlers = handlers.filter((i) => handlerWrapper !== i);
-      },
-    };
-  };
-
-  const emit = (data: T) => {
-    if (isActive()) {
-      handlers.forEach((handler) => handler({ value: data }));
-    }
-  };
-
-  return Object.freeze({ listen, emit });
-};
+      return {
+        unsubscribe() {
+          handlers = handlers.filter((i) => handlerWrapper !== i);
+        },
+      };
+    },
+    emit(data: T) {
+      if (isActive()) {
+        handlers.forEach((handler) => handler({ value: data }));
+      }
+    },
+  });
+}
 
 export type EventEmitterInstance<T> = {
   readonly listen: (handler: Listener<T>) => Subscription;

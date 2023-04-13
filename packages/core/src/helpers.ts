@@ -8,19 +8,20 @@ export function isPromise(value: any) {
   return Boolean(value && typeof value.then === 'function');
 }
 
-export const valueOrPromise = <T, R>(
+export function valueOrPromise<T, R>(
   value: T | Promise<T>,
   callback: (value: T) => R
-) => {
+) {
   if (isPromise(value)) {
     return Promise.resolve(value).then(callback);
   } else {
     return callback(value as T);
   }
-};
+}
 
-export const missingOptionError = (option: string) =>
-  `Tolgee: You need to specify '${option}' option`;
+export function missingOptionError(option: string) {
+  return `Tolgee: You need to specify '${option}' option`;
+}
 
 export function isObject(item: any) {
   return typeof item === 'object' && !Array.isArray(item) && item !== null;

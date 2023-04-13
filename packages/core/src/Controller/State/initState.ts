@@ -139,10 +139,10 @@ export const combineOptions = <T extends TolgeeOptions>(
   return result;
 };
 
-export const initState = (
+export function initState(
   options?: Partial<TolgeeOptions>,
   previousState?: State
-): State => {
+): State {
   const initialOptions = combineOptions(
     defaultValues,
     previousState?.initialOptions,
@@ -161,4 +161,4 @@ export const initState = (
     isInitialLoading: false,
     isRunning: false,
   };
-};
+}

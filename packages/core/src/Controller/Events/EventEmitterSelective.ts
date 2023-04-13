@@ -15,54 +15,15 @@ type HandlerWrapperType = {
   namespaces: Set<string>;
 };
 
-export const EventEmitterSelective = (
+export function EventEmitterSelective(
   isActive: () => boolean,
   getFallbackNs: () => string[],
   getDefaultNs: () => string
-): EventEmitterSelectiveInstance => {
+): EventEmitterSelectiveInstance {
   const listeners: Set<Listener<undefined>> = new Set();
   const partialListeners: Set<HandlerWrapperType> = new Set();
 
-  const listen = (handler: Listener<undefined>) => {
-    listeners.add(handler);
-    const result = {
-      unsubscribe: () => {
-        listeners.delete(handler);
-      },
-    };
-    return result;
-  };
-
-  const listenSome = (handler: Listener<undefined>) => {
-    const handlerWrapper = {
-      fn: (e: ListenerEvent<undefined>) => {
-        handler(e);
-      },
-      namespaces: new Set<NsListType>(),
-    };
-
-    partialListeners.add(handlerWrapper);
-
-    const result = {
-      unsubscribe: () => {
-        partialListeners.delete(handlerWrapper);
-      },
-      subscribeNs: (ns: NsFallback) => {
-        getFallbackArray(ns).forEach((val) =>
-          handlerWrapper.namespaces.add(val)
-        );
-        if (ns === undefined) {
-          // subscribing to default ns
-          handlerWrapper.namespaces.add(getDefaultNs());
-        }
-        return result;
-      },
-    };
-
-    return result;
-  };
-
-  const callHandlers = (ns: Array<string> | undefined) => {
+  function callHandlers(ns: Array<string> | undefined) {
     // everything is implicitly subscribed to fallbacks
     // as it can always fall through to it
     const fallbackNamespaces = new Set(getFallbackNs());
@@ -78,11 +39,12 @@ export const EventEmitterSelective = (
         handler.fn({ value: undefined as any });
       }
     });
-  };
+  }
 
   let queue: (string[] | undefined)[] = [];
+
   // merge events in queue into one event
-  const solveQueue = () => {
+  function solveQueue() {
     if (queue.length === 0) {
       return;
     }
@@ -109,21 +71,60 @@ export const EventEmitterSelective = (
       : undefined;
 
     callHandlers(namespacesArray);
-  };
+  }
 
-  const emit = (ns?: string[], delayed?: boolean) => {
-    if (isActive()) {
-      queue.push(ns);
-      if (!delayed) {
-        solveQueue();
-      } else {
-        setTimeout(solveQueue, 0);
+  return Object.freeze({
+    emit(ns?: string[], delayed?: boolean) {
+      if (isActive()) {
+        queue.push(ns);
+        if (!delayed) {
+          solveQueue();
+        } else {
+          setTimeout(solveQueue, 0);
+        }
       }
-    }
-  };
+    },
 
-  return Object.freeze({ listenSome, listen, emit });
-};
+    listen(handler: Listener<undefined>) {
+      listeners.add(handler);
+      const result = {
+        unsubscribe: () => {
+          listeners.delete(handler);
+        },
+      };
+      return result;
+    },
+
+    listenSome(handler: Listener<undefined>) {
+      const handlerWrapper = {
+        fn: (e: ListenerEvent<undefined>) => {
+          handler(e);
+        },
+        namespaces: new Set<NsListType>(),
+      };
+
+      partialListeners.add(handlerWrapper);
+
+      const result = {
+        unsubscribe: () => {
+          partialListeners.delete(handlerWrapper);
+        },
+        subscribeNs: (ns: NsFallback) => {
+          getFallbackArray(ns).forEach((val) =>
+            handlerWrapper.namespaces.add(val)
+          );
+          if (ns === undefined) {
+            // subscribing to default ns
+            handlerWrapper.namespaces.add(getDefaultNs());
+          }
+          return result;
+        },
+      };
+
+      return result;
+    },
+  });
+}
 
 export type EventEmitterSelectiveInstance = {
   readonly listenSome: (handler: Listener<undefined>) => SubscriptionSelective;

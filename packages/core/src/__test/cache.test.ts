@@ -3,13 +3,14 @@ import { TolgeeCore, TolgeeInstance } from '../TolgeeCore';
 import { TolgeePlugin, TreeTranslationsData } from '../types';
 import { resolvablePromise } from './testTools';
 
-const waitForInitialLoad = (tolgee: TolgeeInstance) =>
-  new Promise<void>((resolve) => {
+function waitForInitialLoad(tolgee: TolgeeInstance) {
+  return new Promise<void>((resolve) => {
     const { unsubscribe } = tolgee.on('initialLoad', () => {
       unsubscribe();
       resolve();
     });
   });
+}
 
 const DevToolsPlugin =
   (postfix = ''): TolgeePlugin =>

@@ -63,7 +63,7 @@ const globalStyles = css`
   }
 `;
 
-export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
+export function ThemeProvider({ children }: React.PropsWithChildren) {
   const cache = useRef(
     createCache({
       key: 'css',
@@ -78,4 +78,4 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
       <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
     </CacheProvider>
   );
-};
+}

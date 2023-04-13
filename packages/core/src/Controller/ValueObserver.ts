@@ -4,19 +4,18 @@ export const ValueObserver = <T = any>(
   handler: (value: T) => void
 ): ValueObserverInstance<T> => {
   let previousValue: T = initialValue;
-  function init(value: T) {
-    previousValue = value;
-  }
-  function notify() {
-    const value = valueGetter();
-    if (previousValue !== value) {
-      handler(value);
-    }
-    previousValue = value;
-  }
+
   return Object.freeze({
-    init,
-    notify,
+    init(value: T) {
+      previousValue = value;
+    },
+    notify() {
+      const value = valueGetter();
+      if (previousValue !== value) {
+        handler(value);
+      }
+      previousValue = value;
+    },
   });
 };
 

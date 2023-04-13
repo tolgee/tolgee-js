@@ -5,20 +5,20 @@ export const INVISIBLE_REGEX = RegExp(
   'gu'
 );
 
-const toBytes = (text: string) => {
+function toBytes(text: string) {
   return Array.from(new TextEncoder().encode(text));
-};
+}
 
-const fromBytes = (bytes: Iterable<number>) => {
+function fromBytes(bytes: Iterable<number>) {
   return new TextDecoder().decode(new Uint8Array(bytes));
-};
+}
 
-const padToWholeBytes = (binary: string) => {
+function padToWholeBytes(binary: string) {
   const needsToAdd = 8 - binary.length;
   return '0'.repeat(needsToAdd) + binary;
-};
+}
 
-export const encodeMessage = (text: string) => {
+export function encodeMessage(text: string) {
   const bytes = toBytes(text).map(Number);
   const binary = bytes
     .map((byte) => padToWholeBytes(byte.toString(2)) + '0')
@@ -29,9 +29,9 @@ export const encodeMessage = (text: string) => {
     .join('');
 
   return result;
-};
+}
 
-const decodeMessage = (message: string) => {
+function decodeMessage(message: string) {
   const binary = Array.from(message)
     .map((character) => {
       return INVISIBLE_CHARACTERS.indexOf(character);
@@ -44,23 +44,23 @@ const decodeMessage = (message: string) => {
     textBytes?.map((byte) => parseInt(byte.slice(0, 8), 2)) || []
   );
   return fromBytes(codes);
-};
+}
 
-export const decodeFromText = (text: string) => {
+export function decodeFromText(text: string) {
   const invisibleMessages = text
     .match(INVISIBLE_REGEX)
     ?.filter((m) => m.length > 8);
   return invisibleMessages?.map(decodeMessage) || [];
-};
+}
 
-export const removeSecrets = (text: string) => {
+export function removeSecrets(text: string) {
   return text.replace(INVISIBLE_REGEX, '');
-};
+}
 
-export const stringToCodePoints = (text: string) => {
+export function stringToCodePoints(text: string) {
   const result: number[] = [];
   for (const codePoint of text) {
     result.push(codePoint.codePointAt(0)!);
   }
   return result;
-};
+}

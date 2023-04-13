@@ -16,167 +16,150 @@ import {
 } from '../../helpers';
 import { initState, TolgeeOptions } from './initState';
 
-export const State = (
+export function State(
   onLanguageChange: EventEmitterInstance<string>,
   onPendingLanguageChange: EventEmitterInstance<string>,
   onRunningChange: EventEmitterInstance<boolean>
-) => {
+) {
   let state = initState();
   let devCredentials: DevCredentials = undefined;
 
-  function init(options?: Partial<TolgeeOptions>) {
-    state = initState(options, state);
-  }
+  const self = Object.freeze({
+    init(options?: Partial<TolgeeOptions>) {
+      state = initState(options, state);
+    },
 
-  function isRunning() {
-    return state.isRunning;
-  }
+    isRunning() {
+      return state.isRunning;
+    },
 
-  function setRunning(value: boolean) {
-    if (state.isRunning !== value) {
-      state.isRunning = value;
-      onRunningChange.emit(value);
-    }
-  }
-
-  function isInitialLoading() {
-    return state.isInitialLoading;
-  }
-
-  function setInitialLoading(value: boolean) {
-    state.isInitialLoading = value;
-  }
-
-  function getLanguage() {
-    return state.language || state.initialOptions.language;
-  }
-
-  function setLanguage(language: string) {
-    if (state.language !== language) {
-      state.language = language;
-      onLanguageChange.emit(language);
-    }
-  }
-
-  function getPendingLanguage() {
-    return state.pendingLanguage || getLanguage();
-  }
-
-  function setPendingLanguage(language: string) {
-    if (state.pendingLanguage !== language) {
-      state.pendingLanguage = language;
-      onPendingLanguageChange.emit(language);
-    }
-  }
-
-  function getInitialOptions() {
-    return { ...state.initialOptions, ...devCredentials };
-  }
-
-  function addActiveNs(ns: NsFallback) {
-    const namespaces = getFallbackArray(ns);
-    namespaces.forEach((namespace) => {
-      const value = state.activeNamespaces.get(namespace);
-      if (value !== undefined) {
-        state.activeNamespaces.set(namespace, value + 1);
-      } else {
-        state.activeNamespaces.set(namespace, 1);
+    setRunning(value: boolean) {
+      if (state.isRunning !== value) {
+        state.isRunning = value;
+        onRunningChange.emit(value);
       }
-    });
-  }
+    },
 
-  function removeActiveNs(ns: NsFallback) {
-    const namespaces = getFallbackArray(ns);
-    namespaces.forEach((namespace) => {
-      const value = state.activeNamespaces.get(namespace);
-      if (value !== undefined && value > 1) {
-        state.activeNamespaces.set(namespace, value - 1);
-      } else {
-        state.activeNamespaces.delete(namespace);
+    isInitialLoading() {
+      return state.isInitialLoading;
+    },
+
+    setInitialLoading(value: boolean) {
+      state.isInitialLoading = value;
+    },
+
+    getLanguage() {
+      return state.language || state.initialOptions.language;
+    },
+
+    setLanguage(language: string) {
+      if (state.language !== language) {
+        state.language = language;
+        onLanguageChange.emit(language);
       }
-    });
-  }
+    },
 
-  function getRequiredNamespaces() {
-    return unique([
-      ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
-      ...getFallbackArray(state.initialOptions.fallbackNs),
-      ...state.activeNamespaces.keys(),
-    ]);
-  }
+    getPendingLanguage() {
+      return state.pendingLanguage || self.getLanguage();
+    },
 
-  function getFallbackLangs(lang?: string) {
-    const language = lang || getLanguage();
-    if (!language) {
-      return [];
-    }
-    return unique([
-      language,
-      ...getFallbackFromStruct(language, state.initialOptions.fallbackLanguage),
-    ]);
-  }
+    setPendingLanguage(language: string) {
+      if (state.pendingLanguage !== language) {
+        state.pendingLanguage = language;
+        onPendingLanguageChange.emit(language);
+      }
+    },
 
-  function getFallbackNs() {
-    return getFallbackArray(state.initialOptions.fallbackNs);
-  }
+    getInitialOptions() {
+      return { ...state.initialOptions, ...devCredentials };
+    },
 
-  function getDefaultNs(ns?: NsType) {
-    return ns === undefined ? state.initialOptions.defaultNs : ns;
-  }
+    addActiveNs(ns: NsFallback) {
+      const namespaces = getFallbackArray(ns);
+      namespaces.forEach((namespace) => {
+        const value = state.activeNamespaces.get(namespace);
+        if (value !== undefined) {
+          state.activeNamespaces.set(namespace, value + 1);
+        } else {
+          state.activeNamespaces.set(namespace, 1);
+        }
+      });
+    },
 
-  function getAvailableLanguages() {
-    if (state.initialOptions.availableLanguages) {
-      return state.initialOptions.availableLanguages;
-    } else if (state.initialOptions.staticData) {
-      const languagesFromStaticData = Object.keys(
-        state.initialOptions.staticData
-      ).map((key) => decodeCacheKey(key).language);
-      return Array.from(new Set(languagesFromStaticData));
-    }
-  }
+    removeActiveNs(ns: NsFallback) {
+      const namespaces = getFallbackArray(ns);
+      namespaces.forEach((namespace) => {
+        const value = state.activeNamespaces.get(namespace);
+        if (value !== undefined && value > 1) {
+          state.activeNamespaces.set(namespace, value - 1);
+        } else {
+          state.activeNamespaces.delete(namespace);
+        }
+      });
+    },
+    getRequiredNamespaces() {
+      return unique([
+        ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
+        ...getFallbackArray(state.initialOptions.fallbackNs),
+        ...state.activeNamespaces.keys(),
+      ]);
+    },
 
-  function withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
-    return {
-      namespace:
-        descriptor.namespace === undefined
-          ? getInitialOptions().defaultNs
-          : descriptor.namespace,
-      language: descriptor.language,
-    };
-  }
+    getFallbackLangs(lang?: string) {
+      const language = lang || self.getLanguage();
+      if (!language) {
+        return [];
+      }
+      return unique([
+        language,
+        ...getFallbackFromStruct(
+          language,
+          state.initialOptions.fallbackLanguage
+        ),
+      ]);
+    },
 
-  function overrideCredentials(credentials: DevCredentials) {
-    if (credentials) {
-      devCredentials = {
-        ...credentials,
-        apiUrl: sanitizeUrl(credentials.apiUrl),
+    getFallbackNs() {
+      return getFallbackArray(state.initialOptions.fallbackNs);
+    },
+
+    getDefaultNs(ns?: NsType) {
+      return ns === undefined ? state.initialOptions.defaultNs : ns;
+    },
+
+    getAvailableLanguages() {
+      if (state.initialOptions.availableLanguages) {
+        return state.initialOptions.availableLanguages;
+      } else if (state.initialOptions.staticData) {
+        const languagesFromStaticData = Object.keys(
+          state.initialOptions.staticData
+        ).map((key) => decodeCacheKey(key).language);
+        return Array.from(new Set(languagesFromStaticData));
+      }
+    },
+
+    withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
+      return {
+        namespace:
+          descriptor.namespace === undefined
+            ? self.getInitialOptions().defaultNs
+            : descriptor.namespace,
+        language: descriptor.language,
       };
-    } else {
-      devCredentials = undefined;
-    }
-  }
+    },
 
-  return Object.freeze({
-    init,
-    isRunning,
-    setRunning,
-    isInitialLoading,
-    setInitialLoading,
-    getLanguage,
-    setLanguage,
-    getPendingLanguage,
-    setPendingLanguage,
-    getInitialOptions,
-    addActiveNs,
-    removeActiveNs,
-    getRequiredNamespaces,
-    getFallbackLangs,
-    getFallbackNs,
-    getDefaultNs,
-    getAvailableLanguages,
-    withDefaultNs,
-    overrideCredentials,
+    overrideCredentials(credentials: DevCredentials) {
+      if (credentials) {
+        devCredentials = {
+          ...credentials,
+          apiUrl: sanitizeUrl(credentials.apiUrl),
+        };
+      } else {
+        devCredentials = undefined;
+      }
+    },
   });
-};
+  return self;
+}
 
 export type StateInstance = ReturnType<typeof State>;

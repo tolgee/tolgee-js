@@ -24,12 +24,12 @@ type Props = {
   options: ObserverOptionsInternal;
 };
 
-export const MouseEventHandler = ({
+export function MouseEventHandler({
   highlightKeys,
   elementStore,
   onClick,
   options,
-}: Props) => {
+}: Props) {
   let keysDown = new Set<ModifierKey>();
   let highlighted: TolgeeElement | undefined;
   let cursorPosition: Coordinates | undefined;
@@ -39,7 +39,7 @@ export const MouseEventHandler = ({
 
   const targetDocument = options.targetElement?.ownerDocument || document;
 
-  const highlight = (el: TolgeeElement | undefined) => {
+  function highlight(el: TolgeeElement | undefined) {
     if (highlighted !== el) {
       unhighlight();
       const meta = elementStore.get(el);
@@ -49,16 +49,16 @@ export const MouseEventHandler = ({
         highlighted = el;
       }
     }
-  };
+  }
 
-  const unhighlight = () => {
+  function unhighlight() {
     const meta = elementStore.get(highlighted);
     if (meta) {
       meta.preventClean = false;
       meta.unhighlight?.();
       highlighted = undefined;
     }
-  };
+  }
 
   function updateHighlight() {
     const position = cursorPosition;
@@ -81,44 +81,50 @@ export const MouseEventHandler = ({
     updateHighlight();
   }
 
-  const blockEvents = (e: MouseEvent) => {
+  function blockEvents(e: MouseEvent) {
     if (areKeysDown() && !isInUiDialog(e.target as Element)) {
       e.stopPropagation();
       e.preventDefault();
     }
-  };
-  const onMouseMove = (e: MouseEvent) => {
+  }
+
+  function onMouseMove(e: MouseEvent) {
     updateCursorPosition({ x: e.clientX, y: e.clientY });
-  };
-  const onBlur = () => {
+  }
+
+  function onBlur() {
     keysDown = new Set();
     // keysChanged.emit(areKeysDown());
     updateHighlight();
-  };
-  const onKeyDown = (e: KeyboardEvent) => {
+  }
+
+  function onKeyDown(e: KeyboardEvent) {
     const modifierKey = e.key as unknown as ModifierKey;
     if (modifierKey !== undefined) {
       keysDown.add(modifierKey);
       // keysChanged.emit(areKeysDown());
     }
     updateHighlight();
-  };
-  const onKeyUp = (e: KeyboardEvent) => {
+  }
+
+  function onKeyUp(e: KeyboardEvent) {
     keysDown.delete(e.key as unknown as ModifierKey);
     // keysChanged.emit(areKeysDown());
     updateHighlight();
-  };
-  const onScroll = () => {
+  }
+
+  function onScroll() {
     const meta = elementStore.get(highlighted);
     meta?.highlight?.();
-  };
-  const handleClick = (e: MouseEvent) => {
+  }
+
+  function handleClick(e: MouseEvent) {
     blockEvents(e);
     if (areKeysDown() && highlighted) {
       onClick(e, highlighted);
       unhighlight();
     }
-  };
+  }
 
   function initEventListeners() {
     targetDocument.addEventListener('blur', onBlur, eCapture);
@@ -187,16 +193,13 @@ export const MouseEventHandler = ({
     return true;
   }
 
-  function stop() {
-    removeEventListeners();
-  }
-
-  function run() {
-    initEventListeners();
-  }
-
   return Object.freeze({
-    run,
-    stop,
+    stop() {
+      removeEventListeners();
+    },
+
+    run() {
+      initEventListeners();
+    },
   });
-};
+}
