@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-testapp",
-  "version": "5.8.1",
+  "version": "5.8.2",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -11,8 +11,8 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.8.0",
-    "@tolgee/vue": "5.8.1",
+    "@tolgee/format-icu": "5.8.2",
+    "@tolgee/vue": "5.8.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
