@@ -8,6 +8,7 @@ export const TextObserver = (): ObserverMiddleware => () => {
 
   const self = Object.freeze({
     ...observer,
+
     run(props: ObserverRunProps) {
       const wrapper = TextWrapper({
         inputPrefix: props.options.inputPrefix,
@@ -16,6 +17,7 @@ export const TextObserver = (): ObserverMiddleware => () => {
       });
       observer.run({ ...props, wrapper });
     },
+
     retranslate() {
       observer.forEachElement((_, elMeta) => {
         for (const [node, nodeMeta] of elMeta.nodes.entries()) {
@@ -29,6 +31,7 @@ export const TextObserver = (): ObserverMiddleware => () => {
         }
       });
     },
+
     outputNotFormattable: true,
   });
   return self;

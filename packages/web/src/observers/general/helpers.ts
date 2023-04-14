@@ -63,10 +63,10 @@ export function nodeContains(descendant: Node, node: Node) {
   return false;
 }
 
-export const compareDescriptors = (
+export function compareDescriptors(
   descriptor: KeyDescriptorInternal,
   criteria: KeyDescriptorInternal
-) => {
+) {
   const keyMatches =
     descriptor.key === undefined ||
     criteria.key === undefined ||
@@ -77,4 +77,4 @@ export const compareDescriptors = (
     descriptor.ns?.findIndex((ns) => criteria.ns?.includes(ns)) !== -1;
 
   return keyMatches && nsMatches;
-};
+}

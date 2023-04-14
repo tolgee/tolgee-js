@@ -17,10 +17,7 @@ type Props = {
   highlightWidth: number;
 };
 
-export const ElementHighlighter = ({
-  highlightColor,
-  highlightWidth,
-}: Props) => {
+export function ElementHighlighter({ highlightColor, highlightWidth }: Props) {
   function initHighlightFunction(
     element: TolgeeElement,
     elementMeta: ElementMeta
@@ -63,10 +60,10 @@ export const ElementHighlighter = ({
     };
   }
 
-  function initHighlighter(element: TolgeeElement, elementMeta: ElementMeta) {
-    initHighlightFunction(element, elementMeta);
-    initUnhighlightFunction(element, elementMeta);
-  }
-
-  return Object.freeze({ initHighlighter });
-};
+  return Object.freeze({
+    initHighlighter(element: TolgeeElement, elementMeta: ElementMeta) {
+      initHighlightFunction(element, elementMeta);
+      initUnhighlightFunction(element, elementMeta);
+    },
+  });
+}

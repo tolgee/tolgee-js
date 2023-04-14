@@ -2,68 +2,57 @@ import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
 import { CacheDescriptorWithKey, TolgeeOn } from '../../types';
 
-export const Events = (
+export function Events(
   getFallbackNs: () => string[],
   getDefaultNs: () => string
-) => {
+) {
   let emitterActive = true;
 
   function isActive() {
     return emitterActive;
   }
 
-  const onPendingLanguageChange = EventEmitter<string>(isActive);
-  const onLanguageChange = EventEmitter<string>(isActive);
-  const onLoadingChange = EventEmitter<boolean>(isActive);
-  const onFetchingChange = EventEmitter<boolean>(isActive);
-  const onInitialLoaded = EventEmitter<void>(isActive);
-  const onRunningChange = EventEmitter<boolean>(isActive);
-  const onCacheChange = EventEmitter<CacheDescriptorWithKey>(isActive);
-  const onUpdate = EventEmitterSelective(isActive, getFallbackNs, getDefaultNs);
-
-  onInitialLoaded.listen(() => onUpdate.emit());
-  onLanguageChange.listen(() => onUpdate.emit());
-  onCacheChange.listen(({ value }) => {
-    onUpdate.emit([value.namespace], true);
+  const self = Object.freeze({
+    onPendingLanguageChange: EventEmitter<string>(isActive),
+    onLanguageChange: EventEmitter<string>(isActive),
+    onLoadingChange: EventEmitter<boolean>(isActive),
+    onFetchingChange: EventEmitter<boolean>(isActive),
+    onInitialLoaded: EventEmitter<void>(isActive),
+    onRunningChange: EventEmitter<boolean>(isActive),
+    onCacheChange: EventEmitter<CacheDescriptorWithKey>(isActive),
+    onUpdate: EventEmitterSelective(isActive, getFallbackNs, getDefaultNs),
+    setEmitterActive(active: boolean) {
+      emitterActive = active;
+    },
+    on: ((event, handler): any => {
+      switch (event) {
+        case 'pendingLanguage':
+          return self.onPendingLanguageChange.listen(handler as any);
+        case 'language':
+          return self.onLanguageChange.listen(handler as any);
+        case 'loading':
+          return self.onLoadingChange.listen(handler as any);
+        case 'fetching':
+          return self.onFetchingChange.listen(handler as any);
+        case 'initialLoad':
+          return self.onInitialLoaded.listen(handler as any);
+        case 'running':
+          return self.onRunningChange.listen(handler as any);
+        case 'cache':
+          return self.onCacheChange.listen(handler as any);
+        case 'update':
+          return self.onUpdate.listen(handler as any);
+      }
+    }) as TolgeeOn,
   });
 
-  const on: TolgeeOn = (event, handler): any => {
-    switch (event) {
-      case 'pendingLanguage':
-        return onPendingLanguageChange.listen(handler as any);
-      case 'language':
-        return onLanguageChange.listen(handler as any);
-      case 'loading':
-        return onLoadingChange.listen(handler as any);
-      case 'fetching':
-        return onFetchingChange.listen(handler as any);
-      case 'initialLoad':
-        return onInitialLoaded.listen(handler as any);
-      case 'running':
-        return onRunningChange.listen(handler as any);
-      case 'cache':
-        return onCacheChange.listen(handler as any);
-      case 'update':
-        return onUpdate.listen(handler as any);
-    }
-  };
+  self.onInitialLoaded.listen(() => self.onUpdate.emit());
+  self.onLanguageChange.listen(() => self.onUpdate.emit());
+  self.onCacheChange.listen(({ value }) =>
+    self.onUpdate.emit([value.namespace], true)
+  );
 
-  function setEmitterActive(active: boolean) {
-    emitterActive = active;
-  }
-
-  return Object.freeze({
-    onPendingLanguageChange,
-    onLanguageChange,
-    onLoadingChange,
-    onFetchingChange,
-    onInitialLoaded,
-    onRunningChange,
-    onCacheChange,
-    onUpdate,
-    setEmitterActive,
-    on,
-  });
-};
+  return self;
+}
 
 export type EventsInstance = ReturnType<typeof Events>;

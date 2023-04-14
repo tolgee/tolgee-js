@@ -13,7 +13,7 @@ export function listen<T = any>(type: string[], callback: (data?: T) => any) {
   };
   window.addEventListener('message', handler, false);
   return {
-    unsubscribe: () => {
+    unsubscribe() {
       window.removeEventListener('message', handler);
     },
   };
@@ -65,7 +65,9 @@ export function sendAndRecieve<T>({
   };
 
   return {
-    cancel: () => (cancelled = true),
+    cancel() {
+      cancelled = true;
+    },
     promise: getData(),
   };
 }

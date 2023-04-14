@@ -9,20 +9,20 @@ import {
   TranslationKey,
 } from './types';
 
-const createTolgee = (options: TolgeeOptions) => {
+function createTolgee(options: TolgeeOptions) {
   const controller = Controller({
     options,
   });
 
   // restarts tolgee while applying callback
-  const withRestart = (callback: () => void) => {
+  function withRestart(callback: () => void) {
     const wasRunning = controller.isRunning();
     wasRunning && controller.stop();
     callback();
     wasRunning && controller.run();
-  };
+  }
 
-  const tolgee = Object.freeze({
+  const self = Object.freeze({
     /**
      * Listen to tolgee events.
      */
@@ -201,7 +201,7 @@ const createTolgee = (options: TolgeeOptions) => {
      */
     addPlugin(plugin: TolgeePlugin | undefined) {
       if (plugin) {
-        withRestart(() => controller.addPlugin(tolgee, plugin));
+        withRestart(() => controller.addPlugin(self, plugin));
       }
     },
 
@@ -218,8 +218,8 @@ const createTolgee = (options: TolgeeOptions) => {
     },
   });
 
-  return tolgee;
-};
+  return self;
+}
 
 export type TolgeeInstance = Omit<ReturnType<typeof createTolgee>, 't'> & {
   // enabling generics (when inferred they are lost)

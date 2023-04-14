@@ -1,12 +1,12 @@
 import type { BackendMiddleware, TolgeePlugin } from '@tolgee/core';
 import { GetPath, BackendOptions } from './types';
 
-const trimSlashes = (path: string) => {
+function trimSlashes(path: string) {
   if (path.endsWith('/')) {
     return path.slice(0, -1);
   }
   return path;
-};
+}
 
 const defaultGetPath: GetPath = ({ namespace, language, prefix }) => {
   if (namespace) {
@@ -16,7 +16,9 @@ const defaultGetPath: GetPath = ({ namespace, language, prefix }) => {
   }
 };
 
-const defaultGetData = (r: Response) => r.json();
+function defaultGetData(r: Response) {
+  return r.json();
+}
 
 const DEFAULT_OPTIONS = {
   prefix: '/i18n',
@@ -27,9 +29,9 @@ const DEFAULT_OPTIONS = {
   },
 };
 
-const createBackendFetch = (
+function createBackendFetch(
   options?: Partial<BackendOptions>
-): BackendMiddleware => {
+): BackendMiddleware {
   const { prefix, getPath, getData, headers, ...fetchOptions }: BackendOptions =
     {
       ...DEFAULT_OPTIONS,
@@ -54,7 +56,7 @@ const createBackendFetch = (
       });
     },
   };
-};
+}
 
 export const BackendFetch =
   (options?: Partial<BackendOptions>): TolgeePlugin =>

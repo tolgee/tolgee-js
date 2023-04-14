@@ -1,10 +1,7 @@
 import type {
   KeyAndParams,
   TranslatePropsInternal,
-  WrapperAttributeXPathGetter,
   WrapperMiddleware,
-  WrapperUnwrapFunction,
-  WrapperWrapFunction,
 } from '@tolgee/core';
 import { isCharEscaped } from './helpers';
 
@@ -14,11 +11,11 @@ type Props = {
   translate: (params: TranslatePropsInternal) => string;
 };
 
-export const TextWrapper = ({
+export function TextWrapper({
   inputPrefix,
   inputSuffix,
   translate,
-}: Props): WrapperMiddleware => {
+}: Props): WrapperMiddleware {
   function getRawUnWrapRegex(): string {
     const escapedPrefix = escapeForRegExp(inputPrefix);
     const escapedSuffix = escapeForRegExp(inputSuffix);
@@ -124,82 +121,6 @@ export const TextWrapper = ({
     return result;
   }
 
-  const unwrap: WrapperUnwrapFunction = (text: string) => {
-    const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
-
-    const keysAndParams: KeyAndParams[] = [];
-
-    let matched = false;
-
-    let match;
-    let start = 0;
-    let result = '';
-    while ((match = matchRegexp.exec(text)) !== null) {
-      let pre = match[1] as string;
-      const [fullMatch, _, wrapped, unwrapped] = match as unknown as [
-        string,
-        string,
-        string,
-        string
-      ];
-      const { index, input } = match;
-      result += input.substr(start, index - start);
-      start = index + fullMatch.length;
-      if (pre === '\\') {
-        if (!isCharEscaped(index, text)) {
-          result += wrapped;
-          continue;
-        }
-        pre = '';
-      }
-      const translated = getTranslatedWithMetadata(unwrapped);
-      keysAndParams.push({
-        key: translated.key,
-        params: translated.params,
-        defaultValue: translated.defaultValue,
-        ns: translated.ns,
-      });
-      matched = true;
-      result += pre + translated.translated;
-    }
-
-    result += text.substring(start);
-
-    if (matched) {
-      return { text: result, keys: keysAndParams };
-    }
-
-    return { text: text, keys: [] };
-  };
-
-  const wrap: WrapperWrapFunction = ({
-    key,
-    params,
-    defaultValue,
-    ns,
-  }): string => {
-    let paramString = Object.entries(params || {})
-      .map(
-        ([name, value]) =>
-          `${escapeParam(name)}:${escapeParam(value as string)}`
-      )
-      .join(',');
-    paramString = paramString.length ? `:${paramString}` : '';
-
-    const defaultString =
-      defaultValue !== undefined ? `,${escapeParam(defaultValue)}` : '';
-
-    const nsArray = typeof ns === 'string' ? [ns] : ns;
-
-    const namespaces = nsArray?.length
-      ? `|${nsArray.map((ns) => escapeParam(ns)).join('|')}`
-      : '';
-
-    return `${inputPrefix}${escapeParam(
-      key
-    )}${namespaces}${defaultString}${paramString}${inputSuffix}`;
-  };
-
   function getTranslatedWithMetadata(text: string) {
     const { key, params, defaultValue, ns } = parseUnwrapped(text);
     const translated = translate({
@@ -212,11 +133,11 @@ export const TextWrapper = ({
     return { translated, key, params, defaultValue, ns };
   }
 
-  const escapeForRegExp = (string: string) => {
+  function escapeForRegExp(string: string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  };
+  }
 
-  const escapeParam = (param: any) => {
+  function escapeParam(param: any) {
     if (typeof param === 'string') {
       return param.replace(/[,:|\\]/gs, '\\$&');
     }
@@ -228,23 +149,86 @@ export const TextWrapper = ({
       `Parameters of type "${typeof param}" are not supported in "text" wrapper mode.`
     );
     return param;
-  };
-
-  const getTextXPath = () => {
-    return `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-  };
-
-  const getAttributeXPath: WrapperAttributeXPathGetter = ({
-    tag,
-    attribute,
-  }) => {
-    return `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-  };
+  }
 
   return Object.freeze({
-    wrap,
-    unwrap,
-    getTextXPath,
-    getAttributeXPath,
+    wrap({ key, params, defaultValue, ns }): string {
+      let paramString = Object.entries(params || {})
+        .map(
+          ([name, value]) =>
+            `${escapeParam(name)}:${escapeParam(value as string)}`
+        )
+        .join(',');
+      paramString = paramString.length ? `:${paramString}` : '';
+
+      const defaultString =
+        defaultValue !== undefined ? `,${escapeParam(defaultValue)}` : '';
+
+      const nsArray = typeof ns === 'string' ? [ns] : ns;
+
+      const namespaces = nsArray?.length
+        ? `|${nsArray.map((ns) => escapeParam(ns)).join('|')}`
+        : '';
+
+      return `${inputPrefix}${escapeParam(
+        key
+      )}${namespaces}${defaultString}${paramString}${inputSuffix}`;
+    },
+
+    unwrap(text: string) {
+      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
+
+      const keysAndParams: KeyAndParams[] = [];
+
+      let matched = false;
+
+      let match;
+      let start = 0;
+      let result = '';
+      while ((match = matchRegexp.exec(text)) !== null) {
+        let pre = match[1] as string;
+        const [fullMatch, _, wrapped, unwrapped] = match as unknown as [
+          string,
+          string,
+          string,
+          string
+        ];
+        const { index, input } = match;
+        result += input.substr(start, index - start);
+        start = index + fullMatch.length;
+        if (pre === '\\') {
+          if (!isCharEscaped(index, text)) {
+            result += wrapped;
+            continue;
+          }
+          pre = '';
+        }
+        const translated = getTranslatedWithMetadata(unwrapped);
+        keysAndParams.push({
+          key: translated.key,
+          params: translated.params,
+          defaultValue: translated.defaultValue,
+          ns: translated.ns,
+        });
+        matched = true;
+        result += pre + translated.translated;
+      }
+
+      result += text.substring(start);
+
+      if (matched) {
+        return { text: result, keys: keysAndParams };
+      }
+
+      return { text: text, keys: [] };
+    },
+
+    getTextXPath() {
+      return `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+    },
+
+    getAttributeXPath({ tag, attribute }) {
+      return `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
+    },
   });
-};
+}

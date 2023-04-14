@@ -33,18 +33,18 @@ type RunProps = ObserverRunProps & {
   wrapper: WrapperMiddleware;
 };
 
-export const GeneralObserver = () => {
+export function GeneralObserver() {
   let isObserving = false;
   let instance: RunningInstance | undefined;
 
   const elementStore = ElementStore();
 
-  const createRunningInstance = ({
+  function createRunningInstance({
     mouseHighlight,
     options,
     wrapper,
     onClick,
-  }: RunProps): RunningInstance | undefined => {
+  }: RunProps): RunningInstance | undefined {
     if (isSSR()) {
       return;
     }
@@ -66,7 +66,7 @@ export const GeneralObserver = () => {
       }
     }
 
-    const handleKeyAttribute = (node: Node) => {
+    function handleKeyAttribute(node: Node) {
       const xPath = `./descendant-or-self::*[@${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}]`;
       const elements = xPathEvaluate(xPath, node) as Element[];
       elements.forEach((element) => {
@@ -80,7 +80,7 @@ export const GeneralObserver = () => {
           keyAttributeOnly: true,
         });
       });
-    };
+    }
 
     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       if (!isObserving) {
@@ -133,18 +133,21 @@ export const GeneralObserver = () => {
       elementRegistry,
       wrapper,
     };
-  };
+  }
 
   const self = Object.freeze({
     run(props: RunProps) {
       instance = createRunningInstance(props);
     },
+
     stop() {
       instance?.stop();
     },
+
     forEachElement(callback: (el: TolgeeElement, meta: ElementMeta) => void) {
       instance?.elementRegistry.forEachElement?.(callback);
     },
+
     highlight(key?: string, ns?: NsFallback) {
       const elements = instance?.elementRegistry.findAll(key, ns) || [];
       elements.forEach((el) => el.highlight?.());
@@ -154,6 +157,7 @@ export const GeneralObserver = () => {
         },
       };
     },
+
     findPositions(key?: string, ns?: NsFallback) {
       const elements = instance?.elementRegistry.findAll(key, ns) || [];
       const result: KeyPosition[] = [];
@@ -182,6 +186,7 @@ export const GeneralObserver = () => {
       });
       return result;
     },
+
     unwrap(text: string): Unwrapped {
       if (instance) {
         return instance.wrapper.unwrap(text);
@@ -191,6 +196,7 @@ export const GeneralObserver = () => {
         keys: [],
       };
     },
+
     wrap(props: WrapperWrapProps): string {
       if (instance) {
         return instance.wrapper.wrap(props);
@@ -200,6 +206,6 @@ export const GeneralObserver = () => {
   });
 
   return self;
-};
+}
 
 export type GeneralObserverType = ReturnType<typeof GeneralObserver>;

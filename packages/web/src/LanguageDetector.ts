@@ -1,7 +1,7 @@
 import type { LanguageDetectorMiddleware, TolgeePlugin } from '@tolgee/core';
 import { throwIfSSR } from './tools/isSSR';
 
-export const createLanguageDetector = (): LanguageDetectorMiddleware => {
+export function createLanguageDetector(): LanguageDetectorMiddleware {
   return {
     getLanguage({ availableLanguages }) {
       throwIfSSR('LanguageDetector');
@@ -24,7 +24,7 @@ export const createLanguageDetector = (): LanguageDetectorMiddleware => {
       return undefined;
     },
   };
-};
+}
 
 export const LanguageDetector = (): TolgeePlugin => (tolgee, tools) => {
   tools.setLanguageDetector(createLanguageDetector());
