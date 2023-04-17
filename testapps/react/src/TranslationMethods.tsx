@@ -58,7 +58,7 @@ export const TranslationMethods = () => {
               params={{
                 b: <b />,
                 i: <i />,
-                key: '<b>value</b>',
+                key: 'value',
               }}
             >
               Hey

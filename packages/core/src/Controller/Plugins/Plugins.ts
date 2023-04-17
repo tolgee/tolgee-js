@@ -22,6 +22,7 @@ import {
   TolgeeOptionsInternal,
   FormatErrorHandler,
   FindPositionsInterface,
+  ParamsFormatterMiddleware,
 } from '../../types';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
@@ -39,6 +40,7 @@ export function Plugins(
 
   const instances = {
     formatters: [] as FormatterMiddleware[],
+    paramsFormatters: [] as ParamsFormatterMiddleware[],
     finalFormatter: undefined as FinalFormatterMiddleware | undefined,
     observer: undefined as ReturnType<ObserverMiddleware> | undefined,
     devBackend: undefined as BackendDevMiddleware | undefined,
@@ -95,6 +97,14 @@ export function Plugins(
     }
   }
 
+  function addParamsFormatter(
+    formatter: ParamsFormatterMiddleware | undefined
+  ) {
+    if (formatter) {
+      instances.paramsFormatters.push(formatter);
+    }
+  }
+
   function setFinalFormatter(formatter: FinalFormatterMiddleware | undefined) {
     instances.finalFormatter = formatter;
   }
@@ -143,6 +153,7 @@ export function Plugins(
     const pluginTools = Object.freeze({
       setFinalFormatter,
       addFormatter,
+      addParamsFormatter,
       setObserver,
       hasObserver,
       setUi,
@@ -155,8 +166,28 @@ export function Plugins(
     plugin(tolgeeInstance, pluginTools);
   }
 
+  function handleFormatError(
+    e: any,
+    result: string,
+    props: TranslatePropsInternal
+  ) {
+    // eslint-disable-next-line no-console
+    console.error(e);
+    const errorMessage = getErrorMessage(e) || DEFAULT_FORMAT_ERROR;
+    const onFormatError = getInitialOptions().onFormatError;
+    const formatErrorType = typeof onFormatError;
+    if (formatErrorType === 'string') {
+      result = onFormatError as string;
+    } else if (formatErrorType === 'function') {
+      result = (onFormatError as FormatErrorHandler)(errorMessage, props);
+    } else {
+      result = DEFAULT_FORMAT_ERROR;
+    }
+    return result;
+  }
+
   const self = Object.freeze({
-    addPlugin,
+    addPlugin: addPlugin,
 
     run() {
       const { apiKey, apiUrl, projectId, observerOptions } =
@@ -272,14 +303,15 @@ export function Plugins(
       formatEnabled,
       ...props
     }: TranslatePropsInternal & { formatEnabled?: boolean }) {
-      const { key, translation, defaultValue, noWrap, params, orEmpty, ns } =
-        props;
+      const { key, translation, defaultValue, noWrap, orEmpty, ns } = props;
       const formattableTranslation = translation || defaultValue;
       let result = formattableTranslation || (orEmpty ? '' : key);
 
       const language = getLanguage();
       const isFormatEnabled =
         formatEnabled || !instances.observer?.outputNotFormattable;
+
+      let params = props.params || {};
 
       const wrap = (result: string) => {
         if (instances.observer && !noWrap) {
@@ -293,6 +325,18 @@ export function Plugins(
         }
         return result;
       };
+
+      try {
+        if (language) {
+          for (const formatter of instances.paramsFormatters) {
+            params = formatter.format({ language, params });
+          }
+        }
+      } catch (e: any) {
+        result = handleFormatError(e, result, props);
+        // wrap error message, so it's detectable
+        return wrap(result);
+      }
 
       result = wrap(result);
       try {
@@ -318,20 +362,9 @@ export function Plugins(
           });
         }
       } catch (e: any) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-        const errorMessage = getErrorMessage(e) || DEFAULT_FORMAT_ERROR;
-        const onFormatError = getInitialOptions().onFormatError;
-        const formatErrorType = typeof onFormatError;
-        if (formatErrorType === 'string') {
-          result = onFormatError as string;
-        } else if (formatErrorType === 'function') {
-          result = (onFormatError as FormatErrorHandler)(errorMessage, props);
-        } else {
-          result = DEFAULT_FORMAT_ERROR;
-        }
+        result = handleFormatError(e, result, props);
         // wrap error message, so it's detectable
-        result = wrap(result);
+        return wrap(result);
       }
 
       return result;

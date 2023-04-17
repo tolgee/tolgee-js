@@ -1,13 +1,17 @@
+import { CHAR_ESCAPE, ESCAPABLE_CHARS } from './tagEscape';
+
 const STATE_TEXT = 0,
   STATE_TAG_START = 1,
   STATE_TAG_NAME = 2,
-  STATE_SELF_CLOSING = 3;
+  STATE_SELF_CLOSING = 3,
+  STATE_ESCAPE_MAYBE = 4;
 
 type State =
   | typeof STATE_TEXT
   | typeof STATE_TAG_START
   | typeof STATE_TAG_NAME
-  | typeof STATE_SELF_CLOSING;
+  | typeof STATE_SELF_CLOSING
+  | typeof STATE_ESCAPE_MAYBE;
 
 export type Token = {
   type: 'text' | 'tag';
@@ -63,6 +67,9 @@ export function tokenizer(source: string) {
           createToken('text');
           state = STATE_TAG_START;
         }
+        if (char === CHAR_ESCAPE) {
+          state = STATE_ESCAPE_MAYBE;
+        }
         text += char;
         break;
 
@@ -109,6 +116,14 @@ export function tokenizer(source: string) {
           state = STATE_TEXT;
         }
         break;
+
+      case STATE_ESCAPE_MAYBE:
+        if (ESCAPABLE_CHARS.has(char)) {
+          text = text.slice(0, -1) + char;
+        } else {
+          text += char;
+        }
+        state = STATE_TEXT;
     }
   }
   createToken('text');

@@ -1,13 +1,23 @@
+import { htmlEscape } from './htmlEscape';
 import { Token } from './tokenizer';
 
 export function handleTag(
   startToken: Token | undefined,
   stack: Token[],
   params: Record<string, any> | undefined,
-  fullText: string
+  fullText: string,
+  escapeHtml: boolean
 ) {
   let token: Token | undefined;
   let content: any[] = [];
+
+  function escape(text: any) {
+    if (typeof text === 'string' && escapeHtml) {
+      return htmlEscape(text);
+    } else {
+      return text;
+    }
+  }
 
   function addToContent(item: any) {
     if (
@@ -70,14 +80,14 @@ export function handleTag(
       getParamFunc(token.name)
     ) {
       // opening tag - call recursively
-      addToContent(handleTag(token, stack, params, fullText));
+      addToContent(handleTag(token, stack, params, fullText, escapeHtml));
     } else {
       // treat everything else as text
-      addToContent(token.text);
+      addToContent(escape(token.text));
     }
   }
   if (startToken !== undefined) {
-    prependContent(startToken.text);
+    prependContent(escape(startToken.text));
   }
   return simplifyContent();
 }
