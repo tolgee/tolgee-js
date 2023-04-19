@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react",
-  "version": "5.8.2",
+  "version": "5.8.3",
   "description": "React implementation for tolgee localization framework",
   "main": "./dist/tolgee-react.cjs.js",
   "module": "./dist/tolgee-react.esm.js",
@@ -38,7 +38,7 @@
     "react": "^16.14.0 || ^17.0.1 || ^18.1.0"
   },
   "dependencies": {
-    "@tolgee/web": "5.8.2"
+    "@tolgee/web": "5.8.3"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^14.1.0",

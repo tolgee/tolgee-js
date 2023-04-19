@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.3](https://github.com/tolgee/tolgee-js/compare/v5.8.2...v5.8.3) (2023-04-19)
+
+
+### Bug Fixes
+
+* move registry refresh out of the observer loop ([#3199](https://github.com/tolgee/tolgee-js/issues/3199)) ([243da10](https://github.com/tolgee/tolgee-js/commit/243da1060ab186b70cb5acd00ab05200c90ea51e))
+
+
+
+
+
 ## [5.8.2](https://github.com/tolgee/tolgee-js/compare/v5.8.1...v5.8.2) (2023-04-14)
 
 **Note:** Version bump only for package root
