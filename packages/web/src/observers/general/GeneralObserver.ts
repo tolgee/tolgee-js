@@ -104,8 +104,8 @@ export function GeneralObserver() {
             break;
         }
         handleNodes(result);
-        elementRegistry.refreshAll();
       }
+      elementRegistry.refreshAll();
     });
 
     const targetElement = options.targetElement || document.body;
