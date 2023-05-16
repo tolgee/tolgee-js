@@ -67,6 +67,7 @@
   },
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-i18next.cjs.js",
       "import": "./dist/tolgee-i18next.esm.mjs"
     },

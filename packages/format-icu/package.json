@@ -26,6 +26,7 @@
   },
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-format-icu.cjs.js",
       "import": "./dist/tolgee-format-icu.esm.mjs"
     },

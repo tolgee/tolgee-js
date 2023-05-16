@@ -75,6 +75,12 @@ const checkPackage = (filePath) => {
         f.exports?.['./package.json'] === './package.json',
         'package.json in exports'
       );
+      if (typeof f.exports?.['.'] === 'object') {
+        assertExpr(
+          f.exports?.['.']?.['types'] !== undefined,
+          "has type definitions for 'exports' field"
+        );
+      }
     }
     assertFileExists(folder, f.main, 'main');
     assertFileExists(folder, f.module, 'module');
