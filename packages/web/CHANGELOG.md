@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.4](https://github.com/tolgee/tolgee-js/compare/v5.8.3...v5.8.4) (2023-05-16)
+
+
+### Bug Fixes
+
+* **ui:** case insensitive autocomplete ([#3200](https://github.com/tolgee/tolgee-js/issues/3200)) ([451601e](https://github.com/tolgee/tolgee-js/commit/451601eb8d229a8a6aa132b6bcdff81a9e258e4e))
+
+
+
+
+
 ## [5.8.3](https://github.com/tolgee/tolgee-js/compare/v5.8.2...v5.8.3) (2023-04-19)
 
 
