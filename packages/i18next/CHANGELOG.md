@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.4-prerelease.f5f66c17.0](https://github.com/tolgee/tolgee-js/compare/v5.8.3...v5.8.4-prerelease.f5f66c17.0) (2023-05-16)
+
+
+### Bug Fixes
+
+* include type definitions in "exports" ([f5f66c1](https://github.com/tolgee/tolgee-js/commit/f5f66c17d2555ab9a37f91c693d21a114a234d55))
+
+
+
+
+
 ## [5.8.3](https://github.com/tolgee/tolgee-js/compare/v5.8.2...v5.8.3) (2023-04-19)
 
 **Note:** Version bump only for package @tolgee/i18next
