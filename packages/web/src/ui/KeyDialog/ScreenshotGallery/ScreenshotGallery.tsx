@@ -145,6 +145,7 @@ export const ScreenshotGallery: React.FC = () => {
                   }}
                 >
                   <IconButton
+                    sx={{ fontSize: 24 }}
                     onClick={
                       ableToTakeScreenshot
                         ? handleTakeScreenshot
@@ -163,7 +164,7 @@ export const ScreenshotGallery: React.FC = () => {
                   style: { zIndex: DEVTOOLS_Z_INDEX },
                 }}
               >
-                <IconButton onClick={onFileSelect}>
+                <IconButton sx={{ fontSize: 24 }} onClick={onFileSelect}>
                   <AddCircleOutline />
                 </IconButton>
               </Tooltip>
