@@ -1,6 +1,6 @@
 # How to Contribute
 
-We're excited you're interested in contributing to the Tolgee CLI! We'd love your help, and there are plenty of ways to
+We're excited you're interested in contributing to the Tolgee! We'd love your help, and there are plenty of ways to
 contribute:
 
 * Give the repo a star
