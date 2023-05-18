@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/vue",
   "version": "5.8.4",
-  "description": "Vue implementation for tolgee localization framework",
+  "description": "Vue implementation for Tolgee localization framework",
   "module": "dist/tolgee-vue.esm.js",
   "main": "dist/tolgee-vue.cjs.js",
   "types": "lib/index.d.ts",
