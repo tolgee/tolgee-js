@@ -58,6 +58,7 @@ To learn more, visit [https://tolgee.io](https://tolgee.io)
 | [@tolgee/vue](https://github.com/tolgee/tolgee-js/tree/main/packages/vue)                             | [![@tolgee/vue version](https://img.shields.io/npm/v/@tolgee/vue?label=npm)](https://www.npmjs.com/package/@tolgee/vue)             |
 | [@tolgee/svelte](https://github.com/tolgee/tolgee-js/tree/main/packages/svelte)                       | [![@tolgee/svelte version](https://img.shields.io/npm/v/@tolgee/svelte?label=npm)](https://www.npmjs.com/package/@tolgee/svelte)    |
 | [@tolgee/i18next](https://github.com/tolgee/tolgee-js/tree/main/packages/i18next)                     | [![@tolgee/i18next version](https://img.shields.io/npm/v/@tolgee/i18next?label=npm)](https://www.npmjs.com/package/@tolgee/i18next) |
+| [@tolgee/format-icu](https://github.com/tolgee/tolgee-js/tree/main/packages/format-icu)                           | [![@tolgee/format-icu version](https://img.shields.io/npm/v/@tolgee/format-icu?label=npm)](https://www.npmjs.com/package/@tolgee/format-icu)          |
 
 
 ## Why to use Tolgee?

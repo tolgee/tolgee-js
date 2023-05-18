@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/react",
   "version": "5.8.4",
-  "description": "React implementation for tolgee localization framework",
+  "description": "React implementation for Tolgee localization framework",
   "main": "./dist/tolgee-react.cjs.js",
   "module": "./dist/tolgee-react.esm.js",
   "types": "lib/index.d.ts",
