@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/core",
-  "version": "5.8.2",
+  "version": "5.8.5-prerelease.dc1d5e4d.0",
   "description": "Library providing ability to translate messages directly in context of developed application.",
   "main": "./dist/tolgee.cjs.js",
   "module": "./dist/tolgee.esm.js",

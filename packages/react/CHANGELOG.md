@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.5-prerelease.dc1d5e4d.0](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.8.5-prerelease.dc1d5e4d.0) (2023-05-18)
+
+
+### Bug Fixes
+
+* include type definitions in "exports" ([#3201](https://github.com/tolgee/tolgee-js/issues/3201)) ([3a76506](https://github.com/tolgee/tolgee-js/commit/3a765066be87d018cdc764f57b9207bc7fdbf433))
+
+
+
+
+
 ## [5.8.4](https://github.com/tolgee/tolgee-js/compare/v5.8.3...v5.8.4) (2023-05-16)
 
 **Note:** Version bump only for package @tolgee/react
