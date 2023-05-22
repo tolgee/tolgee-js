@@ -12,7 +12,6 @@ import {
   removeSecrets,
   stringToCodePoints,
 } from './secret';
-
 import { ValueMemory } from './ValueMemory';
 
 type EncodeValue = {
@@ -24,7 +23,11 @@ type EncodeValue = {
   d: string | undefined;
 };
 
-export function InvisibleWrapper(): WrapperMiddleware {
+type Props = {
+  fullKeyEncode: boolean;
+};
+
+export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
   const keyMemory = ValueMemory();
 
   function encodeValue(data: TranslatePropsInternal) {
@@ -36,8 +39,23 @@ export function InvisibleWrapper(): WrapperMiddleware {
     return JSON.stringify(value);
   }
 
-  function decodeValue(value: string) {
-    return JSON.parse(value || '{}') as EncodeValue;
+  function decodeValue(value: string): EncodeValue | undefined {
+    try {
+      return JSON.parse(value || '{}') as EncodeValue;
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e);
+      return undefined;
+    }
+  }
+
+  function getMessage(message: string) {
+    if (message.length <= 2) {
+      const [valueCode] = stringToCodePoints(message);
+      return keyMemory.numberToValue(valueCode);
+    } else {
+      return message;
+    }
   }
 
   return Object.freeze({
@@ -45,15 +63,17 @@ export function InvisibleWrapper(): WrapperMiddleware {
       const keysAndParams = [] as KeyAndParams[];
       const messages = decodeFromText(text);
 
-      messages.forEach((msg: string) => {
-        const [valueCode] = stringToCodePoints(msg);
-        const encodedValue = keyMemory.numberToValue(valueCode);
-        const { k: key, d: defaultValue, n: ns } = decodeValue(encodedValue);
-        keysAndParams.push({
-          key,
-          defaultValue,
-          ns,
-        });
+      messages.forEach((encodedValue: string) => {
+        const message = getMessage(encodedValue);
+        const decodedVal = decodeValue(message);
+        if (decodedVal) {
+          const { k: key, d: defaultValue, n: ns } = decodedVal;
+          keysAndParams.push({
+            key,
+            defaultValue,
+            ns,
+          });
+        }
       });
 
       const result = removeSecrets(text);
@@ -63,10 +83,16 @@ export function InvisibleWrapper(): WrapperMiddleware {
 
     wrap({ key, defaultValue, translation, ns }) {
       const encodedValue = encodeValue({ key, ns, defaultValue });
-      const code = keyMemory.valueToNumber(encodedValue);
+
+      let invisibleMark: string;
+      if (fullKeyEncode) {
+        invisibleMark = encodeMessage(encodedValue);
+      } else {
+        const code = keyMemory.valueToNumber(encodedValue);
+        invisibleMark = encodeMessage(String.fromCodePoint(code));
+      }
 
       const value = translation || '';
-      const invisibleMark = encodeMessage(String.fromCodePoint(code));
 
       return typeof value === 'string' ? value + invisibleMark : value;
     },

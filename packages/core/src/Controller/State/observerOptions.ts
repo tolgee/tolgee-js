@@ -43,6 +43,11 @@ export type ObserverOptionsInternal = {
    * Html elements which will pass click listener to their parent (default: ['option', 'optgroup'])
    */
   passToParent: (keyof HTMLElementTagNameMap)[] | ((node: Element) => boolean);
+
+  /**
+   * Encodes full key info into the invisble characters (default: false)
+   */
+  fullKeyEncode: boolean;
 };
 
 export type ObserverOptions = Partial<ObserverOptionsInternal>;
@@ -63,4 +68,5 @@ export const defaultObserverOptions: ObserverOptionsInternal = {
   inputPrefix: '%-%tolgee:',
   inputSuffix: '%-%',
   passToParent: ['option', 'optgroup'],
+  fullKeyEncode: false,
 };
