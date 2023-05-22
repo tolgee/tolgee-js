@@ -10,10 +10,7 @@ import {
   encodeMessage,
   INVISIBLE_CHARACTERS,
   removeSecrets,
-  stringToCodePoints,
 } from './secret';
-
-import { ValueMemory } from './ValueMemory';
 
 type EncodeValue = {
   // key
@@ -25,7 +22,7 @@ type EncodeValue = {
 };
 
 export function InvisibleWrapper(): WrapperMiddleware {
-  const keyMemory = ValueMemory();
+  // const keyMemory = ValueMemory();
 
   function encodeValue(data: TranslatePropsInternal) {
     const value: EncodeValue = {
@@ -45,9 +42,7 @@ export function InvisibleWrapper(): WrapperMiddleware {
       const keysAndParams = [] as KeyAndParams[];
       const messages = decodeFromText(text);
 
-      messages.forEach((msg: string) => {
-        const [valueCode] = stringToCodePoints(msg);
-        const encodedValue = keyMemory.numberToValue(valueCode);
+      messages.forEach((encodedValue: string) => {
         const { k: key, d: defaultValue, n: ns } = decodeValue(encodedValue);
         keysAndParams.push({
           key,
@@ -63,10 +58,9 @@ export function InvisibleWrapper(): WrapperMiddleware {
 
     wrap({ key, defaultValue, translation, ns }) {
       const encodedValue = encodeValue({ key, ns, defaultValue });
-      const code = keyMemory.valueToNumber(encodedValue);
 
       const value = translation || '';
-      const invisibleMark = encodeMessage(String.fromCodePoint(code));
+      const invisibleMark = encodeMessage(encodedValue);
 
       return typeof value === 'string' ? value + invisibleMark : value;
     },
