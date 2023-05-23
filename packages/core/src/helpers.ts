@@ -19,8 +19,16 @@ export function valueOrPromise<T, R>(
   }
 }
 
-export function missingOptionError(option: string) {
-  return `Tolgee: You need to specify '${option}' option`;
+export function missingOptionError(option: string | string[]) {
+  const options = (Array.isArray(option) ? option : [option]).map(
+    (val) => `'${val}'`
+  );
+
+  const lastPart = options.slice(-2).join(' or ');
+  const firstPart = options.slice(0, -2);
+  const stringifiedOptions = [...firstPart, lastPart].join(', ');
+
+  return `Tolgee: You need to specify ${stringifiedOptions} option`;
 }
 
 export function isObject(item: any) {

@@ -169,9 +169,6 @@ export function Controller({ options }: StateServiceProps) {
     if (existingLanguage) {
       return;
     }
-    if (!state.getInitialOptions().defaultLanguage) {
-      throw new Error(missingOptionError('defaultLanguage'));
-    }
     const languageOrPromise = pluginService.getInitialLanguage();
     return valueOrPromise(languageOrPromise, (lang) => {
       const language =
@@ -191,11 +188,7 @@ export function Controller({ options }: StateServiceProps) {
       }
     }
     if (!state.getLanguage() && !state.getInitialOptions().defaultLanguage) {
-      if (languageComputable) {
-        throw new Error(missingOptionError('defaultLanguage'));
-      } else {
-        throw new Error(missingOptionError('language'));
-      }
+      throw new Error(missingOptionError(['defaultLanguage', 'language']));
     }
   }
 
