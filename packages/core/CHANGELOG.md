@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.5](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.8.5) (2023-05-24)
+
+
+### Bug Fixes
+
+* improve tolgee missing language error ([#3204](https://github.com/tolgee/tolgee-js/issues/3204)) ([c72924f](https://github.com/tolgee/tolgee-js/commit/c72924f3f3ee05b1b2fd0467e1c9d1c93d5179e3))
+* include type definitions in "exports" ([#3201](https://github.com/tolgee/tolgee-js/issues/3201)) ([3a76506](https://github.com/tolgee/tolgee-js/commit/3a765066be87d018cdc764f57b9207bc7fdbf433))
+
+
+
+
+
 ## [5.8.2](https://github.com/tolgee/tolgee-js/compare/v5.8.1...v5.8.2) (2023-04-14)
 
 **Note:** Version bump only for package @tolgee/core
