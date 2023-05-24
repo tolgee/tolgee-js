@@ -9,9 +9,9 @@
     "build": "ng build --configuration production"
   },
   "dependencies": {
-    "@tolgee/web": "5.8.5"
+    "@tolgee/web": "5.8.6"
   },
-  "version": "5.8.5",
+  "version": "5.8.6",
   "publishConfig": {
     "directory": "../../dist/ngx-tolgee",
     "access": "public"

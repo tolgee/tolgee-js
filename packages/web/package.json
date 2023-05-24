@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "5.8.5",
+  "version": "5.8.6",
   "description": "Tolgee for web",
   "declaration": true,
   "main": "./index.js",

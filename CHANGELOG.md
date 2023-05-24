@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.6](https://github.com/tolgee/tolgee-js/compare/v5.8.5...v5.8.6) (2023-05-24)
+
+
+### Bug Fixes
+
+* rem font size leaking into in-context dialog ([#3203](https://github.com/tolgee/tolgee-js/issues/3203)) ([6fe340e](https://github.com/tolgee/tolgee-js/commit/6fe340e9dd507b93efe5e9688eaf5f0c6223ec26))
+
+
+
+
+
 ## [5.8.5](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.8.5) (2023-05-24)
 
 
