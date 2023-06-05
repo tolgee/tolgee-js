@@ -49,3 +49,10 @@ declare module 'vue' {
     $tolgee: TolgeeInstance;
   }
 }
+
+declare module '@vue/runtime-core' {
+  export interface ComponentCustomProperties {
+    $t: TFnType<DefaultParamType, string, TranslationKey>;
+    $tolgee: TolgeeInstance;
+  }
+}
