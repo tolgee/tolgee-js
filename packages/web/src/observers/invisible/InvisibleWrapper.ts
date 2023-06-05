@@ -10,7 +10,9 @@ import {
   encodeMessage,
   INVISIBLE_CHARACTERS,
   removeSecrets,
+  stringToCodePoints,
 } from './secret';
+import { ValueMemory } from './ValueMemory';
 
 type EncodeValue = {
   // key
@@ -21,8 +23,12 @@ type EncodeValue = {
   d: string | undefined;
 };
 
-export function InvisibleWrapper(): WrapperMiddleware {
-  // const keyMemory = ValueMemory();
+type Props = {
+  fullKeyEncode: boolean;
+};
+
+export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
+  const keyMemory = ValueMemory();
 
   function encodeValue(data: TranslatePropsInternal) {
     const value: EncodeValue = {
@@ -43,13 +49,23 @@ export function InvisibleWrapper(): WrapperMiddleware {
     }
   }
 
+  function getMessage(message: string) {
+    if (message.length <= 2) {
+      const [valueCode] = stringToCodePoints(message);
+      return keyMemory.numberToValue(valueCode);
+    } else {
+      return message;
+    }
+  }
+
   return Object.freeze({
     unwrap(text: string): Unwrapped {
       const keysAndParams = [] as KeyAndParams[];
       const messages = decodeFromText(text);
 
       messages.forEach((encodedValue: string) => {
-        const decodedVal = decodeValue(encodedValue);
+        const message = getMessage(encodedValue);
+        const decodedVal = decodeValue(message);
         if (decodedVal) {
           const { k: key, d: defaultValue, n: ns } = decodedVal;
           keysAndParams.push({
@@ -68,8 +84,15 @@ export function InvisibleWrapper(): WrapperMiddleware {
     wrap({ key, defaultValue, translation, ns }) {
       const encodedValue = encodeValue({ key, ns, defaultValue });
 
+      let invisibleMark: string;
+      if (fullKeyEncode) {
+        invisibleMark = encodeMessage(encodedValue);
+      } else {
+        const code = keyMemory.valueToNumber(encodedValue);
+        invisibleMark = encodeMessage(String.fromCodePoint(code));
+      }
+
       const value = translation || '';
-      const invisibleMark = encodeMessage(encodedValue);
 
       return typeof value === 'string' ? value + invisibleMark : value;
     },
