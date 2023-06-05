@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.9.0-prerelease.fffd4303.0](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.9.0-prerelease.fffd4303.0) (2023-06-05)
+
+
+### Bug Fixes
+
+* include type definitions in "exports" ([#3201](https://github.com/tolgee/tolgee-js/issues/3201)) ([3a76506](https://github.com/tolgee/tolgee-js/commit/3a765066be87d018cdc764f57b9207bc7fdbf433))
+
+
+### Features
+
+* encode a whole key to invisible characters (TEST) ([14c9ab9](https://github.com/tolgee/tolgee-js/commit/14c9ab9fea5e742068240ebda3a504b82cdde2b4))
+* support full key encode into invisible characters ([f16fddf](https://github.com/tolgee/tolgee-js/commit/f16fddf3c38450f4ffec6e4ae7b1cee9e8b75cbe))
+
+
+
+
+
 ## [5.8.4](https://github.com/tolgee/tolgee-js/compare/v5.8.3...v5.8.4) (2023-05-16)
 
 

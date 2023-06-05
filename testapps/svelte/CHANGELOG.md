@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.9.0-prerelease.fffd4303.0](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.9.0-prerelease.fffd4303.0) (2023-06-05)
+
+**Note:** Version bump only for package @tolgee/svelte-testapp
+
+
+
+
+
 ## [5.8.4](https://github.com/tolgee/tolgee-js/compare/v5.8.3...v5.8.4) (2023-05-16)
 
 **Note:** Version bump only for package @tolgee/svelte-testapp
