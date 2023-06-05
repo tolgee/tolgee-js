@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.8.7](https://github.com/tolgee/tolgee-js/compare/v5.8.6...v5.8.7) (2023-06-05)
+
+
+### Bug Fixes
+
+* support @vue/runtime-core in typescript ([#3205](https://github.com/tolgee/tolgee-js/issues/3205)) ([31e0d67](https://github.com/tolgee/tolgee-js/commit/31e0d675a7d541bc280ab8b892fcd9ec5bc140cb))
+
+
+
+
+
 ## [5.8.6](https://github.com/tolgee/tolgee-js/compare/v5.8.5...v5.8.6) (2023-05-24)
 
 **Note:** Version bump only for package @tolgee/vue
