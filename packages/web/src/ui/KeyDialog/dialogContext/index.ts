@@ -187,58 +187,48 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           }
         });
 
-        const result =
-          translations === undefined
-            ? await createKey.mutateAsync({
-                content: {
-                  'application/json': {
-                    name: props.keyName,
-                    namespace: selectedNs || undefined,
-                    translations: newTranslations,
-                    screenshots: screenshots.map((sc) => ({
-                      uploadedImageId: sc.id,
-                      positions: sc.keyReferences?.map(mapPosition),
-                    })),
-                    tags,
-                  },
-                },
-              })
-            : await updateKey.mutateAsync({
-                content: {
-                  'application/json': {
-                    name: props.keyName,
-                    namespace: selectedNs || undefined,
-                    translations: newTranslations,
-                    screenshotIdsToDelete: getRemovedScreenshots(),
-                    screenshotsToAdd: getJustUploadedScreenshots().map(
-                      (sc) => ({
-                        uploadedImageId: sc.id,
-                        positions: sc.keyReferences?.map(mapPosition),
-                      })
-                    ),
-                    tags,
-                  },
-                },
-                path: { id: translations.keyId! },
-              });
+        if (translations === undefined) {
+          await createKey.mutateAsync({
+            content: {
+              'application/json': {
+                name: props.keyName,
+                namespace: selectedNs || undefined,
+                translations: newTranslations,
+                screenshots: screenshots.map((sc) => ({
+                  uploadedImageId: sc.id,
+                  positions: sc.keyReferences?.map(mapPosition),
+                })),
+                tags,
+              },
+            },
+          });
+        } else {
+          await updateKey.mutateAsync({
+            content: {
+              'application/json': {
+                name: props.keyName,
+                namespace: selectedNs || undefined,
+                translations: newTranslations,
+                screenshotIdsToDelete: getRemovedScreenshots(),
+                screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
+                  uploadedImageId: sc.id,
+                  positions: sc.keyReferences?.map(mapPosition),
+                })),
+                tags,
+              },
+            },
+            path: { id: translations.keyId! },
+          });
+        }
 
         const surroundingKeys = props.uiProps.findPositions();
         await updateMetadata.mutateAsync({
           content: {
             'application/json': {
-              items: [
-                {
-                  keyName: result.name!,
-                  namespace: result.namespace,
-                  location: `web:${window.location.pathname}`,
-                  contextData: surroundingKeys.map(
-                    ({ keyName, keyNamespace }) => ({
-                      name: keyName,
-                      namespace: keyNamespace,
-                    })
-                  ),
-                },
-              ],
+              relatedKeysInOrder: surroundingKeys.map((val) => ({
+                keyName: val.keyName,
+                namespace: val.keyNamespace || undefined,
+              })),
             },
           },
         });
