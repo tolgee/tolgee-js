@@ -18,7 +18,7 @@ import { getApiKeyType } from '../../../tools/decodeApiKey';
 import { useGallery } from './useGallery';
 import { requirePlatformVersion } from '../../tools/requirePlatformVersion';
 
-const PLATFORM_SUPPORTING_BIG_META = '3.17.0';
+const PLATFORM_SUPPORTING_BIG_META = 'v3.17.0';
 
 type FormTranslations = {
   [key: string]: string;
