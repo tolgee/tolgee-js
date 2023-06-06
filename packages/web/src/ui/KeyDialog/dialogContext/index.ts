@@ -16,6 +16,9 @@ import {
 } from './tools';
 import { getApiKeyType } from '../../../tools/decodeApiKey';
 import { useGallery } from './useGallery';
+import { requirePlatformVersion } from '../../tools/requirePlatformVersion';
+
+const PLATFORM_SUPPORTING_BIG_META = '3.17.0';
 
 type FormTranslations = {
   [key: string]: string;
@@ -187,51 +190,57 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           }
         });
 
-        if (translations === undefined) {
-          await createKey.mutateAsync({
+        const result = await (translations === undefined
+          ? createKey.mutateAsync({
+              content: {
+                'application/json': {
+                  name: props.keyName,
+                  namespace: selectedNs || undefined,
+                  translations: newTranslations,
+                  screenshots: screenshots.map((sc) => ({
+                    uploadedImageId: sc.id,
+                    positions: sc.keyReferences?.map(mapPosition),
+                  })),
+                  tags,
+                },
+              },
+            })
+          : updateKey.mutateAsync({
+              content: {
+                'application/json': {
+                  name: props.keyName,
+                  namespace: selectedNs || undefined,
+                  translations: newTranslations,
+                  screenshotIdsToDelete: getRemovedScreenshots(),
+                  screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
+                    uploadedImageId: sc.id,
+                    positions: sc.keyReferences?.map(mapPosition),
+                  })),
+                  tags,
+                },
+              },
+              path: { id: translations.keyId! },
+            }));
+
+        const version = result._internal?.version;
+
+        if (
+          version &&
+          (version === '??' ||
+            requirePlatformVersion(PLATFORM_SUPPORTING_BIG_META, version))
+        ) {
+          const surroundingKeys = props.uiProps.findPositions();
+          await updateMetadata.mutateAsync({
             content: {
               'application/json': {
-                name: props.keyName,
-                namespace: selectedNs || undefined,
-                translations: newTranslations,
-                screenshots: screenshots.map((sc) => ({
-                  uploadedImageId: sc.id,
-                  positions: sc.keyReferences?.map(mapPosition),
+                relatedKeysInOrder: surroundingKeys.map((val) => ({
+                  keyName: val.keyName,
+                  namespace: val.keyNamespace || undefined,
                 })),
-                tags,
               },
             },
-          });
-        } else {
-          await updateKey.mutateAsync({
-            content: {
-              'application/json': {
-                name: props.keyName,
-                namespace: selectedNs || undefined,
-                translations: newTranslations,
-                screenshotIdsToDelete: getRemovedScreenshots(),
-                screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
-                  uploadedImageId: sc.id,
-                  positions: sc.keyReferences?.map(mapPosition),
-                })),
-                tags,
-              },
-            },
-            path: { id: translations.keyId! },
           });
         }
-
-        const surroundingKeys = props.uiProps.findPositions();
-        await updateMetadata.mutateAsync({
-          content: {
-            'application/json': {
-              relatedKeysInOrder: surroundingKeys.map((val) => ({
-                keyName: val.keyName,
-                namespace: val.keyNamespace || undefined,
-              })),
-            },
-          },
-        });
 
         changeInTolgeeCache(
           props.keyName,

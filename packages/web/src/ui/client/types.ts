@@ -21,7 +21,7 @@ export type ResponseContent<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
   Paths
-> = OperationSchema<
+> = (OperationSchema<
   Url,
   Method,
   Paths
@@ -53,7 +53,7 @@ export type ResponseContent<
       Paths
     >['responses'][201] extends NotNullAnyContent
   ? OperationSchema<Url, Method, Paths>['responses'][201]['content']['*/*']
-  : void;
+  : void) & { _internal?: { version?: string } };
 
 type NotNullAnyContent = {
   content: {

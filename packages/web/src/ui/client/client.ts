@@ -51,7 +51,7 @@ async function customFetch(
   input: RequestInfo,
   options: GlobalOptions,
   init?: RequestInit
-): Promise<Response> {
+) {
   if (options.apiUrl === undefined) {
     throw 'Api url not specified';
   }
@@ -75,7 +75,13 @@ async function customFetch(
         }`;
         throw new Error(message);
       }
-      return await getResObject(r);
+      const result = await getResObject(r);
+      if (typeof result === 'object' && result !== null) {
+        result._internal = {
+          version: r.headers.get('X-Tolgee-Version'),
+        };
+      }
+      return result;
     })
     .catch((e) => {
       throw e.message || 'Failed to fetch';
