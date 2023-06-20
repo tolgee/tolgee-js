@@ -110,6 +110,9 @@ export interface paths {
     get: operations["export_1"];
     post: operations["exportPost_1"];
   };
+  "/v2/projects/big-meta": {
+    post: operations["store_1"];
+  };
   "/v2/projects/translations/{translationId}/comments": {
     get: operations["getAll_6"];
     post: operations["create_5"];
@@ -259,6 +262,65 @@ export interface components {
       baseLanguageId?: number;
       description?: string;
     };
+    ComputedPermissionModel: {
+      permissionModel?: components["schemas"]["PermissionModel"];
+      origin:
+        | "ORGANIZATION_BASE"
+        | "DIRECT"
+        | "ORGANIZATION_OWNER"
+        | "NONE"
+        | "SERVER_ADMIN";
+      /** @description The user's permission type. This field is null if uses granular permissions */
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example 200001,200004
+       */
+      stateChangeLanguageIds?: number[];
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example 200001,200004
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example 200001,200004
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example KEYS_EDIT,TRANSLATIONS_VIEW
+       */
+      scopes: (
+        | "translations.view"
+        | "translations.edit"
+        | "keys.edit"
+        | "screenshots.upload"
+        | "screenshots.delete"
+        | "screenshots.view"
+        | "activity.view"
+        | "languages.edit"
+        | "admin"
+        | "project.edit"
+        | "members.view"
+        | "members.edit"
+        | "translation-comments.add"
+        | "translation-comments.edit"
+        | "translation-comments.set-state"
+        | "translations.state-edit"
+        | "keys.view"
+        | "keys.delete"
+        | "keys.create"
+      )[];
+      /**
+       * @deprecated
+       * @description Deprecated (use translateLanguageIds).
+       *
+       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
+       * @example 200001,200004
+       */
+      permittedLanguageIds?: number[];
+    };
     LanguageModel: {
       /** Format: int64 */
       id: number;
@@ -266,12 +328,12 @@ export interface components {
        * @description Language name in english
        * @example Czech
        */
-      name?: string;
+      name: string;
       /**
        * @description Language tag according to BCP 47 definition
        * @example cs-CZ
        */
-      tag?: string;
+      tag: string;
       /**
        * @description Language name in this language
        * @example čeština
@@ -283,7 +345,63 @@ export interface components {
        */
       flagEmoji?: string;
       /** @description Whether is base language of project */
-      base?: boolean;
+      base: boolean;
+    };
+    /**
+     * @description Current user's direct permission
+     * @example MANAGE
+     */
+    PermissionModel: {
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example KEYS_EDIT,TRANSLATIONS_VIEW
+       */
+      scopes: (
+        | "translations.view"
+        | "translations.edit"
+        | "keys.edit"
+        | "screenshots.upload"
+        | "screenshots.delete"
+        | "screenshots.view"
+        | "activity.view"
+        | "languages.edit"
+        | "admin"
+        | "project.edit"
+        | "members.view"
+        | "members.edit"
+        | "translation-comments.add"
+        | "translation-comments.edit"
+        | "translation-comments.set-state"
+        | "translations.state-edit"
+        | "keys.view"
+        | "keys.delete"
+        | "keys.create"
+      )[];
+      /** @description The user's permission type. This field is null if uses granular permissions */
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
+      /**
+       * @deprecated
+       * @description Deprecated (use translateLanguageIds).
+       *
+       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
+       * @example 200001,200004
+       */
+      permittedLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example 200001,200004
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example 200001,200004
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example 200001,200004
+       */
+      stateChangeLanguageIds?: number[];
     };
     ProjectModel: {
       /** Format: int64 */
@@ -294,56 +412,21 @@ export interface components {
       avatar?: components["schemas"]["Avatar"];
       organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
       baseLanguage?: components["schemas"]["LanguageModel"];
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerName?: string;
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerSlug?: string;
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerBasePermissions?:
-        | "VIEW"
-        | "TRANSLATE"
-        | "EDIT"
-        | "MANAGE";
       organizationRole?: "MEMBER" | "OWNER";
-      /**
-       * @description Current user's direct permission
-       * @example MANAGE
-       */
-      directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      computedPermissions: components["schemas"]["UserPermissionModel"];
+      directPermission?: components["schemas"]["PermissionModel"];
+      computedPermission: components["schemas"]["ComputedPermissionModel"];
     };
     SimpleOrganizationModel: {
       /** Format: int64 */
       id: number;
       /** @example Beautiful organization */
-      name?: string;
+      name: string;
       /** @example btforg */
-      slug?: string;
+      slug: string;
       /** @example This is a beautiful organization full of beautiful and clever people */
       description?: string;
-      basePermissions: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      basePermissions: components["schemas"]["PermissionModel"];
       avatar?: components["schemas"]["Avatar"];
-    };
-    UserPermissionModel: {
-      /**
-       * @description List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example 200001,200004
-       */
-      permittedLanguageIds?: number[];
-      /**
-       * @description The type of permission.
-       * @example EDIT
-       */
-      type?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
     };
     UpdateNamespaceDto: {
       name: string;
@@ -354,9 +437,9 @@ export interface components {
        * @description The id of namespace
        * @example 10000048
        */
-      id?: number;
+      id: number;
       /** @example homepage */
-      name?: string;
+      name: string;
     };
     MachineTranslationLanguagePropsDto: {
       /**
@@ -365,9 +448,22 @@ export interface components {
        */
       targetLanguageId?: number;
       /** @description This service will be used for automated translation */
-      primaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      primaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       /** @description List of enabled services */
-      enabledServices?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU")[];
+      enabledServices: (
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE"
+      )[];
     };
     SetMachineTranslationSettingsDto: {
       settings: components["schemas"]["MachineTranslationLanguagePropsDto"][];
@@ -388,9 +484,22 @@ export interface components {
       /** @description When null, its a default configuration applied to not configured languages */
       targetLanguageName?: string;
       /** @description Service used for automated translating */
-      primaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      primaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       /** @description Services to be used for suggesting */
-      enabledServices?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU")[];
+      enabledServices: (
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE"
+      )[];
     };
     TagKeyDto: {
       name: string;
@@ -431,7 +540,7 @@ export interface components {
        * Format: int64
        * @description Ids of screenshot uploaded with /v2/image-upload endpoint
        */
-      uploadedImageId?: number;
+      uploadedImageId: number;
       positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
     };
     KeyInScreenshotModel: {
@@ -457,12 +566,12 @@ export interface components {
        * Format: int64
        * @description Id of key record
        */
-      id?: number;
+      id: number;
       /**
        * @description Name of key
        * @example this_is_super_key
        */
-      name?: string;
+      name: string;
       /**
        * @description Namespace of key
        * @example homepage
@@ -472,13 +581,13 @@ export interface components {
        * @description Translations object containing values updated in this request
        * @example [object Object]
        */
-      translations?: {
+      translations: {
         [key: string]: components["schemas"]["TranslationModel"];
       };
       /** @description Tags of key */
-      tags?: components["schemas"]["TagModel"][];
+      tags: components["schemas"]["TagModel"][];
       /** @description Screenshots of the key */
-      screenshots?: components["schemas"]["ScreenshotModel"][];
+      screenshots: components["schemas"]["ScreenshotModel"][];
     };
     /** @description Screenshots of the key */
     ScreenshotModel: {
@@ -489,13 +598,13 @@ export interface components {
        *
        * When images are secured. Encrypted timestamp is appended to the filename.
        */
-      filename?: string;
+      filename: string;
       /**
        * @description Thumbnail file name, which may be downloaded from the screenshot path.
        *
        * When images are secured. Encrypted timestamp is appended to the filename.
        */
-      thumbnail?: string;
+      thumbnail: string;
       fileUrl: string;
       thumbnailUrl: string;
       /** Format: date-time */
@@ -516,17 +625,17 @@ export interface components {
        * Format: int64
        * @description Id of translation record
        */
-      id?: number;
+      id: number;
       /** @description Translation text */
       text?: string;
       /** @description State of translation */
-      state?: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED";
+      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED";
       /** @description Whether base language translation was changed after this translation was updated */
-      outdated?: boolean;
+      outdated: boolean;
       /** @description Was translated using Translation Memory or Machine translation service? */
-      auto?: boolean;
+      auto: boolean;
       /** @description Which machine translation service was used to auto translate this */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
     };
     EditKeyDto: {
       name: string;
@@ -538,12 +647,12 @@ export interface components {
        * Format: int64
        * @description Id of key record
        */
-      id?: number;
+      id: number;
       /**
        * @description Name of key
        * @example this_is_super_key
        */
-      name?: string;
+      name: string;
       /**
        * @description Namespace of key
        * @example homepage
@@ -551,13 +660,32 @@ export interface components {
       namespace?: string;
     };
     ProjectInviteUserDto: {
-      type: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       /**
-       * @description IDs of languages to allow user to translate to with TRANSLATE permission.
-       *
-       * Only applicable when type is TRANSLATE, otherwise 400 - Bad Request is returned.
+       * @description Granted scopes for the invited user
+       * @example translations.view,translations.edit
+       */
+      scopes?: string[];
+      /**
+       * @deprecated
+       * @description Deprecated -> use translate languages
        */
       languages?: number[];
+      /**
+       * @deprecated
+       * @description Languages user can translate to
+       */
+      translateLanguages?: number[];
+      /**
+       * @deprecated
+       * @description Languages user can view
+       */
+      viewLanguages?: number[];
+      /**
+       * @deprecated
+       * @description Languages user can change translation state (review)
+       */
+      stateChangeLanguages?: number[];
       /** @description Email to send invitation to */
       email?: string;
       /** @description Name of invited user */
@@ -567,18 +695,19 @@ export interface components {
       /** Format: int64 */
       id: number;
       code: string;
-      type: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       permittedLanguageIds?: number[];
       /** Format: date-time */
       createdAt: string;
       invitedUserName?: string;
       invitedUserEmail?: string;
+      permission: components["schemas"]["PermissionModel"];
     };
     AutoTranslationSettingsDto: {
       /** @description If true, new keys will be automatically translated using translation memory when 100% match is found */
-      usingTranslationMemory?: boolean;
+      usingTranslationMemory: boolean;
       /** @description If true, new keys will be automatically translated using primary machine translation service.When "usingTranslationMemory" is enabled, it tries to translate it with translation memory first. */
-      usingMachineTranslation?: boolean;
+      usingMachineTranslation: boolean;
     };
     SetFileNamespaceRequest: {
       namespace?: string;
@@ -588,22 +717,22 @@ export interface components {
        * Format: int64
        * @description Id of translation comment record
        */
-      id?: number;
+      id: number;
       /** @description Text of comment */
-      text?: string;
+      text: string;
       /** @description State of translation */
-      state?: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
-      author?: components["schemas"]["UserAccountModel"];
+      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
+      author: components["schemas"]["UserAccountModel"];
       /**
        * Format: date-time
        * @description Date when it was created
        */
-      createdAt?: string;
+      createdAt: string;
       /**
        * Format: date-time
        * @description Date when it was updated
        */
-      updatedAt?: string;
+      updatedAt: string;
     };
     /** @description User who created the comment */
     UserAccountModel: {
@@ -615,6 +744,7 @@ export interface components {
       avatar?: components["schemas"]["Avatar"];
       globalServerRole: "USER" | "ADMIN";
       deleted: boolean;
+      disabled: boolean;
     };
     TranslationCommentDto: {
       text: string;
@@ -647,12 +777,12 @@ export interface components {
        * Format: int64
        * @description Id of key record
        */
-      keyId?: number;
+      keyId: number;
       /**
        * @description Name of key
        * @example this_is_super_key
        */
-      keyName?: string;
+      keyName: string;
       /**
        * @description The namespace of the key
        * @example homepage
@@ -662,7 +792,7 @@ export interface components {
        * @description Translations object containing values updated in this request
        * @example [object Object]
        */
-      translations?: {
+      translations: {
         [key: string]: components["schemas"]["TranslationModel"];
       };
     };
@@ -717,15 +847,15 @@ export interface components {
       token: string;
       /** Format: int64 */
       id: number;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
       description: string;
       /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /** Format: int64 */
+      expiresAt?: number;
     };
     SetOrganizationRoleDto: {
       roleType: "MEMBER" | "OWNER";
@@ -737,18 +867,17 @@ export interface components {
       description?: string;
       /** @example btforg */
       slug?: string;
-      basePermissions: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
     };
     OrganizationModel: {
       /** Format: int64 */
       id: number;
       /** @example Beautiful organization */
-      name?: string;
+      name: string;
       /** @example btforg */
-      slug?: string;
+      slug: string;
       /** @example This is a beautiful organization full of beautiful and clever people */
       description?: string;
-      basePermissions: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
+      basePermissions: components["schemas"]["PermissionModel"];
       /**
        * @description The role of currently authorized user.
        *
@@ -774,6 +903,39 @@ export interface components {
       invitedUserName?: string;
       invitedUserEmail?: string;
     };
+    SetLicenseKeyDto: {
+      licenseKey: string;
+    };
+    EeSubscriptionModel: {
+      name: string;
+      licenseKey: string;
+      enabledFeatures: (
+        | "GRANULAR_PERMISSIONS"
+        | "PRIORITIZED_FEATURE_REQUESTS"
+        | "PREMIUM_SUPPORT"
+        | "DEDICATED_SLACK_CHANNEL"
+        | "ASSISTED_UPDATES"
+        | "DEPLOYMENT_ASSISTANCE"
+        | "BACKUP_CONFIGURATION"
+        | "TEAM_TRAINING"
+        | "ACCOUNT_MANAGER"
+        | "STANDARD_SUPPORT"
+      )[];
+      /** Format: int64 */
+      currentPeriodEnd?: number;
+      cancelAtPeriodEnd: boolean;
+      /** Format: int64 */
+      currentUserCount: number;
+      status:
+        | "ACTIVE"
+        | "CANCELED"
+        | "PAST_DUE"
+        | "UNPAID"
+        | "ERROR"
+        | "KEY_USED_BY_ANOTHER_INSTANCE";
+      /** Format: date-time */
+      lastValidCheck?: string;
+    };
     V2EditApiKeyDto: {
       scopes: string[];
       description?: string;
@@ -783,9 +945,9 @@ export interface components {
        * Format: int64
        * @description ID of the API key
        */
-      id?: number;
+      id: number;
       /** @description Description */
-      description?: string;
+      description: string;
       /** @description Username of user owner */
       username?: string;
       /** @description Full name of user owner */
@@ -794,9 +956,9 @@ export interface components {
        * Format: int64
        * @description Api key's project ID
        */
-      projectId?: number;
+      projectId: number;
       /** @description Api key's project name */
-      projectName?: string;
+      projectName: string;
       /**
        * Format: int64
        * @description Timestamp of API key expiraion
@@ -811,7 +973,7 @@ export interface components {
        * @description Api key's permission scopes
        * @example screenshots.upload,screenshots.delete,translations.edit,screenshots.view,translations.view,keys.edit
        */
-      scopes?: string[];
+      scopes: string[];
     };
     RegenerateApiKeyDto: {
       /**
@@ -823,17 +985,17 @@ export interface components {
     };
     RevealedApiKeyModel: {
       /** @description Resulting user's api key */
-      key?: string;
+      key: string;
       /** Format: int64 */
       id: number;
+      description: string;
+      username?: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
-      username?: string;
+      /** Format: int64 */
+      expiresAt?: number;
       scopes: string[];
       userFullName?: string;
       projectName: string;
@@ -848,6 +1010,120 @@ export interface components {
       name: string;
       oldSlug?: string;
     };
+    GetMySubscriptionDto: {
+      licenseKey: string;
+      instanceId: string;
+    };
+    PlanIncludedUsageModel: {
+      /** Format: int64 */
+      seats: number;
+      /** Format: int64 */
+      translationSlots: number;
+      /** Format: int64 */
+      translations: number;
+      /** Format: int64 */
+      mtCredits: number;
+    };
+    PlanPricesModel: {
+      perSeat: number;
+      perThousandTranslations?: number;
+      perThousandMtCredits?: number;
+      subscriptionMonthly: number;
+      subscriptionYearly: number;
+    };
+    SelfHostedEePlanModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      public: boolean;
+      enabledFeatures: (
+        | "GRANULAR_PERMISSIONS"
+        | "PRIORITIZED_FEATURE_REQUESTS"
+        | "PREMIUM_SUPPORT"
+        | "DEDICATED_SLACK_CHANNEL"
+        | "ASSISTED_UPDATES"
+        | "DEPLOYMENT_ASSISTANCE"
+        | "BACKUP_CONFIGURATION"
+        | "TEAM_TRAINING"
+        | "ACCOUNT_MANAGER"
+        | "STANDARD_SUPPORT"
+      )[];
+      prices: components["schemas"]["PlanPricesModel"];
+      includedUsage: components["schemas"]["PlanIncludedUsageModel"];
+      hasYearlyPrice: boolean;
+    };
+    SelfHostedEeSubscriptionModel: {
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      currentPeriodStart?: number;
+      /** Format: int64 */
+      currentPeriodEnd?: number;
+      currentBillingPeriod: "MONTHLY" | "YEARLY";
+      /** Format: int64 */
+      createdAt: number;
+      plan: components["schemas"]["SelfHostedEePlanModel"];
+      status:
+        | "ACTIVE"
+        | "CANCELED"
+        | "PAST_DUE"
+        | "UNPAID"
+        | "ERROR"
+        | "KEY_USED_BY_ANOTHER_INSTANCE";
+      licenseKey?: string;
+      estimatedCosts?: number;
+    };
+    SetLicenseKeyLicensingDto: {
+      licenseKey: string;
+      /** Format: int64 */
+      seats: number;
+      instanceId: string;
+    };
+    ReportUsageDto: {
+      licenseKey: string;
+      /** Format: int64 */
+      seats: number;
+    };
+    ReportErrorDto: {
+      stackTrace: string;
+      licenseKey: string;
+    };
+    ReleaseKeyDto: {
+      licenseKey: string;
+    };
+    PrepareSetLicenseKeyDto: {
+      licenseKey: string;
+      /** Format: int64 */
+      seats: number;
+    };
+    AverageProportionalUsageItemModel: {
+      total: number;
+      unusedQuantity: number;
+      usedQuantity: number;
+      usedQuantityOverPlan: number;
+    };
+    PrepareSetEeLicenceKeyModel: {
+      plan: components["schemas"]["SelfHostedEePlanModel"];
+      usage: components["schemas"]["UsageModel"];
+    };
+    SumUsageItemModel: {
+      total: number;
+      /** Format: int64 */
+      unusedQuantity: number;
+      /** Format: int64 */
+      usedQuantity: number;
+      /** Format: int64 */
+      usedQuantityOverPlan: number;
+    };
+    UsageModel: {
+      subscriptionPrice?: number;
+      /** @description Relevant for invoices only. When there are applied stripe credits, we need to reduce the total price by this amount. */
+      appliedStripeCredits?: number;
+      seats: components["schemas"]["AverageProportionalUsageItemModel"];
+      translations: components["schemas"]["AverageProportionalUsageItemModel"];
+      credits?: components["schemas"]["SumUsageItemModel"];
+      total: number;
+    };
     CreateProjectDTO: {
       name: string;
       languages: components["schemas"]["LanguageDto"][];
@@ -857,7 +1133,7 @@ export interface components {
        * Format: int64
        * @description Organization to create the project in
        */
-      organizationId?: number;
+      organizationId: number;
       /** @description Tag of one of created languages, to select it as base language. If not provided, first language will be selected as base. */
       baseLanguageTag?: string;
     };
@@ -898,7 +1174,7 @@ export interface components {
        * @description Translation text
        * @example Hello! I am a translation!
        */
-      text?: string;
+      text: string;
       /**
        * @description Determines, how conflict is resolved.
        *
@@ -908,13 +1184,13 @@ export interface components {
        *
        * @example Hello! I am a translation!
        */
-      resolution?: "KEEP" | "OVERRIDE" | "NEW";
+      resolution: "KEEP" | "OVERRIDE" | "NEW";
     };
     KeyImportResolvableResultModel: {
       /** @description List of keys */
-      keys?: components["schemas"]["KeyModel"][];
+      keys: components["schemas"]["KeyModel"][];
       /** @description Map uploadedImageId to screenshot */
-      screenshots?: { [key: string]: components["schemas"]["ScreenshotModel"] };
+      screenshots: { [key: string]: components["schemas"]["ScreenshotModel"] };
     };
     ImportKeysDto: {
       keys: components["schemas"]["ImportKeysItemDto"][];
@@ -1008,6 +1284,15 @@ export interface components {
       zip: boolean;
     };
     StreamingResponseBody: { [key: string]: unknown };
+    BigMetaDto: {
+      /** @description List of keys, visible, in order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder: components["schemas"]["RelatedKeyDto"][];
+    };
+    /** @description List of keys, visible, in order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+    RelatedKeyDto: {
+      namespace?: string;
+      keyName: string;
+    };
     TranslationCommentWithLangKeyDto: {
       /** Format: int64 */
       keyId: number;
@@ -1025,7 +1310,7 @@ export interface components {
        * Format: int64
        * @description Key Id to get results for. Use when key is stored already.
        */
-      keyId?: number;
+      keyId: number;
       /** Format: int64 */
       targetLanguageId: number;
       /** @description Text value of base translation. Useful, when base translation is not stored yet. */
@@ -1058,12 +1343,12 @@ export interface components {
        * Format: int64
        * @description Extra credits are neither refilled nor reset every period. User's can refill them on Tolgee cloud.
        */
-      translationExtraCreditsBalanceBefore?: number;
+      translationExtraCreditsBalanceBefore: number;
       /**
        * Format: int64
        * @description Extra credits are neither refilled nor reset every period. User's can refill them on Tolgee cloud.
        */
-      translationExtraCreditsBalanceAfter?: number;
+      translationExtraCreditsBalanceAfter: number;
     };
     ScreenshotInfoDto: {
       text?: string;
@@ -1140,6 +1425,29 @@ export interface components {
       /** Format: int64 */
       preferredOrganizationId?: number;
     };
+    HierarchyItem: {
+      scope:
+        | "translations.view"
+        | "translations.edit"
+        | "keys.edit"
+        | "screenshots.upload"
+        | "screenshots.delete"
+        | "screenshots.view"
+        | "activity.view"
+        | "languages.edit"
+        | "admin"
+        | "project.edit"
+        | "members.view"
+        | "members.edit"
+        | "translation-comments.add"
+        | "translation-comments.edit"
+        | "translation-comments.set-state"
+        | "translations.state-edit"
+        | "keys.view"
+        | "keys.delete"
+        | "keys.create";
+      requires: components["schemas"]["HierarchyItem"][];
+    };
     AuthMethodsDTO: {
       github: components["schemas"]["OAuthPublicConfigDTO"];
       google: components["schemas"]["OAuthPublicConfigDTO"];
@@ -1148,15 +1456,22 @@ export interface components {
     InitialDataModel: {
       serverConfiguration: components["schemas"]["PublicConfigurationDTO"];
       userInfo?: components["schemas"]["PrivateUserAccountModel"];
-      preferredOrganization?: components["schemas"]["OrganizationModel"];
+      preferredOrganization?: components["schemas"]["PrivateOrganizationModel"];
       languageTag?: string;
+      eeSubscription?: components["schemas"]["EeSubscriptionModel"];
     };
     MtServiceDTO: {
       enabled: boolean;
       defaultEnabledForProject: boolean;
     };
     MtServicesDTO: {
-      defaultPrimaryService?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      defaultPrimaryService?:
+        | "GOOGLE"
+        | "AWS"
+        | "DEEPL"
+        | "AZURE"
+        | "BAIDU"
+        | "TOLGEE";
       services: { [key: string]: components["schemas"]["MtServiceDTO"] };
     };
     OAuthPublicConfigDTO: {
@@ -1168,6 +1483,38 @@ export interface components {
       authorizationUrl?: string;
       scopes?: string[];
       enabled: boolean;
+    };
+    PrivateOrganizationModel: {
+      organizationModel?: components["schemas"]["OrganizationModel"];
+      /** @example Features organization has enabled */
+      enabledFeatures: (
+        | "GRANULAR_PERMISSIONS"
+        | "PRIORITIZED_FEATURE_REQUESTS"
+        | "PREMIUM_SUPPORT"
+        | "DEDICATED_SLACK_CHANNEL"
+        | "ASSISTED_UPDATES"
+        | "DEPLOYMENT_ASSISTANCE"
+        | "BACKUP_CONFIGURATION"
+        | "TEAM_TRAINING"
+        | "ACCOUNT_MANAGER"
+        | "STANDARD_SUPPORT"
+      )[];
+      /** @example Beautiful organization */
+      name: string;
+      /** Format: int64 */
+      id: number;
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
+      /**
+       * @description The role of currently authorized user.
+       *
+       * Can be null when user has direct access to one of the projects owned by the organization.
+       */
+      currentUserRole?: "MEMBER" | "OWNER";
+      /** @example btforg */
+      slug: string;
+      avatar?: components["schemas"]["Avatar"];
+      basePermissions: components["schemas"]["PermissionModel"];
     };
     PublicBillingConfigurationDTO: {
       enabled: boolean;
@@ -1188,12 +1535,13 @@ export interface components {
       appName: string;
       version: string;
       showVersion: boolean;
+      internalControllerEnabled: boolean;
       /** Format: int64 */
       maxTranslationTextLength: number;
       recaptchaSiteKey?: string;
-      openReplayApiKey?: string;
       chatwootToken?: string;
       capterraTracker?: string;
+      ga4Tag?: string;
     };
     PagedModelProjectModel: {
       _embedded?: {
@@ -1212,10 +1560,11 @@ export interface components {
       id: number;
       username: string;
       name?: string;
+      avatar?: components["schemas"]["Avatar"];
       organizationRole?: "MEMBER" | "OWNER";
-      organizationBasePermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      computedPermissions?: components["schemas"]["UserPermissionModel"];
+      organizationBasePermission: components["schemas"]["PermissionModel"];
+      directPermission?: components["schemas"]["PermissionModel"];
+      computedPermission: components["schemas"]["ComputedPermissionModel"];
     };
     CollectionModelUsedNamespaceModel: {
       _embedded?: {
@@ -1259,8 +1608,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
       namespace?: string;
+      translation?: string;
       baseTranslation?: string;
     };
     KeySearchSearchResultModel: {
@@ -1268,8 +1617,8 @@ export interface components {
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
       namespace?: string;
+      translation?: string;
       baseTranslation?: string;
     };
     PagedModelKeySearchSearchResultModel: {
@@ -1391,7 +1740,6 @@ export interface components {
       page?: components["schemas"]["PageMetadata"];
     };
     EntityModelImportFileIssueView: {
-      params: components["schemas"]["ImportFileIssueParamView"][];
       /** Format: int64 */
       id: number;
       type:
@@ -1404,6 +1752,7 @@ export interface components {
         | "ID_ATTRIBUTE_NOT_PROVIDED"
         | "TARGET_NOT_PROVIDED"
         | "TRANSLATION_TOO_LONG";
+      params: components["schemas"]["ImportFileIssueParamView"][];
     };
     ImportFileIssueParamView: {
       value?: string;
@@ -1435,7 +1784,7 @@ export interface components {
        */
       id?: number;
       /** @example homepage */
-      name?: string;
+      name: string;
     };
     PagedModelTranslationCommentModel: {
       _embedded?: {
@@ -1467,7 +1816,7 @@ export interface components {
        * Format: int64
        * @description Unix timestamp of the revision
        */
-      timestamp?: number;
+      timestamp: number;
       author?: components["schemas"]["SimpleUserAccountModel"];
       revisionType: "ADD" | "MOD" | "DEL";
     };
@@ -1479,12 +1828,12 @@ export interface components {
        * Format: int64
        * @description Id of key record
        */
-      keyId?: number;
+      keyId: number;
       /**
        * @description Name of key
        * @example this_is_super_key
        */
-      keyName?: string;
+      keyName: string;
       /**
        * Format: int64
        * @description The namespace id of the key
@@ -1497,13 +1846,13 @@ export interface components {
        */
       keyNamespace?: string;
       /** @description Tags of key */
-      keyTags?: components["schemas"]["TagModel"][];
+      keyTags: components["schemas"]["TagModel"][];
       /**
        * Format: int64
        * @description Count of screenshots provided for the key
        * @example 1
        */
-      screenshotCount?: number;
+      screenshotCount: number;
       /** @description Key screenshots. Not provided when API key hasn't screenshots.view scope permission. */
       screenshots?: components["schemas"]["ScreenshotModel"][];
       /**
@@ -1518,7 +1867,7 @@ export interface components {
        *       }
        *     }
        */
-      translations?: {
+      translations: {
         [key: string]: components["schemas"]["TranslationViewModel"];
       };
     };
@@ -1528,7 +1877,7 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
       /** @description Provided languages data */
-      selectedLanguages?: components["schemas"]["LanguageModel"][];
+      selectedLanguages: components["schemas"]["LanguageModel"][];
       /**
        * @description Cursor to get next data
        * @example eyJrZXlJZCI6eyJkaXJlY3Rpb24iOiJBU0MiLCJ2YWx1ZSI6IjEwMDAwMDAxMjAifX0=
@@ -1552,29 +1901,29 @@ export interface components {
        * Format: int64
        * @description Id of translation record
        */
-      id?: number;
+      id: number;
       /** @description Translation text */
       text?: string;
       /** @description State of translation */
-      state?: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED";
+      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED";
       /** @description Whether base language translation was changed after this translation was updated */
-      outdated?: boolean;
+      outdated: boolean;
       /** @description Was translated using Translation Memory or Machine translation service? */
-      auto?: boolean;
+      auto: boolean;
       /** @description Which machine translation service was used to auto translate this */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU";
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
       /**
        * Format: int64
        * @description Count of translation comments
        */
-      commentCount?: number;
+      commentCount: number;
       /**
        * Format: int64
        * @description Count of unresolved translation comments
        */
-      unresolvedCommentCount?: number;
+      unresolvedCommentCount: number;
       /** @description Was translation memory used to translate this? */
-      fromTranslationMemory?: boolean;
+      fromTranslationMemory: boolean;
     };
     CollectionModelProjectTransferOptionModel: {
       _embedded?: {
@@ -1680,32 +2029,9 @@ export interface components {
       avatar?: components["schemas"]["Avatar"];
       organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
       baseLanguage?: components["schemas"]["LanguageModel"];
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerName?: string;
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerSlug?: string;
-      /**
-       * @deprecated
-       * @description Use organizationOwner field
-       */
-      organizationOwnerBasePermissions?:
-        | "VIEW"
-        | "TRANSLATE"
-        | "EDIT"
-        | "MANAGE";
       organizationRole?: "MEMBER" | "OWNER";
-      /**
-       * @description Current user's direct permission
-       * @example MANAGE
-       */
-      directPermissions?: "VIEW" | "TRANSLATE" | "EDIT" | "MANAGE";
-      computedPermissions?: components["schemas"]["UserPermissionModel"];
+      directPermission?: components["schemas"]["PermissionModel"];
+      computedPermission: components["schemas"]["ComputedPermissionModel"];
       stats: components["schemas"]["ProjectStatistics"];
       languages: components["schemas"]["LanguageModel"][];
     };
@@ -1724,15 +2050,15 @@ export interface components {
       user: components["schemas"]["SimpleUserAccountModel"];
       /** Format: int64 */
       id: number;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
       description: string;
       /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /** Format: int64 */
+      expiresAt?: number;
     };
     OrganizationRequestParamsDto: {
       filterCurrentUserOwner: boolean;
@@ -1749,44 +2075,74 @@ export interface components {
         organizationInvitations?: components["schemas"]["OrganizationInvitationModel"][];
       };
     };
-    UsageModel: {
+    PublicUsageModel: {
       /** Format: int64 */
       organizationId: number;
       /**
        * Format: int64
-       * @description Current balance of standard credits. Standard credits are refilled every month.
+       * @description Current balance of standard credits. Standard credits are refilled every month
        */
-      creditBalance?: number;
+      creditBalance: number;
       /**
        * Format: int64
-       * @description How many credits are included in your current plan.
+       * @description How many credits are included in your current plan
        */
-      includedMtCredits?: number;
+      includedMtCredits: number;
       /**
        * Format: int64
-       * @description Date when credits were refilled. (In epoch format.)
+       * @description Date when credits were refilled. (In epoch format)
        */
-      creditBalanceRefilledAt?: number;
+      creditBalanceRefilledAt: number;
       /**
        * Format: int64
-       * @description Date when credits will be refilled. (In epoch format.)
+       * @description Date when credits will be refilled. (In epoch format)
        */
-      creditBalanceNextRefillAt?: number;
+      creditBalanceNextRefillAt: number;
       /**
        * Format: int64
-       * @description Extra credits, which are neither refilled nor reset every month. These credits are used when there are no standard credits.
+       * @description Currently used credits over credits included in plan and extra credits
        */
-      extraCreditBalance?: number;
+      currentPayAsYouGoMtCredits: number;
       /**
        * Format: int64
-       * @description How many translations can be stored within your organization.
+       * @description The maximum amount organization can spend on MT credit usage before they reach the spending limit
        */
-      translationLimit?: number;
+      availablePayAsYouGoMtCredits: number;
       /**
        * Format: int64
-       * @description How many translations are currently stored within your organization.
+       * @description Extra credits, which are neither refilled nor reset every month. These credits are used when there are no standard credits
        */
-      currentTranslations?: number;
+      extraCreditBalance: number;
+      /**
+       * Format: int64
+       * @description How many translations can be stored within your organization
+       */
+      translationSlotsLimit: number;
+      /**
+       * Format: int64
+       * @description How many translation slots are included in current subscription plan. How many translation slots can organization use without additional costs
+       */
+      includedTranslationSlots: number;
+      /**
+       * Format: int64
+       * @description How many translations are included in current subscription plan. How many translations can organization use without additional costs
+       */
+      includedTranslations: number;
+      /**
+       * Format: int64
+       * @description How many translations slots are currently used by organization
+       */
+      currentTranslationSlots: number;
+      /**
+       * Format: int64
+       * @description How many non-empty translations are currently stored by organization
+       */
+      currentTranslations: number;
+      /**
+       * Format: int64
+       * @description How many translations can be stored until reaching the limit. (For pay us you go, the top limit is the spending limit)
+       */
+      translationsLimit: number;
     };
     PagedModelUserAccountWithOrganizationRoleModel: {
       _embedded?: {
@@ -1794,12 +2150,23 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
+    SimpleProjectModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      description?: string;
+      slug?: string;
+      avatar?: components["schemas"]["Avatar"];
+      baseLanguage?: components["schemas"]["LanguageModel"];
+    };
     UserAccountWithOrganizationRoleModel: {
       /** Format: int64 */
       id: number;
       name: string;
       username: string;
-      organizationRole: "MEMBER" | "OWNER";
+      organizationRole?: "MEMBER" | "OWNER";
+      projectsWithDirectPermission: components["schemas"]["SimpleProjectModel"][];
+      avatar?: components["schemas"]["Avatar"];
     };
     ApiKeyWithLanguagesModel: {
       /**
@@ -1810,14 +2177,14 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
+      description: string;
+      username?: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
-      username?: string;
+      /** Format: int64 */
+      expiresAt?: number;
       scopes: string[];
       userFullName?: string;
       projectName: string;
@@ -1833,7 +2200,7 @@ export interface components {
     };
     DeleteKeysDto: {
       /** @description IDs of keys to delete */
-      ids?: number[];
+      ids: number[];
     };
     Link: {
       href?: string;
@@ -2246,7 +2613,7 @@ export interface operations {
     parameters: {
       query: {
         /** Whether override or keep all translations with unresolved conflicts */
-        forceMode: string;
+        forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
         /** API key provided via query parameter. Will be deprecated in the future. */
         ak?: string;
       };
@@ -2276,7 +2643,7 @@ export interface operations {
     parameters: {
       path: {
         translationId: number;
-        state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED";
+        state: "TRANSLATED" | "REVIEWED";
       };
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -3221,6 +3588,39 @@ export interface operations {
       };
     };
   };
+  store_1: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BigMetaDto"];
+      };
+    };
+  };
   getAll_6: {
     parameters: {
       path: {
@@ -3846,9 +4246,9 @@ export interface operations {
       };
       query: {
         /** Whether only translations, which are in conflict with existing translations should be returned */
-        onlyConflicts: string;
+        onlyConflicts?: boolean;
         /** Whether only translations with unresolved conflictswith existing translations should be returned */
-        onlyUnresolved: string;
+        onlyUnresolved?: boolean;
         /** String to search in translation text or key */
         search?: string;
         /** Zero-based page index (0..N) */
