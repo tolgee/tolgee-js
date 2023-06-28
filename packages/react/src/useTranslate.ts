@@ -9,10 +9,10 @@ import {
 import { useTranslateInternal } from './useTranslateInternal';
 import { ReactOptions } from './types';
 
-type UseTranslateResult = {
+export interface UseTranslateResult {
   t: TFnType<DefaultParamType, string, TranslationKey>;
   isLoading: boolean;
-};
+}
 
 export const useTranslate = (
   ns?: string[] | string,

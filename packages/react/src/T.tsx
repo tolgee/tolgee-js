@@ -5,28 +5,27 @@ import { ParamsTags } from './types';
 
 import { useTranslateInternal } from './useTranslateInternal';
 
-type PropsWithKeyName = {
+interface PropsBase {
   params?: TranslateParams<ParamsTags>;
-  children?: string;
   noWrap?: boolean;
-  keyName: TranslationKey;
   ns?: NsType;
   defaultValue?: string;
   language?: string;
-};
+}
 
-type PropsWithoutKeyName = {
-  params?: TranslateParams<ParamsTags>;
+interface PropsWithKeyName extends PropsBase {
+  children?: string;
+  keyName: TranslationKey;
+}
+
+interface PropsWithoutKeyName extends PropsBase {
   children: TranslationKey;
-  noWrap?: boolean;
-  ns?: NsType;
-  defaultValue?: string;
-  language?: string;
-};
+}
+
+export type TProps = PropsWithKeyName | PropsWithoutKeyName;
 
 interface TInterface {
-  (props: PropsWithKeyName): JSX.Element;
-  (props: PropsWithoutKeyName): JSX.Element;
+  (props: TProps): JSX.Element;
 }
 
 export const T: TInterface = (props) => {
