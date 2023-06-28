@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.1](https://github.com/tolgee/tolgee-js/compare/v5.9.0...v5.9.1) (2023-06-28)
+
+
+### Bug Fixes
+
+* export props and return types for React ([#3210](https://github.com/tolgee/tolgee-js/issues/3210)) ([6f460e2](https://github.com/tolgee/tolgee-js/commit/6f460e2f2d3f1b6387814300dcd8518bfc6c0e86))
+
+
+
+
+
 # [5.9.0](https://github.com/tolgee/tolgee-js/compare/v5.8.7...v5.9.0) (2023-06-20)
 
 
