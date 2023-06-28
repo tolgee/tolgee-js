@@ -10,14 +10,14 @@ export const TolgeeProviderContext = React.createContext<
   TolgeeReactContext | undefined
 >(undefined);
 
-type Props = {
+export interface TolgeeProviderProps {
   children?: React.ReactNode;
   tolgee: TolgeeInstance;
   options?: ReactOptions;
   fallback?: React.ReactNode;
-};
+}
 
-export const TolgeeProvider: React.FC<Props> = ({
+export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   tolgee,
   options,
   children,
