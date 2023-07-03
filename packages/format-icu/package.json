@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/format-icu",
-  "version": "5.9.9",
+  "version": "5.9.10",
   "description": "Tolgee format-icu plugin.",
   "main": "./dist/tolgee-format-icu.cjs.js",
   "module": "./dist/tolgee-format-icu.esm.js",
