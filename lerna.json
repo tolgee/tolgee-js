@@ -10,7 +10,6 @@
     "**/*.spec.ts",
     "**/*.test.tsx",
     "**/*.spec.tsx",
-    "**/package-lock.json",
-    "lerna.json"
+    "**/package-lock.json"
   ]
 }

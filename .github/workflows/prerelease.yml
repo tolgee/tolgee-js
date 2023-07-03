@@ -40,7 +40,7 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version prerelease --yes --conventional-commits --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
+          lerna version prerelease --yes --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --no-push --no-git-tag-version --exact
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
@@ -56,7 +56,7 @@ jobs:
         run: |
           git stash
           git push --follow-tags -u origin $(git rev-parse --abbrev-ref HEAD)
-          lerna version prerelease --yes --conventional-commits --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
+          lerna version prerelease --yes --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --exact --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
