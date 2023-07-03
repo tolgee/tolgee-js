@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.2](https://github.com/tolgee/tolgee-js/compare/v5.9.1...v5.9.2) (2023-07-03)
+
+
+### Bug Fixes
+
+* support for svelte 4 ([63f674f](https://github.com/tolgee/tolgee-js/commit/63f674f7b49eb1d25e67bd6636632b729c79b26b))
+
+
+
+
+
 # [5.9.0](https://github.com/tolgee/tolgee-js/compare/v5.8.7...v5.9.0) (2023-06-20)
 
 **Note:** Version bump only for package @tolgee/svelte

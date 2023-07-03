@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "5.9.0",
+  "version": "5.9.2",
   "description": "Svelte implementation for Tolgee localization framework",
   "repository": "https://github.com/tolgee/tolgee-js",
   "homepage": "https://tolgee.io",
