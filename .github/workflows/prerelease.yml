@@ -64,6 +64,6 @@ jobs:
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
       - name: Publish
-        run: lerna publish from-package --yes --dist-tag prerelease
+        run: lerna publish from-package --yes --force-publish --dist-tag prerelease
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
