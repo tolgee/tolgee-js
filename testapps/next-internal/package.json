@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/next-internal-testapp",
-  "version": "5.9.3",
+  "version": "5.9.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,8 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tolgee/react": "5.9.3",
-    "@tolgee/web": "5.9.3",
+    "@tolgee/react": "5.9.4",
+    "@tolgee/web": "5.9.4",
     "next": "13.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"
