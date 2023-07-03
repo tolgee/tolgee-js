@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.3-prerelease.c6fa65f4.0](https://github.com/tolgee/tolgee-js/compare/v5.9.2...v5.9.3-prerelease.c6fa65f4.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* lerna releases ([c6fa65f](https://github.com/tolgee/tolgee-js/commit/c6fa65f4c371fa7f4fcdb5977addf12915f42f79))
+
+
+
+
+
 ## [5.8.5](https://github.com/tolgee/tolgee-js/compare/v5.8.4...v5.8.5) (2023-05-24)
 
 
