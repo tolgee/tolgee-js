@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.9.2-prerelease.ce0c7097.0](https://github.com/tolgee/tolgee-js/compare/v5.9.1...v5.9.2-prerelease.ce0c7097.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* ngx package.json ([ce0c709](https://github.com/tolgee/tolgee-js/commit/ce0c7097a05438921d65f1cf24548236807f0600))
+* ngx package.json ([41828ff](https://github.com/tolgee/tolgee-js/commit/41828ff89fcdde9918d755dde1ec5e67e2849208))
+* support for svelte 4 ([63f674f](https://github.com/tolgee/tolgee-js/commit/63f674f7b49eb1d25e67bd6636632b729c79b26b))
+
+
+
+
+
 ## [5.9.1](https://github.com/tolgee/tolgee-js/compare/v5.9.0...v5.9.1) (2023-06-28)
 
 
