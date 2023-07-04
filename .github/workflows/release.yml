@@ -38,24 +38,32 @@ jobs:
       - name: Install
         run: pnpm i
 
+      - name: Get next version by semantic-release
+        id: version
+        run: npx semantic-release --dry-run && echo "VERSION=$(cat .VERSION)" >> $GITHUB_OUTPUT
+
       - name: Update version locally
+        if: ${{ steps.version.outputs.VERSION != '' }}
         run: |
-          lerna version --yes --exact --force-publish \
+          lerna version ${{ steps.version.outputs.VERSION }} --yes --exact --force-publish \
             --no-push --no-git-tag-version
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
       - name: Set env
+        if: ${{ steps.version.outputs.VERSION != '' }}
         run: |
           echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
           pnpm run --silent ui-version
 
       - name: Build all packages
+        if: ${{ steps.version.outputs.VERSION != '' }}
         run: pnpm build || pnpm build
 
       - name: Recreate release with push
+        if: ${{ steps.version.outputs.VERSION != '' }}
         run: |
           git stash
-          lerna version --yes --exact --force-publish \
+          lerna version ${{ steps.version.outputs.VERSION }} --yes --exact --force-publish \
             --create-release github
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -63,6 +71,7 @@ jobs:
       - run: echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
 
       - name: Publish
+        if: ${{ steps.version.outputs.VERSION != '' }}
         run: lerna publish from-package --yes --force-publish
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
