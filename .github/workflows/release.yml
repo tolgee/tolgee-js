@@ -72,7 +72,7 @@ jobs:
 
       - name: Publish
         if: ${{ steps.version.outputs.VERSION != '' }}
-        run: lerna publish from-package --yes --force-publish
+        run: lerna publish from-package --yes
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
