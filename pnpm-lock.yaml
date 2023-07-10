@@ -118,7 +118,7 @@ importers:
       '@rollup/plugin-node-resolve': 13.3.0
       '@rollup/plugin-typescript': 8.3.4
       '@testing-library/jest-dom': ^5.16.5
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': 5.9.12
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/testing-library__jest-dom': ^5.14.5
@@ -136,7 +136,7 @@ importers:
       '@rollup/plugin-node-resolve': 13.3.0_rollup@2.79.1
       '@rollup/plugin-typescript': 8.3.4_gypgyaqhine6mwjfvh7icfhviq
       '@testing-library/jest-dom': 5.16.5
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': link:../core
       '@types/jest': 27.5.2
       '@types/node': 17.0.45
       '@types/testing-library__jest-dom': 5.14.5
@@ -466,7 +466,7 @@ importers:
       '@rollup/plugin-typescript': 8.5.0
       '@testing-library/dom': ^8.7.2
       '@testing-library/jest-dom': ^5.11.4
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': 5.9.12
       '@types/jest': ^27.0.2
       '@types/node': ^17.0.8
       '@types/react': ^18.0.28
@@ -492,7 +492,7 @@ importers:
       use-context-selector: ^1.4.1
       use-debounce: ^9.0.2
     dependencies:
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': link:../core
     devDependencies:
       '@babel/preset-typescript': 7.18.6_@babel+core@7.21.3
       '@emotion/react': 11.10.4_hudcjgt2rm5nkdjwdnryloerlu
@@ -672,7 +672,7 @@ importers:
       '@testing-library/jest-dom': ^5.11.4
       '@testing-library/react': ^11.1.0
       '@testing-library/user-event': ^12.1.10
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': 5.9.12
       '@tolgee/i18next': 5.9.12
       '@types/node': ^17.0.8
       '@types/react': ^18.0.28
@@ -691,7 +691,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 11.2.7_biqbaboplfbrettd7655fr4n2y
       '@testing-library/user-event': 12.8.3_@testing-library+dom@9.0.1
-      '@tolgee/core': 5.8.5
+      '@tolgee/core': link:../../packages/core
       '@tolgee/i18next': link:../../packages/i18next
       concurrently: 7.4.0
       i18next: 22.4.10
@@ -9660,9 +9660,6 @@ packages:
       '@vue/test-utils': 2.1.0_vue@3.2.47
       vue: 3.2.47
     dev: true
-
-  /@tolgee/core/5.8.5:
-    resolution: {integrity: sha512-fG0A6G8IAiCxQQkhw0ve9YPEzmMkMJABFtDZ/NCNABMV1ICrm00sPCw95YjtnDcmJ1OuL4tH8PhQmOnbaA6RNg==}
 
   /@tootallnate/once/1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}

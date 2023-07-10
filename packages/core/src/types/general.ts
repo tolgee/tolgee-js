@@ -12,7 +12,7 @@ export type FallbackLanguageObject = Record<string, FallbackGeneral>;
 
 export type FallbackLanguageOption = FallbackGeneral | FallbackLanguageObject;
 
-export type DefaultParamType = string | number | bigint;
+export type DefaultParamType = string | number | bigint | Date;
 
 export type TranslateParams<T = DefaultParamType> = {
   [key: string]: T;

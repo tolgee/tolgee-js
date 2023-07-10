@@ -44,7 +44,7 @@
     "index.js"
   ],
   "dependencies": {
-    "@tolgee/core": "5.8.5"
+    "@tolgee/core": "5.9.12"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.18.6",
