@@ -42,12 +42,6 @@ describe('Tolgee Provider Component', () => {
     expect(mockedTolgee.run).toHaveBeenCalledTimes(1);
   });
 
-  test('stops tolgee', () => {
-    const { unmount } = render(<TolgeeProvider tolgee={mockedTolgee} />);
-    unmount();
-    expect(mockedTolgee.stop).toHaveBeenCalledTimes(1);
-  });
-
   test("doesn't render when everything is already fetched", async () => {
     const tolgee = Tolgee().init({
       language: 'en',

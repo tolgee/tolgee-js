@@ -277,9 +277,6 @@ export function Controller({ options }: StateServiceProps) {
       let result: Promise<void> | undefined = undefined;
       checkCorrectConfiguration();
       if (!state.isRunning()) {
-        if (self.isDev()) {
-          cache.invalidate();
-        }
         state.setRunning(true);
         pluginService.run();
         result = loadInitial();

@@ -14,11 +14,18 @@ function createTolgee(options: TolgeeOptions) {
     options,
   });
 
+  if (controller.isDev()) {
+    // override existing data in DevMode
+    controller.invalidate();
+  }
+
   // restarts tolgee while applying callback
   function withRestart(callback: () => void) {
     const wasRunning = controller.isRunning();
     wasRunning && controller.stop();
     callback();
+    // invalidate cache when tolgee configuration is updated/plugin added in DevMode
+    controller.isDev() && controller.invalidate();
     wasRunning && controller.run();
   }
 
