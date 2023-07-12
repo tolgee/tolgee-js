@@ -19,6 +19,8 @@ function createTolgee(options: TolgeeOptions) {
     const wasRunning = controller.isRunning();
     wasRunning && controller.stop();
     callback();
+    // invalidate cache when tolgee configuration is updated/plugin added in DevMode
+    controller.isDev() && controller.invalidate();
     wasRunning && controller.run();
   }
 
@@ -217,6 +219,10 @@ function createTolgee(options: TolgeeOptions) {
       }
     },
   });
+
+  if (controller.isDev()) {
+    controller.invalidate();
+  }
 
   return self;
 }
