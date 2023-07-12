@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.10.1](https://github.com/tolgee/tolgee-js/compare/v5.10.0...v5.10.1) (2023-07-12)
+
+
+### Bug Fixes
+
+* tolgee fetching data multiple times in devmode ([#3221](https://github.com/tolgee/tolgee-js/issues/3221)) ([6cb113f](https://github.com/tolgee/tolgee-js/commit/6cb113f32f861f8cf3066c0003a2bb1e1ce35d7e))
+
+
+
+
+
 # [5.10.0](https://github.com/tolgee/tolgee-js/compare/v5.9.12...v5.10.0) (2023-07-12)
 
 
