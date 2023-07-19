@@ -52,11 +52,11 @@ export const commonPlugins = [
  * @param {string} ext
  * @param {boolean} min
  */
-const packageOutput = (name, format, ext, min) => {
+const packageOutput = (name, env, format, ext, min) => {
   const targets = [
     {
       name: `@tolgee/${name}`,
-      file: `dist/tolgee-${name}.${format}.${ext}`,
+      file: `dist/tolgee-${name}${env ? `.${env}` : ''}.${format}.${ext}`,
       format,
       sourcemap: true,
     },
@@ -64,7 +64,7 @@ const packageOutput = (name, format, ext, min) => {
   if (min) {
     targets.push({
       name: `@tolgee/${name}`,
-      file: `dist/tolgee-${name}.${format}.min.${ext}`,
+      file: `dist/tolgee-${name}${env ? `.${env}` : ''}.${format}.min.${ext}`,
       format,
       sourcemap: true,
       plugins: [terser()],
@@ -73,14 +73,14 @@ const packageOutput = (name, format, ext, min) => {
   return targets;
 };
 
-export const buildPackage = ({ input, name, min = true }) => ({
+export const buildPackage = ({ input, name, env, min = true }) => ({
   ...commonConfig,
   input,
   output: [
-    ...packageOutput(name, 'cjs', 'js', min),
-    ...packageOutput(name, 'esm', 'js', min),
-    ...packageOutput(name, 'esm', 'mjs', min),
-    ...packageOutput(name, 'umd', 'js', min),
+    ...packageOutput(name, env, 'cjs', 'js', min),
+    ...packageOutput(name, env, 'esm', 'js', min),
+    ...packageOutput(name, env, 'esm', 'mjs', min),
+    ...packageOutput(name, env, 'umd', 'js', min),
   ],
   plugins: commonPlugins,
 });

@@ -3,11 +3,13 @@ import { buildPackage } from './rollup.common';
 export default [
   buildPackage({
     input: 'src/entry-development.ts',
-    name: 'web.development',
+    name: 'web',
+    env: 'development',
   }),
   buildPackage({
     input: 'src/entry-production.ts',
-    name: 'web.production',
+    name: 'web',
+    env: 'production',
   }),
 
   // in-context tools
