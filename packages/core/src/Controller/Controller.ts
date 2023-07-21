@@ -152,8 +152,8 @@ export function Controller({ options }: StateServiceProps) {
     return cache.getTranslationFallback(namespaces, languages, key);
   }
 
-  async function loadInitial() {
-    const data = valueOrPromise<void, void>(initializeLanguage(), () => {
+  function loadInitial() {
+    const data = valueOrPromise(initializeLanguage(), () => {
       // fail if there is no language
       return loadRequiredRecords();
     });
