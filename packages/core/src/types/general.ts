@@ -58,3 +58,8 @@ export type KeyAndNamespacesInternal = Pick<
   TranslatePropsInternal,
   'key' | 'ns' | 'language'
 >;
+
+export type FetchFn = (
+  input: string | URL,
+  init?: RequestInit | undefined
+) => Promise<Response>;

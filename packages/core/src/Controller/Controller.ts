@@ -6,6 +6,7 @@ import {
   TFnType,
   NsType,
   KeyAndNamespacesInternal,
+  TranslationDescriptor,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from '../helpers';
@@ -44,7 +45,8 @@ export function Controller({ options }: StateServiceProps) {
     state.getAvailableLanguages,
     getTranslationNs,
     getTranslation,
-    changeTranslation
+    changeTranslation,
+    onPermanentChange
   );
 
   const cache = Cache(
@@ -105,6 +107,13 @@ export function Controller({ options }: StateServiceProps) {
     };
   }
 
+  function onPermanentChange(props: TranslationDescriptor) {
+    events.onPermanentChange.emit({
+      key: props.key,
+      namespace: props.namespace,
+    });
+  }
+
   function init(options: Partial<TolgeeOptions>) {
     state.init(options);
     cache.addStaticData(state.getInitialOptions().staticData);
@@ -143,8 +152,8 @@ export function Controller({ options }: StateServiceProps) {
     return cache.getTranslationFallback(namespaces, languages, key);
   }
 
-  function loadInitial() {
-    const data = valueOrPromise(initializeLanguage(), () => {
+  async function loadInitial() {
+    const data = valueOrPromise<void, void>(initializeLanguage(), () => {
       // fail if there is no language
       return loadRequiredRecords();
     });

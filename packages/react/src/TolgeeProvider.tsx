@@ -6,9 +6,17 @@ export const DEFAULT_REACT_OPTIONS: ReactOptions = {
   useSuspense: true,
 };
 
-export const TolgeeProviderContext = React.createContext<
-  TolgeeReactContext | undefined
->(undefined);
+let ProviderInstance: React.Context<TolgeeReactContext | undefined>;
+
+export const getProviderInstance = () => {
+  if (!ProviderInstance) {
+    ProviderInstance = React.createContext<TolgeeReactContext | undefined>(
+      undefined
+    );
+  }
+
+  return ProviderInstance;
+};
 
 export interface TolgeeProviderProps {
   children?: React.ReactNode;
@@ -38,6 +46,8 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   }, [tolgee]);
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
+
+  const TolgeeProviderContext = getProviderInstance();
 
   if (optionsWithDefault.useSuspense) {
     return (

@@ -11,6 +11,7 @@ describe('language detector', () => {
 
     const result = detector.getLanguage({
       availableLanguages: ['cs', 'sk'],
+      fetch: (input, init) => fetch(input, init),
     });
 
     expect(result).toEqual('cs');

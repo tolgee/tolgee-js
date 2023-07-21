@@ -3,7 +3,7 @@ import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
-    getRecord({ apiUrl, apiKey, language, namespace, projectId }) {
+    getRecord({ apiUrl, apiKey, language, namespace, projectId, fetch }) {
       const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
       let url =
         pId !== undefined

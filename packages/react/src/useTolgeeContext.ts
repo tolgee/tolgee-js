@@ -1,8 +1,9 @@
 import { useContext } from 'react';
 import { getGlobalContext } from './GlobalContextPlugin';
-import { TolgeeProviderContext } from './TolgeeProvider';
+import { getProviderInstance } from './TolgeeProvider';
 
 export const useTolgeeContext = () => {
+  const TolgeeProviderContext = getProviderInstance();
   const context = useContext(TolgeeProviderContext) || getGlobalContext();
   if (!context) {
     throw new Error(

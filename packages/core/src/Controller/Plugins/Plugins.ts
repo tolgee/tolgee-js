@@ -1,7 +1,6 @@
 import { getErrorMessage, isPromise, valueOrPromise } from '../../helpers';
 import {
   BackendDevMiddleware,
-  BackendGetRecord,
   BackendMiddleware,
   FormatterMiddleware,
   ObserverMiddleware,
@@ -22,6 +21,8 @@ import {
   TolgeeOptionsInternal,
   FormatErrorHandler,
   FindPositionsInterface,
+  BackendGetRecordInternal,
+  TranslationDescriptor,
 } from '../../types';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
@@ -31,7 +32,8 @@ export function Plugins(
   getAvailableLanguages: () => string[] | undefined,
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[],
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
-  changeTranslation: ChangeTranslationInterface
+  changeTranslation: ChangeTranslationInterface,
+  onPermanentChange: (props: TranslationDescriptor) => void
 ) {
   const plugins = {
     ui: undefined as UiMiddleware | undefined,
@@ -81,6 +83,10 @@ export function Plugins(
     });
   }
 
+  function getCommonProps() {
+    return { fetch: getInitialOptions().fetch };
+  }
+
   function setObserver(observer: ObserverMiddleware | undefined) {
     instances.observer = observer?.();
   }
@@ -126,6 +132,7 @@ export function Plugins(
 
     return instances.languageDetector.getLanguage({
       availableLanguages,
+      ...getCommonProps(),
     });
   }
 
@@ -168,6 +175,7 @@ export function Plugins(
         highlight: self.highlight,
         changeTranslation,
         findPositions,
+        onPermanentChange,
       });
 
       instances.observer?.run({
@@ -189,7 +197,9 @@ export function Plugins(
 
     getInitialLanguage() {
       const availableLanguages = getAvailableLanguages();
-      const languageOrPromise = instances.languageStorage?.getLanguage();
+      const languageOrPromise = instances.languageStorage?.getLanguage(
+        getCommonProps()
+      );
 
       return valueOrPromise(languageOrPromise, (language) => {
         if (
@@ -203,7 +213,7 @@ export function Plugins(
     },
 
     setStoredLanguage(language: string) {
-      instances.languageStorage?.setLanguage(language);
+      instances.languageStorage?.setLanguage(language, getCommonProps());
     },
 
     getDevBackend() {
@@ -212,7 +222,11 @@ export function Plugins(
 
     getBackendRecord: (({ language, namespace }) => {
       for (const backend of instances.backends) {
-        const data = backend.getRecord({ language, namespace });
+        const data = backend.getRecord({
+          language,
+          namespace,
+          ...getCommonProps(),
+        });
         if (isPromise(data)) {
           return data?.catch((e) => {
             // eslint-disable-next-line no-console
@@ -225,7 +239,7 @@ export function Plugins(
         }
       }
       return undefined;
-    }) as BackendGetRecord,
+    }) as BackendGetRecordInternal,
 
     getBackendDevRecord: (({ language, namespace }) => {
       const { apiKey, apiUrl, projectId } = getInitialOptions();
@@ -235,8 +249,9 @@ export function Plugins(
         projectId,
         language,
         namespace,
+        ...getCommonProps(),
       });
-    }) as BackendGetRecord,
+    }) as BackendGetRecordInternal,
 
     getLanguageDetector() {
       return instances.languageDetector;

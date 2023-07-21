@@ -3,6 +3,7 @@ import {
   FallbackLanguageOption,
   TreeTranslationsData,
   OnFormatError,
+  FetchFn,
 } from '../../types';
 import { sanitizeUrl } from '../../helpers';
 import {
@@ -97,6 +98,11 @@ export type TolgeeOptionsInternal = {
    * Define what to display in case of formatting error. (Default: 'invalid')
    */
   onFormatError: OnFormatError;
+
+  /**
+   * Define custom fetch function, used for fetching the translations
+   */
+  fetch: FetchFn;
 };
 
 export type TolgeeOptions = Partial<
@@ -120,6 +126,7 @@ const defaultValues: TolgeeOptionsInternal = {
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
   apiUrl: DEFAULT_API_URL,
+  fetch: (input, options) => fetch(input, options),
 };
 
 export const combineOptions = <T extends TolgeeOptions>(

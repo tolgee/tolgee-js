@@ -19,6 +19,7 @@ test('it selects the key', async () => {
     highlight: () => ({ unhighlight: () => {} }),
     changeTranslation: () => ({ revert: () => {} }),
     findPositions: () => [],
+    onPermanentChange: () => {},
   });
   const mouseEvent = new MouseEvent('click');
 

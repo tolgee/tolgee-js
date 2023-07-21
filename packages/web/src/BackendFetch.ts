@@ -42,7 +42,7 @@ function createBackendFetch(
       },
     };
   return {
-    getRecord({ namespace, language }) {
+    getRecord({ namespace, language, fetch }) {
       const path = getPath({
         namespace,
         language,
