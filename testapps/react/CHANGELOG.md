@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.10.2-prerelease.2a0213ec.0](https://github.com/tolgee/tolgee-js/compare/v5.10.1...v5.10.2-prerelease.2a0213ec.0) (2023-07-26)
+
+
+### Bug Fixes
+
+* container host mismatch ([2a0213e](https://github.com/tolgee/tolgee-js/commit/2a0213ecd760bf21d093db9c9812ba6f938fc2f9))
+* container host mismatch ([efacb84](https://github.com/tolgee/tolgee-js/commit/efacb84254146beb43d90d0aea8b991bfac85467))
+
+
+
+
+
 ## [5.10.1](https://github.com/tolgee/tolgee-js/compare/v5.10.0...v5.10.1) (2023-07-12)
 
 **Note:** Version bump only for package @tolgee/react-testapp

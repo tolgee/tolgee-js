@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.10.2-prerelease.2a0213ec.0](https://github.com/tolgee/tolgee-js/compare/v5.10.1...v5.10.2-prerelease.2a0213ec.0) (2023-07-26)
+
+
+### Features
+
+* prepare for server components ([e7b68cf](https://github.com/tolgee/tolgee-js/commit/e7b68cf7d41082bbc4c3023c6e430c4ffe707585))
+
+
+
+
+
 ## [5.10.1](https://github.com/tolgee/tolgee-js/compare/v5.10.0...v5.10.1) (2023-07-12)
 
 
