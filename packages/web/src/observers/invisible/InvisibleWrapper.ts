@@ -50,7 +50,7 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
   }
 
   function getMessage(message: string) {
-    if (message.length <= 2) {
+    if (message.length <= 4) {
       const [valueCode] = stringToCodePoints(message);
       return keyMemory.numberToValue(valueCode);
     } else {
@@ -82,12 +82,13 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     },
 
     wrap({ key, defaultValue, translation, ns }) {
-      const encodedValue = encodeValue({ key, ns, defaultValue });
-
       let invisibleMark: string;
       if (fullKeyEncode) {
+        // don't include default value, as that might be very long when encoded
+        const encodedValue = encodeValue({ key, ns });
         invisibleMark = encodeMessage(encodedValue);
       } else {
+        const encodedValue = encodeValue({ key, ns, defaultValue });
         const code = keyMemory.valueToNumber(encodedValue);
         invisibleMark = encodeMessage(String.fromCodePoint(code));
       }

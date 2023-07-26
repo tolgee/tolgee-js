@@ -28,6 +28,7 @@ describe('invisible wrapper', () => {
     const unwraped = wrapper.unwrap(wrapped);
     expect(unwraped.text).toEqual(translation);
     expect(unwraped.keys[0].key).toEqual(key);
-    expect(unwraped.keys[0].defaultValue).toEqual(defaultValue);
+    // doesn't include default value
+    expect(unwraped.keys[0].defaultValue).toEqual(undefined);
   });
 });
