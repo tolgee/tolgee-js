@@ -80,7 +80,7 @@ export class KeyContextMenu extends React.Component {
               this.setState({ opened: false });
               this.state.onSelect?.(undefined);
             }}
-            container={getRootElement()}
+            container={getRootElement().host}
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
             {Array.from(this.state.keys || []).map(

@@ -84,7 +84,7 @@ export const ScreenshotWithLabels: React.FC<Props> = ({
                 title={key.keyName}
                 placement="right"
                 PopperProps={{
-                  container: getRootElement(),
+                  container: getRootElement().host,
                   style: { zIndex: DEVTOOLS_Z_INDEX },
                 }}
               >

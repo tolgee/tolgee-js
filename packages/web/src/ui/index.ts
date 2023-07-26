@@ -7,7 +7,7 @@ import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { getRootElement } from './getRootElement';
 
 export class UI implements UiInterface {
-  private rootElement: HTMLElement | undefined;
+  private rootElement: ShadowRoot | undefined;
   private viewerComponent: KeyDialog | undefined;
   private keyContextMenu: KeyContextMenu | undefined;
 

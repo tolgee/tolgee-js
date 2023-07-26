@@ -19,7 +19,7 @@ export const TranslationMethods = () => {
       <div className="tiles">
         <div>
           <h1>T component with default</h1>
-          <div>
+          <div title={t('test')}>
             <T keyName="this_key_does_not_exist">This is default</T>
           </div>
         </div>

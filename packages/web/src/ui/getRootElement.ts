@@ -8,5 +8,5 @@ export function getRootElement() {
     rootElement.attachShadow({ mode: 'open' });
     document.body.appendChild(rootElement);
   }
-  return (rootElement.shadowRoot || document.body) as HTMLElement;
+  return rootElement.shadowRoot!;
 }
