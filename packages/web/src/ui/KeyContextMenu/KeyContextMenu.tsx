@@ -3,8 +3,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 
-import { DEVTOOLS_ID, DEVTOOLS_Z_INDEX } from '../../constants';
+import { DEVTOOLS_Z_INDEX } from '../../constants';
 import { ThemeProvider } from '../ThemeProvider';
+import { getRootElement } from '../getRootElement';
 
 const ScMenuItem = styled(MenuItem)`
   display: flex;
@@ -79,7 +80,7 @@ export class KeyContextMenu extends React.Component {
               this.setState({ opened: false });
               this.state.onSelect?.(undefined);
             }}
-            container={document.getElementById(DEVTOOLS_ID)}
+            container={getRootElement()}
             style={{ zIndex: DEVTOOLS_Z_INDEX }}
           >
             {Array.from(this.state.keys || []).map(

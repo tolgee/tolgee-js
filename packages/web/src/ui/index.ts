@@ -4,21 +4,14 @@ import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
-import { DEVTOOLS_ID } from '../constants';
+import { getRootElement } from './getRootElement';
 
 export class UI implements UiInterface {
   private viewerComponent: KeyDialog;
   private keyContextMenu: KeyContextMenu;
 
   constructor(private props: UiProps) {
-    let rootElement = document.getElementById(DEVTOOLS_ID);
-    if (!rootElement) {
-      rootElement = document.createElement('div');
-      rootElement.id = DEVTOOLS_ID;
-      rootElement.attachShadow({ mode: 'open' });
-      document.body.appendChild(rootElement);
-    }
-    const devTools = rootElement.shadowRoot!;
+    const devTools = getRootElement();
 
     const tolgeeModalContainer = document.createElement('div');
     devTools.appendChild(tolgeeModalContainer);

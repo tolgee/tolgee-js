@@ -8,7 +8,7 @@ import { DEVTOOLS_Z_INDEX } from '../constants';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import GlobalStyles from '@mui/material/GlobalStyles';
-import { getRoot } from './tools/getRoot';
+import { getRootElement } from './getRootElement';
 
 let theme = createTheme({
   typography: {
@@ -69,7 +69,7 @@ export function ThemeProvider({ children }: React.PropsWithChildren) {
     createCache({
       key: 'css',
       prepend: true,
-      container: getRoot(),
+      container: getRootElement(),
     })
   );
 

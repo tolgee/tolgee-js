@@ -1,6 +1,6 @@
-import { DEVTOOLS_ID } from '../../constants';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { getRootElement } from '../getRootElement';
 
 export class BodyEnd extends React.PureComponent<{
   document?: Document;
@@ -13,10 +13,7 @@ export class BodyEnd extends React.PureComponent<{
   }
 
   get devTools() {
-    return (
-      this.document.getElementById(DEVTOOLS_ID)?.shadowRoot ||
-      this.document.body
-    );
+    return getRootElement();
   }
 
   componentDidMount() {
