@@ -7,28 +7,39 @@ import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { getRootElement } from './getRootElement';
 
 export class UI implements UiInterface {
-  private viewerComponent: KeyDialog;
-  private keyContextMenu: KeyContextMenu;
+  private rootElement: HTMLElement | undefined;
+  private viewerComponent: KeyDialog | undefined;
+  private keyContextMenu: KeyContextMenu | undefined;
 
   constructor(private props: UiProps) {
-    const devTools = getRootElement();
+    this.checkInitialization();
+  }
 
-    const tolgeeModalContainer = document.createElement('div');
-    devTools.appendChild(tolgeeModalContainer);
+  public checkInitialization() {
+    const rootElement = getRootElement();
+    if (rootElement !== this.rootElement) {
+      this.rootElement = rootElement;
 
-    const contextMenuContainer = document.createElement('div');
-    devTools.appendChild(contextMenuContainer);
+      const tolgeeModalContainer = document.createElement('div');
+      rootElement.appendChild(tolgeeModalContainer);
 
-    const viewerElement = createElement(KeyDialog, {
-      ...this.props,
-    });
+      const contextMenuContainer = document.createElement('div');
+      rootElement.appendChild(contextMenuContainer);
 
-    this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);
+      const viewerElement = createElement(KeyDialog, {
+        ...this.props,
+      });
 
-    this.keyContextMenu = ReactDOM.render(
-      createElement(KeyContextMenu),
-      contextMenuContainer
-    );
+      this.viewerComponent = ReactDOM.render(
+        viewerElement,
+        tolgeeModalContainer
+      );
+
+      this.keyContextMenu = ReactDOM.render(
+        createElement(KeyContextMenu),
+        contextMenuContainer
+      );
+    }
   }
 
   public renderViewer(
@@ -36,15 +47,17 @@ export class UI implements UiInterface {
     defaultValue: string | undefined,
     ns: string[]
   ) {
-    this.viewerComponent.translationEdit(key, defaultValue, ns);
+    this.checkInitialization();
+    this.viewerComponent?.translationEdit(key, defaultValue, ns);
   }
 
   public async getKey(props: {
     keys: Map<string, string | undefined>;
     openEvent: MouseEvent;
   }): Promise<string | undefined> {
+    this.checkInitialization();
     return await new Promise<string | undefined>((resolve) => {
-      this.keyContextMenu.show({
+      this.keyContextMenu?.show({
         ...props,
         onSelect(key) {
           resolve(key);
@@ -57,6 +70,7 @@ export class UI implements UiInterface {
     keysAndDefaults: UiKeyOption[],
     event: MouseEvent
   ) {
+    this.checkInitialization();
     let key = keysAndDefaults[0].key as string | undefined;
     const keysMap = new Map(
       keysAndDefaults.map(({ key, translation, defaultValue }) => [
