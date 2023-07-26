@@ -3,6 +3,25 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.10.2-prerelease.4c2923b2.0](https://github.com/tolgee/tolgee-js/compare/v5.10.1...v5.10.2-prerelease.4c2923b2.0) (2023-07-26)
+
+
+### Bug Fixes
+
+* **@tolgee/web:** support next.js server components ([4bd654a](https://github.com/tolgee/tolgee-js/commit/4bd654a90809259c07d8958738c14511c3f2a6a1))
+* omit defaultValue when full encoded ([4c2923b](https://github.com/tolgee/tolgee-js/commit/4c2923b2e390f9fc6c906e13f6366568beee5672))
+
+
+### Features
+
+* encode a whole key to invisible characters (TEST) ([a12ded4](https://github.com/tolgee/tolgee-js/commit/a12ded4ed4b78be0e9b0bba57960c0585ba20053))
+* prepare for server components ([3fbb14b](https://github.com/tolgee/tolgee-js/commit/3fbb14b1c47d3da56bf0c4b105aa733942876d75))
+* prepare for server components ([e7b68cf](https://github.com/tolgee/tolgee-js/commit/e7b68cf7d41082bbc4c3023c6e430c4ffe707585))
+
+
+
+
+
 ## [5.10.1](https://github.com/tolgee/tolgee-js/compare/v5.10.0...v5.10.1) (2023-07-12)
 
 
