@@ -29,14 +29,10 @@ export const createFormatIcu = (): FinalFormatterMiddleware => {
     language,
     params,
   }) => {
-    const ignoreTag = !Object.values(params || {}).find(
-      (p) => typeof p === 'function'
-    );
-
     const locale = getLocale(language);
 
     return new IntlMessageFormat(translation, locale, undefined, {
-      ignoreTag,
+      ignoreTag: true,
     }).format(params);
   };
 

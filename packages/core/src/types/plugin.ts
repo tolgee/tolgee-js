@@ -112,11 +112,20 @@ export type WrapperMiddleware = {
 export type FormatterMiddlewareFormatParams = {
   translation: string;
   language: string;
-  params: Record<string, any> | undefined;
+  params: TranslateParams;
 };
 
 export type FormatterMiddleware = {
   format: (props: FormatterMiddlewareFormatParams) => string;
+};
+
+export type ParamsFormatterMiddlewareFormatParams = {
+  language: string;
+  params: TranslateParams;
+};
+
+export type ParamsFormatterMiddleware = {
+  format: (props: ParamsFormatterMiddlewareFormatParams) => TranslateParams;
 };
 
 export type TranslationOnClick = (data: {
@@ -168,6 +177,9 @@ export interface UiInterface {
 export type PluginTools = Readonly<{
   setFinalFormatter: (formatter: FinalFormatterMiddleware | undefined) => void;
   addFormatter: (formatter: FormatterMiddleware | undefined) => void;
+  addParamsFormatter: (
+    formatter: ParamsFormatterMiddleware | undefined
+  ) => void;
   setObserver: (observer: ObserverMiddleware | undefined) => void;
   hasObserver: () => boolean;
   setUi: (ui: UiMiddleware | undefined) => void;

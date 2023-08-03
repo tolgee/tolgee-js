@@ -6,8 +6,8 @@ import {
   ERROR_PARAM_EMPTY,
   ERROR_UNEXPECTED_CHAR,
   ERROR_UNEXPECTED_END,
-  FormatError,
-} from './FormatError';
+  FormatSimpleError,
+} from './FormatSimpleError';
 
 function icu(text: string, params?: TranslateParams) {
   return new IntlMessageFormat(text, 'en', undefined, {
@@ -29,13 +29,13 @@ function expectToThrow(
   code?: ErrorCode,
   params?: TranslateParams
 ) {
-  let error: FormatError | undefined = undefined;
+  let error: FormatSimpleError | undefined = undefined;
   try {
     formatter(text, params);
   } catch (e) {
-    error = e as FormatError;
+    error = e as FormatSimpleError;
   }
-  expect(error).toBeInstanceOf(FormatError);
+  expect(error).toBeInstanceOf(FormatSimpleError);
   expect(error?.code).toEqual(code);
 }
 

@@ -7,7 +7,7 @@ export type ErrorCode =
   | typeof ERROR_UNEXPECTED_CHAR
   | typeof ERROR_UNEXPECTED_END;
 
-export class FormatError extends Error {
+export class FormatSimpleError extends Error {
   public readonly code: ErrorCode;
   public readonly index: number;
   constructor(code: ErrorCode, index: number, text: string) {

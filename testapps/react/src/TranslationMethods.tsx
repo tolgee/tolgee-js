@@ -74,7 +74,7 @@ export const TranslationMethods = () => {
               params={{
                 br: <br />,
               }}
-              defaultValue="Key with br<br></br>tag"
+              defaultValue="Key with br<br/>tag"
             />
           </div>
         </div>
