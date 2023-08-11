@@ -18,7 +18,7 @@ export type TolgeeElement = Element &
     _tolgee?: boolean;
   };
 
-export type BackendOptions = Omit<RequestInit, 'headers'> & {
+export type BackendOptions = Omit<RequestInfo, 'headers'> & {
   /**
    * Path prefix (default: '/i18n')
    */

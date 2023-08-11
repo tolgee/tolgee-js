@@ -8,7 +8,9 @@ export const InvisibleObserver = (): ObserverMiddleware => () => {
   const self = Object.freeze({
     ...observer,
     run(props: ObserverRunProps) {
-      const wrapper = InvisibleWrapper();
+      const wrapper = InvisibleWrapper({
+        fullKeyEncode: props.options.fullKeyEncode,
+      });
       observer.run({ ...props, wrapper });
     },
     retranslate() {},

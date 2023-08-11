@@ -1,6 +1,10 @@
 import { EventEmitter } from './EventEmitter';
 import { EventEmitterSelective } from './EventEmitterSelective';
-import { CacheDescriptorWithKey, TolgeeOn } from '../../types';
+import {
+  CacheDescriptorWithKey,
+  TolgeeOn,
+  TranslationDescriptor,
+} from '../../types';
 
 export function Events(
   getFallbackNs: () => string[],
@@ -21,6 +25,7 @@ export function Events(
     onRunningChange: EventEmitter<boolean>(isActive),
     onCacheChange: EventEmitter<CacheDescriptorWithKey>(isActive),
     onUpdate: EventEmitterSelective(isActive, getFallbackNs, getDefaultNs),
+    onPermanentChange: EventEmitter<TranslationDescriptor>(isActive),
     setEmitterActive(active: boolean) {
       emitterActive = active;
     },
@@ -42,6 +47,8 @@ export function Events(
           return self.onCacheChange.listen(handler as any);
         case 'update':
           return self.onUpdate.listen(handler as any);
+        case 'permanentChange':
+          return self.onPermanentChange.listen(handler as any);
       }
     }) as TolgeeOn,
   });

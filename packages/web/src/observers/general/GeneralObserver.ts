@@ -25,7 +25,7 @@ import { NodeHandler } from './NodeHandler';
 
 type RunningInstance = {
   stop: () => void;
-  elementRegistry: ElementRegistryInstance;
+  elementRegistry?: ElementRegistryInstance;
   wrapper: WrapperMiddleware;
 };
 
@@ -46,7 +46,12 @@ export function GeneralObserver() {
     onClick,
   }: RunProps): RunningInstance | undefined {
     if (isSSR()) {
-      return;
+      return {
+        stop() {
+          isObserving = false;
+        },
+        wrapper,
+      };
     }
     const domHelper = DomHelper(options);
     const nodeHandler = NodeHandler(options, wrapper);
@@ -145,11 +150,11 @@ export function GeneralObserver() {
     },
 
     forEachElement(callback: (el: TolgeeElement, meta: ElementMeta) => void) {
-      instance?.elementRegistry.forEachElement?.(callback);
+      instance?.elementRegistry?.forEachElement?.(callback);
     },
 
     highlight(key?: string, ns?: NsFallback) {
-      const elements = instance?.elementRegistry.findAll(key, ns) || [];
+      const elements = instance?.elementRegistry?.findAll(key, ns) || [];
       elements.forEach((el) => el.highlight?.());
       return {
         unhighlight() {
@@ -159,7 +164,7 @@ export function GeneralObserver() {
     },
 
     findPositions(key?: string, ns?: NsFallback) {
-      const elements = instance?.elementRegistry.findAll(key, ns) || [];
+      const elements = instance?.elementRegistry?.findAll(key, ns) || [];
       const result: KeyPosition[] = [];
       // sort elements by their position in the dom
       elements.sort((a, b) => {

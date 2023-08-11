@@ -18,9 +18,20 @@ function getTolgeeWithDeactivatedWrapper(
   };
 }
 
+/**
+ * Updates tolgee static data and language, to be ready right away for the first render
+ * and therefore compatible with SSR.
+ *
+ * It also ensures that the first render is done without wrapping and so it avoids
+ * "client different than server" issues.
+ *
+ * @param tolgeeInstance initialized Tolgee instance
+ * @param language language that is obtained outside of Tolgee on the server and client
+ * @param staticData static data for the language
+ */
 export function useTolgeeSSR(
   tolgeeInstance: TolgeeInstance,
-  locale?: string,
+  language?: string,
   staticData?: TolgeeStaticData | undefined
 ) {
   const initialInstance = useMemo(
@@ -40,9 +51,9 @@ export function useTolgeeSSR(
     // events emitting must be off, to not trigger re-render while rendering
     tolgee.setEmitterActive(false);
     tolgee.addStaticData(staticData);
-    tolgee.changeLanguage(locale!);
+    tolgee.changeLanguage(language!);
     tolgee.setEmitterActive(true);
-  }, [locale, staticData, tolgee]);
+  }, [language, staticData, tolgee]);
 
   return tolgee;
 }

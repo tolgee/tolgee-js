@@ -6,8 +6,7 @@ import {
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
-  BackendGetRecord,
-  BackendGetDevRecord,
+  BackendGetRecordInternal,
 } from '../../types';
 import { getFallbackArray, unique } from '../../helpers';
 import { EventEmitterInstance } from '../Events/EventEmitter';
@@ -30,8 +29,8 @@ type StateCache = Map<string, CacheRecord>;
 
 export function Cache(
   onCacheChange: EventEmitterInstance<CacheDescriptorWithKey>,
-  backendGetRecord: BackendGetRecord,
-  backendGetDevRecord: BackendGetDevRecord,
+  backendGetRecord: BackendGetRecordInternal,
+  backendGetDevRecord: BackendGetRecordInternal,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
   isInitialLoading: () => boolean,
   fetchingObserver: ValueObserverInstance<boolean>,

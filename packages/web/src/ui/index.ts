@@ -4,38 +4,42 @@ import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
-import { DEVTOOLS_ID } from '../constants';
+import { getRootElement } from './getRootElement';
 
 export class UI implements UiInterface {
-  private viewerComponent: KeyDialog;
-  private keyContextMenu: KeyContextMenu;
+  private rootElement: ShadowRoot | undefined;
+  private viewerComponent: KeyDialog | undefined;
+  private keyContextMenu: KeyContextMenu | undefined;
 
   constructor(private props: UiProps) {
-    let rootElement = document.getElementById(DEVTOOLS_ID);
-    if (!rootElement) {
-      rootElement = document.createElement('div');
-      rootElement.id = DEVTOOLS_ID;
-      rootElement.attachShadow({ mode: 'open' });
-      document.body.appendChild(rootElement);
+    this.checkInitialization();
+  }
+
+  public checkInitialization() {
+    const rootElement = getRootElement();
+    if (rootElement !== this.rootElement) {
+      this.rootElement = rootElement;
+
+      const tolgeeModalContainer = document.createElement('div');
+      rootElement.appendChild(tolgeeModalContainer);
+
+      const contextMenuContainer = document.createElement('div');
+      rootElement.appendChild(contextMenuContainer);
+
+      const viewerElement = createElement(KeyDialog, {
+        ...this.props,
+      });
+
+      this.viewerComponent = ReactDOM.render(
+        viewerElement,
+        tolgeeModalContainer
+      );
+
+      this.keyContextMenu = ReactDOM.render(
+        createElement(KeyContextMenu),
+        contextMenuContainer
+      );
     }
-    const devTools = rootElement.shadowRoot!;
-
-    const tolgeeModalContainer = document.createElement('div');
-    devTools.appendChild(tolgeeModalContainer);
-
-    const contextMenuContainer = document.createElement('div');
-    devTools.appendChild(contextMenuContainer);
-
-    const viewerElement = createElement(KeyDialog, {
-      ...this.props,
-    });
-
-    this.viewerComponent = ReactDOM.render(viewerElement, tolgeeModalContainer);
-
-    this.keyContextMenu = ReactDOM.render(
-      createElement(KeyContextMenu),
-      contextMenuContainer
-    );
   }
 
   public renderViewer(
@@ -43,15 +47,17 @@ export class UI implements UiInterface {
     defaultValue: string | undefined,
     ns: string[]
   ) {
-    this.viewerComponent.translationEdit(key, defaultValue, ns);
+    this.checkInitialization();
+    this.viewerComponent?.translationEdit(key, defaultValue, ns);
   }
 
   public async getKey(props: {
     keys: Map<string, string | undefined>;
     openEvent: MouseEvent;
   }): Promise<string | undefined> {
+    this.checkInitialization();
     return await new Promise<string | undefined>((resolve) => {
-      this.keyContextMenu.show({
+      this.keyContextMenu?.show({
         ...props,
         onSelect(key) {
           resolve(key);
@@ -64,6 +70,7 @@ export class UI implements UiInterface {
     keysAndDefaults: UiKeyOption[],
     event: MouseEvent
   ) {
+    this.checkInitialization();
     let key = keysAndDefaults[0].key as string | undefined;
     const keysMap = new Map(
       keysAndDefaults.map(({ key, translation, defaultValue }) => [

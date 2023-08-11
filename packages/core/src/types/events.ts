@@ -27,7 +27,8 @@ export type TolgeeEvent =
   | 'initialLoad'
   | 'running'
   | 'cache'
-  | 'update';
+  | 'update'
+  | 'permanentChange';
 
 export interface EventType {
   language: string;
@@ -38,6 +39,7 @@ export interface EventType {
   running: boolean;
   cache: CacheDescriptorWithKey;
   update: void;
+  permanentChange: CacheDescriptorWithKey;
 }
 
 export type TolgeeOn<E extends keyof EventType = keyof EventType> = {
@@ -81,5 +83,19 @@ export type TolgeeOn<E extends keyof EventType = keyof EventType> = {
    * Emitted when cache changes.
    */
   (event: 'cache', handler: Listener<CacheDescriptorWithKey>): Subscription;
+
+  /**
+   * Translation was changed or created via dev tools
+   */
+  (
+    event: 'permanentChange',
+    handler: Listener<CacheDescriptorWithKey>
+  ): Subscription;
+
   (event: E, handler: unknown): Subscription;
+};
+
+export type TranslationDescriptor = {
+  key: string;
+  namespace: string | undefined;
 };

@@ -6,6 +6,7 @@ import {
   TFnType,
   NsType,
   KeyAndNamespacesInternal,
+  TranslationDescriptor,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from '../helpers';
@@ -44,7 +45,8 @@ export function Controller({ options }: StateServiceProps) {
     state.getAvailableLanguages,
     getTranslationNs,
     getTranslation,
-    changeTranslation
+    changeTranslation,
+    onPermanentChange
   );
 
   const cache = Cache(
@@ -103,6 +105,13 @@ export function Controller({ options }: StateServiceProps) {
         cache.changeTranslation(keyObject, key, previousValue);
       },
     };
+  }
+
+  function onPermanentChange(props: TranslationDescriptor) {
+    events.onPermanentChange.emit({
+      key: props.key,
+      namespace: props.namespace,
+    });
   }
 
   function init(options: Partial<TolgeeOptions>) {

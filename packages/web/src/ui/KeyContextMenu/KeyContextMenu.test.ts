@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
+import { getRootElement } from '../getRootElement';
 import { UI } from '../index';
 import { sleep } from '../tools/sleep';
-import { getRoot } from '../tools/getRoot';
 
 function getShadowRootElement(testId: string, textContent: string) {
-  const shadowRoot = getRoot();
+  const shadowRoot = getRootElement();
 
   return Array.from(
     shadowRoot.querySelectorAll(`*[data-testid="${testId}"]`)
@@ -19,6 +19,7 @@ test('it selects the key', async () => {
     highlight: () => ({ unhighlight: () => {} }),
     changeTranslation: () => ({ revert: () => {} }),
     findPositions: () => [],
+    onPermanentChange: () => {},
   });
   const mouseEvent = new MouseEvent('click');
 

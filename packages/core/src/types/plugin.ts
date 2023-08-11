@@ -1,5 +1,6 @@
 import { ChangeTranslationInterface, TreeTranslationsData } from './cache';
 import {
+  FetchFn,
   NsFallback,
   NsType,
   TranslateParams,
@@ -7,11 +8,16 @@ import {
 } from './general';
 import type { ObserverOptionsInternal } from '../Controller/State/observerOptions';
 import { TolgeeInstance } from '../TolgeeCore';
+import { TranslationDescriptor } from './events';
 
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
   projectId?: number | string;
+};
+
+export type CommonProps = {
+  fetch: FetchFn;
 };
 
 export type BackendGetRecordProps = {
@@ -20,7 +26,7 @@ export type BackendGetRecordProps = {
 };
 
 export type BackendGetRecord = (
-  data: BackendGetRecordProps
+  data: BackendGetRecordProps & CommonProps
 ) => Promise<TreeTranslationsData | undefined> | undefined;
 
 export interface BackendMiddleware {
@@ -28,6 +34,10 @@ export interface BackendMiddleware {
 }
 
 export type BackendGetDevRecord = (
+  data: BackendGetRecordProps & CommonProps & BackendDevProps
+) => Promise<TreeTranslationsData | undefined> | undefined;
+
+export type BackendGetRecordInternal = (
   data: BackendGetRecordProps & BackendDevProps
 ) => Promise<TreeTranslationsData | undefined> | undefined;
 
@@ -82,6 +92,7 @@ export type ObserverMiddleware = () => {
 
 export type LanguageDetectorProps = {
   availableLanguages: string[];
+  fetch: FetchFn;
 };
 
 export type LanguageDetectorMiddleware = {
@@ -91,8 +102,10 @@ export type LanguageDetectorMiddleware = {
 };
 
 export type LanguageStorageMiddleware = {
-  getLanguage: () => string | undefined | Promise<string | undefined>;
-  setLanguage: (language: string) => void | Promise<void>;
+  getLanguage: (
+    props: CommonProps
+  ) => string | undefined | Promise<string | undefined>;
+  setLanguage: (language: string, props: CommonProps) => void | Promise<void>;
 };
 
 export type DevCredentials =
@@ -150,6 +163,7 @@ export type UiProps = {
   highlight: HighlightInterface;
   findPositions: (key?: string | undefined, ns?: NsFallback) => KeyPosition[];
   changeTranslation: ChangeTranslationInterface;
+  onPermanentChange: (props: TranslationDescriptor) => void;
 };
 
 export type UiKeyOption = {

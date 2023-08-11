@@ -248,6 +248,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           Object.entries(newTranslations),
           props.uiProps.changeTranslation
         );
+
+        props.uiProps.onPermanentChange({
+          key: props.keyName,
+          namespace: selectedNs,
+        });
         translationsLoadable.refetch();
         setSuccess(true);
         if (useBrowserWindow) {
