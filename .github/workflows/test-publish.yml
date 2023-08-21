@@ -23,13 +23,29 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - name: Create branch
-        run: git checkout -b test.$(git rev-parse --short HEAD)
+      - run: |
+          echo "" >> .npmrc
+          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
-      - name: Set git globals
-        run: |
-          git config --local user.email "machine@tolgee.io"
-          git config --local user.name "Tolgee Machine"
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-cypress-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-
 
       - name: Install
         run: pnpm install --no-frozen-lockfile --filter='./packages/*'
@@ -48,9 +64,83 @@ jobs:
       - name: Build all packages
         run: pnpm build-packages
 
+      - name: Recreate release with push
+        run: pnpm publish -r --no-git-checks
+
+      - name: Build e2e
+        run: pnpm build:e2e
+
+      - id: set-dirs
+        run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        working-directory: e2e/cypress/e2e
+
+    outputs:
+      dirs: ${{ steps.set-dirs.outputs.dirs }}
+
+  cypress:
+    name: 'Cypress'
+    # cypress-prepare will install and build everything into cache
+    needs: cypress-prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
       - run: |
           echo "" >> .npmrc
+          echo "link-workspace-packages=false" >> .npmrc
+          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
-      - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks --registry=https://npm.pkg.github.com
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-cypress-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Update version locally
+        run: |
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
+            --force-publish --no-push --no-git-tag-version --exact
+
+      - name: Cypress
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress
+          path: |
+            e2e/cypress/videos/**/*
+            e2e/cypress/screenshots/**/*
