@@ -56,9 +56,6 @@ jobs:
       - name: Recreate release with push
         run: pnpm publish -r --no-git-checks
 
-      - name: Build e2e
-        run: pnpm build:e2e
-
       - id: set-dirs
         run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
