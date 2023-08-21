@@ -28,25 +28,6 @@ jobs:
           echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: |
-            .pnpm-store/v3
-            ~/.cache/Cypress
-          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cypress-
-
-      - name: Turbo Cache
-        id: turbo-cache
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: turbo-cypress-${{ github.sha }}
-          restore-keys: |
-            turbo-cypress-
-
       - name: Install
         run: pnpm install --no-frozen-lockfile --filter='./packages/*'
 
@@ -87,7 +68,6 @@ jobs:
 
   cypress:
     name: 'Cypress'
-    # cypress-prepare will install and build everything into cache
     needs: test-publish
     runs-on: ubuntu-latest
     strategy:
@@ -114,25 +94,6 @@ jobs:
           echo "link-workspace-packages=false" >> .npmrc
           echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: |
-            .pnpm-store/v3
-            ~/.cache/Cypress
-          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cypress-
-
-      - name: Turbo Cache
-        id: turbo-cache
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: turbo-cypress-${{ github.sha }}
-          restore-keys: |
-            turbo-cypress-
 
       - name: Install
         run: pnpm install --no-frozen-lockfile
