@@ -62,6 +62,9 @@ jobs:
         run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
 
+    outputs:
+      dirs: ${{ steps.set-dirs.outputs.dirs }}
+
   cypress:
     needs: prepare
     runs-on: ubuntu-latest
