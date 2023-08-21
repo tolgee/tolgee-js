@@ -54,3 +54,5 @@ jobs:
 
       - name: Recreate release with push
         run: pnpm publish -r --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
