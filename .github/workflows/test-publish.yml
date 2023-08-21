@@ -23,11 +23,6 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - run: |
-          echo "" >> .npmrc
-          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
-
       - name: Install
         run: pnpm install --no-frozen-lockfile --filter='./packages/*'
 
@@ -52,6 +47,11 @@ jobs:
 
       - name: Build all packages
         run: pnpm build-packages
+
+      - run: |
+          echo "" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Recreate release with push
         run: pnpm publish -r --no-git-checks
@@ -86,12 +86,6 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - run: |
-          echo "" >> .npmrc
-          echo "link-workspace-packages=false" >> .npmrc
-          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
-
       - name: Install
         run: pnpm install --no-frozen-lockfile
 
@@ -102,6 +96,12 @@ jobs:
         run: |
           git config --local user.email "machine@tolgee.io"
           git config --local user.name "Tolgee Machine"
+
+      - run: |
+          echo "" >> .npmrc
+          echo "link-workspace-packages=false" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Update version locally
         run: |
