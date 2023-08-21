@@ -78,7 +78,7 @@ jobs:
       dirs: ${{ steps.set-dirs.outputs.dirs }}
 
   cypress:
-    name: 'Cypress'
+    name: 'Cypress with published packages'
     # cypress-prepare will install and build everything into cache
     needs: cypress-prepare
     runs-on: ubuntu-latest
