@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  test-publish:
+  main:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -50,6 +50,14 @@ jobs:
       - name: Install
         run: pnpm install --no-frozen-lockfile --filter='./packages/*'
 
+      - name: Create branch
+        run: git checkout -b test.$(git rev-parse --short HEAD)
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
       - name: Update version locally
         run: |
           lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
@@ -78,9 +86,9 @@ jobs:
       dirs: ${{ steps.set-dirs.outputs.dirs }}
 
   cypress:
-    name: 'Cypress with published packages'
+    name: 'Cypress'
     # cypress-prepare will install and build everything into cache
-    needs: test-publish
+    needs: cypress-prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -128,6 +136,14 @@ jobs:
 
       - name: Install
         run: pnpm install --no-frozen-lockfile
+
+      - name: Create branch
+        run: git checkout -b test.$(git rev-parse --short HEAD)
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
 
       - name: Update version locally
         run: |
