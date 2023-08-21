@@ -54,8 +54,8 @@ jobs:
         run: pnpm build-packages
 
       - run: |
-          npm config set registry http://localhost:4873/
-          npx npm-cli-login -u test -p test -e test@test.com -r http://localhost:4873/
+          npm config set registry http://localhost:4873
+          npx npm-cli-login -u admin -p admin -e "test@test.com" -r "http://localhost:4873"
 
       - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks --registry="http://localhost:4873" --access=public --filter='./packages/*'
+        run: pnpm publish -r --no-git-checks --registry="http://localhost:4873"
