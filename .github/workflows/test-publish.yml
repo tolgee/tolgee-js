@@ -49,10 +49,8 @@ jobs:
         run: pnpm build-packages
 
       - run: |
-          npm config set registry https://npm.pkg.github.com
-          echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}' > ~/.npmrc
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
 
       - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks --registry https://npm.pkg.github.com
+        run: pnpm publish -r --no-git-checks
