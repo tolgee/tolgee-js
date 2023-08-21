@@ -11,11 +11,6 @@ jobs:
         with:
           token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
 
-      - name: Start npm-registry
-        run: |
-          docker pull verdaccio/verdaccio
-          docker run -it --rm -e VERDACCIO_MAX_BODY_SIZE=100mb --name verdaccio -p 4873:4873 --detach verdaccio/verdaccio
-
       - name: Build
         uses: actions/setup-node@v3
         with:
@@ -54,8 +49,10 @@ jobs:
         run: pnpm build-packages
 
       - run: |
-          npm config set registry http://localhost:4873
-          npx npm-cli-login -u admin -p admin -e "test@test.com" -r "http://localhost:4873"
+          npm config set registry https://npm.pkg.github.com
+          echo '//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}' > ~/.npmrc
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks --registry="http://localhost:4873"
+        run: pnpm publish -r --no-git-checks
