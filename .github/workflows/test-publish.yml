@@ -61,3 +61,60 @@ jobs:
       - id: set-dirs
         run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
+
+  cypress:
+    needs: main
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: ${{ fromJson(needs.main.outputs.dirs) }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+        run: |
+          echo "" >> .npmrc
+          echo "link-workspace-packages=false" >> .npmrc
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Create branch
+        run: git checkout -b test.$(git rev-parse --short HEAD)
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
+      - run: |
+          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
+
+      - name: Update version locally
+        run: |
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
+            --force-publish --no-push --no-git-tag-version --exact
+
+      - name: Cypress
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: cypress
+          path: |
+            e2e/cypress/videos/**/*
+            e2e/cypress/screenshots/**/*
