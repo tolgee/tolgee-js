@@ -25,7 +25,7 @@ jobs:
 
       - run: |
           echo "" >> .npmrc
-          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Install
@@ -89,7 +89,7 @@ jobs:
       - run: |
           echo "" >> .npmrc
           echo "link-workspace-packages=false" >> .npmrc
-          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
       - name: Install
