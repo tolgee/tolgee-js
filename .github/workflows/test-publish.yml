@@ -55,4 +55,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks
+        run: pnpm publish -r --no-git-checks --registry https://npm.pkg.github.com
