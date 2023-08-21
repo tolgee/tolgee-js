@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  main:
+  prepare:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -63,12 +63,12 @@ jobs:
         working-directory: e2e/cypress/e2e
 
   cypress:
-    needs: main
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJson(needs.main.outputs.dirs) }}
+        app: ${{ fromJson(needs.prepare.outputs.dirs) }}
 
     steps:
       - uses: actions/checkout@v3
