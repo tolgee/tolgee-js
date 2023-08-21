@@ -50,13 +50,13 @@ jobs:
 
       - run: |
           echo "" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
 
       - name: Recreate release with push
         run: pnpm publish -r --no-git-checks
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.TOLGEE_MACHINE_PAT}}
 
       - id: set-dirs
         run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
