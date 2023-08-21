@@ -1,0 +1,63 @@
+name: Test publish
+
+on:
+  pull_request:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+          # fetch full history for lerna version to work
+          fetch-depth: 0
+
+      - name: Start npm-registry
+        run: |
+          docker pull verdaccio/verdaccio
+          docker run -it --rm -e VERDACCIO_MAX_BODY_SIZE=100mb --name verdaccio -p 4873:4873 --detach verdaccio/verdaccio
+
+      - name: Build
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - name: Create branch
+        run: git checkout -b test.$(git rev-parse --short HEAD)
+
+      - name: Set git globals
+        run: |
+          git config --local user.email "machine@tolgee.io"
+          git config --local user.name "Tolgee Machine"
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Update version locally
+        run: |
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
+            --force-publish --no-push --no-git-tag-version --exact
+
+      # Set TOLGEE_UI_VERSION for @tolgee/core build
+      - name: Set env
+        run: |
+          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
+          pnpm run --silent ui-version
+
+      - name: Build all packages
+        run: pnpm build-packages
+
+      - run: |
+          npm config set registry http://localhost:4873/
+          npx npm-cli-login -u test -p test -e test@test.com -r http://localhost:4873/
+
+      - name: Recreate release with push
+        run: pnpm publish -r --no-git-checks
