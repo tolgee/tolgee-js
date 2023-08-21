@@ -37,7 +37,7 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - name: Install
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile --filter='./packages/*'
 
       - name: Update version locally
         run: |
@@ -58,4 +58,4 @@ jobs:
           npx npm-cli-login -u test -p test -e test@test.com -r http://localhost:4873/
 
       - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks
+        run: pnpm publish -r --no-git-checks --registry="http://localhost:4873" --access=public --filter='./packages/*'
