@@ -84,7 +84,7 @@ jobs:
           version: 7.16.0
           run_install: false
 
-        run: |
+      - run: |
           echo "" >> .npmrc
           echo "link-workspace-packages=false" >> .npmrc
 
