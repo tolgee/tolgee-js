@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  main:
+  test-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -88,12 +88,12 @@ jobs:
   cypress:
     name: 'Cypress'
     # cypress-prepare will install and build everything into cache
-    needs: cypress-prepare
+    needs: test-publish
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
+        app: ${{ fromJson(needs.test-publish.outputs.dirs) }}
 
     steps:
       - uses: actions/checkout@v3
