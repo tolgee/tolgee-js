@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.1-prerelease.cb4bc75b.0](https://github.com/tolgee/tolgee-js/compare/v5.11.0...v5.11.1-prerelease.cb4bc75b.0) (2023-08-22)
+
+
+### Bug Fixes
+
+* solve nextjs reeport issue ([cb4bc75](https://github.com/tolgee/tolgee-js/commit/cb4bc75b7ae784ff53d4ffb83fbaf24e558d7a77))
+* solve nextjs reeport issue ([a436cb1](https://github.com/tolgee/tolgee-js/commit/a436cb148bdd2722c34fe04483eeecdd6e5e7931))
+
+
+
+
+
 # [5.11.0](https://github.com/tolgee/tolgee-js/compare/v5.10.2...v5.11.0) (2023-08-11)
 
 
