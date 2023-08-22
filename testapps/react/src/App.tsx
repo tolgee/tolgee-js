@@ -22,7 +22,7 @@ export const App = () => {
   const currentRoute = window.location.pathname;
 
   return (
-    <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+    <TolgeeProvider tolgee={tolgee}>
       {currentRoute === '/translation-methods' ? (
         <TranslationMethods />
       ) : (
