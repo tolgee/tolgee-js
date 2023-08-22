@@ -10,8 +10,8 @@ const path = require('path');
   const locationDir = './testapps/ngx/node_modules/@tolgee';
   const location = path.join(locationDir, 'ngx');
 
-  fs.rmSync(location, { recursive: true, force: true });
-  if (fs.existsSync(target)) {
+  if (fs.existsSync(location)) {
+    fs.rmSync(location, { recursive: true, force: true });
     fs.symlinkSync(path.relative(locationDir, target), location);
   }
 }
@@ -21,8 +21,8 @@ const path = require('path');
   const locationDir = './testapps/svelte/node_modules/@tolgee';
   const location = path.join(locationDir, 'svelte');
 
-  fs.rmSync(location, { recursive: true, force: true });
-  if (fs.existsSync(target)) {
+  if (fs.existsSync(location)) {
+    fs.rmSync(location, { recursive: true, force: true });
     fs.symlinkSync(path.relative(locationDir, target), location);
   }
 }

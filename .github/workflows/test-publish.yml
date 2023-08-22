@@ -20,7 +20,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - uses: actions/cache@v3
@@ -93,7 +93,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - name: Install for root and for e2e
@@ -114,6 +114,7 @@ jobs:
 
       - name: Install testapp dependencies with npm
         run: |
+          echo "" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
           npm install --force
@@ -148,7 +149,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - uses: actions/cache@v3
