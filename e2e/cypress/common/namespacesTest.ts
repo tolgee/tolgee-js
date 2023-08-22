@@ -9,7 +9,7 @@ export const namespacesTest = (
   items: Record<string, { text: string; count: number; testId?: string }[]>,
   options?: { skipLoading: boolean }
 ) =>
-  describe.only('translation methods test', () => {
+  describe('translation methods test', () => {
     before(() => {
       cy.visit(url + '/translation-methods');
       cy.intercept('GET', '*', (req) => {
