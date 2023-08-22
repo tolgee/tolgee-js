@@ -136,7 +136,7 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
-          npm install --legacy-peer-deps
+          npm install --force
         working-directory: testapps/${{matrix.app}}
 
       - name: Build testapp
