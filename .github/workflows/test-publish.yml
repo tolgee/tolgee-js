@@ -105,16 +105,6 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: |
-            .pnpm-store/v3
-            ~/.cache/Cypress
-          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-cypress-
-
       - name: Install for root and for e2e
         run: |
           pnpm install --ignore-workspace
@@ -179,9 +169,7 @@ jobs:
             ${{ runner.os }}-pnpm-eslint-
 
       - name: Install
-        run: pnpm install --no-frozen-lockfile
-        working-directory: ./
+        run: pnpm install --no-frozen-lockfile --ignore-workspace
 
       - name: Eslint
         run: pnpm run eslint
-        working-directory: ./
