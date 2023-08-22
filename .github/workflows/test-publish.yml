@@ -55,8 +55,8 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
 
-      - name: Recreate release with push
-        run: pnpm publish -r --no-git-checks
+      - name: Publish to GitHub Packages
+        run: pnpm publish -r --no-git-checks --tag test
         env:
           NODE_AUTH_TOKEN: ${{secrets.TOLGEE_MACHINE_PAT}}
 
@@ -103,8 +103,8 @@ jobs:
       - run: |
           echo "" >> .npmrc
           echo "link-workspace-packages=false" >> .npmrc
-          echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
 
       - name: Update version locally
         run: |
