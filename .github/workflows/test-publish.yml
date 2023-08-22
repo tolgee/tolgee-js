@@ -32,7 +32,9 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - name: Install
-        run: pnpm install --no-frozen-lockfile --filter='./packages/*'
+        run: |
+          pnpm install --ignore-workspace
+          pnpm install --no-frozen-lockfile --filter='./packages/*'
 
       - name: Update version locally
         run: |
