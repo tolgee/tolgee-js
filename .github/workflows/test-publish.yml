@@ -97,7 +97,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'npm'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
