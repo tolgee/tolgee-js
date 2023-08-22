@@ -99,16 +99,19 @@ jobs:
       - name: Remove 'workspace' field from package.json
         run: node scripts/packageJsonRemoveWorkspaces.js
 
-      - name: Install and build the testapp
+      - name: Install testapp dependencies with npm
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
-          npm install
-          npm run build
+          npm install --legacy-peer-deps
+        working-directory: testapps/${{matrix.app}}
+
+      - name: Build testapp
+        run: npm run build
         working-directory: testapps/${{matrix.app}}
 
       - name: Run e2e tests
-        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev,err
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev,err --skip-build
 
       - uses: actions/upload-artifact@v2
         if: failure()
