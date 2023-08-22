@@ -5,6 +5,7 @@ on:
 
 jobs:
   prepare:
+    name: Build and publish packages to github packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,6 +23,25 @@ jobs:
           version: 7.16.0
           run_install: false
 
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Turbo Cache
+        id: turbo-cache
+        uses: actions/cache@v3
+        with:
+          path: .turbo
+          key: turbo-cypress-${{ github.sha }}
+          restore-keys: |
+            turbo-cypress-
+
       - name: Create branch
         run: git checkout -b test.$(git rev-parse --short HEAD)
 
@@ -29,6 +49,7 @@ jobs:
         run: |
           pnpm install --ignore-workspace
           pnpm install --no-frozen-lockfile --filter='./packages/*'
+          pnpm install --no-frozen-lockfile --filter='./e2e'
 
       - name: Update version with lerna
         run: |
@@ -62,6 +83,7 @@ jobs:
       dirs: ${{ steps.set-dirs.outputs.dirs }}
 
   cypress:
+    name: Run cypress on all testapps
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
@@ -75,6 +97,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
@@ -82,6 +105,16 @@ jobs:
         with:
           version: 7.16.0
           run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
 
       - name: Install for root and for e2e
         run: |
@@ -120,3 +153,36 @@ jobs:
           path: |
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*
+
+  code-checks:
+    name: Eslint 🪲
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - uses: pnpm/action-setup@v2.2.4
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 7.16.0
+          run_install: false
+
+      - uses: actions/cache@v3
+        name: Setup pnpm cache
+        with:
+          path: .pnpm-store/v3
+          key: ${{ runner.os }}-pnpm-eslint-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-eslint-
+
+      - name: Install
+        run: pnpm install --no-frozen-lockfile
+        working-directory: ./
+
+      - name: Eslint
+        run: pnpm run eslint
+        working-directory: ./
