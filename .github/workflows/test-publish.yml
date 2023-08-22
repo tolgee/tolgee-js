@@ -36,7 +36,7 @@ jobs:
 
       - name: Update version locally
         run: |
-          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
 
       # Set TOLGEE_UI_VERSION for @tolgee/core build
@@ -87,12 +87,8 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - run: |
-          echo "" >> .npmrc
-          echo "link-workspace-packages=false" >> .npmrc
-
       - name: Install
-        run: pnpm install --no-frozen-lockfile
+        run: pnpm install --ignore-workspace
 
       - name: Create branch
         run: git checkout -b test.$(git rev-parse --short HEAD)
@@ -103,13 +99,18 @@ jobs:
           git config --local user.name "Tolgee Machine"
 
       - run: |
+          echo "" >> .npmrc
+          echo "link-workspace-packages=false" >> .npmrc
           echo "registry=https://npm.pkg.github.com/tolgee" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
 
       - name: Update version locally
         run: |
-          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) \
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
+
+      - name: pnpm install
+        run: pnpm install --no-frozen-lockfile --filter='./testapps/*'
 
       - name: Cypress
         run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
