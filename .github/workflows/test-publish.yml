@@ -80,13 +80,14 @@ jobs:
       fail-fast: false
       matrix:
         app: ${{ fromJson(needs.prepare.outputs.dirs) }}
+        node: [20, 18, 16]
 
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ matrix.node }}
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
