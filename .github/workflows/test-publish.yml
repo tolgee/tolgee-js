@@ -116,6 +116,7 @@ jobs:
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
           echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+          rm -rf node_modules
           npm install --force
         working-directory: testapps/${{matrix.app}}
 
