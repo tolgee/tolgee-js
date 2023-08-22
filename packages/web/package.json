@@ -9,17 +9,17 @@
     ".": {
       "production": {
         "require": "./dist/tolgee-web.production.cjs.js",
-        "svelte": "./dist/tolgee-web.production.esm.mjs",
+        "node": "./dist/tolgee-web.production.esm.mjs",
         "import": "./dist/tolgee-web.production.esm.js"
       },
       "require": "./index.js",
-      "svelte": "./dist/tolgee-web.development.esm.mjs",
+      "node": "./dist/tolgee-web.development.esm.mjs",
       "import": "./dist/tolgee-web.development.esm.js",
       "types": "./types/index.d.ts"
     },
     "./tools": {
       "require": "./dist/tolgee-in-context-tools.cjs.js",
-      "svelte": "./dist/tolgee-in-context-tools.esm.mjs",
+      "node": "./dist/tolgee-in-context-tools.esm.mjs",
       "import": "./dist/tolgee-in-context-tools.esm.js",
       "types": "./types/index.d.ts"
     },
