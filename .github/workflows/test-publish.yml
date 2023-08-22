@@ -83,17 +83,9 @@ jobs:
           version: 7.16.0
           run_install: false
 
-      - name: Set npm registry to GitHub Packages and prevent linking to local packages
-        run: |
-          echo "" >> .npmrc
-          echo "link-workspace-packages=false" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
-          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
-
-      - name: Install for root and for testapps
+      - name: Install for root and for e2e
         run: |
           pnpm install --ignore-workspace
-          pnpm install --no-frozen-lockfile --filter='./testapps/*'
           pnpm install --no-frozen-lockfile --filter='./e2e'
 
       - name: Create branch
@@ -104,8 +96,19 @@ jobs:
           lerna version prerelease --yes --conventional-prerelease --preid test.$(git rev-parse --short HEAD) --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
 
+      - name: Remove 'workspace' field from package.json
+        run: node scripts/packageJsonRemoveWorkspaces.js
+
+      - name: Install and build the testapp
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+          npm install
+          npm run build
+        working-directory: testapps/${{matrix.app}}
+
       - name: Run e2e tests
-        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev,err
 
       - uses: actions/upload-artifact@v2
         if: failure()

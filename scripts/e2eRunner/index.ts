@@ -32,7 +32,7 @@ function addIntegrationCommands(command: Command, commandName) {
       let code = 0;
       try {
         await downloadExtension();
-        await buildE2e();
+        // await buildE2e();
         const opts = command.opts();
         await runServices(integrationConfig, opts.stdout);
         code = await runCypress(commandName, integration, opts.headed);
