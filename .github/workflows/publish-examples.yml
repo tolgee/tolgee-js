@@ -17,6 +17,7 @@ jobs:
             'react',
             'next',
             'vue',
+            'next-app',
             'svelte',
             'ngx',
             'react-i18next',
