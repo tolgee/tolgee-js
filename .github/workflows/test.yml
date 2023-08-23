@@ -125,7 +125,7 @@ jobs:
         working-directory: testapps/${{matrix.app}}
 
       - name: Run e2e tests
-        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev,err --skip-build
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev --skip-build
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -165,34 +165,6 @@ jobs:
 
       - name: Eslint
         run: pnpm run eslint
-
-  e2e-static-checks:
-    name: E2e static checks
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - uses: pnpm/action-setup@v2.2.4
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 8.6.12
-          run_install: false
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: .pnpm-store/v3
-          key: ${{ runner.os }}-pnpm-eslint-e2e-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-eslint-e2e-
-
-      - name: Install
-        run: pnpm install
 
       - name: Eslint
         run: pnpm --prefix e2e run eslint

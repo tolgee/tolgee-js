@@ -162,7 +162,7 @@ export const config: Config = {
         prod: {
           command: 'npm run start -- -p 8121',
           cwd: path.resolve(__dirname, '../../testapps/next-app/'),
-          waitForOutput: 'on 0.0.0.0:8121',
+          waitForOutput: 'ready started server on',
         },
         dev: {
           command: 'npm run dev -- -p 8122',
