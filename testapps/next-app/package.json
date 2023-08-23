@@ -5,9 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "develop": "next dev",
-    "test": "pnpm run test:playwright && pnpm run test:jest",
-    "test:playwright": "playwright test",
-    "test:jest": "jest",
     "build": "next build",
     "build:e2e": "NEXT_BUILD_DIR=dist-e2e next build",
     "start": "next start"

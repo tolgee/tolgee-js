@@ -1,5 +1,4 @@
 {
-  "extends": "eslint-config-molindo/tsconfig.json",
   "compilerOptions": {
     "baseUrl": "src",
     "target": "es5",
@@ -22,7 +21,9 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "strict": false,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "next-env.d.ts",
