@@ -2,7 +2,7 @@ import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
-context('React app in dev mode', () => {
+context('Next with app router in dev mode', () => {
   const url = 'http://localhost:8122';
   exampleAppTest(url);
   translationMethodsTest(url, {

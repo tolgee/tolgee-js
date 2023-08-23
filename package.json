@@ -23,7 +23,7 @@
     "develop:next-internal": "npm run develop -- --scope=@tolgee/next-internal-testapp",
     "develop:react-i18next": "npm run develop -- --scope=@tolgee/react-i18next-testapp",
     "develop:vue-i18next": "npm run develop -- --scope=@tolgee/vue-i18next-testapp",
-    "develop:next-app-router": "npm run develop -- --scope=@tolgee/next-app-router-testapp",
+    "develop:next-app": "npm run develop -- --scope=@tolgee/next-app-testapp",
     "build:e2e": "turbo run build:e2e --cache-dir='.turbo'",
     "test:e2e": "pnpm run build:e2e && pnpm --prefix e2e run start",
     "clean": "turbo run clean --cache-dir='.turbo'",
