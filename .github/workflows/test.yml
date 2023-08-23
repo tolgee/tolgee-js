@@ -29,18 +29,18 @@ jobs:
           path: |
             .pnpm-store/v3
             ~/.cache/Cypress
-          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-prepare-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-cypress-
+            ${{ runner.os }}-pnpm-prepare-
 
       - name: Turbo Cache
         id: turbo-cache
         uses: actions/cache@v3
         with:
           path: .turbo
-          key: turbo-${{ github.job }}-${{ github.sha }}
+          key: turbo-prepare-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            turbo-${{ github.job }}-
+            turbo-prepare-${{ github.job }}-
 
       - name: Create branch
         run: git checkout -b test.$(git ls-files -s packages | git hash-object --stdin)
@@ -175,9 +175,9 @@ jobs:
         name: Setup pnpm cache
         with:
           path: .pnpm-store/v3
-          key: ${{ runner.os }}-pnpm-eslint-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-lint-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-eslint-
+            ${{ runner.os }}-pnpm-lint-
 
       - name: Install
         run: pnpm install --no-frozen-lockfile
