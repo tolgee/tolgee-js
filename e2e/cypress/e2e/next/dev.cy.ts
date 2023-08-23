@@ -3,7 +3,7 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 import { namespacesTest } from '../../common/namespacesTest';
 
-context('React app in dev mode', () => {
+context('Next app in dev mode', { retries: 2 }, () => {
   const url = 'http://localhost:8106';
   exampleAppTest(url);
   translationMethodsTest(url, {

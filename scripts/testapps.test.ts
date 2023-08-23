@@ -29,6 +29,7 @@ const buildFolders = [
   './testapps/react-i18next/build',
   './testapps/vue-i18next/dist',
   './testapps/next/.next',
+  './testapps/next-app/.next',
   // next-internal uses InContextTools so it is there
   // './testapps/next-internal/.next'
 ];

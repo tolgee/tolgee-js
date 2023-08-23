@@ -26,9 +26,11 @@
   },
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-format-icu.cjs.js",
-      "import": "./dist/tolgee-format-icu.esm.mjs"
+      "svelte": "./dist/tolgee-format-icu.esm.mjs",
+      "module": "./dist/tolgee-format-icu.esm.js",
+      "import": "./dist/tolgee-format-icu.esm.js",
+      "types": "./lib/index.d.ts"
     },
     "./package.json": "./package.json"
   },

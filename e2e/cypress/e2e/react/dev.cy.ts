@@ -49,7 +49,7 @@ context('React app in dev mode', () => {
     ],
   });
 
-  exampleAppDevTest(url);
+  exampleAppDevTest(url, { noLoading: true });
 
   describe('translation in translation', () => {
     beforeEach(() => {

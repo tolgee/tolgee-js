@@ -2,17 +2,17 @@ name: Test
 
 on:
   pull_request:
-  push:
-    branches: [main]
 
 jobs:
-  test:
-    name: 'Test'
+  prepare:
+    name: Prepare packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
+        with:
+          token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
+
+      - uses: actions/setup-node@v3
         with:
           node-version: '18'
 
@@ -20,50 +20,7 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
-          run_install: false
-
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: .pnpm-store/v3
-          key: ${{ runner.os }}-pnpm-test-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-test-
-
-      - name: Turbo Cache
-        id: turbo-cache
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: turbo-${{ github.job }}-${{ github.sha }}
-          restore-keys: |
-            turbo-${{ github.job }}-
-
-      - name: Install
-        run: pnpm install --no-frozen-lockfile
-
-      - name: Build all packages
-        run: pnpm build || pnpm build
-
-      - name: Test
-        run: pnpm run test
-
-  cypress-prepare:
-    name: 'Cypress prepare'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - uses: pnpm/action-setup@v2.2.4
-        name: Install pnpm
-        id: pnpm-install
-        with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - uses: actions/cache@v3
@@ -72,27 +29,50 @@ jobs:
           path: |
             .pnpm-store/v3
             ~/.cache/Cypress
-          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-prepare-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-cypress-
+            ${{ runner.os }}-pnpm-prepare-
 
       - name: Turbo Cache
         id: turbo-cache
         uses: actions/cache@v3
         with:
           path: .turbo
-          key: turbo-cypress-${{ github.sha }}
+          key: turbo-prepare-${{ github.job }}-${{ github.sha }}
           restore-keys: |
-            turbo-cypress-
+            turbo-prepare-${{ github.job }}-
 
-      - name: Install
-        run: pnpm install --no-frozen-lockfile
+      - name: Create branch
+        run: git checkout -b test.$(git ls-files -s packages | git hash-object --stdin)
 
-      - name: Build
-        run: pnpm build || pnpm build
+      - name: Install root and packages dependencies
+        run: |
+          pnpm install --ignore-workspace
+          pnpm install --no-frozen-lockfile --filter='./packages/*'
 
-      - name: Build e2e
-        run: pnpm build:e2e
+      - name: Update version with lerna
+        run: |
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git ls-files -s packages | git hash-object --stdin) --ignore-scripts \
+            --force-publish --no-push --no-git-tag-version --exact
+
+      - name: Set TOLGEE_UI_VERSION
+        run: |
+          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
+          pnpm run --silent ui-version
+
+      - name: Build packages
+        run: pnpm build-packages
+
+      - name: Set npm registry to GitHub Packages
+        run: |
+          echo "" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish -r --no-git-checks --tag test
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.TOLGEE_MACHINE_PAT}}
 
       - id: set-dirs
         run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
@@ -102,27 +82,27 @@ jobs:
       dirs: ${{ steps.set-dirs.outputs.dirs }}
 
   cypress:
-    name: 'Cypress'
-    # cypress-prepare will install and build everything into cache
-    needs: cypress-prepare
+    name: E2e
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        app: ${{ fromJson(needs.cypress-prepare.outputs.dirs) }}
+        app: ${{ fromJson(needs.prepare.outputs.dirs) }}
+        node: [16, 18]
 
     steps:
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ matrix.node }}
 
       - uses: pnpm/action-setup@v2.2.4
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - uses: actions/cache@v3
@@ -135,20 +115,36 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pnpm-cypress-
 
-      - name: Turbo Cache
-        id: turbo-cache
-        uses: actions/cache@v3
-        with:
-          path: .turbo
-          key: turbo-cypress-${{ github.sha }}
-          restore-keys: |
-            turbo-cypress-
+      - name: Install for root and for e2e
+        run: |
+          pnpm install --ignore-workspace
+          pnpm install --no-frozen-lockfile --filter='./e2e'
 
-      - name: Install
-        run: pnpm install --no-frozen-lockfile
+      - name: Create branch
+        run: git checkout -b test.$(git ls-files -s packages | git hash-object --stdin)
 
-      - name: Cypress
-        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
+      - name: Update version with lerna
+        run: |
+          lerna version prerelease --yes --conventional-prerelease --preid test.$(git ls-files -s packages | git hash-object --stdin) --ignore-scripts \
+            --force-publish --no-push --no-git-tag-version --exact
+
+      - name: Remove 'workspace' field from package.json
+        run: node scripts/packageJsonRemoveWorkspaces.js
+
+      - name: Install testapp dependencies with npm
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.TOLGEE_MACHINE_PAT }}" >> .npmrc
+          echo "@tolgee:registry=https://npm.pkg.github.com" >> .npmrc
+          rm -rf node_modules
+          npm install --force
+        working-directory: testapps/${{matrix.app}}
+
+      - name: Build testapp
+        run: npm run build
+        working-directory: testapps/${{matrix.app}}
+
+      - name: Run e2e tests
+        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev --skip-build
 
       - uses: actions/upload-artifact@v2
         if: failure()
@@ -158,8 +154,8 @@ jobs:
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*
 
-  code-checks:
-    name: Eslint 🪲
+  static-checks:
+    name: Static check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -172,21 +168,22 @@ jobs:
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 7.16.0
+          version: 8.6.12
           run_install: false
 
       - uses: actions/cache@v3
         name: Setup pnpm cache
         with:
           path: .pnpm-store/v3
-          key: ${{ runner.os }}-pnpm-eslint-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-pnpm-lint-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-eslint-
+            ${{ runner.os }}-pnpm-lint-
 
       - name: Install
         run: pnpm install --no-frozen-lockfile
-        working-directory: ./
 
       - name: Eslint
         run: pnpm run eslint
-        working-directory: ./
+
+      - name: Eslint
+        run: pnpm --prefix e2e run eslint

@@ -68,7 +68,7 @@ export const TranslationMethods = () => {
 
         <div>
           <h1>T component with br tag</h1>
-          <div data-cy="translationWithTags">
+          <div>
             <T
               keyName="this_is_a_key_with_br_tag"
               params={{

@@ -19,7 +19,7 @@ export const CypressRunner = ({
 
   const run = () =>
     new Promise<number>((resolve, reject) => {
-      cypress = spawn(`cypress ${runType} ${args} ${specParam}`, {
+      cypress = spawn(`npx cypress ${runType} ${args} ${specParam}`, {
         cwd: path.resolve(__dirname, '../../e2e'),
         shell: true,
       });

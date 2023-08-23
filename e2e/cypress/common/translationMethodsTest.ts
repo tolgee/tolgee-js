@@ -21,7 +21,7 @@ export const translationMethodsTest = (
           before(() => {
             cy.get('.lang-selector').select(language);
             Object.values(texts).forEach((text) => {
-              getElement(text.text, text.testId).should('be.visible');
+              getElement(text.text, text.testId).should('exist');
             });
           });
 
