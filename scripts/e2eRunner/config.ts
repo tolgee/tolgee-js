@@ -157,5 +157,25 @@ export const config: Config = {
         },
       },
     },
+    'next-app-router': {
+      commandLineServices: {
+        prod: {
+          command: 'npm run start -- -p 8121',
+          cwd: path.resolve(__dirname, '../../testapps/next-app-router/'),
+          waitForOutput: 'on 0.0.0.0:8121',
+        },
+        dev: {
+          command: 'npm run dev -- -p 8122',
+          cwd: path.resolve(__dirname, '../../testapps/next-app-router/'),
+          waitForOutput: 'client and server successfully',
+          environment: {
+            NEXT_BUILD_DIR: 'dist-e2e',
+            NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8122',
+            NEXT_PUBLIC_TOLGEE_API_KEY:
+              'examples-admin-imported-project-implicit',
+          },
+        },
+      },
+    },
   },
 };

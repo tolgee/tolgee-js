@@ -23,22 +23,30 @@ export const ServicesRunner = ({
     | ReturnType<typeof DockerComposeRunner>
   > = {};
 
-  const stdOutServicesArray = stdoutServices?.split(',') || [];
+  const stdOutServicesArray =
+    stdoutServices?.split(',').filter((val) => Boolean(val)) || [];
 
   const runServices = () =>
     new Promise<void>((resolve, reject) => {
+      function shouldPrint(service: string) {
+        return (
+          stdOutServicesArray.includes(service) ||
+          stdOutServicesArray.length === 0
+        );
+      }
+
       const serviceMonitor = ServiceMonitor(servicesToRun, () => {
         resolve();
       });
 
       const onStdout = (service, data) => {
-        if (stdOutServicesArray.includes(service)) {
+        if (shouldPrint(service)) {
           serviceMonitor.log(service, data);
         }
       };
 
       const onStdErr = (service, data) => {
-        if (stdOutServicesArray.includes(service)) {
+        if (shouldPrint(service)) {
           serviceMonitor.log(service, `stderr: ${data.toString()}`);
         }
       };

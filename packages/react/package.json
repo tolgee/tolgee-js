@@ -72,7 +72,8 @@
     ".": {
       "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-react.cjs.js",
-      "import": "./dist/tolgee-react.esm.mjs"
+      "module": "./dist/tolgee-react.esm.js",
+      "import": "./dist/tolgee-react.esm.js"
     },
     "./package.json": "./package.json"
   },

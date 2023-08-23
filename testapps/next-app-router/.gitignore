@@ -1,0 +1,13 @@
+/node_modules
+/.next/
+/dist-e2e/
+.DS_Store
+tsconfig.tsbuildinfo
+/test-results/
+/playwright-report/
+/playwright/.cache/
+out
+
+.vscode
+
+.env*
