@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.1-prerelease.74c6272d.0](https://github.com/tolgee/tolgee-js/compare/v5.11.0...v5.11.1-prerelease.74c6272d.0) (2023-08-23)
+
+
+### Bug Fixes
+
+* next app-router-app ([8ddce68](https://github.com/tolgee/tolgee-js/commit/8ddce68050b8c3b84fdfce5bc3ed79a21381fe6d))
+
+
+
+
+
 # [5.11.0](https://github.com/tolgee/tolgee-js/compare/v5.10.2...v5.11.0) (2023-08-11)
 
 
