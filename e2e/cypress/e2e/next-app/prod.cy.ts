@@ -1,5 +1,4 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
-import { namespacesTest } from '../../common/namespacesTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('Next with app router in prod mode', () => {

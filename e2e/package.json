@@ -7,7 +7,8 @@
     "cy:run": "cypress run",
     "cy:open": "cypress open --browser chrome",
     "cy:folders-json": "node scripts/listTests.js",
-    "download-extension": "sh scripts/downloadTolgeeExtension.sh"
+    "download-extension": "sh scripts/downloadTolgeeExtension.sh",
+    "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 --report-unused-disable-directives ."
   },
   "author": "Jan Cizmar",
   "license": "BSD",
@@ -19,6 +20,10 @@
     "cypress-xpath": "^2.0.1",
     "dotenv": "^16.0.1",
     "download-github-release": "^0.3.2",
+    "eslint-plugin-no-only-tests": "^3.1.0",
     "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "eslint": "^8.47.0"
   }
 }
