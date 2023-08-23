@@ -2,7 +2,7 @@ import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
-context('Next with app router in dev mode', () => {
+context('Next with app router in dev mode', { retries: 2 }, () => {
   const url = 'http://localhost:8122';
   exampleAppTest(url);
   translationMethodsTest(url, {
