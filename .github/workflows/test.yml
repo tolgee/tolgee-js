@@ -1,4 +1,4 @@
-name: Test publish
+name: Test
 
 on:
   pull_request:
@@ -73,7 +73,7 @@ jobs:
       dirs: ${{ steps.set-dirs.outputs.dirs }}
 
   cypress:
-    name: Run cypress on all testapps
+    name: E2e
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
@@ -136,7 +136,7 @@ jobs:
             e2e/cypress/screenshots/**/*
 
   code-checks:
-    name: Eslint 🪲
+    name: Static check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
