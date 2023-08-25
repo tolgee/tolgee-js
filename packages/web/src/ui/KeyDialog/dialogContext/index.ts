@@ -6,7 +6,7 @@ import { isLanguagePermitted } from '../../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
 import { UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../client/useQueryApi';
-import { isAuthorizedTo } from '../ScreenshotGallery/utils';
+import { isAuthorizedTo } from './usePermissions';
 import {
   changeInTolgeeCache,
   getInitialLanguages,
@@ -379,15 +379,16 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const scopes = scopesLoadable.data?.scopes;
 
     const canEditSomething =
-      isAuthorizedTo('screenshots.upload', scopes) ||
-      isAuthorizedTo('screenshots.delete', scopes) ||
+      isAuthorizedTo('screenshots.upload', scopes, isPat) ||
+      isAuthorizedTo('screenshots.delete', scopes, isPat) ||
       (translationsLoadable.data?._embedded?.keys?.length
-        ? isAuthorizedTo('translations.edit', scopes)
-        : isAuthorizedTo('keys.edit', scopes));
+        ? isAuthorizedTo('translations.edit', scopes, isPat)
+        : isAuthorizedTo('keys.edit', scopes, isPat));
 
     const formDisabled = !isPat && (loading || !canEditSomething);
 
-    const canEditTags = !formDisabled && isAuthorizedTo('keys.edit', scopes);
+    const canEditTags =
+      !formDisabled && isAuthorizedTo('keys.edit', scopes, isPat);
 
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length
@@ -420,6 +421,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       permittedLanguageIds,
       tags,
       canEditTags,
+      isPat,
     } as const;
 
     const actions = {

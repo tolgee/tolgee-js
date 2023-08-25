@@ -11,10 +11,10 @@ import { LoadingButton } from '../common/LoadingButton';
 import { ScreenshotGallery } from './ScreenshotGallery/ScreenshotGallery';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext, useDialogActions } from './dialogContext';
-import { isAuthorizedTo } from './ScreenshotGallery/utils';
 import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
+import { usePermissions } from './dialogContext/usePermissions';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -95,11 +95,11 @@ export const KeyForm = () => {
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
-  const scopes = useDialogContext((c) => c.scopes);
   const ns = useDialogContext((c) => c.ns);
   const selectedNs = useDialogContext((c) => c.selectedNs);
+  const isAuthorizedTo = usePermissions();
 
-  const screenshotsView = isAuthorizedTo('screenshots.view', scopes);
+  const screenshotsView = isAuthorizedTo('screenshots.view');
 
   const ready = !loading && !error;
 
