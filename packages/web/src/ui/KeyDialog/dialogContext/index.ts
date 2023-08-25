@@ -40,6 +40,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [translationsForm, setTranslationsForm] = useState<FormTranslations>(
       {}
     );
+    const [saving, setSaving] = useState(false);
 
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
@@ -176,6 +177,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     }
 
     async function onSave() {
+      setSaving(true);
       try {
         const newTranslations = {} as typeof translationsForm;
         Object.entries(translationsForm).forEach(([language, value]) => {
@@ -254,6 +256,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           namespace: selectedNs,
         });
         translationsLoadable.refetch();
+        setSaving(false);
         setSuccess(true);
         if (useBrowserWindow) {
           await sleep(2000);
@@ -266,6 +269,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         // eslint-disable-next-line no-console
         console.error(e);
       } finally {
+        setSaving(false);
         setSuccess(false);
       }
     }
@@ -366,7 +370,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
       scopesLoadable.isFetching;
-    const saving = updateKey.isLoading || createKey.isLoading;
     const error =
       languagesLoadable.error ||
       translationsLoadable.error ||
