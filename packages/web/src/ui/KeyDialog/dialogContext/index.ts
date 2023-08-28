@@ -6,7 +6,7 @@ import { isLanguagePermitted } from '../../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
 import { UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../client/useQueryApi';
-import { isAuthorizedTo } from '../ScreenshotGallery/utils';
+import { isAuthorizedTo } from './usePermissions';
 import {
   changeInTolgeeCache,
   getInitialLanguages,
@@ -40,6 +40,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [translationsForm, setTranslationsForm] = useState<FormTranslations>(
       {}
     );
+    const [saving, setSaving] = useState(false);
 
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
@@ -176,6 +177,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     }
 
     async function onSave() {
+      setSaving(true);
       try {
         const newTranslations = {} as typeof translationsForm;
         Object.entries(translationsForm).forEach(([language, value]) => {
@@ -254,6 +256,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           namespace: selectedNs,
         });
         translationsLoadable.refetch();
+        setSaving(false);
         setSuccess(true);
         if (useBrowserWindow) {
           await sleep(2000);
@@ -266,6 +269,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         // eslint-disable-next-line no-console
         console.error(e);
       } finally {
+        setSaving(false);
         setSuccess(false);
       }
     }
@@ -366,7 +370,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
       scopesLoadable.isFetching;
-    const saving = updateKey.isLoading || createKey.isLoading;
     const error =
       languagesLoadable.error ||
       translationsLoadable.error ||
@@ -379,15 +382,16 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const scopes = scopesLoadable.data?.scopes;
 
     const canEditSomething =
-      isAuthorizedTo('screenshots.upload', scopes) ||
-      isAuthorizedTo('screenshots.delete', scopes) ||
+      isAuthorizedTo('screenshots.upload', scopes, isPat) ||
+      isAuthorizedTo('screenshots.delete', scopes, isPat) ||
       (translationsLoadable.data?._embedded?.keys?.length
-        ? isAuthorizedTo('translations.edit', scopes)
-        : isAuthorizedTo('keys.edit', scopes));
+        ? isAuthorizedTo('translations.edit', scopes, isPat)
+        : isAuthorizedTo('keys.edit', scopes, isPat));
 
     const formDisabled = !isPat && (loading || !canEditSomething);
 
-    const canEditTags = !formDisabled && isAuthorizedTo('keys.edit', scopes);
+    const canEditTags =
+      !formDisabled && isAuthorizedTo('keys.edit', scopes, isPat);
 
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length
@@ -420,6 +424,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       permittedLanguageIds,
       tags,
       canEditTags,
+      isPat,
     } as const;
 
     const actions = {

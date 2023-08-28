@@ -7,12 +7,13 @@ import CameraAlt from '@mui/icons-material/CameraAlt';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
-import { isAuthorizedTo, MAX_FILE_COUNT } from './utils';
+import { MAX_FILE_COUNT } from './utils';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
 import { useDialogContext, useDialogActions } from '../dialogContext';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
 import { ExtensionPrompt } from './ExtensionPrompt';
+import { usePermissions } from '../dialogContext/usePermissions';
 
 const ScPlaceholder = styled('div')`
   display: flex;
@@ -65,12 +66,12 @@ export const ScreenshotGallery: React.FC = () => {
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
-  const scopes = useDialogContext((c) => c.scopes);
+  const isAuthorizedTo = usePermissions();
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
-  const uploadEnabled = isAuthorizedTo('screenshots.upload', scopes);
-  const deleteEnabled = isAuthorizedTo('screenshots.delete', scopes);
+  const uploadEnabled = isAuthorizedTo('screenshots.upload');
+  const deleteEnabled = isAuthorizedTo('screenshots.delete');
 
   function onFileSelected(e: React.SyntheticEvent) {
     const files = (e.target as HTMLInputElement).files;
