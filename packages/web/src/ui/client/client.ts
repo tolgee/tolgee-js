@@ -1,7 +1,10 @@
+import { createFetchFunction } from '@tolgee/core';
 import { getProjectIdFromApiKey } from '../../tools/decodeApiKey';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
+
+const fetchFn = createFetchFunction();
 
 type Params = {
   [k: string]: string | string[] | null | undefined | Params;
@@ -66,7 +69,7 @@ async function customFetch(
     'X-API-Key': options.apiKey,
   };
 
-  return fetch(options.apiUrl + input, init)
+  return fetchFn(options.apiUrl + input, init)
     .then(async (r) => {
       if (!r.ok) {
         const data = await getResObject(r);

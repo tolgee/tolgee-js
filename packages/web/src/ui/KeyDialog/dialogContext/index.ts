@@ -17,6 +17,7 @@ import {
 import { getApiKeyType } from '../../../tools/decodeApiKey';
 import { useGallery } from './useGallery';
 import { requirePlatformVersion } from '../../tools/requirePlatformVersion';
+import { limitSurroundingKeys } from '../../tools/limitSurroundingKeys';
 
 const PLATFORM_SUPPORTING_BIG_META = 'v3.20.0';
 
@@ -231,7 +232,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           (version === '??' ||
             requirePlatformVersion(PLATFORM_SUPPORTING_BIG_META, version))
         ) {
-          const surroundingKeys = props.uiProps.findPositions();
+          const surroundingKeys = limitSurroundingKeys(
+            props.uiProps.findPositions(),
+            { keyName: props.keyName, keyNamespace: selectedNs }
+          );
           await updateMetadata.mutateAsync({
             content: {
               'application/json': {
