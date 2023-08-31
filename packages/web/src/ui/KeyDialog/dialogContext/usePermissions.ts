@@ -1,12 +1,5 @@
 import { useDialogContext } from './index';
-
-export function isAuthorizedTo(
-  scope: string,
-  scopes: string[] | undefined,
-  isPat: boolean
-) {
-  return Boolean(scopes?.includes(scope)) || isPat;
-}
+import { isAuthorizedTo } from './tools';
 
 export const usePermissions = () => {
   const scopes = useDialogContext((c) => c.scopes);
