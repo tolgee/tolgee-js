@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.2](https://github.com/tolgee/tolgee-js/compare/v5.11.1...v5.11.2) (2023-08-31)
+
+
+### Bug Fixes
+
+* usage of pat token in-context ([#3236](https://github.com/tolgee/tolgee-js/issues/3236)) ([704fe4f](https://github.com/tolgee/tolgee-js/commit/704fe4f5739625ae528751dc0c1b876d82311bef))
+
+
+
+
+
 ## [5.11.1](https://github.com/tolgee/tolgee-js/compare/v5.11.0...v5.11.1) (2023-08-23)
 
 
