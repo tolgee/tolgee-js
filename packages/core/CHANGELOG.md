@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.3](https://github.com/tolgee/tolgee-js/compare/v5.11.2...v5.11.3) (2023-08-31)
+
+
+### Bug Fixes
+
+* limit size of big-meta ([#3239](https://github.com/tolgee/tolgee-js/issues/3239)) ([39f7291](https://github.com/tolgee/tolgee-js/commit/39f7291457a6f836e47bd4e7f9e0e5730fffb124))
+
+
+
+
+
 ## [5.11.2](https://github.com/tolgee/tolgee-js/compare/v5.11.1...v5.11.2) (2023-08-31)
 
 **Note:** Version bump only for package @tolgee/core
