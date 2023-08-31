@@ -5,7 +5,7 @@ import {
   OnFormatError,
   FetchFn,
 } from '../../types';
-import { sanitizeUrl } from '../../helpers';
+import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
   defaultObserverOptions,
   ObserverOptions,
@@ -126,7 +126,7 @@ const defaultValues: TolgeeOptionsInternal = {
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
   apiUrl: DEFAULT_API_URL,
-  fetch: (input, options) => fetch(input, options),
+  fetch: createFetchFunction(),
 };
 
 export const combineOptions = <T extends TolgeeOptions>(
@@ -158,6 +158,10 @@ export function initState(
 
   // remove extra '/' from url end
   initialOptions.apiUrl = sanitizeUrl(initialOptions.apiUrl);
+
+  if (options?.fetch) {
+    initialOptions.fetch = createFetchFunction(options.fetch);
+  }
 
   return {
     initialOptions,

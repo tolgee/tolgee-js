@@ -2,6 +2,7 @@ import {
   FallbackGeneral,
   FallbackLanguageObject,
   FallbackLanguageOption,
+  FetchFn,
 } from './types';
 
 export function isPromise(value: any) {
@@ -77,3 +78,15 @@ export function getErrorMessage(error: any): string | undefined {
     return error.message;
   }
 }
+
+export const createFetchFunction = (fetchFn: FetchFn = fetch): FetchFn => {
+  return (input, init) =>
+    fetchFn(input, {
+      ...init,
+      headers: {
+        'X-Tolgee-SDK-Type': 'JS',
+        'X-Tolgee-SDK-Version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+        ...init?.headers,
+      },
+    });
+};
