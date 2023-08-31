@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.4](https://github.com/tolgee/tolgee-js/compare/v5.11.3...v5.11.4) (2023-08-31)
+
+
+### Bug Fixes
+
+* dev tools height in firefox ([#3240](https://github.com/tolgee/tolgee-js/issues/3240)) ([93abe99](https://github.com/tolgee/tolgee-js/commit/93abe9992867870e8dc9c8dd19252aeedc05256a))
+
+
+
+
+
 ## [5.11.3](https://github.com/tolgee/tolgee-js/compare/v5.11.2...v5.11.3) (2023-08-31)
 
 
