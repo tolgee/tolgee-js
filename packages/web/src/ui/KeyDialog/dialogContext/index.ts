@@ -6,13 +6,13 @@ import { isLanguagePermitted } from '../../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
 import { UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../client/useQueryApi';
-import { isAuthorizedTo } from './usePermissions';
 import {
   changeInTolgeeCache,
   getInitialLanguages,
   getPreferredLanguages,
   mapPosition,
   setPreferredLanguages,
+  isAuthorizedTo,
 } from './tools';
 import { getApiKeyType } from '../../../tools/decodeApiKey';
 import { useGallery } from './useGallery';

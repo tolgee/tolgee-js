@@ -94,3 +94,11 @@ export function getImgSize(url: string) {
     };
   });
 }
+
+export function isAuthorizedTo(
+  scope: string,
+  scopes: string[] | undefined,
+  isPat: boolean
+) {
+  return Boolean(scopes?.includes(scope)) || isPat;
+}
