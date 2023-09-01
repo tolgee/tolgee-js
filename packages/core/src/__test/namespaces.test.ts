@@ -119,4 +119,16 @@ describe('language changes', () => {
     // test ns is not loaded for spanish
     expect(tolgee.t({ key: 'test', ns: 'test' })).toEqual('test');
   });
+
+  it('default ns can be overriten with empty string', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      staticData: {
+        en: { test: 'emptyNs' },
+        'en:common': { test: 'commonNs' },
+      },
+      defaultNs: 'emptyNs',
+    });
+    expect(tolgee.t({ key: 'test', ns: '' })).toEqual('emptyNs');
+  });
 });

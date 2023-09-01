@@ -87,7 +87,7 @@ export function Controller({ options }: StateServiceProps) {
   // takes (ns|default, initial ns, fallback ns, active ns)
   function getRequiredNamespaces(ns: NsFallback) {
     return [
-      ...getFallbackArray(ns || getDefaultNs()),
+      ...getFallbackArray(ns ?? getDefaultNs()),
       ...state.getRequiredNamespaces(),
     ];
   }
@@ -142,12 +142,12 @@ export function Controller({ options }: StateServiceProps) {
 
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
     const languages = state.getFallbackLangs();
-    const namespaces = getDefaultAndFallbackNs(ns || undefined);
+    const namespaces = getDefaultAndFallbackNs(ns ?? undefined);
     return cache.getTranslationNs(namespaces, languages, key);
   }
 
   function getTranslation({ key, ns, language }: KeyAndNamespacesInternal) {
-    const namespaces = getDefaultAndFallbackNs(ns || undefined);
+    const namespaces = getDefaultAndFallbackNs(ns ?? undefined);
     const languages = state.getFallbackLangs(language);
     return cache.getTranslationFallback(namespaces, languages, key);
   }
@@ -209,6 +209,7 @@ export function Controller({ options }: StateServiceProps) {
     init: init,
     getTranslation: getTranslation,
     changeTranslation: changeTranslation,
+    getTranslationNs,
     async changeLanguage(language: string) {
       if (
         state.getPendingLanguage() === language &&
