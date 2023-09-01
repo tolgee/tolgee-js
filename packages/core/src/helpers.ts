@@ -79,7 +79,11 @@ export function getErrorMessage(error: any): string | undefined {
   }
 }
 
-export const createFetchFunction = (fetchFn: FetchFn = fetch): FetchFn => {
+const defaultFetchFunction: FetchFn = (input, options) => fetch(input, options);
+
+export const createFetchFunction = (
+  fetchFn: FetchFn = defaultFetchFunction
+): FetchFn => {
   return (input, init) =>
     fetchFn(input, {
       ...init,
