@@ -29,7 +29,7 @@ describe('limit surrounding keys', () => {
       keyName: 'key_999',
     });
     expect(result).toHaveLength(100);
-    expect(result[0].keyName).toEqual('899');
+    expect(result[result.length - 1].keyName).toEqual('key_999');
   });
 
   it('removes both end and begining', () => {
