@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.5-prerelease.c74f049c.0](https://github.com/tolgee/tolgee-js/compare/v5.11.4...v5.11.5-prerelease.c74f049c.0) (2023-09-08)
+
+
+### Bug Fixes
+
+* empty namespace treatment ([3c9c91f](https://github.com/tolgee/tolgee-js/commit/3c9c91fedd8547860f47bd1e144906b96164aa86))
+
+
+### Features
+
+* better namespace fallback handling ([c74f049](https://github.com/tolgee/tolgee-js/commit/c74f049cea4d91e88de9bcb7451942a10e89c9ca))
+
+
+
+
+
 ## [5.11.4](https://github.com/tolgee/tolgee-js/compare/v5.11.3...v5.11.4) (2023-08-31)
 
 
