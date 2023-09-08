@@ -169,7 +169,8 @@ export type UiProps = {
 export type UiKeyOption = {
   key: string;
   defaultValue?: string;
-  ns: string[];
+  fallbackNamespaces: string[];
+  namespace: string;
   translation: string | undefined;
 };
 

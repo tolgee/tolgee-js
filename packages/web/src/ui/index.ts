@@ -45,10 +45,16 @@ export class UI implements UiInterface {
   public renderViewer(
     key: string,
     defaultValue: string | undefined,
-    ns: string[]
+    fallbackNamespaces: string[],
+    namespace: string
   ) {
     this.checkInitialization();
-    this.viewerComponent?.translationEdit(key, defaultValue, ns);
+    this.viewerComponent?.translationEdit(
+      key,
+      defaultValue,
+      fallbackNamespaces,
+      namespace
+    );
   }
 
   public async getKey(props: {
@@ -86,7 +92,12 @@ export class UI implements UiInterface {
     }
     if (key) {
       const value = keysAndDefaults.find((val) => val.key === key)!;
-      this?.renderViewer(key, value.defaultValue, value.ns);
+      this?.renderViewer(
+        key,
+        value.defaultValue,
+        value.fallbackNamespaces,
+        value.namespace
+      );
     }
   }
 }

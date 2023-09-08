@@ -30,6 +30,7 @@ export function Plugins(
   getLanguage: () => string | undefined,
   getInitialOptions: () => TolgeeOptionsInternal,
   getAvailableLanguages: () => string[] | undefined,
+  getFallbackNamespaces: (ns: string | undefined) => string[],
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[],
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface,
@@ -56,7 +57,8 @@ export function Plugins(
         return {
           key,
           defaultValue,
-          ns: getTranslationNs({ key, ns }),
+          fallbackNamespaces: getFallbackNamespaces(ns),
+          namespace: getTranslationNs({ key, ns })[0],
           translation: getTranslation({
             key,
             ns,

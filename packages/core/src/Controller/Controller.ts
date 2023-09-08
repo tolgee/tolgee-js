@@ -43,6 +43,7 @@ export function Controller({ options }: StateServiceProps) {
     state.getLanguage,
     state.getInitialOptions,
     state.getAvailableLanguages,
+    getDefaultAndFallbackNs,
     getTranslationNs,
     getTranslation,
     changeTranslation,
@@ -209,7 +210,8 @@ export function Controller({ options }: StateServiceProps) {
     init: init,
     getTranslation: getTranslation,
     changeTranslation: changeTranslation,
-    getTranslationNs,
+    getTranslationNs: getTranslationNs,
+    getDefaultAndFallbackNs: getDefaultAndFallbackNs,
     async changeLanguage(language: string) {
       if (
         state.getPendingLanguage() === language &&

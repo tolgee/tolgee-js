@@ -86,4 +86,28 @@ describe('namespace internal function in controller', () => {
     ).toEqual(['fallback', '']);
     expect(controller.t({ key: 'unknown', ns: '' })).toEqual('unknown');
   });
+
+  it('returns correct namespaces if there are empty translations', () => {
+    const controller = Controller({
+      options: {
+        language: 'en',
+        staticData: {
+          en: { test: 'hello' },
+          'en:translation': { test: null },
+        },
+        ns: ['', 'translation'],
+        defaultNs: 'translation',
+        fallbackNs: '',
+      },
+    });
+    expect(controller.getDefaultAndFallbackNs()).toEqual(['translation', '']);
+    expect(controller.getTranslationNs({ key: 'test' })).toEqual(['']);
+    expect(controller.t({ key: 'test' })).toEqual('hello');
+
+    expect(controller.getTranslationNs({ key: 'unknown' })).toEqual([
+      'translation',
+      '',
+    ]);
+    expect(controller.t({ key: 'unknown' })).toEqual('unknown');
+  });
 });
