@@ -64,6 +64,8 @@ export function Controller({ options }: StateServiceProps) {
     init(options);
   }
 
+  let runPromise: Promise<any> | undefined;
+
   events.onUpdate.listen(() => {
     if (state.isRunning()) {
       pluginService.retranslate();
@@ -286,14 +288,13 @@ export function Controller({ options }: StateServiceProps) {
     },
 
     run() {
-      let result: Promise<void> | undefined = undefined;
       checkCorrectConfiguration();
       if (!state.isRunning()) {
         state.setRunning(true);
         pluginService.run();
-        result = loadInitial();
+        runPromise = loadInitial();
       }
-      return Promise.resolve(result);
+      return Promise.resolve(runPromise);
     },
 
     stop() {
