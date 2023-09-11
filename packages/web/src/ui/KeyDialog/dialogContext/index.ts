@@ -31,7 +31,8 @@ type DialogProps = {
   open: boolean;
   onClose: () => void;
   uiProps: UiProps;
-  ns: string[];
+  fallbackNamespaces: string[];
+  namespace: string;
   children: React.ReactNode;
 };
 
@@ -46,7 +47,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [translationsFormTouched, setTranslationsFormTouched] =
       useState(false);
 
-    const [selectedNs, setSelectedNs] = useState<string>(props.ns[0]);
+    const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
     const [tags, setTags] = useState<string[]>([]);
     const isPat = getApiKeyType(props.uiProps.apiKey) === 'tgpat';
 
@@ -105,7 +106,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'get',
       query: {
         filterKeyName: [props.keyName],
-        filterNamespace: props.ns,
+        filterNamespace: [selectedNs],
         languages: selectedLanguages,
       },
       options: {
@@ -130,15 +131,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         },
       },
     });
-
-    const namespaces = useMemo(() => {
-      const keys = translationsLoadable.data?._embedded?.keys;
-      if (keys?.length) {
-        return [keys[0].keyNamespace || ''];
-      } else {
-        return props.ns;
-      }
-    }, [translationsLoadable.data]);
 
     const updateKey = useApiMutation({
       url: '/v2/projects/keys/{id}/complex-update',
@@ -404,7 +396,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const contextValue = {
       input: props.keyName,
       open: props.open,
-      ns: namespaces,
+      fallbackNamespaces: props.fallbackNamespaces,
       selectedNs,
       loading,
       saving,

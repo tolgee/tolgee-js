@@ -13,7 +13,8 @@ type State = {
   key: null | string;
   defaultValue: undefined | string;
   dialogOpened: boolean;
-  ns: string[];
+  fallbackNamespaces: string[];
+  namespace: string;
 };
 
 export class KeyDialog extends React.Component<Props, State> {
@@ -21,7 +22,8 @@ export class KeyDialog extends React.Component<Props, State> {
     key: null,
     defaultValue: undefined,
     dialogOpened: false,
-    ns: [],
+    fallbackNamespaces: [],
+    namespace: '',
   };
 
   constructor(props: Props) {
@@ -31,14 +33,16 @@ export class KeyDialog extends React.Component<Props, State> {
   public translationEdit(
     key: string,
     defaultValue: string | undefined,
-    ns: string[]
+    fallbackNamespaces: string[],
+    namespace: string
   ) {
     this.setState({
       ...this.state,
       dialogOpened: true,
       defaultValue: defaultValue,
       key,
-      ns,
+      fallbackNamespaces,
+      namespace,
     });
   }
 
@@ -55,7 +59,8 @@ export class KeyDialog extends React.Component<Props, State> {
             defaultValue={this.state.defaultValue || ''}
             open={this.state.dialogOpened}
             keyName={this.state.key!}
-            ns={this.state.ns || []}
+            fallbackNamespaces={this.state.fallbackNamespaces}
+            namespace={this.state.namespace}
             onClose={this.onClose}
           >
             <TranslationDialog />

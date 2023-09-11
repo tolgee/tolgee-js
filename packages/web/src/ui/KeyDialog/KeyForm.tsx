@@ -95,7 +95,7 @@ export const KeyForm = () => {
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
-  const ns = useDialogContext((c) => c.ns);
+  const fallbackNamespaces = useDialogContext((c) => c.fallbackNamespaces);
   const selectedNs = useDialogContext((c) => c.selectedNs);
   const isAuthorizedTo = usePermissions();
 
@@ -152,7 +152,11 @@ export const KeyForm = () => {
         </ScKeyHint>
       </ScKey>
 
-      <NsSelect options={ns} value={selectedNs} onChange={setSelectedNs} />
+      <NsSelect
+        options={fallbackNamespaces}
+        value={selectedNs}
+        onChange={setSelectedNs}
+      />
 
       {ready && (
         <ScTagsWrapper>
