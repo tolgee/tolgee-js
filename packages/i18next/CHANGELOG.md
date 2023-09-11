@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.5](https://github.com/tolgee/tolgee-js/compare/v5.11.4...v5.11.5) (2023-09-11)
+
+
+### Bug Fixes
+
+* mjs exports for vue and others ([#3245](https://github.com/tolgee/tolgee-js/issues/3245)) ([1c7f1e5](https://github.com/tolgee/tolgee-js/commit/1c7f1e5a189d0f8c36124e535dc5bbffc35ed88e))
+
+
+
+
+
 ## [5.11.4](https://github.com/tolgee/tolgee-js/compare/v5.11.3...v5.11.4) (2023-08-31)
 
 **Note:** Version bump only for package @tolgee/i18next
