@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.12.1-prerelease.6feb0c2e.0](https://github.com/tolgee/tolgee-js/compare/v5.12.0...v5.12.1-prerelease.6feb0c2e.0) (2023-09-11)
+
+
+### Bug Fixes
+
+* add postinstall message ([6feb0c2](https://github.com/tolgee/tolgee-js/commit/6feb0c2e9be488d8fc0a8fffa6fe2224ce39d3de))
+
+
+
+
+
 # [5.12.0](https://github.com/tolgee/tolgee-js/compare/v5.11.5...v5.12.0) (2023-09-11)
 
 
