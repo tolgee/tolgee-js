@@ -40,7 +40,7 @@
     "test": "jest --collect-coverage",
     "develop": "concurrently \"rollup -c rollup.config.js -w\" \"tsc --declaration --emitDeclarationOnly --watch --preserveWatchOutput --project tsconfig.prod.json\" ",
     "tsc": "tsc --noEmit",
-    "postinstall": "node ./postinstall.js"
+    "postinstall": "node postinstall.js"
   },
   "author": "Tolgee",
   "license": "MIT",
