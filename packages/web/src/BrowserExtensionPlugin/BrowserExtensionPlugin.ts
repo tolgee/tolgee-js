@@ -43,7 +43,20 @@ export type BrowserExtensionProps = {
 
 let BrowserExtensionPlugin: () => TolgeePlugin = () => (tolgee) => tolgee;
 
-if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
+const sessionStorageAvailable = () => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+  try {
+    return typeof sessionStorage !== 'undefined' && sessionStorage;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('sessionStorage not available', err);
+    return false;
+  }
+};
+
+if (sessionStorageAvailable()) {
   BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
     const handshaker = Handshaker();
     const getConfig = () =>
