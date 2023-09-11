@@ -42,9 +42,7 @@ export const useTranslateInternal = (
   useEffect(() => {
     const subscription = tolgee.onNsUpdate(rerender);
     subscriptionRef.current = subscription;
-    if (!isLoaded) {
-      subscription.subscribeNs(namespaces);
-    }
+    subscription.subscribeNs(namespaces);
     subscriptionQueue.current.forEach((ns) => {
       subscription!.subscribeNs(ns);
     });
@@ -52,7 +50,7 @@ export const useTranslateInternal = (
     return () => {
       subscription.unsubscribe();
     };
-  }, [isLoaded, namespacesJoined, tolgee]);
+  }, [namespacesJoined, tolgee]);
 
   useEffect(() => {
     tolgee.addActiveNs(namespaces);
