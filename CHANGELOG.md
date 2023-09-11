@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.6-prerelease.a415c070.0](https://github.com/tolgee/tolgee-js/compare/v5.11.5...v5.11.6-prerelease.a415c070.0) (2023-09-11)
+
+
+### Bug Fixes
+
+* race condition error in react integration ([a415c07](https://github.com/tolgee/tolgee-js/commit/a415c0706c0fb5f485f64bc3f023d80adcc43e41))
+* race condition error in react integration ([8e26e27](https://github.com/tolgee/tolgee-js/commit/8e26e27b8d017dca5ccf426b7d4a1b756aff7d67))
+
+
+
+
+
 ## [5.11.5](https://github.com/tolgee/tolgee-js/compare/v5.11.4...v5.11.5) (2023-09-11)
 
 
