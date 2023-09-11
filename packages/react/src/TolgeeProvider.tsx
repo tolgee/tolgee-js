@@ -34,17 +34,15 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   const [loading, setLoading] = useState(!tolgee.isLoaded());
 
   useEffect(() => {
-    if (!tolgee.isRunning()) {
-      tolgee
-        .run()
-        .catch((e) => {
-          // eslint-disable-next-line no-console
-          console.error(e);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+    tolgee
+      .run()
+      .catch((e) => {
+        // eslint-disable-next-line no-console
+        console.error(e);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [tolgee]);
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
