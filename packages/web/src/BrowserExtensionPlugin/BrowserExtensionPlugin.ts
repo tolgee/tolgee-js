@@ -48,7 +48,7 @@ const sessionStorageAvailable = () => {
     return false;
   }
   try {
-    return typeof sessionStorage !== 'undefined';
+    return typeof sessionStorage !== 'undefined' && sessionStorage;
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('sessionStorage not available', err);
