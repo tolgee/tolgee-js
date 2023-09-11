@@ -69,7 +69,9 @@
     ".": {
       "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-i18next.cjs.js",
-      "import": "./dist/tolgee-i18next.esm.mjs"
+      "svelte": "./dist/tolgee-i18next.esm.mjs",
+      "module": "./dist/tolgee-i18next.esm.js",
+      "import": "./dist/tolgee-i18next.esm.js"
     },
     "./package.json": "./package.json"
   },
