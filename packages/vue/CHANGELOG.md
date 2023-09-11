@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.11.5-prerelease.963d09c5.0](https://github.com/tolgee/tolgee-js/compare/v5.11.4...v5.11.5-prerelease.963d09c5.0) (2023-09-11)
+
+
+### Bug Fixes
+
+* mjs exports for vue and others ([963d09c](https://github.com/tolgee/tolgee-js/commit/963d09c50fe430bb8b0b95be9d624567d56529ac))
+
+
+
+
+
 ## [5.11.4](https://github.com/tolgee/tolgee-js/compare/v5.11.3...v5.11.4) (2023-08-31)
 
 **Note:** Version bump only for package @tolgee/vue
