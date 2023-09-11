@@ -47,7 +47,8 @@
   "files": [
     "lib/**/*",
     "dist/**/*",
-    "src/**/*"
+    "src/**/*",
+    "postinstall.js"
   ],
   "devDependencies": {
     "@rollup/plugin-node-resolve": "13.3.0",
