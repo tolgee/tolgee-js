@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.12.0](https://github.com/tolgee/tolgee-js/compare/v5.11.5...v5.12.0) (2023-09-11)
+
+
+### Bug Fixes
+
+* race condition error in react integration ([#3248](https://github.com/tolgee/tolgee-js/issues/3248)) ([0923175](https://github.com/tolgee/tolgee-js/commit/092317504656a972a0b7097341b4d4845cf1c6a0))
+
+
+### Features
+
+* improve fallback and empty namespace treatment ([#3243](https://github.com/tolgee/tolgee-js/issues/3243)) ([c8f31cb](https://github.com/tolgee/tolgee-js/commit/c8f31cb79b76111ef4087168d80fd5f9cd1a7511))
+
+
+
+
+
 ## [5.11.5](https://github.com/tolgee/tolgee-js/compare/v5.11.4...v5.11.5) (2023-09-11)
 
 
