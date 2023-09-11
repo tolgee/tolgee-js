@@ -1,0 +1,10 @@
+console.log('');
+console.log('###############################################');
+console.log('#                                             #');
+console.log('#  Thank you for installing Tolgee SDK 🐭     #');
+console.log('#  If you like what we do, give us GitHub 🌟  #');
+console.log('#                                             #');
+console.log('#  https://github.com/tolgee/tolgee-platform  #');
+console.log('#                                             #');
+console.log('###############################################');
+console.log('');
