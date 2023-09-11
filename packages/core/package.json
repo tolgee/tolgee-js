@@ -22,9 +22,11 @@
   "declaration": true,
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
       "require": "./dist/tolgee.cjs.js",
-      "import": "./dist/tolgee.esm.mjs"
+      "svelte": "./dist/tolgee.esm.mjs",
+      "module": "./dist/tolgee.esm.js",
+      "import": "./dist/tolgee.esm.js",
+      "types": "./lib/index.d.ts"
     },
     "./package.json": "./package.json"
   },
