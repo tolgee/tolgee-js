@@ -1,5 +1,5 @@
-import IntlMessageFormat from 'intl-messageformat';
 import type { FinalFormatterMiddleware } from '@tolgee/core';
+import { IntlMessageFormat } from './IntlMessageFormat';
 
 export const createFormatIcu = (): FinalFormatterMiddleware => {
   const locales = new Map() as Map<string, string>;
