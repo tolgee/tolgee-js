@@ -43,12 +43,12 @@ export const config: Config = {
         prod: {
           command: 'npm run start -- -p 8107',
           cwd: path.resolve(__dirname, '../../testapps/next/'),
-          waitForOutput: 'Ready in',
+          waitForOutput: 'on 0.0.0.0:8107',
         },
         dev: {
           command: 'npm run dev -- -p 8106',
           cwd: path.resolve(__dirname, '../../testapps/next/'),
-          waitForOutput: 'Ready in',
+          waitForOutput: 'client and server successfully',
           environment: {
             NEXT_BUILD_DIR: 'dist-e2e',
             NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
@@ -63,7 +63,7 @@ export const config: Config = {
         dev: {
           command: 'npm run dev -- -p 8114',
           cwd: path.resolve(__dirname, '../../testapps/next-internal/'),
-          waitForOutput: 'Ready in',
+          waitForOutput: 'client and server successfully',
           environment: {
             NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
           },
@@ -162,12 +162,12 @@ export const config: Config = {
         prod: {
           command: 'npm run start -- -p 8121',
           cwd: path.resolve(__dirname, '../../testapps/next-app/'),
-          waitForOutput: 'Ready in',
+          waitForOutput: 'ready started server on',
         },
         dev: {
           command: 'npm run dev -- -p 8122',
           cwd: path.resolve(__dirname, '../../testapps/next-app/'),
-          waitForOutput: 'Ready in',
+          waitForOutput: 'client and server successfully',
           environment: {
             NEXT_BUILD_DIR: 'dist-e2e',
             NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8122',
