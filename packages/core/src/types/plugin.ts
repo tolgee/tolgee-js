@@ -208,3 +208,7 @@ export type FormatErrorHandler = (
 ) => string;
 
 export type OnFormatError = string | FormatErrorHandler;
+
+export type MissingTranslationHandler = (
+  info: TranslatePropsInternal
+) => string;
