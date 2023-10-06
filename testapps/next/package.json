@@ -14,7 +14,7 @@
   "dependencies": {
     "@tolgee/format-icu": "5.12.0",
     "@tolgee/react": "5.12.0",
-    "next": "13.2.3",
+    "next": "13.4.7",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
