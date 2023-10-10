@@ -60,9 +60,7 @@ export const TranslationMethods = () => {
                 i: <i />,
                 key: 'value',
               }}
-            >
-              Hey
-            </T>
+            />
           </div>
         </div>
 
