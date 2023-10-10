@@ -4,21 +4,27 @@
 
   const { t } = getTranslate();
 
-  let items: string[] = [];
-  let newItemValue: string;
-  try {
-    items = JSON.parse(localStorage.getItem('tolgee-example-app-items') as string) || [
-      'Flame-thrower',
-      'Horse',
-      'My favourite toothbrush'
-    ];
-  } catch (e) {
-    // when local storage is not set due to SSR, don't pring any error
-    if (typeof localStorage !== 'undefined') {
-      console.error('Something went wrong while parsing stored items. Items are reset.');
-      localStorage.removeItem('tolgee-example-app-items');
+  const getInitialItems = () => {
+    let items: string[] | undefined = undefined;
+    try {
+      items = JSON.parse(localStorage.getItem('tolgee-example-app-items') || '');
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Something went wrong while parsing stored items. Items are reset.'
+      );
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('tolgee-example-app-items');
+      }
     }
-  }
+    return items?.length
+      ? items
+      : ['Passport', 'Maps and directions', 'Travel guide'];
+  };
+
+  let items = getInitialItems();
+  let newItemValue: string;
+
   const onAdd = () => {
     if (newItemValue) {
       items = [...items, newItemValue];
@@ -46,45 +52,46 @@
     <Navbar>
       <div slot="menu-items">
         <a href="/translation-methods">
-          <T keyName="menu-item-translation-methods" defaultValue="Translation methods" />
+          <T keyName="menu-item-translation-methods"/>
         </a>
       </div>
     </Navbar>
 
     <header>
+      <img src="/img/appLogo.svg" alt="App logo"/>
       <h1 class="header__title">
-        <T keyName="on-the-road-title" defaultValue="On the road" />
+        <T keyName="app-title"/>
       </h1>
-      <h2 class="header__subtitle">
-        <T keyName="on-the-road-subtitle" defaultValue="what to pack for the trip" />
-      </h2>
     </header>
     <section class="items">
-      <div class="items__new-item">
+      <form class="items__new-item" on:submit|preventDefault={onAdd}>
         <input
           bind:value={newItemValue}
-          placeholder={$t({ key: 'add-item-input-placeholder', defaultValue: 'New list item' })}
+          placeholder={$t({ key: 'add-item-input-placeholder', })}
         />
-        <button on:click={onAdd} disabled={!newItemValue} class="button">
-          <T keyName="add-item-add-button" defaultValue="Add" />
+        <button type="submit" disabled={!newItemValue} class="button">
+          <img src="/img/iconAdd.svg" alt="Add" />
+          <T keyName="add-item-add-button"/>
         </button>
-      </div>
+      </form>
       <div class="items__list">
         {#each items as item, index}
           <div class="item">
             <div class="item__text">{item}</div>
             <button on:click={() => onDelete(index)}>
-              <T keyName="delete-item-button" defaultValue="Delete" />
+              <T keyName="delete-item-button"/>
             </button>
           </div>
         {/each}
       </div>
       <div class="items__buttons">
         <button class="button" on:click={onAction('share')}>
-          <T keyName="share-button" defaultValue="Share" />
+          <img src="/img/iconShare.svg" alt="Share" />
+          <T keyName="share-button" />
         </button>
         <button class="button button--secondary" on:click={onAction('email')}>
-          <T keyName="send-via-email" defaultValue="Send via e-mail" />
+          <img src="/img/iconMail.svg" alt="Send" />
+          <T keyName="send-via-email"/>
         </button>
       </div>
     </section>

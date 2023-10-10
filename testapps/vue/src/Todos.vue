@@ -16,7 +16,7 @@
         </h1>
       </header>
       <section class="items">
-        <div class="items__new-item">
+        <form class="items__new-item" @submit.prevent="onAdd">
           <input
             v-model="newItemValue"
             :placeholder="
@@ -25,11 +25,11 @@
               })
             "
           />
-          <button @click="onAdd" :disabled="!newItemValue" class="button">
+          <button type="submit" :disabled="!newItemValue" class="button">
             <img src="/img/iconAdd.svg" />
             <T keyName="add-item-add-button" />
           </button>
-        </div>
+        </form>
         <div class="items__list">
           <div v-for="(item, i) in items" :key="i" class="item">
             <div class="item__text">{{ item }}</div>
