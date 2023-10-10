@@ -4,24 +4,16 @@
       <Navbar>
         <div>
           <a href="/translation-methods">
-            <T
-              keyName="menu-item-translation-methods"
-              defaultValue="Translation methods"
-            />
+            <T keyName="menu-item-translation-methods" />
           </a>
         </div>
       </Navbar>
 
       <header>
+        <img src="/img/appLogo.svg" />
         <h1 class="header__title">
-          <T keyName="on-the-road-title" defaultValue="On the road" />
+          <T keyName="app-title" />
         </h1>
-        <h2 class="header__subtitle">
-          <T
-            keyName="on-the-road-subtitle"
-            defaultValue="what to pack for the trip"
-          />
-        </h2>
       </header>
       <section class="items">
         <div class="items__new-item">
@@ -30,28 +22,30 @@
             :placeholder="
               $t({
                 key: 'add-item-input-placeholder',
-                defaultValue: 'New list item',
               })
             "
           />
           <button @click="onAdd" :disabled="!newItemValue" class="button">
-            <T keyName="add-item-add-button" defaultValue="Add" />
+            <img src="/img/iconAdd.svg" />
+            <T keyName="add-item-add-button" />
           </button>
         </div>
         <div class="items__list">
           <div v-for="(item, i) in items" :key="i" class="item">
             <div class="item__text">{{ item }}</div>
             <button @click="onDelete(i)">
-              <T keyName="delete-item-button" defaultValue="Delete" />
+              <T keyName="delete-item-button" />
             </button>
           </div>
         </div>
         <div class="items__buttons">
           <button class="button" @click="onAction('share')">
-            <T keyName="share-button" defaultValue="Share" />
+            <img src="/img/iconShare.svg" />
+            <T keyName="share-button" />
           </button>
           <button class="button button--secondary" @click="onAction('email')">
-            <T keyName="send-via-email" defaultValue="Send via e-mail" />
+            <img src="/img/iconMail.svg" />
+            <T keyName="send-via-email" />
           </button>
         </div>
       </section>
@@ -86,7 +80,7 @@ export default defineComponent({
       newItemValue: '',
       items: items?.length
         ? items
-        : ['Flame-thrower', 'Horse', 'My favourite toothbrush'],
+        : ['Passport', 'Maps and directions', 'Travel guide'],
     };
   },
   methods: {

@@ -33,6 +33,7 @@ body {
   position: relative;
   min-height: 100vh;
   padding-bottom: 40px;
+  color: white;
 }
 
 .example {
@@ -43,7 +44,7 @@ body {
 }
 
 .button {
-  color: #ffffff;
+  color: white;
   cursor: pointer;
   border: 0;
   padding: 16px 20px;
@@ -140,7 +141,7 @@ header h1 {
 
 .items__new-item input {
   flex-grow: 1;
-  background-color: #fff;
+  background-color: white;
   border: none;
   box-sizing: border-box;
   border-radius: 6px;
@@ -157,7 +158,8 @@ header h1 {
   display: flex;
   padding: 10px 0px;
   margin: 0px 10px;
-  border-bottom: 1px solid #ffffff;
+  color: black;
+  border-bottom: 1px solid white;
 }
 
 .item__text {
@@ -193,6 +195,7 @@ header h1 {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  color: black;
 }
 
 .translation-methods .tiles > div {
