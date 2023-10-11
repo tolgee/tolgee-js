@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navbar } from './components/Navbar';
 
@@ -17,7 +17,7 @@ const getInitialItems = () => {
   }
   return items?.length
     ? items
-    : ['Flame-thrower', 'Horse', 'My favourite toothbrush'];
+    : ['Passport', 'Maps and directions', 'Travel guide'];
 };
 
 export const Todos = () => {
@@ -26,19 +26,23 @@ export const Todos = () => {
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<string[]>(getInitialItems());
 
-  useEffect(() => {
+  const updateLocalstorage = (items: string[]) => {
     localStorage.setItem('tolgee-example-app-items', JSON.stringify(items));
-  }, [items]);
+  };
 
-  const onAdd = () => {
-    setItems([...items, newItemValue]);
+  const onAdd = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newItems = [...items, newItemValue];
+    setItems(newItems);
+    updateLocalstorage(newItems);
     setNewItemValue('');
   };
 
   const onDelete = (index: number) => () => {
-    setItems(items.filter((_, i) => i !== index));
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    updateLocalstorage(newItems);
   };
-
   const onAction = (action: string) => () => {
     alert('action: ' + action);
   };
@@ -53,47 +57,40 @@ export const Todos = () => {
         </Navbar>
 
         <header>
-          <h1 className="header__title">
-            {t('on-the-road-title', { defaultValue: 'On the road' })}
-          </h1>
-          <h2 className="header__subtitle">
-            {t('on-the-road-subtitle', {
-              defaultValue: 'what to pack for the trip',
-            })}
-          </h2>
+          <img src="/img/appLogo.svg" />
+          <h1 className="header__title">{t('app-title')}</h1>
         </header>
         <section className="items">
-          <div className="items__new-item">
+          <form className="items__new-item" onSubmit={onAdd}>
             <input
               value={newItemValue}
               onChange={(e) => setNewItemValue(e.target.value)}
-              placeholder={t('add-item-input-placeholder', {
-                defaultValue: 'New list item',
-              })}
+              placeholder={t('add-item-input-placeholder')}
             />
-            <button onClick={onAdd} disabled={!newItemValue} className="button">
-              {t('add-item-add-button', { defaultValue: 'Add' })}
+            <button type="submit" disabled={!newItemValue} className="button">
+              <img src="/img/iconAdd.svg" />
+              {t('add-item-add-button')}
             </button>
-          </div>
+          </form>
           <div className="items__list">
             {items.map((item, i) => (
               <div key={i} className="item">
                 <div className="item__text">{item}</div>
-                <button onClick={onDelete(i)}>
-                  {t('delete-item-button', { defaultValue: 'Delete' })}
-                </button>
+                <button onClick={onDelete(i)}>{t('delete-item-button')}</button>
               </div>
             ))}
           </div>
           <div className="items__buttons">
             <button className="button" onClick={onAction('share')}>
-              {t('share-button', { defaultValue: 'Share' })}
+              <img src="/img/iconShare.svg" />
+              {t('share-button')}
             </button>
             <button
               className="button button--secondary"
               onClick={onAction('email')}
             >
-              {t('send-via-email', { defaultValue: 'Send via e-mail' })}
+              <img src="/img/iconMail.svg" />
+              {t('send-via-email')}
             </button>
           </div>
         </section>

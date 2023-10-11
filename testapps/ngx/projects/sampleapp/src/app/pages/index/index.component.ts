@@ -10,11 +10,29 @@ export class IndexComponent implements OnInit {
 
   constructor() {}
 
+  getInitialItems() {
+    let items: string[] | undefined = undefined;
+    try {
+      items = JSON.parse(
+        localStorage.getItem('tolgee-example-app-items') || ''
+      );
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(
+        'Something went wrong while parsing stored items. Items are reset.'
+      );
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('tolgee-example-app-items');
+      }
+    }
+    return items?.length
+      ? items
+      : ['Passport', 'Maps and directions', 'Travel guide'];
+  }
+
   ngOnInit(): void {
     try {
-      this.items = JSON.parse(
-        localStorage.getItem('tolgee-example-app-items')
-      ) || ['Flame-thrower', 'Horse', 'My favourite toothbrush'];
+      this.items = this.getInitialItems();
     } catch (e) {
       // when local storage is not set due to SSR, don't pring any error
       if (typeof localStorage !== 'undefined') {
@@ -27,7 +45,8 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  onAdd() {
+  onAdd(event: Event) {
+    event.preventDefault();
     if (this.newItemValue) {
       this.items = [...this.items, this.newItemValue];
       this.updateLocalStorage();

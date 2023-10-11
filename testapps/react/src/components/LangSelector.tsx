@@ -10,10 +10,10 @@ export const LangSelector: React.FC = () => {
       onChange={(e) => tolgee.changeLanguage(e.target.value)}
       value={tolgee.getPendingLanguage()}
     >
-      <option value="en">🇬🇧 English</option>
-      <option value="cs">🇨🇿 Česky</option>
-      <option value="fr">🇫🇷 Français</option>
-      <option value="de">🇩🇪 Deutsch</option>
+      <option value="en">English</option>
+      <option value="cs">Česky</option>
+      <option value="fr">Français</option>
+      <option value="de">Deutsch</option>
     </select>
   );
 };

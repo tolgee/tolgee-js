@@ -5,17 +5,13 @@ export const exampleAppTest = (url: string) =>
     });
 
     it('Has title', { retries: 2 }, () => {
-      cy.contains('On the road').should('be.visible');
-    });
-
-    it('Has subtitle', () => {
-      cy.contains('What to pack for the trip').should('be.visible');
+      cy.contains('What To Pack').should('be.visible');
     });
 
     it('Has default items', () => {
-      cy.contains('Flame-thrower').should('be.visible');
-      cy.contains('Horse').should('be.visible');
-      cy.contains('My favourite toothbrush').should('be.visible');
+      cy.contains('Passport').should('be.visible');
+      cy.contains('Maps and directions').should('be.visible');
+      cy.contains('Travel guide').should('be.visible');
     });
 
     it('Has buttons', () => {
@@ -38,8 +34,7 @@ export const exampleAppTest = (url: string) =>
     it('is translated to german', () => {
       cy.get('.lang-selector').select('de');
       cy.get('body')
-        .should('contain', 'Auf dem Weg')
-        .should('contain', 'Was zum Ausflug einzupacken')
+        .should('contain', 'Was mitnehmen')
         .should('contain', 'Löschen')
         .should('contain', 'Teilen')
         .should('contain', 'Per Email abschicken')
