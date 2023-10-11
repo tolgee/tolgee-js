@@ -4,43 +4,44 @@
       <Navbar>
         <div>
           <a href="/translation-methods">
-            {{ $t('menu-item-translation-methods', 'Translation methods') }}
+            {{ $t('menu-item-translation-methods') }}
           </a>
         </div>
       </Navbar>
 
       <header>
+        <img src="/img/appLogo.svg" />
         <h1 class="header__title">
-          {{ $t('on-the-road-title', 'On the road') }}
+          {{ $t('app-title') }}
         </h1>
-        <h2 class="header__subtitle">
-          {{ $t('on-the-road-subtitle', 'what to pack for the trip') }}
-        </h2>
       </header>
       <section class="items">
-        <div class="items__new-item">
+        <form class="items__new-item" @submit.prevent="onAdd">
           <input
             v-model="newItemValue"
-            :placeholder="$t('add-item-input-placeholder', 'New list item')"
+            :placeholder="$t('add-item-input-placeholder')"
           />
-          <button @click="onAdd" :disabled="!newItemValue" class="button">
-            {{ $t('add-item-add-button', 'Add') }}
+          <button type="submit" :disabled="!newItemValue" class="button">
+            <img src="/img/iconAdd.svg" />
+            {{ $t('add-item-add-button') }}
           </button>
-        </div>
+        </form>
         <div class="items__list">
           <div v-for="(item, i) in items" :key="i" class="item">
             <div class="item__text">{{ item }}</div>
             <button @click="onDelete(i)">
-              {{ $t('delete-item-button', 'Delete') }}
+              {{ $t('delete-item-button') }}
             </button>
           </div>
         </div>
         <div class="items__buttons">
           <button class="button" @click="onAction('share')">
-            {{ $t('share-button', 'Share') }}
+            <img src="/img/iconShare.svg" />
+            {{ $t('share-button') }}
           </button>
           <button class="button button--secondary" @click="onAction('email')">
-            {{ $t('send-via-email', 'Send via e-mail') }}
+            <img src="/img/iconMail.svg" />
+            {{ $t('send-via-email') }}
           </button>
         </div>
       </section>
@@ -72,12 +73,11 @@ export default {
       newItemValue: '',
       items: items?.length
         ? items
-        : ['Flame-thrower', 'Horse', 'My favourite toothbrush'],
+        : ['Passport', 'Maps and directions', 'Travel guide'],
     };
   },
   methods: {
-    onAdd(e) {
-      e.preventDefault();
+    onAdd() {
       if (this.$data.newItemValue) {
         this.$data.items.push(this.$data.newItemValue);
         this.updateLocalStorage();
