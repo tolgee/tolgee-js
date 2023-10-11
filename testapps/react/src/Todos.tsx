@@ -26,18 +26,22 @@ export const Todos = () => {
   const [newItemValue, setNewItemValue] = useState('');
   const [items, setItems] = useState<string[]>(getInitialItems());
 
-  useEffect(() => {
+  const updateLocalstorage = (items: string[]) => {
     localStorage.setItem('tolgee-example-app-items', JSON.stringify(items));
-  }, [items]);
+  };
 
   const onAdd = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setItems([...items, newItemValue]);
+    const newItems = [...items, newItemValue];
+    setItems(newItems);
+    updateLocalstorage(newItems);
     setNewItemValue('');
   };
 
   const onDelete = (index: number) => () => {
-    setItems(items.filter((_, i) => i !== index));
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    updateLocalstorage(newItems);
   };
 
   const onAction = (action: string) => () => {

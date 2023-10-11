@@ -37,7 +37,9 @@ export const Todos = () => {
   };
 
   const onDelete = (index: number) => () => {
-    setItems(items.filter((_, i) => i !== index));
+    const newItems = items.filter((_, i) => i !== index);
+    setItems(newItems);
+    updateLocalstorage(newItems);
   };
 
   const onAction = (action: string) => () => {
@@ -50,14 +52,11 @@ export const Todos = () => {
         <input
           value={newItemValue}
           onChange={(e) => setNewItemValue(e.target.value)}
-          placeholder={t({
-            key: 'add-item-input-placeholder',
-            defaultValue: 'New list item',
-          })}
+          placeholder={t('add-item-input-placeholder')}
         />
         <button type="submit" disabled={!newItemValue} className="button">
           <img src="/img/iconAdd.svg" />
-          <T keyName="add-item-add-button">Add</T>
+          <T keyName="add-item-add-button" />
         </button>
       </form>
       <div className="items__list">
@@ -65,7 +64,7 @@ export const Todos = () => {
           <div key={i} className="item">
             <div className="item__text">{item}</div>
             <button onClick={onDelete(i)}>
-              <T keyName="delete-item-button">Delete</T>
+              <T keyName="delete-item-button" />
             </button>
           </div>
         ))}
@@ -73,14 +72,14 @@ export const Todos = () => {
       <div className="items__buttons">
         <button className="button" onClick={onAction('share')}>
           <img src="/img/iconShare.svg" />
-          <T keyName="share-button">Share</T>
+          <T keyName="share-button" />
         </button>
         <button
           className="button button--secondary"
           onClick={onAction('email')}
         >
           <img src="/img/iconMail.svg" />
-          <T keyName="send-via-email">Send via e-mail</T>
+          <T keyName="send-via-email" />
         </button>
       </div>
     </section>
