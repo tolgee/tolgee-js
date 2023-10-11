@@ -2,7 +2,7 @@ import { createApiKey } from './apiCalls';
 import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
-export const openUI = (translation = 'On the road') => {
+export const openUI = (translation = 'What To Pack') => {
   cy.contains(translation)
     .should('be.visible')
     .trigger('keydown', { key: 'Alt' })
@@ -22,5 +22,5 @@ export const visitWithApiKey = (scopes: Scope[]) => {
     .then(() =>
       localStorage.setItem('__tolgee_preferredLanguages', '["en","de"]')
     );
-  cy.contains('On the road').invoke('attr', '_tolgee').should('exist');
+  cy.contains('What To Pack').invoke('attr', '_tolgee').should('exist');
 };

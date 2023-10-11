@@ -23,12 +23,12 @@ context('Tags editing', () => {
       req.reply({
         body: {
           id: 1000000706,
-          name: 'on-the-road-title',
+          name: 'app-title',
           translations: {
-            de: { id: 1000000806, text: 'Auf dem Weg', state: 'TRANSLATED' },
+            de: { id: 1000000806, text: 'Was mitnehmen', state: 'TRANSLATED' },
             en: { id: 1000000817, text: 'Hello world', state: 'TRANSLATED' },
-            fr: { id: 1000000828, text: 'Sur la route', state: 'TRANSLATED' },
-            cs: { id: 1000000839, text: 'Na cestu', state: 'TRANSLATED' },
+            fr: { id: 1000000828, text: 'Quoi emballer', state: 'TRANSLATED' },
+            cs: { id: 1000000839, text: 'Co sbalit', state: 'TRANSLATED' },
           },
           tags: [],
           screenshots: [],

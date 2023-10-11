@@ -60,7 +60,7 @@ context('UI Dialog', () => {
       'screenshots.view',
     ]);
     openUI();
-    getDevUi().find('textarea').contains('Auf dem Weg').should('be.disabled');
+    getDevUi().find('textarea').contains('Was mitnehmen').should('be.disabled');
     assertCanEditEnglish();
   });
 
@@ -75,22 +75,22 @@ context('UI Dialog', () => {
   function assertCanEditEnglish() {
     getDevUi()
       .find('textarea')
-      .contains('On the road')
+      .contains('What To Pack')
       .should('not.be.disabled');
     getDevUi()
       .find('textarea')
-      .contains('On the road')
+      .contains('What To Pack')
       .type('{selectAll}{del}Hello world', { force: true });
     cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
       req.reply({
         body: {
           id: 1000000706,
-          name: 'on-the-road-title',
+          name: 'app-title',
           translations: {
-            de: { id: 1000000806, text: 'Auf dem Weg', state: 'TRANSLATED' },
+            de: { id: 1000000806, text: 'Was mitnehmen', state: 'TRANSLATED' },
             en: { id: 1000000817, text: 'Hello world', state: 'TRANSLATED' },
-            fr: { id: 1000000828, text: 'Sur la route', state: 'TRANSLATED' },
-            cs: { id: 1000000839, text: 'Na cestu', state: 'TRANSLATED' },
+            fr: { id: 1000000828, text: 'Quoi emballer', state: 'TRANSLATED' },
+            cs: { id: 1000000839, text: 'Co sbalit', state: 'TRANSLATED' },
           },
           tags: [],
           screenshots: [],

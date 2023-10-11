@@ -16,7 +16,7 @@ export default async function IndexPage() {
         </Navbar>
         <header>
           <img src="/img/appLogo.svg" />
-          <h1 className="header__title">{t('on-the-road-title')}</h1>
+          <h1 className="header__title">{t('app-title')}</h1>
         </header>
         <Todos />
       </div>
