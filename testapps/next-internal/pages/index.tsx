@@ -50,7 +50,7 @@ const Home: NextPage = () => {
 
         <main className={styles.main}>
           <h1>
-            <T>on-the-road-title</T>
+            <T keyName="app-title" />
           </h1>
         </main>
       </div>
