@@ -236,3 +236,9 @@ header h1 {
   margin-top: 20px;
   justify-content: center;
 }
+
+.translation-methods .section-title {
+  position: relative;
+  top: 30px;
+  color: white;
+}

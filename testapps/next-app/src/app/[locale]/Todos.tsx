@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { T, useTranslate } from '@tolgee/react';
 
 const getInitialItems = () => {
@@ -11,7 +11,7 @@ const getInitialItems = () => {
 
   return items?.length
     ? items
-    : ['Flame-thrower', 'Horse', 'My favourite toothbrush'];
+    : ['Passport', 'Maps and directions', 'Travel guide'];
 };
 
 export const Todos = () => {
@@ -24,12 +24,15 @@ export const Todos = () => {
     setItems(getInitialItems());
   }, []);
 
-  useEffect(() => {
+  const updateLocalstorage = (items: string[]) => {
     localStorage.setItem('tolgee-example-app-items', JSON.stringify(items));
-  }, [items]);
+  };
 
-  const onAdd = () => {
-    setItems([...items, newItemValue]);
+  const onAdd = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const newItems = [...items, newItemValue];
+    setItems(newItems);
+    updateLocalstorage(newItems);
     setNewItemValue('');
   };
 
@@ -43,7 +46,7 @@ export const Todos = () => {
 
   return (
     <section className="items">
-      <div className="items__new-item">
+      <form className="items__new-item" onSubmit={onAdd}>
         <input
           value={newItemValue}
           onChange={(e) => setNewItemValue(e.target.value)}
@@ -52,10 +55,11 @@ export const Todos = () => {
             defaultValue: 'New list item',
           })}
         />
-        <button onClick={onAdd} disabled={!newItemValue} className="button">
+        <button type="submit" disabled={!newItemValue} className="button">
+          <img src="/img/iconAdd.svg" />
           <T keyName="add-item-add-button">Add</T>
         </button>
-      </div>
+      </form>
       <div className="items__list">
         {items.map((item, i) => (
           <div key={i} className="item">
@@ -68,12 +72,14 @@ export const Todos = () => {
       </div>
       <div className="items__buttons">
         <button className="button" onClick={onAction('share')}>
+          <img src="/img/iconShare.svg" />
           <T keyName="share-button">Share</T>
         </button>
         <button
           className="button button--secondary"
           onClick={onAction('email')}
         >
+          <img src="/img/iconMail.svg" />
           <T keyName="send-via-email">Send via e-mail</T>
         </button>
       </div>
