@@ -17,7 +17,7 @@ const getInitialItems = () => {
   }
   return items?.length
     ? items
-    : ['Flame-thrower', 'Horse', 'My favourite toothbrush'];
+    : ['Passport', 'Maps and directions', 'Travel guide'];
 };
 
 export const Todos = () => {
