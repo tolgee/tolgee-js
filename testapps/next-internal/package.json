@@ -13,7 +13,7 @@
   "dependencies": {
     "@tolgee/react": "5.12.0",
     "@tolgee/web": "5.12.0",
-    "next": "13.4.7",
+    "next": "13.5.4",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
