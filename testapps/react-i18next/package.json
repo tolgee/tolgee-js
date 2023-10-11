@@ -19,7 +19,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
+    "start": "DISABLE_ESLINT_PLUGIN=true  react-scripts start",
     "develop": "DISABLE_ESLINT_PLUGIN=true FORCE_COLOR=true react-scripts start | cat -",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "clean": "rm -rf build build-e2e dist dist-e2e lib",

@@ -84,7 +84,8 @@ export default defineComponent({
     };
   },
   methods: {
-    onAdd() {
+    onAdd(e: Event) {
+      e.preventDefault();
       if (this.$data.newItemValue) {
         this.$data.items.push(this.$data.newItemValue);
         this.updateLocalStorage();
