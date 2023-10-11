@@ -24,10 +24,7 @@ context('UI Dialog', () => {
     getDevUi()
       .find('#_tolgee_platform_link')
       .invoke('attr', 'href')
-      .should(
-        'contain',
-        '/projects/1/translations/single?key=on-the-road-title'
-      );
+      .should('contain', '/projects/1/translations/single?key=app-title');
   });
 
   it('updates translation properly', () => {
