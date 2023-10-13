@@ -1,6 +1,6 @@
 {
 	"name": "@tolgee/svelte-testapp",
-	"version": "5.12.0",
+	"version": "5.13.0",
 	"private": true,
 	"scripts": {
 		"dev": "npm run develop",
@@ -33,7 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tolgee/format-icu": "5.12.0",
-		"@tolgee/svelte": "5.12.0"
+		"@tolgee/format-icu": "5.13.0",
+		"@tolgee/svelte": "5.13.0"
 	}
 }
