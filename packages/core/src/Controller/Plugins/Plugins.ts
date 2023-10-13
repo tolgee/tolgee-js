@@ -289,10 +289,22 @@ export function Plugins(
       formatEnabled,
       ...props
     }: TranslatePropsInternal & { formatEnabled?: boolean }) {
-      const { key, translation, defaultValue, noWrap, params, orEmpty, ns } =
+      const { key, translation, defaultValue, noWrap, params, ns, orEmpty } =
         props;
-      const formattableTranslation = translation || defaultValue;
-      let result = formattableTranslation || (orEmpty ? '' : key);
+
+      const formattableTranslation = translation ?? defaultValue;
+
+      let translationMissingResult = '';
+
+      if (translation === undefined || translation === null) {
+        // called when translation is missing
+        // return value is used when 'defaultValue' and 'orEmpty' are not defined
+        translationMissingResult =
+          getInitialOptions().onTranslationMissing(props);
+      }
+
+      let result =
+        formattableTranslation ?? (orEmpty ? '' : translationMissingResult);
 
       const language = getLanguage();
       const isFormatEnabled =

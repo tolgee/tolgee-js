@@ -4,6 +4,7 @@ import {
   TreeTranslationsData,
   OnFormatError,
   FetchFn,
+  MissingTranslationHandler,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -14,6 +15,9 @@ import {
 
 export const DEFAULT_FORMAT_ERROR = 'invalid';
 export const DEFAULT_API_URL = 'https://app.tolgee.io';
+export const DEFAULT_MISSING_TRANSLATION: MissingTranslationHandler = ({
+  key,
+}) => key;
 
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
@@ -100,6 +104,13 @@ export type TolgeeOptionsInternal = {
   onFormatError: OnFormatError;
 
   /**
+   * Define what to do when translation is missing.
+   * Is called when translation missing.
+   * If no orEmpty or defaultValue are defined, return value is rendered. (function is called regardless)
+   */
+  onTranslationMissing: MissingTranslationHandler;
+
+  /**
    * Define custom fetch function, used for fetching the translations
    */
   fetch: FetchFn;
@@ -127,6 +138,7 @@ const defaultValues: TolgeeOptionsInternal = {
   onFormatError: DEFAULT_FORMAT_ERROR,
   apiUrl: DEFAULT_API_URL,
   fetch: createFetchFunction(),
+  onTranslationMissing: DEFAULT_MISSING_TRANSLATION,
 };
 
 export const combineOptions = <T extends TolgeeOptions>(
