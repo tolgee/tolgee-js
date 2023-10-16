@@ -8,17 +8,23 @@ export const tolgeeProcessor = (tolgee: TolgeeInstance): Module => {
     type: 'postProcessor',
     name: 'tolgeeProcessor',
     process: function (value: string, keyIn: string[], options, translator) {
+      const keySeparator =
+        options.keySeparator ?? translator?.options?.keySeparator ?? '.';
+
       // if namespace is in the key, we need to extract it
       // https://github.com/i18next/i18next/issues/2049
-      const { key } = translator.extractFromKey(
-        keyIn.join(options.keySeparator || '.'),
-        {}
+      const { key, namespaces } = translator.extractFromKey(
+        keyIn.join(keySeparator),
+        options
       );
+      const ns =
+        namespaces?.[0] ?? options.ns ?? translator?.options?.defaultNS;
+
       return tolgee.wrap({
         key,
         defaultValue: options.defaultValue,
         translation: value,
-        ns: options.ns || translator?.options?.defaultNS,
+        ns,
       });
     },
   } as any as Module;
