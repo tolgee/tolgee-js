@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.13.1](https://github.com/tolgee/tolgee-js/compare/v5.13.0...v5.13.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* i18next processor properly parse namespace if in the key ([#3262](https://github.com/tolgee/tolgee-js/issues/3262)) ([6c4414e](https://github.com/tolgee/tolgee-js/commit/6c4414e29d86611bd374367f40fb05716f6372e5))
+
+
+
+
+
 # [5.13.0](https://github.com/tolgee/tolgee-js/compare/v5.12.0...v5.13.0) (2023-10-13)
 
 **Note:** Version bump only for package @tolgee/i18next
