@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.13.2-prerelease.0f38c926.0](https://github.com/tolgee/tolgee-js/compare/v5.13.1...v5.13.2-prerelease.0f38c926.0) (2023-10-19)
+
+
+### Bug Fixes
+
+* create dev-tools element lazily ([0f38c92](https://github.com/tolgee/tolgee-js/commit/0f38c9265f507fc72feb08ff9ff8aee29eeb4f58))
+
+
+
+
+
 ## [5.13.1](https://github.com/tolgee/tolgee-js/compare/v5.13.0...v5.13.1) (2023-10-16)
 
 
