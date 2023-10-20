@@ -11,9 +11,7 @@ export class UI implements UiInterface {
   private viewerComponent: KeyDialog | undefined;
   private keyContextMenu: KeyContextMenu | undefined;
 
-  constructor(private props: UiProps) {
-    this.checkInitialization();
-  }
+  constructor(private props: UiProps) {}
 
   public checkInitialization() {
     const rootElement = getRootElement();
