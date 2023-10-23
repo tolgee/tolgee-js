@@ -5,10 +5,13 @@ export function getRootElement() {
   if (!rootElement?.isConnected) {
     rootElement = document.createElement('div');
     rootElement.id = DEVTOOLS_ID;
-    rootElement.attachShadow({ mode: 'open' });
     rootElement.style.height = '0px';
     rootElement.style.overflow = 'hidden';
     document.body.appendChild(rootElement);
+  }
+
+  if (!rootElement.shadowRoot) {
+    rootElement.attachShadow({ mode: 'open' });
   }
   return rootElement.shadowRoot!;
 }
