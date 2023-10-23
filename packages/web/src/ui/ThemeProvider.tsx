@@ -67,7 +67,7 @@ const globalStyles = css`
 export function ThemeProvider({ children }: React.PropsWithChildren) {
   const cache = useRef(
     createCache({
-      key: 'css',
+      key: 'tolgee-dev-tools',
       prepend: true,
       container: getRootElement(),
     })
