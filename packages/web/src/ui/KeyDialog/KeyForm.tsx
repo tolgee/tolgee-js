@@ -88,7 +88,7 @@ export const KeyForm = () => {
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
   const input = useDialogContext((c) => c.input);
-  const translations = useDialogContext((c) => c.translations);
+  const keyData = useDialogContext((c) => c.keyData);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
@@ -177,7 +177,7 @@ export const KeyForm = () => {
 
       {formDisabled && ready && (
         <ScRestriction>{`Modification is restricted due to missing ${
-          translations?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
+          keyData?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
         } scope in current api key settings.`}</ScRestriction>
       )}
 
@@ -196,7 +196,7 @@ export const KeyForm = () => {
         >
           {success
             ? 'Saved! ✓'
-            : translations?.keyId === undefined
+            : keyData?.keyId === undefined
             ? 'Create'
             : 'Update'}
         </LoadingButton>

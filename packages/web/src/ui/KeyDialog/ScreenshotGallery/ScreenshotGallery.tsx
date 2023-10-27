@@ -61,7 +61,7 @@ export const ScreenshotGallery: React.FC = () => {
     setScreenshotDetail,
   } = useDialogActions();
 
-  const keyId = useDialogContext((c) => c.translations?.keyId);
+  const keyId = useDialogContext((c) => c.keyData?.keyId);
   const screenshots = useDialogContext((c) => c.screenshots);
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);

@@ -142,7 +142,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'post',
     });
 
-    const translations = translationsLoadable.data?._embedded?.keys?.[0];
+    const keyData = translationsLoadable.data?._embedded?.keys?.[0];
 
     const linkToPlatform =
       scopesLoadable.data?.projectId !== undefined
@@ -185,7 +185,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           }
         });
 
-        const result = await (translations === undefined
+        const result = await (keyData === undefined
           ? createKey.mutateAsync({
               content: {
                 'application/json': {
@@ -214,7 +214,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   tags,
                 },
               },
-              path: { id: translations.keyId! },
+              path: { id: keyData.keyId! },
             }));
 
         const version = result._internal?.version;
@@ -311,7 +311,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const getRemovedScreenshots = () => {
       return (
-        translations?.screenshots
+        keyData?.screenshots
           ?.map((sc) => sc.id)
           .filter((scId) => !screenshots.find((sc) => sc.id === scId)) || []
       );
@@ -340,8 +340,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           !translationsFormTouched
         ) {
           const wasBaseTranslationProvided =
-            translations?.translations?.[baseLanguageDefinition.tag!] !==
-            undefined;
+            keyData?.translations?.[baseLanguageDefinition.tag!] !== undefined;
 
           if (
             !translationsForm[baseLanguageDefinition.tag!] &&
@@ -405,7 +404,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       availableLanguages,
       selectedLanguages: putBaseLangFirstTags(selectedLanguages, baseLang?.tag),
       formDisabled,
-      translations,
+      keyData,
       translationsForm,
       container,
       useBrowserWindow,

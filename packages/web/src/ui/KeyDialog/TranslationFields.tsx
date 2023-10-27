@@ -57,6 +57,7 @@ export const TranslationFields: FunctionComponent = () => {
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
   const permittedLanguageIds = useDialogContext((c) => c.permittedLanguageIds);
+  const keyData = useDialogContext((c) => c.keyData);
 
   const onChange = (key: string) => (e: any) => {
     onInputChange(key, e.target.value);
@@ -85,13 +86,18 @@ export const TranslationFields: FunctionComponent = () => {
                 permittedLanguageIds,
                 availableLanguages
               ));
+          const translation = keyData?.translations[key];
 
           return (
             <React.Fragment key={key}>
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <ScTextField
                 size="small"
-                disabled={formDisabled || !languagePermitted}
+                disabled={
+                  formDisabled ||
+                  !languagePermitted ||
+                  translation?.state === 'DISABLED'
+                }
                 key={key}
                 inputProps={{
                   lang: key,
