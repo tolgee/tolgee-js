@@ -2,7 +2,7 @@ import React from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import OpenInNew from '@mui/icons-material/OpenInNew';
 
 import { TranslationFields } from './TranslationFields';
@@ -82,6 +82,7 @@ const ScError = styled('div')`
 `;
 
 export const KeyForm = () => {
+  const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
     useDialogActions();
 
@@ -116,7 +117,7 @@ export const KeyForm = () => {
             viewBox="0 0 200 200"
             xmlns="http://www.w3.org/2000/svg"
             opacity="0.99"
-            fill="#822B55"
+            fill={theme.palette.primary.main}
             style={{
               fillRule: 'evenodd',
               clipRule: 'evenodd',
