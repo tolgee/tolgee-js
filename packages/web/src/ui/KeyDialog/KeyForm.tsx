@@ -2,7 +2,7 @@ import React from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import OpenInNew from '@mui/icons-material/OpenInNew';
 
 import { TranslationFields } from './TranslationFields';
@@ -82,13 +82,14 @@ const ScError = styled('div')`
 `;
 
 export const KeyForm = () => {
+  const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
     useDialogActions();
 
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
   const input = useDialogContext((c) => c.input);
-  const translations = useDialogContext((c) => c.translations);
+  const keyData = useDialogContext((c) => c.keyData);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
@@ -116,7 +117,7 @@ export const KeyForm = () => {
             viewBox="0 0 200 200"
             xmlns="http://www.w3.org/2000/svg"
             opacity="0.99"
-            fill="#822B55"
+            fill={theme.palette.primary.main}
             style={{
               fillRule: 'evenodd',
               clipRule: 'evenodd',
@@ -177,7 +178,7 @@ export const KeyForm = () => {
 
       {formDisabled && ready && (
         <ScRestriction>{`Modification is restricted due to missing ${
-          translations?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
+          keyData?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
         } scope in current api key settings.`}</ScRestriction>
       )}
 
@@ -196,7 +197,7 @@ export const KeyForm = () => {
         >
           {success
             ? 'Saved! ✓'
-            : translations?.keyId === undefined
+            : keyData?.keyId === undefined
             ? 'Create'
             : 'Update'}
         </LoadingButton>
