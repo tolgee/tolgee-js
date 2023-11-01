@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.14.1-prerelease.a2c80516.0](https://github.com/tolgee/tolgee-js/compare/v5.14.0...v5.14.1-prerelease.a2c80516.0) (2023-11-01)
+
+
+### Features
+
+* improve key modifiers observing ([a2c8051](https://github.com/tolgee/tolgee-js/commit/a2c80516b3d7ca1c47ea278470782a44642871c9))
+* improve mouse handler on disabled elements ([bcf10e0](https://github.com/tolgee/tolgee-js/commit/bcf10e029b64866dd865b318e5e5d222548a70f5))
+
+
+
+
+
 # [5.14.0](https://github.com/tolgee/tolgee-js/compare/v5.13.3...v5.14.0) (2023-10-27)
 
 
