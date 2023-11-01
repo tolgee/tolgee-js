@@ -24,13 +24,23 @@ type Props = {
   options: ObserverOptionsInternal;
 };
 
+const MODIFIER_MAP = new Map<
+  ModifierKey,
+  'ctrlKey' | 'altKey' | 'metaKey' | 'shiftKey'
+>([
+  ['Control', 'ctrlKey'],
+  ['Alt', 'altKey'],
+  ['Meta', 'metaKey'],
+  ['Shift', 'shiftKey'],
+]);
+
 export function MouseEventHandler({
   highlightKeys,
   elementStore,
   onClick,
   options,
 }: Props) {
-  let keysDown = new Set<ModifierKey>();
+  const keysDown = new Set<ModifierKey>();
   let highlighted: TolgeeElement | undefined;
   let cursorPosition: Coordinates | undefined;
 
@@ -80,7 +90,18 @@ export function MouseEventHandler({
     updateHighlight();
   }
 
+  function updateModifiers(e: MouseEvent | KeyboardEvent) {
+    for (const [modifier, modifierProperty] of MODIFIER_MAP.entries()) {
+      if (keysDown.has(modifier) && !e[modifierProperty]) {
+        keysDown.delete(modifier);
+      } else if (!keysDown.has(modifier) && e[modifierProperty]) {
+        keysDown.add(modifier);
+      }
+    }
+  }
+
   function blockEvents(e: MouseEvent) {
+    updateModifiers(e);
     if (areKeysDown() && !isInUiDialog(e.target as Element)) {
       e.stopPropagation();
       e.preventDefault();
@@ -88,27 +109,17 @@ export function MouseEventHandler({
   }
 
   function onMouseMove(e: MouseEvent) {
+    updateModifiers(e);
     updateCursorPosition({ x: e.clientX, y: e.clientY });
   }
 
-  function onBlur() {
-    keysDown = new Set();
-    // keysChanged.emit(areKeysDown());
-    updateHighlight();
-  }
-
   function onKeyDown(e: KeyboardEvent) {
-    const modifierKey = e.key as unknown as ModifierKey;
-    if (modifierKey !== undefined) {
-      keysDown.add(modifierKey);
-      // keysChanged.emit(areKeysDown());
-    }
+    updateModifiers(e);
     updateHighlight();
   }
 
   function onKeyUp(e: KeyboardEvent) {
-    keysDown.delete(e.key as unknown as ModifierKey);
-    // keysChanged.emit(areKeysDown());
+    updateModifiers(e);
     updateHighlight();
   }
 
@@ -118,28 +129,20 @@ export function MouseEventHandler({
   }
 
   function handleClick(e: MouseEvent) {
+    blockEvents(e);
     if (areKeysDown() && highlighted) {
-      blockEvents(e);
       onClick(e, highlighted);
       unhighlight();
     }
   }
 
-  function handleBlur() {
-    if (highlighted) {
-      unhighlight();
-    }
-  }
-
   function initEventListeners() {
-    targetDocument.addEventListener('blur', onBlur, eCapture);
     targetDocument.addEventListener('keydown', onKeyDown, eCapture);
     targetDocument.addEventListener('keyup', onKeyUp, eCapture);
     targetDocument.addEventListener('mousemove', onMouseMove, ePassive);
 
     targetDocument.addEventListener('scroll', onScroll, ePassive);
     targetDocument.addEventListener('click', handleClick, eCapture);
-    targetDocument.addEventListener('blur', handleBlur, eCapture);
 
     targetDocument.addEventListener('mouseenter', blockEvents, eCapture);
     targetDocument.addEventListener('mouseover', blockEvents, eCapture);
@@ -150,14 +153,12 @@ export function MouseEventHandler({
   }
 
   function removeEventListeners() {
-    targetDocument.removeEventListener('blur', onBlur, eCapture);
     targetDocument.removeEventListener('keydown', onKeyDown, eCapture);
     targetDocument.removeEventListener('keyup', onKeyUp, eCapture);
     targetDocument.removeEventListener('mousemove', onMouseMove, ePassive);
 
     targetDocument.removeEventListener('scroll', onScroll, ePassive);
     targetDocument.removeEventListener('click', handleClick, eCapture);
-    targetDocument.removeEventListener('blur', handleBlur, eCapture);
 
     targetDocument.removeEventListener('mouseenter', blockEvents, eCapture);
     targetDocument.removeEventListener('mouseover', blockEvents, eCapture);
