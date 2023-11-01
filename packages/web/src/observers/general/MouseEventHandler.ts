@@ -65,13 +65,12 @@ export function MouseEventHandler({
 
     let newHighlighted: TolgeeElement | undefined;
     if (position && areKeysDown()) {
-      const element = documentOrShadowRoot.elementFromPoint(
+      const elements = documentOrShadowRoot.elementsFromPoint(
         position.x,
         position.y
       );
-      if (element) {
-        newHighlighted = getClosestTolgeeElement(element);
-      }
+
+      newHighlighted = getClosestTolgeeElement(elements);
     }
     highlight(newHighlighted);
   }
@@ -119,9 +118,15 @@ export function MouseEventHandler({
   }
 
   function handleClick(e: MouseEvent) {
-    blockEvents(e);
     if (areKeysDown() && highlighted) {
+      blockEvents(e);
       onClick(e, highlighted);
+      unhighlight();
+    }
+  }
+
+  function handleBlur() {
+    if (highlighted) {
       unhighlight();
     }
   }
@@ -131,8 +136,10 @@ export function MouseEventHandler({
     targetDocument.addEventListener('keydown', onKeyDown, eCapture);
     targetDocument.addEventListener('keyup', onKeyUp, eCapture);
     targetDocument.addEventListener('mousemove', onMouseMove, ePassive);
+
     targetDocument.addEventListener('scroll', onScroll, ePassive);
     targetDocument.addEventListener('click', handleClick, eCapture);
+    targetDocument.addEventListener('blur', handleBlur, eCapture);
 
     targetDocument.addEventListener('mouseenter', blockEvents, eCapture);
     targetDocument.addEventListener('mouseover', blockEvents, eCapture);
@@ -150,6 +157,7 @@ export function MouseEventHandler({
 
     targetDocument.removeEventListener('scroll', onScroll, ePassive);
     targetDocument.removeEventListener('click', handleClick, eCapture);
+    targetDocument.removeEventListener('blur', handleBlur, eCapture);
 
     targetDocument.removeEventListener('mouseenter', blockEvents, eCapture);
     targetDocument.removeEventListener('mouseover', blockEvents, eCapture);
@@ -164,17 +172,26 @@ export function MouseEventHandler({
   }
 
   function getClosestTolgeeElement(
-    element: Element
+    elements: Element[]
   ): TolgeeElement | undefined {
-    return findAncestor(element, (el) =>
-      elementStore.get(el as TolgeeElement)
-    ) as TolgeeElement;
+    for (const element of elements) {
+      const result = findAncestor(element, (el) =>
+        elementStore.get(el as TolgeeElement)
+      ) as TolgeeElement | undefined | null;
+
+      if (result !== undefined) {
+        return result || undefined;
+      }
+    }
   }
 
   function findAncestor(
     element: Element,
     func: (el: Element) => any
-  ): Element | undefined {
+  ): Element | undefined | null {
+    if (element.id === DEVTOOLS_ID) {
+      return null;
+    }
     if (func(element)) {
       return element;
     }

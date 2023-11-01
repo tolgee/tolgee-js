@@ -2,7 +2,6 @@ import { TOLGEE_HIGHLIGHTER_CLASS } from '../../constants';
 import { ElementMeta, TolgeeElement } from '../../types';
 
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
-  pointerEvents: 'none',
   position: 'fixed',
   boxSizing: 'content-box',
   zIndex: String(Number.MAX_SAFE_INTEGER),
