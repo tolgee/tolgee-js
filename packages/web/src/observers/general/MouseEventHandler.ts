@@ -146,12 +146,8 @@ export function MouseEventHandler({
     listener: (ev: DocumentEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions
   ) {
-    const handler = (e: any) => {
-      console.log(e);
-      return listener(e);
-    };
-    targetDocument.addEventListener(type, handler, options);
-    subscribedEvents.push([type, handler, options]);
+    targetDocument.addEventListener(type, listener, options);
+    subscribedEvents.push([type, listener as any, options]);
   }
 
   function initEventListeners() {
