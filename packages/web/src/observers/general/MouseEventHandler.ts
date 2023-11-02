@@ -43,6 +43,11 @@ export function MouseEventHandler({
   const keysDown = new Set<ModifierKey>();
   let highlighted: TolgeeElement | undefined;
   let cursorPosition: Coordinates | undefined;
+  let subscribedEvents: [
+    type: string,
+    listener: EventListenerOrEventListenerObject,
+    options?: boolean | AddEventListenerOptions
+  ][];
 
   const documentOrShadowRoot = (options.targetElement?.getRootNode() ||
     document) as unknown as ShadowRoot;
@@ -136,36 +141,36 @@ export function MouseEventHandler({
     }
   }
 
+  function subscribe<K extends keyof DocumentEventMap>(
+    type: K,
+    listener: (this: Document, ev: DocumentEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ) {
+    targetDocument.addEventListener(type, listener, options);
+    subscribedEvents.push([type, listener as any, options]);
+  }
+
   function initEventListeners() {
-    targetDocument.addEventListener('keydown', onKeyDown, eCapture);
-    targetDocument.addEventListener('keyup', onKeyUp, eCapture);
-    targetDocument.addEventListener('mousemove', onMouseMove, ePassive);
+    subscribe('keydown', onKeyDown, eCapture);
+    subscribe('keyup', onKeyUp, eCapture);
+    subscribe('mousemove', onMouseMove, ePassive);
 
-    targetDocument.addEventListener('scroll', onScroll, ePassive);
-    targetDocument.addEventListener('click', handleClick, eCapture);
+    subscribe('scroll', onScroll, ePassive);
+    subscribe('click', handleClick, eCapture);
 
-    targetDocument.addEventListener('mouseenter', blockEvents, eCapture);
-    targetDocument.addEventListener('mouseover', blockEvents, eCapture);
-    targetDocument.addEventListener('mouseout', blockEvents, eCapture);
-    targetDocument.addEventListener('mouseleave', blockEvents, eCapture);
-    targetDocument.addEventListener('mousedown', blockEvents, eCapture);
-    targetDocument.addEventListener('mouseup', blockEvents, eCapture);
+    subscribe('mouseenter', blockEvents, eCapture);
+    subscribe('mouseover', blockEvents, eCapture);
+    subscribe('mouseout', blockEvents, eCapture);
+    subscribe('mouseleave', blockEvents, eCapture);
+    subscribe('mousedown', blockEvents, eCapture);
+    subscribe('mouseup', blockEvents, eCapture);
   }
 
   function removeEventListeners() {
-    targetDocument.removeEventListener('keydown', onKeyDown, eCapture);
-    targetDocument.removeEventListener('keyup', onKeyUp, eCapture);
-    targetDocument.removeEventListener('mousemove', onMouseMove, ePassive);
-
-    targetDocument.removeEventListener('scroll', onScroll, ePassive);
-    targetDocument.removeEventListener('click', handleClick, eCapture);
-
-    targetDocument.removeEventListener('mouseenter', blockEvents, eCapture);
-    targetDocument.removeEventListener('mouseover', blockEvents, eCapture);
-    targetDocument.removeEventListener('mouseout', blockEvents, eCapture);
-    targetDocument.removeEventListener('mouseleave', blockEvents, eCapture);
-    targetDocument.removeEventListener('mousedown', blockEvents, eCapture);
-    targetDocument.removeEventListener('mouseup', blockEvents, eCapture);
+    for (const params of subscribedEvents) {
+      targetDocument.removeEventListener(...params);
+    }
+    subscribedEvents = [];
   }
 
   function isInUiDialog(element: Element) {
