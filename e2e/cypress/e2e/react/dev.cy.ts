@@ -57,12 +57,12 @@ context('React app in dev mode', () => {
     });
 
     it('opens inner translation correctly', () => {
-      cy.gcy('translationInner').trigger('keydown', { key: 'Alt' }).click();
+      cy.gcy('translationInner').click({ altKey: true });
       getDevUi().contains('translation_inner').should('be.visible');
     });
 
     it('opens outer translation correctly', () => {
-      cy.gcy('translationOuter').trigger('keydown', { key: 'Alt' }).click();
+      cy.gcy('translationOuter').click({ altKey: true });
       getDevUi().contains('translation_outer').should('be.visible');
     });
   });

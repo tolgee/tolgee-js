@@ -47,7 +47,7 @@ export function MouseEventHandler({
     type: string,
     listener: EventListenerOrEventListenerObject,
     options?: boolean | AddEventListenerOptions
-  ][];
+  ][] = [];
 
   const documentOrShadowRoot = (options.targetElement?.getRootNode() ||
     document) as unknown as ShadowRoot;
@@ -80,10 +80,8 @@ export function MouseEventHandler({
 
     let newHighlighted: TolgeeElement | undefined;
     if (position && areKeysDown()) {
-      const elements = documentOrShadowRoot.elementsFromPoint(
-        position.x,
-        position.y
-      );
+      const elements =
+        documentOrShadowRoot.elementsFromPoint(position.x, position.y) || [];
 
       newHighlighted = getClosestTolgeeElement(elements);
     }
@@ -135,6 +133,8 @@ export function MouseEventHandler({
 
   function handleClick(e: MouseEvent) {
     blockEvents(e);
+    updateModifiers(e);
+    updateCursorPosition({ x: e.clientX, y: e.clientY });
     if (areKeysDown() && highlighted) {
       onClick(e, highlighted);
       unhighlight();
@@ -143,11 +143,15 @@ export function MouseEventHandler({
 
   function subscribe<K extends keyof DocumentEventMap>(
     type: K,
-    listener: (this: Document, ev: DocumentEventMap[K]) => any,
+    listener: (ev: DocumentEventMap[K]) => any,
     options?: boolean | AddEventListenerOptions
   ) {
-    targetDocument.addEventListener(type, listener, options);
-    subscribedEvents.push([type, listener as any, options]);
+    const handler = (e: any) => {
+      console.log(e);
+      return listener(e);
+    };
+    targetDocument.addEventListener(type, handler, options);
+    subscribedEvents.push([type, handler, options]);
   }
 
   function initEventListeners() {
