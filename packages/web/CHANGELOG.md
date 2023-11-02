@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.15.0](https://github.com/tolgee/tolgee-js/compare/v5.14.0...v5.15.0) (2023-11-02)
+
+
+### Features
+
+* improve mouse handler ([#3274](https://github.com/tolgee/tolgee-js/issues/3274)) ([44cbf78](https://github.com/tolgee/tolgee-js/commit/44cbf78d6f848a1c50a429460b8e455f66332c8f))
+
+
+
+
+
 # [5.14.0](https://github.com/tolgee/tolgee-js/compare/v5.13.3...v5.14.0) (2023-10-27)
 
 
