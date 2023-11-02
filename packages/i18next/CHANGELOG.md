@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.15.1-prerelease.f75e0f30.0](https://github.com/tolgee/tolgee-js/compare/v5.15.0...v5.15.1-prerelease.f75e0f30.0) (2023-11-02)
+
+
+### Features
+
+* unify exports ([f75e0f3](https://github.com/tolgee/tolgee-js/commit/f75e0f3018cc63a145aab1f1e5ee52aacea8e861))
+
+
+
+
+
 # [5.15.0](https://github.com/tolgee/tolgee-js/compare/v5.14.0...v5.15.0) (2023-11-02)
 
 **Note:** Version bump only for package @tolgee/i18next
