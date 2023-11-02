@@ -3,12 +3,7 @@ import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
 export const openUI = (translation = 'What To Pack') => {
-  cy.contains(translation)
-    .should('be.visible')
-    .trigger('keydown', { key: 'Alt' })
-    .trigger('mouseover')
-    .click();
-  cy.window().trigger('keyup', { key: 'Alt' });
+  cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
   getDevUi().find('textarea').contains(translation).should('be.visible');
   cy.wait(300);

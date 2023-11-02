@@ -19,7 +19,7 @@ export const exampleAppDevTest = (url: string, options?: Options) =>
 
     it('title can be translated', () => {
       cy.contains('What To Pack').invoke('attr', '_tolgee').should('exist');
-      cy.contains('What To Pack').trigger('keydown', { key: 'Alt' }).click();
+      cy.contains('What To Pack').click({ altKey: true });
       getDevUi()
         .contains('Quick translation', { timeout: 60 * 1000 })
         .should('be.visible');
@@ -27,7 +27,7 @@ export const exampleAppDevTest = (url: string, options?: Options) =>
 
     it('placeholder can be translated', () => {
       cy.contains('What To Pack').invoke('attr', '_tolgee').should('exist');
-      cy.get('input').trigger('keydown', { key: 'Alt' }).click();
+      cy.get('input').click({ altKey: true });
       getDevUi()
         .contains('Quick translation', { timeout: 60 * 1000 })
         .should('be.visible');
