@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.16.0](https://github.com/tolgee/tolgee-js/compare/v5.15.0...v5.16.0) (2023-11-04)
+
+
+### Features
+
+* unify exports ([#3276](https://github.com/tolgee/tolgee-js/issues/3276)) ([c8d2563](https://github.com/tolgee/tolgee-js/commit/c8d25637375dfcf7ba3baa622f9dbbc50cc501ed))
+
+
+
+
+
 # [5.15.0](https://github.com/tolgee/tolgee-js/compare/v5.14.0...v5.15.0) (2023-11-02)
 
 **Note:** Version bump only for package @tolgee/format-icu
