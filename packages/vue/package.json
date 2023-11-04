@@ -68,7 +68,7 @@
       "types": "./lib/index.d.ts",
       "require": "./dist/tolgee-vue.cjs.js",
       "module": "./dist/tolgee-vue.esm.js",
-      "import": "./dist/tolgee-vue.esm.js"
+      "import": "./dist/tolgee-vue.esm.mjs"
     },
     "./package.json": "./package.json"
   },
