@@ -1,13 +1,13 @@
 {
   "name": "@tolgee/react-i18next-testapp",
-  "version": "5.16.1",
+  "version": "5.16.2",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "@tolgee/core": "5.16.1",
-    "@tolgee/i18next": "5.16.1",
+    "@tolgee/core": "5.16.2",
+    "@tolgee/i18next": "5.16.2",
     "concurrently": "^7.3.0",
     "i18next": "23.5.1",
     "i18next-icu": "^2.3.0",

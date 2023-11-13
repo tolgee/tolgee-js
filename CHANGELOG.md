@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.16.2](https://github.com/tolgee/tolgee-js/compare/v5.16.1...v5.16.2) (2023-11-13)
+
+
+### Bug Fixes
+
+* remove unused window check, as onMount only runs client side ([#3279](https://github.com/tolgee/tolgee-js/issues/3279)) ([568e5e4](https://github.com/tolgee/tolgee-js/commit/568e5e4b8d67ba680161ac2f930a6375c5186136))
+
+
+
+
+
 ## [5.16.1](https://github.com/tolgee/tolgee-js/compare/v5.16.0...v5.16.1) (2023-11-13)
 
 
