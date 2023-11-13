@@ -12,14 +12,12 @@
     tolgee,
   } as TolgeeSvelteContext);
 
-  if (typeof window !== 'undefined') {
-    onMount(() => {
-      tolgee.run().finally(() => {
-        isLoading = false
-      })
-    });
-    onDestroy(tolgee.stop);
-  }
+  onMount(() => {
+    tolgee.run().finally(() => {
+      isLoading = false
+    })
+  });
+  onDestroy(tolgee.stop);
 </script>
 
 {#if !isLoading }
