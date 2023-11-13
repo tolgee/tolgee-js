@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.16.1-prerelease.d12444aa.0](https://github.com/tolgee/tolgee-js/compare/v5.16.0...v5.16.1-prerelease.d12444aa.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* return TextEncoder polyfill as it's not JS standard ([d12444a](https://github.com/tolgee/tolgee-js/commit/d12444aae2f2416861227f97c4534e2f33524683))
+
+
+
+
+
 # [5.16.0](https://github.com/tolgee/tolgee-js/compare/v5.15.0...v5.16.0) (2023-11-04)
 
 **Note:** Version bump only for package @tolgee/react-i18next-testapp
