@@ -3,7 +3,6 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   roots: ['src'],
-  setupFiles: ['../testing/setupJest.ts'],
   unmockedModulePathPatterns: [
     '<rootDir>/src/__testFixtures/*',
     '/node_modules/*',

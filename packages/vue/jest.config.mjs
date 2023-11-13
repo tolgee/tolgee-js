@@ -8,7 +8,6 @@ export default {
   transform: {
     '^.+\\.vue$': '@vue/vue3-jest',
   },
-  setupFiles: ['../testing/setupJest.ts'],
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],
   },

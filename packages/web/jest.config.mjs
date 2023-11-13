@@ -5,6 +5,5 @@ export default {
   moduleNameMapper: {
     '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
   },
-  setupFiles: ['../testing/setupJest.ts'],
   roots: ['src'],
 };

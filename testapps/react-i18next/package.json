@@ -9,11 +9,11 @@
     "@tolgee/core": "5.16.0",
     "@tolgee/i18next": "5.16.0",
     "concurrently": "^7.3.0",
-    "i18next": "^23.5.1",
+    "i18next": "23.5.1",
     "i18next-icu": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "^13.2.2",
+    "react-i18next": "13.2.2",
     "react-scripts": "5.0.1",
     "serve": "^14.1.1",
     "web-vitals": "^2.1.4"
