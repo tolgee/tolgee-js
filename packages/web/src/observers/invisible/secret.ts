@@ -1,4 +1,8 @@
-import 'fast-text-encoding';
+// @ts-ignore
+import * as FastTextEncoding from 'fast-text-encoding';
+// make sure it's not treeshaken
+// eslint-disable-next-line no-console
+console.assert?.(FastTextEncoding);
 
 export const INVISIBLE_CHARACTERS = ['\u200C', '\u200D'];
 
