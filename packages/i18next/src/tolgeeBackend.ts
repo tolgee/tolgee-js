@@ -12,7 +12,10 @@ export const tolgeeBackend = (tolgee: TolgeeInstance): Module => {
           language,
           namespace: ns,
         });
-        callback(null, Object.fromEntries(translations));
+        callback(
+          null,
+          translations ? Object.fromEntries(translations) : undefined
+        );
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(e);
