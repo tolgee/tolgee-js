@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.16.3](https://github.com/tolgee/tolgee-js/compare/v5.16.2...v5.16.3) (2023-11-24)
+
+
+### Bug Fixes
+
+* prevent error when namespace is empty ([#3284](https://github.com/tolgee/tolgee-js/issues/3284)) ([73c9308](https://github.com/tolgee/tolgee-js/commit/73c9308077903b61b285a02248e7374b324db485))
+
+
+
+
+
 ## [5.16.2](https://github.com/tolgee/tolgee-js/compare/v5.16.1...v5.16.2) (2023-11-13)
 
 
