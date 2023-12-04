@@ -1,24 +1,16 @@
 import React from 'react';
 import { FunctionComponent } from 'react';
-import { useDialogContext, useDialogActions } from './dialogContext';
-import TextField from '@mui/material/TextField';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/styled-engine';
+
+import { useDialogContext, useDialogActions } from './dialogContext';
 import { ScFieldTitle } from '../common/FieldTitle';
-import { isLanguagePermitted } from '../tools/isLanguagePermitted';
 import { getPreferredLanguages } from './dialogContext/tools';
-import { usePermissions } from './dialogContext/usePermissions';
+import { TranslationTextField } from './TranslationTextField';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
   100% { background-position: 100%; }
-`;
-
-const ScTextField = styled(TextField)`
-  margin: 0px;
-  & .Mui-disabled {
-    background: ${({ theme }) => theme.palette.grey[200]};
-  }
 `;
 
 const LoadingTextArea = styled('div')`
@@ -45,9 +37,9 @@ const LoadingTextArea = styled('div')`
 `;
 
 export const TranslationFields: FunctionComponent = () => {
-  const { onInputChange } = useDialogActions();
-  const isAuthorizedTo = usePermissions();
+  const { onInputChange, onStateChange } = useDialogActions();
 
+  const permissions = useDialogContext((c) => c.permissions);
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
   const langFields = selectedLanguages.length
     ? selectedLanguages
@@ -56,12 +48,8 @@ export const TranslationFields: FunctionComponent = () => {
   const translationsForm = useDialogContext((c) => c.translationsForm);
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
-  const permittedLanguageIds = useDialogContext((c) => c.permittedLanguageIds);
-  const keyData = useDialogContext((c) => c.keyData);
 
-  const onChange = (key: string) => (e: any) => {
-    onInputChange(key, e.target.value);
-  };
+  const keyData = useDialogContext((c) => c.keyData);
 
   const Loading = () => (
     <>
@@ -76,38 +64,29 @@ export const TranslationFields: FunctionComponent = () => {
       {loading ? (
         <Loading />
       ) : (
-        [...selectedLanguages].map((key) => {
+        selectedLanguages.map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
-          const languagePermitted =
-            isAuthorizedTo('keys.edit') ||
-            (isAuthorizedTo('translations.edit') &&
-              isLanguagePermitted(
-                key,
-                permittedLanguageIds,
-                availableLanguages
-              ));
+
+          const editPermitted = permissions.canEditTranslation(key);
+          const stateChangePermitted = permissions.canEditState(key);
+
           const translation = keyData?.translations[key];
 
           return (
             <React.Fragment key={key}>
               <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
-              <ScTextField
-                size="small"
+              <TranslationTextField
                 disabled={
                   formDisabled ||
-                  !languagePermitted ||
+                  !editPermitted ||
                   translation?.state === 'DISABLED'
                 }
-                key={key}
-                inputProps={{
-                  lang: key,
-                }}
-                minRows={2}
-                maxRows={Infinity}
-                multiline
-                fullWidth
-                value={translationsForm[key] || ''}
-                onChange={onChange(key)}
+                stateChangeDisabled={!stateChangePermitted}
+                language={lang?.tag}
+                value={translationsForm[key]?.text || ''}
+                onChange={(value) => onInputChange(key, value)}
+                onStateChange={(value) => onStateChange(key, value)}
+                state={translationsForm[key]?.state}
               />
             </React.Fragment>
           );

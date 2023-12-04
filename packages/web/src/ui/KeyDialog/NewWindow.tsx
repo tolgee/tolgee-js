@@ -84,6 +84,7 @@ export const NewWindow = (props: React.PropsWithChildren) => {
     return createCache({
       key: 'external',
       container: head,
+      prepend: true,
     });
   }, [popup]);
 

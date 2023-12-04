@@ -90,13 +90,13 @@ export const useGallery = (uiProps: UiProps) => {
   async function handleTakeScreenshot(
     key: string,
     ns: string,
-    translationsForm: Record<string, string>
+    changes: [language: string, value: string][]
   ) {
     setTakingScreenshot(true);
     const { revert } = changeInTolgeeCache(
       key,
       ns,
-      Object.entries(translationsForm),
+      changes,
       uiProps.changeTranslation
     );
     await sleep(400);

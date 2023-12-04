@@ -13,7 +13,6 @@ import { useDialogContext, useDialogActions } from '../dialogContext';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
 import { ExtensionPrompt } from './ExtensionPrompt';
-import { usePermissions } from '../dialogContext/usePermissions';
 
 const ScPlaceholder = styled('div')`
   display: flex;
@@ -66,12 +65,12 @@ export const ScreenshotGallery: React.FC = () => {
   const screenshotDetails = useDialogContext((c) => c.screenshotDetail);
   const canTakeScreenshots = useDialogContext((c) => c.canTakeScreenshots);
   const screenshotsUploading = useDialogContext((c) => c.screenshotsUploading);
-  const isAuthorizedTo = usePermissions();
+  const permissions = useDialogContext((c) => c.permissions);
 
   const [extensionPrompt, setExtensionPrompt] = useState(false);
 
-  const uploadEnabled = isAuthorizedTo('screenshots.upload');
-  const deleteEnabled = isAuthorizedTo('screenshots.delete');
+  const uploadEnabled = permissions.canUploadScreenshots;
+  const deleteEnabled = permissions.canDeleteScreenshots;
 
   function onFileSelected(e: React.SyntheticEvent) {
     const files = (e.target as HTMLInputElement).files;
