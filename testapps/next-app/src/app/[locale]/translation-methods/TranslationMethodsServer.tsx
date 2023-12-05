@@ -1,4 +1,4 @@
-import { T, getTranslate } from 'tolgee/server';
+import { T, getTranslate } from '@/tolgee/server';
 
 export const TranslationMethodsServer = async () => {
   const t = await getTranslate();

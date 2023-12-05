@@ -1,8 +1,8 @@
-# Tolgee with next.js 13 app router DEMO
+# Tolgee with next.js 14 app router DEMO
 
 This repo demonstrates how to use `tolgee` with new `next.js` app router.
 
-An example based on `next13` app folder with `tolgee` and `next-intl` package.
+An example based on `next14` app folder with `tolgee` and `next-intl` package.
 
 ## Setup
 
