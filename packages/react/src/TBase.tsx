@@ -1,6 +1,6 @@
 import React from 'react';
 import { addReactKeys, wrapTagHandlers } from './tagsTools';
-import { PropsWithKeyName, TBaseInterface } from './types';
+import type { PropsWithKeyName, TBaseInterface } from './types';
 
 export const TBase: TBaseInterface = (props) => {
   const key = (props as PropsWithKeyName).keyName || props.children;

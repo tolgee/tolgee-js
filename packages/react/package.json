@@ -75,6 +75,12 @@
       "module": "./dist/tolgee-react.esm.js",
       "import": "./dist/tolgee-react.esm.mjs"
     },
+    "./server": {
+      "types": "./lib/server.d.ts",
+      "require": "./dist/tolgee-react-server.cjs.js",
+      "module": "./dist/tolgee-react-server.esm.js",
+      "import": "./dist/tolgee-react-server.esm.mjs"
+    },
     "./package.json": "./package.json"
   },
   "publishConfig": {

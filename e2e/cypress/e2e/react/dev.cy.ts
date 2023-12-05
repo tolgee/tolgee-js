@@ -54,7 +54,7 @@ context('React app in dev mode', () => {
 
   describe('translation in translation', () => {
     beforeEach(() => {
-      cy.visit(url + '/translation-methods');
+      cy.visit(translationMethods);
     });
 
     it('opens inner translation correctly', () => {
