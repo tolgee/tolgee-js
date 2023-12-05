@@ -5,8 +5,9 @@ import { namespacesTest } from '../../common/namespacesTest';
 
 context('Next app in dev mode', { retries: 2 }, () => {
   const url = 'http://localhost:8106';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 2 },
       {
@@ -39,7 +40,7 @@ context('Next app in dev mode', { retries: 2 }, () => {
   });
 
   namespacesTest(
-    url,
+    translationMethods,
     {
       en: [
         { text: 'This is a key in namespace', count: 2 },

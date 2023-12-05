@@ -11,7 +11,7 @@ export const namespacesTest = (
 ) =>
   describe('translation methods test', () => {
     before(() => {
-      cy.visit(url + '/translation-methods');
+      cy.visit(url);
       cy.intercept('GET', '*', (req) => {
         req.on('response', (res) => {
           res.delay = 500;

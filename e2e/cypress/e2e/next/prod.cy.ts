@@ -4,8 +4,9 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('React app in prod mode', () => {
   const url = 'http://localhost:8107';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 2 },
       {
@@ -38,7 +39,7 @@ context('React app in prod mode', () => {
   });
 
   namespacesTest(
-    url,
+    translationMethods,
     {
       en: [
         { text: 'This is a key in namespace', count: 2 },

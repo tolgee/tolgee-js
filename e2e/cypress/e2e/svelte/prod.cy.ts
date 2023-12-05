@@ -5,8 +5,9 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 context('Svelte app in prod mode', () => {
   const url = 'http://localhost:8109';
 
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 2 },
       {
@@ -28,7 +29,7 @@ context('Svelte app in prod mode', () => {
     ],
   });
 
-  namespacesTest(url, {
+  namespacesTest(translationMethods, {
     en: [
       { text: 'This is a key in namespace', count: 2 },
       { text: 'This is a key', count: 1 },

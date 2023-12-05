@@ -4,8 +4,9 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 context('Angular app in prod mode', () => {
   const url = 'http://localhost:8115/';
 
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 3 },
       {

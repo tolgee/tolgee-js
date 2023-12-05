@@ -4,8 +4,9 @@ import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
 context('Next with app router in dev mode', { retries: 5 }, () => {
   const url = 'http://localhost:8122';
+  const translationMethods = url + '/en/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is a key', count: 2 },
       { text: 'This is key with params value value2', count: 6 },

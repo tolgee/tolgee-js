@@ -3,8 +3,9 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('React i18next app in prod mode', () => {
   const url = 'http://localhost:8119';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 1 },
       {

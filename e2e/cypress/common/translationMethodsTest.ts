@@ -8,7 +8,7 @@ export const translationMethodsTest = (
 ) =>
   describe('translation methods test', () => {
     before(() => {
-      cy.visit(url + '/translation-methods');
+      cy.visit(url);
     });
 
     // run it twice, as it can behave differently

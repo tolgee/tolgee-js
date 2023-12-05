@@ -4,8 +4,9 @@ import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
 context('React i18next app in dev mode', () => {
   const url = 'http://localhost:8120';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 1 },
       {

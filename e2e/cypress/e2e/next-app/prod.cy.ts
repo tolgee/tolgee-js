@@ -3,8 +3,9 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('Next with app router in prod mode', () => {
   const url = 'http://localhost:8121';
+  const translationMethods = url + '/en/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is a key', count: 2 },
       { text: 'This is key with params value value2', count: 6 },
