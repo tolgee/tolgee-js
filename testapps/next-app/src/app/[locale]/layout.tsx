@@ -12,7 +12,9 @@ export default async function LocaleLayout({
   children,
   params: { locale },
 }: Props) {
-  if (!ALL_LOCALES.includes(locale as any)) notFound();
+  if (!ALL_LOCALES.includes(locale)) {
+    notFound();
+  }
 
   const locales = await getStaticData(['en', locale]);
 
