@@ -1,4 +1,4 @@
-import { T, getTranslate } from 'tolgee/server';
+import { T, getTranslate } from '@/tolgee/server';
 
 export const TranslationMethodsServer = async () => {
   const t = await getTranslate();
@@ -10,7 +10,6 @@ export const TranslationMethodsServer = async () => {
         <div>
           <h1>T component with params</h1>
           <div>
-            {/* @ts-ignore */}
             <T
               keyName="this_is_a_key_with_params"
               params={{ key: 'value', key2: 'value2' }}
@@ -21,7 +20,6 @@ export const TranslationMethodsServer = async () => {
         <div>
           <h1>T component with noWrap</h1>
           <div>
-            {/* @ts-ignore */}
             <T
               keyName="this_is_a_key_with_params"
               params={{ key: 'value', key2: 'value2' }}
@@ -34,7 +32,6 @@ export const TranslationMethodsServer = async () => {
           <h1>T component with interpolation</h1>
           <div data-cy="translationWithTags">
             <span>
-              {/* @ts-ignore */}
               <T
                 keyName="this_is_a_key_with_tags"
                 params={{
@@ -65,7 +62,6 @@ export const TranslationMethodsServer = async () => {
           <h1>Translation in translation</h1>
           <div>
             <div data-cy="translationOuter">
-              {/* @ts-ignore */}
               <T
                 keyName="translation_outer"
                 params={{

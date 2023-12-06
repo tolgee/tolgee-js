@@ -1,11 +1,12 @@
-import Link from 'next-intl/link';
 import { useLocale } from 'next-intl';
 
-import { Navbar } from 'components/Navbar';
+import { Link } from '@/navigation';
+import { Navbar } from '@/components/Navbar';
+import { getStaticData } from '@/tolgee/shared';
+import { TolgeeNextProvider } from '@/tolgee/client';
+
 import { TranslationMethodsServer } from './TranslationMethodsServer';
 import { TranslationMethodsClient } from './TranslationMethodsClient';
-import { getStaticData } from 'tolgee/shared';
-import { TolgeeNextProvider } from 'tolgee/client';
 
 export default async function AboutPage() {
   const locale = useLocale();
@@ -20,7 +21,6 @@ export default async function AboutPage() {
           </div>
         </Navbar>
         <TranslationMethodsClient />
-        {/* @ts-ignore */}
         <TranslationMethodsServer />
       </main>
     </TolgeeNextProvider>

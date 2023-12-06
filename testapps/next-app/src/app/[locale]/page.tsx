@@ -1,8 +1,8 @@
-import { getTranslate } from 'tolgee/server';
+import { getTranslate } from '@/tolgee/server';
 import { Todos } from './Todos';
-import Link from 'next-intl/link';
+import { Link } from '@/navigation';
 
-import { Navbar } from 'components/Navbar';
+import { Navbar } from '@/components/Navbar';
 
 export default async function IndexPage() {
   const t = await getTranslate();

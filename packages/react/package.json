@@ -50,8 +50,8 @@
     "@tolgee/testing": "5.16.3",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.8",
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
+    "@types/react": "^18.2.42",
+    "@types/react-dom": "^18.2.17",
     "@types/testing-library__jest-dom": "^5.14.5",
     "concurrently": "7.2.2",
     "jest": "^27.2.4",
@@ -66,7 +66,7 @@
     "rollup-plugin-terser": "7.0.2",
     "ts-jest": "^27.0.5",
     "tslib": "^2.4.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.9.5"
   },
   "exports": {
     ".": {
@@ -74,6 +74,12 @@
       "require": "./dist/tolgee-react.cjs.js",
       "module": "./dist/tolgee-react.esm.js",
       "import": "./dist/tolgee-react.esm.mjs"
+    },
+    "./server": {
+      "types": "./lib/server.d.ts",
+      "require": "./dist/tolgee-react-server.cjs.js",
+      "module": "./dist/tolgee-react-server.esm.js",
+      "import": "./dist/tolgee-react-server.esm.mjs"
     },
     "./package.json": "./package.json"
   },

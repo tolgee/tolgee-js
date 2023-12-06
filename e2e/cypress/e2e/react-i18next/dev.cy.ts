@@ -5,8 +5,9 @@ import { namespacesTest } from '../../common/namespacesTest';
 
 context('React i18next app in dev mode', () => {
   const url = 'http://localhost:8118';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
-  translationMethodsTest(url, {
+  translationMethodsTest(translationMethods, {
     en: [
       { text: 'This is default', count: 1 },
       {
@@ -27,7 +28,7 @@ context('React i18next app in dev mode', () => {
       },
     ],
   });
-  namespacesTest(url, {
+  namespacesTest(translationMethods, {
     en: [
       { text: 'This is a key in namespace', count: 1 },
       { text: 'This is a key', count: 1 },

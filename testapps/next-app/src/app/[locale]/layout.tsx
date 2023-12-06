@@ -1,23 +1,22 @@
 import { notFound } from 'next/navigation';
-import { useLocale } from 'next-intl';
 import { ReactNode } from 'react';
-import { TolgeeNextProvider } from 'tolgee/client';
-import { getStaticData } from 'tolgee/shared';
+import { TolgeeNextProvider } from '@/tolgee/client';
+import { ALL_LOCALES, getStaticData } from '@/tolgee/shared';
 
 type Props = {
   children: ReactNode;
   params: { locale: string };
 };
 
-export default async function LocaleLayout({ children, params }: Props) {
-  const locale = useLocale();
-
-  const locales = await getStaticData(['en', locale]);
-
-  // Show a 404 error if the user requests an unknown locale
-  if (params.locale !== locale) {
+export default async function LocaleLayout({
+  children,
+  params: { locale },
+}: Props) {
+  if (!ALL_LOCALES.includes(locale)) {
     notFound();
   }
+
+  const locales = await getStaticData(['en', locale]);
 
   return (
     <html lang={locale}>
