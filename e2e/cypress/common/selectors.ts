@@ -4,7 +4,7 @@ export const getByAriaLabel = (label: string) => {
   return getDevUi().find(`*[aria-label="${label}"]`);
 };
 
-export const gcyAdvanced = (
+export const gcyWithCustom = (
   { value, ...other }: { value: string; [key: string]: string },
   options?: Parameters<typeof cy.get>[1]
 ) =>

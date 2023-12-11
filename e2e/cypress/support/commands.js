@@ -37,7 +37,7 @@ Cypress.Commands.add('findDcy', { prevSubject: true }, (subject, dataCy) => {
 });
 
 Cypress.Commands.add(
-  'findDcyAdvanced',
+  'findDcyWithCustom',
   { prevSubject: true },
   (subject, { value, ...other }, options) =>
     subject.find(

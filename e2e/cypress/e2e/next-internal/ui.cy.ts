@@ -87,19 +87,19 @@ context('UI Dialog', () => {
       permissions: changeStateEnglish,
       inForm() {
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'de',
           })
           .should('be.disabled');
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'en',
           })
           .should('not.be.disabled');
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'en',
           })
@@ -124,19 +124,19 @@ context('UI Dialog', () => {
       permissions: changeStateEnglish,
       inForm() {
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'de',
           })
           .should('be.disabled');
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'en',
           })
           .should('not.be.disabled');
         getDevUi()
-          .findDcyAdvanced({
+          .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'en',
           })
