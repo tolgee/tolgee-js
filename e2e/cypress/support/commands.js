@@ -35,3 +35,15 @@ Cypress.Commands.add('gcy', (dataCy) => {
 Cypress.Commands.add('findDcy', { prevSubject: true }, (subject, dataCy) => {
   return subject.find('[data-cy="' + dataCy + '"]');
 });
+
+Cypress.Commands.add(
+  'findDcyWithCustom',
+  { prevSubject: true },
+  (subject, { value, ...other }, options) =>
+    subject.find(
+      `[data-cy="${value}"]${Object.entries(other)
+        .map(([key, value]) => `[data-cy-${key}="${value}"]`)
+        .join('')}`,
+      options
+    )
+);

@@ -14,7 +14,6 @@ import { useDialogContext, useDialogActions } from './dialogContext';
 import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
-import { usePermissions } from './dialogContext/usePermissions';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -78,6 +77,7 @@ const ScRestriction = styled('div')`
 `;
 
 const ScError = styled('div')`
+  padding-top: 16px;
   color: red;
 `;
 
@@ -98,10 +98,9 @@ export const KeyForm = () => {
   const keyExists = useDialogContext((c) => c.keyExists);
   const fallbackNamespaces = useDialogContext((c) => c.fallbackNamespaces);
   const selectedNs = useDialogContext((c) => c.selectedNs);
-  const isAuthorizedTo = usePermissions();
+  const permissions = useDialogContext((c) => c.permissions);
 
-  const screenshotsView = isAuthorizedTo('screenshots.view');
-
+  const screenshotsView = permissions.canViewScreenshots;
   const ready = !loading && !error;
 
   return (
@@ -177,9 +176,9 @@ export const KeyForm = () => {
       )}
 
       {formDisabled && ready && (
-        <ScRestriction>{`Modification is restricted due to missing ${
-          keyData?.keyId !== undefined ? 'translations.edit' : 'keys.edit'
-        } scope in current api key settings.`}</ScRestriction>
+        <ScRestriction>
+          Modification is restricted due to missing permissions.
+        </ScRestriction>
       )}
 
       {error && <ScError>{error}</ScError>}

@@ -6,5 +6,10 @@ declare namespace Cypress {
     gcy(dataCy: string): Chainable;
 
     findDcy(dataCy: string): Chainable;
+
+    findDcyWithCustom(
+      params: { value: string; [key: string]: string },
+      options?: Parameters<typeof cy.get>[1]
+    ): Chainable;
   }
 }

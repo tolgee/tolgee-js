@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Select from '@mui/material/Select';
+import Select, { selectClasses } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
@@ -11,8 +11,16 @@ import { styled } from '@mui/material/styles';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
 import { useDialogContext, useDialogActions } from './dialogContext';
 
-const ScFormControl = styled(FormControl)`
+const StyledFormControl = styled(FormControl)`
   min-width: 200px;
+`;
+
+const StyledSelect = styled(Select<string[]>)`
+  & .${selectClasses.icon} {
+    width: 24px;
+    height: 24px;
+    top: calc(50% - 12px);
+  }
 `;
 
 export const LanguageSelect: React.FC = () => {
@@ -36,12 +44,12 @@ export const LanguageSelect: React.FC = () => {
   return (
     <>
       {availableLanguages && (
-        <ScFormControl
+        <StyledFormControl
           variant="outlined"
           size="small"
           style={{ maxWidth: 250 }}
         >
-          <Select
+          <StyledSelect
             multiple
             value={selected.map((o) => o.value)}
             onChange={(e) => onChange(e.target.value as string | string[])}
@@ -63,8 +71,8 @@ export const LanguageSelect: React.FC = () => {
                 <ListItemText>{option.label}</ListItemText>
               </MenuItem>
             ))}
-          </Select>
-        </ScFormControl>
+          </StyledSelect>
+        </StyledFormControl>
       )}
     </>
   );

@@ -17,7 +17,7 @@ const StyledTags = styled('div')`
 
 export function Tags() {
   const tags = useDialogContext((c) => c.tags);
-  const canEditTags = useDialogContext((c) => c.canEditTags);
+  const canEditTags = useDialogContext((c) => c.permissions.canEditTags);
   const { setTags } = useDialogActions();
 
   return (

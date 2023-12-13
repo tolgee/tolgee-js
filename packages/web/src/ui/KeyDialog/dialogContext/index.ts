@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { sleep } from '../../tools/sleep';
 import { createProvider } from '../../tools/createProvider';
-import { isLanguagePermitted } from '../../tools/isLanguagePermitted';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
 import { UiProps } from '@tolgee/core';
 import { useApiMutation, useApiQuery } from '../../client/useQueryApi';
@@ -12,17 +11,24 @@ import {
   getPreferredLanguages,
   mapPosition,
   setPreferredLanguages,
-  isAuthorizedTo,
 } from './tools';
-import { getApiKeyType } from '../../../tools/decodeApiKey';
 import { useGallery } from './useGallery';
-import { requirePlatformVersion } from '../../tools/requirePlatformVersion';
+import { checkPlatformVersion } from '../../tools/checkPlatformVersion';
 import { limitSurroundingKeys } from '../../tools/limitSurroundingKeys';
+import {
+  StateInType,
+  STATES_FOR_UPDATE,
+  StateType,
+} from '../State/translationStates';
+import { useComputedPermissions } from './usePermissions';
 
-const PLATFORM_SUPPORTING_BIG_META = 'v3.20.0';
+const MINIMAL_PLATFORM_VERSION = 'v3.39.0';
 
 type FormTranslations = {
-  [key: string]: string;
+  [key: string]: {
+    text: string;
+    state: StateType;
+  };
 };
 
 type DialogProps = {
@@ -39,9 +45,30 @@ type DialogProps = {
 export const [DialogProvider, useDialogActions, useDialogContext] =
   createProvider((props: DialogProps) => {
     const [success, setSuccess] = useState<boolean>(false);
-    const [translationsForm, setTranslationsForm] = useState<FormTranslations>(
+    const [translationsForm, _setTranslationsForm] = useState<FormTranslations>(
       {}
     );
+
+    function setTranslation(language: string, text: string) {
+      _setTranslationsForm((value) => ({
+        ...value,
+        [language]: {
+          ...value[language],
+          text,
+        },
+      }));
+    }
+
+    function setState(language: string, state: StateType) {
+      _setTranslationsForm((value) => ({
+        ...value,
+        [language]: {
+          ...value[language],
+          state,
+        },
+      }));
+    }
+
     const [saving, setSaving] = useState(false);
 
     const [translationsFormTouched, setTranslationsFormTouched] =
@@ -49,7 +76,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
     const [tags, setTags] = useState<string[]>([]);
-    const isPat = getApiKeyType(props.uiProps.apiKey) === 'tgpat';
 
     const {
       screenshots,
@@ -67,10 +93,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     } = useGallery(props.uiProps);
 
     const scopesLoadable = useApiQuery({
-      url: '/v2/api-keys/current',
+      url: '/v2/api-keys/current-permissions',
       method: 'get',
-      options: {
-        enabled: !isPat,
+      query: {
+        projectId: Number(props.uiProps.projectId),
       },
     });
 
@@ -116,10 +142,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const firstKey = data._embedded?.keys?.[0];
           Object.entries(firstKey?.translations || {}).forEach(
             ([key, value]) => {
-              result[key] = value.text || '';
+              result[key] = { text: value.text || '', state: value.state };
             }
           );
-          setTranslationsForm(result);
+          _setTranslationsForm(result);
           setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           setScreenshots(
             firstKey?.screenshots?.map((sc) => ({
@@ -131,6 +157,16 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         },
       },
     });
+
+    const keyExists = Boolean(
+      translationsLoadable.data?._embedded?.keys?.length
+    );
+
+    const permissions = useComputedPermissions(
+      scopesLoadable.data,
+      keyExists,
+      languagesLoadable.data?._embedded?.languages
+    );
 
     const updateKey = useApiMutation({
       url: '/v2/projects/keys/{id}/complex-update',
@@ -158,40 +194,48 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     );
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
 
-    const permittedLanguageIds = scopesLoadable.data?.permittedLanguageIds;
-
     function onInputChange(key: string, value: string) {
       setSuccess(false);
       setTranslationsFormTouched(true);
-      setTranslationsForm({
-        ...translationsForm,
-        [key]: value,
-      });
+      setTranslation(key, value);
+    }
+
+    function onStateChange(key: string, value: StateType) {
+      setSuccess(false);
+      setTranslationsFormTouched(true);
+      setState(key, value);
     }
 
     async function onSave() {
       setSaving(true);
       try {
-        const newTranslations = {} as typeof translationsForm;
+        const newTranslations = {} as Record<string, string>;
+        const newStates = {} as Record<string, StateInType>;
         Object.entries(translationsForm).forEach(([language, value]) => {
+          const canBeTranslated = permissions.canEditTranslation(language);
+          const stateCanBeChanged = permissions.canEditState(language);
+
+          if (canBeTranslated) {
+            newTranslations[language] = value.text;
+          }
           if (
-            isLanguagePermitted(
-              language,
-              permittedLanguageIds,
-              availableLanguages
-            )
+            value.text &&
+            STATES_FOR_UPDATE.includes(value.state as StateInType) &&
+            keyData?.translations?.[language]?.state !== value.state &&
+            stateCanBeChanged
           ) {
-            newTranslations[language] = value;
+            newStates[language] = value.state as StateInType;
           }
         });
 
-        const result = await (keyData === undefined
+        await (keyData === undefined
           ? createKey.mutateAsync({
               content: {
                 'application/json': {
                   name: props.keyName,
                   namespace: selectedNs || undefined,
                   translations: newTranslations,
+                  states: newStates,
                   screenshots: screenshots.map((sc) => ({
                     uploadedImageId: sc.id,
                     positions: sc.keyReferences?.map(mapPosition),
@@ -206,6 +250,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   name: props.keyName,
                   namespace: selectedNs || undefined,
                   translations: newTranslations,
+                  states: newStates,
                   screenshotIdsToDelete: getRemovedScreenshots(),
                   screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
                     uploadedImageId: sc.id,
@@ -217,13 +262,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               path: { id: keyData.keyId! },
             }));
 
-        const version = result._internal?.version;
-
-        if (
-          version &&
-          (version === '??' ||
-            requirePlatformVersion(PLATFORM_SUPPORTING_BIG_META, version))
-        ) {
+        if (permissions.canSendBigMeta) {
           const surroundingKeys = limitSurroundingKeys(
             props.uiProps.findPositions(),
             { keyName: props.keyName, keyNamespace: selectedNs }
@@ -321,7 +360,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       galleryProps.handleTakeScreenshot(
         props.keyName,
         selectedNs,
-        translationsForm
+        Object.entries(translationsForm).map(([language, value]) => [
+          language,
+          value.text,
+        ])
       );
     }
 
@@ -346,10 +388,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             !translationsForm[baseLanguageDefinition.tag!] &&
             !wasBaseTranslationProvided
           ) {
-            setTranslationsForm({
-              ...translationsForm,
-              [baseLanguageDefinition.tag!]: props.defaultValue,
-            });
+            setTranslation(baseLanguageDefinition.tag!, props.defaultValue);
           }
         }
       }
@@ -360,12 +399,18 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       props.defaultValue,
     ]);
 
+    const versionError = checkPlatformVersion(
+      MINIMAL_PLATFORM_VERSION,
+      translationsLoadable.data?._internal?.version
+    );
+
     const baseLang = availableLanguages?.find(({ base }) => base);
     const loading =
       languagesLoadable.isFetching ||
       (translationsLoadable.isLoading && !translationsLoadable.data) ||
       scopesLoadable.isFetching;
     const error =
+      versionError ||
       languagesLoadable.error ||
       translationsLoadable.error ||
       scopesLoadable.error ||
@@ -374,23 +419,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       updateMetadata.error ||
       galleryError;
 
-    const scopes = scopesLoadable.data?.scopes;
-
-    const canEditSomething =
-      isAuthorizedTo('screenshots.upload', scopes, isPat) ||
-      isAuthorizedTo('screenshots.delete', scopes, isPat) ||
-      (translationsLoadable.data?._embedded?.keys?.length
-        ? isAuthorizedTo('translations.edit', scopes, isPat)
-        : isAuthorizedTo('keys.edit', scopes, isPat));
-
-    const formDisabled = !isPat && (loading || !canEditSomething);
-
-    const canEditTags =
-      !formDisabled && isAuthorizedTo('keys.edit', scopes, isPat);
-
-    const keyExists = Boolean(
-      translationsLoadable.data?._embedded?.keys?.length
-    );
+    const formDisabled = loading || !permissions.canSubmitForm;
 
     const contextValue = {
       input: props.keyName,
@@ -408,22 +437,20 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       translationsForm,
       container,
       useBrowserWindow,
-      canTakeScreenshots,
       takingScreenshot,
       screenshotsUploading,
       screenshots,
       screenshotDetail,
       linkToPlatform,
       keyExists,
-      scopes,
-      permittedLanguageIds,
       tags,
-      canEditTags,
-      isPat,
+      permissions,
+      canTakeScreenshots,
     } as const;
 
     const actions = {
       onInputChange,
+      onStateChange,
       handleUploadImages,
       handleTakeScreenshot,
       handleRemoveScreenshot,

@@ -8,7 +8,7 @@ export interface paths {
     get: operations["getInfo_2"];
   };
   "/v2/projects/namespaces/{id}": {
-    put: operations["update_1"];
+    put: operations["update_2"];
   };
   "/v2/projects/keys/{id}/disabled-languages": {
     get: operations["getDisabledLanguages_1"];
@@ -65,9 +65,9 @@ export interface paths {
     put: operations["setState_1"];
   };
   "/v2/projects/translations/{translationId}/comments/{commentId}": {
-    get: operations["get_7"];
-    put: operations["update_3"];
-    delete: operations["delete_6"];
+    get: operations["get_10"];
+    put: operations["update_6"];
+    delete: operations["delete_9"];
   };
   "/v2/projects/translations/{translationId}/set-outdated-flag/{state}": {
     put: operations["setOutdated_1"];
@@ -81,7 +81,7 @@ export interface paths {
     post: operations["createOrUpdateTranslations_1"];
   };
   "/v2/projects/languages/{languageId}": {
-    get: operations["get_9"];
+    get: operations["get_12"];
     put: operations["editLanguage_1"];
     delete: operations["deleteLanguage_3"];
   };
@@ -95,7 +95,11 @@ export interface paths {
     put: operations["autoTranslate_1"];
   };
   "/v2/organizations/{id}": {
-    get: operations["get_12"];
+    get: operations["get_15"];
+  };
+  "/v2/projects": {
+    get: operations["getAll"];
+    post: operations["createProject"];
   };
   "/v2/projects/keys/info": {
     post: operations["getInfo_1"];
@@ -107,12 +111,12 @@ export interface paths {
     post: operations["importKeys_3"];
   };
   "/v2/projects/keys/create": {
-    post: operations["create_2"];
+    post: operations["create_3"];
   };
   "/v2/projects/keys": {
     get: operations["getAll_2"];
-    post: operations["create_3"];
-    delete: operations["delete_4"];
+    post: operations["create_4"];
+    delete: operations["delete_5"];
   };
   "/v2/projects/start-batch-job/untag-keys": {
     post: operations["untagKeys_1"];
@@ -160,10 +164,10 @@ export interface paths {
   };
   "/v2/projects/translations/{translationId}/comments": {
     get: operations["getAll_6"];
-    post: operations["create_5"];
+    post: operations["create_8"];
   };
   "/v2/projects/translations/create-comment": {
-    post: operations["create_7"];
+    post: operations["create_10"];
   };
   "/v2/projects/suggest/translation-memory": {
     post: operations["suggestTranslationMemory_1"];
@@ -184,7 +188,7 @@ export interface paths {
   };
   "/v2/organizations": {
     get: operations["getAll_10"];
-    post: operations["create_9"];
+    post: operations["create_12"];
   };
   "/v2/image-upload": {
     post: operations["upload"];
@@ -240,10 +244,10 @@ export interface paths {
     get: operations["currentJobs_1"];
   };
   "/v2/projects/batch-jobs/{id}": {
-    get: operations["get_5"];
+    get: operations["get_8"];
   };
   "/v2/projects/batch-jobs": {
-    get: operations["list_1"];
+    get: operations["list_4"];
   };
   "/v2/projects/translations/{translationId}/history": {
     get: operations["getTranslationHistory_1"];
@@ -264,7 +268,7 @@ export interface paths {
     get: operations["getCurrent"];
   };
   "/v2/organizations/{slug}": {
-    get: operations["get_11"];
+    get: operations["get_14"];
   };
   "/v2/organizations/{organizationId}/machine-translation-credit-balance": {
     get: operations["getOrganizationCredits"];
@@ -272,11 +276,14 @@ export interface paths {
   "/v2/api-keys/current": {
     get: operations["getCurrent_1"];
   };
+  "/v2/api-keys/current-permissions": {
+    get: operations["getCurrentPermissions"];
+  };
   "/api/project/export/jsonZip": {
     get: operations["doExportJsonZip_1"];
   };
   "/v2/projects/keys/{ids}": {
-    delete: operations["delete_2"];
+    delete: operations["delete_3"];
   };
   "/v2/projects/keys/{keyId}/tags/{tagId}": {
     delete: operations["removeTag_1"];
@@ -285,7 +292,7 @@ export interface paths {
     delete: operations["deleteScreenshots"];
   };
   "/v2/image-upload/{ids}": {
-    delete: operations["delete_9"];
+    delete: operations["delete_12"];
   };
 }
 
@@ -363,15 +370,15 @@ export interface components {
        */
       translateLanguageIds?: number[];
       /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example 200001,200004
-       */
-      stateChangeLanguageIds?: number[];
-      /**
        * @description List of languages user can view. If null, all languages view is permitted.
        * @example 200001,200004
        */
       viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example 200001,200004
+       */
+      stateChangeLanguageIds?: number[];
       /**
        * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
        * @example KEYS_EDIT,TRANSLATIONS_VIEW
@@ -400,6 +407,9 @@ export interface components {
         | "batch-jobs.cancel"
         | "translations.batch-by-tm"
         | "translations.batch-machine"
+        | "content-delivery.manage"
+        | "content-delivery.publish"
+        | "webhooks.manage"
       )[];
     };
     LanguageModel: {
@@ -461,6 +471,9 @@ export interface components {
         | "batch-jobs.cancel"
         | "translations.batch-by-tm"
         | "translations.batch-machine"
+        | "content-delivery.manage"
+        | "content-delivery.publish"
+        | "webhooks.manage"
       )[];
       /** @description The user's permission type. This field is null if uses granular permissions */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
@@ -512,6 +525,25 @@ export interface components {
       description?: string;
       basePermissions: components["schemas"]["PermissionModel"];
       avatar?: components["schemas"]["Avatar"];
+    };
+    WebhookConfigRequest: {
+      url: string;
+    };
+    WebhookConfigModel: {
+      /** Format: int64 */
+      id: number;
+      url: string;
+      webhookSecret: string;
+      /**
+       * Format: int64
+       * @description Date of the first failed webhook request. If the last webhook request is successful, this value is set to null.
+       */
+      firstFailed?: number;
+      /**
+       * Format: int64
+       * @description Date of the last webhook request.
+       */
+      lastExecuted?: number;
     };
     AutoTranslationSettingsDto: {
       /** Format: int64 */
@@ -654,6 +686,8 @@ export interface components {
       namespace?: string;
       /** @description Translations to update */
       translations?: { [key: string]: string };
+      /** @description Translation states to update, if not provided states won't be modified */
+      states?: { [key: string]: "TRANSLATED" | "REVIEWED" };
       /** @description Tags of the key. If not provided tags won't be modified */
       tags?: string[];
       /** @description IDs of screenshots to delete */
@@ -846,6 +880,120 @@ export interface components {
       invitedUserEmail?: string;
       permission: components["schemas"]["PermissionModel"];
     };
+    AzureContentStorageConfigDto: {
+      connectionString?: string;
+      containerName: string;
+    };
+    ContentStorageRequest: {
+      name: string;
+      azureContentStorageConfig?: components["schemas"]["AzureContentStorageConfigDto"];
+      s3ContentStorageConfig?: components["schemas"]["S3ContentStorageConfigDto"];
+      publicUrlPrefix?: string;
+    };
+    S3ContentStorageConfigDto: {
+      bucketName: string;
+      accessKey: string;
+      secretKey: string;
+      endpoint: string;
+      signingRegion: string;
+      contentStorageType?: "S3" | "AZURE";
+      enabled?: boolean;
+    };
+    AzureContentStorageConfigModel: {
+      containerName?: string;
+    };
+    ContentStorageModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      publicUrlPrefix?: string;
+      azureContentStorageConfig?: components["schemas"]["AzureContentStorageConfigModel"];
+      s3ContentStorageConfig?: components["schemas"]["S3ContentStorageConfigModel"];
+    };
+    S3ContentStorageConfigModel: {
+      bucketName: string;
+      endpoint: string;
+      signingRegion: string;
+    };
+    ContentDeliveryConfigRequest: {
+      name: string;
+      /**
+       * Format: int64
+       * @description Id of custom storage to use for content delivery. If null, default server storage is used. Tolgee Cloud provides default Content Storage.
+       */
+      contentStorageId?: number;
+      /** @description If true, data are published to the content delivery automatically after each change. */
+      autoPublish: boolean;
+      /**
+       * @description Languages to be contained in export.
+       *
+       * If null, all languages are exported
+       * @example en
+       */
+      languages?: string[];
+      /** @description Format to export to */
+      format: "JSON" | "XLIFF";
+      /**
+       * @description Delimiter to structure file content.
+       *
+       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+       *
+       * When null, resulting file won't be structured.
+       */
+      structureDelimiter?: string;
+      /** @description Filter key IDs to be contained in export */
+      filterKeyId?: number[];
+      /** @description Filter key IDs not to be contained in export */
+      filterKeyIdNot?: number[];
+      /** @description Filter keys tagged by */
+      filterTag?: string;
+      /** @description Filter keys with prefix */
+      filterKeyPrefix?: string;
+      /** @description Filter translations with state. By default, everything except untranslated is exported. */
+      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+      /** @description Select one ore multiple namespaces to export */
+      filterNamespace?: string[];
+    };
+    ContentDeliveryConfigModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      slug: string;
+      storage?: components["schemas"]["ContentStorageModel"];
+      publicUrl?: string;
+      autoPublish: boolean;
+      /** Format: int64 */
+      lastPublished?: number;
+      /**
+       * @description Languages to be contained in export.
+       *
+       * If null, all languages are exported
+       * @example en
+       */
+      languages?: string[];
+      /** @description Format to export to */
+      format: "JSON" | "XLIFF";
+      /**
+       * @description Delimiter to structure file content.
+       *
+       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+       *
+       * When null, resulting file won't be structured.
+       */
+      structureDelimiter?: string;
+      /** @description Filter key IDs to be contained in export */
+      filterKeyId?: number[];
+      /** @description Filter key IDs not to be contained in export */
+      filterKeyIdNot?: number[];
+      /** @description Filter keys tagged by */
+      filterTag?: string;
+      /** @description Filter keys with prefix */
+      filterKeyPrefix?: string;
+      /** @description Filter translations with state. By default, everything except untranslated is exported. */
+      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+      /** @description Select one ore multiple namespaces to export */
+      filterNamespace?: string[];
+    };
     TagKeyDto: {
       name: string;
     };
@@ -988,14 +1136,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      description: string;
-      /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /** Format: int64 */
+      expiresAt?: number;
     };
     SetOrganizationRoleDto: {
       roleType: "MEMBER" | "OWNER";
@@ -1060,6 +1208,9 @@ export interface components {
         | "TEAM_TRAINING"
         | "ACCOUNT_MANAGER"
         | "STANDARD_SUPPORT"
+        | "PROJECT_LEVEL_CONTENT_STORAGES"
+        | "WEBHOOKS"
+        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
       )[];
       /** Format: int64 */
       currentPeriodEnd?: number;
@@ -1131,13 +1282,13 @@ export interface components {
       userFullName?: string;
       projectName: string;
       username?: string;
+      description: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
       scopes: string[];
     };
     SuperTokenRequest: {
@@ -1174,6 +1325,9 @@ export interface components {
       organizationId: number;
       /** @description Tag of one of created languages, to select it as base language. If not provided, first language will be selected as base. */
       baseLanguageTag?: string;
+    };
+    WebhookTestResponse: {
+      success: boolean;
     };
     GetKeysRequestDto: {
       keys: components["schemas"]["KeyDefinitionDto"][];
@@ -1257,10 +1411,198 @@ export interface components {
       name: string;
       namespace?: string;
       translations?: { [key: string]: string };
+      /** @description Translation states to update, if not provided states won't be modified */
+      states?: { [key: string]: "TRANSLATED" | "REVIEWED" };
       tags?: string[];
       /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
       screenshotUploadedImageIds?: number[];
       screenshots?: components["schemas"]["KeyScreenshotDto"][];
+    };
+    StorageTestResult: {
+      success: boolean;
+      message?:
+        | "UNAUTHENTICATED"
+        | "API_ACCESS_FORBIDDEN"
+        | "API_KEY_NOT_FOUND"
+        | "INVALID_API_KEY"
+        | "INVALID_PROJECT_API_KEY"
+        | "PROJECT_API_KEY_EXPIRED"
+        | "BAD_CREDENTIALS"
+        | "MFA_ENABLED"
+        | "INVALID_OTP_CODE"
+        | "MFA_NOT_ENABLED"
+        | "CAN_NOT_REVOKE_OWN_PERMISSIONS"
+        | "DATA_CORRUPTED"
+        | "INVITATION_CODE_DOES_NOT_EXIST_OR_EXPIRED"
+        | "LANGUAGE_TAG_EXISTS"
+        | "LANGUAGE_NAME_EXISTS"
+        | "LANGUAGE_NOT_FOUND"
+        | "OPERATION_NOT_PERMITTED"
+        | "REGISTRATIONS_NOT_ALLOWED"
+        | "PROJECT_NOT_FOUND"
+        | "RESOURCE_NOT_FOUND"
+        | "SCOPE_NOT_FOUND"
+        | "KEY_EXISTS"
+        | "THIRD_PARTY_AUTH_ERROR_MESSAGE"
+        | "THIRD_PARTY_AUTH_NO_EMAIL"
+        | "THIRD_PARTY_AUTH_NO_SUB"
+        | "THIRD_PARTY_AUTH_UNKNOWN_ERROR"
+        | "THIRD_PARTY_UNAUTHORIZED"
+        | "THIRD_PARTY_GOOGLE_WORKSPACE_MISMATCH"
+        | "USERNAME_ALREADY_EXISTS"
+        | "USERNAME_OR_PASSWORD_INVALID"
+        | "USER_ALREADY_HAS_PERMISSIONS"
+        | "USER_ALREADY_HAS_ROLE"
+        | "USER_NOT_FOUND"
+        | "FILE_NOT_IMAGE"
+        | "FILE_TOO_BIG"
+        | "INVALID_TIMESTAMP"
+        | "EMAIL_NOT_VERIFIED"
+        | "MISSING_CALLBACK_URL"
+        | "INVALID_JWT_TOKEN"
+        | "EXPIRED_JWT_TOKEN"
+        | "GENERAL_JWT_ERROR"
+        | "CANNOT_FIND_SUITABLE_ADDRESS_PART"
+        | "ADDRESS_PART_NOT_UNIQUE"
+        | "USER_IS_NOT_MEMBER_OF_ORGANIZATION"
+        | "ORGANIZATION_HAS_NO_OTHER_OWNER"
+        | "USER_HAS_NO_PROJECT_ACCESS"
+        | "USER_IS_ORGANIZATION_OWNER"
+        | "CANNOT_SET_YOUR_OWN_PERMISSIONS"
+        | "USER_IS_ORGANIZATION_MEMBER"
+        | "PROPERTY_NOT_MUTABLE"
+        | "IMPORT_LANGUAGE_NOT_FROM_PROJECT"
+        | "EXISTING_LANGUAGE_NOT_SELECTED"
+        | "CONFLICT_IS_NOT_RESOLVED"
+        | "LANGUAGE_ALREADY_SELECTED"
+        | "CANNOT_PARSE_FILE"
+        | "COULD_NOT_RESOLVE_PROPERTY"
+        | "CANNOT_ADD_MORE_THEN_100_LANGUAGES"
+        | "NO_LANGUAGES_PROVIDED"
+        | "LANGUAGE_WITH_BASE_LANGUAGE_TAG_NOT_FOUND"
+        | "LANGUAGE_NOT_FROM_PROJECT"
+        | "CANNOT_DELETE_BASE_LANGUAGE"
+        | "KEY_NOT_FROM_PROJECT"
+        | "MAX_SCREENSHOTS_EXCEEDED"
+        | "TRANSLATION_NOT_FROM_PROJECT"
+        | "CAN_EDIT_ONLY_OWN_COMMENT"
+        | "REQUEST_PARSE_ERROR"
+        | "FILTER_BY_VALUE_STATE_NOT_VALID"
+        | "IMPORT_HAS_EXPIRED"
+        | "TAG_NOT_FROM_PROJECT"
+        | "TRANSLATION_TEXT_TOO_LONG"
+        | "INVALID_RECAPTCHA_TOKEN"
+        | "CANNOT_LEAVE_OWNING_PROJECT"
+        | "CANNOT_LEAVE_PROJECT_WITH_ORGANIZATION_ROLE"
+        | "DONT_HAVE_DIRECT_PERMISSIONS"
+        | "TAG_TOO_LOG"
+        | "TOO_MANY_UPLOADED_IMAGES"
+        | "ONE_OR_MORE_IMAGES_NOT_FOUND"
+        | "SCREENSHOT_NOT_OF_KEY"
+        | "SERVICE_NOT_FOUND"
+        | "TOO_MANY_REQUESTS"
+        | "TRANSLATION_NOT_FOUND"
+        | "OUT_OF_CREDITS"
+        | "KEY_NOT_FOUND"
+        | "ORGANIZATION_NOT_FOUND"
+        | "CANNOT_FIND_BASE_LANGUAGE"
+        | "BASE_LANGUAGE_NOT_FOUND"
+        | "NO_EXPORTED_RESULT"
+        | "MULTIPLE_FILES_MUST_BE_ZIPPED"
+        | "CANNOT_SET_YOUR_OWN_ROLE"
+        | "ONLY_TRANSLATE_REVIEW_OR_VIEW_PERMISSION_ACCEPTS_VIEW_LANGUAGES"
+        | "OAUTH2_TOKEN_URL_NOT_SET"
+        | "OAUTH2_USER_URL_NOT_SET"
+        | "EMAIL_ALREADY_INVITED_OR_MEMBER"
+        | "PRICE_NOT_FOUND"
+        | "INVOICE_NOT_FROM_ORGANIZATION"
+        | "INVOICE_NOT_FOUND"
+        | "PLAN_NOT_FOUND"
+        | "PLAN_NOT_AVAILABLE_ANY_MORE"
+        | "NO_AUTO_TRANSLATION_METHOD"
+        | "CANNOT_TRANSLATE_BASE_LANGUAGE"
+        | "PAT_NOT_FOUND"
+        | "INVALID_PAT"
+        | "PAT_EXPIRED"
+        | "OPERATION_UNAVAILABLE_FOR_ACCOUNT_TYPE"
+        | "VALIDATION_EMAIL_IS_NOT_VALID"
+        | "CURRENT_PASSWORD_REQUIRED"
+        | "CANNOT_CREATE_ORGANIZATION"
+        | "WRONG_CURRENT_PASSWORD"
+        | "WRONG_PARAM_TYPE"
+        | "EXPIRED_SUPER_JWT_TOKEN"
+        | "CANNOT_DELETE_YOUR_OWN_ACCOUNT"
+        | "CANNOT_SORT_BY_THIS_COLUMN"
+        | "NAMESPACE_NOT_FOUND"
+        | "NAMESPACE_EXISTS"
+        | "INVALID_AUTHENTICATION_METHOD"
+        | "UNKNOWN_SORT_PROPERTY"
+        | "ONLY_REVIEW_PERMISSION_ACCEPTS_STATE_CHANGE_LANGUAGES"
+        | "ONLY_TRANSLATE_OR_REVIEW_PERMISSION_ACCEPTS_TRANSLATE_LANGUAGES"
+        | "CANNOT_SET_LANGUAGE_PERMISSIONS_FOR_ADMIN_SCOPE"
+        | "CANNOT_SET_VIEW_LANGUAGES_WITHOUT_TRANSLATIONS_VIEW_SCOPE"
+        | "CANNOT_SET_TRANSLATE_LANGUAGES_WITHOUT_TRANSLATIONS_EDIT_SCOPE"
+        | "CANNOT_SET_STATE_CHANGE_LANGUAGES_WITHOUT_TRANSLATIONS_STATE_EDIT_SCOPE"
+        | "LANGUAGE_NOT_PERMITTED"
+        | "SCOPES_HAS_TO_BE_SET"
+        | "SET_EXACTLY_ONE_OF_SCOPES_OR_TYPE"
+        | "TRANSLATION_EXISTS"
+        | "IMPORT_KEYS_ERROR"
+        | "PROVIDE_ONLY_ONE_OF_SCREENSHOTS_AND_SCREENSHOT_UPLOADED_IMAGE_IDS"
+        | "MULTIPLE_PROJECTS_NOT_SUPPORTED"
+        | "PLAN_TRANSLATION_LIMIT_EXCEEDED"
+        | "FEATURE_NOT_ENABLED"
+        | "LICENSE_KEY_NOT_FOUND"
+        | "CANNOT_SET_VIEW_LANGUAGES_WITHOUT_FOR_LEVEL_BASED_PERMISSIONS"
+        | "CANNOT_SET_DIFFERENT_TRANSLATE_AND_STATE_CHANGE_LANGUAGES_FOR_LEVEL_BASED_PERMISSIONS"
+        | "CANNOT_DISABLE_YOUR_OWN_ACCOUNT"
+        | "SUBSCRIPTION_NOT_FOUND"
+        | "INVOICE_DOES_NOT_HAVE_USAGE"
+        | "CUSTOMER_NOT_FOUND"
+        | "SUBSCRIPTION_NOT_ACTIVE"
+        | "ORGANIZATION_ALREADY_SUBSCRIBED"
+        | "ORGANIZATION_NOT_SUBSCRIBED"
+        | "LICENSE_KEY_USED_BY_ANOTHER_INSTANCE"
+        | "TRANSLATION_SPENDING_LIMIT_EXCEEDED"
+        | "CREDIT_SPENDING_LIMIT_EXCEEDED"
+        | "SEATS_SPENDING_LIMIT_EXCEEDED"
+        | "THIS_INSTANCE_IS_ALREADY_LICENSED"
+        | "BIG_META_NOT_FROM_PROJECT"
+        | "MT_SERVICE_NOT_ENABLED"
+        | "PROJECT_NOT_SELECTED"
+        | "ORGANIZATION_NOT_SELECTED"
+        | "PLAN_HAS_SUBSCRIBERS"
+        | "TRANSLATION_FAILED"
+        | "BATCH_JOB_NOT_FOUND"
+        | "KEY_EXISTS_IN_NAMESPACE"
+        | "TAG_IS_BLANK"
+        | "EXECUTION_FAILED_ON_MANAGEMENT_ERROR"
+        | "TRANSLATION_API_RATE_LIMIT"
+        | "CANNOT_FINALIZE_ACTIVITY"
+        | "FORMALITY_NOT_SUPPORTED_BY_SERVICE"
+        | "LANGUAGE_NOT_SUPPORTED_BY_SERVICE"
+        | "RATE_LIMITED"
+        | "PAT_ACCESS_NOT_ALLOWED"
+        | "PAK_ACCESS_NOT_ALLOWED"
+        | "CANNOT_MODIFY_DISABLED_TRANSLATION"
+        | "AZURE_CONFIG_REQUIRED"
+        | "S3_CONFIG_REQUIRED"
+        | "CONTENT_STORAGE_CONFIG_REQUIRED"
+        | "CONTENT_STORAGE_TEST_FAILED"
+        | "CONTENT_STORAGE_CONFIG_INVALID"
+        | "INVALID_CONNECTION_STRING"
+        | "CANNOT_CREATE_AZURE_STORAGE_CLIENT"
+        | "S3_ACCESS_KEY_REQUIRED"
+        | "AZURE_CONNECTION_STRING_REQUIRED"
+        | "S3_SECRET_KEY_REQUIRED"
+        | "CANNOT_STORE_FILE_TO_CONTENT_STORAGE"
+        | "UNEXPECTED_ERROR_WHILE_PUBLISHING_TO_CONTENT_STORAGE"
+        | "WEBHOOK_RESPONDED_WITH_NON_200_STATUS"
+        | "UNEXPECTED_ERROR_WHILE_EXECUTING_WEBHOOK"
+        | "CONTENT_STORAGE_IS_IN_USE"
+        | "CANNOT_SET_STATE_FOR_MISSING_TRANSLATION"
+        | "NO_PROJECT_ID_PROVIDED";
+      params?: { [key: string]: unknown }[];
     };
     UntagKeysRequest: {
       keyIds: number[];
@@ -1273,7 +1615,13 @@ export interface components {
        */
       id: number;
       /** @description Status of the batch job */
-      status: "PENDING" | "RUNNING" | "SUCCESS" | "FAILED" | "CANCELLED";
+      status:
+        | "PENDING"
+        | "RUNNING"
+        | "SUCCESS"
+        | "FAILED"
+        | "CANCELLED"
+        | "DEBOUNCED";
       /** @description Type of the batch job */
       type:
         | "PRE_TRANSLATE_BT_TM"
@@ -1285,7 +1633,8 @@ export interface components {
         | "COPY_TRANSLATIONS"
         | "TAG_KEYS"
         | "UNTAG_KEYS"
-        | "SET_KEYS_NAMESPACE";
+        | "SET_KEYS_NAMESPACE"
+        | "AUTOMATION";
       /**
        * Format: int32
        * @description Total items, that have been processed so far
@@ -1405,14 +1754,34 @@ export interface components {
       page?: components["schemas"]["PageMetadata"];
     };
     ExportParams: {
+      /**
+       * @description Languages to be contained in export.
+       *
+       * If null, all languages are exported
+       * @example en
+       */
       languages?: string[];
+      /** @description Format to export to */
       format: "JSON" | "XLIFF";
+      /**
+       * @description Delimiter to structure file content.
+       *
+       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+       *
+       * When null, resulting file won't be structured.
+       */
       structureDelimiter?: string;
+      /** @description Filter key IDs to be contained in export */
       filterKeyId?: number[];
+      /** @description Filter key IDs not to be contained in export */
       filterKeyIdNot?: number[];
+      /** @description Filter keys tagged by */
       filterTag?: string;
+      /** @description Filter keys with prefix */
       filterKeyPrefix?: string;
+      /** @description Filter translations with state. By default, everything except untranslated is exported. */
       filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+      /** @description Select one ore multiple namespaces to export */
       filterNamespace?: string[];
       zip: boolean;
     };
@@ -1562,6 +1931,9 @@ export interface components {
         | "TEAM_TRAINING"
         | "ACCOUNT_MANAGER"
         | "STANDARD_SUPPORT"
+        | "PROJECT_LEVEL_CONTENT_STORAGES"
+        | "WEBHOOKS"
+        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
       )[];
       prices: components["schemas"]["PlanPricesModel"];
       includedUsage: components["schemas"]["PlanIncludedUsageModel"];
@@ -1656,11 +2028,17 @@ export interface components {
         | "batch-jobs.view"
         | "batch-jobs.cancel"
         | "translations.batch-by-tm"
-        | "translations.batch-machine";
+        | "translations.batch-machine"
+        | "content-delivery.manage"
+        | "content-delivery.publish"
+        | "webhooks.manage";
       requires: components["schemas"]["HierarchyItem"][];
     };
     AnnouncementDto: {
-      type: "FEATURE_BATCH_OPERATIONS" | "FEATURE_MT_FORMALITY";
+      type:
+        | "FEATURE_BATCH_OPERATIONS"
+        | "FEATURE_MT_FORMALITY"
+        | "FEATURE_CONTENT_DELIVERY_AND_WEBHOOKS";
     };
     AuthMethodsDTO: {
       github: components["schemas"]["OAuthPublicConfigDTO"];
@@ -1713,20 +2091,23 @@ export interface components {
         | "TEAM_TRAINING"
         | "ACCOUNT_MANAGER"
         | "STANDARD_SUPPORT"
+        | "PROJECT_LEVEL_CONTENT_STORAGES"
+        | "WEBHOOKS"
+        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
       )[];
       /** @example Beautiful organization */
       name: string;
       /** Format: int64 */
       id: number;
       basePermissions: components["schemas"]["PermissionModel"];
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
       /**
        * @description The role of currently authorized user.
        *
        * Can be null when user has direct access to one of the projects owned by the organization.
        */
       currentUserRole?: "MEMBER" | "OWNER";
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
       /** @example btforg */
       slug: string;
       avatar?: components["schemas"]["Avatar"];
@@ -1759,6 +2140,7 @@ export interface components {
       ga4Tag?: string;
       postHogApiKey?: string;
       postHogHost?: string;
+      contentDeliveryConfigured: boolean;
     };
     DocItem: {
       displayName?: string;
@@ -1768,6 +2150,12 @@ export interface components {
     PagedModelProjectModel: {
       _embedded?: {
         projects?: components["schemas"]["ProjectModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelWebhookConfigModel: {
+      _embedded?: {
+        webhookConfigs?: components["schemas"]["WebhookConfigModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
     };
@@ -1831,18 +2219,18 @@ export interface components {
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
-      baseTranslation?: string;
       namespace?: string;
+      baseTranslation?: string;
+      translation?: string;
     };
     KeySearchSearchResultModel: {
       view?: components["schemas"]["KeySearchResultView"];
       name: string;
       /** Format: int64 */
       id: number;
-      translation?: string;
-      baseTranslation?: string;
       namespace?: string;
+      baseTranslation?: string;
+      translation?: string;
     };
     PagedModelKeySearchSearchResultModel: {
       _embedded?: {
@@ -1853,6 +2241,18 @@ export interface components {
     PagedModelKeyModel: {
       _embedded?: {
         keys?: components["schemas"]["KeyModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelContentStorageModel: {
+      _embedded?: {
+        contentStorages?: components["schemas"]["ContentStorageModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelContentDeliveryConfigModel: {
+      _embedded?: {
+        contentDeliveryConfigs?: components["schemas"]["ContentDeliveryConfigModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
     };
@@ -1940,7 +2340,8 @@ export interface components {
         | "BATCH_SET_TRANSLATION_STATE"
         | "BATCH_TAG_KEYS"
         | "BATCH_UNTAG_KEYS"
-        | "BATCH_SET_KEYS_NAMESPACE";
+        | "BATCH_SET_KEYS_NAMESPACE"
+        | "AUTOMATION";
       author?: components["schemas"]["ProjectActivityAuthorModel"];
       modifiedEntities?: {
         [key: string]: components["schemas"]["ModifiedEntityModel"][];
@@ -2330,14 +2731,14 @@ export interface components {
       /** Format: int64 */
       id: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      description: string;
-      /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
+      description: string;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /** Format: int64 */
+      expiresAt?: number;
     };
     OrganizationRequestParamsDto: {
       filterCurrentUserOwner: boolean;
@@ -2449,9 +2850,8 @@ export interface components {
     };
     ApiKeyWithLanguagesModel: {
       /**
+       * @deprecated
        * @description Languages for which user has translate permission.
-       *
-       * If null, all languages are permitted.
        */
       permittedLanguageIds?: number[];
       /** Format: int64 */
@@ -2459,14 +2859,70 @@ export interface components {
       userFullName?: string;
       projectName: string;
       username?: string;
+      description: string;
       /** Format: int64 */
       projectId: number;
       /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
       scopes: string[];
+    };
+    ApiKeyPermissionsModel: {
+      /**
+       * Format: int64
+       * @description The API key's project id or the one provided as query param
+       */
+      projectId: number;
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example 200001,200004
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example 200001,200004
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example 200001,200004
+       */
+      stateChangeLanguageIds?: number[];
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example KEYS_EDIT,TRANSLATIONS_VIEW
+       */
+      scopes: (
+        | "translations.view"
+        | "translations.edit"
+        | "keys.edit"
+        | "screenshots.upload"
+        | "screenshots.delete"
+        | "screenshots.view"
+        | "activity.view"
+        | "languages.edit"
+        | "admin"
+        | "project.edit"
+        | "members.view"
+        | "members.edit"
+        | "translation-comments.add"
+        | "translation-comments.edit"
+        | "translation-comments.set-state"
+        | "translations.state-edit"
+        | "keys.view"
+        | "keys.delete"
+        | "keys.create"
+        | "batch-jobs.view"
+        | "batch-jobs.cancel"
+        | "translations.batch-by-tm"
+        | "translations.batch-machine"
+        | "content-delivery.manage"
+        | "content-delivery.publish"
+        | "webhooks.manage"
+      )[];
+      /** @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions */
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
     };
     PagedModelUserAccountModel: {
       _embedded?: {
@@ -2527,7 +2983,7 @@ export interface operations {
       };
     };
   };
-  update_1: {
+  update_2: {
     parameters: {
       path: {
         id: number;
@@ -3128,7 +3584,7 @@ export interface operations {
       };
     };
   };
-  get_7: {
+  get_10: {
     parameters: {
       path: {
         translationId: number;
@@ -3164,7 +3620,7 @@ export interface operations {
       };
     };
   };
-  update_3: {
+  update_6: {
     parameters: {
       path: {
         commentId: number;
@@ -3204,7 +3660,7 @@ export interface operations {
       };
     };
   };
-  delete_6: {
+  delete_9: {
     parameters: {
       path: {
         commentId: number;
@@ -3464,7 +3920,7 @@ export interface operations {
       };
     };
   };
-  get_9: {
+  get_12: {
     parameters: {
       path: {
         languageId: number;
@@ -3614,7 +4070,7 @@ export interface operations {
       };
     };
   };
-  get_12: {
+  get_15: {
     parameters: {
       path: {
         id: number;
@@ -3646,6 +4102,82 @@ export interface operations {
         content: {
           "*/*": string;
         };
+      };
+    };
+  };
+  getAll: {
+    parameters: {
+      query: {
+        /** Zero-based page index (0..N) */
+        page?: number;
+        /** The size of the page to be returned */
+        size?: number;
+        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/hal+json": components["schemas"]["PagedModelProjectModel"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
+  createProject: {
+    parameters: {
+      query: {
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ProjectModel"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectDTO"];
       };
     };
   };
@@ -3756,7 +4288,7 @@ export interface operations {
       };
     };
   };
-  create_2: {
+  create_3: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -3831,7 +4363,7 @@ export interface operations {
       };
     };
   };
-  create_3: {
+  create_4: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -3868,7 +4400,7 @@ export interface operations {
       };
     };
   };
-  delete_4: {
+  delete_5: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -4491,7 +5023,7 @@ export interface operations {
       };
     };
   };
-  create_5: {
+  create_8: {
     parameters: {
       path: {
         translationId: number;
@@ -4531,7 +5063,7 @@ export interface operations {
       };
     };
   };
-  create_7: {
+  create_10: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -4878,7 +5410,7 @@ export interface operations {
       };
     };
   };
-  create_9: {
+  create_12: {
     parameters: {
       query: {
         /** API key provided via query parameter. Will be deprecated in the future. */
@@ -5516,7 +6048,7 @@ export interface operations {
       };
     };
   };
-  get_5: {
+  get_8: {
     parameters: {
       path: {
         id: number;
@@ -5551,7 +6083,7 @@ export interface operations {
       };
     };
   };
-  list_1: {
+  list_4: {
     parameters: {
       query: {
         /** Zero-based page index (0..N) */
@@ -5848,7 +6380,7 @@ export interface operations {
       };
     };
   };
-  get_11: {
+  get_14: {
     parameters: {
       path: {
         slug: string;
@@ -5950,6 +6482,40 @@ export interface operations {
       };
     };
   };
+  getCurrentPermissions: {
+    parameters: {
+      query: {
+        /** Required when using with PAT */
+        projectId?: number;
+        /** API key provided via query parameter. Will be deprecated in the future. */
+        ak?: string;
+      };
+      header: {
+        /** API key provided via header. Safer since headers are not stored in server logs. */
+        "X-API-Key"?: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "*/*": components["schemas"]["ApiKeyPermissionsModel"];
+        };
+      };
+      /** Bad Request */
+      400: {
+        content: {
+          "*/*": string;
+        };
+      };
+      /** Not Found */
+      404: {
+        content: {
+          "*/*": string;
+        };
+      };
+    };
+  };
   doExportJsonZip_1: {
     parameters: {
       query: {
@@ -5982,7 +6548,7 @@ export interface operations {
       };
     };
   };
-  delete_2: {
+  delete_3: {
     parameters: {
       path: {
         ids: number[];
@@ -6077,7 +6643,7 @@ export interface operations {
       };
     };
   };
-  delete_9: {
+  delete_12: {
     parameters: {
       path: {
         ids: number[];
