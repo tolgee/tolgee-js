@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.18.0](https://github.com/tolgee/tolgee-js/compare/v5.17.0...v5.18.0) (2023-12-13)
+
+
+### Features
+
+* add state editing in-context ([#3286](https://github.com/tolgee/tolgee-js/issues/3286)) ([a5fb570](https://github.com/tolgee/tolgee-js/commit/a5fb57080a3fd11f997fb95fc1c729ac0925cd51))
+
+
+
+
+
 # [5.17.0](https://github.com/tolgee/tolgee-js/compare/v5.16.3...v5.17.0) (2023-12-06)
 
 
