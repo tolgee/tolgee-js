@@ -339,6 +339,11 @@ export interface components {
     UserMfaRecoveryRequestDto: {
       password: string;
     };
+    QuickStartModel: {
+      finished: boolean;
+      completedSteps: string[];
+      open: boolean;
+    };
     EditProjectDTO: {
       name: string;
       slug?: string;
@@ -695,6 +700,8 @@ export interface components {
       /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
       screenshotUploadedImageIds?: number[];
       screenshotsToAdd?: components["schemas"]["KeyScreenshotDto"][];
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
     };
     KeyInScreenshotPositionDto: {
       /** Format: int32 */
@@ -714,6 +721,11 @@ export interface components {
        */
       uploadedImageId: number;
       positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
+    };
+    /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+    RelatedKeyDto: {
+      namespace?: string;
+      keyName: string;
     };
     KeyInScreenshotModel: {
       /** Format: int64 */
@@ -1000,6 +1012,15 @@ export interface components {
     SetFileNamespaceRequest: {
       namespace?: string;
     };
+    /** @description User who created the comment */
+    SimpleUserAccountModel: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      name?: string;
+      avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
+    };
     TranslationCommentModel: {
       /**
        * Format: int64
@@ -1010,7 +1031,7 @@ export interface components {
       text: string;
       /** @description State of translation */
       state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
-      author: components["schemas"]["UserAccountModel"];
+      author: components["schemas"]["SimpleUserAccountModel"];
       /**
        * Format: date-time
        * @description Date when it was created
@@ -1021,18 +1042,6 @@ export interface components {
        * @description Date when it was updated
        */
       updatedAt: string;
-    };
-    /** @description User who created the comment */
-    UserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      emailAwaitingVerification?: string;
-      avatar?: components["schemas"]["Avatar"];
-      globalServerRole: "USER" | "ADMIN";
-      deleted: boolean;
-      disabled: boolean;
     };
     TranslationCommentDto: {
       text: string;
@@ -1135,15 +1144,15 @@ export interface components {
       token: string;
       /** Format: int64 */
       id: number;
-      /** Format: int64 */
-      createdAt: number;
-      /** Format: int64 */
-      updatedAt: number;
       description: string;
       /** Format: int64 */
       lastUsedAt?: number;
       /** Format: int64 */
       expiresAt?: number;
+      /** Format: int64 */
+      createdAt: number;
+      /** Format: int64 */
+      updatedAt: number;
     };
     SetOrganizationRoleDto: {
       roleType: "MEMBER" | "OWNER";
@@ -1279,16 +1288,16 @@ export interface components {
       key: string;
       /** Format: int64 */
       id: number;
-      userFullName?: string;
       projectName: string;
+      userFullName?: string;
       username?: string;
       description: string;
-      /** Format: int64 */
-      projectId: number;
       /** Format: int64 */
       lastUsedAt?: number;
       /** Format: int64 */
       expiresAt?: number;
+      /** Format: int64 */
+      projectId: number;
       scopes: string[];
     };
     SuperTokenRequest: {
@@ -1417,6 +1426,8 @@ export interface components {
       /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
       screenshotUploadedImageIds?: number[];
       screenshots?: components["schemas"]["KeyScreenshotDto"][];
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
     };
     StorageTestResult: {
       success: boolean;
@@ -1664,15 +1675,6 @@ export interface components {
       /** @description If the job failed, this is the error message */
       errorMessage?: string;
     };
-    /** @description The user who started the job */
-    SimpleUserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      avatar?: components["schemas"]["Avatar"];
-      deleted: boolean;
-    };
     TagKeysRequest: {
       keyIds: number[];
       tags: string[];
@@ -1787,13 +1789,8 @@ export interface components {
     };
     StreamingResponseBody: { [key: string]: unknown };
     BigMetaDto: {
-      /** @description List of keys, visible, in order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-      relatedKeysInOrder: components["schemas"]["RelatedKeyDto"][];
-    };
-    /** @description List of keys, visible, in order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-    RelatedKeyDto: {
-      namespace?: string;
-      keyName: string;
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
     };
     TranslationCommentWithLangKeyDto: {
       /** Format: int64 */
@@ -2095,6 +2092,7 @@ export interface components {
         | "WEBHOOKS"
         | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
       )[];
+      quickStart?: components["schemas"]["QuickStartModel"];
       /** @example Beautiful organization */
       name: string;
       /** Format: int64 */
@@ -2108,9 +2106,9 @@ export interface components {
        * Can be null when user has direct access to one of the projects owned by the organization.
        */
       currentUserRole?: "MEMBER" | "OWNER";
+      avatar?: components["schemas"]["Avatar"];
       /** @example btforg */
       slug: string;
-      avatar?: components["schemas"]["Avatar"];
     };
     PublicBillingConfigurationDTO: {
       enabled: boolean;
@@ -2143,8 +2141,8 @@ export interface components {
       contentDeliveryConfigured: boolean;
     };
     DocItem: {
-      displayName?: string;
       name: string;
+      displayName?: string;
       description?: string;
     };
     PagedModelProjectModel: {
@@ -2420,8 +2418,7 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    EntityModelImportFileIssueView: {
-      params: components["schemas"]["ImportFileIssueParamView"][];
+    ImportFileIssueModel: {
       /** Format: int64 */
       id: number;
       type:
@@ -2435,9 +2432,9 @@ export interface components {
         | "TARGET_NOT_PROVIDED"
         | "TRANSLATION_TOO_LONG"
         | "KEY_IS_BLANK";
+      params: components["schemas"]["ImportFileIssueParamModel"][];
     };
-    ImportFileIssueParamView: {
-      value?: string;
+    ImportFileIssueParamModel: {
       type:
         | "KEY_NAME"
         | "KEY_ID"
@@ -2446,10 +2443,11 @@ export interface components {
         | "VALUE"
         | "LINE"
         | "FILE_NODE_ORIGINAL";
+      value?: string;
     };
-    PagedModelEntityModelImportFileIssueView: {
+    PagedModelImportFileIssueModel: {
       _embedded?: {
-        importFileIssueViews?: components["schemas"]["EntityModelImportFileIssueView"][];
+        importFileIssues?: components["schemas"]["ImportFileIssueModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
     };
@@ -2730,15 +2728,15 @@ export interface components {
       user: components["schemas"]["SimpleUserAccountModel"];
       /** Format: int64 */
       id: number;
-      /** Format: int64 */
-      createdAt: number;
-      /** Format: int64 */
-      updatedAt: number;
       description: string;
       /** Format: int64 */
       lastUsedAt?: number;
       /** Format: int64 */
       expiresAt?: number;
+      /** Format: int64 */
+      createdAt: number;
+      /** Format: int64 */
+      updatedAt: number;
     };
     OrganizationRequestParamsDto: {
       filterCurrentUserOwner: boolean;
@@ -2856,16 +2854,16 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
-      userFullName?: string;
       projectName: string;
+      userFullName?: string;
       username?: string;
       description: string;
-      /** Format: int64 */
-      projectId: number;
       /** Format: int64 */
       lastUsedAt?: number;
       /** Format: int64 */
       expiresAt?: number;
+      /** Format: int64 */
+      projectId: number;
       scopes: string[];
     };
     ApiKeyPermissionsModel: {
@@ -2929,6 +2927,17 @@ export interface components {
         users?: components["schemas"]["UserAccountModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
+    };
+    UserAccountModel: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      name?: string;
+      emailAwaitingVerification?: string;
+      avatar?: components["schemas"]["Avatar"];
+      globalServerRole: "USER" | "ADMIN";
+      deleted: boolean;
+      disabled: boolean;
     };
     UserTotpDisableRequestDto: {
       password: string;
@@ -5926,7 +5935,7 @@ export interface operations {
       /** OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelEntityModelImportFileIssueView"];
+          "*/*": components["schemas"]["PagedModelImportFileIssueModel"];
         };
       };
       /** Bad Request */

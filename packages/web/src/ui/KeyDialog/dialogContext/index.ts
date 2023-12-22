@@ -173,11 +173,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'put',
     });
 
-    const updateMetadata = useApiMutation({
-      url: '/v2/projects/big-meta',
-      method: 'post',
-    });
-
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
 
     const linkToPlatform =
@@ -228,6 +223,13 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           }
         });
 
+        const relatedKeysInOrder = permissions.canSendBigMeta
+          ? limitSurroundingKeys(props.uiProps.findPositions(), {
+              keyName: props.keyName,
+              keyNamespace: selectedNs,
+            })
+          : undefined;
+
         await (keyData === undefined
           ? createKey.mutateAsync({
               content: {
@@ -241,6 +243,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                     positions: sc.keyReferences?.map(mapPosition),
                   })),
                   tags,
+                  relatedKeysInOrder,
                 },
               },
             })
@@ -257,27 +260,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                     positions: sc.keyReferences?.map(mapPosition),
                   })),
                   tags,
+                  relatedKeysInOrder,
                 },
               },
               path: { id: keyData.keyId! },
             }));
-
-        if (permissions.canSendBigMeta) {
-          const surroundingKeys = limitSurroundingKeys(
-            props.uiProps.findPositions(),
-            { keyName: props.keyName, keyNamespace: selectedNs }
-          );
-          await updateMetadata.mutateAsync({
-            content: {
-              'application/json': {
-                relatedKeysInOrder: surroundingKeys.map((val) => ({
-                  keyName: val.keyName,
-                  namespace: val.keyNamespace || undefined,
-                })),
-              },
-            },
-          });
-        }
 
         changeInTolgeeCache(
           props.keyName,
@@ -416,7 +403,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       scopesLoadable.error ||
       createKey.error ||
       updateKey.error ||
-      updateMetadata.error ||
       galleryError;
 
     const formDisabled = loading || !permissions.canSubmitForm;
