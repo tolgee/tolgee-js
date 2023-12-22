@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.19.0](https://github.com/tolgee/tolgee-js/compare/v5.18.0...v5.19.0) (2023-12-22)
+
+
+### Features
+
+* use relatedKeysInOrder property ([#3288](https://github.com/tolgee/tolgee-js/issues/3288)) ([2ea1635](https://github.com/tolgee/tolgee-js/commit/2ea1635a4b4221528684ec57474b1e5bc0a50600))
+
+
+
+
+
 # [5.18.0](https://github.com/tolgee/tolgee-js/compare/v5.17.0...v5.18.0) (2023-12-13)
 
 
