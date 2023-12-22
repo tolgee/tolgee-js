@@ -22,7 +22,7 @@ import {
 } from '../State/translationStates';
 import { useComputedPermissions } from './usePermissions';
 
-const MINIMAL_PLATFORM_VERSION = 'v3.39.0';
+const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
 
 type FormTranslations = {
   [key: string]: {
