@@ -3,7 +3,7 @@ export type KeyInfo = {
   keyNamespace?: string;
 };
 
-export const limitSurroundingKeys = (data: KeyInfo[], current: KeyInfo) => {
+function limitPositions(data: KeyInfo[], current: KeyInfo) {
   const index =
     data.findIndex(
       (item) =>
@@ -30,4 +30,12 @@ export const limitSurroundingKeys = (data: KeyInfo[], current: KeyInfo) => {
     first = 0;
   }
   return data.slice(first, last);
-};
+}
+
+export function limitSurroundingKeys(positions: KeyInfo[], current: KeyInfo) {
+  const surroundingKeys = limitPositions(positions, current);
+  return surroundingKeys.map((val) => ({
+    keyName: val.keyName,
+    namespace: val.keyNamespace || undefined,
+  }));
+}
