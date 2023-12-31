@@ -11,21 +11,16 @@ export const config: Config = {
     react: {
       commandLineServices: {
         dev: {
-          command: 'npm run develop',
+          command: 'npm run develop -- --port 8113',
           cwd: path.resolve(__dirname, '../../testapps/react/'),
           environment: {
-            REACT_APP_TOLGEE_API_URL: 'http://localhost:8202',
-            REACT_APP_TOLGEE_API_KEY:
-              'examples-admin-imported-project-implicit',
-            BROWSER: 'none',
-            PORT: '8113',
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
-          waitForOutput: /http:\/\/localhost:.*8113/gm,
         },
         prod: {
           cwd: path.resolve(__dirname, '../../testapps/react/'),
-          command: 'npm run serve -- -p 8102',
-          waitForOutput: 'Accepting connections at',
+          command: 'npm run preview -- --port 8102',
         },
       },
     },
