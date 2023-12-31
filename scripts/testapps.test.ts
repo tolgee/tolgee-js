@@ -22,7 +22,7 @@ const checkBuildFile = (filePath: string) => {
 };
 
 const buildFolders = [
-  './testapps/react/build',
+  './testapps/react/dist',
   './testapps/vue/dist',
   './testapps/svelte/.svelte-kit',
   './testapps/ngx/dist',
