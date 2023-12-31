@@ -121,7 +121,6 @@ export const config: Config = {
             VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
             VITE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
-          waitForOutput: /http:\/\/localhost:.*8118/gm,
         },
         prod: {
           cwd: path.resolve(__dirname, '../../testapps/react-i18next/'),
