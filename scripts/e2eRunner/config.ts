@@ -115,20 +115,17 @@ export const config: Config = {
     'react-i18next': {
       commandLineServices: {
         dev: {
-          command: 'npm run develop',
+          command: 'npm run develop -- --port 8118',
           cwd: path.resolve(__dirname, '../../testapps/react-i18next/'),
           environment: {
-            REACT_APP_TOLGEE_API_URL: 'http://localhost:8202',
-            REACT_APP_TOLGEE_API_KEY:
-              'examples-admin-imported-project-implicit',
-            BROWSER: 'none',
-            PORT: '8118',
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
           },
           waitForOutput: /http:\/\/localhost:.*8118/gm,
         },
         prod: {
           cwd: path.resolve(__dirname, '../../testapps/react-i18next/'),
-          command: 'npm run serve -- -p 8117',
+          command: 'npm run preview -- --port 8117',
           waitForOutput: 'INFO',
         },
       },

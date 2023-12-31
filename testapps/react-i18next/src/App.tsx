@@ -19,8 +19,8 @@ const tolgee = Tolgee()
   .use(I18nextPlugin())
   .use(BackendFetch())
   .init({
-    apiUrl: process.env.REACT_APP_TOLGEE_API_URL,
-    apiKey: process.env.REACT_APP_TOLGEE_API_KEY,
+    apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
+    apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
   });
 
 withTolgee(i18n, tolgee)

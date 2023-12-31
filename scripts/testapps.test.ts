@@ -26,7 +26,7 @@ const buildFolders = [
   './testapps/vue/dist',
   './testapps/svelte/.svelte-kit',
   './testapps/ngx/dist',
-  './testapps/react-i18next/build',
+  './testapps/react-i18next/dist',
   './testapps/vue-i18next/dist',
   './testapps/next/.next',
   './testapps/next-app/.next',

@@ -1,35 +1,30 @@
-# Example application of using react-i18next with Tolgee
+# React + TypeScript + Vite
 
-[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-This application is using Create React App. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
+Currently, two official plugins are available:
 
-## To run the app in dev mode
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-To install dependencies, run:
+## Expanding the ESLint configuration
 
-    npm install
+If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-To run the app in dev mode with in-context translating mode:
+- Configure the top-level `parserOptions` property like this:
 
-1. Create a project on [Tolgee Cloud](https://app.tolgee.io) or use
-   self-hosted [Tolgee Server](https://github.com/tolgee/server).
-2. Generate an API-KEY
-3. Copy file `.env` to `.env.development.local`
-4. Set `REACT_APP_TOLGEE_API_KEY` to API key obtained in previous step
-5. Run `npm run start`
-6. Have fun
+```js
+export default {
+  // other rules...
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: ['./tsconfig.json', './tsconfig.node.json'],
+    tsconfigRootDir: __dirname,
+  },
+}
+```
 
-## To run the app in production mode
-
-To build the app for production run:
-
-    npm run build
-
-Static website will be generated. To start local server with build app, run:
-
-    npm run serve
-
----
-
-This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).
+- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
+- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
+- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
