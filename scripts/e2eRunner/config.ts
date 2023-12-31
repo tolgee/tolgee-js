@@ -126,7 +126,6 @@ export const config: Config = {
         prod: {
           cwd: path.resolve(__dirname, '../../testapps/react-i18next/'),
           command: 'npm run preview -- --port 8117',
-          waitForOutput: 'INFO',
         },
       },
     },
