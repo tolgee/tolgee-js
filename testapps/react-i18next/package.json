@@ -2,46 +2,29 @@
   "name": "@tolgee/react-i18next-testapp",
   "version": "5.19.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "develop": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@tolgee/core": "5.19.0",
     "@tolgee/i18next": "5.19.0",
-    "concurrently": "^7.3.0",
-    "i18next": "23.5.1",
-    "i18next-icu": "^2.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-i18next": "13.2.2",
-    "react-scripts": "5.0.1",
-    "serve": "^14.1.1",
-    "web-vitals": "^2.1.4"
-  },
-  "scripts": {
-    "start": "DISABLE_ESLINT_PLUGIN=true  react-scripts start",
-    "develop": "DISABLE_ESLINT_PLUGIN=true FORCE_COLOR=true react-scripts start | cat -",
-    "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
-    "clean": "rm -rf build build-e2e dist dist-e2e lib",
-    "eject": "react-scripts eject",
-    "serve": "serve -s build"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "react-i18next": "^14.0.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.8",
-    "@types/react": "^18.2.42",
+    "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
-    "typescript": "^4.9.5"
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
   }
 }

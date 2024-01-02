@@ -1,4 +1,4 @@
-ARG nodever=16
+ARG nodever=20
 FROM node:${nodever}-alpine
 
 # gatsby needs to have access to user directory

@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Navbar } from './components/Navbar';
+import { Navbar } from '../../react/src/components/Navbar';
 import { T, useTranslate } from '@tolgee/react';
 
 const getInitialItems = () => {

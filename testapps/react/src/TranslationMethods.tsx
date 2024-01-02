@@ -1,8 +1,8 @@
 import { T, useTranslate } from '@tolgee/react';
-import { Navbar } from './components/Navbar';
+import { Navbar } from '../../react/src/components/Navbar';
 import { useState } from 'react';
 import { Suspense } from 'react';
-import Namespaces from './components/Namespaces';
+import Namespaces from '../../react/src/components/Namespaces';
 
 export const TranslationMethods = () => {
   const { t } = useTranslate();
