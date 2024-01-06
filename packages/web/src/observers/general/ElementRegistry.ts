@@ -33,7 +33,7 @@ export function ElementRegistry(
     },
     options,
   });
-  let refreshAllTimeout: number | null = null;
+  let refreshAllTimeout: null | number | ReturnType<typeof setTimeout> = null;
 
   function isRestricted(element: Element) {
     const restrictedElements = options.restrictedElements;
