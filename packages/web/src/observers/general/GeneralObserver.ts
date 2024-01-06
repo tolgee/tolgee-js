@@ -110,7 +110,7 @@ export function GeneralObserver() {
         }
         handleNodes(result);
       }
-      elementRegistry.refreshAll();
+      elementRegistry.refreshAllLater();
     });
 
     const targetElement = options.targetElement || document.body;

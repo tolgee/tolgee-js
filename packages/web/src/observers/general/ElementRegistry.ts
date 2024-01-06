@@ -33,6 +33,7 @@ export function ElementRegistry(
     },
     options,
   });
+  let refreshAllTimeout: number | null = null;
 
   function isRestricted(element: Element) {
     const restrictedElements = options.restrictedElements;
@@ -102,6 +103,13 @@ export function ElementRegistry(
     },
 
     forEachElement: elementStore.forEachElement,
+
+    refreshAllLater() {
+      if (refreshAllTimeout) {
+        clearTimeout(refreshAllTimeout);
+      }
+      refreshAllTimeout = setTimeout(this.refreshAll, 500);
+    },
 
     refreshAll() {
       elementStore.forEachElement((element, meta) => {
