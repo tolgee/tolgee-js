@@ -42,18 +42,10 @@ export function ElementRegistry(
     );
   }
 
-  function cleanElementInactiveNodes(meta: ElementMeta) {
-    meta.nodes = new Map(getActiveNodes(meta));
-  }
-
-  function getTargetElement() {
-    return options.targetElement || document.body;
-  }
-
-  function* getActiveNodes(meta: ElementMeta) {
-    for (const [node, nodeMeta] of meta.nodes.entries()) {
-      if (nodeContains(getTargetElement(), node)) {
-        yield [node, nodeMeta] as const;
+  function cleanElementInactiveNodes(meta: ElementMeta, removedNodes: Set<Node>) {
+    for (const [key] of meta.nodes) {
+      if (removedNodes.has(key)) {
+        meta.nodes.delete(key);
       }
     }
   }
@@ -103,12 +95,12 @@ export function ElementRegistry(
 
     forEachElement: elementStore.forEachElement,
 
-    refreshAll() {
+    cleanupRemovedNodes(removedNodes: Set<Node>) {
       elementStore.forEachElement((element, meta) => {
         if (meta.preventClean) {
           return;
         }
-        cleanElementInactiveNodes(meta);
+        cleanElementInactiveNodes(meta, removedNodes);
         if (meta.nodes.size === 0) {
           cleanElement(element, meta);
         }

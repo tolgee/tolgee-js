@@ -102,8 +102,16 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       return `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
     },
 
+    testTextNode(textNode: Text) {
+      return textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`);
+    },
+
     getAttributeXPath({ tag, attribute }) {
       return `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
     },
+
+    testAttribute(attribute: Attr) {
+      return attribute.value.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && attribute.value.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`);
+    }
   });
 }

@@ -72,45 +72,69 @@ export function GeneralObserver() {
     }
 
     function handleKeyAttribute(node: Node) {
-      const xPath = `./descendant-or-self::*[@${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}]`;
-      const elements = xPathEvaluate(xPath, node) as Element[];
-      elements.forEach((element) => {
-        const node = element.getAttributeNode(
-          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
-        );
-        const parentElement = domHelper.getSuitableParent(node as Node);
-        elementRegistry.register(parentElement, node as Node, {
+      if (node.nodeType === Node.ATTRIBUTE_NODE) {
+        const attr = node as Attr;
+        if (attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
+          const parentElement = domHelper.getSuitableParent(attr);
+          elementRegistry.register(parentElement, attr, {
+            oldTextContent: '',
+            keys: [{ key: getNodeText(attr)! }],
+            keyAttributeOnly: true,
+          });
+        }
+      }
+
+      const walker = document.createTreeWalker(node, NodeFilter.SHOW_ATTRIBUTE, f =>
+        (f as Attr).name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
+      while (walker.nextNode()) {
+        const attr = walker.currentNode as Attr;
+        const parentElement = domHelper.getSuitableParent(attr as Node);
+        elementRegistry.register(parentElement, attr as Node, {
           oldTextContent: '',
-          keys: [{ key: getNodeText(node as Node)! }],
+          keys: [{ key: getNodeText(attr as Node)! }],
           keyAttributeOnly: true,
         });
-      });
+      }
     }
 
     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       if (!isObserving) {
         return;
       }
+
+      let removedNodes = mutationsList.filter(m => m.type === 'childList').flatMap(m => Array.from(m.removedNodes));
+      let removedNodesSet = new Set(removedNodes);
+
+      for (const node of removedNodes) {
+        const treeWalker = document.createTreeWalker(node);
+        while (treeWalker.nextNode()) {
+          removedNodesSet.add(treeWalker.currentNode);
+        }
+      }
+
+      if (removedNodesSet.size > 0) {
+        elementRegistry.cleanupRemovedNodes(removedNodesSet);
+      }
+
+      let result: (Attr | Text)[] = [];
       for (const mutation of mutationsList) {
-        let result: (Attr | Text)[] = [];
         switch (mutation.type) {
           case 'characterData':
-            result = nodeHandler.handleText(mutation.target);
+            result.push(...nodeHandler.handleText(mutation.target));
             break;
 
           case 'childList':
             handleKeyAttribute(mutation.target);
-            result = nodeHandler.handleChildList(mutation.target);
+            result.push(...nodeHandler.handleChildList(mutation.target));
             break;
 
           case 'attributes':
             handleKeyAttribute(mutation.target);
-            result = nodeHandler.handleAttributes(mutation.target);
+            result.push(...nodeHandler.handleAttributes(mutation.target));
             break;
         }
-        handleNodes(result);
       }
-      elementRegistry.refreshAll();
+      handleNodes(result);
     });
 
     const targetElement = options.targetElement || document.body;

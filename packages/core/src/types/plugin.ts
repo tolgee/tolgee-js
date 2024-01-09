@@ -119,7 +119,9 @@ export type WrapperMiddleware = {
   unwrap: WrapperUnwrapFunction;
   wrap: WrapperWrapFunction;
   getTextXPath: () => string;
+  testTextNode: (node: Text) => boolean;
   getAttributeXPath: WrapperAttributeXPathGetter;
+  testAttribute: (node: Attr) => boolean;
 };
 
 export type FormatterMiddlewareFormatParams = {
