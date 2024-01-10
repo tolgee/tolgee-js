@@ -81,18 +81,20 @@ export function GeneralObserver() {
 
       const walker = document.createTreeWalker(
         node,
-        NodeFilter.SHOW_ATTRIBUTE,
-        (f) =>
-          (f as Attr).name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        NodeFilter.SHOW_ELEMENT,
+        (e) =>
+          (e as Element).hasAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE)
             ? NodeFilter.FILTER_ACCEPT
             : NodeFilter.FILTER_SKIP
       );
       while (walker.nextNode()) {
-        const attr = walker.currentNode as Attr;
-        const parentElement = domHelper.getSuitableParent(attr as Node);
-        elementRegistry.register(parentElement, attr as Node, {
+        const attr = (walker.currentNode as Element).getAttributeNode(
+          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        ) as Node;
+        const parentElement = domHelper.getSuitableParent(attr);
+        elementRegistry.register(parentElement, attr, {
           oldTextContent: '',
-          keys: [{ key: getNodeText(attr as Node)! }],
+          keys: [{ key: getNodeText(attr)! }],
           keyAttributeOnly: true,
         });
       }
@@ -111,10 +113,17 @@ export function GeneralObserver() {
       for (const node of removedNodes) {
         const treeWalker = document.createTreeWalker(
           node,
-          NodeFilter.SHOW_ATTRIBUTE | NodeFilter.SHOW_TEXT
+          NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT
         );
         while (treeWalker.nextNode()) {
-          removedNodesSet.add(treeWalker.currentNode);
+          const currentNode = treeWalker.currentNode;
+          if (currentNode.nodeType === Node.ELEMENT_NODE) {
+            const element = currentNode as Element;
+            for (let i = 0; i < element.attributes.length; i++) {
+              removedNodesSet.add(element.attributes[i]);
+            }
+          }
+          removedNodesSet.add(currentNode);
         }
       }
 

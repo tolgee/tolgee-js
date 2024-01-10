@@ -15,21 +15,19 @@ export function NodeHandler(
         ])
       ) as Record<string, string[]>;
 
-      const tags = new Set(Object.keys(tagAttributes));
       const walker = document.createTreeWalker(
         node,
         NodeFilter.SHOW_ELEMENT,
         (f) =>
-          tags.has((f as Element).tagName.toUpperCase()) ||
-          (tags.has('*') &&
-            '*' in tagAttributes &&
-            tagAttributes['*'].some((t) => (f as Element).hasAttribute(t)))
+          tagAttributes[(f as Element).tagName.toUpperCase()]?.some((t) =>
+            (f as Element).hasAttribute(t)
+          ) || tagAttributes['*']?.some((t) => (f as Element).hasAttribute(t))
             ? NodeFilter.FILTER_ACCEPT
             : NodeFilter.FILTER_SKIP
       );
       while (walker.nextNode()) {
         const element = walker.currentNode as Element;
-        let attributes = tagAttributes[element.tagName.toUpperCase()];
+        let attributes = tagAttributes[element.tagName.toUpperCase()] ?? [];
         if ('*' in tagAttributes) {
           attributes = attributes.concat(tagAttributes['*']);
         }
@@ -37,7 +35,9 @@ export function NodeHandler(
           ...(attributes
             .filter((attrName) => element.hasAttribute(attrName))
             .map((attrName) => element.getAttributeNode(attrName))
-            .filter((attrNode) => wrapper.testAttribute(attrNode)) as Attr[])
+            .filter((attrNode) =>
+              wrapper.testAttribute(attrNode as Attr)
+            ) as Attr[])
         );
       }
 

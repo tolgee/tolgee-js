@@ -103,8 +103,10 @@ export function ElementRegistry(
         if (meta.preventClean) {
           return;
         }
-        cleanElementInactiveNodes(meta, removedNodes);
-        if (meta.nodes.size === 0) {
+        if (!removedNodes.has(element)) {
+          cleanElementInactiveNodes(meta, removedNodes);
+        }
+        if (removedNodes.has(element) || meta.nodes.size === 0) {
           cleanElement(element, meta);
         }
       });

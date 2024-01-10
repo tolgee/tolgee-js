@@ -241,9 +241,8 @@ export function TextWrapper({
 
     testAttribute(attribute: Attr) {
       return (
-        (attribute.value.includes(inputPrefix) &&
-          attribute.value.includes(inputSuffix)) ??
-        false
+        attribute.value.includes(inputPrefix) &&
+        attribute.value.includes(inputSuffix)
       );
     },
   });

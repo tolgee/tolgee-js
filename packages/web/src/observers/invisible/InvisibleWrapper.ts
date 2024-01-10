@@ -120,13 +120,12 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
 
     testAttribute(attribute: Attr) {
       return (
-        (attribute.value.includes(
+        attribute.value.includes(
           `${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`
         ) ||
-          attribute.value.includes(
-            `${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`
-          )) ??
-        false
+        attribute.value.includes(
+          `${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`
+        )
       );
     },
   });
