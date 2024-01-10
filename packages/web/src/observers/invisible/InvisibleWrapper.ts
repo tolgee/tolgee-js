@@ -103,7 +103,7 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     },
 
     testTextNode(textNode: Text) {
-      return textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`);
+      return (textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && textNode.textContent?.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`)) ?? false;
     },
 
     getAttributeXPath({ tag, attribute }) {
@@ -111,7 +111,7 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     },
 
     testAttribute(attribute: Attr) {
-      return attribute.value.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && attribute.value.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`);
+      return (attribute.value.includes(`${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`) && attribute.value.includes(`${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`)) ?? false;
     }
   });
 }

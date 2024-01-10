@@ -1,5 +1,4 @@
 import { ObserverOptionsInternal, WrapperMiddleware } from '@tolgee/core';
-import { xPathEvaluate } from './helpers';
 
 export function NodeHandler(
   options: ObserverOptionsInternal,
@@ -7,15 +6,24 @@ export function NodeHandler(
 ) {
   const self = Object.freeze({
     handleAttributes(node: Node) {
-      let result: Attr[] = [];
+      const result: Attr[] = [];
 
-      const tagAttributes = Object.fromEntries(Object.entries(options.tagAttributes)
-        .map(([tag, attributes]) => [tag.toUpperCase(), attributes])) as Record<string, string[]>;
+      const tagAttributes = Object.fromEntries(
+        Object.entries(options.tagAttributes).map(([tag, attributes]) => [
+          tag.toUpperCase(),
+          attributes,
+        ])
+      ) as Record<string, string[]>;
 
       const tags = new Set(Object.keys(tagAttributes));
-      const walker = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT,
-        f => tags.has((f as Element).tagName.toUpperCase()) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
-      
+      const walker = document.createTreeWalker(
+        node,
+        NodeFilter.SHOW_ELEMENT,
+        (f) =>
+          tags.has((f as Element).tagName.toUpperCase())
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_SKIP
+      );
       while (walker.nextNode()) {
         const element = walker.currentNode as Element;
         const attributes = tagAttributes[element.tagName.toUpperCase()];
@@ -46,8 +54,14 @@ export function NodeHandler(
         return wrapper.testTextNode(node as Text) ? [node as Text] : [];
       }
 
-      const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT,
-        f => wrapper.testTextNode(f as Text) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
+      const walker = document.createTreeWalker(
+        node,
+        NodeFilter.SHOW_TEXT,
+        (f) =>
+          wrapper.testTextNode(f as Text)
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_SKIP
+      );
       const nodes = [];
       while (walker.nextNode()) {
         nodes.push(walker.currentNode);

@@ -228,7 +228,11 @@ export function TextWrapper({
     },
 
     testTextNode(textNode: Text) {
-      return textNode.textContent?.includes(inputPrefix) && textNode.textContent?.includes(inputSuffix);
+      return (
+        (textNode.textContent?.includes(inputPrefix) &&
+          textNode.textContent?.includes(inputSuffix)) ??
+        false
+      );
     },
 
     getAttributeXPath({ tag, attribute }) {
@@ -236,7 +240,11 @@ export function TextWrapper({
     },
 
     testAttribute(attribute: Attr) {
-      return attribute.value.includes(inputPrefix) && attribute.value.includes(inputSuffix);
+      return (
+        (attribute.value.includes(inputPrefix) &&
+          attribute.value.includes(inputSuffix)) ??
+        false
+      );
     },
   });
 }

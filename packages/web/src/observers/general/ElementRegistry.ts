@@ -9,7 +9,7 @@ import { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStoreType } from './ElementStore';
-import { compareDescriptors, nodeContains } from './helpers';
+import { compareDescriptors } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export function ElementRegistry(
@@ -42,7 +42,10 @@ export function ElementRegistry(
     );
   }
 
-  function cleanElementInactiveNodes(meta: ElementMeta, removedNodes: Set<Node>) {
+  function cleanElementInactiveNodes(
+    meta: ElementMeta,
+    removedNodes: Set<Node>
+  ) {
     for (const [key] of meta.nodes) {
       if (removedNodes.has(key)) {
         meta.nodes.delete(key);

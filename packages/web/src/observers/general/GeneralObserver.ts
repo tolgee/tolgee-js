@@ -15,12 +15,7 @@ import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry, ElementRegistryInstance } from './ElementRegistry';
 import { ElementStore } from './ElementStore';
-import {
-  compareDescriptors,
-  getNodeText,
-  setNodeText,
-  xPathEvaluate,
-} from './helpers';
+import { compareDescriptors, getNodeText, setNodeText } from './helpers';
 import { NodeHandler } from './NodeHandler';
 
 type RunningInstance = {
@@ -84,8 +79,14 @@ export function GeneralObserver() {
         }
       }
 
-      const walker = document.createTreeWalker(node, NodeFilter.SHOW_ATTRIBUTE, f =>
-        (f as Attr).name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP);
+      const walker = document.createTreeWalker(
+        node,
+        NodeFilter.SHOW_ATTRIBUTE,
+        (f) =>
+          (f as Attr).name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_SKIP
+      );
       while (walker.nextNode()) {
         const attr = walker.currentNode as Attr;
         const parentElement = domHelper.getSuitableParent(attr as Node);
@@ -102,11 +103,16 @@ export function GeneralObserver() {
         return;
       }
 
-      let removedNodes = mutationsList.filter(m => m.type === 'childList').flatMap(m => Array.from(m.removedNodes));
-      let removedNodesSet = new Set(removedNodes);
+      const removedNodes = mutationsList
+        .filter((m) => m.type === 'childList')
+        .flatMap((m) => Array.from(m.removedNodes));
+      const removedNodesSet = new Set(removedNodes);
 
       for (const node of removedNodes) {
-        const treeWalker = document.createTreeWalker(node);
+        const treeWalker = document.createTreeWalker(
+          node,
+          NodeFilter.SHOW_ATTRIBUTE | NodeFilter.SHOW_TEXT
+        );
         while (treeWalker.nextNode()) {
           removedNodesSet.add(treeWalker.currentNode);
         }
@@ -116,7 +122,7 @@ export function GeneralObserver() {
         elementRegistry.cleanupRemovedNodes(removedNodesSet);
       }
 
-      let result: (Attr | Text)[] = [];
+      const result: (Attr | Text)[] = [];
       for (const mutation of mutationsList) {
         switch (mutation.type) {
           case 'characterData':
