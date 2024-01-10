@@ -20,22 +20,25 @@ export function NodeHandler(
         node,
         NodeFilter.SHOW_ELEMENT,
         (f) =>
-          tags.has((f as Element).tagName.toUpperCase())
+          tags.has((f as Element).tagName.toUpperCase()) ||
+          (tags.has('*') &&
+            '*' in tagAttributes &&
+            tagAttributes['*'].some((t) => (f as Element).hasAttribute(t)))
             ? NodeFilter.FILTER_ACCEPT
             : NodeFilter.FILTER_SKIP
       );
       while (walker.nextNode()) {
         const element = walker.currentNode as Element;
-        const attributes = tagAttributes[element.tagName.toUpperCase()];
-        for (const attribute of attributes) {
-          if (!element.hasAttribute(attribute)) {
-            continue;
-          }
-          const attr = element.getAttributeNode(attribute);
-          if (attr && wrapper.testAttribute(attr)) {
-            result.push(attr);
-          }
+        let attributes = tagAttributes[element.tagName.toUpperCase()];
+        if ('*' in tagAttributes) {
+          attributes = attributes.concat(tagAttributes['*']);
         }
+        result.push(
+          ...(attributes
+            .filter((attrName) => element.hasAttribute(attrName))
+            .map((attrName) => element.getAttributeNode(attrName))
+            .filter((attrNode) => wrapper.testAttribute(attrNode)) as Attr[])
+        );
       }
 
       return result;
