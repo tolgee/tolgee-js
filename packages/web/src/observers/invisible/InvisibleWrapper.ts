@@ -106,7 +106,7 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       return (
         (textNode.textContent?.includes(
           `${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`
-        ) &&
+        ) ||
           textNode.textContent?.includes(
             `${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`
           )) ??
@@ -122,7 +122,7 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       return (
         (attribute.value.includes(
           `${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}`
-        ) &&
+        ) ||
           attribute.value.includes(
             `${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}`
           )) ??
