@@ -66,16 +66,31 @@ export function GeneralObserver() {
       }
     }
 
+    function handleKeyAttributeAttr(attr: Attr) {
+      const parentElement = domHelper.getSuitableParent(attr);
+      elementRegistry.register(parentElement, attr, {
+        oldTextContent: '',
+        keys: [{ key: getNodeText(attr)! }],
+        keyAttributeOnly: true,
+      });
+    }
+
     function handleKeyAttribute(node: Node) {
       if (node.nodeType === Node.ATTRIBUTE_NODE) {
         const attr = node as Attr;
         if (attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
-          const parentElement = domHelper.getSuitableParent(attr);
-          elementRegistry.register(parentElement, attr, {
-            oldTextContent: '',
-            keys: [{ key: getNodeText(attr)! }],
-            keyAttributeOnly: true,
-          });
+          handleKeyAttributeAttr(attr);
+          return;
+        }
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element;
+        const attr = element.getAttributeNode(
+          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        ) as Attr;
+        if (attr) {
+          handleKeyAttributeAttr(attr);
         }
       }
 
@@ -91,12 +106,7 @@ export function GeneralObserver() {
         const attr = (walker.currentNode as Element).getAttributeNode(
           TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
         ) as Node;
-        const parentElement = domHelper.getSuitableParent(attr);
-        elementRegistry.register(parentElement, attr, {
-          oldTextContent: '',
-          keys: [{ key: getNodeText(attr)! }],
-          keyAttributeOnly: true,
-        });
+        handleKeyAttributeAttr(attr as Attr);
       }
     }
 
@@ -111,6 +121,12 @@ export function GeneralObserver() {
       const removedNodesSet = new Set(removedNodes);
 
       for (const node of removedNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          for (let i = 0; i < (node as Element).attributes.length; i++) {
+            removedNodesSet.add((node as Element).attributes[i]);
+          }
+        }
+
         const treeWalker = document.createTreeWalker(
           node,
           NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT
@@ -131,25 +147,43 @@ export function GeneralObserver() {
         elementRegistry.cleanupRemovedNodes(removedNodesSet);
       }
 
-      const result: (Attr | Text)[] = [];
+      if (
+        mutationsList.some(
+          (m) =>
+            m.type === 'attributes' &&
+            m.attributeName === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        )
+      ) {
+        elementRegistry.cleanupLingeringKeyAttributes();
+      }
+
+      const result: Set<Attr | Text> = new Set();
       for (const mutation of mutationsList) {
         switch (mutation.type) {
           case 'characterData':
-            result.push(...nodeHandler.handleText(mutation.target));
+            nodeHandler
+              .handleText(mutation.target)
+              .forEach((t) => result.add(t));
             break;
 
           case 'childList':
             handleKeyAttribute(mutation.target);
-            result.push(...nodeHandler.handleChildList(mutation.target));
+            nodeHandler
+              .handleChildList(mutation.target)
+              .forEach((t) => result.add(t));
             break;
 
           case 'attributes':
-            handleKeyAttribute(mutation.target);
-            result.push(...nodeHandler.handleAttributes(mutation.target));
+            if (mutation.attributeName === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
+              handleKeyAttribute(mutation.target);
+            }
+            nodeHandler
+              .handleAttributes(mutation.target)
+              .forEach((t) => result.add(t));
             break;
         }
       }
-      handleNodes(result);
+      handleNodes([...result]);
     });
 
     const targetElement = options.targetElement || document.body;

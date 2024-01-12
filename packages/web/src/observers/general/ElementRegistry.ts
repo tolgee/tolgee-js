@@ -3,6 +3,7 @@ import { KeyAndParams, TranslationOnClick } from '@tolgee/core';
 import {
   TOLGEE_RESTRICT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
+  TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
 } from '../../constants';
 import { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 
@@ -97,6 +98,28 @@ export function ElementRegistry(
     },
 
     forEachElement: elementStore.forEachElement,
+
+    cleanupLingeringKeyAttributes() {
+      elementStore.forEachElement((element, meta) => {
+        if (meta.preventClean) {
+          return;
+        }
+        for (const [node] of meta.nodes) {
+          if (node.nodeType === Node.ATTRIBUTE_NODE) {
+            const attr = node as Attr;
+            if (
+              attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE &&
+              attr.ownerElement === null
+            ) {
+              meta.nodes.delete(attr);
+            }
+          }
+        }
+        if (meta.nodes.size === 0) {
+          cleanElement(element, meta);
+        }
+      });
+    },
 
     cleanupRemovedNodes(removedNodes: Set<Node>) {
       elementStore.forEachElement((element, meta) => {
