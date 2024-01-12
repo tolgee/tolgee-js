@@ -75,7 +75,7 @@ export function GeneralObserver() {
       });
     }
 
-    function handleKeyAttribute(node: Node) {
+    function handleKeyAttribute(node: Node, includeChild: boolean) {
       if (node.nodeType === Node.ATTRIBUTE_NODE) {
         const attr = node as Attr;
         if (attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
@@ -92,6 +92,10 @@ export function GeneralObserver() {
         if (attr) {
           handleKeyAttributeAttr(attr);
         }
+      }
+
+      if (!includeChild) {
+        return;
       }
 
       const walker = document.createTreeWalker(
@@ -167,7 +171,7 @@ export function GeneralObserver() {
             break;
 
           case 'childList':
-            handleKeyAttribute(mutation.target);
+            handleKeyAttribute(mutation.target, true);
             nodeHandler
               .handleChildList(mutation.target)
               .forEach((t) => result.add(t));
@@ -175,7 +179,7 @@ export function GeneralObserver() {
 
           case 'attributes':
             if (mutation.attributeName === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
-              handleKeyAttribute(mutation.target);
+              handleKeyAttribute(mutation.target, false);
             }
             nodeHandler
               .handleAttributes(mutation.target)
@@ -191,7 +195,7 @@ export function GeneralObserver() {
     elementRegistry.run(mouseHighlight);
 
     // initially go through all elements
-    handleKeyAttribute(targetElement);
+    handleKeyAttribute(targetElement, true);
     handleNodes(nodeHandler.handleChildList(targetElement));
 
     // then observe for changes
