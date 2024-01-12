@@ -223,20 +223,12 @@ export function TextWrapper({
       return { text: text, keys: [] };
     },
 
-    getTextXPath() {
-      return `./descendant-or-self::text()[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
-    },
-
     testTextNode(textNode: Text) {
       return (
         (textNode.textContent?.includes(inputPrefix) &&
           textNode.textContent?.includes(inputSuffix)) ??
         false
       );
-    },
-
-    getAttributeXPath({ tag, attribute }) {
-      return `descendant-or-self::${tag}/@${attribute}[contains(., '${inputPrefix}') and contains(., '${inputSuffix}')]`;
     },
 
     testAttribute(attribute: Attr) {

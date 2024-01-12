@@ -98,10 +98,6 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       return typeof value === 'string' ? value + invisibleMark : value;
     },
 
-    getTextXPath() {
-      return `./descendant-or-self::text()[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
-    },
-
     testTextNode(textNode: Text) {
       return (
         (textNode.textContent?.includes(
@@ -112,10 +108,6 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
           )) ??
         false
       );
-    },
-
-    getAttributeXPath({ tag, attribute }) {
-      return `descendant-or-self::${tag}/@${attribute}[contains(., '${INVISIBLE_CHARACTERS[0]}${INVISIBLE_CHARACTERS[0]}') or contains(., '${INVISIBLE_CHARACTERS[1]}${INVISIBLE_CHARACTERS[0]}')]`;
     },
 
     testAttribute(attribute: Attr) {
