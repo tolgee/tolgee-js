@@ -3,6 +3,7 @@ type Props = {
   recievingMessage: string[];
   data?: any;
   attempts?: number;
+  timeout?: number;
 };
 
 export function listen<T = any>(type: string[], callback: (data?: T) => any) {
@@ -24,13 +25,14 @@ export function sendAndRecieve<T>({
   recievingMessage,
   data,
   attempts = 1,
+  timeout = 300,
 }: Props) {
   let cancelled = false;
   const makeAttempt = () =>
     new Promise<T>((resolve, reject) => {
       const listener = listen(recievingMessage, handler);
       window.postMessage({ type: message, data }, window.origin);
-      const timer = setTimeout(timeout, 300);
+      const timer = setTimeout(expire, timeout);
 
       function handler(data: any) {
         clearTimeout(timer);
@@ -40,7 +42,7 @@ export function sendAndRecieve<T>({
       function removeEventListener() {
         listener.unsubscribe();
       }
-      function timeout() {
+      function expire() {
         removeEventListener();
         reject();
       }
@@ -76,6 +78,7 @@ export function takeScreenshot(): Promise<string> {
   return sendAndRecieve({
     message: 'TOLGEE_TAKE_SCREENSHOT',
     recievingMessage: ['TOLGEE_SCREENSHOT_TAKEN'],
+    timeout: 3000,
   }).promise as Promise<string>;
 }
 
