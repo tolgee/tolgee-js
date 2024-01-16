@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.1](https://github.com/tolgee/tolgee-js/compare/v5.19.0...v5.19.1) (2024-01-16)
+
+
+### Bug Fixes
+
+* stop failing when screenshot takes too long to take ([#3298](https://github.com/tolgee/tolgee-js/issues/3298)) ([5680b9a](https://github.com/tolgee/tolgee-js/commit/5680b9a4f90e8adc75bcb6ddb95edb440905ed3d)), closes [#3295](https://github.com/tolgee/tolgee-js/issues/3295)
+
+
+
+
+
 # [5.19.0](https://github.com/tolgee/tolgee-js/compare/v5.18.0...v5.19.0) (2023-12-22)
 
 
