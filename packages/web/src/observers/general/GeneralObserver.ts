@@ -200,9 +200,16 @@ export function GeneralObserver() {
     handleKeyAttribute(targetElement, true);
     handleNodes(nodeHandler.handleChildList([targetElement]));
 
+    const monitorAttributeList = new Set<string>();
+    monitorAttributeList.add(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE);
+    Object.values(options.tagAttributes).forEach((attrs) =>
+      attrs.forEach((attr) => monitorAttributeList.add(attr.toLowerCase()))
+    );
+
     // then observe for changes
     observer.observe(targetElement, {
       attributes: true,
+      attributeFilter: [...monitorAttributeList],
       childList: true,
       subtree: true,
       characterData: true,
