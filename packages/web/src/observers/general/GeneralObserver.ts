@@ -172,9 +172,11 @@ export function GeneralObserver() {
 
           case 'childList':
             handleKeyAttribute(mutation.target, true);
-            nodeHandler
-              .handleChildList(mutation.target)
-              .forEach((t) => result.add(t));
+            if (mutation.addedNodes.length > 0) {
+              nodeHandler
+                .handleChildList(Array.from(mutation.addedNodes))
+                .forEach((t) => result.add(t));
+            }
             break;
 
           case 'attributes':
@@ -182,7 +184,7 @@ export function GeneralObserver() {
               handleKeyAttribute(mutation.target, false);
             }
             nodeHandler
-              .handleAttributes(mutation.target)
+              .handleAttributes(mutation.target, false)
               .forEach((t) => result.add(t));
             break;
         }
@@ -196,7 +198,7 @@ export function GeneralObserver() {
 
     // initially go through all elements
     handleKeyAttribute(targetElement, true);
-    handleNodes(nodeHandler.handleChildList(targetElement));
+    handleNodes(nodeHandler.handleChildList([targetElement]));
 
     // then observe for changes
     observer.observe(targetElement, {

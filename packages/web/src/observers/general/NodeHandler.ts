@@ -5,7 +5,7 @@ export function NodeHandler(
   wrapper: WrapperMiddleware
 ) {
   const self = Object.freeze({
-    handleAttributes(node: Node) {
+    handleAttributes(node: Node, includeChild = true) {
       const result: Attr[] = [];
 
       const tagAttributes = Object.fromEntries(
@@ -15,18 +15,8 @@ export function NodeHandler(
         ])
       ) as Record<string, string[]>;
 
-      const walker = document.createTreeWalker(
-        node,
-        NodeFilter.SHOW_ELEMENT,
-        (f) =>
-          tagAttributes[(f as Element).tagName.toUpperCase()]?.some((t) =>
-            (f as Element).hasAttribute(t)
-          ) || tagAttributes['*']?.some((t) => (f as Element).hasAttribute(t))
-            ? NodeFilter.FILTER_ACCEPT
-            : NodeFilter.FILTER_SKIP
-      );
-      while (walker.nextNode()) {
-        const element = walker.currentNode as Element;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element;
         let attributes = tagAttributes[element.tagName.toUpperCase()] ?? [];
         if ('*' in tagAttributes) {
           attributes = attributes.concat(tagAttributes['*']);
@@ -41,13 +31,41 @@ export function NodeHandler(
         );
       }
 
+      if (includeChild) {
+        const walker = document.createTreeWalker(
+          node,
+          NodeFilter.SHOW_ELEMENT,
+          (f) =>
+            tagAttributes[(f as Element).tagName.toUpperCase()]?.some((t) =>
+              (f as Element).hasAttribute(t)
+            ) || tagAttributes['*']?.some((t) => (f as Element).hasAttribute(t))
+              ? NodeFilter.FILTER_ACCEPT
+              : NodeFilter.FILTER_SKIP
+        );
+        while (walker.nextNode()) {
+          const element = walker.currentNode as Element;
+          let attributes = tagAttributes[element.tagName.toUpperCase()] ?? [];
+          if ('*' in tagAttributes) {
+            attributes = attributes.concat(tagAttributes['*']);
+          }
+          result.push(
+            ...(attributes
+              .filter((attrName) => element.hasAttribute(attrName))
+              .map((attrName) => element.getAttributeNode(attrName))
+              .filter((attrNode) =>
+                wrapper.testAttribute(attrNode as Attr)
+              ) as Attr[])
+          );
+        }
+      }
+
       return result;
     },
 
-    handleChildList(node: Node) {
-      let result: (Attr | Text)[] = [];
-      result = result.concat(self.handleAttributes(node));
-      result = result.concat(self.handleText(node));
+    handleChildList(node: Node[]) {
+      const result: (Attr | Text)[] = [];
+      result.push(...node.flatMap((n) => self.handleAttributes(n, true)));
+      result.push(...node.flatMap((n) => self.handleText(n)));
       // wrappedHandler(node);
       return result;
     },
@@ -57,6 +75,8 @@ export function NodeHandler(
         return wrapper.testTextNode(node as Text) ? [node as Text] : [];
       }
 
+      const nodes = [];
+
       const walker = document.createTreeWalker(
         node,
         NodeFilter.SHOW_TEXT,
@@ -65,10 +85,10 @@ export function NodeHandler(
             ? NodeFilter.FILTER_ACCEPT
             : NodeFilter.FILTER_SKIP
       );
-      const nodes = [];
       while (walker.nextNode()) {
         nodes.push(walker.currentNode);
       }
+
       return nodes as Text[];
     },
   });

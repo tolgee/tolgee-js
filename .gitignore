@@ -6,5 +6,6 @@ node_modules
 .gradle
 .idea
 **/.turbo
+**/'.turbo'
 .pnpm-store
 .VERSION
