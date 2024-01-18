@@ -17,7 +17,7 @@ export const T = defineComponent({
       type: Boolean,
       default: false,
     },
-    ns: { type: Object as PropType<NsType> },
+    ns: { type: String as PropType<NsType> },
     language: { type: String as PropType<string> },
   },
   setup() {
