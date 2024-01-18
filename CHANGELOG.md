@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.2](https://github.com/tolgee/tolgee-js/compare/v5.19.1...v5.19.2) (2024-01-18)
+
+
+### Bug Fixes
+
+* correct vue ns prop type ([#3300](https://github.com/tolgee/tolgee-js/issues/3300)) ([201d79d](https://github.com/tolgee/tolgee-js/commit/201d79d6c22713848faa365a3fa8764d83b2f1fc))
+
+
+
+
+
 ## [5.19.1](https://github.com/tolgee/tolgee-js/compare/v5.19.0...v5.19.1) (2024-01-16)
 
 
