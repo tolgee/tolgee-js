@@ -177,6 +177,11 @@ export function GeneralObserver() {
                 .handleChildList(Array.from(mutation.addedNodes))
                 .forEach((t) => result.add(t));
             }
+            if (mutation.removedNodes.length > 0) {
+              nodeHandler
+                .handleChildList(Array.from(mutation.removedNodes))
+                .forEach((t) => result.delete(t));
+            }
             break;
 
           case 'attributes':
