@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.3-prerelease.a08fc0b3.0](https://github.com/tolgee/tolgee-js/compare/v5.19.2...v5.19.3-prerelease.a08fc0b3.0) (2024-01-23)
+
+
+### Performance Improvements
+
+* Improve DOM Performance ([#3296](https://github.com/tolgee/tolgee-js/issues/3296)) ([257529a](https://github.com/tolgee/tolgee-js/commit/257529a1f3759fc3f4cc74744d1948b1221f34e1))
+
+
+
+
+
 ## [5.19.2](https://github.com/tolgee/tolgee-js/compare/v5.19.1...v5.19.2) (2024-01-18)
 
 **Note:** Version bump only for package @tolgee/core

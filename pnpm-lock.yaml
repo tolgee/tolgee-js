@@ -185,7 +185,7 @@ importers:
         specifier: ^5.16.5
         version: 5.16.5
       '@tolgee/core':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../core
       '@types/jest':
         specifier: ^27.0.2
@@ -230,7 +230,7 @@ importers:
   packages/i18next:
     dependencies:
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../web
     devDependencies:
       '@rollup/plugin-typescript':
@@ -243,7 +243,7 @@ importers:
         specifier: ^5.11.4
         version: 5.16.5
       '@tolgee/testing':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../testing
       '@types/jest':
         specifier: ^28.1.6
@@ -318,7 +318,7 @@ importers:
         specifier: ~13.1.3
         version: 13.1.3(@angular/common@13.1.3)(@angular/core@13.1.3)(@angular/platform-browser@13.1.3)(rxjs@7.5.7)
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../web
       rxjs:
         specifier: ~7.5.5
@@ -349,10 +349,10 @@ importers:
         specifier: 5.16.4
         version: 5.16.4
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../testing
       '@types/jasmine':
         specifier: ~3.10.3
@@ -400,14 +400,14 @@ importers:
   packages/ngx/projects/ngx-tolgee:
     dependencies:
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../../web
     publishDirectory: ../../dist/ngx-tolgee
 
   packages/react:
     dependencies:
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../web
     devDependencies:
       '@rollup/plugin-node-resolve':
@@ -426,10 +426,10 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(react-dom@18.2.0)(react@18.2.0)
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../testing
       '@types/jest':
         specifier: ^27.0.2
@@ -492,7 +492,7 @@ importers:
   packages/svelte:
     dependencies:
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../web
     devDependencies:
       '@sveltejs/adapter-auto':
@@ -511,10 +511,10 @@ importers:
         specifier: ^3.2.2
         version: 3.2.2(svelte@3.55.1)
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../testing
       '@tsconfig/svelte':
         specifier: ^3.0.0
@@ -589,7 +589,7 @@ importers:
   packages/vue:
     dependencies:
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../web
     devDependencies:
       '@rollup/plugin-node-resolve':
@@ -605,10 +605,10 @@ importers:
         specifier: ^6.6.1
         version: 6.6.1(@vue/compiler-sfc@3.3.10)(vue@3.2.47)
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../testing
       '@types/jest':
         specifier: ^27.0.2
@@ -659,7 +659,7 @@ importers:
   packages/web:
     dependencies:
       '@tolgee/core':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../core
     devDependencies:
       '@babel/preset-typescript':
@@ -777,14 +777,14 @@ importers:
   testapps/next:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/react
       next:
         specifier: 14.1.0
-        version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
+        version: 14.1.0(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -808,17 +808,17 @@ importers:
   testapps/next-app:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/react
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/web
       next:
         specifier: 14.1.0
-        version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
+        version: 14.1.0(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)
       next-intl:
         specifier: ^3.2.3
         version: 3.2.3(next@14.1.0)(react@18.2.0)
@@ -845,14 +845,14 @@ importers:
   testapps/next-internal:
     dependencies:
       '@tolgee/react':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/react
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/web
       next:
         specifier: 14.1.0
-        version: 14.1.0(react-dom@18.2.0)(react@18.2.0)
+        version: 14.1.0(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -906,10 +906,10 @@ importers:
         specifier: 13.0.2
         version: 13.0.2(@angular/common@13.1.3)(@angular/core@13.1.3)(@angular/platform-server@13.1.3)(express@4.18.1)
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/ngx':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/ngx/dist/ngx-tolgee
       express:
         specifier: ^4.15.2
@@ -970,10 +970,10 @@ importers:
   testapps/react:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/react
       react:
         specifier: ^18.2.0
@@ -1016,7 +1016,7 @@ importers:
   testapps/react-i18next:
     dependencies:
       '@tolgee/i18next':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/i18next
       react:
         specifier: ^18.2.0
@@ -1062,10 +1062,10 @@ importers:
   testapps/svelte:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/svelte':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/svelte/package
     devDependencies:
       '@fontsource/fira-mono':
@@ -1123,10 +1123,10 @@ importers:
   testapps/vue:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/vue':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/vue
       vue:
         specifier: ^3.2.45
@@ -1160,7 +1160,7 @@ importers:
   testapps/vue-i18next:
     dependencies:
       '@tolgee/i18next':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/i18next
       core-js:
         specifier: ^3.25.3
@@ -1200,10 +1200,10 @@ importers:
   testapps/web:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/format-icu
       '@tolgee/web':
-        specifier: 5.19.2
+        specifier: 5.19.3-prerelease.a08fc0b3.0
         version: link:../../packages/web
     devDependencies:
       concurrently:
@@ -5356,7 +5356,7 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dependencies:
       ajv: 6.12.6
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       espree: 9.6.1
       globals: 13.23.0
       ignore: 5.3.0
@@ -5542,7 +5542,7 @@ packages:
     engines: {node: '>=10.10.0'}
     dependencies:
       '@humanwhocodes/object-schema': 1.2.1
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       minimatch: 3.1.2
     transitivePeerDependencies:
       - supports-color
@@ -9587,7 +9587,7 @@ packages:
       '@typescript-eslint/scope-manager': 5.54.1
       '@typescript-eslint/types': 5.54.1
       '@typescript-eslint/typescript-estree': 5.54.1(typescript@4.9.5)
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.35.0
       typescript: 4.9.5
     transitivePeerDependencies:
@@ -9820,7 +9820,7 @@ packages:
     dependencies:
       '@typescript-eslint/types': 5.54.1
       '@typescript-eslint/visitor-keys': 5.54.1
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.5.4
@@ -14554,17 +14554,6 @@ packages:
     dependencies:
       ms: 2.0.0
 
-  /debug@3.2.7:
-    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.3
-    dev: true
-
   /debug@3.2.7(supports-color@5.5.0):
     resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
     peerDependencies:
@@ -14603,18 +14592,6 @@ packages:
 
   /debug@4.3.3:
     resolution: {integrity: sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==}
-    engines: {node: '>=6.0'}
-    peerDependencies:
-      supports-color: '*'
-    peerDependenciesMeta:
-      supports-color:
-        optional: true
-    dependencies:
-      ms: 2.1.2
-    dev: true
-
-  /debug@4.3.4:
-    resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}
     engines: {node: '>=6.0'}
     peerDependencies:
       supports-color: '*'
@@ -16139,7 +16116,7 @@ packages:
       eslint: 8.35.0
       eslint-import-resolver-node: 0.3.7
       eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.35.0)
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.54.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.35.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.39.0)(eslint@8.35.0)
       eslint-plugin-jsx-a11y: 6.7.1(eslint@8.35.0)
       eslint-plugin-react: 7.32.2(eslint@8.35.0)
       eslint-plugin-react-hooks: 4.6.0(eslint@8.35.0)
@@ -16179,7 +16156,7 @@ packages:
   /eslint-import-resolver-node@0.3.7:
     resolution: {integrity: sha512-gozW2blMLJCeFpBwugLTGyvVjNoeo1knonXAcatC6bjPBZitotxdWf7Gimr25N4c0AAOo4eOUfaG82IJPDpqCA==}
     dependencies:
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@5.5.0)
       is-core-module: 2.11.0
       resolve: 1.22.1
     transitivePeerDependencies:
@@ -16193,10 +16170,10 @@ packages:
       eslint: '*'
       eslint-plugin-import: '*'
     dependencies:
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       enhanced-resolve: 5.12.0
       eslint: 8.35.0
-      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.54.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.35.0)
+      eslint-plugin-import: 2.27.5(@typescript-eslint/parser@5.39.0)(eslint@8.35.0)
       get-tsconfig: 4.4.0
       globby: 13.2.1
       is-core-module: 2.11.0
@@ -16206,7 +16183,7 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-module-utils@2.7.4(@typescript-eslint/parser@5.54.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.35.0):
+  /eslint-module-utils@2.7.4(@typescript-eslint/parser@5.39.0)(eslint-import-resolver-node@0.3.7)(eslint@8.35.0):
     resolution: {integrity: sha512-j4GT+rqzCoRKHwURX7pddtIPGySnX9Si/cgMI5ztrcqOPtk5dDEeZ34CQVPphnqkJytlc97Vuk05Um2mJ3gEQA==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -16227,16 +16204,15 @@ packages:
       eslint-import-resolver-webpack:
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.54.1(eslint@8.35.0)(typescript@4.9.5)
-      debug: 3.2.7
+      '@typescript-eslint/parser': 5.39.0(eslint@8.22.0)(typescript@4.9.5)
+      debug: 3.2.7(supports-color@5.5.0)
       eslint: 8.35.0
       eslint-import-resolver-node: 0.3.7
-      eslint-import-resolver-typescript: 3.5.3(eslint-plugin-import@2.27.5)(eslint@8.35.0)
     transitivePeerDependencies:
       - supports-color
     dev: true
 
-  /eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.54.1)(eslint-import-resolver-typescript@3.5.3)(eslint@8.35.0):
+  /eslint-plugin-import@2.27.5(@typescript-eslint/parser@5.39.0)(eslint@8.35.0):
     resolution: {integrity: sha512-LmEt3GVofgiGuiE+ORpnvP+kAm3h6MLZJ4Q5HCyHADofsb4VzXFsRiWj3c0OFiV+3DWFh0qg3v9gcPlfc3zRow==}
     engines: {node: '>=4'}
     peerDependencies:
@@ -16246,15 +16222,15 @@ packages:
       '@typescript-eslint/parser':
         optional: true
     dependencies:
-      '@typescript-eslint/parser': 5.54.1(eslint@8.35.0)(typescript@4.9.5)
+      '@typescript-eslint/parser': 5.39.0(eslint@8.22.0)(typescript@4.9.5)
       array-includes: 3.1.6
       array.prototype.flat: 1.3.1
       array.prototype.flatmap: 1.3.1
-      debug: 3.2.7
+      debug: 3.2.7(supports-color@5.5.0)
       doctrine: 2.1.0
       eslint: 8.35.0
       eslint-import-resolver-node: 0.3.7
-      eslint-module-utils: 2.7.4(@typescript-eslint/parser@5.54.1)(eslint-import-resolver-node@0.3.7)(eslint-import-resolver-typescript@3.5.3)(eslint@8.35.0)
+      eslint-module-utils: 2.7.4(@typescript-eslint/parser@5.39.0)(eslint-import-resolver-node@0.3.7)(eslint@8.35.0)
       has: 1.0.3
       is-core-module: 2.11.0
       is-glob: 4.0.3
@@ -16669,7 +16645,7 @@ packages:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.3
-      debug: 4.3.4
+      debug: 4.3.4(supports-color@8.1.1)
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.1.1
@@ -22783,12 +22759,12 @@ packages:
     dependencies:
       '@formatjs/intl-localematcher': 0.2.32
       negotiator: 0.6.3
-      next: 14.1.0(react-dom@18.2.0)(react@18.2.0)
+      next: 14.1.0(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       use-intl: 3.2.3(react@18.2.0)
     dev: false
 
-  /next@14.1.0(react-dom@18.2.0)(react@18.2.0):
+  /next@14.1.0(@babel/core@7.23.5)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-wlzrsbfeSU48YQBjZhDzOwhWhGsy+uQycR8bHAOt1LY1bn3zZEcDyHQOEoN3aWzQ8LHCAJ1nqrWCc9XF2+O45Q==}
     engines: {node: '>=18.17.0'}
     hasBin: true
@@ -22811,7 +22787,7 @@ packages:
       postcss: 8.4.31
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      styled-jsx: 5.1.1(react@18.2.0)
+      styled-jsx: 5.1.1(@babel/core@7.23.5)(react@18.2.0)
     optionalDependencies:
       '@next/swc-darwin-arm64': 14.1.0
       '@next/swc-darwin-x64': 14.1.0
@@ -28212,7 +28188,7 @@ packages:
       through: 2.3.8
     dev: true
 
-  /styled-jsx@5.1.1(react@18.2.0):
+  /styled-jsx@5.1.1(@babel/core@7.23.5)(react@18.2.0):
     resolution: {integrity: sha512-pW7uC1l4mBZ8ugbiZrcIsiIvVx1UmTfw7UkC3Um2tmfUq9Bhk8IiyEIPl6F8agHgjzku6j0xQEZbfA5uSgSaCw==}
     engines: {node: '>= 12.0.0'}
     peerDependencies:
@@ -28225,6 +28201,7 @@ packages:
       babel-plugin-macros:
         optional: true
     dependencies:
+      '@babel/core': 7.23.5
       client-only: 0.0.1
       react: 18.2.0
     dev: false
