@@ -15,12 +15,7 @@ import { DomHelper } from './DomHelper';
 import { initNodeMeta } from './ElementMeta';
 import { ElementRegistry, ElementRegistryInstance } from './ElementRegistry';
 import { ElementStore } from './ElementStore';
-import {
-  compareDescriptors,
-  getNodeText,
-  setNodeText,
-  xPathEvaluate,
-} from './helpers';
+import { compareDescriptors, getNodeText, setNodeText } from './helpers';
 import { NodeHandler } from './NodeHandler';
 
 type RunningInstance = {
@@ -71,46 +66,135 @@ export function GeneralObserver() {
       }
     }
 
-    function handleKeyAttribute(node: Node) {
-      const xPath = `./descendant-or-self::*[@${TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE}]`;
-      const elements = xPathEvaluate(xPath, node) as Element[];
-      elements.forEach((element) => {
-        const node = element.getAttributeNode(
-          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
-        );
-        const parentElement = domHelper.getSuitableParent(node as Node);
-        elementRegistry.register(parentElement, node as Node, {
-          oldTextContent: '',
-          keys: [{ key: getNodeText(node as Node)! }],
-          keyAttributeOnly: true,
-        });
+    function handleKeyAttributeAttr(attr: Attr) {
+      const parentElement = domHelper.getSuitableParent(attr);
+      elementRegistry.register(parentElement, attr, {
+        oldTextContent: '',
+        keys: [{ key: getNodeText(attr)! }],
+        keyAttributeOnly: true,
       });
+    }
+
+    function handleKeyAttribute(node: Node, includeChild: boolean) {
+      if (node.nodeType === Node.ATTRIBUTE_NODE) {
+        const attr = node as Attr;
+        if (attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
+          handleKeyAttributeAttr(attr);
+          return;
+        }
+      }
+
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as Element;
+        const attr = element.getAttributeNode(
+          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        ) as Attr;
+        if (attr) {
+          handleKeyAttributeAttr(attr);
+        }
+      }
+
+      if (!includeChild) {
+        return;
+      }
+
+      const walker = document.createTreeWalker(
+        node,
+        NodeFilter.SHOW_ELEMENT,
+        (e) =>
+          (e as Element).hasAttribute(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE)
+            ? NodeFilter.FILTER_ACCEPT
+            : NodeFilter.FILTER_SKIP
+      );
+      while (walker.nextNode()) {
+        const attr = (walker.currentNode as Element).getAttributeNode(
+          TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        ) as Node;
+        handleKeyAttributeAttr(attr as Attr);
+      }
     }
 
     const observer = new MutationObserver((mutationsList: MutationRecord[]) => {
       if (!isObserving) {
         return;
       }
+
+      const removedNodes = mutationsList
+        .filter((m) => m.type === 'childList')
+        .flatMap((m) => Array.from(m.removedNodes));
+      const removedNodesSet = new Set(removedNodes);
+
+      for (const node of removedNodes) {
+        if (node.nodeType === Node.ELEMENT_NODE) {
+          for (let i = 0; i < (node as Element).attributes.length; i++) {
+            removedNodesSet.add((node as Element).attributes[i]);
+          }
+        }
+
+        const treeWalker = document.createTreeWalker(
+          node,
+          NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT
+        );
+        while (treeWalker.nextNode()) {
+          const currentNode = treeWalker.currentNode;
+          if (currentNode.nodeType === Node.ELEMENT_NODE) {
+            const element = currentNode as Element;
+            for (let i = 0; i < element.attributes.length; i++) {
+              removedNodesSet.add(element.attributes[i]);
+            }
+          }
+          removedNodesSet.add(currentNode);
+        }
+      }
+
+      if (removedNodesSet.size > 0) {
+        elementRegistry.cleanupRemovedNodes(removedNodesSet);
+      }
+
+      if (
+        mutationsList.some(
+          (m) =>
+            m.type === 'attributes' &&
+            m.attributeName === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE
+        )
+      ) {
+        elementRegistry.cleanupLingeringKeyAttributes();
+      }
+
+      const result: Set<Attr | Text> = new Set();
       for (const mutation of mutationsList) {
-        let result: (Attr | Text)[] = [];
         switch (mutation.type) {
           case 'characterData':
-            result = nodeHandler.handleText(mutation.target);
+            nodeHandler
+              .handleText(mutation.target)
+              .forEach((t) => result.add(t));
             break;
 
           case 'childList':
-            handleKeyAttribute(mutation.target);
-            result = nodeHandler.handleChildList(mutation.target);
+            handleKeyAttribute(mutation.target, true);
+            if (mutation.addedNodes.length > 0) {
+              nodeHandler
+                .handleChildList(Array.from(mutation.addedNodes))
+                .forEach((t) => result.add(t));
+            }
+            if (mutation.removedNodes.length > 0) {
+              nodeHandler
+                .handleChildList(Array.from(mutation.removedNodes))
+                .forEach((t) => result.delete(t));
+            }
             break;
 
           case 'attributes':
-            handleKeyAttribute(mutation.target);
-            result = nodeHandler.handleAttributes(mutation.target);
+            if (mutation.attributeName === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE) {
+              handleKeyAttribute(mutation.target, false);
+            }
+            nodeHandler
+              .handleAttributes(mutation.target, false)
+              .forEach((t) => result.add(t));
             break;
         }
-        handleNodes(result);
       }
-      elementRegistry.refreshAll();
+      handleNodes([...result]);
     });
 
     const targetElement = options.targetElement || document.body;
@@ -118,12 +202,19 @@ export function GeneralObserver() {
     elementRegistry.run(mouseHighlight);
 
     // initially go through all elements
-    handleKeyAttribute(targetElement);
-    handleNodes(nodeHandler.handleChildList(targetElement));
+    handleKeyAttribute(targetElement, true);
+    handleNodes(nodeHandler.handleChildList([targetElement]));
+
+    const monitorAttributeList = new Set<string>();
+    monitorAttributeList.add(TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE);
+    Object.values(options.tagAttributes).forEach((attrs) =>
+      attrs.forEach((attr) => monitorAttributeList.add(attr.toLowerCase()))
+    );
 
     // then observe for changes
     observer.observe(targetElement, {
       attributes: true,
+      attributeFilter: [...monitorAttributeList],
       childList: true,
       subtree: true,
       characterData: true,

@@ -3,13 +3,14 @@ import { KeyAndParams, TranslationOnClick } from '@tolgee/core';
 import {
   TOLGEE_RESTRICT_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,
+  TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
 } from '../../constants';
 import { ElementMeta, NodeMeta, TolgeeElement } from '../../types';
 
 import { ElementHighlighter } from './ElementHighlighter';
 import { initElementMeta } from './ElementMeta';
 import { ElementStoreType } from './ElementStore';
-import { compareDescriptors, nodeContains } from './helpers';
+import { compareDescriptors } from './helpers';
 import { MouseEventHandler } from './MouseEventHandler';
 
 export function ElementRegistry(
@@ -42,18 +43,13 @@ export function ElementRegistry(
     );
   }
 
-  function cleanElementInactiveNodes(meta: ElementMeta) {
-    meta.nodes = new Map(getActiveNodes(meta));
-  }
-
-  function getTargetElement() {
-    return options.targetElement || document.body;
-  }
-
-  function* getActiveNodes(meta: ElementMeta) {
-    for (const [node, nodeMeta] of meta.nodes.entries()) {
-      if (nodeContains(getTargetElement(), node)) {
-        yield [node, nodeMeta] as const;
+  function cleanElementInactiveNodes(
+    meta: ElementMeta,
+    removedNodes: Set<Node>
+  ) {
+    for (const [key] of meta.nodes) {
+      if (removedNodes.has(key)) {
+        meta.nodes.delete(key);
       }
     }
   }
@@ -103,13 +99,37 @@ export function ElementRegistry(
 
     forEachElement: elementStore.forEachElement,
 
-    refreshAll() {
+    cleanupLingeringKeyAttributes() {
       elementStore.forEachElement((element, meta) => {
         if (meta.preventClean) {
           return;
         }
-        cleanElementInactiveNodes(meta);
+        for (const [node] of meta.nodes) {
+          if (node.nodeType === Node.ATTRIBUTE_NODE) {
+            const attr = node as Attr;
+            if (
+              attr.name === TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE &&
+              attr.ownerElement === null
+            ) {
+              meta.nodes.delete(attr);
+            }
+          }
+        }
         if (meta.nodes.size === 0) {
+          cleanElement(element, meta);
+        }
+      });
+    },
+
+    cleanupRemovedNodes(removedNodes: Set<Node>) {
+      elementStore.forEachElement((element, meta) => {
+        if (meta.preventClean) {
+          return;
+        }
+        if (!removedNodes.has(element)) {
+          cleanElementInactiveNodes(meta, removedNodes);
+        }
+        if (removedNodes.has(element) || meta.nodes.size === 0) {
           cleanElement(element, meta);
         }
       });

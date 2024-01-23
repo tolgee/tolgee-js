@@ -61,11 +61,6 @@ export type WrapperWrapProps = Pick<
 export type WrapperWrapFunction = (props: WrapperWrapProps) => string;
 export type WrapperUnwrapFunction = (text: string) => Unwrapped;
 
-export type WrapperAttributeXPathGetter = (props: {
-  tag: string;
-  attribute: string;
-}) => string;
-
 export type HighlightInterface = (key?: string, ns?: NsFallback) => Highlighter;
 export type FindPositionsInterface = (
   key?: string,
@@ -118,8 +113,8 @@ export type DevCredentials =
 export type WrapperMiddleware = {
   unwrap: WrapperUnwrapFunction;
   wrap: WrapperWrapFunction;
-  getTextXPath: () => string;
-  getAttributeXPath: WrapperAttributeXPathGetter;
+  testTextNode: (node: Text) => boolean;
+  testAttribute: (node: Attr) => boolean;
 };
 
 export type FormatterMiddlewareFormatParams = {
