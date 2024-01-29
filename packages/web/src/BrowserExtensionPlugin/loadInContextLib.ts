@@ -13,11 +13,7 @@ function injectScript(src: string) {
     script.src = src;
     script.addEventListener('load', () => resolve());
     script.addEventListener('error', (e) => reject(e.error));
-    if (document.body) {
-      document.body.appendChild(script);
-    } else {
-      document.head.appendChild(script);
-    }
+    document.head.appendChild(script);
   });
 }
 
