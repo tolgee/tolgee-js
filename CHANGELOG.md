@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.4](https://github.com/tolgee/tolgee-js/compare/v5.19.3...v5.19.4) (2024-01-31)
+
+
+### Bug Fixes
+
+* inject in-context-tools into head instead of body ([#3303](https://github.com/tolgee/tolgee-js/issues/3303)) ([d05d587](https://github.com/tolgee/tolgee-js/commit/d05d587ee4c6e9df8dd715614081a24e9dee1943))
+
+
+
+
+
 ## [5.19.3](https://github.com/tolgee/tolgee-js/compare/v5.19.2...v5.19.3) (2024-01-23)
 
 
