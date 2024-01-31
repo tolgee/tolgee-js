@@ -5,8 +5,13 @@ export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
   const updateTranslations = () => {
     tolgee.getAllRecords().forEach(({ language, namespace, data }) => {
       if (i18n.getResourceBundle(language, namespace)) {
-        i18n.removeResourceBundle(language, namespace);
-        i18n.addResources(language, namespace, Object.fromEntries(data));
+        i18n.addResourceBundle(
+          language,
+          namespace,
+          Object.fromEntries(data),
+          false,
+          true
+        );
       }
     });
   };
