@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.5](https://github.com/tolgee/tolgee-js/compare/v5.19.4...v5.19.5) (2024-01-31)
+
+
+### Bug Fixes
+
+* i18next update with addResourceBundle ([#3304](https://github.com/tolgee/tolgee-js/issues/3304)) ([c73e05a](https://github.com/tolgee/tolgee-js/commit/c73e05ad31c026413519d2a3eb69ecc0d4ddd2a2))
+
+
+
+
+
 ## [5.19.4](https://github.com/tolgee/tolgee-js/compare/v5.19.3...v5.19.4) (2024-01-31)
 
 **Note:** Version bump only for package @tolgee/i18next
