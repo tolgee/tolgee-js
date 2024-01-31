@@ -4,7 +4,15 @@ import { i18n } from 'i18next';
 export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
   const updateTranslations = () => {
     tolgee.getAllRecords().forEach(({ language, namespace, data }) => {
-      i18n.addResourceBundle(language, namespace, Object.fromEntries(data), false, true);
+      if (i18n.getResourceBundle(language, namespace)) {
+        i18n.addResourceBundle(
+          language,
+          namespace,
+          Object.fromEntries(data),
+          false,
+          true
+        );
+      }
     });
   };
 
