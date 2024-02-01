@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react';
-import { Navbar } from '../../react/src/components/Navbar';
 import { T, useTranslate } from '@tolgee/react';
+
+import { Navbar } from './components/Navbar';
 
 const getInitialItems = () => {
   let items: string[] | undefined = undefined;
