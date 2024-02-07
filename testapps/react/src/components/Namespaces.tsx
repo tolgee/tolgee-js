@@ -1,6 +1,6 @@
 import { useTranslate, T } from '@tolgee/react';
 
-const Namespaces = () => {
+export const Namespaces = () => {
   const { t } = useTranslate('namespaced');
 
   return (
@@ -24,5 +24,3 @@ const Namespaces = () => {
     </div>
   );
 };
-
-export default Namespaces;
