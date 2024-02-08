@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-testapp",
-  "version": "5.19.5",
+  "version": "5.19.6",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,8 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.19.5",
-    "@tolgee/react": "5.19.5",
+    "@tolgee/format-icu": "5.19.6",
+    "@tolgee/react": "5.19.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

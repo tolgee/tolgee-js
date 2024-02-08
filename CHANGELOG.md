@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.6](https://github.com/tolgee/tolgee-js/compare/v5.19.5...v5.19.6) (2024-02-08)
+
+
+### Bug Fixes
+
+* adjust languages pagination to fetch all languages ([#3311](https://github.com/tolgee/tolgee-js/issues/3311)) ([a8e4f34](https://github.com/tolgee/tolgee-js/commit/a8e4f346e5a7f72fd4c7b06d089b166f0023cf6d))
+
+
+
+
+
 ## [5.19.5](https://github.com/tolgee/tolgee-js/compare/v5.19.4...v5.19.5) (2024-01-31)
 
 
