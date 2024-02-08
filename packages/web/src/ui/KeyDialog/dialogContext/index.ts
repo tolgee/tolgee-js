@@ -103,6 +103,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const languagesLoadable = useApiQuery({
       url: '/v2/projects/languages',
       method: 'get',
+      query: {
+        size: 1000,
+      },
       options: {
         onSuccess(data) {
           const selectedLanguages = getInitialLanguages(
