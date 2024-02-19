@@ -1,45 +1,18 @@
 import React, { useRef } from 'react';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import { inputBaseClasses } from '@mui/material/InputBase';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import Tooltip from '@mui/material/Tooltip';
 
 import { components } from '../client/apiSchema.generated';
 import { StateType, TRANSLATION_STATES } from './State/translationStates';
 import { StateTransitionButtons } from './State/StateTransitionButtons';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
+import { Editor } from '../editor/Editor';
+import { EditorWrapper } from '../editor/EditorWrapper';
 
 type State = components['schemas']['TranslationModel']['state'];
 
 const StyledContainer = styled('div')`
   position: relative;
-`;
-
-const StyledTextField = styled(TextField)`
-  position: relative;
-  margin: 0px;
-
-  & .Mui-disabled {
-    background: ${({ theme }) => theme.palette.grey[200]};
-  }
-
-  & .${inputBaseClasses.root} .${inputBaseClasses.input} {
-    padding-bottom: 16px;
-    min-height: 30px;
-    height: unset;
-  }
-
-  & .${inputBaseClasses.root}:hover .${outlinedInputClasses.notchedOutline} {
-    border-color: ${({ theme }) => theme.palette.grey[500]};
-  }
-
-  &
-    .${inputBaseClasses.root}:focus-within
-    .${outlinedInputClasses.notchedOutline} {
-    border-color: ${({ theme }) => theme.palette.grey[900]};
-    border-width: 1px;
-  }
 `;
 
 const StyledStateIndicator = styled('div')`
@@ -83,7 +56,16 @@ export const TranslationTextField = ({
   const textFieldRef = useRef<HTMLDivElement>(null);
   return (
     <StyledContainer>
-      <StyledTextField
+      <EditorWrapper>
+        <Editor
+          direction="ltr"
+          mode="placeholders"
+          locale={language}
+          value={value}
+          onChange={onChange}
+        />
+      </EditorWrapper>
+      {/* <StyledTextField
         size="small"
         disabled={disabled}
         inputProps={{
@@ -95,7 +77,7 @@ export const TranslationTextField = ({
         fullWidth
         value={value}
         onChange={(e) => onChange(e.target.value)}
-      />
+      /> */}
       <Tooltip
         disableInteractive
         title={TRANSLATION_STATES[fallbackedState]?.name}

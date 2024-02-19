@@ -11,9 +11,7 @@ export const commonConfig = {
   watch: {
     clearScreen: false,
   },
-  treeshake: {
-    moduleSideEffects: false,
-  },
+  treeshake: 'smallest',
 };
 
 export const commonPlugins = [
