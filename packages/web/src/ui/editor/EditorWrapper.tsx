@@ -11,13 +11,11 @@ const StyledEditorWrapper = styled('div')`
   padding: 1px;
 
   &:hover {
-    border: 1px solid ${({ theme }) => theme.palette.grey[900]};
+    border: 1px solid ${({ theme }) => theme.palette.grey[700]};
   }
 
   &:focus-within {
     border-color: ${({ theme }) => theme.palette.grey[900]};
-    border-width: 2px;
-    padding: 0px;
   }
 
   & > * {

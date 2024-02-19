@@ -38,7 +38,7 @@ export type EditorProps = {
   value: string;
   onChange?: (val: string) => void;
   background?: string;
-  mode: 'placeholders' | 'syntax' | 'plain';
+  mode: 'placeholders' | 'plain';
   autofocus?: boolean;
   minHeight?: number | string;
   onBlur?: () => void;
@@ -49,6 +49,7 @@ export type EditorProps = {
   editorRef?: React.RefObject<EditorView | null>;
   examplePluralNum?: number;
   direction: 'ltr' | 'rtl';
+  disabled?: boolean;
 };
 
 function useRefGroup<T>(value: T): RefObject<T> {
@@ -70,11 +71,13 @@ export const Editor: React.FC<EditorProps> = ({
   editorRef,
   examplePluralNum,
   direction,
+  disabled,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const editor = useRef<EditorView>();
   const placeholders = useRef<Compartment>(new Compartment());
   const isolates = useRef<Compartment>(new Compartment());
+  const disabledCompartment = useRef<Compartment>(new Compartment());
   const keyBindings = useRef(shortcuts);
   const theme = useTheme();
   const callbacksRef = useRefGroup({
@@ -132,6 +135,7 @@ export const Editor: React.FC<EditorProps> = ({
           placeholders.current.of([]),
           isolates.current.of([]),
           direction === 'rtl' ? htmlIsolatesPlugin : [],
+          disabledCompartment.current.of([]),
         ],
       }),
     });
@@ -171,6 +175,14 @@ export const Editor: React.FC<EditorProps> = ({
       editor.current!.destroy();
     };
   }, []);
+
+  useEffect(() => {
+    editor.current?.dispatch({
+      effects: disabledCompartment.current.reconfigure(
+        EditorState.readOnly.of(Boolean(disabled))
+      ),
+    });
+  }, [disabled]);
 
   useEffect(() => {
     if (editorRef) {

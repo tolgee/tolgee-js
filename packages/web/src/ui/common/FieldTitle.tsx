@@ -6,4 +6,5 @@ export const ScFieldTitle = styled('div')`
   margin-bottom: 4px;
   font-size: 14px;
   color: ${({ theme }) => theme.palette.text.secondary};
+  justify-content: space-between;
 `;

@@ -13,7 +13,7 @@ type Props = {
   onStateChange?: (s: StateInType) => void;
   className?: string;
   disabled?: boolean;
-  language: string;
+  language: string | undefined;
 };
 
 export const StateTransitionButtons: React.FC<Props> = ({
@@ -40,7 +40,7 @@ export const StateTransitionButtons: React.FC<Props> = ({
           }
           disabled={disabled}
         >
-          <StateIcon state={state} fontSize="small" />
+          <StateIcon state={state} />
         </ControlsButton>
       )}
     </>

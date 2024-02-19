@@ -1,10 +1,8 @@
-import React from 'react';
-import { FunctionComponent } from 'react';
+import React, { FunctionComponent } from 'react';
 import { styled } from '@mui/material/styles';
 import { keyframes } from '@mui/styled-engine';
 
 import { useDialogContext, useDialogActions } from './dialogContext';
-import { ScFieldTitle } from '../common/FieldTitle';
 import { getPreferredLanguages } from './dialogContext/tools';
 import { TranslationTextField } from './TranslationTextField';
 
@@ -71,22 +69,22 @@ export const TranslationFields: FunctionComponent = () => {
           const stateChangePermitted = permissions.canEditState(key);
 
           const translation = keyData?.translations[key];
+          const formValue = translationsForm[key];
 
           return (
             <React.Fragment key={key}>
-              <ScFieldTitle>{lang?.name || key}</ScFieldTitle>
               <TranslationTextField
                 disabled={
                   formDisabled ||
                   !editPermitted ||
                   translation?.state === 'DISABLED'
                 }
-                stateChangeDisabled={!stateChangePermitted}
                 language={lang?.tag}
-                value={translationsForm[key]?.text || ''}
+                value={formValue?.value}
                 onChange={(value) => onInputChange(key, value)}
                 onStateChange={(value) => onStateChange(key, value)}
-                state={translationsForm[key]?.state}
+                state={formValue?.state}
+                stateChangePermitted={stateChangePermitted}
               />
             </React.Fragment>
           );

@@ -49,7 +49,7 @@ export const PluralEditor = ({
               onFocus={() => onActiveVariantChange?.(variant ?? 'other')}
               direction={getLanguageDirection(locale)}
               autofocus={variant === activeVariant ? autofocus : false}
-              minHeight={value.parameter ? 'unset' : '100px'}
+              minHeight={value.parameter ? 'unset' : '50px'}
               locale={locale}
               editorRef={
                 variant === activeVariant ? activeEditorRef : undefined

@@ -1,8 +1,11 @@
 import { useMemo } from 'react';
-import { getVariantExample, getPluralVariants } from './pluralTools';
 import { styled } from '@mui/material/styles';
 import React from 'react';
-import { TolgeeFormat } from '@tginternal/editor';
+import {
+  TolgeeFormat,
+  getVariantExample,
+  getPluralVariants,
+} from '@tginternal/editor';
 import { editorTheme } from './editorTheme';
 
 const StyledContainer = styled('div')`

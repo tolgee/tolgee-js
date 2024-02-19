@@ -1,109 +1,102 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 
 import { components } from '../client/apiSchema.generated';
-import { StateType, TRANSLATION_STATES } from './State/translationStates';
-import { StateTransitionButtons } from './State/StateTransitionButtons';
+import { TRANSLATION_STATES } from '../editor/State/translationStates';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
-import { Editor } from '../editor/Editor';
-import { EditorWrapper } from '../editor/EditorWrapper';
+import { TolgeeFormat } from '@tginternal/editor';
+import { PluralEditor } from '../editor/PluralEditor';
+import { ControlsEditorSmall } from '../editor/ControlsEditorSmall';
+import { ScFieldTitle } from '../common/FieldTitle';
+import clsx from 'clsx';
 
 type State = components['schemas']['TranslationModel']['state'];
 
 const StyledContainer = styled('div')`
-  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+
+  &.disabled {
+    opacity: 0.5;
+  }
+
+  &.disabled .cm-cursor {
+    display: none !important;
+  }
 `;
 
 const StyledStateIndicator = styled('div')`
-  position: absolute;
-  left: 1px;
-  top: 1px;
-  bottom: 1px;
+  margin-top: 4px;
   width: 5px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-`;
-
-const StyledControls = styled('div')`
-  position: absolute;
-  bottom: 1px;
-  right: 1px;
-  margin: 10px;
 `;
 
 type Props = {
   disabled?: boolean;
-  stateChangeDisabled: boolean;
   language?: string;
-  value: string;
-  onChange: (val: string) => void;
-  onStateChange: (val: StateType) => void;
+  value: TolgeeFormat;
+  onChange: (val: TolgeeFormat) => void;
   state?: State;
+  onStateChange: (value: State) => void;
+  stateChangePermitted?: boolean;
 };
 
 export const TranslationTextField = ({
   disabled,
-  stateChangeDisabled,
   language,
   value,
+  state,
+  stateChangePermitted,
   onChange,
   onStateChange,
-  state,
 }: Props) => {
   const normalized = state === 'UNTRANSLATED' ? undefined : state;
   const fallbackedState = value ? normalized ?? 'TRANSLATED' : 'UNTRANSLATED';
   const textFieldRef = useRef<HTMLDivElement>(null);
+  const [mode, setMode] = useState<'placeholders' | 'plain'>('placeholders');
   return (
-    <StyledContainer>
-      <EditorWrapper>
-        <Editor
-          direction="ltr"
-          mode="placeholders"
-          locale={language}
-          value={value}
+    <>
+      <ScFieldTitle>
+        <div>{language}</div>
+        {!disabled && (
+          <ControlsEditorSmall
+            state={state}
+            onStateChange={(value) => onStateChange(value)}
+            language={language}
+            stateChangeEnabled={stateChangePermitted}
+            mode={mode}
+            onModeToggle={() =>
+              setMode(mode === 'plain' ? 'placeholders' : 'plain')
+            }
+          />
+        )}
+      </ScFieldTitle>
+      <StyledContainer className={clsx({ disabled })}>
+        <Tooltip
+          disableInteractive
+          title={TRANSLATION_STATES[fallbackedState]?.name}
+          PopperProps={{
+            disablePortal: true,
+            style: { zIndex: DEVTOOLS_Z_INDEX },
+          }}
+        >
+          <StyledStateIndicator
+            style={{
+              background: TRANSLATION_STATES[fallbackedState]?.color,
+            }}
+            onClick={() => {
+              textFieldRef.current?.focus();
+            }}
+          />
+        </Tooltip>
+        <PluralEditor
+          value={value ?? { variants: { other: '' } }}
           onChange={onChange}
+          locale={language!}
+          editorProps={{ direction: 'ltr', mode, disabled }}
         />
-      </EditorWrapper>
-      {/* <StyledTextField
-        size="small"
-        disabled={disabled}
-        inputProps={{
-          lang: language,
-          ref: textFieldRef,
-        }}
-        maxRows={Infinity}
-        multiline
-        fullWidth
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      /> */}
-      <Tooltip
-        disableInteractive
-        title={TRANSLATION_STATES[fallbackedState]?.name}
-        PopperProps={{
-          disablePortal: true,
-          style: { zIndex: DEVTOOLS_Z_INDEX },
-        }}
-      >
-        <StyledStateIndicator
-          style={{
-            background: TRANSLATION_STATES[fallbackedState]?.color,
-          }}
-          onClick={() => {
-            textFieldRef.current?.focus();
-          }}
-        />
-      </Tooltip>
-
-      <StyledControls>
-        <StateTransitionButtons
-          state={fallbackedState}
-          onStateChange={onStateChange}
-          disabled={stateChangeDisabled}
-          language={language!}
-        />
-      </StyledControls>
-    </StyledContainer>
+      </StyledContainer>
+    </>
   );
 };

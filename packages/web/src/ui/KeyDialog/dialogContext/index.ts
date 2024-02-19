@@ -19,14 +19,19 @@ import {
   StateInType,
   STATES_FOR_UPDATE,
   StateType,
-} from '../State/translationStates';
+} from '../../editor/State/translationStates';
 import { useComputedPermissions } from './usePermissions';
+import {
+  TolgeeFormat,
+  getTolgeePlurals,
+  tolgeeFormatGenerateIcu,
+} from '@tginternal/editor';
 
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
 
 type FormTranslations = {
   [key: string]: {
-    text: string;
+    value: TolgeeFormat;
     state: StateType;
   };
 };
@@ -49,12 +54,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       {}
     );
 
-    function setTranslation(language: string, text: string) {
-      _setTranslationsForm((value) => ({
-        ...value,
+    function setTranslation(language: string, value: TolgeeFormat) {
+      _setTranslationsForm((val) => ({
+        ...val,
         [language]: {
-          ...value[language],
-          text,
+          ...val[language],
+          value,
         },
       }));
     }
@@ -145,7 +150,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const firstKey = data._embedded?.keys?.[0];
           Object.entries(firstKey?.translations || {}).forEach(
             ([key, value]) => {
-              result[key] = { text: value.text || '', state: value.state };
+              result[key] = {
+                value: getTolgeePlurals(value.text || ''),
+                state: value.state,
+              };
             }
           );
           _setTranslationsForm(result);
@@ -192,7 +200,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     );
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
 
-    function onInputChange(key: string, value: string) {
+    function onInputChange(key: string, value: TolgeeFormat) {
       setSuccess(false);
       setTranslationsFormTouched(true);
       setTranslation(key, value);
@@ -214,10 +222,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const stateCanBeChanged = permissions.canEditState(language);
 
           if (canBeTranslated) {
-            newTranslations[language] = value.text;
+            newTranslations[language] = tolgeeFormatGenerateIcu(value.value);
           }
           if (
-            value.text &&
+            newTranslations[language] &&
             STATES_FOR_UPDATE.includes(value.state as StateInType) &&
             keyData?.translations?.[language]?.state !== value.state &&
             stateCanBeChanged
@@ -352,7 +360,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         selectedNs,
         Object.entries(translationsForm).map(([language, value]) => [
           language,
-          value.text,
+          tolgeeFormatGenerateIcu(value.value),
         ])
       );
     }
@@ -378,7 +386,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             !translationsForm[baseLanguageDefinition.tag!] &&
             !wasBaseTranslationProvided
           ) {
-            setTranslation(baseLanguageDefinition.tag!, props.defaultValue);
+            setTranslation(
+              baseLanguageDefinition.tag!,
+              getTolgeePlurals(props.defaultValue ?? '')
+            );
           }
         }
       }
