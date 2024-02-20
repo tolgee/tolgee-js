@@ -1,17 +1,18 @@
 import React, { useRef, useState } from 'react';
+import clsx from 'clsx';
 import { styled } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
+import { TolgeeFormat } from '@tginternal/editor';
 
 import { components } from '../client/apiSchema.generated';
-import { TRANSLATION_STATES } from '../editor/State/translationStates';
+import { TRANSLATION_STATES } from './State/translationStates';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
-import { TolgeeFormat } from '@tginternal/editor';
-import { PluralEditor } from '../editor/PluralEditor';
-import { ControlsEditorSmall } from '../editor/ControlsEditorSmall';
+import { PluralEditor } from './editor/PluralEditor';
+import { ControlsEditorSmall } from './editor/ControlsEditorSmall';
 import { ScFieldTitle } from '../common/FieldTitle';
-import clsx from 'clsx';
 
 type State = components['schemas']['TranslationModel']['state'];
+type LanguageModel = components['schemas']['LanguageModel'];
 
 const StyledContainer = styled('div')`
   display: grid;
@@ -34,7 +35,7 @@ const StyledStateIndicator = styled('div')`
 
 type Props = {
   disabled?: boolean;
-  language?: string;
+  language: LanguageModel | undefined;
   value: TolgeeFormat;
   onChange: (val: TolgeeFormat) => void;
   state?: State;
@@ -58,12 +59,12 @@ export const TranslationTextField = ({
   return (
     <>
       <ScFieldTitle>
-        <div>{language}</div>
+        <div>{language?.name || language?.tag}</div>
         {!disabled && (
           <ControlsEditorSmall
             state={state}
             onStateChange={(value) => onStateChange(value)}
-            language={language}
+            language={language?.tag}
             stateChangeEnabled={stateChangePermitted}
             mode={mode}
             onModeToggle={() =>
@@ -93,7 +94,7 @@ export const TranslationTextField = ({
         <PluralEditor
           value={value ?? { variants: { other: '' } }}
           onChange={onChange}
-          locale={language!}
+          locale={language!.tag}
           editorProps={{ direction: 'ltr', mode, disabled }}
         />
       </StyledContainer>

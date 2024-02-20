@@ -79,7 +79,7 @@ export const TranslationFields: FunctionComponent = () => {
                   !editPermitted ||
                   translation?.state === 'DISABLED'
                 }
-                language={lang?.tag}
+                language={lang}
                 value={formValue?.value}
                 onChange={(value) => onInputChange(key, value)}
                 onStateChange={(value) => onStateChange(key, value)}

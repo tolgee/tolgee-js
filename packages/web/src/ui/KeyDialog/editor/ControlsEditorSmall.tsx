@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Code from '@mui/icons-material/Code';
 
-import { StateInType, StateType } from './State/translationStates';
-import { ControlsButton } from './State/ControlsButton';
-import { StateTransitionButtons } from './State/StateTransitionButtons';
+import { StateInType, StateType } from '../State/translationStates';
+import { ControlsButton } from '../State/ControlsButton';
+import { StateTransitionButtons } from '../State/StateTransitionButtons';
 
 const StyledContainer = styled(Box)`
   display: flex;
