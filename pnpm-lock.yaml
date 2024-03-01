@@ -696,8 +696,8 @@ importers:
         specifier: ^5.11.4
         version: 5.16.5
       '@tginternal/editor':
-        specifier: ^1.10.0
-        version: 1.10.0(@codemirror/lint@6.5.0)(@codemirror/state@6.4.1)(@codemirror/view@6.24.1)
+        specifier: ^1.13.4
+        version: 1.13.4(@codemirror/lint@6.5.0)(@codemirror/state@6.4.1)(@codemirror/view@6.24.1)
       '@types/jest':
         specifier: ^27.0.2
         version: 27.5.2
@@ -9233,8 +9233,8 @@ packages:
       vue: 3.2.47
     dev: true
 
-  /@tginternal/editor@1.10.0(@codemirror/lint@6.5.0)(@codemirror/state@6.4.1)(@codemirror/view@6.24.1):
-    resolution: {integrity: sha512-VFcg1OMG7pE/+74rA/CPo7h+gHc+wTygakJnp0Ojd4Ci58CBua+AfNobrOxprOIWebnC25ul4FxpdP0buKSS0w==}
+  /@tginternal/editor@1.13.4(@codemirror/lint@6.5.0)(@codemirror/state@6.4.1)(@codemirror/view@6.24.1):
+    resolution: {integrity: sha512-7aBbjXkoHop1tuVztks4ttqrAljeP/vOwVyHJlTXhGCNUcPKw5Xg1FLpH85lGKyqdXtI1KFBunGwY0BGlN4Ayw==}
     peerDependencies:
       '@codemirror/lint': ^6.4.2
       '@codemirror/state': ^6.4.0

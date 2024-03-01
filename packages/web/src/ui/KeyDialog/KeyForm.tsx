@@ -87,6 +87,7 @@ export const KeyForm = () => {
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
     useDialogActions();
 
+  const pluralsSupported = useDialogContext((c) => c.pluralsSupported);
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
   const input = useDialogContext((c) => c.input);
@@ -102,7 +103,7 @@ export const KeyForm = () => {
   const permissions = useDialogContext((c) => c.permissions);
 
   const screenshotsView = permissions.canViewScreenshots;
-  const viewPluralCheckbox = permissions.canEditPlural;
+  const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
   const ready = !loading && !error;
 
   return (
@@ -167,9 +168,9 @@ export const KeyForm = () => {
         </ScTagsWrapper>
       )}
 
-      {ready && <PluralFormCheckbox />}
+      {ready && viewPluralCheckbox && <PluralFormCheckbox />}
 
-      {ready && viewPluralCheckbox && (
+      {ready && (
         <ScFieldsWrapper>
           <TranslationFields />
         </ScFieldsWrapper>

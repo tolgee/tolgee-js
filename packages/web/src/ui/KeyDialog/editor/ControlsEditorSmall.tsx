@@ -21,7 +21,7 @@ const StyledIcons = styled('div')`
 
 type ControlsProps = {
   state?: StateType;
-  mode?: 'placeholders' | 'plain';
+  mode?: 'placeholders' | 'syntax';
   isBaseLanguage?: boolean;
   stateChangeEnabled?: boolean;
   onStateChange?: (state: StateInType) => void;

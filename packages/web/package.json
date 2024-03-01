@@ -61,7 +61,7 @@
     "@rollup/plugin-typescript": "8.5.0",
     "@testing-library/dom": "^8.7.2",
     "@testing-library/jest-dom": "^5.11.4",
-    "@tginternal/editor": "^1.10.0",
+    "@tginternal/editor": "^1.13.4",
     "@types/jest": "^27.0.2",
     "@types/node": "^17.0.8",
     "@types/react": "^18.2.42",

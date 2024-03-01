@@ -81,8 +81,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
     const [tags, setTags] = useState<string[]>([]);
-    const [isPlural, setIsPlural] = useState<boolean>(false);
-    const [pluralArgName, setPluralArgName] = useState<string>();
+    const [_isPlural, setIsPlural] = useState<boolean>();
+    useEffect(() => {
+      // reset when key changes
+      setIsPlural(undefined);
+    }, [props.keyName, props.namespace]);
+    const [_pluralArgName, setPluralArgName] = useState<string>('value');
 
     const {
       screenshots,
@@ -106,6 +110,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         projectId: Number(props.uiProps.projectId),
       },
     });
+
+    const icuPlaceholders = scopesLoadable.data?.project?.icuPlaceholders;
+    const pluralsSupported = icuPlaceholders !== undefined;
 
     const languagesLoadable = useApiQuery({
       url: '/v2/projects/languages',
@@ -146,17 +153,20 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         languages: selectedLanguages,
       },
       options: {
+        enabled: Boolean(scopesLoadable.data),
         keepPreviousData: true,
         onSuccess(data) {
           const result: FormTranslations = {};
           const firstKey = data._embedded?.keys?.[0];
           const isPlural = Boolean(firstKey?.keyIsPlural);
-          setIsPlural(isPlural);
-          setPluralArgName(firstKey?.keyPluralArgName);
           Object.entries(firstKey?.translations || {}).forEach(
             ([key, value]) => {
               result[key] = {
-                value: getTolgeeFormat(value.text || '', isPlural),
+                value: getTolgeeFormat(
+                  value.text || '',
+                  isPlural,
+                  !icuPlaceholders
+                ),
                 state: value.state,
               };
             }
@@ -175,6 +185,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     });
 
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
+    const isPlural =
+      _isPlural !== undefined ? _isPlural : Boolean(keyData?.keyIsPlural);
+    const pluralArgName = isPlural
+      ? _pluralArgName || keyData?.keyPluralArgName || 'value'
+      : undefined;
 
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length
@@ -227,7 +242,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const stateCanBeChanged = permissions.canEditState(language);
 
           if (canBeTranslated) {
-            newTranslations[language] = tolgeeFormatGenerateIcu(value.value);
+            newTranslations[language] = tolgeeFormatGenerateIcu(
+              { ...value.value, parameter: pluralArgName },
+              !icuPlaceholders
+            );
           }
           if (
             newTranslations[language] &&
@@ -279,6 +297,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   })),
                   tags,
                   relatedKeysInOrder,
+                  isPlural,
+                  pluralArgName,
                 },
               },
               path: { id: keyData.keyId! },
@@ -365,10 +385,13 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       galleryProps.handleTakeScreenshot(
         props.keyName,
         selectedNs,
-        Object.entries(translationsForm).map(([language, value]) => [
-          language,
-          tolgeeFormatGenerateIcu(value.value),
-        ])
+        Object.entries(translationsForm).map(
+          ([language, value]) =>
+            [
+              language,
+              tolgeeFormatGenerateIcu(value.value, !icuPlaceholders),
+            ] as [string, string]
+        )
       );
     }
 
@@ -395,7 +418,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           ) {
             setTranslation(
               baseLanguageDefinition.tag!,
-              getTolgeeFormat(props.defaultValue ?? '', isPlural)
+              getTolgeeFormat(
+                props.defaultValue ?? '',
+                isPlural,
+                !icuPlaceholders
+              )
             );
           }
         }
@@ -454,7 +481,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       permissions,
       canTakeScreenshots,
       isPlural,
+      _pluralArgName,
       pluralArgName,
+      pluralsSupported,
+      icuPlaceholders,
     } as const;
 
     const actions = {

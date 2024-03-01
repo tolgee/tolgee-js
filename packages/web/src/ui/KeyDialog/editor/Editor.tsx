@@ -1,19 +1,25 @@
-import { RefObject, useEffect, useMemo, useRef } from 'react';
+import React, { RefObject, useEffect, useMemo, useRef } from 'react';
 import { minimalSetup } from 'codemirror';
 import { Compartment, EditorState, Prec } from '@codemirror/state';
 import { EditorView, ViewUpdate, keymap, KeyBinding } from '@codemirror/view';
-import { styled, useTheme } from '@mui/material/styles';
+import { Direction, styled, useTheme } from '@mui/material/styles';
 import {
   tolgeeSyntax,
   PlaceholderPlugin,
-  htmlIsolatesPlugin,
+  TolgeeHighlight,
   generatePlaceholdersStyle,
 } from '@tginternal/editor';
-import React from 'react';
 import { editorTheme } from './editorTheme';
+
+const editorSyntaxColors = {
+  function: '#007300',
+  other: '#002bff',
+  main: '#2C3C52',
+};
 
 const StyledEditor = styled('div')`
   font-size: 14px;
+  display: grid;
 
   & .cm-editor {
     outline: none !important;
@@ -38,7 +44,8 @@ export type EditorProps = {
   value: string;
   onChange?: (val: string) => void;
   background?: string;
-  mode: 'placeholders' | 'plain';
+  mode: 'placeholders' | 'syntax' | 'plain';
+  direction?: Direction;
   autofocus?: boolean;
   minHeight?: number | string;
   onBlur?: () => void;
@@ -48,7 +55,7 @@ export type EditorProps = {
   locale?: string;
   editorRef?: React.RefObject<EditorView | null>;
   examplePluralNum?: number;
-  direction: 'ltr' | 'rtl';
+  nested?: boolean;
   disabled?: boolean;
 };
 
@@ -64,13 +71,14 @@ export const Editor: React.FC<EditorProps> = ({
   onFocus,
   onBlur,
   mode,
+  direction,
   autofocus,
   shortcuts,
   minHeight,
   locale,
   editorRef,
   examplePluralNum,
-  direction,
+  nested,
   disabled,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -85,6 +93,7 @@ export const Editor: React.FC<EditorProps> = ({
     onFocus,
     onBlur,
   });
+  const languageCompartment = useRef<Compartment>(new Compartment());
 
   const StyledEditorWrapper = useMemo(() => {
     return generatePlaceholdersStyle({
@@ -97,8 +106,6 @@ export const Editor: React.FC<EditorProps> = ({
   keyBindings.current = shortcuts;
 
   useEffect(() => {
-    const languageCompartment = new Compartment();
-
     const shortcutsUptoDate = shortcuts?.map((value, i) => {
       return {
         ...value,
@@ -128,13 +135,12 @@ export const Editor: React.FC<EditorProps> = ({
           }),
           EditorView.contentAttributes.of({
             spellcheck: 'true',
-            dir: direction || 'ltr',
             lang: locale || '',
           }),
-          languageCompartment.of(tolgeeSyntax()),
+          TolgeeHighlight(editorSyntaxColors),
+          languageCompartment.current.of([]),
           placeholders.current.of([]),
           isolates.current.of([]),
-          direction === 'rtl' ? htmlIsolatesPlugin : [],
           disabledCompartment.current.of([]),
         ],
       }),
@@ -148,13 +154,20 @@ export const Editor: React.FC<EditorProps> = ({
   }, [theme.palette.mode]);
 
   useEffect(() => {
-    const plugins =
-      mode === 'placeholders' ? [PlaceholderPlugin({ examplePluralNum })] : [];
+    const placholderPlugins =
+      mode === 'placeholders'
+        ? [PlaceholderPlugin({ examplePluralNum, nested: Boolean(nested) })]
+        : [];
+    const syntaxPlugins =
+      mode === 'plain' ? [] : [tolgeeSyntax(Boolean(nested))];
     editor.current?.dispatch({
-      effects: placeholders.current?.reconfigure(plugins),
       selection: editor.current.state.selection,
+      effects: [
+        placeholders.current?.reconfigure(placholderPlugins),
+        languageCompartment.current.reconfigure(syntaxPlugins),
+      ],
     });
-  }, [mode]);
+  }, [mode, nested, examplePluralNum]);
 
   useEffect(() => {
     const state = editor.current?.state;
@@ -194,6 +207,7 @@ export const Editor: React.FC<EditorProps> = ({
 
   return (
     <StyledEditorWrapper
+      data-cy="global-editor"
       ref={ref}
       style={{
         minHeight,

@@ -6,16 +6,18 @@ import { Editor, EditorProps } from './Editor';
 import { TolgeeFormat } from '@tginternal/editor';
 import { getLanguageDirection } from '@tginternal/editor';
 import { RefObject } from 'react';
+import { useDialogContext } from '../dialogContext';
 
 type Props = {
   locale: string;
   value: TolgeeFormat;
   onChange?: (value: TolgeeFormat) => void;
-  activeVariant?: Intl.LDMLPluralRule;
-  onActiveVariantChange?: (variant: Intl.LDMLPluralRule) => void;
+  activeVariant?: string;
+  onActiveVariantChange?: (variant: string) => void;
   editorProps?: Partial<EditorProps>;
   autofocus?: boolean;
   activeEditorRef?: RefObject<EditorView | null>;
+  mode: 'placeholders' | 'syntax' | 'plain';
 };
 
 export const PluralEditor = ({
@@ -27,10 +29,15 @@ export const PluralEditor = ({
   autofocus,
   activeEditorRef,
   editorProps,
+  mode,
 }: Props) => {
-  function handleChange(text: string, variant: Intl.LDMLPluralRule) {
+  function handleChange(text: string, variant: string) {
     onChange?.({ ...value, variants: { ...value.variants, [variant]: text } });
   }
+
+  const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
+
+  const editorMode = icuPlaceholders ? mode : 'plain';
 
   return (
     <TranslationPlurals
@@ -40,21 +47,23 @@ export const PluralEditor = ({
       activeVariant={activeVariant}
       variantPaddingTop="8px"
       render={({ content, variant, exampleValue }) => {
+        const variantOrOther = variant || 'other';
         return (
-          <EditorWrapper>
+          <EditorWrapper data-cy="translation-editor" data-cy-variant={variant}>
             <Editor
-              mode="placeholders"
+              mode={editorMode}
               value={content}
-              onChange={(value) => handleChange(value, variant ?? 'other')}
-              onFocus={() => onActiveVariantChange?.(variant ?? 'other')}
+              onChange={(value) => handleChange(value, variantOrOther)}
+              onFocus={() => onActiveVariantChange?.(variantOrOther)}
               direction={getLanguageDirection(locale)}
-              autofocus={variant === activeVariant ? autofocus : false}
+              autofocus={variantOrOther === activeVariant ? autofocus : false}
               minHeight={value.parameter ? 'unset' : '50px'}
               locale={locale}
               editorRef={
-                variant === activeVariant ? activeEditorRef : undefined
+                variantOrOther === activeVariant ? activeEditorRef : undefined
               }
               examplePluralNum={exampleValue}
+              nested={Boolean(variant)}
               {...editorProps}
             />
           </EditorWrapper>

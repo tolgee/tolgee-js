@@ -12,7 +12,7 @@ import { ScFieldTitle } from '../common/FieldTitle';
 
 export const PluralFormCheckbox = () => {
   const isPlural = useDialogContext((c) => c.isPlural);
-  const pluralArgName = useDialogContext((c) => c.pluralArgName);
+  const pluralArgName = useDialogContext((c) => c._pluralArgName);
   const { setIsPlural, setPluralArgName } = useDialogActions();
   const [expanded, setExpanded] = useState(false);
 
