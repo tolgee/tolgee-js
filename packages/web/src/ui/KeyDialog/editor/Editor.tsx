@@ -152,6 +152,7 @@ export const Editor: React.FC<EditorProps> = ({
       mode === 'placeholders' ? [PlaceholderPlugin({ examplePluralNum })] : [];
     editor.current?.dispatch({
       effects: placeholders.current?.reconfigure(plugins),
+      selection: editor.current.state.selection,
     });
   }, [mode]);
 

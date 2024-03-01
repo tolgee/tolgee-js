@@ -167,7 +167,7 @@ export const KeyForm = () => {
         </ScTagsWrapper>
       )}
 
-      <PluralFormCheckbox />
+      {ready && <PluralFormCheckbox />}
 
       {ready && viewPluralCheckbox && (
         <ScFieldsWrapper>
