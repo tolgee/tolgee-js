@@ -93,7 +93,11 @@ export const TranslationTextField = ({
           }
         />
       </ScFieldTitle>
-      <StyledContainer className={clsx({ disabled, notPlural })}>
+      <StyledContainer
+        className={clsx({ disabled, notPlural })}
+        data-cy="translation-field"
+        data-cy-language={language?.tag}
+      >
         <Tooltip
           disableInteractive
           title={TRANSLATION_STATES[fallbackedState]?.name}
