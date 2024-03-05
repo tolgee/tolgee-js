@@ -1,5 +1,5 @@
 import { createElement } from 'react';
-import * as ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
