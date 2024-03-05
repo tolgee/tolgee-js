@@ -209,6 +209,8 @@ export const Editor: React.FC<EditorProps> = ({
     <StyledEditorWrapper
       data-cy="global-editor"
       ref={ref}
+      disabled={disabled}
+      dir={direction}
       style={{
         minHeight,
         direction,

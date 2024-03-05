@@ -5,7 +5,8 @@ import { Scope } from './types';
 export const openUI = (translation = 'What To Pack') => {
   cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
-  getDevUi().find('textarea').contains(translation).should('be.visible');
+  getDevUi().contains(translation).should('be.visible');
+  getEditor().should('not.be.disabled');
   cy.wait(300);
 };
 
@@ -18,4 +19,8 @@ export const visitWithApiKey = (scopes: Scope[]) => {
       localStorage.setItem('__tolgee_preferredLanguages', '["en","de"]')
     );
   cy.contains('What To Pack').invoke('attr', '_tolgee').should('exist');
+};
+
+export const getEditor = () => {
+  return getDevUi().findDcy('global-editor').find('.cm-content');
 };
