@@ -11,6 +11,7 @@ import { PluralEditor } from './editor/PluralEditor';
 import { ControlsEditorSmall } from './editor/ControlsEditorSmall';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext } from './dialogContext';
+import { isTranslationEmpty } from '../tools/isTranslationEmpty';
 
 type State = components['schemas']['TranslationModel']['state'];
 type LanguageModel = components['schemas']['LanguageModel'];
@@ -66,31 +67,31 @@ export const TranslationTextField = ({
   onChange,
   onStateChange,
 }: Props) => {
-  const normalized = state === 'UNTRANSLATED' ? undefined : state;
-  const fallbackedState = value ? normalized ?? 'TRANSLATED' : 'UNTRANSLATED';
   const textFieldRef = useRef<HTMLDivElement>(null);
   const parameter = useDialogContext((c) => c.pluralArgName);
   const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
   const notPlural = !parameter;
+  const normalized = state === 'UNTRANSLATED' ? undefined : state;
+  const fallbackedState = isTranslationEmpty(value, !notPlural)
+    ? 'UNTRANSLATED'
+    : normalized ?? 'TRANSLATED';
   const [mode, setMode] = useState<'placeholders' | 'syntax'>('placeholders');
   return (
     <>
       <ScFieldTitle>
         <div>{language?.name || language?.tag}</div>
-        {!disabled && (
-          <ControlsEditorSmall
-            state={state}
-            onStateChange={(value) => onStateChange(value)}
-            language={language?.tag}
-            stateChangeEnabled={stateChangePermitted}
-            mode={mode}
-            onModeToggle={
-              icuPlaceholders
-                ? () => setMode(mode === 'syntax' ? 'placeholders' : 'syntax')
-                : undefined
-            }
-          />
-        )}
+        <ControlsEditorSmall
+          state={fallbackedState}
+          onStateChange={(value) => onStateChange(value)}
+          language={language?.tag}
+          stateChangeEnabled={stateChangePermitted}
+          mode={mode}
+          onModeToggle={
+            icuPlaceholders && !disabled
+              ? () => setMode(mode === 'syntax' ? 'placeholders' : 'syntax')
+              : undefined
+          }
+        />
       </ScFieldTitle>
       <StyledContainer className={clsx({ disabled, notPlural })}>
         <Tooltip

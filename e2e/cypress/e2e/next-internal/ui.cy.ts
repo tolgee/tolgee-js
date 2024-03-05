@@ -1,6 +1,10 @@
 import { login } from '../../common/apiCalls';
 import { getByAriaLabel } from '../../common/selectors';
-import { translateEnglish, fullPermissions } from '../../common/testApiKeys';
+import {
+  translateEnglish,
+  fullPermissions,
+  changeStateEnglish,
+} from '../../common/testApiKeys';
 import {
   getEditor,
   openUI,
@@ -85,40 +89,35 @@ context('UI Dialog', () => {
     });
   });
 
-  // it.only('updates state properly when languages restricted', () => {
-  //   simulateReqAndResponse({
-  //     permissions: changeStateEnglish,
-  //     inForm() {
-  //       getDevUi()
-  //         .findDcyWithCustom({
-  //           value: 'translation-state-button',
-  //           language: 'de',
-  //         })
-  //         .should('not.exist');
-  //       getDevUi()
-  //         .findDcyWithCustom({
-  //           value: 'translation-state-button',
-  //           language: 'en',
-  //         })
-  //         .should('not.be.disabled');
-  //       getDevUi()
-  //         .findDcyWithCustom({
-  //           value: 'translation-state-button',
-  //           language: 'en',
-  //         })
-  //         .click();
-  //     },
-  //     checkRequest(data) {
-  //       assert(data.states.en === 'REVIEWED', 'State changed correctly');
-  //       assert(
-  //         Object.values(data.states).length === 1,
-  //         'No other states touched'
-  //       );
-  //       assert(
-  //         Object.values(data.translations).length === 0,
-  //         'No translation changes'
-  //       );
-  //     },
-  //   });
-  // });
+  it('updates state properly when languages restricted', () => {
+    simulateReqAndResponse({
+      permissions: changeStateEnglish,
+      inForm() {
+        getDevUi()
+          .findDcyWithCustom({
+            value: 'translation-state-button',
+            language: 'de',
+          })
+          .should('not.exist');
+        getDevUi()
+          .findDcyWithCustom({
+            value: 'translation-state-button',
+            language: 'en',
+          })
+          .should('not.be.disabled')
+          .click();
+      },
+      checkRequest(data) {
+        assert(data.states.en === 'REVIEWED', 'State changed correctly');
+        assert(
+          Object.values(data.states).length === 1,
+          'No other states touched'
+        );
+        assert(
+          Object.values(data.translations).length === 0,
+          'No translation changes'
+        );
+      },
+    });
+  });
 });

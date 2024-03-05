@@ -23,22 +23,23 @@ export const StateTransitionButtons: React.FC<Props> = ({
   disabled,
   language,
 }) => {
-  const nextState = state && TRANSLATION_STATES[state]?.next;
+  const nextState = TRANSLATION_STATES[state || 'TRANSLATED']?.next;
+  const nextFallbacked = nextState ?? TRANSLATION_STATES['TRANSLATED']?.next;
 
   return (
     <>
-      {nextState && (
+      {nextFallbacked && (
         <ControlsButton
           data-cy="translation-state-button"
           data-cy-language={language}
-          onClick={() => onStateChange?.(nextState)}
+          onClick={() => onStateChange?.(nextFallbacked)}
           className={className}
           tooltip={
             <Box sx={{ whiteSpace: 'nowrap' }}>
-              Mark as {TRANSLATION_STATES[nextState].name}
+              Mark as {TRANSLATION_STATES[nextFallbacked].name}
             </Box>
           }
-          disabled={disabled}
+          disabled={disabled || !nextState}
         >
           <StateIcon state={state} />
         </ControlsButton>

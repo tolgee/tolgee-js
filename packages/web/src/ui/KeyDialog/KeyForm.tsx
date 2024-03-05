@@ -170,11 +170,9 @@ export const KeyForm = () => {
 
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
 
-      {ready && (
-        <ScFieldsWrapper>
-          <TranslationFields />
-        </ScFieldsWrapper>
-      )}
+      <ScFieldsWrapper>
+        <TranslationFields />
+      </ScFieldsWrapper>
 
       {screenshotsView && ready && (
         <ScGalleryWrapper>

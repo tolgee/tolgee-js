@@ -39,8 +39,6 @@ export const ControlsEditorSmall: React.FC<ControlsProps> = ({
   controlsProps,
   language,
 }) => {
-  const displayTransitionButtons = state && stateChangeEnabled;
-
   return (
     <StyledContainer {...controlsProps}>
       <StyledIcons>
@@ -62,7 +60,7 @@ export const ControlsEditorSmall: React.FC<ControlsProps> = ({
           </ControlsButton>
         )}
 
-        {displayTransitionButtons && (
+        {stateChangeEnabled && (
           <StateTransitionButtons
             state={state}
             onStateChange={onStateChange}

@@ -248,7 +248,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             );
           }
           if (
-            newTranslations[language] &&
             STATES_FOR_UPDATE.includes(value.state as StateInType) &&
             keyData?.translations?.[language]?.state !== value.state &&
             stateCanBeChanged
