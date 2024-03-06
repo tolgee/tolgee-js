@@ -159,18 +159,17 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const result: FormTranslations = {};
           const firstKey = data._embedded?.keys?.[0];
           const isPlural = Boolean(firstKey?.keyIsPlural);
-          Object.entries(firstKey?.translations || {}).forEach(
-            ([key, value]) => {
-              result[key] = {
-                value: getTolgeeFormat(
-                  value.text || '',
-                  isPlural,
-                  !icuPlaceholders
-                ),
-                state: value.state,
-              };
-            }
-          );
+          data.selectedLanguages.forEach((lang) => {
+            const translation = firstKey?.translations[lang.tag];
+            result[lang.tag] = {
+              value: getTolgeeFormat(
+                translation?.text || '',
+                isPlural,
+                !icuPlaceholders
+              ),
+              state: translation?.state || 'UNTRANSLATED',
+            };
+          });
           _setTranslationsForm(result);
           setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           setScreenshots(
