@@ -1,7 +1,14 @@
 import { ApiKeyPermissionsModel } from './simulateReqAndResponse';
 
+const project: ApiKeyPermissionsModel['project'] = {
+  id: 1,
+  name: 'Test',
+  icuPlaceholders: true,
+};
+
 export const fullPermissions: ApiKeyPermissionsModel = {
   projectId: 1,
+  project,
   viewLanguageIds: null,
   translateLanguageIds: null,
   stateChangeLanguageIds: null,
@@ -19,6 +26,7 @@ export const fullPermissions: ApiKeyPermissionsModel = {
 
 export const translateEnglish: ApiKeyPermissionsModel = {
   projectId: 1,
+  project,
   viewLanguageIds: null,
   translateLanguageIds: [1000000001],
   stateChangeLanguageIds: null,
@@ -27,6 +35,7 @@ export const translateEnglish: ApiKeyPermissionsModel = {
 
 export const changeStateEnglish: ApiKeyPermissionsModel = {
   projectId: 1,
+  project,
   viewLanguageIds: null,
   translateLanguageIds: null,
   stateChangeLanguageIds: [1000000001],

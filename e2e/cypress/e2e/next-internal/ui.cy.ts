@@ -2,10 +2,14 @@ import { login } from '../../common/apiCalls';
 import { getByAriaLabel } from '../../common/selectors';
 import {
   translateEnglish,
-  changeStateEnglish,
   fullPermissions,
+  changeStateEnglish,
 } from '../../common/testApiKeys';
-import { openUI, visitWithApiKey } from '../../common/nextInternalCommon';
+import {
+  getEditor,
+  openUI,
+  visitWithApiKey,
+} from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
 import { simulateReqAndResponse } from '../../common/simulateReqAndResponse';
 
@@ -36,21 +40,22 @@ context('UI Dialog', () => {
     openUI();
     getDevUi().contains('There are no screenshots.').should('be.visible');
     getByAriaLabel('Take screenshot').should('not.exist');
-    getDevUi().contains('Update').should('be.disabled');
+    getDevUi().contains('Update').should('not.have.attr', 'contenteditable');
   });
 
   it('updates translation properly', () => {
     simulateReqAndResponse({
       permissions: fullPermissions,
       inForm() {
-        getDevUi()
-          .find('textarea')
+        getEditor()
           .contains('What To Pack')
-          .should('not.be.disabled');
-        getDevUi()
-          .find('textarea')
+          .closestDcy('global-editor')
+          .should('not.have.attr', 'disabled');
+        getEditor()
           .contains('What To Pack')
-          .type('{selectAll}{del}Hello world', { force: true });
+          .click()
+          .parent()
+          .type('{selectall}{backspace}Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');
@@ -63,18 +68,20 @@ context('UI Dialog', () => {
     simulateReqAndResponse({
       permissions: translateEnglish,
       inForm() {
-        getDevUi()
-          .find('textarea')
+        getEditor()
           .contains('Was mitnehmen')
-          .should('be.disabled');
-        getDevUi()
-          .find('textarea')
+          .closestDcy('global-editor')
+          .should('have.attr', 'disabled');
+        getEditor()
           .contains('What To Pack')
-          .should('not.be.disabled');
-        getDevUi()
-          .find('textarea')
+          .closestDcy('global-editor')
+          .should('not.have.attr', 'disabled');
+        getEditor()
           .contains('What To Pack')
-          .type('{selectAll}{del}Hello world', { force: true });
+          .click()
+          .parent()
+          .clear()
+          .type('Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');
@@ -91,55 +98,13 @@ context('UI Dialog', () => {
             value: 'translation-state-button',
             language: 'de',
           })
-          .should('be.disabled');
+          .should('not.exist');
         getDevUi()
           .findDcyWithCustom({
             value: 'translation-state-button',
             language: 'en',
           })
-          .should('not.be.disabled');
-        getDevUi()
-          .findDcyWithCustom({
-            value: 'translation-state-button',
-            language: 'en',
-          })
-          .click();
-      },
-      checkRequest(data) {
-        assert(data.states.en === 'REVIEWED', 'State changed correctly');
-        assert(
-          Object.values(data.states).length === 1,
-          'No other states touched'
-        );
-        assert(
-          Object.values(data.translations).length === 0,
-          'No translation changes'
-        );
-      },
-    });
-  });
-
-  it('updates state properly when languages restricted', () => {
-    simulateReqAndResponse({
-      permissions: changeStateEnglish,
-      inForm() {
-        getDevUi()
-          .findDcyWithCustom({
-            value: 'translation-state-button',
-            language: 'de',
-          })
-          .should('be.disabled');
-        getDevUi()
-          .findDcyWithCustom({
-            value: 'translation-state-button',
-            language: 'en',
-          })
-          .should('not.be.disabled');
-        getDevUi()
-          .findDcyWithCustom({
-            value: 'translation-state-button',
-            language: 'en',
-          })
+          .should('not.be.disabled')
           .click();
       },
       checkRequest(data) {

@@ -1,127 +1,129 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
+import clsx from 'clsx';
 import { styled } from '@mui/material/styles';
-import TextField from '@mui/material/TextField';
-import { inputBaseClasses } from '@mui/material/InputBase';
-import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 import Tooltip from '@mui/material/Tooltip';
+import { TolgeeFormat } from '@tginternal/editor';
 
 import { components } from '../client/apiSchema.generated';
-import { StateType, TRANSLATION_STATES } from './State/translationStates';
-import { StateTransitionButtons } from './State/StateTransitionButtons';
+import { TRANSLATION_STATES } from './State/translationStates';
 import { DEVTOOLS_Z_INDEX } from '../../constants';
+import { PluralEditor } from './editor/PluralEditor';
+import { ControlsEditorSmall } from './editor/ControlsEditorSmall';
+import { ScFieldTitle } from '../common/FieldTitle';
+import { useDialogContext } from './dialogContext';
+import { isTranslationEmpty } from '../tools/isTranslationEmpty';
 
 type State = components['schemas']['TranslationModel']['state'];
+type LanguageModel = components['schemas']['LanguageModel'];
 
 const StyledContainer = styled('div')`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
   position: relative;
-`;
 
-const StyledTextField = styled(TextField)`
-  position: relative;
-  margin: 0px;
-
-  & .Mui-disabled {
-    background: ${({ theme }) => theme.palette.grey[200]};
+  &.disabled {
+    opacity: 0.5;
   }
 
-  & .${inputBaseClasses.root} .${inputBaseClasses.input} {
-    padding-bottom: 16px;
-    min-height: 30px;
-    height: unset;
+  &.disabled .cm-cursor {
+    display: none !important;
   }
 
-  & .${inputBaseClasses.root}:hover .${outlinedInputClasses.notchedOutline} {
-    border-color: ${({ theme }) => theme.palette.grey[500]};
-  }
-
-  &
-    .${inputBaseClasses.root}:focus-within
-    .${outlinedInputClasses.notchedOutline} {
-    border-color: ${({ theme }) => theme.palette.grey[900]};
-    border-width: 1px;
+  &.notPlural {
+    grid-template-columns: 1fr;
   }
 `;
 
 const StyledStateIndicator = styled('div')`
-  position: absolute;
-  left: 1px;
-  top: 1px;
-  bottom: 1px;
+  margin-top: 4px;
   width: 5px;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-`;
 
-const StyledControls = styled('div')`
-  position: absolute;
-  bottom: 1px;
-  right: 1px;
-  margin: 10px;
+  &.notPlural {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    bottom: 1px;
+    border-radius: 3px 0px 0px 3px;
+  }
 `;
 
 type Props = {
   disabled?: boolean;
-  stateChangeDisabled: boolean;
-  language?: string;
-  value: string;
-  onChange: (val: string) => void;
-  onStateChange: (val: StateType) => void;
+  language: LanguageModel | undefined;
+  value: TolgeeFormat | undefined;
+  onChange: (val: TolgeeFormat) => void;
   state?: State;
+  onStateChange: (value: State) => void;
+  stateChangePermitted?: boolean;
 };
 
 export const TranslationTextField = ({
   disabled,
-  stateChangeDisabled,
   language,
   value,
+  state,
+  stateChangePermitted,
   onChange,
   onStateChange,
-  state,
 }: Props) => {
-  const normalized = state === 'UNTRANSLATED' ? undefined : state;
-  const fallbackedState = value ? normalized ?? 'TRANSLATED' : 'UNTRANSLATED';
   const textFieldRef = useRef<HTMLDivElement>(null);
+  const parameter = useDialogContext((c) => c.pluralArgName);
+  const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
+  const notPlural = !parameter;
+  const normalized = state === 'UNTRANSLATED' ? undefined : state;
+  const fallbackedState = isTranslationEmpty(value, !notPlural)
+    ? 'UNTRANSLATED'
+    : normalized ?? 'TRANSLATED';
+  const [mode, setMode] = useState<'placeholders' | 'syntax'>('placeholders');
   return (
-    <StyledContainer>
-      <StyledTextField
-        size="small"
-        disabled={disabled}
-        inputProps={{
-          lang: language,
-          ref: textFieldRef,
-        }}
-        maxRows={Infinity}
-        multiline
-        fullWidth
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      <Tooltip
-        disableInteractive
-        title={TRANSLATION_STATES[fallbackedState]?.name}
-        PopperProps={{
-          disablePortal: true,
-          style: { zIndex: DEVTOOLS_Z_INDEX },
-        }}
-      >
-        <StyledStateIndicator
-          style={{
-            background: TRANSLATION_STATES[fallbackedState]?.color,
-          }}
-          onClick={() => {
-            textFieldRef.current?.focus();
-          }}
-        />
-      </Tooltip>
-
-      <StyledControls>
-        <StateTransitionButtons
+    <>
+      <ScFieldTitle>
+        <div>{language?.name || language?.tag}</div>
+        <ControlsEditorSmall
           state={fallbackedState}
-          onStateChange={onStateChange}
-          disabled={stateChangeDisabled}
-          language={language!}
+          onStateChange={(value) => onStateChange(value)}
+          language={language?.tag}
+          stateChangeEnabled={stateChangePermitted}
+          mode={mode}
+          onModeToggle={
+            icuPlaceholders && !disabled
+              ? () => setMode(mode === 'syntax' ? 'placeholders' : 'syntax')
+              : undefined
+          }
         />
-      </StyledControls>
-    </StyledContainer>
+      </ScFieldTitle>
+      <StyledContainer
+        className={clsx({ disabled, notPlural })}
+        data-cy="translation-field"
+        data-cy-language={language?.tag}
+      >
+        <Tooltip
+          disableInteractive
+          title={TRANSLATION_STATES[fallbackedState]?.name}
+          PopperProps={{
+            disablePortal: true,
+            style: { zIndex: DEVTOOLS_Z_INDEX },
+          }}
+        >
+          <StyledStateIndicator
+            className={clsx({ notPlural })}
+            style={{
+              background: TRANSLATION_STATES[fallbackedState]?.color,
+            }}
+            onClick={() => {
+              textFieldRef.current?.focus();
+            }}
+          />
+        </Tooltip>
+        <PluralEditor
+          mode={mode}
+          value={value ? { ...value, parameter } : { variants: { other: '' } }}
+          onChange={onChange}
+          locale={language!.tag}
+          editorProps={{ direction: 'ltr', disabled }}
+        />
+      </StyledContainer>
+    </>
   );
 };

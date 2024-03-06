@@ -14,6 +14,7 @@ import { useDialogContext, useDialogActions } from './dialogContext';
 import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
+import { PluralFormCheckbox } from './PluralFormCheckbox';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -86,6 +87,7 @@ export const KeyForm = () => {
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
     useDialogActions();
 
+  const pluralsSupported = useDialogContext((c) => c.pluralsSupported);
   const linkToPlatform = useDialogContext((c) => c.linkToPlatform);
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
   const input = useDialogContext((c) => c.input);
@@ -101,6 +103,7 @@ export const KeyForm = () => {
   const permissions = useDialogContext((c) => c.permissions);
 
   const screenshotsView = permissions.canViewScreenshots;
+  const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
   const ready = !loading && !error;
 
   return (
@@ -164,6 +167,8 @@ export const KeyForm = () => {
           <Tags />
         </ScTagsWrapper>
       )}
+
+      {ready && viewPluralCheckbox && <PluralFormCheckbox />}
 
       <ScFieldsWrapper>
         <TranslationFields />

@@ -55,6 +55,14 @@ theme = createTheme(theme, {
         },
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        fontSizeSmall: {
+          width: '19px',
+          height: '19px',
+        },
+      },
+    },
   },
 });
 
