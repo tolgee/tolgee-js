@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.19.7-prerelease.d6de9cd8.0](https://github.com/tolgee/tolgee-js/compare/v5.19.6...v5.19.7-prerelease.d6de9cd8.0) (2024-03-06)
+
+
+### Bug Fixes
+
+* e2e tests ([c7e1c53](https://github.com/tolgee/tolgee-js/commit/c7e1c53965b826955067f8f03ee748fba52f8a6d))
+* e2e tests ([2ba0cfd](https://github.com/tolgee/tolgee-js/commit/2ba0cfd6aa88af826e6cf2217c4cf477f59f0aa4))
+* editor and keyform ([9b89fa2](https://github.com/tolgee/tolgee-js/commit/9b89fa2be5cc376c13d72028987dcf97db5d066a))
+* new version of editor and empty translation fix ([d6de9cd](https://github.com/tolgee/tolgee-js/commit/d6de9cd8aacb3567ecd92ee8cafb2619d6361674))
+
+
+### Features
+
+* add plural selector ([e6ef4ef](https://github.com/tolgee/tolgee-js/commit/e6ef4ef176a1beb4471f7cd2a0e93b56b61d7797))
+* add plurals editor and update state change buttons ([a76e42b](https://github.com/tolgee/tolgee-js/commit/a76e42b54bc6671d62f8f719617e8a984780e5aa))
+* update according to platform and add support for raw mode ([4721b64](https://github.com/tolgee/tolgee-js/commit/4721b6480a408e333d6a463bcbbaf0ae060d54a9))
+* use codemirror editor ([bf09867](https://github.com/tolgee/tolgee-js/commit/bf09867d45375548de2d4b77e4c82fd67ce9d7da))
+
+
+
+
+
 ## [5.19.6](https://github.com/tolgee/tolgee-js/compare/v5.19.5...v5.19.6) (2024-02-08)
 
 
