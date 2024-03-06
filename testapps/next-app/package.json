@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/next-app-testapp",
-  "version": "5.19.6",
+  "version": "5.20.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,9 +10,9 @@
     "start": "next start"
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.19.6",
-    "@tolgee/react": "5.19.6",
-    "@tolgee/web": "5.19.6",
+    "@tolgee/format-icu": "5.20.0",
+    "@tolgee/react": "5.20.0",
+    "@tolgee/web": "5.20.0",
     "next": "14.0.3",
     "next-intl": "^3.2.3",
     "react": "18.2.0",
