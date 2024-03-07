@@ -82,11 +82,14 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
     const [tags, setTags] = useState<string[]>([]);
     const [_isPlural, setIsPlural] = useState<boolean>();
+    const [_pluralArgName, setPluralArgName] = useState<string>();
+    const [submitError, setSubmitError] = useState<string>();
+
     useEffect(() => {
       // reset when key changes
       setIsPlural(undefined);
+      setPluralArgName(undefined);
     }, [props.keyName, props.namespace]);
-    const [_pluralArgName, setPluralArgName] = useState<string>('value');
 
     const {
       screenshots,
@@ -170,6 +173,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               state: translation?.state || 'UNTRANSLATED',
             };
           });
+          if (_pluralArgName === undefined) {
+            setPluralArgName(firstKey?.keyPluralArgName);
+          }
           _setTranslationsForm(result);
           setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           setScreenshots(
@@ -220,6 +226,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
 
     function onInputChange(key: string, value: TolgeeFormat) {
+      setSubmitError(undefined);
       setSuccess(false);
       setTranslationsFormTouched(true);
       setTranslation(key, value);
@@ -323,9 +330,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           await sleep(400);
           props.onClose();
         }
-      } catch (e) {
+      } catch (e: any) {
         // eslint-disable-next-line no-console
         console.error(e);
+        setSubmitError(e?.message);
       } finally {
         setSaving(false);
         setSuccess(false);
@@ -483,6 +491,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       pluralArgName,
       pluralsSupported,
       icuPlaceholders,
+      submitError,
     } as const;
 
     const actions = {

@@ -95,6 +95,7 @@ export const KeyForm = () => {
   const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
+  const submitError = useDialogContext((c) => c.submitError);
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
@@ -105,6 +106,8 @@ export const KeyForm = () => {
   const screenshotsView = permissions.canViewScreenshots;
   const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
   const ready = !loading && !error;
+
+  const generalError = error || submitError;
 
   return (
     <ScContainer {...{ [TOLGEE_RESTRICT_ATTRIBUTE]: 'true' }}>
@@ -170,9 +173,11 @@ export const KeyForm = () => {
 
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
 
-      <ScFieldsWrapper>
-        <TranslationFields />
-      </ScFieldsWrapper>
+      {!error && (
+        <ScFieldsWrapper>
+          <TranslationFields />
+        </ScFieldsWrapper>
+      )}
 
       {screenshotsView && ready && (
         <ScGalleryWrapper>
@@ -186,7 +191,7 @@ export const KeyForm = () => {
         </ScRestriction>
       )}
 
-      {error && <ScError>{error}</ScError>}
+      {generalError && <ScError>{generalError}</ScError>}
       <ScControls>
         <Button onClick={onClose} color="secondary">
           {useBrowserWindow ? 'Close' : 'Cancel'}
