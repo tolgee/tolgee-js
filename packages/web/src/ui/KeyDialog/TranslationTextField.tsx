@@ -120,7 +120,7 @@ export const TranslationTextField = ({
           mode={mode}
           value={value ? { ...value, parameter } : { variants: { other: '' } }}
           onChange={onChange}
-          locale={language!.tag}
+          locale={language?.tag || 'en'}
           editorProps={{ direction: 'ltr', disabled }}
         />
       </StyledContainer>
