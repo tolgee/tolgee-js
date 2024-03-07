@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.20.1](https://github.com/tolgee/tolgee-js/compare/v5.20.0...v5.20.1) (2024-03-07)
+
+
+### Bug Fixes
+
+* stop failing when api key is not valid ([#3314](https://github.com/tolgee/tolgee-js/issues/3314)) ([47eba84](https://github.com/tolgee/tolgee-js/commit/47eba844ffb2c04ce5b419d2b39c8f87cdc20e26))
+
+
+
+
+
 # [5.20.0](https://github.com/tolgee/tolgee-js/compare/v5.19.6...v5.20.0) (2024-03-06)
 
 
