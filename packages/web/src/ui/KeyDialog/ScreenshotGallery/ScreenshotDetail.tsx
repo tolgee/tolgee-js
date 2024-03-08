@@ -3,6 +3,7 @@ import Dialog from '@mui/material/Dialog';
 import { ScreenshotInterface } from '../dialogContext/useGallery';
 import { DEVTOOLS_Z_INDEX } from '../../../constants';
 import { ScreenshotWithLabels } from './ScreenshotWithLabels';
+import Box from '@mui/material/Box';
 
 type Props = {
   screenshot: ScreenshotInterface;
@@ -24,7 +25,7 @@ export const ScreenshotDetail: React.FC<Props> = ({
       style={{ zIndex: DEVTOOLS_Z_INDEX }}
       onClose={onClose}
     >
-      <div>
+      <Box display="grid">
         {screenshot && (
           <ScreenshotWithLabels
             showTooltips
@@ -37,7 +38,7 @@ export const ScreenshotDetail: React.FC<Props> = ({
             }}
           />
         )}
-      </div>
+      </Box>
     </Dialog>
   );
 };
