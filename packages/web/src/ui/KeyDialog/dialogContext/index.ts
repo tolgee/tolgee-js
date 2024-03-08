@@ -173,7 +173,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               state: translation?.state || 'UNTRANSLATED',
             };
           });
-          if (_pluralArgName === undefined) {
+          if (_pluralArgName === undefined && isPlural) {
             setPluralArgName(firstKey?.keyPluralArgName);
           }
           _setTranslationsForm(result);
@@ -192,9 +192,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
     const isPlural =
       _isPlural !== undefined ? _isPlural : Boolean(keyData?.keyIsPlural);
-    const pluralArgName = isPlural
-      ? _pluralArgName || keyData?.keyPluralArgName || 'value'
-      : undefined;
+    const pluralArgName = isPlural ? _pluralArgName || 'value' : undefined;
 
     const keyExists = Boolean(
       translationsLoadable.data?._embedded?.keys?.length
