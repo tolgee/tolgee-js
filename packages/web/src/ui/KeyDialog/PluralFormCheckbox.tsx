@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
@@ -10,11 +10,25 @@ import TextField from '@mui/material/TextField';
 import { useDialogActions, useDialogContext } from './dialogContext';
 import { ScFieldTitle } from '../common/FieldTitle';
 
+function isParameterDefault(value: string | undefined) {
+  return value === undefined || value === 'value';
+}
+
 export const PluralFormCheckbox = () => {
   const isPlural = useDialogContext((c) => c.isPlural);
-  const pluralArgName = useDialogContext((c) => c._pluralArgName);
+  const _pluralArgName = useDialogContext((c) => c._pluralArgName);
+  const pluralArgName = useDialogContext((c) => c.pluralArgName);
   const { setIsPlural, setPluralArgName } = useDialogActions();
-  const [expanded, setExpanded] = useState(false);
+  const [_expanded, setExpanded] = useState(
+    !isParameterDefault(_pluralArgName)
+  );
+
+  useEffect(() => {
+    if (isPlural && !isParameterDefault(_pluralArgName)) {
+      setExpanded(true);
+    }
+  }, [_pluralArgName]);
+  const expanded = _expanded && isPlural;
 
   return (
     <Box display="grid" mt={2}>
@@ -48,8 +62,9 @@ export const PluralFormCheckbox = () => {
         <Box display="grid">
           <ScFieldTitle sx={{ mt: 0.5 }}>Variable name</ScFieldTitle>
           <TextField
-            value={pluralArgName}
+            value={_pluralArgName}
             onChange={(e) => setPluralArgName(e.target.value)}
+            placeholder={pluralArgName}
             size="small"
             disabled={!isPlural}
             sx={{ maxWidth: 300 }}
