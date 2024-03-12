@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.20.3](https://github.com/tolgee/tolgee-js/compare/v5.20.2...v5.20.3) (2024-03-12)
+
+
+### Bug Fixes
+
+* editor in popup ([#3318](https://github.com/tolgee/tolgee-js/issues/3318)) ([6af1be1](https://github.com/tolgee/tolgee-js/commit/6af1be1a0aa4502603d2619f026b7ea36164fef9))
+
+
+
+
+
 ## [5.20.2](https://github.com/tolgee/tolgee-js/compare/v5.20.1...v5.20.2) (2024-03-12)
 
 
