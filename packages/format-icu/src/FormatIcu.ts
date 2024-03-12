@@ -1,4 +1,4 @@
-import { TolgeePlugin } from '@tolgee/core';
+import type { TolgeePlugin } from '@tolgee/core';
 import { createFormatIcu } from './createFormatIcu';
 
 export const FormatIcu = (): TolgeePlugin => (tolgee, tools) => {
