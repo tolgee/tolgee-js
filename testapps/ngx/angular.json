@@ -164,7 +164,8 @@
               ],
               "optimization": true,
               "sourceMap": false,
-              "extractLicenses": true
+              "extractLicenses": true,
+              "buildOptimizer": true
             },
             "stage": {
               "fileReplacements": [
@@ -175,7 +176,8 @@
               ],
               "optimization": false,
               "sourceMap": true,
-              "extractLicenses": false
+              "extractLicenses": false,
+              "buildOptimizer": false
             },
             "e2e": {
               "fileReplacements": [
@@ -186,13 +188,14 @@
               ],
               "optimization": false,
               "sourceMap": true,
-              "extractLicenses": false
+              "extractLicenses": false,
+              "buildOptimizer": false
             }
           },
           "defaultConfiguration": "production"
         },
         "prerender": {
-          "builder": "@nguniversal/builders:prerender",
+          "builder": "@angular-devkit/build-angular:prerender",
           "options": {
             "routes": [
               "/"
@@ -212,6 +215,5 @@
         }
       }
     }
-  },
-  "defaultProject": "sampleapp"
+  }
 }
