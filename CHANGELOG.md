@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.20.2](https://github.com/tolgee/tolgee-js/compare/v5.20.1...v5.20.2) (2024-03-12)
+
+
+### Bug Fixes
+
+* Plural argument name in context dialog ([#3315](https://github.com/tolgee/tolgee-js/issues/3315)) ([5247a08](https://github.com/tolgee/tolgee-js/commit/5247a080179799cbd1eb5993722437b5bb92bf59))
+
+
+
+
+
 ## [5.20.1](https://github.com/tolgee/tolgee-js/compare/v5.20.0...v5.20.1) (2024-03-07)
 
 
