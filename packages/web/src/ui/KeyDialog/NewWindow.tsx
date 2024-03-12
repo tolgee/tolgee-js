@@ -88,7 +88,7 @@ export const NewWindow = (props: React.PropsWithChildren) => {
     });
   }, [popup]);
 
-  return container
+  return popup && container
     ? createPortal(
         <CacheProvider value={styleCache}>{props.children}</CacheProvider>,
         container
