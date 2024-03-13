@@ -77,6 +77,8 @@ export function Cache(
       return dataPromise.catch((e) => {
         const error = new RecordFetchError(e, keyObject);
         events.onError.emit(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
         throw error;
       });
     } else {
@@ -92,6 +94,8 @@ export function Cache(
       dataPromise = backendGetDevRecord(keyObject)?.catch((e) => {
         const error = new RecordFetchError(e, keyObject, true);
         events.onError.emit(error);
+        // eslint-disable-next-line no-console
+        console.warn(error);
         // fallback to prod fetch if dev fails
         return fetchProd(keyObject);
       });

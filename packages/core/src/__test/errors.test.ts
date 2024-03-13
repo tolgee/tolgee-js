@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { TolgeeCore } from '../TolgeeCore';
 import { RecordFetchError, TolgeePlugin } from '../types';
 
@@ -24,6 +25,11 @@ const failingDevBackend = (): TolgeePlugin => {
 };
 
 describe('error events', () => {
+  beforeEach(() => {
+    console.warn = jest.fn();
+    console.error = jest.fn();
+  });
+
   it('emitts error when fails to fetch dev record', async () => {
     const errorHandler = jest.fn();
     const tolgee = TolgeeCore()
@@ -37,7 +43,9 @@ describe('error events', () => {
     expect(firstArgument).toHaveProperty('language', 'en');
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', true);
-    expect(firstArgument).toHaveProperty('type', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(console.warn).toBeCalledTimes(1);
+    expect(console.error).toBeCalledTimes(0);
   });
 
   it('emitts error when fails to fetch record', async () => {
@@ -51,7 +59,9 @@ describe('error events', () => {
     expect(firstArgument).toHaveProperty('language', 'en');
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', false);
-    expect(firstArgument).toHaveProperty('type', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(console.warn).toBeCalledTimes(0);
+    expect(console.error).toBeCalledTimes(1);
   });
 
   it('emitts error when fails to fetch promise in static data', async () => {
@@ -71,6 +81,8 @@ describe('error events', () => {
     expect(firstArgument).toHaveProperty('language', 'en');
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', false);
-    expect(firstArgument).toHaveProperty('type', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(console.warn).toBeCalledTimes(0);
+    expect(console.error).toBeCalledTimes(1);
   });
 });
