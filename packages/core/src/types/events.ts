@@ -1,6 +1,6 @@
 import type { NsFallback } from './general';
 import type { CacheDescriptorWithKey } from './cache';
-import { RecordFetchError, TolgeeError } from './errors';
+import { TolgeeError } from './errors';
 
 export type Subscription = {
   unsubscribe: () => void;
