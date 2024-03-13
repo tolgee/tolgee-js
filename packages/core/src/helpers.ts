@@ -3,10 +3,14 @@ import {
   FallbackLanguageObject,
   FallbackLanguageOption,
   FetchFn,
+  TolgeeError,
 } from './types';
+import { EventEmitterInstance } from './Controller/Events/EventEmitter';
 
-export function isPromise(value: any) {
-  return Boolean(value && typeof value.then === 'function');
+export function isPromise(value: unknown): value is Promise<unknown> {
+  return Boolean(
+    value && typeof (value as unknown as Promise<unknown>).then === 'function'
+  );
 }
 
 export function valueOrPromise<T, R>(
@@ -17,6 +21,29 @@ export function valueOrPromise<T, R>(
     return Promise.resolve(value).then(callback);
   } else {
     return callback(value as T);
+  }
+}
+
+export function handleRegularOrAsyncErr<T>(
+  onError: EventEmitterInstance<TolgeeError>,
+  createError: (e: any) => TolgeeError,
+  callback: () => Promise<T> | T
+): Promise<T> | T {
+  function handle(e: any): never {
+    const error = createError(e);
+    onError.emit(error);
+    // eslint-disable-next-line no-console
+    console.error(error);
+    throw error;
+  }
+  try {
+    const result = callback();
+    if (isPromise(result)) {
+      return result.catch(handle);
+    }
+    return result;
+  } catch (e) {
+    handle(e);
   }
 }
 

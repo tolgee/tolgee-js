@@ -5,23 +5,36 @@ export class RecordFetchError extends Error {
   public language: string;
   public namespace: string | undefined;
   constructor(
-    originalError: Error | undefined,
     descriptor: CacheDescriptorInternal,
+    public cause: any,
     public isDev: boolean = false
   ) {
     const { language, namespace } = descriptor;
     super(
-      originalError?.message ??
-        `Failed to fetch record for ${language} and ${namespace}`
+      `Tolgee: Failed to fetch record for "${language}"${
+        namespace && ` and "${namespace}"`
+      }`
     );
     this.language = language;
     this.namespace = namespace;
-    if (originalError instanceof Error) {
-      this.stack = originalError?.stack;
-      // Set the prototype explicitly.
-      Object.setPrototypeOf(this, RecordFetchError.prototype);
-    }
   }
 }
 
-export type TolgeeError = RecordFetchError;
+export class LanguageDetectorError extends Error {
+  public name = 'LanguageDetectorError' as const;
+  constructor(message: string, public cause: any) {
+    super(message);
+  }
+}
+
+export class LanguageStorageError extends Error {
+  public name = 'LanguageStorageError' as const;
+  constructor(message: string, public cause: any) {
+    super(message);
+  }
+}
+
+export type TolgeeError =
+  | RecordFetchError
+  | LanguageDetectorError
+  | LanguageStorageError;

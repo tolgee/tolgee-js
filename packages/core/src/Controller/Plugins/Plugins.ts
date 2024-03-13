@@ -1,4 +1,8 @@
-import { getErrorMessage, valueOrPromise } from '../../helpers';
+import {
+  getErrorMessage,
+  valueOrPromise,
+  handleRegularOrAsyncErr,
+} from '../../helpers';
 import {
   BackendDevMiddleware,
   BackendMiddleware,
@@ -22,6 +26,8 @@ import {
   FormatErrorHandler,
   FindPositionsInterface,
   BackendGetRecordInternal,
+  LanguageStorageError,
+  LanguageDetectorError,
 } from '../../types';
 import { EventsInstance } from '../Events/Events';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
@@ -125,6 +131,14 @@ export function Plugins(
     instances.languageDetector = detector;
   }
 
+  function storageLoadLanguage() {
+    return handleRegularOrAsyncErr(
+      events.onError,
+      (e) => new LanguageStorageError('Tolgee: Failed to load language', e),
+      () => instances.languageStorage?.getLanguage(getCommonProps())
+    );
+  }
+
   function detectLanguage() {
     if (!instances.languageDetector) {
       return undefined;
@@ -132,10 +146,15 @@ export function Plugins(
 
     const availableLanguages = getAvailableLanguages()!;
 
-    return instances.languageDetector.getLanguage({
-      availableLanguages,
-      ...getCommonProps(),
-    });
+    return handleRegularOrAsyncErr(
+      events.onError,
+      (e) => new LanguageDetectorError('Tolgee: Failed to detect language', e),
+      () =>
+        instances.languageDetector?.getLanguage({
+          availableLanguages,
+          ...getCommonProps(),
+        })
+    );
   }
 
   function addBackend(backend: BackendMiddleware | undefined) {
@@ -199,9 +218,7 @@ export function Plugins(
 
     getInitialLanguage() {
       const availableLanguages = getAvailableLanguages();
-      const languageOrPromise = instances.languageStorage?.getLanguage(
-        getCommonProps()
-      );
+      const languageOrPromise = storageLoadLanguage();
 
       return valueOrPromise(languageOrPromise, (language) => {
         if (
@@ -215,7 +232,11 @@ export function Plugins(
     },
 
     setStoredLanguage(language: string) {
-      instances.languageStorage?.setLanguage(language, getCommonProps());
+      return handleRegularOrAsyncErr(
+        events.onError,
+        (e) => new LanguageStorageError('Tolgee: Failed to store language', e),
+        () => instances.languageStorage?.setLanguage(language, getCommonProps())
+      );
     },
 
     getDevBackend() {

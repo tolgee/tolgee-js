@@ -174,6 +174,7 @@ export function Controller({ options }: StateServiceProps) {
       return;
     }
     const languageOrPromise = pluginService.getInitialLanguage();
+
     return valueOrPromise(languageOrPromise, (lang) => {
       const language =
         (lang as string | undefined) ||
@@ -223,7 +224,7 @@ export function Controller({ options }: StateServiceProps) {
         // there might be parallel language change
         // we only want to apply latest
         state.setLanguage(language);
-        pluginService.setStoredLanguage(language);
+        await pluginService.setStoredLanguage(language);
       }
     },
 

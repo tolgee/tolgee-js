@@ -58,40 +58,40 @@ export function Cache(
    * Fetches production data
    */
   function fetchProd(keyObject: CacheDescriptorInternal) {
-    let dataPromise = undefined as
+    let dataOrPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
-    if (!dataPromise) {
+    if (!dataOrPromise) {
       const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
-        dataPromise = staticDataValue();
+        dataOrPromise = staticDataValue();
       }
     }
 
-    if (!dataPromise) {
-      dataPromise = backendGetRecord(keyObject);
+    if (!dataOrPromise) {
+      dataOrPromise = backendGetRecord(keyObject);
     }
 
-    if (isPromise(dataPromise)) {
-      return dataPromise?.catch((e) => {
-        const error = new RecordFetchError(e, keyObject);
+    if (isPromise(dataOrPromise)) {
+      return dataOrPromise?.catch((e) => {
+        const error = new RecordFetchError(keyObject, e);
         events.onError.emit(error);
         // eslint-disable-next-line no-console
         console.error(error);
         throw error;
       });
     } else {
-      return dataPromise;
+      return dataOrPromise;
     }
   }
 
   function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
-    let dataPromise = undefined as
+    let dataOrPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
     if (isDev) {
-      dataPromise = backendGetDevRecord(keyObject)?.catch((e) => {
-        const error = new RecordFetchError(e, keyObject, true);
+      dataOrPromise = backendGetDevRecord(keyObject)?.catch((e) => {
+        const error = new RecordFetchError(keyObject, e, true);
         events.onError.emit(error);
         // eslint-disable-next-line no-console
         console.warn(error);
@@ -100,11 +100,11 @@ export function Cache(
       });
     }
 
-    if (!dataPromise) {
-      dataPromise = fetchProd(keyObject);
+    if (!dataOrPromise) {
+      dataOrPromise = fetchProd(keyObject);
     }
 
-    return dataPromise;
+    return dataOrPromise;
   }
 
   const self = Object.freeze({

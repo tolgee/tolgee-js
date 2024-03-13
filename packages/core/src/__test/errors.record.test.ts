@@ -24,7 +24,7 @@ const failingDevBackend = (): TolgeePlugin => {
   };
 };
 
-describe('error events', () => {
+describe('translation records', () => {
   beforeEach(() => {
     console.warn = jest.fn();
     console.error = jest.fn();
@@ -40,10 +40,15 @@ describe('error events', () => {
     const firstArgument = errorHandler.mock.calls[0][0]
       .value as RecordFetchError;
     expect(firstArgument).toBeInstanceOf(RecordFetchError);
+    expect(firstArgument).toBeInstanceOf(Error);
     expect(firstArgument).toHaveProperty('language', 'en');
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', true);
     expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty(
+      'message',
+      'Tolgee: Failed to fetch record for "en"'
+    );
     expect(console.warn).toBeCalledTimes(1);
     expect(console.error).toBeCalledTimes(0);
   });
@@ -60,6 +65,10 @@ describe('error events', () => {
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', false);
     expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty(
+      'message',
+      'Tolgee: Failed to fetch record for "en"'
+    );
     expect(console.warn).toBeCalledTimes(0);
     expect(console.error).toBeCalledTimes(1);
   });
@@ -82,6 +91,36 @@ describe('error events', () => {
     expect(firstArgument).toHaveProperty('namespace', '');
     expect(firstArgument).toHaveProperty('isDev', false);
     expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty(
+      'message',
+      'Tolgee: Failed to fetch record for "en"'
+    );
+    expect(console.warn).toBeCalledTimes(0);
+    expect(console.error).toBeCalledTimes(1);
+  });
+
+  it('emitts error when it fails', async () => {
+    const errorHandler = jest.fn();
+    const tolgee = TolgeeCore()
+      .use(failingDevBackend())
+      .init({
+        language: 'en',
+        staticData: { en: () => Promise.reject(new Error('No data')) },
+      });
+    tolgee.on('error', errorHandler);
+    await expect(() => tolgee.run()).rejects.toThrow(RecordFetchError);
+
+    const firstArgument = errorHandler.mock.calls[0][0]
+      .value as RecordFetchError;
+    expect(firstArgument).toBeInstanceOf(RecordFetchError);
+    expect(firstArgument).toHaveProperty('language', 'en');
+    expect(firstArgument).toHaveProperty('namespace', '');
+    expect(firstArgument).toHaveProperty('isDev', false);
+    expect(firstArgument).toHaveProperty('name', 'RecordFetchError');
+    expect(firstArgument).toHaveProperty(
+      'message',
+      'Tolgee: Failed to fetch record for "en"'
+    );
     expect(console.warn).toBeCalledTimes(0);
     expect(console.error).toBeCalledTimes(1);
   });
