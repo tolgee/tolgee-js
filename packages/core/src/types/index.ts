@@ -2,6 +2,7 @@ export * from './general';
 export * from './events';
 export * from './cache';
 export * from './plugin';
+export * from './errors';
 
 export type {
   State,

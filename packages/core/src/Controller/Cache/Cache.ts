@@ -1,19 +1,20 @@
 import {
   CacheDescriptor,
   CacheDescriptorInternal,
-  CacheDescriptorWithKey,
   NsFallback,
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
   BackendGetRecordInternal,
+  RecordFetchError,
 } from '../../types';
 import { getFallbackArray, unique } from '../../helpers';
-import { EventEmitterInstance } from '../Events/EventEmitter';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
+import { EventsInstance } from '../Events/Events';
+import { isPromise } from 'util/types';
 
 type CacheAsyncRequests = Map<
   string,
@@ -28,7 +29,7 @@ type CacheRecord = {
 type StateCache = Map<string, CacheRecord>;
 
 export function Cache(
-  onCacheChange: EventEmitterInstance<CacheDescriptorWithKey>,
+  events: EventsInstance,
   backendGetRecord: BackendGetRecordInternal,
   backendGetDevRecord: BackendGetRecordInternal,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
@@ -51,7 +52,7 @@ export function Cache(
       data: flattenTranslations(data),
       version: recordVersion,
     });
-    onCacheChange.emit(descriptor);
+    events.onCacheChange.emit(descriptor);
   }
 
   /**
@@ -72,7 +73,15 @@ export function Cache(
       dataPromise = backendGetRecord(keyObject);
     }
 
-    return dataPromise;
+    if (isPromise(dataPromise)) {
+      return dataPromise.catch((e) => {
+        const error = new RecordFetchError(e, keyObject);
+        events.onError.emit(error);
+        throw error;
+      });
+    } else {
+      return dataPromise;
+    }
   }
 
   function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
@@ -80,9 +89,9 @@ export function Cache(
       | Promise<TreeTranslationsData | undefined>
       | undefined;
     if (isDev) {
-      dataPromise = backendGetDevRecord(keyObject)?.catch(() => {
-        // eslint-disable-next-line no-console
-        console.warn(`Tolgee: Failed to fetch data from dev backend`);
+      dataPromise = backendGetDevRecord(keyObject)?.catch((e) => {
+        const error = new RecordFetchError(e, keyObject, true);
+        events.onError.emit(error);
         // fallback to prod fetch if dev fails
         return fetchProd(keyObject);
       });
@@ -175,7 +184,7 @@ export function Cache(
     ) {
       const record = cache.get(encodeCacheKey(descriptor))?.data;
       record?.set(key, value);
-      onCacheChange.emit({ ...descriptor, key });
+      events.onCacheChange.emit({ ...descriptor, key });
     },
 
     isFetching(ns?: NsFallback) {

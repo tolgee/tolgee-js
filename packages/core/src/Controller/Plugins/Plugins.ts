@@ -1,4 +1,4 @@
-import { getErrorMessage, isPromise, valueOrPromise } from '../../helpers';
+import { getErrorMessage, valueOrPromise } from '../../helpers';
 import {
   BackendDevMiddleware,
   BackendMiddleware,
@@ -22,8 +22,8 @@ import {
   FormatErrorHandler,
   FindPositionsInterface,
   BackendGetRecordInternal,
-  TranslationDescriptor,
 } from '../../types';
+import { EventsInstance } from '../Events/Events';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
 export function Plugins(
@@ -34,7 +34,7 @@ export function Plugins(
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[],
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface,
-  onPermanentChange: (props: TranslationDescriptor) => void
+  events: EventsInstance
 ) {
   const plugins = {
     ui: undefined as UiMiddleware | undefined,
@@ -177,7 +177,7 @@ export function Plugins(
         highlight: self.highlight,
         changeTranslation,
         findPositions,
-        onPermanentChange,
+        onPermanentChange: (data) => events.onPermanentChange.emit(data),
       });
 
       instances.observer?.run({
@@ -229,13 +229,6 @@ export function Plugins(
           namespace,
           ...getCommonProps(),
         });
-        if (isPromise(data)) {
-          return data?.catch((e) => {
-            // eslint-disable-next-line no-console
-            console.error(e);
-            return {};
-          });
-        }
         if (data !== undefined) {
           return data;
         }
