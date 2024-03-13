@@ -8,13 +8,12 @@ import {
   BackendGetRecordInternal,
   RecordFetchError,
 } from '../../types';
-import { getFallbackArray, unique } from '../../helpers';
+import { getFallbackArray, isPromise, unique } from '../../helpers';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 import { EventsInstance } from '../Events/Events';
-import { isPromise } from 'util/types';
 
 type CacheAsyncRequests = Map<
   string,
@@ -74,7 +73,7 @@ export function Cache(
     }
 
     if (isPromise(dataPromise)) {
-      return dataPromise.catch((e) => {
+      return dataPromise?.catch((e) => {
         const error = new RecordFetchError(e, keyObject);
         events.onError.emit(error);
         // eslint-disable-next-line no-console
