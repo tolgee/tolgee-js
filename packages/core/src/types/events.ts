@@ -1,5 +1,6 @@
 import type { NsFallback } from './general';
 import type { CacheDescriptorWithKey } from './cache';
+import { TolgeeError } from './errors';
 
 export type Subscription = {
   unsubscribe: () => void;
@@ -39,6 +40,7 @@ export interface EventType {
   running: boolean;
   cache: CacheDescriptorWithKey;
   update: void;
+  error: TolgeeError;
   permanentChange: CacheDescriptorWithKey;
 }
 
@@ -83,6 +85,11 @@ export type TolgeeOn<E extends keyof EventType = keyof EventType> = {
    * Emitted when cache changes.
    */
   (event: 'cache', handler: Listener<CacheDescriptorWithKey>): Subscription;
+
+  /**
+   * Emitted on errors
+   */
+  (event: 'error', handler: Listener<TolgeeError>): Subscription;
 
   /**
    * Translation was changed or created via dev tools

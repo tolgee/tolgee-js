@@ -1,19 +1,19 @@
 import {
   CacheDescriptor,
   CacheDescriptorInternal,
-  CacheDescriptorWithKey,
   NsFallback,
   TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
   BackendGetRecordInternal,
+  RecordFetchError,
 } from '../../types';
-import { getFallbackArray, unique } from '../../helpers';
-import { EventEmitterInstance } from '../Events/EventEmitter';
+import { getFallbackArray, isPromise, unique } from '../../helpers';
 import { TolgeeStaticData } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
+import { EventsInstance } from '../Events/Events';
 
 type CacheAsyncRequests = Map<
   string,
@@ -28,7 +28,7 @@ type CacheRecord = {
 type StateCache = Map<string, CacheRecord>;
 
 export function Cache(
-  onCacheChange: EventEmitterInstance<CacheDescriptorWithKey>,
+  events: EventsInstance,
   backendGetRecord: BackendGetRecordInternal,
   backendGetDevRecord: BackendGetRecordInternal,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
@@ -51,48 +51,60 @@ export function Cache(
       data: flattenTranslations(data),
       version: recordVersion,
     });
-    onCacheChange.emit(descriptor);
+    events.onCacheChange.emit(descriptor);
   }
 
   /**
    * Fetches production data
    */
   function fetchProd(keyObject: CacheDescriptorInternal) {
-    let dataPromise = undefined as
+    let dataOrPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
-    if (!dataPromise) {
+    if (!dataOrPromise) {
       const staticDataValue = staticData[encodeCacheKey(keyObject)];
       if (typeof staticDataValue === 'function') {
-        dataPromise = staticDataValue();
+        dataOrPromise = staticDataValue();
       }
     }
 
-    if (!dataPromise) {
-      dataPromise = backendGetRecord(keyObject);
+    if (!dataOrPromise) {
+      dataOrPromise = backendGetRecord(keyObject);
     }
 
-    return dataPromise;
+    if (isPromise(dataOrPromise)) {
+      return dataOrPromise?.catch((e) => {
+        const error = new RecordFetchError(keyObject, e);
+        events.onError.emit(error);
+        // eslint-disable-next-line no-console
+        console.error(error);
+        throw error;
+      });
+    } else {
+      return dataOrPromise;
+    }
   }
 
   function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
-    let dataPromise = undefined as
+    let dataOrPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
     if (isDev) {
-      dataPromise = backendGetDevRecord(keyObject)?.catch(() => {
+      dataOrPromise = backendGetDevRecord(keyObject)?.catch((e) => {
+        const error = new RecordFetchError(keyObject, e, true);
+        events.onError.emit(error);
         // eslint-disable-next-line no-console
-        console.warn(`Tolgee: Failed to fetch data from dev backend`);
+        console.warn(error);
         // fallback to prod fetch if dev fails
         return fetchProd(keyObject);
       });
     }
 
-    if (!dataPromise) {
-      dataPromise = fetchProd(keyObject);
+    if (!dataOrPromise) {
+      dataOrPromise = fetchProd(keyObject);
     }
 
-    return dataPromise;
+    return dataOrPromise;
   }
 
   const self = Object.freeze({
@@ -175,7 +187,7 @@ export function Cache(
     ) {
       const record = cache.get(encodeCacheKey(descriptor))?.data;
       record?.set(key, value);
-      onCacheChange.emit({ ...descriptor, key });
+      events.onCacheChange.emit({ ...descriptor, key });
     },
 
     isFetching(ns?: NsFallback) {

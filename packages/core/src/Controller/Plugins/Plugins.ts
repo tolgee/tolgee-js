@@ -1,4 +1,8 @@
-import { getErrorMessage, isPromise, valueOrPromise } from '../../helpers';
+import {
+  getErrorMessage,
+  valueOrPromise,
+  handleRegularOrAsyncErr,
+} from '../../helpers';
 import {
   BackendDevMiddleware,
   BackendMiddleware,
@@ -22,8 +26,10 @@ import {
   FormatErrorHandler,
   FindPositionsInterface,
   BackendGetRecordInternal,
-  TranslationDescriptor,
+  LanguageStorageError,
+  LanguageDetectorError,
 } from '../../types';
+import { EventsInstance } from '../Events/Events';
 import { DEFAULT_FORMAT_ERROR } from '../State/initState';
 
 export function Plugins(
@@ -34,7 +40,7 @@ export function Plugins(
   getTranslationNs: (props: KeyAndNamespacesInternal) => string[],
   getTranslation: (props: KeyAndNamespacesInternal) => string | undefined,
   changeTranslation: ChangeTranslationInterface,
-  onPermanentChange: (props: TranslationDescriptor) => void
+  events: EventsInstance
 ) {
   const plugins = {
     ui: undefined as UiMiddleware | undefined,
@@ -125,6 +131,14 @@ export function Plugins(
     instances.languageDetector = detector;
   }
 
+  function storageLoadLanguage() {
+    return handleRegularOrAsyncErr(
+      events.onError,
+      (e) => new LanguageStorageError('Tolgee: Failed to load language', e),
+      () => instances.languageStorage?.getLanguage(getCommonProps())
+    );
+  }
+
   function detectLanguage() {
     if (!instances.languageDetector) {
       return undefined;
@@ -132,10 +146,15 @@ export function Plugins(
 
     const availableLanguages = getAvailableLanguages()!;
 
-    return instances.languageDetector.getLanguage({
-      availableLanguages,
-      ...getCommonProps(),
-    });
+    return handleRegularOrAsyncErr(
+      events.onError,
+      (e) => new LanguageDetectorError('Tolgee: Failed to detect language', e),
+      () =>
+        instances.languageDetector?.getLanguage({
+          availableLanguages,
+          ...getCommonProps(),
+        })
+    );
   }
 
   function addBackend(backend: BackendMiddleware | undefined) {
@@ -177,7 +196,7 @@ export function Plugins(
         highlight: self.highlight,
         changeTranslation,
         findPositions,
-        onPermanentChange,
+        onPermanentChange: (data) => events.onPermanentChange.emit(data),
       });
 
       instances.observer?.run({
@@ -199,9 +218,7 @@ export function Plugins(
 
     getInitialLanguage() {
       const availableLanguages = getAvailableLanguages();
-      const languageOrPromise = instances.languageStorage?.getLanguage(
-        getCommonProps()
-      );
+      const languageOrPromise = storageLoadLanguage();
 
       return valueOrPromise(languageOrPromise, (language) => {
         if (
@@ -215,7 +232,11 @@ export function Plugins(
     },
 
     setStoredLanguage(language: string) {
-      instances.languageStorage?.setLanguage(language, getCommonProps());
+      return handleRegularOrAsyncErr(
+        events.onError,
+        (e) => new LanguageStorageError('Tolgee: Failed to store language', e),
+        () => instances.languageStorage?.setLanguage(language, getCommonProps())
+      );
     },
 
     getDevBackend() {
@@ -229,13 +250,6 @@ export function Plugins(
           namespace,
           ...getCommonProps(),
         });
-        if (isPromise(data)) {
-          return data?.catch((e) => {
-            // eslint-disable-next-line no-console
-            console.error(e);
-            return {};
-          });
-        }
         if (data !== undefined) {
           return data;
         }

@@ -6,7 +6,6 @@ import {
   TFnType,
   NsType,
   KeyAndNamespacesInternal,
-  TranslationDescriptor,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from '../helpers';
@@ -47,11 +46,11 @@ export function Controller({ options }: StateServiceProps) {
     getTranslationNs,
     getTranslation,
     changeTranslation,
-    onPermanentChange
+    events
   );
 
   const cache = Cache(
-    events.onCacheChange,
+    events,
     pluginService.getBackendRecord,
     pluginService.getBackendDevRecord,
     state.withDefaultNs,
@@ -108,13 +107,6 @@ export function Controller({ options }: StateServiceProps) {
         cache.changeTranslation(keyObject, key, previousValue);
       },
     };
-  }
-
-  function onPermanentChange(props: TranslationDescriptor) {
-    events.onPermanentChange.emit({
-      key: props.key,
-      namespace: props.namespace,
-    });
   }
 
   function init(options: Partial<TolgeeOptions>) {
@@ -182,6 +174,7 @@ export function Controller({ options }: StateServiceProps) {
       return;
     }
     const languageOrPromise = pluginService.getInitialLanguage();
+
     return valueOrPromise(languageOrPromise, (lang) => {
       const language =
         (lang as string | undefined) ||
@@ -231,7 +224,7 @@ export function Controller({ options }: StateServiceProps) {
         // there might be parallel language change
         // we only want to apply latest
         state.setLanguage(language);
-        pluginService.setStoredLanguage(language);
+        await pluginService.setStoredLanguage(language);
       }
     },
 

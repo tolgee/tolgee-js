@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build --cache-dir='.turbo'",
-    "test": "turbo run test --cache-dir='.turbo' && npm run testRoot",
+    "test": "turbo run test --cache-dir='.turbo' -- --runInBand && npm run testRoot -- --runInBand",
     "testRoot": "jest",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "develop": "turbo run develop --parallel --include-dependencies --cache-dir='.turbo'",
