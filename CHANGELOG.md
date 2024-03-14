@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.20.4-prerelease.afe383ff.0](https://github.com/tolgee/tolgee-js/compare/v5.20.3...v5.20.4-prerelease.afe383ff.0) (2024-03-14)
+
+
+### Features
+
+* add error event ([afe383f](https://github.com/tolgee/tolgee-js/commit/afe383ff61219b11189545272167ac39069faed5))
+* add error event ([e833b8c](https://github.com/tolgee/tolgee-js/commit/e833b8c98929805170c04230f36e1b5d9ecfcae6))
+* add error event ([1c0176d](https://github.com/tolgee/tolgee-js/commit/1c0176ddc67701f51292619cc1474d4e7e673d81))
+* add error event ([790681f](https://github.com/tolgee/tolgee-js/commit/790681f995544ebfc48238cbff9835ce99834aff))
+* add error event ([0bf9b26](https://github.com/tolgee/tolgee-js/commit/0bf9b26f0ec8b5244db39bb3b231083a8efd323b))
+* add error event ([19d8850](https://github.com/tolgee/tolgee-js/commit/19d88506252ab467231c6699b52c04ca25b29983))
+
+
+
+
+
 ## [5.20.3](https://github.com/tolgee/tolgee-js/compare/v5.20.2...v5.20.3) (2024-03-12)
 
 
