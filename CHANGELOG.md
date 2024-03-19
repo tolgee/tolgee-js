@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.22.0](https://github.com/tolgee/tolgee-js/compare/v5.21.0...v5.22.0) (2024-03-19)
+
+
+### Features
+
+* support for tags with attributes & tooltips in editor ([#3321](https://github.com/tolgee/tolgee-js/issues/3321)) ([c4527a6](https://github.com/tolgee/tolgee-js/commit/c4527a6238c2d6fae9b4fbf2b05bfc825d85b207))
+
+
+
+
+
 # [5.21.0](https://github.com/tolgee/tolgee-js/compare/v5.20.3...v5.21.0) (2024-03-14)
 
 
