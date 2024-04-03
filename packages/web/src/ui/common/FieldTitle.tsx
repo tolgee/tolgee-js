@@ -1,4 +1,5 @@
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/material';
+import { HTMLFactory } from 'react';
 
 export const ScFieldTitle = styled('div')`
   display: flex;
@@ -7,4 +8,4 @@ export const ScFieldTitle = styled('div')`
   font-size: 14px;
   color: ${({ theme }) => theme.palette.text.secondary};
   justify-content: space-between;
-`;
+` as unknown as HTMLFactory<HTMLDivElement>;

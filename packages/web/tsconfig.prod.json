@@ -1,4 +1,11 @@
 {
   "extends": "./tsconfig",
-  "exclude": ["src/__test__"]
+  "compilerOptions": {
+    "allowArbitraryExtensions": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "outDir": "./lib"
+  },
+  "exclude": ["./src/__test__"]
 }

@@ -116,7 +116,7 @@ export const TagInput: React.FC<Props> = ({
           setValue(value);
         }}
         onChange={(_, newValue) => {
-          if (newValue) {
+          if (typeof newValue !== 'string') {
             onAdd(newValue.value);
           }
         }}

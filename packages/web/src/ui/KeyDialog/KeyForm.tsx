@@ -1,9 +1,5 @@
-import React from 'react';
-
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import { styled, useTheme } from '@mui/material/styles';
-import OpenInNew from '@mui/icons-material/OpenInNew';
+import { IconButton, Button, styled, useTheme } from '@mui/material';
+import { OpenInNew } from '@mui/icons-material';
 
 import { TranslationFields } from './TranslationFields';
 import { LanguageSelect } from './LanguageSelect';

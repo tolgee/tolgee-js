@@ -60,7 +60,7 @@ export const PluralFormCheckbox = () => {
 
       {expanded && (
         <Box display="grid">
-          <ScFieldTitle sx={{ mt: 0.5 }}>Variable name</ScFieldTitle>
+          <ScFieldTitle style={{ marginTop: 4 }}>Variable name</ScFieldTitle>
           <TextField
             value={_pluralArgName}
             onChange={(e) => setPluralArgName(e.target.value)}
