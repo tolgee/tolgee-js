@@ -14,13 +14,13 @@
         "import": "./dist/tolgee-web.production.esm.js"
       },
       "require": "./index.cjs",
-      "module": "./dist/tolgee-web.production.umd.cjs",
+      "module": "./dist/tolgee-web.development.umd.cjs",
       "import": "./dist/tolgee-web.development.esm.js",
       "types": "./types/index.d.ts"
     },
     "./tools": {
       "require": "./dist/tolgee-in-context-tools.umd.cjs",
-      "module": "./dist/tolgee-web.production.umd.cjs",
+      "module": "./dist/tolgee-in-context-tools.umd.cjs",
       "import": "./dist/tolgee-in-context-tools.esm.js",
       "types": "./types/tools.d.ts"
     },
