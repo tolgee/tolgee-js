@@ -12,30 +12,25 @@ export const commonConfig = {
   treeshake: 'smallest',
 } as const;
 
-export const commonPlugins = [
-  replace({
-    'process.env.TOLGEE_UI_VERSION': JSON.stringify(
-      process.env.TOLGEE_UI_VERSION
-    ),
-    preventAssignment: true,
-  }),
-];
+export const commonPlugins = [];
 
 export const packageOutput = (
   name: string,
   env: 'production' | 'development' | undefined,
   format: ModuleFormat,
   ext: string,
-  min: boolean
+  variants: ('min' | 'normal')[]
 ) => {
-  const targets: OutputOptions[] = [
-    {
+  const targets: OutputOptions[] = [];
+
+  if (variants.includes('normal')) {
+    targets.push({
       name: `@tolgee/${name}`,
       entryFileNames: `tolgee-${name}${env ? `.${env}` : ''}.${format}.${ext}`,
       format,
-    },
-  ];
-  if (min) {
+    });
+  }
+  if (variants.includes('min')) {
     targets.push({
       name: `@tolgee/${name}`,
       entryFileNames: `tolgee-${name}${
@@ -54,16 +49,12 @@ type Props = {
   min?: boolean;
 };
 
-export const buildPackage = ({
-  name,
-  env,
-  min = true,
-}: Props): RollupOptions => ({
+export const buildPackage = ({ name, env }: Props): RollupOptions => ({
   ...commonConfig,
   output: [
-    ...packageOutput(name, env, 'esm', 'js', min),
-    ...packageOutput(name, env, 'umd', 'js', min),
-    ...packageOutput(name, env, 'umd', 'cjs', min),
+    ...packageOutput(name, env, 'esm', 'js', ['min', 'normal']),
+    ...packageOutput(name, env, 'umd', 'js', ['min']),
+    ...packageOutput(name, env, 'umd', 'cjs', ['normal']),
   ],
   plugins: commonPlugins,
 });

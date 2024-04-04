@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 lib
+coverage
 
 node_modules
 dist

@@ -5,7 +5,8 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "noEmit": false,
+    "rootDir": "src/package",
     "outDir": "./lib"
   },
-  "exclude": ["./src/__test__"]
+  "exclude": ["./src/package/__test__"]
 }

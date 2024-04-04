@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import { buildPackage } from './rollup.common';
 import { RollupOptions } from 'rollup';
+import { replaceCodePlugin } from 'vite-plugin-replace';
 
 type Props = {
   entry: string;
@@ -14,17 +15,28 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
   defineConfig({
     build: {
       emptyOutDir: false,
+      minify: false,
+      sourcemap: true,
       lib: {
         entry,
       },
       rollupOptions,
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      replaceCodePlugin({
+        replacements: [
+          {
+            from: 'process.env.TOLGEE_UI_VERSION',
+            to: JSON.stringify(process.env.TOLGEE_UI_VERSION) || 'undefined',
+          },
+        ],
+      }),
+    ],
   });
 
-// https://vitejs.dev/config/
 export default createConfig({
-  entry: resolve(__dirname, 'src/entry-development.ts'),
+  entry: resolve(__dirname, 'src/package/entry-development.ts'),
   rollupOptions: buildPackage({
     name: 'web',
     env: 'development',
