@@ -9,19 +9,19 @@
   "exports": {
     ".": {
       "production": {
-        "import": "./dist/tolgee-web.production.esm.js",
         "require": "./dist/tolgee-web.production.umd.cjs",
-        "module": "./dist/tolgee-web.production.umd.cjs"
+        "module": "./dist/tolgee-web.production.umd.cjs",
+        "import": "./dist/tolgee-web.production.esm.js"
       },
-      "import": "./dist/tolgee-web.development.esm.js",
       "require": "./index.cjs",
       "module": "./dist/tolgee-web.production.umd.cjs",
+      "import": "./dist/tolgee-web.development.esm.js",
       "types": "./types/index.d.ts"
     },
     "./tools": {
-      "import": "./dist/tolgee-in-context-tools.esm.js",
       "require": "./dist/tolgee-in-context-tools.umd.cjs",
       "module": "./dist/tolgee-web.production.umd.cjs",
+      "import": "./dist/tolgee-in-context-tools.esm.js",
       "types": "./types/tools.d.ts"
     },
     "./package.json": "./package.json"

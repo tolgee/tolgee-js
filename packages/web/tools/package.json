@@ -5,9 +5,9 @@
   "types": "../types/tools.d.ts",
   "exports": {
     ".": {
-      "import": "./../dist/tolgee-in-context-tools.esm.js",
       "require": "./../dist/tolgee-in-context-tools.umd.cjs",
       "module": "./../dist/tolgee-in-context-tools.umd.cjs",
+      "import": "./../dist/tolgee-in-context-tools.esm.js",
       "types": "./../types/tools.d.ts"
     },
     "./package.json": "./package.json"
