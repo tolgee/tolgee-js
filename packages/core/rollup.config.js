@@ -3,6 +3,7 @@ import { terser } from 'rollup-plugin-terser';
 import sizes from 'rollup-plugin-bundle-size';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { visualizer } from 'rollup-plugin-visualizer';
+import replace from '@rollup/plugin-replace';
 
 export default {
   input: 'src/index.ts',
@@ -67,5 +68,10 @@ export default {
     nodeResolve(),
     sizes(),
     visualizer(),
+    replace({
+      'process.env.TOLGEE_UI_VERSION':
+        JSON.stringify(process.env.TOLGEE_UI_VERSION) || 'undefined',
+      preventAssignment: true,
+    }),
   ],
 };

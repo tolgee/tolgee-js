@@ -8,5 +8,6 @@
     "rootDir": "src/package",
     "outDir": "./lib"
   },
+  "include": ["src/package"],
   "exclude": ["./src/package/__test__"]
 }

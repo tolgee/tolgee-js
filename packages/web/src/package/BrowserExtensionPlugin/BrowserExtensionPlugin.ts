@@ -75,7 +75,7 @@ if (sessionStorageAvailable()) {
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
       const InContextTools = await loadInContextLib(
-        import.meta.env.TOLGEE_UI_VERSION || 'prerelease'
+        process.env.TOLGEE_UI_VERSION || 'prerelease'
       );
       return (tolgee) => {
         const credentials = getCredentials()!;
