@@ -9,26 +9,23 @@
   "exports": {
     ".": {
       "production": {
-        "require": "./dist/tolgee-web.production.umd.cjs",
-        "module": "./dist/tolgee-web.production.umd.cjs",
-        "import": "./dist/tolgee-web.production.esm.js"
+        "import": "./dist/tolgee-web.production.esm.js",
+        "require": "./dist/tolgee-web.production.umd.cjs"
       },
-      "require": "./index.cjs",
-      "module": "./dist/tolgee-web.development.umd.cjs",
       "import": "./dist/tolgee-web.development.esm.js",
+      "require": "./index.cjs",
       "types": "./types/index.d.ts"
     },
     "./tools": {
-      "require": "./dist/tolgee-in-context-tools.umd.cjs",
-      "module": "./dist/tolgee-in-context-tools.umd.cjs",
       "import": "./dist/tolgee-in-context-tools.esm.js",
+      "require": "./dist/tolgee-in-context-tools.umd.cjs",
       "types": "./types/tools.d.ts"
     },
     "./package.json": "./package.json"
   },
   "scripts": {
     "dev": "vite",
-    "develop": "concurrently \"tsc --project tsconfig.prod.json --watch\" \"vite build --watch\"",
+    "develop": "concurrently --raw \"tsc --watch --preserveWatchOutput --project tsconfig.prod.json\" \"vite build --watch\"",
     "build": "tsc --project tsconfig.prod.json && vite build && vite build --config vite.config.production.ts && vite build --config vite.config.tools.ts",
     "test": "jest --collect-coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",

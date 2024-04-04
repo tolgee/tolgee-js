@@ -13,6 +13,7 @@ type Props = {
 // reused for vite.config.tools & vite.config.production
 export const createConfig = ({ entry, rollupOptions }: Props) =>
   defineConfig({
+    clearScreen: false,
     build: {
       emptyOutDir: false,
       minify: false,
