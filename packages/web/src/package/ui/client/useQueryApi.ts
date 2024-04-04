@@ -18,7 +18,7 @@ import { RequestParamsType, ResponseContent } from './types';
 export type QueryProps<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 > = {
   url: Url;
   method: Method;
@@ -29,7 +29,7 @@ export type QueryProps<
 export const useApiQuery = <
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 >(
   props: QueryProps<Url, Method, Paths>
 ) => {
@@ -47,7 +47,7 @@ export const useApiQuery = <
 export type MutationProps<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 > = {
   url: Url;
   method: Method;
@@ -63,7 +63,7 @@ export type MutationProps<
 export const useApiMutation = <
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 >(
   props: MutationProps<Url, Method, Paths>
 ) => {

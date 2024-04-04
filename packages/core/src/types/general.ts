@@ -27,7 +27,7 @@ export type TranslateOptions = {
 
 export type TranslateProps<
   T = DefaultParamType,
-  K extends string = TranslationKey
+  K extends string = TranslationKey,
 > = {
   key: K;
   defaultValue?: string;
@@ -47,7 +47,7 @@ export type CombinedOptions<T> = TranslateOptions & {
 export type TFnType<
   T = DefaultParamType,
   R = string,
-  K extends string = TranslationKey
+  K extends string = TranslationKey,
 > = {
   (key: K, defaultValue?: string, options?: CombinedOptions<T>): R;
   (key: K, options?: CombinedOptions<T>): R;

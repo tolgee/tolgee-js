@@ -81,11 +81,14 @@ export const ServicesRunner = ({
       });
 
       Object.entries(runners).forEach(([serviceName, runner]) => {
-        setTimeout(() => {
-          if (!serviceMonitor.isRunning(serviceName)) {
-            throw Error(`Service ${serviceName} timed out...`);
-          }
-        }, runner.config.timeout || 3 * 60 * 1000);
+        setTimeout(
+          () => {
+            if (!serviceMonitor.isRunning(serviceName)) {
+              throw Error(`Service ${serviceName} timed out...`);
+            }
+          },
+          runner.config.timeout || 3 * 60 * 1000
+        );
         runner
           .run()
           .then(() => {

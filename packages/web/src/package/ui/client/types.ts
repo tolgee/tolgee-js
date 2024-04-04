@@ -10,7 +10,7 @@ type ExcludeAk<T extends Record<string, Record<string, any>>> = Omit<
 export type RequestParamsType<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 > = ExcludeAk<
   // @ts-ignore
   Omit<OperationSchema<Url, Method, Paths>['parameters'], 'header'>
@@ -20,7 +20,7 @@ export type RequestParamsType<
 export type ResponseContent<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths
+  Paths,
 > = (OperationSchema<
   Url,
   Method,
@@ -28,32 +28,36 @@ export type ResponseContent<
 >['responses'][200] extends NotNullAnyContent
   ? OperationSchema<Url, Method, Paths>['responses'][200]['content']['*/*']
   : OperationSchema<
-      Url,
-      Method,
-      Paths
-    >['responses'][200] extends NotNullJsonHalContent
-  ? OperationSchema<
-      Url,
-      Method,
-      Paths
-    >['responses'][200]['content']['application/hal+json']
-  : OperationSchema<
-      Url,
-      Method,
-      Paths
-    >['responses'][200] extends NotNullJsonContent
-  ? OperationSchema<
-      Url,
-      Method,
-      Paths
-    >['responses'][200]['content']['application/json']
-  : OperationSchema<
-      Url,
-      Method,
-      Paths
-    >['responses'][201] extends NotNullAnyContent
-  ? OperationSchema<Url, Method, Paths>['responses'][201]['content']['*/*']
-  : void) & { _internal?: { version?: string } };
+        Url,
+        Method,
+        Paths
+      >['responses'][200] extends NotNullJsonHalContent
+    ? OperationSchema<
+        Url,
+        Method,
+        Paths
+      >['responses'][200]['content']['application/hal+json']
+    : OperationSchema<
+          Url,
+          Method,
+          Paths
+        >['responses'][200] extends NotNullJsonContent
+      ? OperationSchema<
+          Url,
+          Method,
+          Paths
+        >['responses'][200]['content']['application/json']
+      : OperationSchema<
+            Url,
+            Method,
+            Paths
+          >['responses'][201] extends NotNullAnyContent
+        ? OperationSchema<
+            Url,
+            Method,
+            Paths
+          >['responses'][201]['content']['*/*']
+        : void) & { _internal?: { version?: string } };
 
 type NotNullAnyContent = {
   content: {
@@ -109,5 +113,5 @@ type OperationSchemaType = {
 type OperationSchema<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 > = Paths[Url][Method] extends OperationSchemaType ? Paths[Url][Method] : never;

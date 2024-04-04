@@ -98,7 +98,7 @@ export const addProjectIdToUrl = (url: string) => {
 export async function client<
   Url extends keyof Paths,
   Method extends keyof Paths[Url],
-  Paths = paths
+  Paths = paths,
 >(
   url: Url,
   method: Method,

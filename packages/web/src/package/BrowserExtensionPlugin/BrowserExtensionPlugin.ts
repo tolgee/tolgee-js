@@ -71,7 +71,7 @@ if (sessionStorageAvailable()) {
           apiUrl: tolgee.getInitialOptions().apiUrl || '',
           apiKey: tolgee.getInitialOptions().apiKey || '',
         },
-      } as const);
+      }) as const;
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
       const InContextTools = await loadInContextLib(

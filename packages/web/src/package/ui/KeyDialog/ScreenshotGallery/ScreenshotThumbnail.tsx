@@ -41,7 +41,9 @@ const DeleteIconButton = styled(IconButton)`
   color: rgba(255, 255, 255, 0.8);
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0.1s linear, opacity 0.1s linear;
+  transition:
+    visibility 0.1s linear,
+    opacity 0.1s linear;
   &:hover {
     background-color: rgba(62, 62, 62, 1);
     color: rgba(255, 255, 255, 0.9);

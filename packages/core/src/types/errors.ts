@@ -22,14 +22,20 @@ export class RecordFetchError extends Error {
 
 export class LanguageDetectorError extends Error {
   public name = 'LanguageDetectorError' as const;
-  constructor(message: string, public cause: any) {
+  constructor(
+    message: string,
+    public cause: any
+  ) {
     super(message);
   }
 }
 
 export class LanguageStorageError extends Error {
   public name = 'LanguageStorageError' as const;
-  constructor(message: string, public cause: any) {
+  constructor(
+    message: string,
+    public cause: any
+  ) {
     super(message);
   }
 }

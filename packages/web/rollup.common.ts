@@ -36,8 +36,8 @@ export const packageOutput = (
       entryFileNames: `tolgee-${name}${env ? `.${env}` : ''}.${format}.${ext}`,
       format,
       globals: {
-        '@tolgee/core': '@tolgee/core'
-      }
+        '@tolgee/core': '@tolgee/core',
+      },
     });
   }
   if (variants.includes('min')) {
@@ -49,8 +49,8 @@ export const packageOutput = (
       format,
       plugins: [terser()],
       globals: {
-        '@tolgee/core': '@tolgee/core'
-      }
+        '@tolgee/core': '@tolgee/core',
+      },
     });
   }
   return targets;

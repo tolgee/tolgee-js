@@ -203,8 +203,8 @@ export const KeyForm = () => {
           {success
             ? 'Saved! ✓'
             : keyData?.keyId === undefined
-            ? 'Create'
-            : 'Update'}
+              ? 'Create'
+              : 'Update'}
         </LoadingButton>
       </ScControls>
     </ScContainer>

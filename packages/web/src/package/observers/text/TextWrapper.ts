@@ -191,7 +191,7 @@ export function TextWrapper({
           string,
           string,
           string,
-          string
+          string,
         ];
         const { index, input } = match;
         result += input.substr(start, index - start);

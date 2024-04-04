@@ -46,7 +46,7 @@ export function MouseEventHandler({
   let subscribedEvents: [
     type: string,
     listener: EventListenerOrEventListenerObject,
-    options?: boolean | AddEventListenerOptions
+    options?: boolean | AddEventListenerOptions,
   ][] = [];
 
   const documentOrShadowRoot = (options.targetElement?.getRootNode() ||
