@@ -36,8 +36,6 @@ context('Tags editing', () => {
       });
     }).as('updateTranslation');
 
-    cy.wait(500);
-
     getDevUi()
       .findDcy('tag-autocomplete-input')
       .should('be.visible')
@@ -46,6 +44,7 @@ context('Tags editing', () => {
 
     cy.wait('@getTags');
 
+    cy.wait(500);
     getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
 
     getDevUi().contains('Update').click();
