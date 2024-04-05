@@ -3,7 +3,7 @@ import { join } from 'path';
 import { readdirSync } from 'fs';
 import { expect } from '@jest/globals';
 
-import { CHROME_EXTENSION_LINK } from '../packages/web/src/constants';
+import { CHROME_EXTENSION_LINK } from '../packages/web/src/package/constants';
 
 function getFiles(dir: string): string[] {
   const dirents = readdirSync(dir, { withFileTypes: true });

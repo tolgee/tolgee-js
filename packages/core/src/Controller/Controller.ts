@@ -207,6 +207,7 @@ export function Controller({ options }: StateServiceProps) {
     changeTranslation: changeTranslation,
     getTranslationNs: getTranslationNs,
     getDefaultAndFallbackNs: getDefaultAndFallbackNs,
+    findPositions: pluginService.findPositions,
     async changeLanguage(language: string) {
       if (
         state.getPendingLanguage() === language &&

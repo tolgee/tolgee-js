@@ -7,13 +7,14 @@
     "develop": "next dev",
     "build": "next build",
     "build:e2e": "NEXT_BUILD_DIR=dist-e2e next build",
-    "start": "next start"
+    "start": "next start",
+    "clean": "rm -rf .next dist-e2e"
   },
   "dependencies": {
     "@tolgee/format-icu": "5.22.0",
     "@tolgee/react": "5.22.0",
     "@tolgee/web": "5.22.0",
-    "next": "14.0.3",
+    "next": "14.1.4",
     "next-intl": "^3.2.3",
     "react": "18.2.0",
     "react-dom": "18.2.0"

@@ -57,7 +57,7 @@ export function Plugins(
     languageStorage: undefined as LanguageStorageMiddleware | undefined,
   };
 
-  const onClick: TranslationOnClick = async ({ keysAndDefaults, event }) => {
+  const onClick: TranslationOnClick = async ({ keysAndDefaults, target }) => {
     const withNs: UiKeyOption[] = keysAndDefaults.map(
       ({ key, ns, defaultValue }) => {
         return {
@@ -72,7 +72,7 @@ export function Plugins(
         };
       }
     );
-    instances.ui?.handleElementClick(withNs, event);
+    instances.ui?.handleElementClick(withNs, target);
   };
 
   const findPositions: FindPositionsInterface = (key, ns) => {
@@ -185,7 +185,7 @@ export function Plugins(
 
   const self = Object.freeze({
     addPlugin,
-
+    findPositions: findPositions,
     run() {
       const { apiKey, apiUrl, projectId, observerOptions } =
         getInitialOptions();

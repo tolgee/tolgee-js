@@ -44,6 +44,7 @@ context('Tags editing', () => {
 
     cy.wait('@getTags');
 
+    cy.wait(100);
     getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
 
     getDevUi().contains('Update').click();
