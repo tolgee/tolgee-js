@@ -1,15 +1,14 @@
-import { createElement } from 'react';
-import ReactDOM from 'react-dom';
 import type { UiProps, UiInterface, UiKeyOption } from '@tolgee/core';
 
 import { KeyDialog } from './KeyDialog/KeyDialog';
-import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 import { getRootElement } from './getRootElement';
+import { Root, createRoot } from 'react-dom/client';
+import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 
 export class UI implements UiInterface {
   private rootElement: ShadowRoot | undefined;
-  private viewerComponent: KeyDialog | undefined;
-  private keyContextMenu: KeyContextMenu | undefined;
+  tolgeeModalRoot: Root;
+  contextMenuRoot: Root;
 
   constructor(private props: UiProps) {}
 
@@ -20,23 +19,11 @@ export class UI implements UiInterface {
 
       const tolgeeModalContainer = document.createElement('div');
       rootElement.appendChild(tolgeeModalContainer);
+      this.tolgeeModalRoot = createRoot(tolgeeModalContainer);
 
       const contextMenuContainer = document.createElement('div');
       rootElement.appendChild(contextMenuContainer);
-
-      const viewerElement = createElement(KeyDialog, {
-        ...this.props,
-      });
-
-      this.viewerComponent = ReactDOM.render(
-        viewerElement,
-        tolgeeModalContainer
-      );
-
-      this.keyContextMenu = ReactDOM.render(
-        createElement(KeyContextMenu),
-        contextMenuContainer
-      );
+      this.contextMenuRoot = createRoot(contextMenuContainer);
     }
   }
 
@@ -47,32 +34,44 @@ export class UI implements UiInterface {
     namespace: string
   ) {
     this.checkInitialization();
-    this.viewerComponent?.translationEdit(
-      key,
-      defaultValue,
-      fallbackNamespaces,
-      namespace
+    this.tolgeeModalRoot.render(
+      <KeyDialog
+        uiProps={this.props}
+        keyData={{
+          key,
+          defaultValue,
+          dialogOpened: true,
+          fallbackNamespaces,
+          namespace,
+        }}
+      />
     );
   }
 
   public async getKey(props: {
     keys: Map<string, string | undefined>;
-    openEvent: MouseEvent;
+    target: HTMLElement;
   }): Promise<string | undefined> {
-    this.checkInitialization();
     return await new Promise<string | undefined>((resolve) => {
-      this.keyContextMenu?.show({
-        ...props,
-        onSelect(key) {
-          resolve(key);
-        },
-      });
+      this.checkInitialization();
+      this.contextMenuRoot.render(
+        <KeyContextMenu
+          // get rid of element state
+          key={Math.random()}
+          initialState={{
+            ...props,
+            onSelect(key) {
+              resolve(key);
+            },
+          }}
+        />
+      );
     });
   }
 
   public async handleElementClick(
     keysAndDefaults: UiKeyOption[],
-    event: MouseEvent
+    target: HTMLElement
   ) {
     this.checkInitialization();
     let key = keysAndDefaults[0].key as string | undefined;
@@ -85,7 +84,7 @@ export class UI implements UiInterface {
     if (keysMap.size > 1) {
       key = await this.getKey({
         keys: keysMap,
-        openEvent: event,
+        target,
       });
     }
     if (key) {

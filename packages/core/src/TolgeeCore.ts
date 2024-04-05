@@ -172,6 +172,11 @@ function createTolgee(options: TolgeeOptions) {
     highlight: controller.highlight,
 
     /**
+     * Find positions of keys in the DOM.
+     */
+    findPositions: controller.findPositions,
+
+    /**
      * @return current Tolgee options.
      */
     getInitialOptions: controller.getInitialOptions,

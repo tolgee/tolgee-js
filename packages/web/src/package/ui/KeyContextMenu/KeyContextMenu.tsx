@@ -27,23 +27,31 @@ const ScKey = styled('div')`
   font-family: Monospace, 'Courier New', Courier;
 `;
 
-export interface KeyContextMenuParams {
-  openEvent: MouseEvent;
+export interface KeyContextMenuProps {
+  target: HTMLElement;
   keys: Map<string, string | undefined>;
   onSelect: (key: string | undefined) => void;
 }
 
-export type KeyContextMenuState = Partial<KeyContextMenuParams> & {
+export type KeyContextMenuState = Partial<KeyContextMenuProps> & {
   opened: boolean;
 };
 
-export class KeyContextMenu extends React.Component {
-  state: KeyContextMenuState & { opened: boolean } = {
+type Props = {
+  initialState: KeyContextMenuProps;
+};
+
+export class KeyContextMenu extends React.Component<
+  Props,
+  KeyContextMenuState
+> {
+  state: KeyContextMenuState = {
     opened: false,
   };
 
-  async show(params: KeyContextMenuParams) {
-    this.setState({ ...params, opened: true });
+  constructor(props: Props) {
+    super(props);
+    this.state = { ...props.initialState, opened: true };
   }
 
   keyDown = (e: KeyboardEvent) => {
@@ -68,7 +76,7 @@ export class KeyContextMenu extends React.Component {
           <Menu
             disablePortal
             disableEnforceFocus
-            anchorEl={this.state.openEvent?.target as Element}
+            anchorEl={this.state.target}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'center',

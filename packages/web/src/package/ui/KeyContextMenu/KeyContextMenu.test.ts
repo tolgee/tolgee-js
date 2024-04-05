@@ -21,19 +21,13 @@ test('it selects the key', async () => {
     findPositions: () => [],
     onPermanentChange: () => {},
   });
-  const mouseEvent = new MouseEvent('click');
-
-  Object.defineProperty(mouseEvent, 'target', {
-    writable: false,
-    value: document.body,
-  });
 
   const keys = new Map([
     ['key 1', 'Key 1'],
     ['key 2', 'Key 2'],
   ]);
   // open context menu and wait for select
-  const resultPromise = ui.getKey({ openEvent: mouseEvent, keys: keys });
+  const resultPromise = ui.getKey({ target: document.body, keys: keys });
 
   await sleep(10);
 

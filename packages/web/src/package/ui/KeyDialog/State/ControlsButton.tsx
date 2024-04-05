@@ -33,7 +33,7 @@ export const ControlsButton: React.FC<Props> = function ControlsButton({
     </StyledIconButton>
   );
 
-  return tooltip ? (
+  return tooltip && !props.disabled ? (
     <Tooltip
       disableInteractive
       title={tooltip}

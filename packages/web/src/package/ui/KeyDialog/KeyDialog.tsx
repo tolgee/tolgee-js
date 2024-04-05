@@ -1,16 +1,13 @@
-import * as React from 'react';
 import type { UiProps } from '@tolgee/core';
 
-import { BodyEnd } from '../common/BodyEnd';
+import { useEffect, useState } from 'react';
+import { QueryProvider } from '../client/QueryProvider';
 import { DialogProvider } from './dialogContext';
 import { TranslationDialog } from './TranslationDialog';
-import { QueryProvider } from '../../ui/client/QueryProvider';
 
 export type ComponentDependencies = UiProps;
 
-export type Props = UiProps;
-
-type State = {
+type KeyData = {
   key: null | string;
   defaultValue: undefined | string;
   dialogOpened: boolean;
@@ -18,60 +15,39 @@ type State = {
   namespace: string;
 };
 
-export class KeyDialog extends React.Component<Props, State> {
-  state = {
-    key: null,
-    defaultValue: undefined,
-    dialogOpened: false,
-    fallbackNamespaces: [],
-    namespace: '',
-  };
+export type Props = {
+  uiProps: UiProps;
+  keyData: KeyData;
+};
 
-  constructor(props: Props) {
-    super(props);
+export const KeyDialog = ({ uiProps, keyData }: Props) => {
+  const [open, setOpen] = useState(true);
+  useEffect(() => {
+    setOpen(true);
+  }, [keyData]);
+
+  function handleClose() {
+    setOpen(false);
   }
 
-  public translationEdit(
-    key: string,
-    defaultValue: string | undefined,
-    fallbackNamespaces: string[],
-    namespace: string
-  ) {
-    this.setState({
-      ...this.state,
-      dialogOpened: true,
-      defaultValue: defaultValue,
-      key,
-      fallbackNamespaces,
-      namespace,
-    });
-  }
-
-  public render = () => (
-    <BodyEnd>
-      <QueryProvider
-        apiUrl={this.props.apiUrl}
-        apiKey={this.props.apiKey}
-        projectId={this.props.projectId}
-      >
-        {this.state.dialogOpened && (
-          <DialogProvider
-            uiProps={this.props}
-            defaultValue={this.state.defaultValue || ''}
-            open={this.state.dialogOpened}
-            keyName={this.state.key!}
-            fallbackNamespaces={this.state.fallbackNamespaces}
-            namespace={this.state.namespace}
-            onClose={this.onClose}
-          >
-            <TranslationDialog />
-          </DialogProvider>
-        )}
-      </QueryProvider>
-    </BodyEnd>
+  return (
+    <QueryProvider
+      apiUrl={uiProps.apiUrl}
+      apiKey={uiProps.apiKey}
+      projectId={uiProps.projectId}
+    >
+      {open && (
+        <DialogProvider
+          uiProps={uiProps}
+          defaultValue={keyData.defaultValue || ''}
+          keyName={keyData.key!}
+          fallbackNamespaces={keyData.fallbackNamespaces}
+          namespace={keyData.namespace}
+          onClose={handleClose}
+        >
+          <TranslationDialog />
+        </DialogProvider>
+      )}
+    </QueryProvider>
   );
-
-  private onClose = () => {
-    this.setState({ ...this.state, dialogOpened: false });
-  };
-}
+};

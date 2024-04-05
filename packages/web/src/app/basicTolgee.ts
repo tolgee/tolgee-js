@@ -2,13 +2,17 @@ import { TolgeeEvent, TolgeeInstance } from '@tolgee/core';
 import { useCallback, useEffect, useState } from 'react';
 import { BackendFetch, DevTools, Tolgee } from '../package/entry-development';
 
-const tolgee = Tolgee()
+export const secrets = {
+  apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
+  apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
+};
+
+export const tolgee = Tolgee()
   .use(DevTools())
   .use(BackendFetch())
   .init({
+    ...secrets,
     availableLanguages: ['en', 'cs', 'fr', 'de'],
-    apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
-    apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
     defaultLanguage: 'en',
   });
 

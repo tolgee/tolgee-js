@@ -39,7 +39,6 @@ type FormTranslations = {
 type DialogProps = {
   keyName: string;
   defaultValue: string;
-  open: boolean;
   onClose: () => void;
   uiProps: UiProps;
   fallbackNamespaces: string[];
@@ -405,7 +404,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         props.defaultValue &&
         availableLanguages &&
         selectedLanguages &&
-        translationsForm
+        translationsForm &&
+        keyData
       ) {
         const baseLanguageDefinition = availableLanguages.find((l) => l.base);
         if (
@@ -416,10 +416,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const wasBaseTranslationProvided =
             keyData?.translations?.[baseLanguageDefinition.tag!] !== undefined;
 
-          if (
-            !translationsForm[baseLanguageDefinition.tag!] &&
-            !wasBaseTranslationProvided
-          ) {
+          if (!wasBaseTranslationProvided) {
             setTranslation(
               baseLanguageDefinition.tag!,
               getTolgeeFormat(
@@ -436,6 +433,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       translationsForm,
       selectedLanguages,
       props.defaultValue,
+      keyData,
     ]);
 
     const versionError = checkPlatformVersion(
@@ -461,7 +459,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const contextValue = {
       input: props.keyName,
-      open: props.open,
       fallbackNamespaces: props.fallbackNamespaces,
       selectedNs,
       loading,

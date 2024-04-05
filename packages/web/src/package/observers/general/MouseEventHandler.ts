@@ -20,7 +20,7 @@ type Coordinates = {
 type Props = {
   highlightKeys: ModifierKey[];
   elementStore: ElementStoreType;
-  onClick: (event: MouseEvent, el: TolgeeElement) => void;
+  onClick: (el: TolgeeElement) => void;
   options: ObserverOptionsInternal;
 };
 
@@ -136,7 +136,7 @@ export function MouseEventHandler({
     updateModifiers(e);
     updateCursorPosition({ x: e.clientX, y: e.clientY });
     if (areKeysDown() && highlighted) {
-      onClick(e, highlighted);
+      onClick(highlighted);
       unhighlight();
     }
   }

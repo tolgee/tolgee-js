@@ -25,10 +25,10 @@ export function ElementRegistry(
   const eventHandler = MouseEventHandler({
     highlightKeys: options.highlightKeys,
     elementStore,
-    onClick(event, el) {
+    onClick(el) {
       const meta = elementStore.get(el)!;
       onClick({
-        event,
+        target: el as HTMLElement,
         keysAndDefaults: getKeysAndDefaults(meta),
       });
     },

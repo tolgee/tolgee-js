@@ -10,7 +10,6 @@ export const TranslationDialogWrapper = ({
 }: React.PropsWithChildren) => {
   const { onClose } = useDialogActions();
   const useBrowserWindow = useDialogContext((c) => c.useBrowserWindow);
-  const open = useDialogContext((c) => c.open);
   const takingScreenshot = useDialogContext((c) => c.takingScreenshot);
 
   return (
@@ -20,9 +19,9 @@ export const TranslationDialogWrapper = ({
       ) : (
         <Dialog
           disableRestoreFocus
-          disablePortal
           disableEnforceFocus
-          open={open}
+          disablePortal
+          open={true}
           onClose={onClose}
           aria-labelledby="form-dialog-title"
           maxWidth="lg"

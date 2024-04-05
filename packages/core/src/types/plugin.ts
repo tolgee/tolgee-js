@@ -129,7 +129,7 @@ export type FormatterMiddleware = {
 
 export type TranslationOnClick = (data: {
   keysAndDefaults: KeyAndParams[];
-  event: any;
+  target: HTMLElement;
 }) => void;
 
 export type Highlighter = {
@@ -172,7 +172,10 @@ export type UiKeyOption = {
 export type UiMiddleware = (props: UiProps) => UiInterface;
 
 export interface UiInterface {
-  handleElementClick(keysAndDefaults: UiKeyOption[], event: any): Promise<void>;
+  handleElementClick(
+    keysAndDefaults: UiKeyOption[],
+    target: HTMLElement
+  ): Promise<void>;
 }
 
 export type PluginTools = Readonly<{
