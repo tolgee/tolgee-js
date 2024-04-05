@@ -1,5 +1,6 @@
 import { TOLGEE_HIGHLIGHTER_CLASS } from '../../constants';
 import { ElementMeta, TolgeeElement } from '../../types';
+import { elementClickable } from './helpers';
 
 const HIGHLIGHTER_BASE_STYLE: Partial<CSSStyleDeclaration> = {
   position: 'fixed',
@@ -25,6 +26,7 @@ export function ElementHighlighter({ highlightColor, highlightWidth }: Props) {
       if (!element.isConnected) {
         return;
       }
+      const clickable = elementClickable(element);
       let highlightEl = elementMeta.highlightEl;
       if (!highlightEl) {
         highlightEl = document.createElement('div');
@@ -41,6 +43,7 @@ export function ElementHighlighter({ highlightColor, highlightWidth }: Props) {
 
       const shape = element.getBoundingClientRect();
 
+      highlightEl.style.pointerEvents = clickable ? 'none' : 'auto';
       highlightEl.style.borderWidth = highlightWidth + 'px';
       highlightEl.style.top = shape.top - highlightWidth + 'px';
       highlightEl.style.left = shape.left - highlightWidth + 'px';
