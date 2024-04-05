@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.23.1-prerelease.88c01ea6.0](https://github.com/tolgee/tolgee-js/compare/v5.23.0...v5.23.1-prerelease.88c01ea6.0) (2024-04-05)
+
+
+### Bug Fixes
+
+* don't affect tooltips by highlight ([88c01ea](https://github.com/tolgee/tolgee-js/commit/88c01ea617bc4c1b88fc18c65e1e56f03b9d4dac))
+
+
+
+
+
 # [5.23.0](https://github.com/tolgee/tolgee-js/compare/v5.22.0...v5.23.0) (2024-04-05)
 
 
