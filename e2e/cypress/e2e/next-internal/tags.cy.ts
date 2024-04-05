@@ -36,7 +36,7 @@ context('Tags editing', () => {
       });
     }).as('updateTranslation');
 
-    cy.wait(1000);
+    cy.wait(500);
 
     getDevUi()
       .findDcy('tag-autocomplete-input')
