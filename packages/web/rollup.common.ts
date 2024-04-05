@@ -9,7 +9,6 @@ export const commonConfig = {
   watch: {
     clearScreen: false,
   },
-  external: ['@tolgee/core'],
   treeshake: 'smallest',
 } as const satisfies RollupOptions;
 
@@ -35,9 +34,6 @@ export const packageOutput = (
       name: `@tolgee/${name}`,
       entryFileNames: `tolgee-${name}${env ? `.${env}` : ''}.${format}.${ext}`,
       format,
-      globals: {
-        '@tolgee/core': '@tolgee/core',
-      },
     });
   }
   if (variants.includes('min')) {
@@ -48,9 +44,6 @@ export const packageOutput = (
       }.${format}.min.${ext}`,
       format,
       plugins: [terser()],
-      globals: {
-        '@tolgee/core': '@tolgee/core',
-      },
     });
   }
   return targets;
