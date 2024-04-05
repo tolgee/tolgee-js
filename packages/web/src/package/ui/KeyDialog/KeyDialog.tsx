@@ -7,10 +7,9 @@ import { TranslationDialog } from './TranslationDialog';
 
 export type ComponentDependencies = UiProps;
 
-type KeyData = {
+export type KeyData = {
   key: null | string;
   defaultValue: undefined | string;
-  dialogOpened: boolean;
   fallbackNamespaces: string[];
   namespace: string;
 };

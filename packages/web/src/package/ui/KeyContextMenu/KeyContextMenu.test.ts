@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { getRootElement } from '../getRootElement';
-import { UI } from '../index';
+import { InContextUi } from '../InContextUi';
 import { sleep } from '../tools/sleep';
 
 function getShadowRootElement(testId: string, textContent: string) {
@@ -12,7 +12,7 @@ function getShadowRootElement(testId: string, textContent: string) {
 }
 
 test('it selects the key', async () => {
-  const ui = new UI({
+  const ui = InContextUi({
     apiKey: 'test',
     apiUrl: 'test',
     projectId: undefined,
