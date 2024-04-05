@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.22.1-prerelease.b7e76156.0](https://github.com/tolgee/tolgee-js/compare/v5.22.0...v5.22.1-prerelease.b7e76156.0) (2024-04-05)
+
+
+### Features
+
+* refactor tolgee in-context ui class ([b7e7615](https://github.com/tolgee/tolgee-js/commit/b7e761564be024fd75f9967797bd49b13bce0506))
+* refactor tolgee UI ([e20f895](https://github.com/tolgee/tolgee-js/commit/e20f8958c0c24d74cb8c2e8403ad5188493faa1c))
+* refactor tolgee UI ([b4c3c7d](https://github.com/tolgee/tolgee-js/commit/b4c3c7dbde6a2edee14702466bbf30e36bdf42dd))
+
+
+
+
+
 # [5.22.0](https://github.com/tolgee/tolgee-js/compare/v5.21.0...v5.22.0) (2024-03-19)
 
 
