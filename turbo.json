@@ -45,6 +45,12 @@
       ],
       "cache": false
     },
+    "dev": {
+      "dependsOn": [
+        "^dev"
+      ],
+      "cache": false
+    },
     "clean": {
       "dependsOn": [],
       "cache": false
