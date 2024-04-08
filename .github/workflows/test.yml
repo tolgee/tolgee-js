@@ -10,20 +10,20 @@ jobs:
     name: 'Test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v3
         name: Install pnpm
         id: pnpm-install
         with:
           version: 8.6.12
           run_install: false
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: .pnpm-store/v3
@@ -33,7 +33,7 @@ jobs:
 
       - name: Turbo Cache
         id: turbo-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .turbo
           key: turbo-${{ github.job }}-${{ github.sha }}
@@ -53,22 +53,22 @@ jobs:
     name: Prepare packages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           token: '${{ secrets.TOLGEE_MACHINE_PAT }}'
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v3
         name: Install pnpm
         id: pnpm-install
         with:
           version: 8.6.12
           run_install: false
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: |
@@ -80,7 +80,7 @@ jobs:
 
       - name: Turbo Cache
         id: turbo-cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .turbo
           key: turbo-prepare-${{ github.job }}-${{ github.sha }}
@@ -137,20 +137,20 @@ jobs:
         node: [18, 20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
 
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v3
         name: Install pnpm
         id: pnpm-install
         with:
           version: 8.6.12
           run_install: false
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: |
@@ -203,20 +203,20 @@ jobs:
     name: Static check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: pnpm/action-setup@v3
         name: Install pnpm
         id: pnpm-install
         with:
           version: 8.6.12
           run_install: false
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
           path: .pnpm-store/v3
