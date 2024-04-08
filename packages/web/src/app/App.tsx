@@ -7,26 +7,11 @@ const StyledContainer = styled('div')`
   max-width: 300px;
 `;
 
-// const ui = InContextUi({
-//   ...secrets,
-//   projectId: undefined,
-//   highlight: tolgee.highlight,
-//   findPositions: tolgee.findPositions,
-//   changeTranslation: tolgee.changeTranslation,
-//   onPermanentChange: undefined,
-// });
-
 export const App = () => {
   const tolgee = useTolgee(['update', 'language']);
 
   useEffect(() => {
     tolgee.run();
-    // ui.openKeyDialog({
-    //   key: 'on-the-road-title',
-    //   defaultValue: 'Default value',
-    //   fallbackNamespaces: [''],
-    //   namespace: '',
-    // });
   }, []);
 
   return (
