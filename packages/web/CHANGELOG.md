@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.23.1](https://github.com/tolgee/tolgee-js/compare/v5.23.0...v5.23.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* stop affecting tooltips by higlighter ([#3323](https://github.com/tolgee/tolgee-js/issues/3323)) ([8e4947b](https://github.com/tolgee/tolgee-js/commit/8e4947bd2a5359cfd709ac28bcac5b0f7fe14488))
+
+
+
+
+
 # [5.23.0](https://github.com/tolgee/tolgee-js/compare/v5.22.0...v5.23.0) (2024-04-05)
 
 
