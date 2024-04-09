@@ -13,10 +13,9 @@ export type NodeLock = {
   locked?: boolean;
 };
 
-export type TolgeeElement = Element &
-  ElementCSSInlineStyle & {
-    _tolgee?: boolean;
-  };
+export type TolgeeElement = HTMLElement & {
+  _tolgee?: boolean;
+};
 
 export type BackendOptions = Omit<RequestInfo, 'headers'> & {
   /**
