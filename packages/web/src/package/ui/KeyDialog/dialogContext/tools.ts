@@ -38,16 +38,18 @@ export const changeInTolgeeCache = (
   values: [language: string, value: string][],
   changeTranslation: ChangeTranslationInterface
 ) => {
-  const changers = values.map(([language, value]) =>
-    changeTranslation(
-      {
-        language,
-        namespace: ns,
-      },
-      key,
-      value
-    )
-  );
+  const changers = values
+    .filter(([_, value]) => Boolean(value))
+    .map(([language, value]) =>
+      changeTranslation(
+        {
+          language,
+          namespace: ns,
+        },
+        key,
+        value
+      )
+    );
   return { revert: () => changers.forEach((ch) => ch.revert()) };
 };
 
