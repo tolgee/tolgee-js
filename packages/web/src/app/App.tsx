@@ -16,10 +16,10 @@ export const App = () => {
 
   return (
     <StyledContainer>
-      <div title="test">{tolgee.t('on-the-road-title')}</div>
+      <div title="test">{tolgee.t('app-title')}</div>
       <div>
-        {tolgee.t('on-the-road-title')}
-        {tolgee.t('on-the-road-subtitle')}
+        {tolgee.t('app-title')}
+        {tolgee.t('add-item-input-placeholder')}
       </div>
       <button disabled>{tolgee.t('app-title')}</button>
       <div style={{ pointerEvents: 'none' }}>

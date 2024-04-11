@@ -243,9 +243,9 @@ export function Plugins(
       return instances.devBackend;
     },
 
-    getBackendRecord: (({ language, namespace }) => {
+    getBackendRecord: (async ({ language, namespace }) => {
       for (const backend of instances.backends) {
-        const data = backend.getRecord({
+        const data = await backend.getRecord({
           language,
           namespace,
           ...getCommonProps(),
@@ -257,7 +257,7 @@ export function Plugins(
       return undefined;
     }) as BackendGetRecordInternal,
 
-    getBackendDevRecord: (({ language, namespace }) => {
+    getBackendDevRecord: (async ({ language, namespace }) => {
       const { apiKey, apiUrl, projectId } = getInitialOptions();
       return instances.devBackend?.getRecord({
         apiKey,

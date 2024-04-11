@@ -57,15 +57,13 @@ export function Cache(
   /**
    * Fetches production data
    */
-  function fetchProd(keyObject: CacheDescriptorInternal) {
+  async function fetchProd(keyObject: CacheDescriptorInternal) {
     let dataOrPromise = undefined as
       | Promise<TreeTranslationsData | undefined>
       | undefined;
-    if (!dataOrPromise) {
-      const staticDataValue = staticData[encodeCacheKey(keyObject)];
-      if (typeof staticDataValue === 'function') {
-        dataOrPromise = staticDataValue();
-      }
+    const staticDataValue = staticData[encodeCacheKey(keyObject)];
+    if (typeof staticDataValue === 'function') {
+      dataOrPromise = staticDataValue();
     }
 
     if (!dataOrPromise) {
@@ -85,26 +83,25 @@ export function Cache(
     }
   }
 
-  function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
-    let dataOrPromise = undefined as
-      | Promise<TreeTranslationsData | undefined>
-      | undefined;
+  async function fetchData(keyObject: CacheDescriptorInternal, isDev: boolean) {
+    let result = undefined as TreeTranslationsData | undefined;
+
     if (isDev) {
-      dataOrPromise = backendGetDevRecord(keyObject)?.catch((e) => {
+      try {
+        result = await backendGetDevRecord(keyObject);
+      } catch (e) {
         const error = new RecordFetchError(keyObject, e, true);
         events.onError.emit(error);
         // eslint-disable-next-line no-console
         console.warn(error);
-        // fallback to prod fetch if dev fails
-        return fetchProd(keyObject);
-      });
+      }
     }
 
-    if (!dataOrPromise) {
-      dataOrPromise = fetchProd(keyObject);
+    if (!result) {
+      result = await fetchProd(keyObject);
     }
 
-    return dataOrPromise;
+    return result;
   }
 
   const self = Object.freeze({

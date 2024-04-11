@@ -27,7 +27,7 @@ export type BackendGetRecordProps = {
 
 export type BackendGetRecord = (
   data: BackendGetRecordProps & CommonProps
-) => Promise<TreeTranslationsData | undefined> | undefined;
+) => Promise<TreeTranslationsData | undefined>;
 
 export interface BackendMiddleware {
   getRecord: BackendGetRecord;
@@ -35,11 +35,11 @@ export interface BackendMiddleware {
 
 export type BackendGetDevRecord = (
   data: BackendGetRecordProps & CommonProps & BackendDevProps
-) => Promise<TreeTranslationsData | undefined> | undefined;
+) => Promise<TreeTranslationsData | undefined>;
 
 export type BackendGetRecordInternal = (
   data: BackendGetRecordProps & BackendDevProps
-) => Promise<TreeTranslationsData | undefined> | undefined;
+) => Promise<TreeTranslationsData | undefined>;
 
 export type BackendDevMiddleware = {
   getRecord: BackendGetDevRecord;
