@@ -3,7 +3,8 @@
   "version": 1,
   "newProjectRoot": "projects",
   "cli": {
-    "packageManager": "pnpm"
+    "packageManager": "pnpm",
+    "analytics": false
   },
   "projects": {
     "sampleapp": {
@@ -151,7 +152,7 @@
           "options": {
             "outputPath": "dist/sampleapp/server",
             "main": "projects/sampleapp/server.ts",
-            "tsConfig": "projects/sampleapp/tsconfig.server.json",
+            "tsConfig": "projects/sampleapp/tsconfig.server.json"
           },
           "configurations": {
             "production": {
