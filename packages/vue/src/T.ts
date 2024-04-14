@@ -4,9 +4,8 @@ import {
   TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
-import { defineComponent, PropType, Fragment, h, SetupContext } from 'vue';
+import { defineComponent, PropType, SetupContext } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
-import { convertStringToVNodeArrayWithSlots } from './lib/convertStringToVNodeArrayWithSlots';
 
 export const T = defineComponent({
   name: 'T',
@@ -24,15 +23,13 @@ export const T = defineComponent({
   setup(props, context: SetupContext) {
     const { slots } = context;
     const { params } = props;
-    const slotsName = Object.keys(slots).filter((key) => key !== '_');
     const slotsParams = {};
-    slotsName.forEach((key) => {
-      slotsParams[key] = `{${key}}`;
+    Object.keys(slots).forEach((key) => {
+      slotsParams[key] = slots[key]();
     });
-
-    const { t } = useTranslateInternal();
     const assignedParams = Object.assign({}, params, slotsParams);
-    return { t, assignedParams, slots, slotsName };
+    const { t } = useTranslateInternal();
+    return { t, assignedParams };
   },
   render() {
     const params: TranslateProps = {
@@ -44,13 +41,6 @@ export const T = defineComponent({
       language: this.$props.language,
     };
     const content = this.t(params);
-
-    if (this.slotsName.length === 0) return content;
-
-    const arrayOfChildren = convertStringToVNodeArrayWithSlots(
-      content,
-      this.slots
-    );
-    return h(Fragment, arrayOfChildren);
+    return content;
   },
 });
