@@ -30,6 +30,11 @@ const TestComponent = {
       <div data-testid="with_language_prop">
         <T keyName="hello_world" language="en" />
       </div>
+      <div data-testid="peter_dogs_slot">
+        <T keyName="peter_dogs">
+          <template #dogsCount><span class='test_class'>5</span></template>
+        </T>
+      </div>
     </div>`,
 };
 
@@ -109,6 +114,13 @@ describe('T component integration', () => {
     expect(screen.queryByTestId('with_language_prop')).toHaveAttribute(
       '_tolgee'
     );
+  });
+
+  it('works with slots', () => {
+    expect(screen.queryByTestId('peter_dogs_slot').innerHTML).toContain(
+      'Petr má <span class="test_class">5</span> psů.'
+    );
+    expect(screen.queryByTestId('peter_dogs')).toHaveAttribute('_tolgee');
   });
 
   describe('language switch', () => {

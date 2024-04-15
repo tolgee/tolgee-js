@@ -4,7 +4,7 @@ import {
   TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, PropType, SetupContext, computed } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 
 export const T = defineComponent({
@@ -20,14 +20,22 @@ export const T = defineComponent({
     ns: { type: String as PropType<NsType> },
     language: { type: String as PropType<string> },
   },
-  setup() {
+  setup(props, context: SetupContext) {
+    const { slots } = context;
     const { t } = useTranslateInternal();
-    return { t };
+    const assignedParams = computed(() => {
+      const slotsParams = {};
+      Object.keys(slots).forEach((key) => {
+        slotsParams[key] = slots[key]();
+      });
+      return Object.assign({}, props.params, slotsParams);
+    });
+    return { t, assignedParams };
   },
   render() {
     const params: TranslateProps = {
       key: this.$props.keyName,
-      params: this.$props.params,
+      params: this.assignedParams,
       defaultValue: this.$props.defaultValue,
       noWrap: this.$props.noWrap,
       ns: this.$props.ns,
