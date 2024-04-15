@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.24.0](https://github.com/tolgee/tolgee-js/compare/v5.23.3...v5.24.0) (2024-04-15)
+
+**Note:** Version bump only for package @tolgee/next-testapp
+
+
+
+
+
 ## [5.23.3](https://github.com/tolgee/tolgee-js/compare/v5.23.2...v5.23.3) (2024-04-11)
 
 **Note:** Version bump only for package @tolgee/next-testapp

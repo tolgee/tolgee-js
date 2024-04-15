@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.24.0](https://github.com/tolgee/tolgee-js/compare/v5.23.3...v5.24.0) (2024-04-15)
+
+
+### Features
+
+* vue named slot syntax ([#3327](https://github.com/tolgee/tolgee-js/issues/3327)) ([d904085](https://github.com/tolgee/tolgee-js/commit/d9040852acda859c247e3fd0e61aa9c2028a78e0))
+
+
+
+
+
 ## [5.23.3](https://github.com/tolgee/tolgee-js/compare/v5.23.2...v5.23.3) (2024-04-11)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
