@@ -80,10 +80,8 @@ async function customFetch(
   };
 
   return fetchFn(options.apiUrl + input, init)
-    .catch((e) => {
-      throw new Error(
-        e.message || `Failed to fetch data from "${options.apiUrl}"`
-      );
+    .catch(() => {
+      throw new Error(`Failed to fetch data from "${options.apiUrl}"`);
     })
     .then(async (r) => {
       if (!r.ok) {
