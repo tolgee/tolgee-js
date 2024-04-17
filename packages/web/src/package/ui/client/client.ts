@@ -6,8 +6,11 @@ import { RequestParamsType, ResponseContent } from './types';
 
 const errorFromResponse = (status: number, body: any) => {
   switch (body?.code) {
+    case 'operation_not_permitted':
+      return `Provided API key is missing required scope "${body?.params?.[0]}"`;
+
     case 'invalid_project_api_key':
-      return 'Api key is not valid';
+      return 'API key is not valid';
 
     default:
       return `${status}: ${body?.message || 'Error status code from server'}`;
