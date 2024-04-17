@@ -8,10 +8,21 @@ export const ALL_LOCALES = ['en', 'cs', 'de', 'fr'];
 
 export const DEFAULT_LOCALE = 'en';
 
-export async function getStaticData(languages: string[]) {
+export async function getStaticData(
+  languages: string[],
+  namespaces: string[] = ['']
+) {
   const result: Record<string, any> = {};
   for (const lang of languages) {
-    result[lang] = (await import(`../i18n/${lang}.json`)).default;
+    for (const namespace of namespaces) {
+      if (namespace) {
+        result[`${lang}:${namespace}`] = (
+          await import(`../i18n/${namespace}/${lang}.json`)
+        ).default;
+      } else {
+        result[lang] = (await import(`../i18n/${lang}.json`)).default;
+      }
+    }
   }
   return result;
 }

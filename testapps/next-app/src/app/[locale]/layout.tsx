@@ -16,7 +16,7 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  const locales = await getStaticData(['en', locale]);
+  const locales = await getStaticData(['en', locale], ['', 'namespaced']);
 
   return (
     <html lang={locale}>
