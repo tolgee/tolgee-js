@@ -4,6 +4,19 @@ import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 
+const errorFromResponse = (status: number, body: any) => {
+  switch (body?.code) {
+    case 'operation_not_permitted':
+      return `Provided API key is missing required scope "${body?.params?.[0]}"`;
+
+    case 'invalid_project_api_key':
+      return 'API key is not valid';
+
+    default:
+      return `${status}: ${body?.message || 'Error status code from server'}`;
+  }
+};
+
 const fetchFn = createFetchFunction();
 
 type Params = {
@@ -70,13 +83,13 @@ async function customFetch(
   };
 
   return fetchFn(options.apiUrl + input, init)
+    .catch(() => {
+      throw new Error(`Failed to fetch data from "${options.apiUrl}"`);
+    })
     .then(async (r) => {
       if (!r.ok) {
         const data = await getResObject(r);
-        const message = `${r.status}: ${
-          data?.message || 'Error status code from server'
-        }`;
-        throw new Error(message);
+        throw new Error(errorFromResponse(r.status, data));
       }
       const result = await getResObject(r);
       if (typeof result === 'object' && result !== null) {
