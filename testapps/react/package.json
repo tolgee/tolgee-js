@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-testapp",
-  "version": "5.24.0",
+  "version": "5.24.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,8 +11,8 @@
     "clean": "rm -rf dist "
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.24.0",
-    "@tolgee/react": "5.24.0",
+    "@tolgee/format-icu": "5.24.1",
+    "@tolgee/react": "5.24.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

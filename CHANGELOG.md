@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.24.1](https://github.com/tolgee/tolgee-js/compare/v5.24.0...v5.24.1) (2024-04-18)
+
+
+### Bug Fixes
+
+* better error messages ([#3330](https://github.com/tolgee/tolgee-js/issues/3330)) ([d075928](https://github.com/tolgee/tolgee-js/commit/d07592862319f14654cca03cfb3b1be5f410f4ad))
+
+
+
+
+
 # [5.24.0](https://github.com/tolgee/tolgee-js/compare/v5.23.3...v5.24.0) (2024-04-15)
 
 
