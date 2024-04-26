@@ -16,6 +16,8 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  // it's important you provide all data which are needed for initial render
+  // so current locale and also fallback locales + necessary namespaces
   const locales = await getStaticData(['en', locale]);
 
   return (
