@@ -20,7 +20,7 @@ export const createServerInstance = ({
     const tolgee = await createTolgee(locale);
     await tolgee.run();
     return tolgee;
-  });
+  }) as (locale: string) => Promise<TolgeeInstance>;
 
   const getTolgee = async () => {
     const locale = getLocale();

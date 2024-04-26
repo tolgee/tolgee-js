@@ -128,6 +128,11 @@ function createTolgee(options: TolgeeOptions) {
     isLoaded: controller.isLoaded,
 
     /**
+     * Returns records need for instance to be `loaded`
+     */
+    getRequiredRecords: controller.getRequiredRecords,
+
+    /**
      * @return `true` if tolgee is loading initial data (triggered by `run`).
      */
     isInitialLoading: controller.isInitialLoading,

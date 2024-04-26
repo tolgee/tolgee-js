@@ -54,7 +54,14 @@ export function GeneralObserver() {
 
     function handleNodes(nodes: Array<Text | Attr>) {
       for (const textNode of nodes) {
+        const parent = textNode.parentElement;
+
+        if (parent && elementRegistry.isRestricted(parent)) {
+          continue;
+        }
+
         const oldTextContent = getNodeText(textNode);
+
         const result = oldTextContent ? wrapper.unwrap(oldTextContent) : null;
         if (result) {
           const { text, keys } = result;

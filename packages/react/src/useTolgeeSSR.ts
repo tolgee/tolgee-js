@@ -53,7 +53,22 @@ export function useTolgeeSSR(
     tolgee.addStaticData(staticData);
     tolgee.changeLanguage(language!);
     tolgee.setEmitterActive(true);
-  }, [language, staticData, tolgee]);
+    if (!tolgee.isLoaded()) {
+      // warning user, that static data provided are not sufficient
+      // for proper SSR render
+      const missingRecords = tolgee
+        .getRequiredRecords(language)
+        .map(({ namespace, language }) =>
+          namespace ? `${namespace}:${language}` : language
+        )
+        .filter((key) => !staticData?.[key]);
+
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+      );
+    }
+  }, []);
 
   return tolgee;
 }
