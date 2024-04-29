@@ -34,26 +34,44 @@ export function useTolgeeSSR(
   language?: string,
   staticData?: TolgeeStaticData | undefined
 ) {
-  const initialInstance = useMemo(
-    () => getTolgeeWithDeactivatedWrapper(tolgeeInstance),
-    []
+  const [noWrappingTolgee] = useState(() =>
+    getTolgeeWithDeactivatedWrapper(tolgeeInstance)
   );
 
-  const [tolgee, setTolgee] = useState(initialInstance);
+  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
-    setTolgee(tolgeeInstance);
+    setInitialRender(false);
   }, []);
 
   useMemo(() => {
     // we have to prepare tolgee before rendering children
     // so translations are available right away
     // events emitting must be off, to not trigger re-render while rendering
-    tolgee.setEmitterActive(false);
-    tolgee.addStaticData(staticData);
-    tolgee.changeLanguage(language!);
-    tolgee.setEmitterActive(true);
-  }, [language, staticData, tolgee]);
+    tolgeeInstance.setEmitterActive(false);
+    tolgeeInstance.addStaticData(staticData);
+    tolgeeInstance.changeLanguage(language!);
+    tolgeeInstance.setEmitterActive(true);
+  }, [language, staticData, tolgeeInstance]);
 
-  return tolgee;
+  useState(() => {
+    // running this function only on first render
+    if (!tolgeeInstance.isLoaded()) {
+      // warning user, that static data provided are not sufficient
+      // for proper SSR render
+      const missingRecords = tolgeeInstance
+        .getRequiredRecords(language)
+        .map(({ namespace, language }) =>
+          namespace ? `${namespace}:${language}` : language
+        )
+        .filter((key) => !staticData?.[key]);
+
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+      );
+    }
+  });
+
+  return initialRender ? noWrappingTolgee : tolgeeInstance;
 }

@@ -82,6 +82,7 @@ export function ElementRegistry(
   }
 
   return Object.freeze({
+    isRestricted: isRestricted,
     register(element: Element, node: Node, nodeMeta: NodeMeta) {
       if (isRestricted(element)) {
         return;
