@@ -1,12 +1,9 @@
-import {
-  ActivatedRouteSnapshot,
-  Resolve,
-} from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { TranslateService } from './translate.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class NamespaceResolver implements Resolve<void> {
+export class NamespaceResolver  {
   constructor(public service: TranslateService) {}
 
   async resolve(
