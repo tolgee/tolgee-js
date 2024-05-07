@@ -1,7 +1,17 @@
-import { ChangeDetectorRef, OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  OnDestroy,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { TranslateService } from './translate.service';
 import { Subscription } from 'rxjs';
-import { getTranslateProps, TFnType, TranslateProps, TranslationKey } from '@tolgee/web';
+import {
+  getTranslateProps,
+  TFnType,
+  TranslateProps,
+  TranslationKey,
+} from '@tolgee/web';
 
 @Pipe({
   name: 'translate',
@@ -13,7 +23,10 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
   private subscription: Subscription;
 
-  constructor(protected translateService: TranslateService, private _cdr: ChangeDetectorRef) {}
+  constructor(
+    protected translateService: TranslateService,
+    private _cdr: ChangeDetectorRef
+  ) {}
 
   ngOnDestroy(): void {
     this.unsubscribe();
@@ -56,9 +69,11 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
   private subscribe(props: TranslateProps) {
     this.unsubscribe();
-    this.subscription = this.translateService.translate(props).subscribe((r) => {
-      this.value = r;
-      this._cdr.markForCheck();
-    });
+    this.subscription = this.translateService
+      .translate(props)
+      .subscribe((r) => {
+        this.value = r;
+        this._cdr.detectChanges();
+      });
   }
 }
