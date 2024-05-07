@@ -42,7 +42,6 @@
       }
     }
   },
-  "defaultProject": "ngx-tolgee",
   "cli": {
     "analytics": false
   }

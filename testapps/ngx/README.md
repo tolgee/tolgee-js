@@ -4,6 +4,9 @@
 
 To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
+## The Docs
+[Read more about using Tolgee with Angular in the docs.](https://tolgee.io/js-sdk/integrations/angular/installation)
+
 ## To run the app in dev mode
 
 To install dependencies, run:
