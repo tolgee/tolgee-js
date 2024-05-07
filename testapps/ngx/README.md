@@ -11,7 +11,7 @@ To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
 To install dependencies, run:
 
-    pnpm install
+    npm install
 
 To run the app in dev mode with in-context translating mode:
 
@@ -20,18 +20,19 @@ To run the app in dev mode with in-context translating mode:
 2. Generate an API-KEY
 3. Copy file `projects/sampleapp/src/environments/environment.ts` to `projects/sampleapp/src/environments/environment.stage.ts`
 4. Set `apiKey` to API key obtained in previous step
-5. Run `pnpm run start`
+5. Run `npm run start`
 6. Have fun
 
 ## To run the app in production mode
 
 To build the app for production run:
 
-    pnpm run build
+    npm run build
 
 Static website will be generated. To start local server with build app, run:
 
-    pnpm run serve
+    npm run serve
+
 ---
 
 This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).
