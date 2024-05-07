@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.26.0](https://github.com/tolgee/tolgee-js/compare/v5.25.0...v5.26.0) (2024-05-07)
+
+
+### Features
+
+* Update Angular package dependencies and example app to Angular 17 ([#3319](https://github.com/tolgee/tolgee-js/issues/3319)) ([72f11a7](https://github.com/tolgee/tolgee-js/commit/72f11a7646af4709be528b4e1a10899e7cbbcb2b))
+
+
+
+
+
 # [5.25.0](https://github.com/tolgee/tolgee-js/compare/v5.24.1...v5.25.0) (2024-04-29)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
