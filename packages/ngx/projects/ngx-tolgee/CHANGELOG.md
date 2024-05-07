@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.25.1-prerelease.d38486d9.0](https://github.com/tolgee/tolgee-js/compare/v5.25.0...v5.25.1-prerelease.d38486d9.0) (2024-05-07)
+
+
+### Bug Fixes
+
+* Translate pipe ([a1ee152](https://github.com/tolgee/tolgee-js/commit/a1ee152d283481c1ddcba77a47e354c0eed3685a))
+
+
+### Features
+
+* Update Angular to v17 ([891dfc1](https://github.com/tolgee/tolgee-js/commit/891dfc1ff91457f579dc15dfda41fd5fe5ca27dd))
+
+
+
+
+
 # [5.25.0](https://github.com/tolgee/tolgee-js/compare/v5.24.1...v5.25.0) (2024-04-29)
 
 **Note:** Version bump only for package @tolgee/ngx
