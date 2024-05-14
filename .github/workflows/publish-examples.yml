@@ -59,8 +59,8 @@ jobs:
       - name: Recreate package-lock
         run: |
           npm install --package-lock-only --force
-        # this tests the previous command
           npm install --package-lock-only
+
         working-directory: testapps/${{ matrix.project }}
 
       - name: Commit & Push files
