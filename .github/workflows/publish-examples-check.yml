@@ -62,4 +62,9 @@ jobs:
 
         working-directory: testapps/${{ matrix.project }}
 
+      - name: Update README
+        run: |
+          echo '> This repository is just a dummy. Submit issues [in monorepo](https://github.com/tolgee/tolgee-js) or [check the source code here](https://github.com/tolgee/tolgee-js/tree/main/testapps/${{ matrix.project }}).' | cat - README.md > temp && mv temp README.md
+        working-directory: testapps/${{ matrix.project }}
+
       # NOT publishing here
