@@ -25,6 +25,9 @@ export const App = () => {
       <div style={{ pointerEvents: 'none' }}>
         <div>{tolgee.t('app-title')}</div>
       </div>
+      <div>
+        <div>{tolgee.t('new-key')}</div>
+      </div>
     </StyledContainer>
   );
 };

@@ -176,7 +176,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             setPluralArgName(firstKey?.keyPluralArgName);
           }
           _setTranslationsForm(result);
-          setTags(firstKey?.keyTags?.map((t) => t.name) || []);
+          if (firstKey) {
+            setTags(firstKey?.keyTags?.map((t) => t.name) || []);
+          } else {
+            setTags(props.uiProps.tagNewKeys ?? []);
+          }
           setScreenshots(
             firstKey?.screenshots?.map((sc) => ({
               ...sc,
