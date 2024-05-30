@@ -187,7 +187,7 @@ export function Plugins(
     addPlugin,
     findPositions: findPositions,
     run() {
-      const { apiKey, apiUrl, projectId, observerOptions } =
+      const { apiKey, apiUrl, projectId, observerOptions, tagNewKeys } =
         getInitialOptions();
       instances.ui = plugins.ui?.({
         apiKey: apiKey!,
@@ -197,6 +197,7 @@ export function Plugins(
         changeTranslation,
         findPositions,
         onPermanentChange: (data) => events.onPermanentChange.emit(data),
+        tagNewKeys,
       });
 
       instances.observer?.run({

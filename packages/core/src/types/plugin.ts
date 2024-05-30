@@ -159,6 +159,7 @@ export type UiProps = {
   findPositions: (key?: string | undefined, ns?: NsFallback) => KeyPosition[];
   changeTranslation: ChangeTranslationInterface;
   onPermanentChange: (props: TranslationDescriptor) => void;
+  tagNewKeys?: string[];
 };
 
 export type UiKeyOption = {

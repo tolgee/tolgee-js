@@ -114,6 +114,11 @@ export type TolgeeOptionsInternal = {
    * Define custom fetch function, used for fetching the translations
    */
   fetch: FetchFn;
+
+  /**
+   * Specify tags that will be preselected for non-existant keys.
+   */
+  tagNewKeys?: string[];
 };
 
 export type TolgeeOptions = Partial<
