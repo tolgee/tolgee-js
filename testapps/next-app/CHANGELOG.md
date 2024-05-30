@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.27.0](https://github.com/tolgee/tolgee-js/compare/v5.26.0...v5.27.0) (2024-05-30)
+
+
+### Features
+
+* default tags for new keys ([#3339](https://github.com/tolgee/tolgee-js/issues/3339)) ([7d2cac8](https://github.com/tolgee/tolgee-js/commit/7d2cac86f12b08505885192306629f8fcfc7c85f))
+
+
+
+
+
 # [5.26.0](https://github.com/tolgee/tolgee-js/compare/v5.25.0...v5.26.0) (2024-05-07)
 
 **Note:** Version bump only for package @tolgee/next-app-testapp
