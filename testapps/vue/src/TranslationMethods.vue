@@ -52,7 +52,7 @@
               </span>
             </template>
             <template #key2>
-              <a href="#">{{ $t('value') }}</a>
+              <a href="#">value2</a>
             </template>
           </T>
         </div>
