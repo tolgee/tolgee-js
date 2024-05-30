@@ -8,5 +8,6 @@
   "share-button" : "Teilen",
   "this_is_a_key" : "Dies ist ein Schlüssel",
   "this_is_a_key_with_params" : "Dies ist ein Schlüssel mit den Parametern {key} {key2}",
-  "this_is_a_key_with_tags" : "Dies ist ein Schlüssel mit den Tags <b>bold</b> <b><i>{key}</i></b>"
+  "this_is_a_key_with_tags" : "Dies ist ein Schlüssel mit den Tags <b>bold</b> <b><i>{key}</i></b>",
+  "value": "Wert"
 }
