@@ -8,5 +8,6 @@
   "share-button" : "Partager",
   "this_is_a_key" : "C'est un clé",
   "this_is_a_key_with_params" : "C'est la clé avec paramètres {key} {key2}",
-  "this_is_a_key_with_tags" : "C'est la clé avec des tags <b>bold</b> <b><i>{key}</i></b>"
+  "this_is_a_key_with_tags" : "C'est la clé avec des tags <b>bold</b> <b><i>{key}</i></b>",
+  "value": "valeur"
 }
