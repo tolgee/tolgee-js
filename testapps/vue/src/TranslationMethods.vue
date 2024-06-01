@@ -26,7 +26,7 @@
         <div>
           <T
             keyName="this_is_a_key_with_params"
-            :params="{ key: 'value', key2: 'value2' }"
+            :params="{ key: $t('value'), key2: 'value2' }"
           />
         </div>
       </div>
@@ -36,7 +36,7 @@
         <div>
           <T
             keyName="this_is_a_key_with_params"
-            :params="{ key: 'value', key2: 'value2' }"
+            :params="{ key: $t('value'), key2: 'value2' }"
             noWrap
           />
         </div>
@@ -47,7 +47,9 @@
         <div>
           <T keyName="this_is_a_key_with_params">
             <template #key>
-              <span class="custom_class">value</span>
+              <span class="custom_class">
+                {{ $t('value') }}
+              </span>
             </template>
             <template #key2>
               <a href="#">value2</a>
@@ -65,7 +67,10 @@
         <h1>t function with params</h1>
         <div>
           {{
-            $t('this_is_a_key_with_params', { key: 'value', key2: 'value2' })
+            $t('this_is_a_key_with_params', {
+              key: $t('value'),
+              key2: 'value2',
+            })
           }}
         </div>
       </div>
@@ -88,7 +93,7 @@
           {{
             $t({
               key: 'this_is_a_key',
-              params: { key: 'value', key2: 'value2' },
+              params: { key: $t('value'), key2: 'value2' },
             })
           }}
         </div>
@@ -100,7 +105,7 @@
           {{
             $t({
               key: 'this_is_a_key',
-              params: { key: 'value', key2: 'value2' },
+              params: { key: $t('value'), key2: 'value2' },
               noWrap: true,
             })
           }}

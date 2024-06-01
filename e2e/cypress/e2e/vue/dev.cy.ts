@@ -23,7 +23,7 @@ context('Vue app in dev mode', () => {
         count: 5,
       },
       {
-        text: 'Dies ist ein Schlüssel mit den Parametern value value2',
+        text: 'Dies ist ein Schlüssel mit den Parametern Wert value2',
         count: 3,
       },
     ],
