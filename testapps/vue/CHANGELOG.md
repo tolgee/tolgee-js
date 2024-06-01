@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.27.1](https://github.com/tolgee/tolgee-js/compare/v5.27.0...v5.27.1) (2024-06-01)
+
+
+### Bug Fixes
+
+* update slot translation when language changes ([#3340](https://github.com/tolgee/tolgee-js/issues/3340)) ([33ca527](https://github.com/tolgee/tolgee-js/commit/33ca527e8db2409bacf83ad3d3ed5765739995d5))
+
+
+
+
+
 # [5.27.0](https://github.com/tolgee/tolgee-js/compare/v5.26.0...v5.27.0) (2024-05-30)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
