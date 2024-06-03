@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.28.0](https://github.com/tolgee/tolgee-js/compare/v5.27.1...v5.28.0) (2024-06-03)
+
+
+### Features
+
+* update next-intl support ([#3342](https://github.com/tolgee/tolgee-js/issues/3342)) ([99c2190](https://github.com/tolgee/tolgee-js/commit/99c21902d0dedb952789ae5ed0533682fcb62981))
+
+
+
+
+
 ## [5.27.1](https://github.com/tolgee/tolgee-js/compare/v5.27.0...v5.27.1) (2024-06-01)
 
 **Note:** Version bump only for package @tolgee/react-testapp
