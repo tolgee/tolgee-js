@@ -1,5 +1,4 @@
-import { useLocale } from 'next-intl';
-
+import { getLocale } from 'next-intl/server';
 import { Link } from '@/navigation';
 import { Navbar } from '@/components/Navbar';
 import { getStaticData } from '@/tolgee/shared';
@@ -9,7 +8,7 @@ import { TranslationMethodsServer } from './TranslationMethodsServer';
 import { TranslationMethodsClient } from './TranslationMethodsClient';
 
 export default async function AboutPage() {
-  const locale = useLocale();
+  const locale = await getLocale();
   const locales = await getStaticData(['en', locale]);
 
   return (
