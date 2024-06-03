@@ -9,7 +9,7 @@ import { TolgeeInstance } from '@tolgee/web';
 
 export type CreateServerInstanceOptions = {
   createTolgee: (locale: string) => Promise<TolgeeInstance>;
-  getLocale: () => string;
+  getLocale: () => Promise<string>;
 };
 
 export const createServerInstance = ({
@@ -23,7 +23,7 @@ export const createServerInstance = ({
   }) as (locale: string) => Promise<TolgeeInstance>;
 
   const getTolgee = async () => {
-    const locale = getLocale();
+    const locale = await getLocale();
     const tolgee = await getTolgeeInstance(locale);
     return tolgee;
   };
