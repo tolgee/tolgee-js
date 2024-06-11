@@ -4,6 +4,7 @@ import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
+import { isUrlValid } from '../tools/validateUrl';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -24,7 +25,7 @@ async function getResObject(r: Response) {
   try {
     return JSON.parse(textBody);
   } catch (e) {
-    return textBody;
+    throw new HttpError('fetch_error');
   }
 }
 
@@ -66,6 +67,9 @@ async function customFetch(
 ) {
   if (options.apiUrl === undefined) {
     throw new HttpError('api_url_not_specified');
+  }
+  if (!isUrlValid(options.apiUrl)) {
+    throw new HttpError('api_url_not_valid');
   }
   if (options.apiKey === undefined) {
     throw new HttpError('api_key_not_specified');

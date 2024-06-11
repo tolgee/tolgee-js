@@ -162,7 +162,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const result: FormTranslations = {};
           const firstKey = data._embedded?.keys?.[0];
           const isPlural = Boolean(firstKey?.keyIsPlural);
-          data.selectedLanguages.forEach((lang) => {
+          data.selectedLanguages?.forEach((lang) => {
             const translation = firstKey?.translations[lang.tag];
             result[lang.tag] = {
               value: getTolgeeFormat(
@@ -335,7 +335,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       } catch (e: any) {
         // eslint-disable-next-line no-console
         console.error(e);
-        setSubmitError(e?.message);
+        setSubmitError(e);
       } finally {
         setSaving(false);
         setSuccess(false);

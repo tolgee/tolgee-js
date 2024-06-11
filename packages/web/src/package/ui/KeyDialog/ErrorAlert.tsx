@@ -62,6 +62,14 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
         </>
       );
 
+    case 'api_url_not_valid':
+      return (
+        <>
+          <AlertTitle>API url is not correct ({apiUrl})</AlertTitle>
+          Check it in the code or in the chrome plugin. <DocsInContext />
+        </>
+      );
+
     case 'api_key_not_specified':
       return (
         <>

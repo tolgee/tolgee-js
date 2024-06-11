@@ -70,11 +70,6 @@ const ScControls = styled('div')`
   min-height: 36px;
 `;
 
-const ScRestriction = styled('div')`
-  margin-top: 8px;
-  color: ${({ theme }) => theme.palette.text.secondary};
-`;
-
 export const KeyForm = () => {
   const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =

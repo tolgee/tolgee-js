@@ -13,7 +13,9 @@ export const checkPlatformVersion = (
   });
 
   if (result > 0) {
-    return `Requires minimal platform version ${requiredV} (got ${currentV})`;
+    return new Error(
+      `Requires minimal platform version ${requiredV} (got ${currentV})`
+    );
   }
   return undefined;
 };

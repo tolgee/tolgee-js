@@ -7,6 +7,7 @@ type ErrorCustomStatus =
   | 'fetch_error'
   | 'api_url_not_specified'
   | 'api_key_not_specified'
+  | 'api_url_not_valid'
   | 'permissions_not_sufficient_to_edit';
 
 export type ErrorStatusCode = ErrorResponseTypedCode | ErrorCustomStatus;
