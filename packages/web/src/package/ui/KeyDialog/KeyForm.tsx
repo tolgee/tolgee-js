@@ -11,6 +11,8 @@ import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
+import { ErrorAlert } from './ErrorAlert';
+import { HttpError } from '../client/HttpError';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -71,11 +73,6 @@ const ScControls = styled('div')`
 const ScRestriction = styled('div')`
   margin-top: 8px;
   color: ${({ theme }) => theme.palette.text.secondary};
-`;
-
-const ScError = styled('div')`
-  padding-top: 16px;
-  color: red;
 `;
 
 export const KeyForm = () => {
@@ -145,7 +142,6 @@ export const KeyForm = () => {
         )}
         <ScHeadingRight>{!loading && <LanguageSelect />}</ScHeadingRight>
       </ScHeading>
-
       <ScFieldTitle>Key</ScFieldTitle>
       <ScKey>
         {input}
@@ -153,41 +149,35 @@ export const KeyForm = () => {
           {!keyExists && ready && " (key doesn't exist yet)"}
         </ScKeyHint>
       </ScKey>
-
       <NsSelect
         options={fallbackNamespaces}
         value={selectedNs}
         onChange={setSelectedNs}
       />
-
       {ready && (
         <ScTagsWrapper>
           <ScFieldTitle>Tags</ScFieldTitle>
           <Tags />
         </ScTagsWrapper>
       )}
-
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
-
       {!error && (
         <ScFieldsWrapper>
           <TranslationFields />
         </ScFieldsWrapper>
       )}
-
       {screenshotsView && ready && (
         <ScGalleryWrapper>
           <ScreenshotGallery />
         </ScGalleryWrapper>
       )}
-
       {formDisabled && ready && (
-        <ScRestriction>
-          Modification is restricted due to missing permissions.
-        </ScRestriction>
+        <ErrorAlert
+          error={new HttpError('permissions_not_sufficient_to_edit')}
+          severity="info"
+        />
       )}
-
-      {generalError && <ScError>{generalError}</ScError>}
+      {generalError && <ErrorAlert error={generalError} />}
       <ScControls>
         <Button onClick={onClose} color="secondary">
           {useBrowserWindow ? 'Close' : 'Cancel'}

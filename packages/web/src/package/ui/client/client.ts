@@ -3,17 +3,13 @@ import { getProjectIdFromApiKey } from '../../tools/decodeApiKey';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
+import { HttpError } from './HttpError';
 
 const errorFromResponse = (status: number, body: any) => {
-  switch (body?.code) {
-    case 'operation_not_permitted':
-      return `Provided API key is missing required scope "${body?.params?.[0]}"`;
-
-    case 'invalid_project_api_key':
-      return 'API key is not valid';
-
-    default:
-      return `${status}: ${body?.message || 'Error status code from server'}`;
+  if (body?.code) {
+    return new HttpError(body.code, status, body.params);
+  } else {
+    return new HttpError('fetch_error', status);
   }
 };
 
@@ -69,10 +65,10 @@ async function customFetch(
   init?: RequestInit
 ) {
   if (options.apiUrl === undefined) {
-    throw 'Api url not specified';
+    throw new HttpError('api_url_not_specified');
   }
   if (options.apiKey === undefined) {
-    throw 'Api key not specified';
+    throw new HttpError('api_key_not_specified');
   }
 
   init = init || {};
@@ -82,26 +78,19 @@ async function customFetch(
     'X-API-Key': options.apiKey,
   };
 
-  return fetchFn(options.apiUrl + input, init)
-    .catch(() => {
-      throw new Error(`Failed to fetch data from "${options.apiUrl}"`);
-    })
-    .then(async (r) => {
-      if (!r.ok) {
-        const data = await getResObject(r);
-        throw new Error(errorFromResponse(r.status, data));
-      }
-      const result = await getResObject(r);
-      if (typeof result === 'object' && result !== null) {
-        result._internal = {
-          version: r.headers.get('X-Tolgee-Version'),
-        };
-      }
-      return result;
-    })
-    .catch((e) => {
-      throw e.message || 'Failed to fetch';
-    });
+  return fetchFn(options.apiUrl + input, init).then(async (r) => {
+    if (!r.ok) {
+      const data = await getResObject(r);
+      throw errorFromResponse(r.status, data);
+    }
+    const result = await getResObject(r);
+    if (typeof result === 'object' && result !== null) {
+      result._internal = {
+        version: r.headers.get('X-Tolgee-Version'),
+      };
+    }
+    return result;
+  });
 }
 
 export const addProjectIdToUrl = (url: string) => {

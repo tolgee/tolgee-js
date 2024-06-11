@@ -30,7 +30,7 @@
     "test": "jest --collect-coverage",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "schema": "openapi-typescript http://localhost:8202/v3/api-docs/Accessible%20with%20API%20key --output ./src/ui/client/apiSchema.generated.ts",
+    "schema": "openapi-typescript 'http://localhost:8080/v3/api-docs/Accessible%20with%20Project%20API%20key%20(V2)' --output ./src/package/ui/client/apiSchema.generated.ts",
     "tsc": "tsc --noEmit",
     "clean": "rm -rf dist lib coverage"
   },
@@ -69,6 +69,7 @@
     "fast-text-encoding": "^1.0.6",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "openapi-typescript": "^6.7.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-query": "^3.39.3",
