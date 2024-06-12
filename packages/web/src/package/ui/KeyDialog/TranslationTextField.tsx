@@ -1,16 +1,17 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import clsx from 'clsx';
-import { styled, Tooltip } from '@mui/material';
+import { styled } from '@mui/material';
 import { TolgeeFormat } from '@tginternal/editor';
 
 import { components } from '../client/apiSchema.generated';
 import { TRANSLATION_STATES } from './State/translationStates';
-import { DEVTOOLS_Z_INDEX } from '../../constants';
+
 import { PluralEditor } from './editor/PluralEditor';
 import { ControlsEditorSmall } from './editor/ControlsEditorSmall';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext } from './dialogContext';
 import { isTranslationEmpty } from '../tools/isTranslationEmpty';
+import { Tooltip } from '../common/Tooltip';
 
 type State = components['schemas']['TranslationModel']['state'];
 type LanguageModel = components['schemas']['LanguageModel'];
@@ -97,14 +98,7 @@ export const TranslationTextField = ({
         data-cy="translation-field"
         data-cy-language={language?.tag}
       >
-        <Tooltip
-          disableInteractive
-          title={TRANSLATION_STATES[fallbackedState]?.name}
-          PopperProps={{
-            disablePortal: true,
-            style: { zIndex: DEVTOOLS_Z_INDEX },
-          }}
-        >
+        <Tooltip title={TRANSLATION_STATES[fallbackedState]?.name}>
           <StyledStateIndicator
             className={clsx({ notPlural })}
             style={{

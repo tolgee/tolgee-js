@@ -1,9 +1,7 @@
 import React from 'react';
-import { Tooltip } from '@mui/material';
 
 import { components } from '../../client/apiSchema.generated';
-import { DEVTOOLS_Z_INDEX } from '../../../constants';
-import { getRootElement } from '../../getRootElement';
+import { Tooltip } from '../../common/Tooltip';
 
 const markerColors = {
   primary: '#ff0000',
@@ -80,15 +78,7 @@ export const ScreenshotWithLabels: React.FC<Props> = ({
           );
           if (showTooltips) {
             return (
-              <Tooltip
-                key={i}
-                title={key.keyName}
-                placement="right"
-                PopperProps={{
-                  container: getRootElement().host,
-                  style: { zIndex: DEVTOOLS_Z_INDEX },
-                }}
-              >
+              <Tooltip key={i} title={key.keyName} placement="right">
                 {rectangle}
               </Tooltip>
             );

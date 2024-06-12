@@ -13,6 +13,7 @@ import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
 import { ErrorAlert } from './ErrorAlert';
 import { HttpError } from '../client/HttpError';
+import { Tooltip } from '../common/Tooltip';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -126,14 +127,15 @@ export const KeyForm = () => {
         <ScHeadingTitle>Quick translation</ScHeadingTitle>
 
         {!useBrowserWindow && (
-          <IconButton
-            title="Open in new window"
-            onClick={() => setUseBrowserWindow(true)}
-            color="inherit"
-            size="small"
-          >
-            <OpenInNew fontSize="small" />
-          </IconButton>
+          <Tooltip title="Open in separate window">
+            <IconButton
+              onClick={() => setUseBrowserWindow(true)}
+              color="inherit"
+              size="small"
+            >
+              <OpenInNew fontSize="small" />
+            </IconButton>
+          </Tooltip>
         )}
         <ScHeadingRight>{!loading && <LanguageSelect />}</ScHeadingRight>
       </ScHeading>

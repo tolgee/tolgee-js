@@ -1,7 +1,6 @@
 import React from 'react';
-import { styled, IconButton, Tooltip } from '@mui/material';
-
-import { DEVTOOLS_Z_INDEX } from '../../../constants';
+import { styled, IconButton } from '@mui/material';
+import { Tooltip } from '../../common/Tooltip';
 
 const StyledIconButton = styled(IconButton)`
   display: flex;
@@ -34,16 +33,7 @@ export const ControlsButton: React.FC<Props> = function ControlsButton({
   );
 
   return tooltip && !props.disabled ? (
-    <Tooltip
-      disableInteractive
-      title={tooltip}
-      PopperProps={{
-        disablePortal: true,
-        style: { zIndex: DEVTOOLS_Z_INDEX },
-      }}
-    >
-      {content}
-    </Tooltip>
+    <Tooltip title={tooltip}>{content}</Tooltip>
   ) : (
     content
   );

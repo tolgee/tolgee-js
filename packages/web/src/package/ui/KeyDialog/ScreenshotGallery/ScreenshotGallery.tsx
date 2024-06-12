@@ -1,15 +1,15 @@
 import React, { useRef, useState } from 'react';
-import { styled, CircularProgress, IconButton, Tooltip } from '@mui/material';
+import { styled, CircularProgress, IconButton } from '@mui/material';
 import { CameraAlt, AddCircleOutline } from '@mui/icons-material';
 
 import { ScreenshotDropzone } from './ScreenshotDropzone';
 import { ScreenshotThumbnail } from './ScreenshotThumbnail';
 import { MAX_FILE_COUNT } from './utils';
-import { DEVTOOLS_Z_INDEX } from '../../../constants';
 import { useDialogContext, useDialogActions } from '../dialogContext';
 import { ScreenshotDetail } from './ScreenshotDetail';
 import { ScFieldTitle } from '../../common/FieldTitle';
 import { ExtensionPrompt } from './ExtensionPrompt';
+import { Tooltip } from '../../common/Tooltip';
 
 const ScPlaceholder = styled('div')`
   display: flex;
@@ -134,13 +134,7 @@ export const ScreenshotGallery: React.FC = () => {
           {uploadEnabled && (
             <>
               {(isChrome || ableToTakeScreenshot) && (
-                <Tooltip
-                  title="Take screenshot"
-                  PopperProps={{
-                    disablePortal: true,
-                    style: { zIndex: DEVTOOLS_Z_INDEX },
-                  }}
-                >
+                <Tooltip title="Take screenshot">
                   <IconButton
                     sx={{ fontSize: 24 }}
                     onClick={
@@ -154,13 +148,7 @@ export const ScreenshotGallery: React.FC = () => {
                 </Tooltip>
               )}
 
-              <Tooltip
-                title="Add image"
-                PopperProps={{
-                  disablePortal: true,
-                  style: { zIndex: DEVTOOLS_Z_INDEX },
-                }}
-              >
+              <Tooltip title="Add image">
                 <IconButton sx={{ fontSize: 24 }} onClick={onFileSelect}>
                   <AddCircleOutline />
                 </IconButton>
