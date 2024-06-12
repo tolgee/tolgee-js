@@ -1,6 +1,8 @@
 import { CommandLineServiceConfig } from '../types';
 import { spawn } from 'child_process';
 import { checkOutput } from './checkOutput';
+import { log } from '../log';
+import terminate from 'terminate';
 
 export const CommandLineServiceRunner = ({
   config,
@@ -45,13 +47,29 @@ export const CommandLineServiceRunner = ({
       });
     });
 
-  return {
+  function getProcessName() {
+    return `${spawnedProcess.spawnargs.join(' ')}`;
+  }
+
+  const self = {
     config,
     async run() {
-      return runService();
+      try {
+        return runService();
+      } catch (e) {
+        await self.exit();
+        throw e;
+      }
     },
     exit() {
-      spawnedProcess.kill();
+      log('info', `Terminating process "${getProcessName()}"`);
+      // force terminate child processes
+      return new Promise<void>((resolve, reject) => {
+        terminate(spawnedProcess.pid!, { timeout: 5000 }, (err) =>
+          err ? reject(err) : resolve()
+        );
+      });
     },
   };
+  return self;
 };
