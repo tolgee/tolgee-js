@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/svelte",
-  "version": "5.28.0",
+  "version": "5.28.1-prerelease.8f811f6d.0",
   "description": "Svelte implementation for Tolgee localization framework",
   "repository": "https://github.com/tolgee/tolgee-js",
   "homepage": "https://tolgee.io",
@@ -31,7 +31,7 @@
     "svelte": "^3.29.0 || ^4.0.0"
   },
   "dependencies": {
-    "@tolgee/web": "5.28.0"
+    "@tolgee/web": "5.28.1-prerelease.8f811f6d.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-auto": "1.0.2",
@@ -39,8 +39,8 @@
     "@sveltejs/package": "1.0.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/svelte": "^3.2.2",
-    "@tolgee/format-icu": "5.28.0",
-    "@tolgee/testing": "5.28.0",
+    "@tolgee/format-icu": "5.28.1-prerelease.8f811f6d.0",
+    "@tolgee/testing": "5.28.1-prerelease.8f811f6d.0",
     "@tsconfig/svelte": "^3.0.0",
     "@types/jest": "^28.1.7",
     "@typescript-eslint/eslint-plugin": "^5.34.0",

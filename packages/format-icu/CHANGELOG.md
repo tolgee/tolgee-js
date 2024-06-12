@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.1-prerelease.8f811f6d.0](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1-prerelease.8f811f6d.0) (2024-06-12)
+
+**Note:** Version bump only for package @tolgee/format-icu
+
+
+
+
+
 # [5.28.0](https://github.com/tolgee/tolgee-js/compare/v5.27.1...v5.28.0) (2024-06-03)
 
 **Note:** Version bump only for package @tolgee/format-icu
