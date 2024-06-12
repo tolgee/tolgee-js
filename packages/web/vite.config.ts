@@ -25,6 +25,7 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
     },
     plugins: [
       // this check in emotion package is not safe enough
+      // https://github.com/emotion-js/emotion/issues/3196
       replaceCodePlugin({
         replacements: [
           {
