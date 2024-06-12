@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.1-prerelease.5080c26e.0](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1-prerelease.5080c26e.0) (2024-06-12)
+
+
+### Bug Fixes
+
+* avoid creating theme just by import ([5080c26](https://github.com/tolgee/tolgee-js/commit/5080c26e4f66d15f65bea31e97ac29ad66536904))
+
+
+
+
+
 # [5.28.0](https://github.com/tolgee/tolgee-js/compare/v5.27.1...v5.28.0) (2024-06-03)
 
 
