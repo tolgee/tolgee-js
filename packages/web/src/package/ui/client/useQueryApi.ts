@@ -14,6 +14,7 @@ import { paths } from './apiSchema.generated';
 import { client } from './client';
 import { QueryContext } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
+import { HttpError } from './HttpError';
 
 export type QueryProps<
   Url extends keyof Paths,
@@ -37,7 +38,7 @@ export const useApiQuery = <
 
   const globalOptions = useContext(QueryContext);
 
-  return useQuery<ResponseContent<Url, Method, Paths>, any>(
+  return useQuery<ResponseContent<Url, Method, Paths>, HttpError>(
     [url, (request as any)?.path, (request as any)?.query],
     () => client(url, method, request as any, globalOptions),
     options
@@ -72,7 +73,7 @@ export const useApiMutation = <
   const globalOptions = useContext(QueryContext);
   const mutation = useMutation<
     ResponseContent<Url, Method, Paths>,
-    any,
+    HttpError,
     RequestParamsType<Url, Method, Paths>
   >(
     (request) =>

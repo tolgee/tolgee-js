@@ -3,102 +3,193 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
   "/v2/user": {
+    /**
+     * Get user info
+     * @description Returns information about currently authenticated user.
+     */
     get: operations["getInfo_2"];
   };
   "/v2/projects/namespaces/{id}": {
+    /** Update namespace */
     put: operations["update_2"];
   };
   "/v2/projects/keys/{id}/disabled-languages": {
+    /**
+     * Get disabled languages
+     * @description Returns languages, in which key is disabled
+     */
     get: operations["getDisabledLanguages_1"];
+    /**
+     * Set disabled languages
+     * @description Sets languages, in which key is disabled
+     */
     put: operations["setDisabledLanguages_1"];
   };
   "/v2/projects/keys/{id}/complex-update": {
+    /**
+     * Edit key and related data
+     * @description Edits key name, translations, tags, screenshots, and other data
+     */
     put: operations["complexEdit_1"];
   };
   "/v2/projects/keys/{id}": {
-    get: operations["get_6"];
+    /** Get one key */
+    get: operations["get_7"];
+    /** Edit key name */
     put: operations["edit_1"];
   };
+  "/v2/projects/tag-complex": {
+    /** Execute complex tag operation */
+    put: operations["executeComplexTagOperation_1"];
+  };
   "/v2/projects/keys/{keyId}/tags": {
+    /**
+     * Tag key
+     * @description Tags a key with tag. If tag with provided name doesn't exist, it is created
+     */
     put: operations["tagKey_1"];
   };
   "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-override": {
-    /** Resolves translation conflict. The old translation will be overridden. */
+    /**
+     * Resolve conflict (override)
+     * @description Resolves translation conflict. The old translation will be overridden.
+     */
     put: operations["resolveTranslationSetOverride_1"];
   };
   "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-keep-existing": {
-    /** Resolves translation conflict. The old translation will be kept. */
+    /**
+     * Resolve conflict (keep existing)
+     * @description Resolves translation conflict. The old translation will be kept.
+     */
     put: operations["resolveTranslationSetKeepExisting_1"];
   };
   "/v2/projects/import/result/languages/{languageId}/resolve-all/set-override": {
-    /** Resolves all translation conflicts for provided language. The old translations will be overridden. */
+    /**
+     * Resolve all translation conflicts (override)
+     * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
+     */
     put: operations["resolveTranslationSetOverride_3"];
   };
   "/v2/projects/import/result/languages/{languageId}/resolve-all/set-keep-existing": {
-    /** Resolves all translation conflicts for provided language. The old translations will be kept. */
+    /**
+     * Resolve all translation conflicts (keep existing)
+     * @description Resolves all translation conflicts for provided language. The old translations will be kept.
+     */
     put: operations["resolveTranslationSetKeepExisting_3"];
   };
   "/v2/projects/import/result/languages/{importLanguageId}/select-existing/{existingLanguageId}": {
-    /** Sets existing language to pair with language to import. Data will be imported to selected existing language when applied. */
+    /**
+     * Pair existing language
+     * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
+     */
     put: operations["selectExistingLanguage_1"];
   };
   "/v2/projects/import/result/languages/{importLanguageId}/reset-existing": {
-    /** Resets existing language paired with language to import. */
+    /**
+     * Reset existing language pairing
+     * @description Resets existing language paired with language to import.
+     */
     put: operations["resetExistingLanguage_1"];
   };
   "/v2/projects/import/result/files/{fileId}/select-namespace": {
-    /** Sets namespace for file to import. */
+    /**
+     * Select namespace
+     * @description Sets namespace for file to import.
+     */
     put: operations["selectNamespace_1"];
   };
   "/v2/projects/import/apply-streaming": {
-    /** Imports the data prepared in previous step. Streams current status. */
+    /**
+     * Apply import (streaming)
+     * @description Imports the data prepared in previous step. Streams current status.
+     */
     put: operations["applyImportStreaming_1"];
   };
   "/v2/projects/import/apply": {
-    /** Imports the data prepared in previous step */
+    /**
+     * Apply import
+     * @description Imports the data prepared in previous step
+     */
     put: operations["applyImport_1"];
   };
   "/v2/projects/import-settings": {
-    /** Returns import settings for the authenticated user and the project. */
-    get: operations["get_10"];
-    /** Stores import settings for the authenticated user and the project. */
+    /**
+     * Get Import Settings
+     * @description Returns import settings for the authenticated user and the project.
+     */
+    get: operations["get_11"];
+    /**
+     * Set Import Settings
+     * @description Stores import settings for the authenticated user and the project.
+     */
     put: operations["store_1"];
   };
   "/v2/projects/batch-jobs/{id}/cancel": {
+    /**
+     * Stop batch operation
+     * @description Stops batch operation if possible.
+     */
     put: operations["cancel_1"];
   };
   "/v2/projects/translations/{translationId}/set-state/{state}": {
+    /** Set translation state */
     put: operations["setTranslationState_1"];
   };
   "/v2/projects/translations/{translationId}/comments/{commentId}/set-state/{state}": {
+    /** Set state of translation comment */
     put: operations["setState_1"];
   };
   "/v2/projects/translations/{translationId}/comments/{commentId}": {
-    get: operations["get_14"];
+    /** Get one translation comment */
+    get: operations["get_15"];
+    /** Update translation comment */
     put: operations["update_6"];
+    /** Delete translation comment */
     delete: operations["delete_9"];
   };
   "/v2/projects/translations/{translationId}/set-outdated-flag/{state}": {
+    /**
+     * Set outdated value
+     * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+     */
     put: operations["setOutdated_1"];
   };
   "/v2/projects/translations/{translationId}/dismiss-auto-translated-state": {
+    /**
+     * Dismiss auto-translated
+     * @description Removes "auto translated" indication
+     */
     put: operations["dismissAutoTranslatedState_1"];
   };
   "/v2/projects/translations": {
+    /** Get translations in project */
     get: operations["getTranslations_1"];
+    /**
+     * Update translations for existing key
+     * @description Sets translations for existing key
+     */
     put: operations["setTranslations_1"];
+    /**
+     * Create key or update translations
+     * @description Sets translations for existing key or creates new key and sets the translations to it.
+     */
     post: operations["createOrUpdateTranslations_1"];
   };
   "/v2/projects/languages/{languageId}": {
-    get: operations["get_16"];
+    /** Get one language */
+    get: operations["get_17"];
+    /** Update language */
     put: operations["editLanguage_1"];
+    /** Delete specific language */
     delete: operations["deleteLanguage_3"];
   };
   "/v2/projects/keys/{keyId}/auto-translate": {
     /**
-     * Uses enabled auto-translation methods.
+     * Auto translates keys
+     * @description Uses enabled auto-translation methods.
      * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
      *
      * This will replace the the existing translation with the result obtained from specified source!
@@ -106,221 +197,407 @@ export interface paths {
     put: operations["autoTranslate_1"];
   };
   "/v2/organizations/{id}": {
-    get: operations["get_19"];
+    /** Get one organization */
+    get: operations["get_20"];
   };
   "/v2/projects": {
+    /**
+     * Get all permitted
+     * @description Returns all projects where current user has any permission
+     */
     get: operations["getAll"];
+    /**
+     * Create project
+     * @description Creates a new project with languages and initial settings.
+     */
     post: operations["createProject"];
   };
   "/v2/projects/keys/info": {
+    /**
+     * Get key info
+     * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
+     */
     post: operations["getInfo_1"];
   };
   "/v2/projects/keys/import-resolvable": {
+    /**
+     * Import keys (resolvable)
+     * @description Import's new keys with translations. Translations can be updated, when specified.
+     */
     post: operations["importKeys_1"];
   };
   "/v2/projects/keys/import": {
+    /**
+     * Import keys
+     * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
+     */
     post: operations["importKeys_3"];
   };
   "/v2/projects/keys/create": {
+    /** Create new key */
     post: operations["create_3"];
   };
   "/v2/projects/keys": {
+    /** Get all keys */
     get: operations["getAll_2"];
+    /** Create new key */
     post: operations["create_4"];
+    /**
+     * Delete one or multiple keys (post)
+     * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
+     */
     delete: operations["delete_5"];
   };
   "/v2/projects/start-batch-job/untag-keys": {
+    /** Remove tags */
     post: operations["untagKeys_1"];
   };
   "/v2/projects/start-batch-job/tag-keys": {
+    /** Add tags */
     post: operations["tagKeys_1"];
   };
   "/v2/projects/start-batch-job/set-translation-state": {
+    /** Set translation state */
     post: operations["setTranslationState_3"];
   };
   "/v2/projects/start-batch-job/set-keys-namespace": {
+    /** Set keys namespace */
     post: operations["setKeysNamespace_1"];
   };
   "/v2/projects/start-batch-job/pre-translate-by-tm": {
-    /** Pre-translate provided keys to provided languages by TM. */
-    post: operations["translate_2"];
+    /**
+     * Pre-translate by TM
+     * @description Pre-translate provided keys to provided languages by TM.
+     */
+    post: operations["translate_1"];
   };
   "/v2/projects/start-batch-job/machine-translate": {
-    /** Translate provided keys to provided languages through primary MT provider. */
+    /**
+     * Machine Translation
+     * @description Translate provided keys to provided languages through primary MT provider.
+     */
     post: operations["machineTranslation_1"];
   };
   "/v2/projects/start-batch-job/delete-keys": {
+    /** Delete keys */
     post: operations["deleteKeys_1"];
   };
   "/v2/projects/start-batch-job/copy-translations": {
-    /** Copy translation values from one language to other languages. */
+    /**
+     * Copy translation values
+     * @description Copy translation values from one language to other languages.
+     */
     post: operations["copyTranslations_1"];
   };
   "/v2/projects/start-batch-job/clear-translations": {
-    /** Clear translation values for provided keys in selected languages. */
+    /**
+     * Clear translation values
+     * @description Clear translation values for provided keys in selected languages.
+     */
     post: operations["clearTranslations_1"];
   };
+  "/v2/projects/single-step-import": {
+    /**
+     * Single step import
+     * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
+     */
+    post: operations["doImport_1"];
+  };
   "/v2/projects/import": {
-    /** Prepares provided files to import. */
+    /**
+     * Add files
+     * @description Prepares provided files to import.
+     */
     post: operations["addFiles_1"];
-    /** Deletes prepared import data. */
+    /**
+     * Delete
+     * @description Deletes prepared import data.
+     */
     delete: operations["cancelImport_1"];
   };
   "/v2/projects/export": {
+    /** Export data */
     get: operations["export_1"];
+    /**
+     * Export data (post)
+     * @description Exports data (post). Useful when exceeding allowed URL size.
+     */
     post: operations["exportPost_1"];
   };
   "/v2/projects/big-meta": {
+    /**
+     * Store Big Meta
+     * @description Stores a bigMeta for a project
+     */
     post: operations["store_3"];
   };
   "/v2/projects/translations/{translationId}/comments": {
+    /**
+     * Get translation comments
+     * @description Returns translation comments of translation
+     */
     get: operations["getAll_6"];
+    /** Create translation comment */
     post: operations["create_8"];
   };
   "/v2/projects/translations/create-comment": {
+    /**
+     * Create translation comment
+     * @description Creates a translation comment. Empty translation is stored, when not exists.
+     */
     post: operations["create_10"];
   };
   "/v2/projects/suggest/translation-memory": {
+    /**
+     * Get suggestions from translation memory
+     * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
+     */
     post: operations["suggestTranslationMemory_1"];
   };
   "/v2/projects/suggest/machine-translations-streaming": {
+    /**
+     * Get machine translation suggestions (streaming)
+     * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
+     */
     post: operations["suggestMachineTranslationsStreaming_1"];
   };
   "/v2/projects/suggest/machine-translations": {
+    /**
+     * Get machine translation suggestions
+     * @description Suggests machine translations from enabled services
+     */
     post: operations["suggestMachineTranslations_1"];
   };
   "/v2/projects/languages": {
+    /** Get all languages */
     get: operations["getAll_8"];
+    /** Create language */
     post: operations["createLanguage_1"];
   };
   "/v2/projects/keys/{keyId}/screenshots": {
+    /** Get screenshots */
     get: operations["getKeyScreenshots"];
+    /** Upload screenshot */
     post: operations["uploadScreenshot"];
   };
   "/v2/organizations": {
+    /**
+     * Get all permitted organizations
+     * @description Returns all organizations, which is current user allowed to view
+     */
     get: operations["getAll_10"];
+    /** Create organization */
     post: operations["create_12"];
   };
   "/v2/image-upload": {
+    /** Upload an image for later use */
     post: operations["upload"];
   };
   "/v2/projects/used-namespaces": {
+    /**
+     * Get used namespaces
+     * @description Returns all used project namespaces. Response contains default (null) namespace if used.
+     */
     get: operations["getUsedNamespaces_1"];
   };
   "/v2/projects/namespaces": {
+    /** Get namespaces */
     get: operations["getAllNamespaces_1"];
   };
   "/v2/projects/namespace-by-name/{name}": {
+    /**
+     * Get namespace by name
+     * @description Returns information about a namespace by its name
+     */
     get: operations["getByName_1"];
   };
   "/v2/projects/keys/search": {
+    /**
+     * Search for keys
+     * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
+     */
     get: operations["searchForKey_1"];
   };
   "/v2/projects/activity": {
+    /** Get project activity */
     get: operations["getActivity_1"];
   };
   "/v2/projects/tags": {
+    /** Get tags */
     get: operations["getAll_4"];
   };
   "/v2/projects/my-batch-jobs": {
+    /**
+     * List user batch operations
+     * @description List all batch operations started by current user
+     */
     get: operations["myList_1"];
   };
   "/v2/projects/keys/{id}/big-meta": {
+    /** Get Big Meta for key */
     get: operations["getBigMeta_1"];
   };
   "/v2/projects/import/result/languages/{languageId}/translations": {
-    /** Returns translations prepared to import. */
+    /**
+     * Get translations
+     * @description Returns translations prepared to import.
+     */
     get: operations["getImportTranslations_1"];
   };
   "/v2/projects/import/result/languages/{languageId}": {
-    /** Returns language prepared to import. */
+    /**
+     * Get import language
+     * @description Returns language prepared to import.
+     */
     get: operations["getImportLanguage_1"];
-    /** Deletes language prepared to import. */
+    /**
+     * Delete language
+     * @description Deletes language prepared to import.
+     */
     delete: operations["deleteLanguage_1"];
   };
   "/v2/projects/import/result/files/{importFileId}/issues": {
-    /** Returns issues for uploaded file. */
+    /**
+     * Get file issues
+     * @description Returns issues for uploaded file.
+     */
     get: operations["getImportFileIssues_1"];
   };
   "/v2/projects/import/result": {
-    /** Returns the result of preparation. */
+    /**
+     * Get result
+     * @description Returns the result of preparation.
+     */
     get: operations["getImportResult_1"];
   };
   "/v2/projects/import/all-namespaces": {
-    /** Returns all existing and imported namespaces */
+    /**
+     * Get namespaces
+     * @description Returns all existing and imported namespaces
+     */
     get: operations["getAllNamespaces_3"];
   };
   "/v2/projects/current-batch-jobs": {
-    /** Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned. */
+    /**
+     * Get all running and pending batch operations
+     * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
+     */
     get: operations["currentJobs_1"];
   };
   "/v2/projects/batch-jobs/{id}": {
-    get: operations["get_12"];
+    /** Get batch operation */
+    get: operations["get_13"];
   };
   "/v2/projects/batch-jobs": {
+    /** List batch operations */
     get: operations["list_4"];
   };
   "/v2/projects/translations/{translationId}/history": {
+    /**
+     * Get translation history
+     * @description Sorting is not supported for supported. It is automatically sorted from newest to oldest.
+     */
     get: operations["getTranslationHistory_1"];
   };
   "/v2/projects/translations/{languages}": {
+    /**
+     * Get all translations
+     * @description Returns all translations for specified languages
+     */
     get: operations["getAllTranslations_1"];
   };
   "/v2/projects/translations/select-all": {
-    get: operations["getSelectAllKeyIds_1"];
+    /**
+     * Select keys
+     * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+     */
+    get: operations["selectKeys_1"];
+  };
+  "/v2/projects/keys/select": {
+    /**
+     * Select keys
+     * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+     */
+    get: operations["selectKeys_3"];
   };
   "/v2/projects/stats/daily-activity": {
+    /** Get project daily amount of events */
     get: operations["getProjectDailyActivity_1"];
   };
   "/v2/projects/stats": {
+    /** Get project stats */
     get: operations["getProjectStats_1"];
   };
   "/v2/pats/current": {
+    /**
+     * Return current PAK
+     * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
+     */
     get: operations["getCurrent"];
   };
   "/v2/organizations/{slug}": {
-    get: operations["get_18"];
+    /** Get organization by slug */
+    get: operations["get_19"];
   };
   "/v2/organizations/{organizationId}/machine-translation-credit-balance": {
+    /**
+     * Get credit balance for organization
+     * @description Returns machine translation credit balance for organization
+     */
     get: operations["getOrganizationCredits"];
   };
   "/v2/api-keys/current": {
+    /**
+     * Get current API key info
+     * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
+     */
     get: operations["getCurrent_1"];
   };
   "/v2/api-keys/current-permissions": {
+    /**
+     * Get current permission info
+     * @description Returns current PAK or PAT permissions for current user, api-key and project
+     */
     get: operations["getCurrentPermissions"];
   };
-  "/api/project/export/jsonZip": {
-    get: operations["doExportJsonZip_1"];
-  };
   "/v2/projects/keys/{ids}": {
+    /** Delete one or multiple keys */
     delete: operations["delete_3"];
   };
   "/v2/projects/keys/{keyId}/tags/{tagId}": {
+    /**
+     * Remove tag
+     * @description Removes tag with provided id from key with provided id
+     */
     delete: operations["removeTag_1"];
   };
   "/v2/projects/keys/{keyId}/screenshots/{ids}": {
+    /** Delete screenshots */
     delete: operations["deleteScreenshots"];
   };
   "/v2/image-upload/{ids}": {
+    /** Delete uploaded images */
     delete: operations["delete_12"];
   };
 }
 
+export type webhooks = Record<string, never>;
+
 export interface components {
   schemas: {
-    UserUpdateRequestDto: {
-      name: string;
-      email: string;
-      currentPassword?: string;
-      /** @description Callback url for link sent in e-mail. This may be omitted, when server has set frontEndUrl in properties. */
-      callbackUrl?: string;
+    ErrorResponseTyped: {
+      /** @enum {string} */
+      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "address_part_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found";
+      params?: Record<string, never>[];
+    };
+    ErrorResponseBody: {
+      code: string;
+      params?: Record<string, never>[];
     };
     Avatar: {
       large: string;
       thumbnail: string;
     };
-    Links: { [key: string]: components["schemas"]["Link"] };
     PrivateUserAccountModel: {
       /** Format: int64 */
       id: number;
@@ -329,106 +606,65 @@ export interface components {
       emailAwaitingVerification?: string;
       mfaEnabled: boolean;
       avatar?: components["schemas"]["Avatar"];
+      /** @enum {string} */
       accountType: "LOCAL" | "MANAGED" | "THIRD_PARTY";
+      /** @enum {string} */
       globalServerRole: "USER" | "ADMIN";
       deletable: boolean;
       needsSuperJwtToken: boolean;
     };
-    UserUpdatePasswordRequestDto: {
-      currentPassword: string;
-      password: string;
-    };
-    JwtAuthenticationResponse: {
-      accessToken?: string;
-      tokenType?: string;
-    };
-    UserTotpEnableRequestDto: {
-      totpKey: string;
-      otp: string;
-      password: string;
-    };
-    UserMfaRecoveryRequestDto: {
-      password: string;
-    };
-    QuickStartModel: {
-      finished: boolean;
-      completedSteps: string[];
-      open: boolean;
-    };
-    EditProjectRequest: {
-      name: string;
-      slug?: string;
-      /** Format: int64 */
-      baseLanguageId?: number;
-      description?: string;
-      /** @description Whether to use ICU placeholder visualization in the editor and it's support. */
-      icuPlaceholders: boolean;
-    };
     ComputedPermissionModel: {
       permissionModel?: components["schemas"]["PermissionModel"];
-      origin:
-        | "ORGANIZATION_BASE"
-        | "DIRECT"
-        | "ORGANIZATION_OWNER"
-        | "NONE"
-        | "SERVER_ADMIN";
-      /** @description The user's permission type. This field is null if uses granular permissions */
+      /** @enum {string} */
+      origin: "ORGANIZATION_BASE" | "DIRECT" | "ORGANIZATION_OWNER" | "NONE" | "SERVER_ADMIN";
+      /**
+       * @description The user's permission type. This field is null if uses granular permissions
+       * @enum {string}
+       */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
-      /**
-       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example KEYS_EDIT,TRANSLATIONS_VIEW
-       */
-      scopes: (
-        | "translations.view"
-        | "translations.edit"
-        | "keys.edit"
-        | "screenshots.upload"
-        | "screenshots.delete"
-        | "screenshots.view"
-        | "activity.view"
-        | "languages.edit"
-        | "admin"
-        | "project.edit"
-        | "members.view"
-        | "members.edit"
-        | "translation-comments.add"
-        | "translation-comments.edit"
-        | "translation-comments.set-state"
-        | "translations.state-edit"
-        | "keys.view"
-        | "keys.delete"
-        | "keys.create"
-        | "batch-jobs.view"
-        | "batch-jobs.cancel"
-        | "translations.batch-by-tm"
-        | "translations.batch-machine"
-        | "content-delivery.manage"
-        | "content-delivery.publish"
-        | "webhooks.manage"
-      )[];
-      /**
-       * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example 200001,200004
-       */
-      translateLanguageIds?: number[];
-      /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example 200001,200004
-       */
-      viewLanguageIds?: number[];
-      /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example 200001,200004
-       */
-      stateChangeLanguageIds?: number[];
       /**
        * @deprecated
        * @description Deprecated (use translateLanguageIds).
        *
        * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       permittedLanguageIds?: number[];
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
+       */
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      stateChangeLanguageIds?: number[];
     };
     LanguageModel: {
       /** Format: int64 */
@@ -453,8 +689,21 @@ export interface components {
        * @example 🇨🇿
        */
       flagEmoji?: string;
-      /** @description Whether is base language of project */
+      /**
+       * @description Whether is base language of project
+       * @example false
+       */
       base: boolean;
+    };
+    NamespaceModel: {
+      /**
+       * Format: int64
+       * @description The id of namespace
+       * @example 10000048
+       */
+      id: number;
+      /** @example homepage */
+      name: string;
     };
     /**
      * @description Current user's direct permission
@@ -463,59 +712,50 @@ export interface components {
     PermissionModel: {
       /**
        * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example KEYS_EDIT,TRANSLATIONS_VIEW
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
        */
-      scopes: (
-        | "translations.view"
-        | "translations.edit"
-        | "keys.edit"
-        | "screenshots.upload"
-        | "screenshots.delete"
-        | "screenshots.view"
-        | "activity.view"
-        | "languages.edit"
-        | "admin"
-        | "project.edit"
-        | "members.view"
-        | "members.edit"
-        | "translation-comments.add"
-        | "translation-comments.edit"
-        | "translation-comments.set-state"
-        | "translations.state-edit"
-        | "keys.view"
-        | "keys.delete"
-        | "keys.create"
-        | "batch-jobs.view"
-        | "batch-jobs.cancel"
-        | "translations.batch-by-tm"
-        | "translations.batch-machine"
-        | "content-delivery.manage"
-        | "content-delivery.publish"
-        | "webhooks.manage"
-      )[];
-      /** @description The user's permission type. This field is null if uses granular permissions */
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
+      /**
+       * @description The user's permission type. This field is null if uses granular permissions
+       * @enum {string}
+       */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       /**
        * @deprecated
        * @description Deprecated (use translateLanguageIds).
        *
        * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       permittedLanguageIds?: number[];
       /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       translateLanguageIds?: number[];
       /**
        * @description List of languages user can view. If null, all languages view is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       viewLanguageIds?: number[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       stateChangeLanguageIds?: number[];
     };
@@ -528,6 +768,8 @@ export interface components {
       avatar?: components["schemas"]["Avatar"];
       organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
       baseLanguage?: components["schemas"]["LanguageModel"];
+      defaultNamespace?: components["schemas"]["NamespaceModel"];
+      /** @enum {string} */
       organizationRole?: "MEMBER" | "OWNER";
       directPermission?: components["schemas"]["PermissionModel"];
       computedPermission: components["schemas"]["ComputedPermissionModel"];
@@ -546,151 +788,8 @@ export interface components {
       basePermissions: components["schemas"]["PermissionModel"];
       avatar?: components["schemas"]["Avatar"];
     };
-    WebhookConfigRequest: {
-      url: string;
-    };
-    WebhookConfigModel: {
-      /** Format: int64 */
-      id: number;
-      url: string;
-      webhookSecret: string;
-      /**
-       * Format: int64
-       * @description Date of the first failed webhook request. If the last webhook request is successful, this value is set to null.
-       */
-      firstFailed?: number;
-      /**
-       * Format: int64
-       * @description Date of the last webhook request.
-       */
-      lastExecuted?: number;
-    };
-    AutoTranslationSettingsDto: {
-      /** Format: int64 */
-      languageId?: number;
-      /** @description If true, new keys will be automatically translated via batch operation using translation memory when 100% match is found */
-      usingTranslationMemory: boolean;
-      /** @description If true, new keys will be automatically translated via batch operationusing primary machine translation service.When "usingTranslationMemory" is enabled, it tries to translate it with translation memory first. */
-      usingMachineTranslation: boolean;
-      /**
-       * @description If true, import will trigger batch operation to translate the new new keys.
-       * It includes also the data imported via CLI, Figma, or other integrations using batch key import.
-       */
-      enableForImport: boolean;
-    };
-    AutoTranslationConfigModel: {
-      /** Format: int64 */
-      languageId?: number;
-      /** @description If true, new keys will be automatically translated via batch operation using translation memory when 100% match is found */
-      usingTranslationMemory: boolean;
-      /** @description If true, new keys will be automatically translated via batch operationusing primary machine translation service.When "usingTranslationMemory" is enabled, it tries to translate it with translation memory first. */
-      usingMachineTranslation: boolean;
-      /**
-       * @description If true, import will trigger batch operation to translate the new new keys.
-       * It includes also the data imported via CLI, Figma, or other integrations using batch key import.
-       */
-      enableForImport: boolean;
-    };
-    CollectionModelAutoTranslationConfigModel: {
-      _embedded?: {
-        configs?: components["schemas"]["AutoTranslationConfigModel"][];
-      };
-    };
     UpdateNamespaceDto: {
       name: string;
-    };
-    NamespaceModel: {
-      /**
-       * Format: int64
-       * @description The id of namespace
-       * @example 10000048
-       */
-      id: number;
-      /** @example homepage */
-      name: string;
-    };
-    MachineTranslationLanguagePropsDto: {
-      /**
-       * Format: int64
-       * @description The language to apply those rules. If null, then this settings are default.
-       */
-      targetLanguageId?: number;
-      /**
-       * @deprecated
-       * @description This service will be used for automated translation
-       */
-      primaryService?:
-        | "GOOGLE"
-        | "AWS"
-        | "DEEPL"
-        | "AZURE"
-        | "BAIDU"
-        | "TOLGEE";
-      primaryServiceInfo?: components["schemas"]["MtServiceInfo"];
-      /**
-       * @deprecated
-       * @description List of enabled services (deprecated: use enabledServicesInfo)
-       */
-      enabledServices?: (
-        | "GOOGLE"
-        | "AWS"
-        | "DEEPL"
-        | "AZURE"
-        | "BAIDU"
-        | "TOLGEE"
-      )[];
-      /** @description Info about enabled services */
-      enabledServicesInfo?: components["schemas"]["MtServiceInfo"][];
-    };
-    /** @description Info about enabled services */
-    MtServiceInfo: {
-      serviceType: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
-      formality?: "FORMAL" | "INFORMAL" | "DEFAULT";
-    };
-    SetMachineTranslationSettingsDto: {
-      settings: components["schemas"]["MachineTranslationLanguagePropsDto"][];
-    };
-    CollectionModelLanguageConfigItemModel: {
-      _embedded?: {
-        languageConfigs?: components["schemas"]["LanguageConfigItemModel"][];
-      };
-    };
-    LanguageConfigItemModel: {
-      /**
-       * Format: int64
-       * @description When null, its a default configuration applied to not configured languages
-       */
-      targetLanguageId?: number;
-      /** @description When null, its a default configuration applied to not configured languages */
-      targetLanguageTag?: string;
-      /** @description When null, its a default configuration applied to not configured languages */
-      targetLanguageName?: string;
-      /**
-       * @deprecated
-       * @description Service used for automated translating (deprecated: use primaryServiceInfo)
-       */
-      primaryService?:
-        | "GOOGLE"
-        | "AWS"
-        | "DEEPL"
-        | "AZURE"
-        | "BAIDU"
-        | "TOLGEE";
-      primaryServiceInfo?: components["schemas"]["MtServiceInfo"];
-      /**
-       * @deprecated
-       * @description Services to be used for suggesting (deprecated: use enabledServicesInfo)
-       */
-      enabledServices: (
-        | "GOOGLE"
-        | "AWS"
-        | "DEEPL"
-        | "AZURE"
-        | "BAIDU"
-        | "TOLGEE"
-      )[];
-      /** @description Info about enabled services */
-      enabledServicesInfo: components["schemas"]["MtServiceInfo"][];
     };
     SetDisabledLanguagesRequest: {
       languageIds: number[];
@@ -705,9 +804,13 @@ export interface components {
       name: string;
       namespace?: string;
       /** @description Translations to update */
-      translations?: { [key: string]: string };
+      translations?: {
+        [key: string]: string;
+      };
       /** @description Translation states to update, if not provided states won't be modified */
-      states?: { [key: string]: "TRANSLATED" | "REVIEWED" };
+      states?: {
+        [key: string]: "TRANSLATED" | "REVIEWED";
+      };
       /** @description Tags of the key. If not provided tags won't be modified */
       tags?: string[];
       /** @description IDs of screenshots to delete */
@@ -723,8 +826,12 @@ export interface components {
       isPlural?: boolean;
       /** @description The argument name for the plural. If null, value won't be modified. If isPlural is false, this value will be ignored. */
       pluralArgName?: string;
+      /** @description If true, it will fail with 400 (with code plural_forms_data_loss) if plural is disabled and there are plural forms, which would be lost by the action. You can get rid of this warning by setting this value to false. */
+      warnOnDataLoss?: boolean;
       /** @description Custom values of the key. If not provided, custom values won't be modified */
-      custom?: { [key: string]: { [key: string]: unknown } };
+      custom?: {
+        [key: string]: Record<string, never>;
+      };
     };
     KeyInScreenshotPositionDto: {
       /** Format: int32 */
@@ -791,7 +898,12 @@ export interface components {
       description?: string;
       /**
        * @description Translations object containing values updated in this request
-       * @example [object Object]
+       * @example {
+       *   "en": {
+       *     "id": 100000003,
+       *     "text": "This is super translation!"
+       *   }
+       * }
        */
       translations: {
         [key: string]: components["schemas"]["TranslationModel"];
@@ -805,7 +917,9 @@ export interface components {
       /** @description The argument name for the plural */
       pluralArgName?: string;
       /** @description Custom values of the key */
-      custom: { [key: string]: { [key: string]: unknown } };
+      custom: {
+        [key: string]: Record<string, never>;
+      };
     };
     /** @description Screenshots of the key */
     ScreenshotModel: {
@@ -842,7 +956,12 @@ export interface components {
     };
     /**
      * @description Translations object containing values updated in this request
-     * @example [object Object]
+     * @example {
+     *   "en": {
+     *     "id": 100000003,
+     *     "text": "This is super translation!"
+     *   }
+     * }
      */
     TranslationModel: {
       /**
@@ -852,13 +971,19 @@ export interface components {
       id: number;
       /** @description Translation text */
       text?: string;
-      /** @description State of translation */
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
       state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
       /** @description Whether base language translation was changed after this translation was updated */
       outdated: boolean;
       /** @description Was translated using Translation Memory or Machine translation service? */
       auto: boolean;
-      /** @description Which machine translation service was used to auto translate this */
+      /**
+       * @description Which machine translation service was used to auto translate this
+       * @enum {string}
+       */
       mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
     };
     EditKeyDto: {
@@ -892,203 +1017,37 @@ export interface components {
        */
       description?: string;
       /** @description Custom values of the key */
-      custom?: { [key: string]: { [key: string]: unknown } };
+      custom?: {
+        [key: string]: Record<string, never>;
+      };
     };
-    ProjectInviteUserDto: {
-      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
-      /**
-       * @description Granted scopes for the invited user
-       * @example translations.view,translations.edit
-       */
-      scopes?: string[];
-      /**
-       * @deprecated
-       * @description Deprecated -> use translate languages
-       */
-      languages?: number[];
-      /**
-       * @deprecated
-       * @description Languages user can translate to
-       */
-      translateLanguages?: number[];
-      /**
-       * @deprecated
-       * @description Languages user can view
-       */
-      viewLanguages?: number[];
-      /**
-       * @deprecated
-       * @description Languages user can change translation state (review)
-       */
-      stateChangeLanguages?: number[];
-      /** @description Email to send invitation to */
-      email?: string;
-      /** @description Name of invited user */
+    ComplexTagKeysRequest: {
+      /** @description Include keys filtered by the provided key information */
+      filterKeys?: components["schemas"]["KeyId"][];
+      /** @description Exclude keys filtered by the provided key information */
+      filterKeysNot?: components["schemas"]["KeyId"][];
+      /** @description Include keys filtered by the provided tag information. This filter supports wildcards. For example, `draft-*` will match all tags starting with `draft-`. */
+      filterTag?: string[];
+      /** @description Exclude keys filtered by the provided tag information. This filter supports wildcards. For example, `draft-*` will match all tags starting with `draft-`. */
+      filterTagNot?: string[];
+      /** @description Specified tags will be added to filtered keys */
+      tagFiltered?: string[];
+      /** @description Specified tags will be removed from filtered keys. It supports wildcards. For example, `draft-*` will remove all tags starting with `draft-`. */
+      untagFiltered?: string[];
+      /** @description Specified tags will be added to keys not filtered by any of the specified filters. */
+      tagOther?: string[];
+      /** @description Specified tags will be removed from keys not filtered by any of the specified filters. It supports wildcards. For example, `draft-*` will remove all tags starting with `draft-`. */
+      untagOther?: string[];
+    };
+    /** @description Exclude keys filtered by the provided key information */
+    KeyId: {
       name?: string;
-    };
-    ProjectInvitationModel: {
-      /** Format: int64 */
-      id: number;
-      code: string;
-      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
-      permittedLanguageIds?: number[];
-      /** Format: date-time */
-      createdAt: string;
-      invitedUserName?: string;
-      invitedUserEmail?: string;
-      permission: components["schemas"]["PermissionModel"];
-    };
-    AzureContentStorageConfigDto: {
-      connectionString?: string;
-      containerName: string;
-    };
-    ContentStorageRequest: {
-      name: string;
-      azureContentStorageConfig?: components["schemas"]["AzureContentStorageConfigDto"];
-      s3ContentStorageConfig?: components["schemas"]["S3ContentStorageConfigDto"];
-      publicUrlPrefix?: string;
-    };
-    S3ContentStorageConfigDto: {
-      bucketName: string;
-      accessKey?: string;
-      secretKey?: string;
-      endpoint: string;
-      signingRegion: string;
-      enabled?: boolean;
-      contentStorageType?: "S3" | "AZURE";
-    };
-    AzureContentStorageConfigModel: {
-      containerName?: string;
-    };
-    ContentStorageModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      publicUrlPrefix?: string;
-      azureContentStorageConfig?: components["schemas"]["AzureContentStorageConfigModel"];
-      s3ContentStorageConfig?: components["schemas"]["S3ContentStorageConfigModel"];
-    };
-    S3ContentStorageConfigModel: {
-      bucketName: string;
-      endpoint: string;
-      signingRegion: string;
-    };
-    ContentDeliveryConfigRequest: {
-      name: string;
+      namespace?: string;
       /**
        * Format: int64
-       * @description Id of custom storage to use for content delivery. If null, default server storage is used. Tolgee Cloud provides default Content Storage.
+       * @description If key id is provided, name and namespace are ignored.
        */
-      contentStorageId?: number;
-      /** @description If true, data are published to the content delivery automatically after each change. */
-      autoPublish: boolean;
-      /**
-       * @description Languages to be contained in export.
-       *
-       * If null, all languages are exported
-       * @example en
-       */
-      languages?: string[];
-      /** @description Format to export to */
-      format:
-        | "JSON"
-        | "XLIFF"
-        | "PO"
-        | "APPLE_STRINGS_STRINGSDICT"
-        | "APPLE_XLIFF"
-        | "ANDROID_XML"
-        | "FLUTTER_ARB";
-      /**
-       * @description Delimiter to structure file content.
-       *
-       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
-       *
-       * When null, resulting file won't be structured.
-       */
-      structureDelimiter?: string;
-      /**
-       * @description
-       *       If true, for structured formats (like JSON) arrays are supported.
-       *       e.g. Key hello[0] will be exported as {"hello": ["..."]}
-       */
-      supportArrays: boolean;
-      /** @description Filter key IDs to be contained in export */
-      filterKeyId?: number[];
-      /** @description Filter key IDs not to be contained in export */
-      filterKeyIdNot?: number[];
-      /** @description Filter keys tagged by */
-      filterTag?: string;
-      /** @description Filter keys with prefix */
-      filterKeyPrefix?: string;
-      /** @description Filter translations with state. By default, everything except untranslated is exported. */
-      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-      /** @description Select one ore multiple namespaces to export */
-      filterNamespace?: string[];
-      /**
-       * @description Message format to be used for export. (applicable for .po)
-       *
-       * e.g. PHP_PO: Hello %s, PYTHON_PO: Hello %(name)s
-       */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "PYTHON_SPRINTF";
-    };
-    ContentDeliveryConfigModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      slug: string;
-      storage?: components["schemas"]["ContentStorageModel"];
-      publicUrl?: string;
-      autoPublish: boolean;
-      /** Format: int64 */
-      lastPublished?: number;
-      /**
-       * @description Languages to be contained in export.
-       *
-       * If null, all languages are exported
-       * @example en
-       */
-      languages?: string[];
-      /** @description Format to export to */
-      format:
-        | "JSON"
-        | "XLIFF"
-        | "PO"
-        | "APPLE_STRINGS_STRINGSDICT"
-        | "APPLE_XLIFF"
-        | "ANDROID_XML"
-        | "FLUTTER_ARB";
-      /**
-       * @description Delimiter to structure file content.
-       *
-       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
-       *
-       * When null, resulting file won't be structured.
-       */
-      structureDelimiter?: string;
-      /** @description Filter key IDs to be contained in export */
-      filterKeyId?: number[];
-      /** @description Filter key IDs not to be contained in export */
-      filterKeyIdNot?: number[];
-      /** @description Filter keys tagged by */
-      filterTag?: string;
-      /** @description Filter keys with prefix */
-      filterKeyPrefix?: string;
-      /** @description Filter translations with state. By default, everything except untranslated is exported. */
-      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-      /** @description Select one ore multiple namespaces to export */
-      filterNamespace?: string[];
-      /**
-       * @description Message format to be used for export. (applicable for .po)
-       *
-       * e.g. PHP_PO: Hello %s, PYTHON_PO: Hello %(name)s
-       */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "PYTHON_SPRINTF";
-      /**
-       * @description
-       *       If true, for structured formats (like JSON) arrays are supported.
-       *       e.g. Key hello[0] will be exported as {"hello": ["..."]}
-       */
-      supportArrays: boolean;
+      id?: number;
     };
     TagKeyDto: {
       name: string;
@@ -1096,25 +1055,18 @@ export interface components {
     SetFileNamespaceRequest: {
       namespace?: string;
     };
-    StreamingResponseBody: { [key: string]: unknown };
+    StreamingResponseBody: Record<string, never>;
     ImportSettingsRequest: {
       /** @description If true, key descriptions will be overridden by the import */
       overrideKeyDescriptions: boolean;
       /** @description If true, placeholders from other formats will be converted to ICU when possible */
       convertPlaceholdersToIcu: boolean;
     };
-    IImportSettings: {
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
-      /** @description If true, key descriptions will be overridden by the import */
-      overrideKeyDescriptions: boolean;
-    };
     ImportSettingsModel: {
-      settings?: components["schemas"]["IImportSettings"];
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
       /** @description If true, key descriptions will be overridden by the import */
       overrideKeyDescriptions: boolean;
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
     };
     /** @description User who created the comment */
     SimpleUserAccountModel: {
@@ -1133,7 +1085,10 @@ export interface components {
       id: number;
       /** @description Text of comment */
       text: string;
-      /** @description State of translation */
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
       state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
       author: components["schemas"]["SimpleUserAccountModel"];
       /**
@@ -1149,6 +1104,7 @@ export interface components {
     };
     TranslationCommentDto: {
       text: string;
+      /** @enum {string} */
       state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
     };
     SetTranslationsWithKeyDto: {
@@ -1161,15 +1117,24 @@ export interface components {
       namespace?: string;
       /**
        * @description Object mapping language tag to translation
-       * @example [object Object]
+       * @example {
+       *   "en": "What a translated value!",
+       *   "cs": "Jaká to přeložená hodnota!"
+       * }
        */
-      translations: { [key: string]: string };
+      translations: {
+        [key: string]: string;
+      };
       /**
        * @description List of languages to return translations for.
        *
        * If not provided, only modified translation will be provided.
        *
-       * @example en,de,fr
+       * @example [
+       *   "en",
+       *   "de",
+       *   "fr"
+       * ]
        */
       languagesToReturn?: string[];
     };
@@ -1192,7 +1157,12 @@ export interface components {
       keyIsPlural: boolean;
       /**
        * @description Translations object containing values updated in this request
-       * @example [object Object]
+       * @example {
+       *   "en": {
+       *     "id": 100000003,
+       *     "text": "This is super translation!"
+       *   }
+       * }
        */
       translations: {
         [key: string]: components["schemas"]["TranslationModel"];
@@ -1220,81 +1190,6 @@ export interface components {
        */
       flagEmoji?: string;
     };
-    SetLanguagePromptCustomizationRequest: {
-      /**
-       * @description The language description used in the  prompt that helps AI translator to fine tune results for specific language
-       * @example For arabic language, we are super formal. Always use these translations:
-       * Paper -> ورقة
-       * Office -> مكتب
-       */
-      description?: string;
-    };
-    LanguageAiPromptCustomizationModel: {
-      /**
-       * @description The language description used in the  prompt that helps AI translator to fine tune results for specific language
-       * @example For arabic language, we are super formal. Always use these translations:
-       * Paper -> ورقة
-       * Office -> مكتب
-       */
-      description?: string;
-      language: components["schemas"]["LanguageModel"];
-    };
-    SetProjectPromptCustomizationRequest: {
-      /**
-       * @description The project description used in the  prompt that helps AI translator to understand the context of your project.
-       * @example We are Dunder Mifflin, a paper company. We sell paper. This is an project of translations for out paper selling app.
-       */
-      description?: string;
-    };
-    ProjectAiPromptCustomizationModel: {
-      /**
-       * @description The project description used in the  prompt that helps AI translator to understand the context of your project.
-       * @example We are Dunder Mifflin, a paper company. We sell paper. This is an project of translations for out paper selling app.
-       */
-      description?: string;
-    };
-    UpdatePatDto: {
-      /** @description New description of the PAT */
-      description: string;
-    };
-    PatModel: {
-      /** Format: int64 */
-      id: number;
-      description: string;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      createdAt: number;
-      /** Format: int64 */
-      updatedAt: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-    };
-    RegeneratePatDto: {
-      /**
-       * Format: int64
-       * @description Expiration date in epoch format (milliseconds). When null key never expires.
-       * @example 1661172869000
-       */
-      expiresAt?: number;
-    };
-    RevealedPatModel: {
-      token: string;
-      /** Format: int64 */
-      id: number;
-      description: string;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      /** Format: int64 */
-      createdAt: number;
-      /** Format: int64 */
-      updatedAt: number;
-    };
-    SetOrganizationRoleDto: {
-      roleType: "MEMBER" | "OWNER";
-    };
     OrganizationDto: {
       /** @example Beautiful organization */
       name: string;
@@ -1317,311 +1212,10 @@ export interface components {
        * @description The role of currently authorized user.
        *
        * Can be null when user has direct access to one of the projects owned by the organization.
+       * @enum {string}
        */
       currentUserRole?: "MEMBER" | "OWNER";
       avatar?: components["schemas"]["Avatar"];
-    };
-    OrganizationInviteUserDto: {
-      roleType: "MEMBER" | "OWNER";
-      /** @description Name of invited user */
-      name?: string;
-      /** @description Email to send invitation to */
-      email?: string;
-    };
-    OrganizationInvitationModel: {
-      /** Format: int64 */
-      id: number;
-      code: string;
-      type: "MEMBER" | "OWNER";
-      /** Format: date-time */
-      createdAt: string;
-      invitedUserName?: string;
-      invitedUserEmail?: string;
-    };
-    SetLicenseKeyDto: {
-      licenseKey: string;
-    };
-    EeSubscriptionModel: {
-      name: string;
-      licenseKey: string;
-      enabledFeatures: (
-        | "GRANULAR_PERMISSIONS"
-        | "PRIORITIZED_FEATURE_REQUESTS"
-        | "PREMIUM_SUPPORT"
-        | "DEDICATED_SLACK_CHANNEL"
-        | "ASSISTED_UPDATES"
-        | "DEPLOYMENT_ASSISTANCE"
-        | "BACKUP_CONFIGURATION"
-        | "TEAM_TRAINING"
-        | "ACCOUNT_MANAGER"
-        | "STANDARD_SUPPORT"
-        | "PROJECT_LEVEL_CONTENT_STORAGES"
-        | "WEBHOOKS"
-        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
-        | "AI_PROMPT_CUSTOMIZATION"
-      )[];
-      /** Format: int64 */
-      currentPeriodEnd?: number;
-      cancelAtPeriodEnd: boolean;
-      /** Format: int64 */
-      currentUserCount: number;
-      status:
-        | "ACTIVE"
-        | "CANCELED"
-        | "PAST_DUE"
-        | "UNPAID"
-        | "ERROR"
-        | "KEY_USED_BY_ANOTHER_INSTANCE";
-      /** Format: date-time */
-      lastValidCheck?: string;
-    };
-    V2EditApiKeyDto: {
-      scopes: string[];
-      description?: string;
-    };
-    ApiKeyModel: {
-      /**
-       * Format: int64
-       * @description ID of the API key
-       */
-      id: number;
-      /** @description Description */
-      description: string;
-      /** @description Username of user owner */
-      username?: string;
-      /** @description Full name of user owner */
-      userFullName?: string;
-      /**
-       * Format: int64
-       * @description Api key's project ID
-       */
-      projectId: number;
-      /** @description Api key's project name */
-      projectName: string;
-      /**
-       * Format: int64
-       * @description Timestamp of API key expiraion
-       */
-      expiresAt?: number;
-      /**
-       * Format: int64
-       * @description Timestamp of API key last usage
-       */
-      lastUsedAt?: number;
-      /**
-       * @description Api key's permission scopes
-       * @example screenshots.upload,screenshots.delete,translations.edit,screenshots.view,translations.view,keys.edit
-       */
-      scopes: string[];
-    };
-    RegenerateApiKeyDto: {
-      /**
-       * Format: int64
-       * @description Expiration date in epoch format (milliseconds). When null key never expires.
-       * @example 1661172869000
-       */
-      expiresAt?: number;
-    };
-    RevealedApiKeyModel: {
-      /** @description Resulting user's api key */
-      key: string;
-      /** Format: int64 */
-      id: number;
-      scopes: string[];
-      username?: string;
-      description: string;
-      /** Format: int64 */
-      projectId: number;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      projectName: string;
-      userFullName?: string;
-    };
-    SuperTokenRequest: {
-      /** @description Has to be provided when TOTP enabled */
-      otp?: string;
-      /** @description Has to be provided when TOTP not enabled */
-      password?: string;
-    };
-    GenerateSlugDto: {
-      name: string;
-      oldSlug?: string;
-    };
-    ExampleItem: {
-      source: string;
-      target: string;
-      key: string;
-      keyNamespace?: string;
-    };
-    Metadata: {
-      examples: components["schemas"]["ExampleItem"][];
-      closeItems: components["schemas"]["ExampleItem"][];
-      keyDescription?: string;
-      projectDescription?: string;
-      languageDescription?: string;
-    };
-    TolgeeTranslateParams: {
-      text: string;
-      keyName?: string;
-      sourceTag: string;
-      targetTag: string;
-      metadata?: components["schemas"]["Metadata"];
-      formality?: "FORMAL" | "INFORMAL" | "DEFAULT";
-      isBatch: boolean;
-      pluralForms?: { [key: string]: string };
-      expectedPluralForms?: string[];
-    };
-    MtResult: {
-      translated?: string;
-      /** Format: int32 */
-      price: number;
-      contextDescription?: string;
-    };
-    TelemetryReportRequest: {
-      instanceId: string;
-      /** Format: int64 */
-      projectsCount: number;
-      /** Format: int64 */
-      translationsCount: number;
-      /** Format: int64 */
-      languagesCount: number;
-      /** Format: int64 */
-      distinctLanguagesCount: number;
-      /** Format: int64 */
-      usersCount: number;
-    };
-    GetMySubscriptionDto: {
-      licenseKey: string;
-      instanceId: string;
-    };
-    PlanIncludedUsageModel: {
-      /** Format: int64 */
-      seats: number;
-      /** Format: int64 */
-      translationSlots: number;
-      /** Format: int64 */
-      translations: number;
-      /** Format: int64 */
-      mtCredits: number;
-    };
-    PlanPricesModel: {
-      perSeat: number;
-      perThousandTranslations?: number;
-      perThousandMtCredits?: number;
-      subscriptionMonthly: number;
-      subscriptionYearly: number;
-    };
-    SelfHostedEePlanModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      public: boolean;
-      enabledFeatures: (
-        | "GRANULAR_PERMISSIONS"
-        | "PRIORITIZED_FEATURE_REQUESTS"
-        | "PREMIUM_SUPPORT"
-        | "DEDICATED_SLACK_CHANNEL"
-        | "ASSISTED_UPDATES"
-        | "DEPLOYMENT_ASSISTANCE"
-        | "BACKUP_CONFIGURATION"
-        | "TEAM_TRAINING"
-        | "ACCOUNT_MANAGER"
-        | "STANDARD_SUPPORT"
-        | "PROJECT_LEVEL_CONTENT_STORAGES"
-        | "WEBHOOKS"
-        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
-        | "AI_PROMPT_CUSTOMIZATION"
-      )[];
-      prices: components["schemas"]["PlanPricesModel"];
-      includedUsage: components["schemas"]["PlanIncludedUsageModel"];
-      hasYearlyPrice: boolean;
-      free: boolean;
-    };
-    SelfHostedEeSubscriptionModel: {
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      currentPeriodStart?: number;
-      /** Format: int64 */
-      currentPeriodEnd?: number;
-      currentBillingPeriod: "MONTHLY" | "YEARLY";
-      /** Format: int64 */
-      createdAt: number;
-      plan: components["schemas"]["SelfHostedEePlanModel"];
-      status:
-        | "ACTIVE"
-        | "CANCELED"
-        | "PAST_DUE"
-        | "UNPAID"
-        | "ERROR"
-        | "KEY_USED_BY_ANOTHER_INSTANCE";
-      licenseKey?: string;
-      estimatedCosts?: number;
-    };
-    SetLicenseKeyLicensingDto: {
-      licenseKey: string;
-      /** Format: int64 */
-      seats: number;
-      instanceId: string;
-    };
-    ReportUsageDto: {
-      licenseKey: string;
-      /** Format: int64 */
-      seats: number;
-    };
-    ReportErrorDto: {
-      stackTrace: string;
-      licenseKey: string;
-    };
-    ReleaseKeyDto: {
-      licenseKey: string;
-    };
-    PrepareSetLicenseKeyDto: {
-      licenseKey: string;
-      /** Format: int64 */
-      seats: number;
-    };
-    AverageProportionalUsageItemModel: {
-      total: number;
-      unusedQuantity: number;
-      usedQuantity: number;
-      usedQuantityOverPlan: number;
-    };
-    PrepareSetEeLicenceKeyModel: {
-      plan: components["schemas"]["SelfHostedEePlanModel"];
-      usage: components["schemas"]["UsageModel"];
-    };
-    SumUsageItemModel: {
-      total: number;
-      /** Format: int64 */
-      unusedQuantity: number;
-      /** Format: int64 */
-      usedQuantity: number;
-      /** Format: int64 */
-      usedQuantityOverPlan: number;
-    };
-    UsageModel: {
-      subscriptionPrice?: number;
-      /** @description Relevant for invoices only. When there are applied stripe credits, we need to reduce the total price by this amount. */
-      appliedStripeCredits?: number;
-      seats: components["schemas"]["AverageProportionalUsageItemModel"];
-      translations: components["schemas"]["AverageProportionalUsageItemModel"];
-      credits?: components["schemas"]["SumUsageItemModel"];
-      total: number;
-    };
-    BusinessEventReportRequest: {
-      eventName: string;
-      anonymousUserId?: string;
-      /** Format: int64 */
-      organizationId?: number;
-      /** Format: int64 */
-      projectId?: number;
-      data?: { [key: string]: { [key: string]: unknown } };
-    };
-    IdentifyRequest: {
-      anonymousUserId: string;
     };
     CreateProjectRequest: {
       name: string;
@@ -1637,9 +1231,6 @@ export interface components {
       baseLanguageTag?: string;
       /** @description Whether to use ICU placeholder visualization in the editor and it's support. */
       icuPlaceholders: boolean;
-    };
-    WebhookTestResponse: {
-      success: boolean;
     };
     GetKeysRequestDto: {
       keys: components["schemas"]["KeyDefinitionDto"][];
@@ -1687,6 +1278,7 @@ export interface components {
        * - NEW: New translation is created)
        *
        * @example OVERRIDE
+       * @enum {string}
        */
       resolution: "KEEP" | "OVERRIDE" | "NEW";
     };
@@ -1694,7 +1286,9 @@ export interface components {
       /** @description List of keys */
       keys: components["schemas"]["KeyModel"][];
       /** @description Map uploadedImageId to screenshot */
-      screenshots: { [key: string]: components["schemas"]["ScreenshotModel"] };
+      screenshots: {
+        [key: string]: components["schemas"]["ScreenshotModel"];
+      };
     };
     ImportKeysDto: {
       keys: components["schemas"]["ImportKeysItemDto"][];
@@ -1714,12 +1308,20 @@ export interface components {
       description?: string;
       /**
        * @description Object mapping language tag to translation
-       * @example [object Object]
+       * @example {
+       *   "en": "What a translated value!",
+       *   "cs": "Jaká to přeložená hodnota!"
+       * }
        */
-      translations: { [key: string]: string };
+      translations: {
+        [key: string]: string;
+      };
       /**
        * @description Tags of the key
-       * @example homepage,user-profile
+       * @example [
+       *   "homepage",
+       *   "user-profile"
+       * ]
        */
       tags?: string[];
     };
@@ -1727,9 +1329,13 @@ export interface components {
       /** @description Name of the key */
       name: string;
       namespace?: string;
-      translations?: { [key: string]: string };
+      translations?: {
+        [key: string]: string;
+      };
       /** @description Translation states to update, if not provided states won't be modified */
-      states?: { [key: string]: "TRANSLATED" | "REVIEWED" };
+      states?: {
+        [key: string]: "TRANSLATED" | "REVIEWED";
+      };
       tags?: string[];
       /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
       screenshotUploadedImageIds?: number[];
@@ -1746,207 +1352,6 @@ export interface components {
       /** @description The argument name for the plural. If null, value will be guessed from the values provided in translations. */
       pluralArgName?: string;
     };
-    StorageTestResult: {
-      success: boolean;
-      message?:
-        | "UNAUTHENTICATED"
-        | "API_ACCESS_FORBIDDEN"
-        | "API_KEY_NOT_FOUND"
-        | "INVALID_API_KEY"
-        | "INVALID_PROJECT_API_KEY"
-        | "PROJECT_API_KEY_EXPIRED"
-        | "BAD_CREDENTIALS"
-        | "MFA_ENABLED"
-        | "INVALID_OTP_CODE"
-        | "MFA_NOT_ENABLED"
-        | "CAN_NOT_REVOKE_OWN_PERMISSIONS"
-        | "DATA_CORRUPTED"
-        | "INVITATION_CODE_DOES_NOT_EXIST_OR_EXPIRED"
-        | "LANGUAGE_TAG_EXISTS"
-        | "LANGUAGE_NAME_EXISTS"
-        | "LANGUAGE_NOT_FOUND"
-        | "OPERATION_NOT_PERMITTED"
-        | "REGISTRATIONS_NOT_ALLOWED"
-        | "PROJECT_NOT_FOUND"
-        | "RESOURCE_NOT_FOUND"
-        | "SCOPE_NOT_FOUND"
-        | "KEY_EXISTS"
-        | "THIRD_PARTY_AUTH_ERROR_MESSAGE"
-        | "THIRD_PARTY_AUTH_NO_EMAIL"
-        | "THIRD_PARTY_AUTH_NO_SUB"
-        | "THIRD_PARTY_AUTH_UNKNOWN_ERROR"
-        | "THIRD_PARTY_UNAUTHORIZED"
-        | "THIRD_PARTY_GOOGLE_WORKSPACE_MISMATCH"
-        | "USERNAME_ALREADY_EXISTS"
-        | "USERNAME_OR_PASSWORD_INVALID"
-        | "USER_ALREADY_HAS_PERMISSIONS"
-        | "USER_ALREADY_HAS_ROLE"
-        | "USER_NOT_FOUND"
-        | "FILE_NOT_IMAGE"
-        | "FILE_TOO_BIG"
-        | "INVALID_TIMESTAMP"
-        | "EMAIL_NOT_VERIFIED"
-        | "MISSING_CALLBACK_URL"
-        | "INVALID_JWT_TOKEN"
-        | "EXPIRED_JWT_TOKEN"
-        | "GENERAL_JWT_ERROR"
-        | "CANNOT_FIND_SUITABLE_ADDRESS_PART"
-        | "ADDRESS_PART_NOT_UNIQUE"
-        | "USER_IS_NOT_MEMBER_OF_ORGANIZATION"
-        | "ORGANIZATION_HAS_NO_OTHER_OWNER"
-        | "USER_HAS_NO_PROJECT_ACCESS"
-        | "USER_IS_ORGANIZATION_OWNER"
-        | "CANNOT_SET_YOUR_OWN_PERMISSIONS"
-        | "USER_IS_ORGANIZATION_MEMBER"
-        | "PROPERTY_NOT_MUTABLE"
-        | "IMPORT_LANGUAGE_NOT_FROM_PROJECT"
-        | "EXISTING_LANGUAGE_NOT_SELECTED"
-        | "CONFLICT_IS_NOT_RESOLVED"
-        | "LANGUAGE_ALREADY_SELECTED"
-        | "CANNOT_PARSE_FILE"
-        | "COULD_NOT_RESOLVE_PROPERTY"
-        | "CANNOT_ADD_MORE_THEN_100_LANGUAGES"
-        | "NO_LANGUAGES_PROVIDED"
-        | "LANGUAGE_WITH_BASE_LANGUAGE_TAG_NOT_FOUND"
-        | "LANGUAGE_NOT_FROM_PROJECT"
-        | "CANNOT_DELETE_BASE_LANGUAGE"
-        | "KEY_NOT_FROM_PROJECT"
-        | "MAX_SCREENSHOTS_EXCEEDED"
-        | "TRANSLATION_NOT_FROM_PROJECT"
-        | "CAN_EDIT_ONLY_OWN_COMMENT"
-        | "REQUEST_PARSE_ERROR"
-        | "FILTER_BY_VALUE_STATE_NOT_VALID"
-        | "IMPORT_HAS_EXPIRED"
-        | "TAG_NOT_FROM_PROJECT"
-        | "TRANSLATION_TEXT_TOO_LONG"
-        | "INVALID_RECAPTCHA_TOKEN"
-        | "CANNOT_LEAVE_OWNING_PROJECT"
-        | "CANNOT_LEAVE_PROJECT_WITH_ORGANIZATION_ROLE"
-        | "DONT_HAVE_DIRECT_PERMISSIONS"
-        | "TAG_TOO_LOG"
-        | "TOO_MANY_UPLOADED_IMAGES"
-        | "ONE_OR_MORE_IMAGES_NOT_FOUND"
-        | "SCREENSHOT_NOT_OF_KEY"
-        | "SERVICE_NOT_FOUND"
-        | "TOO_MANY_REQUESTS"
-        | "TRANSLATION_NOT_FOUND"
-        | "OUT_OF_CREDITS"
-        | "KEY_NOT_FOUND"
-        | "ORGANIZATION_NOT_FOUND"
-        | "CANNOT_FIND_BASE_LANGUAGE"
-        | "BASE_LANGUAGE_NOT_FOUND"
-        | "NO_EXPORTED_RESULT"
-        | "CANNOT_SET_YOUR_OWN_ROLE"
-        | "ONLY_TRANSLATE_REVIEW_OR_VIEW_PERMISSION_ACCEPTS_VIEW_LANGUAGES"
-        | "OAUTH2_TOKEN_URL_NOT_SET"
-        | "OAUTH2_USER_URL_NOT_SET"
-        | "EMAIL_ALREADY_INVITED_OR_MEMBER"
-        | "PRICE_NOT_FOUND"
-        | "INVOICE_NOT_FROM_ORGANIZATION"
-        | "INVOICE_NOT_FOUND"
-        | "PLAN_NOT_FOUND"
-        | "PLAN_NOT_AVAILABLE_ANY_MORE"
-        | "NO_AUTO_TRANSLATION_METHOD"
-        | "CANNOT_TRANSLATE_BASE_LANGUAGE"
-        | "PAT_NOT_FOUND"
-        | "INVALID_PAT"
-        | "PAT_EXPIRED"
-        | "OPERATION_UNAVAILABLE_FOR_ACCOUNT_TYPE"
-        | "VALIDATION_EMAIL_IS_NOT_VALID"
-        | "CURRENT_PASSWORD_REQUIRED"
-        | "CANNOT_CREATE_ORGANIZATION"
-        | "WRONG_CURRENT_PASSWORD"
-        | "WRONG_PARAM_TYPE"
-        | "EXPIRED_SUPER_JWT_TOKEN"
-        | "CANNOT_DELETE_YOUR_OWN_ACCOUNT"
-        | "CANNOT_SORT_BY_THIS_COLUMN"
-        | "NAMESPACE_NOT_FOUND"
-        | "NAMESPACE_EXISTS"
-        | "INVALID_AUTHENTICATION_METHOD"
-        | "UNKNOWN_SORT_PROPERTY"
-        | "ONLY_REVIEW_PERMISSION_ACCEPTS_STATE_CHANGE_LANGUAGES"
-        | "ONLY_TRANSLATE_OR_REVIEW_PERMISSION_ACCEPTS_TRANSLATE_LANGUAGES"
-        | "CANNOT_SET_LANGUAGE_PERMISSIONS_FOR_ADMIN_SCOPE"
-        | "CANNOT_SET_VIEW_LANGUAGES_WITHOUT_TRANSLATIONS_VIEW_SCOPE"
-        | "CANNOT_SET_TRANSLATE_LANGUAGES_WITHOUT_TRANSLATIONS_EDIT_SCOPE"
-        | "CANNOT_SET_STATE_CHANGE_LANGUAGES_WITHOUT_TRANSLATIONS_STATE_EDIT_SCOPE"
-        | "LANGUAGE_NOT_PERMITTED"
-        | "SCOPES_HAS_TO_BE_SET"
-        | "SET_EXACTLY_ONE_OF_SCOPES_OR_TYPE"
-        | "TRANSLATION_EXISTS"
-        | "IMPORT_KEYS_ERROR"
-        | "PROVIDE_ONLY_ONE_OF_SCREENSHOTS_AND_SCREENSHOT_UPLOADED_IMAGE_IDS"
-        | "MULTIPLE_PROJECTS_NOT_SUPPORTED"
-        | "PLAN_TRANSLATION_LIMIT_EXCEEDED"
-        | "FEATURE_NOT_ENABLED"
-        | "LICENSE_KEY_NOT_FOUND"
-        | "CANNOT_SET_VIEW_LANGUAGES_WITHOUT_FOR_LEVEL_BASED_PERMISSIONS"
-        | "CANNOT_SET_DIFFERENT_TRANSLATE_AND_STATE_CHANGE_LANGUAGES_FOR_LEVEL_BASED_PERMISSIONS"
-        | "CANNOT_DISABLE_YOUR_OWN_ACCOUNT"
-        | "SUBSCRIPTION_NOT_FOUND"
-        | "INVOICE_DOES_NOT_HAVE_USAGE"
-        | "CUSTOMER_NOT_FOUND"
-        | "SUBSCRIPTION_NOT_ACTIVE"
-        | "ORGANIZATION_ALREADY_SUBSCRIBED"
-        | "ORGANIZATION_NOT_SUBSCRIBED"
-        | "LICENSE_KEY_USED_BY_ANOTHER_INSTANCE"
-        | "TRANSLATION_SPENDING_LIMIT_EXCEEDED"
-        | "CREDIT_SPENDING_LIMIT_EXCEEDED"
-        | "SEATS_SPENDING_LIMIT_EXCEEDED"
-        | "THIS_INSTANCE_IS_ALREADY_LICENSED"
-        | "BIG_META_NOT_FROM_PROJECT"
-        | "MT_SERVICE_NOT_ENABLED"
-        | "PROJECT_NOT_SELECTED"
-        | "ORGANIZATION_NOT_SELECTED"
-        | "PLAN_HAS_SUBSCRIBERS"
-        | "TRANSLATION_FAILED"
-        | "BATCH_JOB_NOT_FOUND"
-        | "KEY_EXISTS_IN_NAMESPACE"
-        | "TAG_IS_BLANK"
-        | "EXECUTION_FAILED_ON_MANAGEMENT_ERROR"
-        | "TRANSLATION_API_RATE_LIMIT"
-        | "CANNOT_FINALIZE_ACTIVITY"
-        | "FORMALITY_NOT_SUPPORTED_BY_SERVICE"
-        | "LANGUAGE_NOT_SUPPORTED_BY_SERVICE"
-        | "RATE_LIMITED"
-        | "PAT_ACCESS_NOT_ALLOWED"
-        | "PAK_ACCESS_NOT_ALLOWED"
-        | "CANNOT_MODIFY_DISABLED_TRANSLATION"
-        | "AZURE_CONFIG_REQUIRED"
-        | "S3_CONFIG_REQUIRED"
-        | "CONTENT_STORAGE_CONFIG_REQUIRED"
-        | "CONTENT_STORAGE_TEST_FAILED"
-        | "CONTENT_STORAGE_CONFIG_INVALID"
-        | "INVALID_CONNECTION_STRING"
-        | "CANNOT_CREATE_AZURE_STORAGE_CLIENT"
-        | "S3_ACCESS_KEY_REQUIRED"
-        | "AZURE_CONNECTION_STRING_REQUIRED"
-        | "S3_SECRET_KEY_REQUIRED"
-        | "CANNOT_STORE_FILE_TO_CONTENT_STORAGE"
-        | "UNEXPECTED_ERROR_WHILE_PUBLISHING_TO_CONTENT_STORAGE"
-        | "WEBHOOK_RESPONDED_WITH_NON_200_STATUS"
-        | "UNEXPECTED_ERROR_WHILE_EXECUTING_WEBHOOK"
-        | "CONTENT_STORAGE_IS_IN_USE"
-        | "CANNOT_SET_STATE_FOR_MISSING_TRANSLATION"
-        | "NO_PROJECT_ID_PROVIDED"
-        | "LICENSE_KEY_NOT_PROVIDED"
-        | "SUBSCRIPTION_ALREADY_CANCELED"
-        | "USER_IS_SUBSCRIBED_TO_PAID_PLAN"
-        | "CANNOT_CREATE_FREE_PLAN_WITHOUT_FIXED_TYPE"
-        | "CANNOT_MODIFY_PLAN_FREE_STATUS"
-        | "KEY_ID_NOT_PROVIDED"
-        | "FREE_SELF_HOSTED_SEAT_LIMIT_EXCEEDED"
-        | "ADVANCED_PARAMS_NOT_SUPPORTED"
-        | "PLURAL_FORMS_NOT_FOUND_FOR_LANGUAGE"
-        | "NESTED_PLURALS_NOT_SUPPORTED"
-        | "MESSAGE_IS_NOT_PLURAL"
-        | "CONTENT_OUTSIDE_PLURAL_FORMS"
-        | "INVALID_PLURAL_FORM"
-        | "MULTIPLE_PLURALS_NOT_SUPPORTED"
-        | "CUSTOM_VALUES_JSON_TOO_LONG"
-        | "UNSUPPORTED_PO_MESSAGE_FORMAT";
-      params?: { [key: string]: unknown }[];
-    };
     UntagKeysRequest: {
       keyIds: number[];
       tags: string[];
@@ -1957,27 +1362,16 @@ export interface components {
        * @description Batch job id
        */
       id: number;
-      /** @description Status of the batch job */
-      status:
-        | "PENDING"
-        | "RUNNING"
-        | "SUCCESS"
-        | "FAILED"
-        | "CANCELLED"
-        | "DEBOUNCED";
-      /** @description Type of the batch job */
-      type:
-        | "PRE_TRANSLATE_BT_TM"
-        | "MACHINE_TRANSLATE"
-        | "AUTO_TRANSLATE"
-        | "DELETE_KEYS"
-        | "SET_TRANSLATIONS_STATE"
-        | "CLEAR_TRANSLATIONS"
-        | "COPY_TRANSLATIONS"
-        | "TAG_KEYS"
-        | "UNTAG_KEYS"
-        | "SET_KEYS_NAMESPACE"
-        | "AUTOMATION";
+      /**
+       * @description Status of the batch job
+       * @enum {string}
+       */
+      status: "PENDING" | "RUNNING" | "SUCCESS" | "FAILED" | "CANCELLED" | "DEBOUNCED";
+      /**
+       * @description Type of the batch job
+       * @enum {string}
+       */
+      type: "PRE_TRANSLATE_BT_TM" | "MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "DELETE_KEYS" | "SET_TRANSLATIONS_STATE" | "CLEAR_TRANSLATIONS" | "COPY_TRANSLATIONS" | "TAG_KEYS" | "UNTAG_KEYS" | "SET_KEYS_NAMESPACE" | "AUTOMATION";
       /**
        * Format: int32
        * @description Total items, that have been processed so far
@@ -2014,6 +1408,7 @@ export interface components {
     SetTranslationsStateStateRequest: {
       keyIds: number[];
       languageIds: number[];
+      /** @enum {string} */
       state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
     };
     SetKeysNamespaceRequest: {
@@ -2041,9 +1436,86 @@ export interface components {
       keyIds: number[];
       languageIds: number[];
     };
-    ErrorResponseBody: {
-      code: string;
-      params?: { [key: string]: unknown }[];
+    /** @description Definition of mapping for each file to import. */
+    ImportFileMapping: {
+      /** @description Name of the file to import. This is the name of the file provided in `files` request part or in uploaded archive. */
+      fileName: string;
+      /** @description Namespace to import the file to. If not provided, the key will be imported without namespace. */
+      namespace?: string;
+      /**
+       * @description Format of the file. If not provided, Tolgee will try to guess the format from the file name or file contents.
+       *
+       * It is recommended to provide these values to prevent any issues with format detection.
+       * @enum {string}
+       */
+      format?: "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY";
+      /**
+       * @description The existing language tag in the Tolgee platform to which the imported language should be mapped.
+       *
+       * When null, Tolgee will try to guess the language from the file contents or file name.
+       */
+      languageTag?: string;
+    };
+    /**
+     * @description Maps the languages from imported files to languages existing in the Tolgee platform.
+     *
+     * Use this field only when your files contain multiple languages (e.g., XLIFF files).
+     *
+     * Otherwise, use the `languageTag` property of `fileMappings`.
+     *
+     * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
+     */
+    LanguageMapping: {
+      /**
+       * @description The language from the imported file.
+       *
+       * For xliff files, this is the `source-language` or the `target-language` attribute value of `file` element.
+       * @example en-US
+       */
+      importLanguage: string;
+      /**
+       * @description The tag of language existing in the Tolgee platform to which the imported language should be mapped.
+       * @example en-US
+       */
+      platformLanguageTag: string;
+    };
+    SingleStepImportRequest: {
+      /**
+       * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
+       * @example .
+       */
+      structureDelimiter?: string;
+      /**
+       * @description Whether to override existing translation data.
+       *
+       * When set to `KEEP`, existing translations will be kept.
+       *
+       * When set to `OVERRIDE`, existing translations will be overwrote.
+       *
+       * When set to `NO_FORCE`, error will be thrown on conflict.
+       * @enum {string}
+       */
+      forceMode: "OVERRIDE" | "KEEP" | "NO_FORCE";
+      /**
+       * @description Maps the languages from imported files to languages existing in the Tolgee platform.
+       *
+       * Use this field only when your files contain multiple languages (e.g., XLIFF files).
+       *
+       * Otherwise, use the `languageTag` property of `fileMappings`.
+       *
+       * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
+       */
+      languageMappings?: components["schemas"]["LanguageMapping"][];
+      /** @description If true, key descriptions will be overridden by the import */
+      overrideKeyDescriptions: boolean;
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
+      /** @description Definition of mapping for each file to import. */
+      fileMappings: components["schemas"]["ImportFileMapping"][];
+      /** @description Keys created by this import will be tagged with these tags. It add tags only to new keys. The keys that already exist will not be tagged. */
+      tagNewKeys: string[];
+      /** @description If yes, keys from project that were not included in import will be deleted. */
+      removeOtherKeys?: boolean;
     };
     ImportAddFilesResultModel: {
       errors: components["schemas"]["ErrorResponseBody"][];
@@ -2095,46 +1567,70 @@ export interface components {
        * @example en
        */
       languages?: string[];
-      /** @description Format to export to */
-      format:
-        | "JSON"
-        | "XLIFF"
-        | "PO"
-        | "APPLE_STRINGS_STRINGSDICT"
-        | "APPLE_XLIFF"
-        | "ANDROID_XML"
-        | "FLUTTER_ARB";
+      /**
+       * @description Format to export to
+       * @enum {string}
+       */
+      format: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
       /**
        * @description Delimiter to structure file content.
        *
        * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
        *
-       * When null, resulting file won't be structured.
+       * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
+       * specific formats like `YAML_RUBY` don't honor this parameter.
        */
       structureDelimiter?: string;
       /** @description Filter key IDs to be contained in export */
       filterKeyId?: number[];
       /** @description Filter key IDs not to be contained in export */
       filterKeyIdNot?: number[];
-      /** @description Filter keys tagged by */
+      /**
+       * @description Filter keys tagged by.
+       *
+       * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
+       */
       filterTag?: string;
+      /** @description Filter keys tagged by one of provided tags */
+      filterTagIn?: string[];
+      /** @description Filter keys not tagged by one of provided tags */
+      filterTagNotIn?: string[];
       /** @description Filter keys with prefix */
       filterKeyPrefix?: string;
-      /** @description Filter translations with state. By default, everything except untranslated is exported. */
+      /** @description Filter translations with state. By default, all states except untranslated is exported. */
       filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-      /** @description Select one ore multiple namespaces to export */
+      /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
       filterNamespace?: string[];
       zip: boolean;
       /**
-       * @description Message format to be used for export. (applicable for .po)
+       * @description Message format to be used for export.
        *
-       * e.g. PHP_PO: Hello %s, PYTHON_PO: Hello %(name)s
+       * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
+       *
+       * This property is honored only for generic formats like JSON or YAML.
+       * For specific formats like `YAML_RUBY` it's ignored.
+       * @enum {string}
        */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "PYTHON_SPRINTF";
+      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "ICU";
       /**
-       * @description
-       *       If true, for structured formats (like JSON) arrays are supported.
-       *       e.g. Key hello[0] will be exported as {"hello": ["..."]}
+       * @description This is a template that defines the structure of the resulting .zip file content.
+       *
+       * The template is a string that can contain the following placeholders: {namespace}, {languageTag},
+       * {androidLanguageTag}, {snakeLanguageTag}, {extension}.
+       *
+       * For example, when exporting to JSON with the template `{namespace}/{languageTag}.{extension}`,
+       * the English translations of the `home` namespace will be stored in `home/en.json`.
+       *
+       * The `{snakeLanguageTag}` placeholder is the same as `{languageTag}` but in snake case. (e.g., en_US).
+       *
+       * The Android specific `{androidLanguageTag}` placeholder is the same as `{languageTag}`
+       * but in Android format. (e.g., en-rUS)
+       */
+      fileStructureTemplate?: string;
+      /**
+       * @description If true, for structured formats (like JSON) arrays are supported.
+       *
+       * e.g. Key hello[0] will be exported as {"hello": ["..."]}
        */
       supportArrays: boolean;
     };
@@ -2148,6 +1644,7 @@ export interface components {
       /** Format: int64 */
       languageId: number;
       text: string;
+      /** @enum {string} */
       state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
     };
     TranslationWithCommentModel: {
@@ -2192,18 +1689,40 @@ export interface components {
        *       "TOLGEE": "This was translated by Tolgee Translator",
        *     }
        */
-      machineTranslations?: { [key: string]: string };
+      machineTranslations?: {
+        [key: string]: string;
+      };
       /**
        * @description Results provided by enabled services.
-       * @example [object Object]
+       * @example {
+       *   "GOOGLE": {
+       *     "output": "This was translated by Google",
+       *     "contextDescription": null
+       *   },
+       *   "TOLGEE": {
+       *     "output": "This was translated by Tolgee Translator",
+       *     "contextDescription": "This is an example in swagger"
+       *   }
+       * }
        */
-      result?: { [key: string]: components["schemas"]["TranslationItemModel"] };
+      result?: {
+        [key: string]: components["schemas"]["TranslationItemModel"];
+      };
       /** @description If true, the base translation was empty and no translation was provided. */
       baseBlank: boolean;
     };
     /**
      * @description Results provided by enabled services.
-     * @example [object Object]
+     * @example {
+     *   "GOOGLE": {
+     *     "output": "This was translated by Google",
+     *     "contextDescription": null
+     *   },
+     *   "TOLGEE": {
+     *     "output": "This was translated by Tolgee Translator",
+     *     "contextDescription": "This is an example in swagger"
+     *   }
+     * }
      */
     TranslationItemModel: {
       output: string;
@@ -2213,16 +1732,6 @@ export interface components {
       text?: string;
       positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
       location?: string;
-    };
-    CreatePatDto: {
-      /** @description Description of the PAT */
-      description: string;
-      /**
-       * Format: int64
-       * @description Expiration date in epoch format (milliseconds). When null, token never expires.
-       * @example 1661172869000
-       */
-      expiresAt?: number;
     };
     ImageUploadInfoDto: {
       location?: string;
@@ -2237,228 +1746,11 @@ export interface components {
       createdAt: string;
       location?: string;
     };
-    CreateApiKeyDto: {
-      /** Format: int64 */
-      projectId: number;
-      scopes: string[];
-      /** @description Description of the project API key */
-      description?: string;
-      /**
-       * Format: int64
-       * @description Expiration date in epoch format (milliseconds). When null key never expires.
-       * @example 1661172869000
-       */
-      expiresAt?: number;
-    };
-    TextNode: { [key: string]: unknown };
-    SignUpDto: {
-      name: string;
-      email: string;
-      organizationName?: string;
-      password: string;
-      invitationCode?: string;
-      callbackUrl?: string;
-      recaptchaToken?: string;
-    };
-    ResetPassword: {
-      email: string;
-      code: string;
-      password?: string;
-    };
-    ResetPasswordRequest: {
-      callbackUrl: string;
-      email: string;
-    };
-    LoginRequest: {
-      username: string;
-      password: string;
-      otp?: string;
-    };
-    CollectionModelSimpleOrganizationModel: {
-      _embedded?: {
-        organizations?: components["schemas"]["SimpleOrganizationModel"][];
-      };
-    };
-    UserPreferencesModel: {
-      language?: string;
-      /** Format: int64 */
-      preferredOrganizationId?: number;
-    };
-    HierarchyItem: {
-      scope:
-        | "translations.view"
-        | "translations.edit"
-        | "keys.edit"
-        | "screenshots.upload"
-        | "screenshots.delete"
-        | "screenshots.view"
-        | "activity.view"
-        | "languages.edit"
-        | "admin"
-        | "project.edit"
-        | "members.view"
-        | "members.edit"
-        | "translation-comments.add"
-        | "translation-comments.edit"
-        | "translation-comments.set-state"
-        | "translations.state-edit"
-        | "keys.view"
-        | "keys.delete"
-        | "keys.create"
-        | "batch-jobs.view"
-        | "batch-jobs.cancel"
-        | "translations.batch-by-tm"
-        | "translations.batch-machine"
-        | "content-delivery.manage"
-        | "content-delivery.publish"
-        | "webhooks.manage";
-      requires: components["schemas"]["HierarchyItem"][];
-    };
-    AnnouncementDto: {
-      type:
-        | "FEATURE_BATCH_OPERATIONS"
-        | "FEATURE_MT_FORMALITY"
-        | "FEATURE_CONTENT_DELIVERY_AND_WEBHOOKS"
-        | "NEW_PRICING"
-        | "FEATURE_AI_CUSTOMIZATION";
-    };
-    AuthMethodsDTO: {
-      github: components["schemas"]["OAuthPublicConfigDTO"];
-      google: components["schemas"]["OAuthPublicConfigDTO"];
-      oauth2: components["schemas"]["OAuthPublicExtendsConfigDTO"];
-    };
-    InitialDataModel: {
-      serverConfiguration: components["schemas"]["PublicConfigurationDTO"];
-      userInfo?: components["schemas"]["PrivateUserAccountModel"];
-      preferredOrganization?: components["schemas"]["PrivateOrganizationModel"];
-      languageTag?: string;
-      eeSubscription?: components["schemas"]["EeSubscriptionModel"];
-      announcement?: components["schemas"]["AnnouncementDto"];
-    };
-    MtServiceDTO: {
-      enabled: boolean;
-      defaultEnabledForProject: boolean;
-    };
-    MtServicesDTO: {
-      defaultPrimaryService?:
-        | "GOOGLE"
-        | "AWS"
-        | "DEEPL"
-        | "AZURE"
-        | "BAIDU"
-        | "TOLGEE";
-      services: { [key: string]: components["schemas"]["MtServiceDTO"] };
-    };
-    OAuthPublicConfigDTO: {
-      clientId?: string;
-      enabled: boolean;
-    };
-    OAuthPublicExtendsConfigDTO: {
-      clientId?: string;
-      authorizationUrl?: string;
-      scopes?: string[];
-      enabled: boolean;
-    };
-    PrivateOrganizationModel: {
-      organizationModel?: components["schemas"]["OrganizationModel"];
-      /** @example Features organization has enabled */
-      enabledFeatures: (
-        | "GRANULAR_PERMISSIONS"
-        | "PRIORITIZED_FEATURE_REQUESTS"
-        | "PREMIUM_SUPPORT"
-        | "DEDICATED_SLACK_CHANNEL"
-        | "ASSISTED_UPDATES"
-        | "DEPLOYMENT_ASSISTANCE"
-        | "BACKUP_CONFIGURATION"
-        | "TEAM_TRAINING"
-        | "ACCOUNT_MANAGER"
-        | "STANDARD_SUPPORT"
-        | "PROJECT_LEVEL_CONTENT_STORAGES"
-        | "WEBHOOKS"
-        | "MULTIPLE_CONTENT_DELIVERY_CONFIGS"
-        | "AI_PROMPT_CUSTOMIZATION"
-      )[];
-      quickStart?: components["schemas"]["QuickStartModel"];
-      /** @example Beautiful organization */
-      name: string;
-      /** Format: int64 */
-      id: number;
-      /** @example btforg */
-      slug: string;
-      avatar?: components["schemas"]["Avatar"];
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
-      /**
-       * @description The role of currently authorized user.
-       *
-       * Can be null when user has direct access to one of the projects owned by the organization.
-       */
-      currentUserRole?: "MEMBER" | "OWNER";
-      basePermissions: components["schemas"]["PermissionModel"];
-    };
-    PublicBillingConfigurationDTO: {
-      enabled: boolean;
-    };
-    PublicConfigurationDTO: {
-      machineTranslationServices: components["schemas"]["MtServicesDTO"];
-      billing: components["schemas"]["PublicBillingConfigurationDTO"];
-      version: string;
-      authentication: boolean;
-      authMethods?: components["schemas"]["AuthMethodsDTO"];
-      passwordResettable: boolean;
-      allowRegistrations: boolean;
-      screenshotsUrl: string;
-      /** Format: int32 */
-      maxUploadFileSize: number;
-      clientSentryDsn?: string;
-      needsEmailVerification: boolean;
-      userCanCreateOrganizations: boolean;
-      appName: string;
-      showVersion: boolean;
-      internalControllerEnabled: boolean;
-      /** Format: int64 */
-      maxTranslationTextLength: number;
-      recaptchaSiteKey?: string;
-      chatwootToken?: string;
-      capterraTracker?: string;
-      ga4Tag?: string;
-      postHogApiKey?: string;
-      postHogHost?: string;
-      contentDeliveryConfigured: boolean;
-    };
-    DocItem: {
-      name: string;
-      displayName?: string;
-      description?: string;
-    };
     PagedModelProjectModel: {
       _embedded?: {
         projects?: components["schemas"]["ProjectModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelWebhookConfigModel: {
-      _embedded?: {
-        webhookConfigs?: components["schemas"]["WebhookConfigModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelUserAccountInProjectModel: {
-      _embedded?: {
-        users?: components["schemas"]["UserAccountInProjectModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    UserAccountInProjectModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      avatar?: components["schemas"]["Avatar"];
-      organizationRole?: "MEMBER" | "OWNER";
-      organizationBasePermission: components["schemas"]["PermissionModel"];
-      directPermission?: components["schemas"]["PermissionModel"];
-      computedPermission: components["schemas"]["ComputedPermissionModel"];
     };
     CollectionModelUsedNamespaceModel: {
       _embedded?: {
@@ -2484,39 +1776,24 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    CollectionModelLanguageInfoModel: {
-      _embedded?: {
-        languageInfos?: components["schemas"]["LanguageInfoModel"][];
-      };
-    };
-    LanguageInfoModel: {
-      /** Format: int64 */
-      languageId: number;
-      languageTag: string;
-      supportedServices: components["schemas"]["MtSupportedService"][];
-    };
-    MtSupportedService: {
-      serviceType: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
-      formalitySupported: boolean;
-    };
     KeySearchResultView: {
       name: string;
       /** Format: int64 */
       id: number;
-      namespace?: string;
-      description?: string;
-      translation?: string;
       baseTranslation?: string;
+      translation?: string;
+      description?: string;
+      namespace?: string;
     };
     KeySearchSearchResultModel: {
       view?: components["schemas"]["KeySearchResultView"];
       name: string;
       /** Format: int64 */
       id: number;
-      namespace?: string;
-      description?: string;
-      translation?: string;
       baseTranslation?: string;
+      translation?: string;
+      description?: string;
+      namespace?: string;
     };
     PagedModelKeySearchSearchResultModel: {
       _embedded?: {
@@ -2530,34 +1807,21 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    PagedModelContentStorageModel: {
-      _embedded?: {
-        contentStorages?: components["schemas"]["ContentStorageModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelContentDeliveryConfigModel: {
-      _embedded?: {
-        contentDeliveryConfigs?: components["schemas"]["ContentDeliveryConfigModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    CollectionModelKeyModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeyModel"][];
-      };
-    };
     EntityDescriptionWithRelations: {
       entityClass: string;
       /** Format: int64 */
       entityId: number;
-      data: { [key: string]: { [key: string]: unknown } };
+      data: {
+        [key: string]: Record<string, never>;
+      };
     };
     ExistenceEntityDescription: {
       entityClass: string;
       /** Format: int64 */
       entityId: number;
-      data: { [key: string]: { [key: string]: unknown } };
+      data: {
+        [key: string]: Record<string, never>;
+      };
       relations: {
         [key: string]: components["schemas"]["EntityDescriptionWithRelations"];
       };
@@ -2566,7 +1830,9 @@ export interface components {
     ModifiedEntityModel: {
       /** Format: int64 */
       entityId: number;
-      description?: { [key: string]: { [key: string]: unknown } };
+      description?: {
+        [key: string]: Record<string, never>;
+      };
       modifications?: {
         [key: string]: components["schemas"]["PropertyModification"];
       };
@@ -2594,51 +1860,23 @@ export interface components {
       revisionId: number;
       /** Format: int64 */
       timestamp: number;
-      type:
-        | "UNKNOWN"
-        | "SET_TRANSLATION_STATE"
-        | "SET_TRANSLATIONS"
-        | "DISMISS_AUTO_TRANSLATED_STATE"
-        | "SET_OUTDATED_FLAG"
-        | "TRANSLATION_COMMENT_ADD"
-        | "TRANSLATION_COMMENT_DELETE"
-        | "TRANSLATION_COMMENT_EDIT"
-        | "TRANSLATION_COMMENT_SET_STATE"
-        | "SCREENSHOT_DELETE"
-        | "SCREENSHOT_ADD"
-        | "KEY_TAGS_EDIT"
-        | "KEY_NAME_EDIT"
-        | "KEY_DELETE"
-        | "CREATE_KEY"
-        | "COMPLEX_EDIT"
-        | "IMPORT"
-        | "CREATE_LANGUAGE"
-        | "EDIT_LANGUAGE"
-        | "DELETE_LANGUAGE"
-        | "CREATE_PROJECT"
-        | "EDIT_PROJECT"
-        | "NAMESPACE_EDIT"
-        | "BATCH_PRE_TRANSLATE_BY_TM"
-        | "BATCH_MACHINE_TRANSLATE"
-        | "AUTO_TRANSLATE"
-        | "BATCH_CLEAR_TRANSLATIONS"
-        | "BATCH_COPY_TRANSLATIONS"
-        | "BATCH_SET_TRANSLATION_STATE"
-        | "BATCH_TAG_KEYS"
-        | "BATCH_UNTAG_KEYS"
-        | "BATCH_SET_KEYS_NAMESPACE"
-        | "AUTOMATION";
+      /** @enum {string} */
+      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION";
       author?: components["schemas"]["ProjectActivityAuthorModel"];
       modifiedEntities?: {
         [key: string]: components["schemas"]["ModifiedEntityModel"][];
       };
-      meta?: { [key: string]: { [key: string]: unknown } };
-      counts?: { [key: string]: number };
-      params?: { [key: string]: unknown };
+      meta?: {
+        [key: string]: Record<string, never>;
+      };
+      counts?: {
+        [key: string]: number;
+      };
+      params?: Record<string, never>;
     };
     PropertyModification: {
-      old?: { [key: string]: unknown };
-      new?: { [key: string]: unknown };
+      old?: Record<string, never>;
+      new?: Record<string, never>;
     };
     PagedModelTagModel: {
       _embedded?: {
@@ -2712,31 +1950,13 @@ export interface components {
     ImportFileIssueModel: {
       /** Format: int64 */
       id: number;
-      type:
-        | "KEY_IS_NOT_STRING"
-        | "MULTIPLE_VALUES_FOR_KEY_AND_LANGUAGE"
-        | "VALUE_IS_NOT_STRING"
-        | "KEY_IS_EMPTY"
-        | "VALUE_IS_EMPTY"
-        | "PO_MSGCTXT_NOT_SUPPORTED"
-        | "ID_ATTRIBUTE_NOT_PROVIDED"
-        | "TARGET_NOT_PROVIDED"
-        | "TRANSLATION_TOO_LONG"
-        | "KEY_IS_BLANK"
-        | "TRANSLATION_DEFINED_IN_ANOTHER_FILE"
-        | "INVALID_CUSTOM_VALUES";
+      /** @enum {string} */
+      type: "KEY_IS_NOT_STRING" | "MULTIPLE_VALUES_FOR_KEY_AND_LANGUAGE" | "VALUE_IS_NOT_STRING" | "KEY_IS_EMPTY" | "VALUE_IS_EMPTY" | "PO_MSGCTXT_NOT_SUPPORTED" | "ID_ATTRIBUTE_NOT_PROVIDED" | "TARGET_NOT_PROVIDED" | "TRANSLATION_TOO_LONG" | "KEY_IS_BLANK" | "TRANSLATION_DEFINED_IN_ANOTHER_FILE" | "INVALID_CUSTOM_VALUES";
       params: components["schemas"]["ImportFileIssueParamModel"][];
     };
     ImportFileIssueParamModel: {
-      type:
-        | "KEY_NAME"
-        | "KEY_ID"
-        | "LANGUAGE_ID"
-        | "KEY_INDEX"
-        | "VALUE"
-        | "LINE"
-        | "FILE_NODE_ORIGINAL"
-        | "LANGUAGE_NAME";
+      /** @enum {string} */
+      type: "KEY_NAME" | "KEY_ID" | "LANGUAGE_ID" | "KEY_INDEX" | "VALUE" | "LINE" | "FILE_NODE_ORIGINAL" | "LANGUAGE_NAME";
       value?: string;
     };
     PagedModelImportFileIssueModel: {
@@ -2788,6 +2008,7 @@ export interface components {
        */
       timestamp: number;
       author?: components["schemas"]["SimpleUserAccountModel"];
+      /** @enum {string} */
       revisionType: "ADD" | "MOD" | "DEL";
     };
     SelectAllResponse: {
@@ -2891,13 +2112,19 @@ export interface components {
       id: number;
       /** @description Translation text */
       text?: string;
-      /** @description State of translation */
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
       state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
       /** @description Whether base language translation was changed after this translation was updated */
       outdated: boolean;
       /** @description Was translated using Translation Memory or Machine translation service? */
       auto: boolean;
-      /** @description Which machine translation service was used to auto translate this */
+      /**
+       * @description Which machine translation service was used to auto translate this
+       * @enum {string}
+       */
       mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
       /**
        * Format: int64
@@ -2911,17 +2138,6 @@ export interface components {
       unresolvedCommentCount: number;
       /** @description Was translation memory used to translate this? */
       fromTranslationMemory: boolean;
-    };
-    CollectionModelProjectTransferOptionModel: {
-      _embedded?: {
-        transferOptions?: components["schemas"]["ProjectTransferOptionModel"][];
-      };
-    };
-    ProjectTransferOptionModel: {
-      name: string;
-      slug: string;
-      /** Format: int64 */
-      id: number;
     };
     LanguageStatsModel: {
       /** Format: int64 */
@@ -2974,173 +2190,28 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    CollectionModelLanguageAiPromptCustomizationModel: {
-      _embedded?: {
-        promptCustomizations?: components["schemas"]["LanguageAiPromptCustomizationModel"][];
-      };
-    };
-    CollectionModelProjectInvitationModel: {
-      _embedded?: {
-        invitations?: components["schemas"]["ProjectInvitationModel"][];
-      };
-    };
-    Pageable: {
-      /** Format: int32 */
-      page?: number;
-      /** Format: int32 */
-      size?: number;
-      sort?: string[];
-    };
-    PagedModelApiKeyModel: {
-      _embedded?: {
-        apiKeys?: components["schemas"]["ApiKeyModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelProjectWithStatsModel: {
-      _embedded?: {
-        projects?: components["schemas"]["ProjectWithStatsModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    ProjectStatistics: {
-      /** Format: int64 */
-      projectId: number;
-      /** Format: int64 */
-      keyCount: number;
-      /** Format: int64 */
-      languageCount: number;
-      translationStatePercentages: { [key: string]: number };
-    };
-    ProjectWithStatsModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      description?: string;
-      slug?: string;
-      avatar?: components["schemas"]["Avatar"];
-      organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
-      baseLanguage?: components["schemas"]["LanguageModel"];
-      organizationRole?: "MEMBER" | "OWNER";
-      directPermission?: components["schemas"]["PermissionModel"];
-      computedPermission: components["schemas"]["ComputedPermissionModel"];
-      stats: components["schemas"]["ProjectStatistics"];
-      languages: components["schemas"]["LanguageModel"][];
-      /** @description Whether to disable ICU placeholder visualization in the editor and it's support. */
-      icuPlaceholders: boolean;
-    };
     CollectionModelScreenshotModel: {
       _embedded?: {
         screenshots?: components["schemas"]["ScreenshotModel"][];
       };
     };
-    PagedModelPatModel: {
-      _embedded?: {
-        pats?: components["schemas"]["PatModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
     PatWithUserModel: {
       user: components["schemas"]["SimpleUserAccountModel"];
       /** Format: int64 */
       id: number;
-      description: string;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
+      description: string;
       /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
       updatedAt: number;
     };
-    OrganizationRequestParamsDto: {
-      filterCurrentUserOwner: boolean;
-      search?: string;
-    };
     PagedModelOrganizationModel: {
       _embedded?: {
         organizations?: components["schemas"]["OrganizationModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    CollectionModelOrganizationInvitationModel: {
-      _embedded?: {
-        organizationInvitations?: components["schemas"]["OrganizationInvitationModel"][];
-      };
-    };
-    PublicUsageModel: {
-      /** Format: int64 */
-      organizationId: number;
-      /**
-       * Format: int64
-       * @description Current balance of standard credits. Standard credits are refilled every month
-       */
-      creditBalance: number;
-      /**
-       * Format: int64
-       * @description How many credits are included in your current plan
-       */
-      includedMtCredits: number;
-      /**
-       * Format: int64
-       * @description Date when credits were refilled. (In epoch format)
-       */
-      creditBalanceRefilledAt: number;
-      /**
-       * Format: int64
-       * @description Date when credits will be refilled. (In epoch format)
-       */
-      creditBalanceNextRefillAt: number;
-      /**
-       * Format: int64
-       * @description Currently used credits over credits included in plan and extra credits
-       */
-      currentPayAsYouGoMtCredits: number;
-      /**
-       * Format: int64
-       * @description The maximum amount organization can spend on MT credit usage before they reach the spending limit
-       */
-      availablePayAsYouGoMtCredits: number;
-      /**
-       * Format: int64
-       * @description Extra credits, which are neither refilled nor reset every month. These credits are used when there are no standard credits
-       */
-      extraCreditBalance: number;
-      /**
-       * Format: int64
-       * @description How many translations can be stored within your organization
-       */
-      translationSlotsLimit: number;
-      /**
-       * Format: int64
-       * @description How many translation slots are included in current subscription plan. How many translation slots can organization use without additional costs
-       */
-      includedTranslationSlots: number;
-      /**
-       * Format: int64
-       * @description How many translations are included in current subscription plan. How many translations can organization use without additional costs
-       */
-      includedTranslations: number;
-      /**
-       * Format: int64
-       * @description How many translations slots are currently used by organization
-       */
-      currentTranslationSlots: number;
-      /**
-       * Format: int64
-       * @description How many non-empty translations are currently stored by organization
-       */
-      currentTranslations: number;
-      /**
-       * Format: int64
-       * @description How many translations can be stored until reaching the limit. (For pay us you go, the top limit is the spending limit)
-       */
-      translationsLimit: number;
-    };
-    PagedModelUserAccountWithOrganizationRoleModel: {
-      _embedded?: {
-        usersInOrganization?: components["schemas"]["UserAccountWithOrganizationRoleModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
     };
@@ -3154,15 +2225,6 @@ export interface components {
       baseLanguage?: components["schemas"]["LanguageModel"];
       icuPlaceholders: boolean;
     };
-    UserAccountWithOrganizationRoleModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      username: string;
-      organizationRole?: "MEMBER" | "OWNER";
-      projectsWithDirectPermission: components["schemas"]["SimpleProjectModel"][];
-      avatar?: components["schemas"]["Avatar"];
-    };
     ApiKeyWithLanguagesModel: {
       /**
        * @deprecated
@@ -3171,17 +2233,17 @@ export interface components {
       permittedLanguageIds?: number[];
       /** Format: int64 */
       id: number;
+      projectName: string;
+      userFullName?: string;
       scopes: string[];
-      username?: string;
-      description: string;
-      /** Format: int64 */
-      projectId: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
+      projectId: number;
+      /** Format: int64 */
       lastUsedAt?: number;
-      projectName: string;
-      userFullName?: string;
+      username?: string;
+      description: string;
     };
     ApiKeyPermissionsModel: {
       /**
@@ -3191,157 +2253,104 @@ export interface components {
       projectId: number;
       /**
        * @description List of languages user can view. If null, all languages view is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       viewLanguageIds?: number[];
       /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       translateLanguageIds?: number[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example 200001,200004
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
       stateChangeLanguageIds?: number[];
       /**
        * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example KEYS_EDIT,TRANSLATIONS_VIEW
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
        */
-      scopes: (
-        | "translations.view"
-        | "translations.edit"
-        | "keys.edit"
-        | "screenshots.upload"
-        | "screenshots.delete"
-        | "screenshots.view"
-        | "activity.view"
-        | "languages.edit"
-        | "admin"
-        | "project.edit"
-        | "members.view"
-        | "members.edit"
-        | "translation-comments.add"
-        | "translation-comments.edit"
-        | "translation-comments.set-state"
-        | "translations.state-edit"
-        | "keys.view"
-        | "keys.delete"
-        | "keys.create"
-        | "batch-jobs.view"
-        | "batch-jobs.cancel"
-        | "translations.batch-by-tm"
-        | "translations.batch-machine"
-        | "content-delivery.manage"
-        | "content-delivery.publish"
-        | "webhooks.manage"
-      )[];
-      /** @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions */
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
+      /**
+       * @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions
+       * @enum {string}
+       */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       project: components["schemas"]["SimpleProjectModel"];
-    };
-    PagedModelUserAccountModel: {
-      _embedded?: {
-        users?: components["schemas"]["UserAccountModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    UserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      emailAwaitingVerification?: string;
-      avatar?: components["schemas"]["Avatar"];
-      globalServerRole: "USER" | "ADMIN";
-      deleted: boolean;
-      disabled: boolean;
-    };
-    UserTotpDisableRequestDto: {
-      password: string;
     };
     DeleteKeysDto: {
       /** @description IDs of keys to delete */
       ids: number[];
     };
-    Link: {
-      href?: string;
-      hreflang?: string;
-      title?: string;
-      type?: string;
-      deprecation?: string;
-      profile?: string;
-      name?: string;
-      templated?: boolean;
-    };
   };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
+export type external = Record<string, never>;
+
 export interface operations {
+
+  /**
+   * Get user info
+   * @description Returns information about currently authenticated user.
+   */
   getInfo_2: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PrivateUserAccountModel"];
+          "application/json": components["schemas"]["PrivateUserAccountModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Update namespace */
   update_2: {
     parameters: {
       path: {
         id: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["NamespaceModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3349,74 +2358,90 @@ export interface operations {
         "application/json": components["schemas"]["UpdateNamespaceDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Get disabled languages
+   * @description Returns languages, in which key is disabled
+   */
   getDisabledLanguages_1: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelLanguageModel"];
+          "application/json": components["schemas"]["CollectionModelLanguageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Set disabled languages
+   * @description Sets languages, in which key is disabled
+   */
   setDisabledLanguages_1: {
     parameters: {
       path: {
         id: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["CollectionModelLanguageModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3424,39 +2449,47 @@ export interface operations {
         "application/json": components["schemas"]["SetDisabledLanguagesRequest"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelLanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Edit key and related data
+   * @description Edits key name, translations, tags, screenshots, and other data
+   */
   complexEdit_1: {
     parameters: {
       path: {
         id: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["KeyWithDataModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3464,74 +2497,84 @@ export interface operations {
         "application/json": components["schemas"]["ComplexEditKeyDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
-  get_6: {
+  /** Get one key */
+  get_7: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["KeyModel"];
+          "application/json": components["schemas"]["KeyModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Edit key name */
   edit_1: {
     parameters: {
       path: {
         id: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["KeyModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3539,39 +2582,85 @@ export interface operations {
         "application/json": components["schemas"]["EditKeyDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /** Execute complex tag operation */
+  executeComplexTagOperation_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ComplexTagKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Tag key
+   * @description Tags a key with tag. If tag with provided name doesn't exist, it is created
+   */
   tagKey_1: {
     parameters: {
       path: {
         keyId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TagModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3579,231 +2668,296 @@ export interface operations {
         "application/json": components["schemas"]["TagKeyDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TagModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
-  /** Resolves translation conflict. The old translation will be overridden. */
+  /**
+   * Resolve conflict (override)
+   * @description Resolves translation conflict. The old translation will be overridden.
+   */
   resolveTranslationSetOverride_1: {
     parameters: {
       path: {
         languageId: number;
         translationId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Resolves translation conflict. The old translation will be kept. */
+  /**
+   * Resolve conflict (keep existing)
+   * @description Resolves translation conflict. The old translation will be kept.
+   */
   resolveTranslationSetKeepExisting_1: {
     parameters: {
       path: {
         languageId: number;
         translationId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Resolves all translation conflicts for provided language. The old translations will be overridden. */
+  /**
+   * Resolve all translation conflicts (override)
+   * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
+   */
   resolveTranslationSetOverride_3: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Resolves all translation conflicts for provided language. The old translations will be kept. */
+  /**
+   * Resolve all translation conflicts (keep existing)
+   * @description Resolves all translation conflicts for provided language. The old translations will be kept.
+   */
   resolveTranslationSetKeepExisting_3: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Sets existing language to pair with language to import. Data will be imported to selected existing language when applied. */
+  /**
+   * Pair existing language
+   * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
+   */
   selectExistingLanguage_1: {
     parameters: {
       path: {
         importLanguageId: number;
         existingLanguageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Resets existing language paired with language to import. */
+  /**
+   * Reset existing language pairing
+   * @description Resets existing language paired with language to import.
+   */
   resetExistingLanguage_1: {
     parameters: {
       path: {
         importLanguageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Sets namespace for file to import. */
+  /**
+   * Select namespace
+   * @description Sets namespace for file to import.
+   */
   selectNamespace_1: {
     parameters: {
       path: {
         fileId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -3811,315 +2965,375 @@ export interface operations {
         "application/json": components["schemas"]["SetFileNamespaceRequest"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
-  /** Imports the data prepared in previous step. Streams current status. */
+  /**
+   * Apply import (streaming)
+   * @description Imports the data prepared in previous step. Streams current status.
+   */
   applyImportStreaming_1: {
     parameters: {
-      query: {
-        /** Whether override or keep all translations with unresolved conflicts */
+      query?: {
+        /** @description Whether override or keep all translations with unresolved conflicts */
         forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/x-ndjson": components["schemas"]["StreamingResponseBody"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Imports the data prepared in previous step */
+  /**
+   * Apply import
+   * @description Imports the data prepared in previous step
+   */
   applyImport_1: {
     parameters: {
-      query: {
-        /** Whether override or keep all translations with unresolved conflicts */
+      query?: {
+        /** @description Whether override or keep all translations with unresolved conflicts */
         forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns import settings for the authenticated user and the project. */
-  get_10: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
+  /**
+   * Get Import Settings
+   * @description Returns import settings for the authenticated user and the project.
+   */
+  get_11: {
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ImportSettingsModel"];
+          "application/json": components["schemas"]["ImportSettingsModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Stores import settings for the authenticated user and the project. */
+  /**
+   * Set Import Settings
+   * @description Stores import settings for the authenticated user and the project.
+   */
   store_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ImportSettingsModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["ImportSettingsRequest"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportSettingsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Stop batch operation
+   * @description Stops batch operation if possible.
+   */
   cancel_1: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Set translation state */
   setTranslationState_1: {
     parameters: {
       path: {
         translationId: number;
         state: "TRANSLATED" | "REVIEWED";
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TranslationModel"];
+          "application/json": components["schemas"]["TranslationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Set state of translation comment */
   setState_1: {
     parameters: {
       path: {
+        translationId: number;
         commentId: number;
         state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TranslationCommentModel"];
+          "application/json": components["schemas"]["TranslationCommentModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  get_14: {
+  /** Get one translation comment */
+  get_15: {
     parameters: {
       path: {
         translationId: number;
         commentId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TranslationCommentModel"];
+          "application/json": components["schemas"]["TranslationCommentModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Update translation comment */
   update_6: {
     parameters: {
       path: {
         commentId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["TranslationCommentModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
+        translationId: number;
       };
     };
     requestBody: {
@@ -4127,116 +3341,173 @@ export interface operations {
         "application/json": components["schemas"]["TranslationCommentDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationCommentModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /** Delete translation comment */
   delete_9: {
     parameters: {
       path: {
+        translationId: number;
         commentId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Set outdated value
+   * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+   */
   setOutdated_1: {
     parameters: {
       path: {
         translationId: number;
         state: boolean;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TranslationModel"];
+          "application/json": components["schemas"]["TranslationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Dismiss auto-translated
+   * @description Removes "auto translated" indication
+   */
   dismissAutoTranslatedState_1: {
     parameters: {
       path: {
         translationId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["TranslationModel"];
+          "application/json": components["schemas"]["TranslationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Get translations in project */
   getTranslations_1: {
     parameters: {
-      query: {
-        /** Cursor to get next data */
+      query?: {
+        /** @description Cursor to get next data */
         cursor?: string;
         /**
-         * Translation state in the format: languageTag,state. You can use this parameter multiple times.
+         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
          *
          * When used with multiple states for same language it is applied with logical OR.
          *
@@ -4244,217 +3515,226 @@ export interface operations {
          */
         filterState?: string[];
         /**
-         * Languages to be contained in response.
+         * @description Languages to be contained in response.
          *
          * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
+         * @example en
          */
         languages?: string[];
-        /** String to search in key name or translation text */
+        /** @description String to search in key name or translation text */
         search?: string;
-        /** Selects key with provided names. Use this param multiple times to fetch more keys. */
+        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
         filterKeyName?: string[];
-        /** Selects key with provided ID. Use this param multiple times to fetch more keys. */
+        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
         filterKeyId?: number[];
-        /** Selects only keys, where translation is missing in any language */
+        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
         filterUntranslatedAny?: boolean;
-        /** Selects only keys, where translation is provided in any language */
+        /** @description Selects only keys, where translation is provided in any language */
         filterTranslatedAny?: boolean;
-        /** Selects only keys, where translation is missing in specified language */
+        /**
+         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
+         * @example en-US
+         */
         filterUntranslatedInLang?: string;
-        /** Selects only keys, where translation is provided in specified language */
+        /**
+         * @description Selects only keys, where translation is provided in specified language
+         * @example en-US
+         */
         filterTranslatedInLang?: string;
-        /** Selects only keys with screenshots */
+        /** @description Selects only keys with screenshots */
         filterHasScreenshot?: boolean;
-        /** Selects only keys without screenshots */
+        /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
         /**
-         * Filter namespaces.
+         * @description Filter namespaces.
          *
          * To filter default namespace, set to empty string.
          */
         filterNamespace?: string[];
-        /** Selects only keys with provided tag */
+        /** @description Selects only keys with provided tag */
         filterTag?: string[];
-        /** Selects only keys, where translation in provided langs is in outdated state */
+        /**
+         * @description Selects only keys, where translation in provided langs is in outdated state
+         * @example en-US
+         */
         filterOutdatedLanguage?: string[];
-        /** Selects only keys, where translation in provided langs is not in outdated state */
+        /**
+         * @description Selects only keys, where translation in provided langs is not in outdated state
+         * @example en-US
+         */
         filterNotOutdatedLanguage?: string[];
-        /** Zero-based page index (0..N) */
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["KeysWithTranslationsPageModel"];
+          "application/json": components["schemas"]["KeysWithTranslationsPageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Update translations for existing key
+   * @description Sets translations for existing key
+   */
   setTranslations_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["SetTranslationsResponseModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["SetTranslationsWithKeyDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SetTranslationsResponseModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Create key or update translations
+   * @description Sets translations for existing key or creates new key and sets the translations to it.
+   */
   createOrUpdateTranslations_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["SetTranslationsResponseModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["SetTranslationsWithKeyDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SetTranslationsResponseModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
-  get_16: {
+  /** Get one language */
+  get_17: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["LanguageModel"];
+          "application/json": components["schemas"]["LanguageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Update language */
   editLanguage_1: {
     parameters: {
       path: {
         languageId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["LanguageModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -4462,1084 +3742,1314 @@ export interface operations {
         "application/json": components["schemas"]["LanguageRequest"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /** Delete specific language */
   deleteLanguage_3: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
   /**
-   * Uses enabled auto-translation methods.
+   * Auto translates keys
+   * @description Uses enabled auto-translation methods.
    * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
    *
    * This will replace the the existing translation with the result obtained from specified source!
    */
   autoTranslate_1: {
     parameters: {
-      path: {
-        keyId: number;
-      };
-      query: {
+      query?: {
         /**
-         * Tags of languages to auto-translate.
+         * @description Tags of languages to auto-translate.
          * When no languages provided, it translates only untranslated languages.
          */
         languages?: string[];
         useMachineTranslation?: boolean;
         useTranslationMemory?: boolean;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
       };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+      path: {
+        keyId: number;
       };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  get_19: {
+  /** Get one organization */
+  get_20: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["OrganizationModel"];
+          "application/json": components["schemas"]["OrganizationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get all permitted
+   * @description Returns all projects where current user has any permission
+   */
   getAll: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
         search?: string;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/hal+json": components["schemas"]["PagedModelProjectModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Create project
+   * @description Creates a new project with languages and initial settings.
+   */
   createProject: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["ProjectModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateProjectRequest"];
       };
     };
-  };
-  getInfo_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelKeyWithDataModel"];
+          "application/json": components["schemas"]["ProjectModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Get key info
+   * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
+   */
+  getInfo_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["GetKeysRequestDto"];
       };
     };
-  };
-  importKeys_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["KeyImportResolvableResultModel"];
+          "application/json": components["schemas"]["CollectionModelKeyWithDataModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Import keys (resolvable)
+   * @description Import's new keys with translations. Translations can be updated, when specified.
+   */
+  importKeys_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ImportKeysResolvableDto"];
       };
     };
-  };
-  importKeys_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyImportResolvableResultModel"];
+        };
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Import keys
+   * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
+   */
+  importKeys_3: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ImportKeysDto"];
       };
     };
-  };
-  create_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["KeyWithDataModel"];
-        };
+      /** @description OK */
+      200: {
+        content: never;
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Create new key */
+  create_3: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateKeyDto"];
       };
     };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["KeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /** Get all keys */
   getAll_2: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelKeyModel"];
+          "application/json": components["schemas"]["PagedModelKeyModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Create new key */
   create_4: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["KeyWithDataModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateKeyDto"];
       };
     };
-  };
-  delete_5: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["KeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Delete one or multiple keys (post)
+   * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
+   */
+  delete_5: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteKeysDto"];
       };
     };
-  };
-  untagKeys_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
-        content: {
-          "*/*": components["schemas"]["BatchJobModel"];
-        };
+        content: never;
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Remove tags */
+  untagKeys_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UntagKeysRequest"];
       };
     };
-  };
-  tagKeys_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Add tags */
+  tagKeys_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["TagKeysRequest"];
       };
     };
-  };
-  setTranslationState_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Set translation state */
+  setTranslationState_3: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["SetTranslationsStateStateRequest"];
       };
     };
-  };
-  setKeysNamespace_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Set keys namespace */
+  setKeysNamespace_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["SetKeysNamespaceRequest"];
       };
     };
-  };
-  /** Pre-translate provided keys to provided languages by TM. */
-  translate_2: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Pre-translate by TM
+   * @description Pre-translate provided keys to provided languages by TM.
+   */
+  translate_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["PreTranslationByTmRequest"];
       };
     };
-  };
-  /** Translate provided keys to provided languages through primary MT provider. */
-  machineTranslation_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Machine Translation
+   * @description Translate provided keys to provided languages through primary MT provider.
+   */
+  machineTranslation_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["MachineTranslationRequest"];
       };
     };
-  };
-  deleteKeys_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /** Delete keys */
+  deleteKeys_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteKeysRequest"];
       };
     };
-  };
-  /** Copy translation values from one language to other languages. */
-  copyTranslations_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Copy translation values
+   * @description Copy translation values from one language to other languages.
+   */
+  copyTranslations_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CopyTranslationRequest"];
       };
     };
-  };
-  /** Clear translation values for provided keys in selected languages. */
-  clearTranslations_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Clear translation values
+   * @description Clear translation values for provided keys in selected languages.
+   */
+  clearTranslations_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["ClearTranslationsRequest"];
       };
     };
-  };
-  /** Prepares provided files to import. */
-  addFiles_1: {
-    parameters: {
-      query: {
-        /** When importing structured JSONs, you can set the delimiter which will be used in names of improted keys. */
-        structureDelimiter?: string;
-        storeFilesToFileStorage?: boolean;
-        /** If true, for structured formats (like JSON) arrays are supported. e.g. Array object like {"hello": ["item1", "item2"]} will be imported as keys hello[0] = "item1" and hello[1] = "item2". */
-        supportArrays?: boolean;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
       };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Single step import
+   * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
+   */
+  doImport_1: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          files: string[];
+          params: components["schemas"]["SingleStepImportRequest"];
+        };
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
-        content: {
-          "*/*": components["schemas"]["ImportAddFilesResultModel"];
-        };
+        content: never;
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
-    requestBody: {
+  };
+  /**
+   * Add files
+   * @description Prepares provided files to import.
+   */
+  addFiles_1: {
+    parameters: {
+      query?: {
+        /**
+         * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
+         * @example .
+         */
+        structureDelimiter?: string;
+      };
+    };
+    requestBody?: {
       content: {
         "multipart/form-data": {
           files: string[];
         };
       };
     };
-  };
-  /** Deletes prepared import data. */
-  cancelImport_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportAddFilesResultModel"];
+        };
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Delete
+   * @description Deletes prepared import data.
+   */
+  cancelImport_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Export data */
   export_1: {
     parameters: {
-      query: {
+      query?: {
         /**
-         * Languages to be contained in export.
+         * @description Languages to be contained in export.
          *
          * If null, all languages are exported
+         * @example en
          */
         languages?: string[];
-        /** Format to export to */
-        format?:
-          | "JSON"
-          | "XLIFF"
-          | "PO"
-          | "APPLE_STRINGS_STRINGSDICT"
-          | "APPLE_XLIFF"
-          | "ANDROID_XML"
-          | "FLUTTER_ARB";
+        /** @description Format to export to */
+        format?: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
         /**
-         * Delimiter to structure file content.
+         * @description Delimiter to structure file content.
          *
          * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
          *
-         * When null, resulting file won't be structured.
+         * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
+         * specific formats like `YAML_RUBY` don't honor this parameter.
          */
         structureDelimiter?: string;
-        /** Filter key IDs to be contained in export */
+        /** @description Filter key IDs to be contained in export */
         filterKeyId?: number[];
-        /** Filter key IDs not to be contained in export */
+        /** @description Filter key IDs not to be contained in export */
         filterKeyIdNot?: number[];
-        /** Filter keys tagged by */
+        /**
+         * @description Filter keys tagged by.
+         *
+         * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
+         */
         filterTag?: string;
-        /** Filter keys with prefix */
+        /** @description Filter keys tagged by one of provided tags */
+        filterTagIn?: string[];
+        /** @description Filter keys not tagged by one of provided tags */
+        filterTagNotIn?: string[];
+        /** @description Filter keys with prefix */
         filterKeyPrefix?: string;
-        /** Filter translations with state. By default, everything except untranslated is exported. */
-        filterState?: (
-          | "UNTRANSLATED"
-          | "TRANSLATED"
-          | "REVIEWED"
-          | "DISABLED"
-        )[];
-        /** Select one ore multiple namespaces to export */
+        /** @description Filter translations with state. By default, all states except untranslated is exported. */
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
         filterNamespace?: string[];
         /**
-         * If false, it doesn't return zip of files, but it returns single file.
+         * @description If false, it doesn't return zip of files, but it returns single file.
          *
          * This is possible only when single language is exported. Otherwise it returns "400 - Bad Request" response.
          */
         zip?: boolean;
         /**
-         * Message format to be used for export. (applicable for .po)
+         * @description Message format to be used for export.
          *
-         * e.g. PHP_PO: Hello %s, PYTHON_PO: Hello %(name)s
+         * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
+         *
+         * This property is honored only for generic formats like JSON or YAML.
+         * For specific formats like `YAML_RUBY` it's ignored.
          */
-        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "PYTHON_SPRINTF";
+        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "ICU";
+        /**
+         * @description This is a template that defines the structure of the resulting .zip file content.
+         *
+         * The template is a string that can contain the following placeholders: {namespace}, {languageTag},
+         * {androidLanguageTag}, {snakeLanguageTag}, {extension}.
+         *
+         * For example, when exporting to JSON with the template `{namespace}/{languageTag}.{extension}`,
+         * the English translations of the `home` namespace will be stored in `home/en.json`.
+         *
+         * The `{snakeLanguageTag}` placeholder is the same as `{languageTag}` but in snake case. (e.g., en_US).
+         *
+         * The Android specific `{androidLanguageTag}` placeholder is the same as `{languageTag}`
+         * but in Android format. (e.g., en-rUS)
+         */
+        fileStructureTemplate?: string;
+        /**
+         * @description If true, for structured formats (like JSON) arrays are supported.
+         *
+         * e.g. Key hello[0] will be exported as {"hello": ["..."]}
+         */
         supportArrays?: boolean;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["StreamingResponseBody"];
+          "application/json": components["schemas"]["StreamingResponseBody"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Export data (post)
+   * @description Exports data (post). Useful when exceeding allowed URL size.
+   */
   exportPost_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["StreamingResponseBody"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["ExportParams"];
       };
     };
-  };
-  store_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StreamingResponseBody"];
+        };
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Store Big Meta
+   * @description Stores a bigMeta for a project
+   */
+  store_3: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["BigMetaDto"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Get translation comments
+   * @description Returns translation comments of translation
+   */
   getAll_6: {
     parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
       path: {
         translationId: number;
       };
-      query: {
-        /** Zero-based page index (0..N) */
-        page?: number;
-        /** The size of the page to be returned */
-        size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelTranslationCommentModel"];
+          "application/json": components["schemas"]["PagedModelTranslationCommentModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Create translation comment */
   create_8: {
     parameters: {
       path: {
         translationId: number;
-      };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["TranslationCommentModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
       };
     };
     requestBody: {
@@ -5547,79 +5057,95 @@ export interface operations {
         "application/json": components["schemas"]["TranslationCommentDto"];
       };
     };
-  };
-  create_10: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** Created */
+      /** @description Created */
       201: {
         content: {
-          "*/*": components["schemas"]["TranslationWithCommentModel"];
+          "*/*": components["schemas"]["TranslationCommentModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
+  };
+  /**
+   * Create translation comment
+   * @description Creates a translation comment. Empty translation is stored, when not exists.
+   */
+  create_10: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["TranslationCommentWithLangKeyDto"];
       };
     };
-  };
-  suggestTranslationMemory_1: {
-    parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
-        page?: number;
-        /** The size of the page to be returned */
-        size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: {
+      /** @description Created */
+      201: {
         content: {
-          "*/*": components["schemas"]["PagedModelTranslationMemoryItemModel"];
+          "*/*": components["schemas"]["TranslationWithCommentModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
+      };
+    };
+  };
+  /**
+   * Get suggestions from translation memory
+   * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
+   */
+  suggestTranslationMemory_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
       };
     };
     requestBody: {
@@ -5627,226 +5153,258 @@ export interface operations {
         "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
-  };
-  suggestMachineTranslationsStreaming_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTranslationMemoryItemModel"];
+        };
       };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get machine translation suggestions (streaming)
+   * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
+   */
+  suggestMachineTranslationsStreaming_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/x-ndjson": components["schemas"]["StreamingResponseBody"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
   };
+  /**
+   * Get machine translation suggestions
+   * @description Suggests machine translations from enabled services
+   */
   suggestMachineTranslations_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["SuggestResultModel"];
+          "application/json": components["schemas"]["SuggestResultModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
   };
+  /** Get all languages */
   getAll_8: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelLanguageModel"];
+          "application/json": components["schemas"]["PagedModelLanguageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Create language */
   createLanguage_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["LanguageModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["LanguageRequest"];
       };
     };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /** Get screenshots */
   getKeyScreenshots: {
     parameters: {
       path: {
         keyId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelScreenshotModel"];
+          "application/json": components["schemas"]["CollectionModelScreenshotModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Upload screenshot */
   uploadScreenshot: {
     parameters: {
       path: {
         keyId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
-    responses: {
-      /** Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["ScreenshotModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-    requestBody: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5855,115 +5413,132 @@ export interface operations {
         };
       };
     };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["ScreenshotModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
   };
+  /**
+   * Get all permitted organizations
+   * @description Returns all organizations, which is current user allowed to view
+   */
   getAll_10: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        params: components["schemas"]["OrganizationRequestParamsDto"];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+        filterCurrentUserOwner?: boolean;
+        search?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/hal+json": components["schemas"]["PagedModelOrganizationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Create organization */
   create_12: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "*/*": components["schemas"]["OrganizationModel"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["OrganizationDto"];
       };
     };
-  };
-  upload: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** Created */
-      201: {
+      /** @description OK */
+      200: {
         content: {
-          "*/*": components["schemas"]["UploadedImageModel"];
+          "application/json": components["schemas"]["OrganizationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
-    requestBody: {
+  };
+  /** Upload an image for later use */
+  upload: {
+    requestBody?: {
       content: {
         "multipart/form-data": {
           /** Format: binary */
@@ -5972,732 +5547,916 @@ export interface operations {
         };
       };
     };
-  };
-  getUsedNamespaces_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
-      200: {
+      /** @description Created */
+      201: {
         content: {
-          "*/*": components["schemas"]["CollectionModelUsedNamespaceModel"];
+          "*/*": components["schemas"]["UploadedImageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get used namespaces
+   * @description Returns all used project namespaces. Response contains default (null) namespace if used.
+   */
+  getUsedNamespaces_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelUsedNamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get namespaces */
   getAllNamespaces_1: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelNamespaceModel"];
+          "application/json": components["schemas"]["PagedModelNamespaceModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get namespace by name
+   * @description Returns information about a namespace by its name
+   */
   getByName_1: {
     parameters: {
       path: {
         name: string;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["NamespaceModel"];
+          "application/json": components["schemas"]["NamespaceModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Search for keys
+   * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
+   */
   searchForKey_1: {
     parameters: {
       query: {
-        /** Search query */
+        /** @description Search query */
         search: string;
-        /** Language to search in */
+        /** @description Language to search in */
         languageTag?: string;
-        /** Zero-based page index (0..N) */
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelKeySearchSearchResultModel"];
+          "application/json": components["schemas"]["PagedModelKeySearchSearchResultModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Get project activity */
   getActivity_1: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/hal+json": components["schemas"]["PagedModelProjectActivityModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Get tags */
   getAll_4: {
     parameters: {
-      query: {
+      query?: {
         search?: string;
-        /** Zero-based page index (0..N) */
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelTagModel"];
+          "application/json": components["schemas"]["PagedModelTagModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * List user batch operations
+   * @description List all batch operations started by current user
+   */
   myList_1: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelBatchJobModel"];
+          "application/json": components["schemas"]["PagedModelBatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Get Big Meta for key */
   getBigMeta_1: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelKeyWithBaseTranslationModel"];
+          "application/json": components["schemas"]["CollectionModelKeyWithBaseTranslationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns translations prepared to import. */
+  /**
+   * Get translations
+   * @description Returns translations prepared to import.
+   */
   getImportTranslations_1: {
     parameters: {
+      query?: {
+        /** @description Whether only translations, which are in conflict with existing translations should be returned */
+        onlyConflicts?: boolean;
+        /** @description Whether only translations with unresolved conflictswith existing translations should be returned */
+        onlyUnresolved?: boolean;
+        /** @description String to search in translation text or key */
+        search?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
       path: {
         languageId: number;
       };
-      query: {
-        /** Whether only translations, which are in conflict with existing translations should be returned */
-        onlyConflicts?: boolean;
-        /** Whether only translations with unresolved conflictswith existing translations should be returned */
-        onlyUnresolved?: boolean;
-        /** String to search in translation text or key */
-        search?: string;
-        /** Zero-based page index (0..N) */
-        page?: number;
-        /** The size of the page to be returned */
-        size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelImportTranslationModel"];
+          "application/json": components["schemas"]["PagedModelImportTranslationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns language prepared to import. */
+  /**
+   * Get import language
+   * @description Returns language prepared to import.
+   */
   getImportLanguage_1: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ImportLanguageModel"];
+          "application/json": components["schemas"]["ImportLanguageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Deletes language prepared to import. */
+  /**
+   * Delete language
+   * @description Deletes language prepared to import.
+   */
   deleteLanguage_1: {
     parameters: {
       path: {
         languageId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns issues for uploaded file. */
+  /**
+   * Get file issues
+   * @description Returns issues for uploaded file.
+   */
   getImportFileIssues_1: {
     parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
       path: {
         importFileId: number;
       };
-      query: {
-        /** Zero-based page index (0..N) */
-        page?: number;
-        /** The size of the page to be returned */
-        size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelImportFileIssueModel"];
+          "application/json": components["schemas"]["PagedModelImportFileIssueModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns the result of preparation. */
+  /**
+   * Get result
+   * @description Returns the result of preparation.
+   */
   getImportResult_1: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelImportLanguageModel"];
+          "application/json": components["schemas"]["PagedModelImportLanguageModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Returns all existing and imported namespaces */
+  /**
+   * Get namespaces
+   * @description Returns all existing and imported namespaces
+   */
   getAllNamespaces_3: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelImportNamespaceModel"];
+          "application/json": components["schemas"]["CollectionModelImportNamespaceModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  /** Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned. */
+  /**
+   * Get all running and pending batch operations
+   * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
+   */
   currentJobs_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CollectionModelBatchJobModel"];
+          "application/json": components["schemas"]["CollectionModelBatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  get_12: {
+  /** Get batch operation */
+  get_13: {
     parameters: {
       path: {
         id: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["BatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** List batch operations */
   list_4: {
     parameters: {
-      query: {
-        /** Zero-based page index (0..N) */
+      query?: {
+        /** @description Zero-based page index (0..N) */
         page?: number;
-        /** The size of the page to be returned */
+        /** @description The size of the page to be returned */
         size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelBatchJobModel"];
+          "application/json": components["schemas"]["PagedModelBatchJobModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get translation history
+   * @description Sorting is not supported for supported. It is automatically sorted from newest to oldest.
+   */
   getTranslationHistory_1: {
     parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
       path: {
         translationId: number;
       };
-      query: {
-        /** Zero-based page index (0..N) */
-        page?: number;
-        /** The size of the page to be returned */
-        size?: number;
-        /** Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PagedModelTranslationHistoryModel"];
+          "application/json": components["schemas"]["PagedModelTranslationHistoryModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get all translations
+   * @description Returns all translations for specified languages
+   */
   getAllTranslations_1: {
     parameters: {
-      path: {
-        /** Comma-separated language tags to return translations in. Languages you are not permitted to see will be silently dropped and not returned. */
-        languages: string[];
-      };
-      query: {
-        /** Namespace to return */
+      query?: {
+        /** @description Namespace to return */
         ns?: string;
         /**
-         * Delimiter to structure response content.
+         * @description Delimiter to structure response content.
          *
          * e.g. For key "home.header.title" would result in {"home": {"header": {"title": "Hello"}}} structure.
          *
          * When null, resulting file will be a flat key-value object.
          */
         structureDelimiter?: string;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
       };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
+      path: {
+        /**
+         * @description Comma-separated language tags to return translations in. Languages you are not permitted to see will be silently dropped and not returned.
+         * @example en,de,fr
+         */
+        languages: string[];
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": string;
+          "application/json": string;
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  getSelectAllKeyIds_1: {
+  /**
+   * Select keys
+   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+   */
+  selectKeys_1: {
     parameters: {
-      query: {
+      query?: {
         /**
-         * Translation state in the format: languageTag,state. You can use this parameter multiple times.
+         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
          *
          * When used with multiple states for same language it is applied with logical OR.
          *
@@ -6705,460 +6464,618 @@ export interface operations {
          */
         filterState?: string[];
         /**
-         * Languages to be contained in response.
+         * @description Languages to be contained in response.
          *
          * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
+         * @example en
          */
         languages?: string[];
-        /** String to search in key name or translation text */
+        /** @description String to search in key name or translation text */
         search?: string;
-        /** Selects key with provided names. Use this param multiple times to fetch more keys. */
+        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
         filterKeyName?: string[];
-        /** Selects key with provided ID. Use this param multiple times to fetch more keys. */
+        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
         filterKeyId?: number[];
-        /** Selects only keys, where translation is missing in any language */
+        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
         filterUntranslatedAny?: boolean;
-        /** Selects only keys, where translation is provided in any language */
+        /** @description Selects only keys, where translation is provided in any language */
         filterTranslatedAny?: boolean;
-        /** Selects only keys, where translation is missing in specified language */
+        /**
+         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
+         * @example en-US
+         */
         filterUntranslatedInLang?: string;
-        /** Selects only keys, where translation is provided in specified language */
+        /**
+         * @description Selects only keys, where translation is provided in specified language
+         * @example en-US
+         */
         filterTranslatedInLang?: string;
-        /** Selects only keys with screenshots */
+        /** @description Selects only keys with screenshots */
         filterHasScreenshot?: boolean;
-        /** Selects only keys without screenshots */
+        /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
         /**
-         * Filter namespaces.
+         * @description Filter namespaces.
          *
          * To filter default namespace, set to empty string.
          */
         filterNamespace?: string[];
-        /** Selects only keys with provided tag */
+        /** @description Selects only keys with provided tag */
         filterTag?: string[];
-        /** Selects only keys, where translation in provided langs is in outdated state */
+        /**
+         * @description Selects only keys, where translation in provided langs is in outdated state
+         * @example en-US
+         */
         filterOutdatedLanguage?: string[];
-        /** Selects only keys, where translation in provided langs is not in outdated state */
+        /**
+         * @description Selects only keys, where translation in provided langs is not in outdated state
+         * @example en-US
+         */
         filterNotOutdatedLanguage?: string[];
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["SelectAllResponse"];
+          "application/json": components["schemas"]["SelectAllResponse"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Select keys
+   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+   */
+  selectKeys_3: {
+    parameters: {
+      query?: {
+        /**
+         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
+         *
+         * When used with multiple states for same language it is applied with logical OR.
+         *
+         * When used with multiple languages, it is applied with logical AND.
+         */
+        filterState?: string[];
+        /**
+         * @description Languages to be contained in response.
+         *
+         * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
+         * @example en
+         */
+        languages?: string[];
+        /** @description String to search in key name or translation text */
+        search?: string;
+        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
+        filterKeyName?: string[];
+        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
+        filterKeyId?: number[];
+        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
+        filterUntranslatedAny?: boolean;
+        /** @description Selects only keys, where translation is provided in any language */
+        filterTranslatedAny?: boolean;
+        /**
+         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
+         * @example en-US
+         */
+        filterUntranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation is provided in specified language
+         * @example en-US
+         */
+        filterTranslatedInLang?: string;
+        /** @description Selects only keys with screenshots */
+        filterHasScreenshot?: boolean;
+        /** @description Selects only keys without screenshots */
+        filterHasNoScreenshot?: boolean;
+        /**
+         * @description Filter namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNamespace?: string[];
+        /** @description Selects only keys with provided tag */
+        filterTag?: string[];
+        /**
+         * @description Selects only keys, where translation in provided langs is in outdated state
+         * @example en-US
+         */
+        filterOutdatedLanguage?: string[];
+        /**
+         * @description Selects only keys, where translation in provided langs is not in outdated state
+         * @example en-US
+         */
+        filterNotOutdatedLanguage?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SelectAllResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get project daily amount of events */
   getProjectDailyActivity_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "application/hal+json": { [key: string]: number };
+          "application/hal+json": {
+            [key: string]: number;
+          };
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Get project stats */
   getProjectStats_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
           "application/hal+json": components["schemas"]["ProjectStatsModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Return current PAK
+   * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
+   */
   getCurrent: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["PatWithUserModel"];
+          "application/json": components["schemas"]["PatWithUserModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  get_18: {
+  /** Get organization by slug */
+  get_19: {
     parameters: {
       path: {
         slug: string;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["OrganizationModel"];
+          "application/json": components["schemas"]["OrganizationModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get credit balance for organization
+   * @description Returns machine translation credit balance for organization
+   */
   getOrganizationCredits: {
     parameters: {
       path: {
         organizationId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["CreditBalanceModel"];
+          "application/json": components["schemas"]["CreditBalanceModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get current API key info
+   * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
+   */
   getCurrent_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ApiKeyWithLanguagesModel"];
+          "application/json": components["schemas"]["ApiKeyWithLanguagesModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Get current permission info
+   * @description Returns current PAK or PAT permissions for current user, api-key and project
+   */
   getCurrentPermissions: {
     parameters: {
-      query: {
-        /** Required when using with PAT */
+      query?: {
+        /** @description Required when using with PAT */
         projectId?: number;
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
       };
     };
     responses: {
-      /** OK */
+      /** @description OK */
       200: {
         content: {
-          "*/*": components["schemas"]["ApiKeyPermissionsModel"];
+          "application/json": components["schemas"]["ApiKeyPermissionsModel"];
         };
       };
-      /** Bad Request */
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
-  doExportJsonZip_1: {
-    parameters: {
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/zip": components["schemas"]["StreamingResponseBody"];
-        };
-      };
-      /** Bad Request */
-      400: {
-        content: {
-          "*/*": string;
-        };
-      };
-      /** Not Found */
-      404: {
-        content: {
-          "*/*": string;
-        };
-      };
-    };
-  };
+  /** Delete one or multiple keys */
   delete_3: {
     parameters: {
       path: {
         ids: number[];
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /**
+   * Remove tag
+   * @description Removes tag with provided id from key with provided id
+   */
   removeTag_1: {
     parameters: {
       path: {
         keyId: number;
         tagId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Delete screenshots */
   deleteScreenshots: {
     parameters: {
       path: {
         ids: number[];
         keyId: number;
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
+  /** Delete uploaded images */
   delete_12: {
     parameters: {
       path: {
         ids: number[];
       };
-      query: {
-        /** API key provided via query parameter. Will be deprecated in the future. */
-        ak?: string;
-      };
-      header: {
-        /** API key provided via header. Safer since headers are not stored in server logs. */
-        "X-API-Key"?: string;
-      };
     };
     responses: {
-      /** OK */
-      200: unknown;
-      /** Bad Request */
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
       400: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
-      /** Not Found */
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
       404: {
         content: {
-          "*/*": string;
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
         };
       };
     };
   };
 }
-
-export interface external {}

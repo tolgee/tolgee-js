@@ -2,10 +2,10 @@ import { checkPlatformVersion } from './checkPlatformVersion';
 
 describe('checks platform version correctly', () => {
   it('returns error if version is lower', () => {
-    expect(typeof checkPlatformVersion('v1.2.3', 'v1.2.2')).toBe('string');
-    expect(typeof checkPlatformVersion('v1.2.3', 'v1.2.1')).toBe('string');
-    expect(typeof checkPlatformVersion('v1.2.3', 'v1.1.4')).toBe('string');
-    expect(typeof checkPlatformVersion('v1.2.3', 'v0.0.0')).toBe('string');
+    expect(checkPlatformVersion('v1.2.3', 'v1.2.2')).toBeInstanceOf(Error);
+    expect(checkPlatformVersion('v1.2.3', 'v1.2.1')).toBeInstanceOf(Error);
+    expect(checkPlatformVersion('v1.2.3', 'v1.1.4')).toBeInstanceOf(Error);
+    expect(checkPlatformVersion('v1.2.3', 'v0.0.0')).toBeInstanceOf(Error);
   });
 
   it('returns undefined if version is higher', () => {

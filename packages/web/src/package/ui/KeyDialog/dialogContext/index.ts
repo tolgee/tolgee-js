@@ -26,6 +26,7 @@ import {
   StateType,
 } from '../State/translationStates';
 import { useComputedPermissions } from './usePermissions';
+import { HttpError } from '../../client/HttpError';
 
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
 
@@ -82,7 +83,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [tags, setTags] = useState<string[]>([]);
     const [_isPlural, setIsPlural] = useState<boolean>();
     const [_pluralArgName, setPluralArgName] = useState<string>();
-    const [submitError, setSubmitError] = useState<string>();
+    const [submitError, setSubmitError] = useState<HttpError>();
 
     useEffect(() => {
       // reset when key changes
@@ -161,7 +162,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const result: FormTranslations = {};
           const firstKey = data._embedded?.keys?.[0];
           const isPlural = Boolean(firstKey?.keyIsPlural);
-          data.selectedLanguages.forEach((lang) => {
+          data.selectedLanguages?.forEach((lang) => {
             const translation = firstKey?.translations[lang.tag];
             result[lang.tag] = {
               value: getTolgeeFormat(
@@ -334,7 +335,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       } catch (e: any) {
         // eslint-disable-next-line no-console
         console.error(e);
-        setSubmitError(e?.message);
+        setSubmitError(e);
       } finally {
         setSaving(false);
         setSuccess(false);
@@ -464,6 +465,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const contextValue = {
       input: props.keyName,
       fallbackNamespaces: props.fallbackNamespaces,
+      uiProps: props.uiProps,
       selectedNs,
       loading,
       saving,

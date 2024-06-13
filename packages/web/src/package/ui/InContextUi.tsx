@@ -6,7 +6,7 @@ import { Root, createRoot } from 'react-dom/client';
 import { KeyContextMenu } from './KeyContextMenu/KeyContextMenu';
 
 export const InContextUi = (props: UiProps) => {
-  let rootElement: ShadowRoot | undefined;
+  let rootElement: Element | undefined;
   let tolgeeModalRoot: Root;
   let contextMenuRoot: Root;
 

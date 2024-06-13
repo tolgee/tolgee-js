@@ -35,7 +35,7 @@ export const simulateReqAndResponse = ({
   cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
     checkRequest?.(req.body);
     // response is not checked by the client
-    req.reply({});
+    req.reply({ response: 'success' });
   }).as(randomId);
 
   getDevUi().contains('Update').click();

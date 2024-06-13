@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { styled, Tooltip, IconButton } from '@mui/material';
+import { styled, IconButton } from '@mui/material';
 import { Clear } from '@mui/icons-material';
 
 import { ScreenshotInterface } from '../dialogContext/useGallery';
-import { DEVTOOLS_Z_INDEX } from '../../../constants';
 import { ScreenshotWithLabels } from './ScreenshotWithLabels';
+import { Tooltip } from '../../common/Tooltip';
 
 const ScreenshotBox = styled('div')`
   border: 1px solid ${({ theme }) => theme.palette.grey[300]};
@@ -85,13 +85,7 @@ export const ScreenshotThumbnail: React.FC<Props> = (props) => {
   return (
     <ScreenshotBox onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
       {props.onDelete && (
-        <Tooltip
-          title="Delete"
-          PopperProps={{
-            disablePortal: true,
-            style: { zIndex: DEVTOOLS_Z_INDEX },
-          }}
-        >
+        <Tooltip title="Delete">
           <DeleteIconButton onClick={onDeleteClick} className={clsx({ hover })}>
             <DeleteIcon />
           </DeleteIconButton>

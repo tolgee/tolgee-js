@@ -102,8 +102,10 @@ export const ServicesRunner = ({
     run() {
       return runServices();
     },
-    exit() {
-      Object.values(runners).forEach((runner) => runner.exit());
+    async exit() {
+      return Promise.all([
+        Object.values(runners).forEach((runner) => runner.exit()),
+      ]);
     },
   };
 };

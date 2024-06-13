@@ -41,10 +41,10 @@ function addIntegrationCommands(command: Command, commandName) {
         code = await runCypress(commandName, integration, opts.headed);
       } catch (e) {
         log('error', e);
-        servicesRunner?.exit();
+        await servicesRunner?.exit();
         process.exit(1);
       } finally {
-        servicesRunner?.exit();
+        await servicesRunner?.exit();
         process.exit(code);
       }
     });
@@ -67,13 +67,13 @@ process.on('uncaughtException', async (e) => {
   console.error(e);
   // eslint-disable-next-line no-console
   console.log(e.stack);
-  servicesRunner?.exit();
+  await servicesRunner?.exit();
   process.exit(1);
 });
 
 process.stdin.resume();
-process.on('SIGINT', () => {
-  servicesRunner?.exit();
+process.on('SIGINT', async () => {
+  await servicesRunner?.exit();
 });
 
 const parsed = program.parse();
