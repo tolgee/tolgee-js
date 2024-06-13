@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.1](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1) (2024-06-13)
+
+
+### Bug Fixes
+
+* acessing document in SSR ([#3345](https://github.com/tolgee/tolgee-js/issues/3345)) ([de15b78](https://github.com/tolgee/tolgee-js/commit/de15b786695ccc9e6cba0471cec5ea2c4a25ed8b))
+* improve in context errors ([#3344](https://github.com/tolgee/tolgee-js/issues/3344)) ([93dfbd1](https://github.com/tolgee/tolgee-js/commit/93dfbd1e5eba15580843ef25f57cf10af2b7db52))
+
+
+
+
+
 # [5.28.0](https://github.com/tolgee/tolgee-js/compare/v5.27.1...v5.28.0) (2024-06-03)
 
 
