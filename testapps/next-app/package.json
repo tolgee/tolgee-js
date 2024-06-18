@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/next-app-testapp",
-  "version": "5.28.1",
+  "version": "5.28.2-prerelease.2842344b.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,9 +11,9 @@
     "clean": "rm -rf .next dist-e2e"
   },
   "dependencies": {
-    "@tolgee/format-icu": "5.28.1",
-    "@tolgee/react": "5.28.1",
-    "@tolgee/web": "5.28.1",
+    "@tolgee/format-icu": "5.28.2-prerelease.2842344b.0",
+    "@tolgee/react": "5.28.2-prerelease.2842344b.0",
+    "@tolgee/web": "5.28.2-prerelease.2842344b.0",
     "next": "14.2.3",
     "next-intl": "3.14.1",
     "react": "18.3.1",
