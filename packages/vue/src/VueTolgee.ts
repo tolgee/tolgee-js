@@ -1,4 +1,5 @@
 import type { App } from 'vue';
+import { ref } from 'vue';
 import {
   getTranslateProps,
   TolgeeInstance,
@@ -19,21 +20,36 @@ export const VueTolgee = {
       throw new Error('Tolgee instance not passed in options');
     }
 
+    const createTFunc = () => {
+      return (...props) => {
+        // @ts-ignore
+        const params = getTranslateProps(...props);
+        return tolgee.t(params);
+      };
+    };
+
+    const tFunc = ref(createTFunc());
+    tolgee.on('update', () => {
+      tFunc.value = createTFunc();
+    });
+
     app.mixin({
       beforeCreate() {
         this.$options.__keySubscription = tolgee.on('update', () => {
-          this.$forceUpdate();
+          this.$t = createTFunc();
         });
       },
       unmounted() {
         this.$options.__keySubscription.unsubscribe();
       },
-      methods: {
-        // @ts-ignore
-        $t(...props) {
-          // @ts-ignore
-          const params = getTranslateProps(...props);
-          return tolgee.t(params);
+      computed: {
+        $t: {
+          get() {
+            return tFunc.value;
+          },
+          set(value: ReturnType<typeof createTFunc>) {
+            tFunc.value = value;
+          },
         },
       },
     });
