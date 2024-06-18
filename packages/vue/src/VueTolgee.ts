@@ -34,21 +34,13 @@ export const VueTolgee = {
     });
 
     app.mixin({
-      beforeCreate() {
-        this.$options.__keySubscription = tolgee.on('update', () => {
-          this.$t = createTFunc();
-        });
-      },
-      unmounted() {
-        this.$options.__keySubscription.unsubscribe();
-      },
       computed: {
         $t: {
           get() {
             return tFunc.value;
           },
-          set(value: ReturnType<typeof createTFunc>) {
-            tFunc.value = value;
+          set() {
+            // do nothing
           },
         },
       },
