@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.2-prerelease.f66a29c5.0](https://github.com/tolgee/tolgee-js/compare/v5.28.1...v5.28.2-prerelease.f66a29c5.0) (2024-06-18)
+
+**Note:** Version bump only for package @tolgee/ngx
+
+
+
+
+
 ## [5.28.1](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1) (2024-06-13)
 
 **Note:** Version bump only for package @tolgee/ngx

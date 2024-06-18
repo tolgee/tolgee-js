@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.2-prerelease.f66a29c5.0](https://github.com/tolgee/tolgee-js/compare/v5.28.1...v5.28.2-prerelease.f66a29c5.0) (2024-06-18)
+
+
+### Features
+
+* make $t function computed ([f66a29c](https://github.com/tolgee/tolgee-js/commit/f66a29c548bbe5e4fcfc8c095672556112af2075))
+
+
+
+
+
 ## [5.28.1](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1) (2024-06-13)
 
 
