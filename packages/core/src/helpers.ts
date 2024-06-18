@@ -108,7 +108,7 @@ export function getErrorMessage(error: any): string | undefined {
 
 const defaultFetchFunction: FetchFn = (input, options) => fetch(input, options);
 
-function headersInitToRecord1(headersInit?: HeadersInit | undefined) {
+function headersInitToRecord(headersInit?: HeadersInit | undefined) {
   return Object.fromEntries(new Headers(headersInit).entries());
 }
 
@@ -116,7 +116,7 @@ export const createFetchFunction = (
   fetchFn: FetchFn = defaultFetchFunction
 ): FetchFn => {
   return (input, init) => {
-    let headers = headersInitToRecord1(init?.headers);
+    let headers = headersInitToRecord(init?.headers);
     if (headers['x-api-key']) {
       headers = {
         'x-tolgee-sdk-type': 'JS',
