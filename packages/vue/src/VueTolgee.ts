@@ -21,7 +21,7 @@ export const VueTolgee = {
 
     app.mixin({
       beforeCreate() {
-        this.$options.__keySubscription = tolgee.onNsUpdate(() => {
+        this.$options.__keySubscription = tolgee.on('update', () => {
           this.$forceUpdate();
         });
       },
@@ -33,8 +33,6 @@ export const VueTolgee = {
         $t(...props) {
           // @ts-ignore
           const params = getTranslateProps(...props);
-          const { ns } = params;
-          this.$options.__keySubscription.subscribeNs(ns);
           return tolgee.t(params);
         },
       },
