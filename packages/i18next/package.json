@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/i18next",
-  "version": "5.28.1",
+  "version": "5.28.2-prerelease.b455a498.0",
   "description": "Tolgee i18n integration.",
   "main": "./dist/tolgee-i18next.cjs.js",
   "module": "./dist/tolgee-i18next.esm.js",
@@ -44,7 +44,7 @@
     "@rollup/plugin-typescript": "8.3.4",
     "@testing-library/dom": "^8.7.1",
     "@testing-library/jest-dom": "^5.11.4",
-    "@tolgee/testing": "5.28.1",
+    "@tolgee/testing": "5.28.2-prerelease.b455a498.0",
     "@types/jest": "^28.1.6",
     "@types/node": "^18.6.1",
     "concurrently": "7.3.0",
@@ -76,7 +76,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@tolgee/web": "5.28.1"
+    "@tolgee/web": "5.28.2-prerelease.b455a498.0"
   },
   "publishConfig": {
     "access": "public"

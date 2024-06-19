@@ -1,5 +1,5 @@
 {
-  "version": "5.28.1",
+  "version": "5.28.2-prerelease.b455a498.0",
   "command": {
     "publish": {
       "conventionalCommits": true
