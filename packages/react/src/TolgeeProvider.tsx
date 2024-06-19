@@ -43,6 +43,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
       .finally(() => {
         setLoading(false);
       });
+    return () => tolgee.stop();
   }, [tolgee]);
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
