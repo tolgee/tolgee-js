@@ -35,13 +35,8 @@ export const VueTolgee = {
 
     app.mixin({
       computed: {
-        $t: {
-          get() {
-            return tFunc.value;
-          },
-          set() {
-            // do nothing
-          },
+        $t() {
+          return tFunc.value;
         },
       },
     });
