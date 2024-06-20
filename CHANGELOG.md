@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.2](https://github.com/tolgee/tolgee-js/compare/v5.28.1...v5.28.2) (2024-06-20)
+
+
+### Bug Fixes
+
+* vue $t update every time language or translation has changed ([#3348](https://github.com/tolgee/tolgee-js/issues/3348)) ([c1ea134](https://github.com/tolgee/tolgee-js/commit/c1ea134c35282d7125c589638b3bfbe6b385ed09))
+
+
+
+
+
 ## [5.28.1](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1) (2024-06-13)
 
 

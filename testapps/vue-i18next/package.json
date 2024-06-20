@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-i18next-testapp",
-  "version": "5.28.1",
+  "version": "5.28.2",
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
@@ -11,7 +11,7 @@
     "serve": "serve -s dist"
   },
   "dependencies": {
-    "@tolgee/i18next": "5.28.1",
+    "@tolgee/i18next": "5.28.2",
     "core-js": "^3.25.3",
     "i18next": "^23.5.1",
     "i18next-icu": "^2.3.0",
