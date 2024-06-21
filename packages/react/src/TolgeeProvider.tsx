@@ -18,6 +18,8 @@ export const getProviderInstance = () => {
   return ProviderInstance;
 };
 
+let LAST_TOLGEE_INSTANCE: TolgeeInstance | undefined = undefined;
+
 export interface TolgeeProviderProps {
   children?: React.ReactNode;
   tolgee: TolgeeInstance;
@@ -33,17 +35,25 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
 }) => {
   const [loading, setLoading] = useState(!tolgee.isLoaded());
 
+  // prevent restarting tolgee unnecesarly
+  // however if the instance change on hot-reloading
+  // we want to restart
   useEffect(() => {
-    tolgee
-      .run()
-      .catch((e) => {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-    return () => tolgee.stop();
+    if (LAST_TOLGEE_INSTANCE !== tolgee) {
+      if (LAST_TOLGEE_INSTANCE) {
+        LAST_TOLGEE_INSTANCE.stop();
+      }
+      LAST_TOLGEE_INSTANCE = tolgee;
+      tolgee
+        .run()
+        .catch((e) => {
+          // eslint-disable-next-line no-console
+          console.error(e);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   }, [tolgee]);
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
