@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.2-prerelease.9e7595c3.0](https://github.com/tolgee/tolgee-js/compare/v5.28.1...v5.28.2-prerelease.9e7595c3.0) (2024-06-21)
+
+
+### Bug Fixes
+
+* handle tolgee instance update ([9e7595c](https://github.com/tolgee/tolgee-js/commit/9e7595c3bc0aaca53a2f60cafaaad5f676870622))
+* handle tolgee instance update ([be74609](https://github.com/tolgee/tolgee-js/commit/be74609e0a99a80a6f029435abc9f8c937fae94e))
+
+
+
+
+
 ## [5.28.1](https://github.com/tolgee/tolgee-js/compare/v5.28.0...v5.28.1) (2024-06-13)
 
 
