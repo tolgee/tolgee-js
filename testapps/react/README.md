@@ -17,7 +17,7 @@ To run the app in dev mode with in-context translating mode:
 2. Generate an API-KEY
 3. Copy file `.env` to `.env.development.local`
 4. Set `VITE_APP_TOLGEE_API_KEY` to API key obtained in previous step
-5. Run `npm run start`
+5. Run `npm run develop`
 6. Have fun
 
 ## To run the app in production mode
