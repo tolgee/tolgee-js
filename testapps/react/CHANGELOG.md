@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.3](https://github.com/tolgee/tolgee-js/compare/v5.28.2...v5.28.3) (2024-06-25)
+
+
+### Bug Fixes
+
+* handle tolgee instance update (on hot reload) ([#3349](https://github.com/tolgee/tolgee-js/issues/3349)) ([038e407](https://github.com/tolgee/tolgee-js/commit/038e4072d62e37d58835f8a10b944cb1fd8887ff))
+
+
+
+
+
 ## [5.28.2](https://github.com/tolgee/tolgee-js/compare/v5.28.1...v5.28.2) (2024-06-20)
 
 **Note:** Version bump only for package @tolgee/react-testapp
