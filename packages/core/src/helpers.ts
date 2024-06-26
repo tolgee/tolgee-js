@@ -108,16 +108,25 @@ export function getErrorMessage(error: any): string | undefined {
 
 const defaultFetchFunction: FetchFn = (input, options) => fetch(input, options);
 
+function headersInitToRecord(headersInit?: HeadersInit | undefined) {
+  return Object.fromEntries(new Headers(headersInit).entries());
+}
+
 export const createFetchFunction = (
   fetchFn: FetchFn = defaultFetchFunction
 ): FetchFn => {
-  return (input, init) =>
-    fetchFn(input, {
+  return (input, init) => {
+    let headers = headersInitToRecord(init?.headers);
+    if (headers['x-api-key']) {
+      headers = {
+        'x-tolgee-sdk-type': 'JS',
+        'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+        ...headers,
+      };
+    }
+    return fetchFn(input, {
       ...init,
-      headers: {
-        'X-Tolgee-SDK-Type': 'JS',
-        'X-Tolgee-SDK-Version': process.env.TOLGEE_UI_VERSION || 'prerelease',
-        ...init?.headers,
-      },
+      headers,
     });
+  };
 };
