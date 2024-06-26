@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.4](https://github.com/tolgee/tolgee-js/compare/v5.28.3...v5.28.4) (2024-06-26)
+
+
+### Bug Fixes
+
+* prevent custom headers if the request is not going to tolgee platform ([#3347](https://github.com/tolgee/tolgee-js/issues/3347)) ([1219aa5](https://github.com/tolgee/tolgee-js/commit/1219aa57a3da4802966e81a6d294a2bcb430b9ac))
+
+
+
+
+
 ## [5.28.3](https://github.com/tolgee/tolgee-js/compare/v5.28.2...v5.28.3) (2024-06-25)
 
 
