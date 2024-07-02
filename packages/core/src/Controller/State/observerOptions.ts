@@ -20,9 +20,9 @@ export type ObserverOptionsInternal = {
   highlightWidth: number;
 
   /**
-   * Root element which will be observed (default: document.body)
+   * Root element which will be observed (default: document)
    */
-  targetElement?: HTMLElement;
+  targetElement?: Node;
 
   /**
    * Elements which are not observed (default: ['script', 'style'])
