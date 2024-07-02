@@ -204,7 +204,7 @@ export function GeneralObserver() {
       handleNodes([...result]);
     });
 
-    const targetElement = options.targetElement || document.body;
+    const targetElement = options.targetElement || document;
     isObserving = true;
     elementRegistry.run(mouseHighlight);
 
