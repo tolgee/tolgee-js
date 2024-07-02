@@ -20,9 +20,7 @@ export const TranslationMethods = () => {
         <div>
           <h1>T component with default</h1>
           <div>
-            <T keyName="this_key_does_not_exist" ns="test">
-              This is default
-            </T>
+            <T keyName="this_key_does_not_exist">This is default</T>
           </div>
         </div>
         <div>

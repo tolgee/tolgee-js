@@ -1,3 +1,13 @@
+<script>
+	import { T, getTranslate } from '@tolgee/svelte';
+	import Namespaces from '../../component/Namespaces.svelte';
+	import Navbar from '../../component/Navbar.svelte';
+
+	const { t } = getTranslate();
+
+	let revealed = false;
+</script>
+
 <main class="translation-methods">
 	<Navbar>
 		<div slot="menu-items">
@@ -87,13 +97,3 @@
 		<Namespaces />
 	{/if}
 </main>
-
-<script>
-	import { T, getTranslate } from '@tolgee/svelte';
-	import Namespaces from '../../component/Namespaces.svelte';
-	import Navbar from '../../component/Navbar.svelte';
-
-	const { t } = getTranslate();
-
-	let revealed = false;
-</script>
