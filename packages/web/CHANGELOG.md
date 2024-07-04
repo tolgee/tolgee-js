@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.5](https://github.com/tolgee/tolgee-js/compare/v5.28.4...v5.28.5) (2024-07-04)
+
+
+### Bug Fixes
+
+* unnecessary stopping on nextjs ([#3352](https://github.com/tolgee/tolgee-js/issues/3352)) ([a5f4390](https://github.com/tolgee/tolgee-js/commit/a5f4390b90d4f89ec864cf265e4e786a3482b6c6))
+
+
+
+
+
 ## [5.28.4](https://github.com/tolgee/tolgee-js/compare/v5.28.3...v5.28.4) (2024-06-26)
 
 **Note:** Version bump only for package @tolgee/web
