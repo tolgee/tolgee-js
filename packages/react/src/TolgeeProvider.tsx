@@ -39,7 +39,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   // however if the instance change on hot-reloading
   // we want to restart
   useEffect(() => {
-    if (LAST_TOLGEE_INSTANCE !== tolgee) {
+    if (LAST_TOLGEE_INSTANCE?.run !== tolgee.run) {
       if (LAST_TOLGEE_INSTANCE) {
         LAST_TOLGEE_INSTANCE.stop();
       }
