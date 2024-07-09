@@ -29,6 +29,7 @@
       "require": "./dist/tolgee-format-icu.cjs.js",
       "module": "./dist/tolgee-format-icu.esm.js",
       "import": "./dist/tolgee-format-icu.esm.mjs",
+      "svelte": "./dist/tolgee-format-icu.esm.mjs",
       "types": "./lib/index.d.ts"
     },
     "./package.json": "./package.json"
