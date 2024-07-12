@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.6-prerelease.c1d73b61.0](https://github.com/tolgee/tolgee-js/compare/v5.28.5...v5.28.6-prerelease.c1d73b61.0) (2024-07-12)
+
+
+### Bug Fixes
+
+* add svelte into exports field ([c1d73b6](https://github.com/tolgee/tolgee-js/commit/c1d73b619a8848acc21fc484160ee9d790cf85a0))
+
+
+
+
+
 ## [5.28.5](https://github.com/tolgee/tolgee-js/compare/v5.28.4...v5.28.5) (2024-07-04)
 
 **Note:** Version bump only for package @tolgee/i18next

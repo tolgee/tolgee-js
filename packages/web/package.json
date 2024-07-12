@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "5.28.5",
+  "version": "5.28.6-prerelease.c1d73b61.0",
   "description": "Tolgee for web",
   "declaration": true,
   "type": "module",
@@ -45,7 +45,7 @@
     "index.cjs"
   ],
   "dependencies": {
-    "@tolgee/core": "5.28.5"
+    "@tolgee/core": "5.28.6-prerelease.c1d73b61.0"
   },
   "devDependencies": {
     "@emotion/react": "^11.11.4",
