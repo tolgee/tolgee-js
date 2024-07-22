@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.7-prerelease.68770a6a.0](https://github.com/tolgee/tolgee-js/compare/v5.28.6...v5.28.7-prerelease.68770a6a.0) (2024-07-22)
+
+
+### Bug Fixes
+
+* use fixed version of emotion ([cb1cebd](https://github.com/tolgee/tolgee-js/commit/cb1cebd07e6377ac29e1628c9a5cc095f59efd23))
+
+
+
+
+
 ## [5.28.6](https://github.com/tolgee/tolgee-js/compare/v5.28.5...v5.28.6) (2024-07-12)
 
 **Note:** Version bump only for package @tolgee/web
