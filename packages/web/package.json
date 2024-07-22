@@ -48,8 +48,8 @@
     "@tolgee/core": "5.28.6"
   },
   "devDependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.14",
     "@rollup/plugin-replace": "^4.0.0",
