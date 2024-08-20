@@ -5,13 +5,16 @@ import { isAuthorizedTo, isLanguagePermitted } from '../../tools/permissions';
 
 type ApiKeyPermissionsModel = components['schemas']['ApiKeyPermissionsModel'];
 type LanguageModel = components['schemas']['LanguageModel'];
+type KeyWithTranslationsModel =
+  components['schemas']['KeyWithTranslationsModel'];
 
 export const getComputedPermissions = (
   permissions: ApiKeyPermissionsModel | undefined,
-  keyExists: boolean | undefined,
+  keyData: KeyWithTranslationsModel | undefined,
   availableLanguages: LanguageModel[] | undefined
 ) => {
   const has = (scope: string) => isAuthorizedTo(scope, permissions?.scopes);
+  const keyExists = Boolean(keyData);
 
   const canCreateKey = has('keys.create');
 
@@ -26,35 +29,43 @@ export const getComputedPermissions = (
   const canUploadScreenshots = has('screenshots.upload') && keyCreationOk;
   const canDeleteScreenshots = has('screenshots.delete') && keyCreationOk;
   const canSendBigMeta = has('translations.edit');
+  const isAssignedToTranslation = Object.values(
+    keyData?.translations ?? {}
+  ).find((i) => i.tasks?.[0]?.userAssigned);
 
   const canSubmitForm =
     canEditTranslations ||
     canEditStates ||
     canEditTags ||
     canUploadScreenshots ||
-    canDeleteScreenshots;
+    canDeleteScreenshots ||
+    isAssignedToTranslation;
 
   const getLanguageId = (language: string) => {
     return availableLanguages?.find((l) => l.tag === language)?.id;
   };
 
   const canEditTranslation = (language: string) => {
+    const firstTask = keyData?.translations?.[language]?.tasks?.[0];
     return (
-      canEditTranslations &&
-      isLanguagePermitted(
-        getLanguageId(language),
-        permissions?.translateLanguageIds
-      )
+      (canEditTranslations &&
+        isLanguagePermitted(
+          getLanguageId(language),
+          permissions?.translateLanguageIds
+        )) ||
+      (firstTask?.userAssigned && firstTask.type === 'TRANSLATE')
     );
   };
 
   const canEditState = (language: string) => {
+    const firstTask = keyData?.translations?.[language]?.tasks?.[0];
     return (
-      canEditStates &&
-      isLanguagePermitted(
-        getLanguageId(language),
-        permissions?.stateChangeLanguageIds
-      )
+      (canEditStates &&
+        isLanguagePermitted(
+          getLanguageId(language),
+          permissions?.stateChangeLanguageIds
+        )) ||
+      (firstTask?.userAssigned && firstTask.type === 'REVIEW')
     );
   };
 
@@ -73,11 +84,11 @@ export const getComputedPermissions = (
 
 export const useComputedPermissions = (
   permissions: ApiKeyPermissionsModel | undefined,
-  keyExists: boolean | undefined,
+  keyData: KeyWithTranslationsModel | undefined,
   availableLanguages: LanguageModel[] | undefined
 ) => {
   return useMemo(
-    () => getComputedPermissions(permissions, keyExists, availableLanguages),
-    [permissions, keyExists, availableLanguages]
+    () => getComputedPermissions(permissions, keyData, availableLanguages),
+    [permissions, keyData, availableLanguages]
   );
 };
