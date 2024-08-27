@@ -12,6 +12,7 @@ services:
       - 'tolgee.screenshots-url=http://localhost:8202/screenshots'
       - tolgee.authentication.needs-email-verification=true
       - tolgee.authentication.registrations-allowed=true
+      - tolgee.authentication.create-demo-for-initial-user=false
       - tolgee.internal.fake-emails-sent=true
       - tolgee.authentication.initialPassword=admin
       - tolgee.import.dir=/data/import-data
