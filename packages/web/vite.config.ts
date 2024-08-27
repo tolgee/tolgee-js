@@ -24,16 +24,6 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
       rollupOptions,
     },
     plugins: [
-      // this check in emotion package is not safe enough
-      // https://github.com/emotion-js/emotion/issues/3196
-      replaceCodePlugin({
-        replacements: [
-          {
-            from: "typeof HTMLElement !== 'undefined'",
-            to: "(typeof document !== 'undefined' && typeof HTMLElement !== 'undefined')",
-          },
-        ],
-      }),
       react(),
       replaceCodePlugin({
         replacements: [
