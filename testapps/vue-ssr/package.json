@@ -2,6 +2,7 @@
   "name": "@tolgee/vue-ssr-testapp",
   "version": "5.28.6",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "develop": "vite dev",

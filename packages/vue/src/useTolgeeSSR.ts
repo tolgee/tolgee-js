@@ -2,7 +2,7 @@ import {
   getTranslateProps,
   TolgeeInstance,
   TolgeeStaticData,
-} from '@tolgee/vue';
+} from '@tolgee/web';
 import { ref, onMounted, watch, computed } from 'vue';
 
 function getTolgeeWithDeactivatedWrapper(

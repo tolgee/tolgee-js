@@ -1,8 +1,6 @@
 import { getServerLocales } from '../tolgee';
 
-export const data = async (pageContext) => {
-  const { lang } = pageContext;
-
-  const locales = await getServerLocales(lang);
+export const data = async () => {
+  const locales = await getServerLocales('en');
   return locales;
 };

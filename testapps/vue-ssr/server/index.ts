@@ -69,6 +69,7 @@ async function main() {
       fastify.log.error(err);
       process.exit(1);
     }
+    // eslint-disable-next-line no-console
     console.log(`Server listening at ${address}`);
   });
 }

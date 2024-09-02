@@ -7,14 +7,14 @@ import {
 } from '@tolgee/vue';
 import { FormatIcu } from '@tolgee/format-icu';
 
-export const createTolgee = (lang) => {
+export const createTolgee = () => {
   return Tolgee()
     .use(DevTools())
     .use(FormatIcu())
     .use(BackendFetch())
     .init({
       availableLanguages: ['en', 'de', 'fr', 'cs'],
-      language: lang,
+      language: 'en',
       apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
       apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
     });
