@@ -1,25 +1,14 @@
-import { TolgeeEvent } from '@tolgee/web';
-import { getCurrentInstance, inject, onUnmounted, ref } from 'vue';
+import { TolgeeEvent, TolgeeInstance } from '@tolgee/web';
+import { inject, computed } from 'vue';
 import { TolgeeVueContext } from './types';
+import type { Ref, ComputedRef } from 'vue';
 
 export const useTolgee = (events?: TolgeeEvent[]) => {
-  const instance = getCurrentInstance();
-  const tolgeeContext = inject('tolgeeContext', {
-    tolgee: instance.proxy.$tolgee,
-  }) as TolgeeVueContext;
+  const tolgeeContext: Ref<TolgeeVueContext> = inject('tolgeeContext');
 
-  const tolgee = ref(tolgeeContext.tolgee);
-
-  const listeners = events?.map((e) =>
-    tolgee.value.on(e, () => {
-      tolgee.value = Object.freeze({ ...tolgee.value });
-      instance.proxy.$forceUpdate();
-    })
+  const tolgee: ComputedRef<TolgeeInstance> = computed(
+    () => tolgeeContext.value.tolgee
   );
-
-  onUnmounted(() => {
-    listeners?.forEach((listener) => listener.unsubscribe());
-  });
 
   return tolgee;
 };

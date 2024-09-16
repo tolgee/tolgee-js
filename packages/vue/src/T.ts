@@ -4,8 +4,10 @@ import {
   TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
-import { defineComponent, PropType } from 'vue';
+import { defineComponent, inject, computed } from 'vue';
+import type { Ref, PropType } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
+import { TolgeeVueContext } from './types';
 
 export const T = defineComponent({
   name: 'T',
@@ -22,7 +24,9 @@ export const T = defineComponent({
   },
   setup() {
     const { t } = useTranslateInternal();
-    return { t };
+    const tolgeeContext: Ref<TolgeeVueContext> = inject('tolgeeContext');
+    const isInitialRender = computed(() => tolgeeContext.value.isInitialRender);
+    return { t, isInitialRender };
   },
   render() {
     const slotsParams = {};
@@ -35,7 +39,7 @@ export const T = defineComponent({
       key: this.$props.keyName,
       params: assignedParams,
       defaultValue: this.$props.defaultValue,
-      noWrap: this.$props.noWrap,
+      noWrap: this.isInitialRender || this.$props.noWrap,
       ns: this.$props.ns,
       language: this.$props.language,
     };

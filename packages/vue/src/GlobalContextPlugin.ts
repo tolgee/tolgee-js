@@ -6,6 +6,7 @@ let globalContext: TolgeeVueContext | undefined;
 export const GlobalContextPlugin = (): TolgeePlugin => (tolgee) => {
   globalContext = {
     tolgee,
+    isInitialRender: false,
   };
   return tolgee;
 };

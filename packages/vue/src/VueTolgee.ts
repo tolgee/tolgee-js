@@ -1,5 +1,5 @@
 import type { App } from 'vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
   getTranslateProps,
   TolgeeInstance,
@@ -7,9 +7,11 @@ import {
   DefaultParamType,
   TranslationKey,
 } from '@tolgee/web';
+import { TolgeeVueContext } from './types';
 
 type Options = {
   tolgee?: TolgeeInstance;
+  isSSR?: boolean;
 };
 
 export const VueTolgee = {
@@ -20,27 +22,59 @@ export const VueTolgee = {
       throw new Error('Tolgee instance not passed in options');
     }
 
-    const createTFunc = () => {
-      return (...props) => {
-        // @ts-ignore
-        const params = getTranslateProps(...props);
-        return tolgee.t(params);
+    const isSSR = Boolean(options?.isSSR);
+
+    const reactiveContext = ref<TolgeeVueContext>({
+      tolgee: tolgee,
+      isInitialRender: isSSR,
+    });
+
+    app.provide('tolgeeContext', reactiveContext);
+
+    if (isSSR) {
+      const getOriginalTolgeeInstance = () => {
+        return {
+          ...reactiveContext.value.tolgee,
+          t(...args) {
+            // @ts-ignore
+            const props = getTranslateProps(...args);
+            return tolgee.t({ ...props });
+          },
+        };
       };
+
+      const getTolgeeInstanceWithDeactivatedWrapper = () => {
+        return {
+          ...reactiveContext.value.tolgee,
+          t(...args) {
+            // @ts-ignore
+            const props = getTranslateProps(...args);
+            return tolgee.t({ ...props, noWrap: true });
+          },
+        };
+      };
+
+      reactiveContext.value.tolgee = getTolgeeInstanceWithDeactivatedWrapper();
+
+      watch(
+        () => reactiveContext.value.isInitialRender,
+        (isInitialRender) => {
+          if (!isInitialRender) {
+            reactiveContext.value.tolgee = getOriginalTolgeeInstance();
+          }
+        }
+      );
+    }
+
+    app.config.globalProperties.$t = (...args) => {
+      // @ts-ignore
+      return reactiveContext.value.tolgee.t(...args);
     };
 
-    const tFunc = ref(createTFunc());
-    tolgee.on('update', () => {
-      tFunc.value = createTFunc();
-    });
-
-    app.mixin({
-      computed: {
-        $t() {
-          return tFunc.value;
-        },
-      },
-    });
-    app.config.globalProperties.$tolgee = tolgee;
+    // keep it for backward compatibility
+    // but it is not reactive
+    // not recommended to use it
+    app.config.globalProperties.$tolgee = reactiveContext.value.tolgee;
   },
 };
 

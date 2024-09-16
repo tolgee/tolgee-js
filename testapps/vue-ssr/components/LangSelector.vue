@@ -1,6 +1,6 @@
 <template>
   <select
-    :value="tolgee.getLanguage()"
+    v-bind:value="tolgee.getLanguage()"
     v-on:change="changeLanguage"
     class="lang-selector"
   >

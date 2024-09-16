@@ -5,5 +5,5 @@ export const onCreateApp = (pageContext) => {
   const { app } = pageContext;
   const tolgee = createTolgee();
 
-  app.use(VueTolgee, { tolgee });
+  app.use(VueTolgee, { tolgee, isSSR: true });
 };
