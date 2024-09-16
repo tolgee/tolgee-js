@@ -4,10 +4,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
+import { inject } from 'vue';
+import { TolgeeVueContext } from '@tolgee/vue';
 
-export default defineComponent({
-  inject: ['tolgeeContext'],
-});
+const tolgeeContext = inject<TolgeeVueContext>('tolgeeContext');
 </script>

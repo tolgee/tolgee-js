@@ -5,11 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "develop": "vite dev",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
+    "develop": "vite",
+    "start": "node ./server"
   },
   "dependencies": {
     "@fastify/compress": "^7.0.3",

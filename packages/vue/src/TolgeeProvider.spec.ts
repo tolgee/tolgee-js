@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/vue';
 import ProviderComponent from './mocks/ProviderComponent.vue';
 import ProviderComponentSlot from './mocks/ProviderComponentSlot.vue';
 import { TolgeeInstance, Tolgee } from '@tolgee/web';
+import { VueTolgee } from '.';
 
 describe('Tolgee Provider Component', function () {
   let mockedTolgee: TolgeeInstance;
@@ -23,6 +24,7 @@ describe('Tolgee Provider Component', function () {
           getLanguage: () => 'mocked-lang',
         },
       },
+      global: { plugins: [[VueTolgee, { tolgee: mockedTolgee }]] },
     });
     await waitFor(() => {
       screen.getByText("It's rendered!");
@@ -33,6 +35,7 @@ describe('Tolgee Provider Component', function () {
   test('runs tolgee', async () => {
     render(ProviderComponent, {
       props: { tolgee: mockedTolgee },
+      global: { plugins: [[VueTolgee, { tolgee: mockedTolgee }]] },
     });
     expect(mockedTolgee.run).toHaveBeenCalledTimes(1);
   });
@@ -40,6 +43,7 @@ describe('Tolgee Provider Component', function () {
   test('stops tolgee', () => {
     const { unmount } = render(ProviderComponent, {
       props: { tolgee: mockedTolgee },
+      global: { plugins: [[VueTolgee, { tolgee: mockedTolgee }]] },
     });
     unmount();
     expect(mockedTolgee.stop).toHaveBeenCalledTimes(1);
@@ -48,6 +52,7 @@ describe('Tolgee Provider Component', function () {
   test('renders fallback with slot', async () => {
     render(ProviderComponentSlot, {
       props: { tolgee: mockedTolgee },
+      global: { plugins: [[VueTolgee, { tolgee: mockedTolgee }]] },
     });
     await waitFor(() => {
       screen.getByText('loading');
@@ -62,6 +67,7 @@ describe('Tolgee Provider Component', function () {
         tolgee: { ...mockedTolgee, isLoaded: () => true },
         fallback: 'loading',
       },
+      global: { plugins: [[VueTolgee, { tolgee: mockedTolgee }]] },
     });
     await waitFor(async () => {
       screen.getByText("It's rendered!");
