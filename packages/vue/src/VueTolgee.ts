@@ -14,6 +14,8 @@ type Options = {
   isSSR?: boolean;
 };
 
+type TolgeeT = TolgeeInstance['t'];
+
 export const VueTolgee = {
   install(app: App, options?: Options) {
     const tolgee = options?.tolgee;
@@ -32,27 +34,20 @@ export const VueTolgee = {
     app.provide('tolgeeContext', reactiveContext);
 
     if (isSSR) {
-      const getOriginalTolgeeInstance = () => {
-        return {
-          ...reactiveContext.value.tolgee,
-          t(...args) {
-            // @ts-ignore
-            const props = getTranslateProps(...args);
-            return tolgee.t({ ...props });
-          },
-        };
-      };
-
-      const getTolgeeInstanceWithDeactivatedWrapper = () => {
-        return {
-          ...reactiveContext.value.tolgee,
-          t(...args) {
-            // @ts-ignore
-            const props = getTranslateProps(...args);
-            return tolgee.t({ ...props, noWrap: true });
-          },
-        };
-      };
+      const getOriginalTolgeeInstance = (): TolgeeInstance => ({
+        ...reactiveContext.value.tolgee,
+        t: ((...args: Parameters<TolgeeT>) => {
+          const props = getTranslateProps(...args);
+          return tolgee.t({ ...props });
+        }) as TolgeeT,
+      });
+      const getTolgeeInstanceWithDeactivatedWrapper = (): TolgeeInstance => ({
+        ...reactiveContext.value.tolgee,
+        t: ((...args: Parameters<TolgeeT>) => {
+          const props = getTranslateProps(...args);
+          return tolgee.t({ ...props, noWrap: true });
+        }) as TolgeeT,
+      });
 
       reactiveContext.value.tolgee = getTolgeeInstanceWithDeactivatedWrapper();
 
@@ -66,10 +61,9 @@ export const VueTolgee = {
       );
     }
 
-    app.config.globalProperties.$t = (...args) => {
-      // @ts-ignore
-      return reactiveContext.value.tolgee.t(...args);
-    };
+    // Improve type safety for $t
+    app.config.globalProperties.$t = ((...args: Parameters<TolgeeT>) =>
+      reactiveContext.value.tolgee.t(...args)) as TolgeeT;
 
     // keep it for backward compatibility
     // but it is not reactive
