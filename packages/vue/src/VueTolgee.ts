@@ -61,7 +61,6 @@ export const VueTolgee = {
       );
     }
 
-    // Improve type safety for $t
     app.config.globalProperties.$t = ((...args: Parameters<TolgeeT>) =>
       reactiveContext.value.tolgee.t(...args)) as TolgeeT;
 
