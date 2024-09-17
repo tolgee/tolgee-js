@@ -51,7 +51,7 @@ Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 �
 
 
 ## Quick links
-- [Tolgee for Angular docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/integrations/svelte/installation)
+- [Tolgee for Svelte docs](https://tolgee.io/js-sdk/integrations/svelte/overview)
 - [Tolgee JS SDK docs](https://tolgee.io/js-sdk)
 - [Tolgee Website](https://tolgee.io)
     - Product (Learn more about the great features)
@@ -126,7 +126,7 @@ The `getTranslate` function returns a store containing the function, which trans
 
 ### Changing the language
 
-To change the current language, use `getLanguageStore` method. For example, you can bind it to a select value.
+To change the current language, use `getTolgee` method. For example, you can bind it to a select value.
 
 ```svelte
 <script lang="ts">
@@ -152,8 +152,8 @@ To change the current language, use `getLanguageStore` method. For example, you 
    
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 
