@@ -11,7 +11,7 @@ import { TolgeeVueContext } from './types';
 
 type Options = {
   tolgee?: TolgeeInstance;
-  isSSR?: boolean;
+  enableSSR?: boolean;
 };
 
 type TolgeeT = TolgeeInstance['t'];
@@ -24,16 +24,16 @@ export const VueTolgee = {
       throw new Error('Tolgee instance not passed in options');
     }
 
-    const isSSR = Boolean(options?.isSSR);
+    const isSsrEnabled = Boolean(options?.enableSSR);
 
     const reactiveContext = ref<TolgeeVueContext>({
       tolgee: tolgee,
-      isInitialRender: isSSR,
+      isInitialRender: isSsrEnabled,
     });
 
     app.provide('tolgeeContext', reactiveContext);
 
-    if (isSSR) {
+    if (isSsrEnabled) {
       const getOriginalTolgeeInstance = (): TolgeeInstance => ({
         ...reactiveContext.value.tolgee,
         t: ((...args: Parameters<TolgeeT>) => {

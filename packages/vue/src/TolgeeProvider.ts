@@ -22,11 +22,11 @@ export const TolgeeProvider = defineComponent({
     },
     staticData: {
       type: Object as PropType<TolgeeStaticData>,
-      default: undefined,
+      required: false,
     },
     language: {
       type: String as PropType<string>,
-      default: 'en',
+      required: false,
     },
   },
 
