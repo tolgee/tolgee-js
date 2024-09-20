@@ -4,7 +4,7 @@ import path from 'path';
 export const config: Config = {
   dockerComposeServices: {
     app: {
-      waitForOutput: 'Tomcat started on port(s): 8080 (http)',
+      waitForOutput: 'Tomcat started on port 8080',
     },
   },
   tests: {
