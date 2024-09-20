@@ -149,7 +149,7 @@ jobs:
       - name: Cypress
         run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress

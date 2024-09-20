@@ -15,6 +15,7 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
   defineConfig({
     clearScreen: false,
     build: {
+      target: 'es2017',
       emptyOutDir: false,
       minify: false,
       sourcemap: true,

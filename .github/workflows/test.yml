@@ -191,7 +191,7 @@ jobs:
       - name: Run e2e tests
         run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev --skip-build
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress
