@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.28.7](https://github.com/tolgee/tolgee-js/compare/v5.28.6...v5.28.7) (2024-09-20)
+
+
+### Bug Fixes
+
+* es2017 compatibility ([#3371](https://github.com/tolgee/tolgee-js/issues/3371)) ([c3d0e39](https://github.com/tolgee/tolgee-js/commit/c3d0e39a5b814d2fc5c0d49a0c31e6eafba70ad0))
+
+
+
+
+
 ## [5.28.6](https://github.com/tolgee/tolgee-js/compare/v5.28.5...v5.28.6) (2024-07-12)
 
 
