@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { TolgeeNextProvider } from '@/tolgee/client';
-import { ALL_LOCALES, getStaticData } from '@/tolgee/shared';
+import { ALL_LOCALES } from '@/tolgee/shared';
+import { getMessages } from 'next-intl/server';
 
 type Props = {
   children: ReactNode;
@@ -16,9 +17,7 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // it's important you provide all data which are needed for initial render
-  // so current locale and also fallback locales + necessary namespaces
-  const locales = await getStaticData(['en', locale]);
+  const locales = await getMessages();
 
   return (
     <html lang={locale}>

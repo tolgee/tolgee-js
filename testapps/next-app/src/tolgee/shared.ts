@@ -17,10 +17,10 @@ export async function getStaticData(
     for (const namespace of namespaces) {
       if (namespace) {
         result[`${lang}:${namespace}`] = (
-          await import(`../i18n/${namespace}/${lang}.json`)
+          await import(`../../messages/${namespace}/${lang}.json`)
         ).default;
       } else {
-        result[lang] = (await import(`../i18n/${lang}.json`)).default;
+        result[lang] = (await import(`../../messages/${lang}.json`)).default;
       }
     }
   }
