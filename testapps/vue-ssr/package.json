@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "develop": "vite",
+    "build": "tsc --noEmit && vite build",
     "start": "node ./server"
   },
   "dependencies": {

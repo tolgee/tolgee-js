@@ -113,18 +113,22 @@
       </div>
     </div>
 
-    <div v-if="!revealed" class="load-more-section">
+    <div v-if="!revealed && loaded" class="load-more-section">
       <button class="button" @click="revealed = true">Load more</button>
     </div>
-    <Namespaces v-else />
+    <Namespaces v-if="revealed" />
   </main>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { T } from '@tolgee/vue';
 import Navbar from './Navbar.vue';
 import Namespaces from './Namespaces.vue';
 
 const revealed = ref(false);
+const loaded = ref(false);
+onMounted(() => {
+  loaded.value = true;
+});
 </script>

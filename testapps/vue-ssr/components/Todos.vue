@@ -54,45 +54,50 @@
 </template>
 
 <script lang="tsx">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { T } from '@tolgee/vue';
 
 import Navbar from './Navbar.vue';
+import { onMounted } from 'vue';
 
 export default defineComponent({
   components: { T, Navbar },
   name: 'TodosComponent',
-  data() {
-    let items: string[] | undefined = undefined;
-    try {
-      items = JSON.parse(
-        localStorage.getItem('tolgee-example-app-items') || ''
-      );
-    } catch (e) {
-      console.error(
-        'Something went wrong while parsing stored items. Items are reset.'
-      );
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem('tolgee-example-app-items');
+  setup() {
+    const newItemValue = ref('');
+    let items = ref<string[]>([]);
+
+    onMounted(() => {
+      let result = [];
+      try {
+        result = JSON.parse(
+          localStorage.getItem('tolgee-example-app-items') || ''
+        );
+      } catch (e) {
+        console.error(
+          'Something went wrong while parsing stored items. Items are reset.'
+        );
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('tolgee-example-app-items');
+        }
       }
-    }
-    return {
-      newItemValue: '',
-      items: items?.length
-        ? items
-        : ['Passport', 'Maps and directions', 'Travel guide'],
-    };
+      items.value = result.length
+        ? result
+        : ['Passport', 'Maps and directions', 'Travel guide'];
+    });
+
+    return { newItemValue, items };
   },
   methods: {
     onAdd() {
-      if (this.$data.newItemValue) {
-        this.$data.items.push(this.$data.newItemValue);
+      if (this.newItemValue) {
+        this.items.push(this.newItemValue);
         this.updateLocalStorage();
-        this.$data.newItemValue = '';
+        this.newItemValue = '';
       }
     },
     onDelete(index: number) {
-      this.$data.items = this.$data.items.filter((_, i) => i !== index);
+      this.items = this.items.filter((_, i) => i !== index);
       this.updateLocalStorage();
     },
     updateLocalStorage() {

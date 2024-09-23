@@ -35,11 +35,6 @@ export const config: Config = {
     },
     next: {
       commandLineServices: {
-        prod: {
-          command: 'npm run start -- -p 8107',
-          cwd: path.resolve(__dirname, '../../testapps/next/'),
-          waitForOutput: 'Ready in ',
-        },
         dev: {
           command: 'npm run dev -- -p 8106',
           cwd: path.resolve(__dirname, '../../testapps/next/'),
@@ -50,6 +45,11 @@ export const config: Config = {
             NEXT_PUBLIC_TOLGEE_API_KEY:
               'examples-admin-imported-project-implicit',
           },
+        },
+        prod: {
+          command: 'npm run start -- -p 8107',
+          cwd: path.resolve(__dirname, '../../testapps/next/'),
+          waitForOutput: 'Ready in ',
         },
       },
     },
@@ -149,11 +149,6 @@ export const config: Config = {
     },
     'next-app': {
       commandLineServices: {
-        prod: {
-          command: 'npm run start -- -p 8121',
-          cwd: path.resolve(__dirname, '../../testapps/next-app/'),
-          waitForOutput: 'Ready in ',
-        },
         dev: {
           command: 'npm run dev -- -p 8122',
           cwd: path.resolve(__dirname, '../../testapps/next-app/'),
@@ -163,6 +158,30 @@ export const config: Config = {
             NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
             NEXT_PUBLIC_TOLGEE_API_KEY:
               'examples-admin-imported-project-implicit',
+          },
+        },
+        prod: {
+          command: 'npm run start -- -p 8121',
+          cwd: path.resolve(__dirname, '../../testapps/next-app/'),
+          waitForOutput: 'Ready in ',
+        },
+      },
+    },
+    'vue-ssr': {
+      commandLineServices: {
+        dev: {
+          command: 'npm run dev -- --port 8123',
+          cwd: path.resolve(__dirname, '../../testapps/vue-ssr/'),
+          environment: {
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
+          },
+        },
+        prod: {
+          cwd: path.resolve(__dirname, '../../testapps/vue-ssr/'),
+          command: 'npm run start',
+          environment: {
+            PORT: '8124',
           },
         },
       },

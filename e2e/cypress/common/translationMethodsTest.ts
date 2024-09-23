@@ -19,10 +19,9 @@ export const translationMethodsTest = (
         // when translations are already in cache
         describe(`for language ${language} (run ${run})`, () => {
           before(() => {
+            cy.get('.tiles').should('be.visible');
+            cy.wait(500);
             cy.get('.lang-selector').select(language);
-            Object.values(texts).forEach((text) => {
-              getElement(text.text, text.testId).should('exist');
-            });
           });
 
           texts.forEach((text) => {
