@@ -55,7 +55,7 @@ context('UI Dialog', () => {
           .contains('What To Pack')
           .click()
           .parent()
-          .type('{selectall}{backspace}Hello world');
+          .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');
@@ -81,7 +81,6 @@ context('UI Dialog', () => {
           .click()
           .parent()
           .clear()
-          // @ts-ignore
           .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
