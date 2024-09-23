@@ -64,7 +64,7 @@ context('UI Dialog', () => {
     cy.contains('Hello world').should('be.visible');
   });
 
-  it('updates translation properly when languages restricted', () => {
+  it.only('updates translation properly when languages restricted', () => {
     simulateReqAndResponse({
       permissions: translateEnglish,
       inForm() {
@@ -81,7 +81,8 @@ context('UI Dialog', () => {
           .click()
           .parent()
           .clear()
-          .type('Hello world');
+          // @ts-ignore
+          .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');

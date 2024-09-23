@@ -24,6 +24,8 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+import 'cypress-real-events';
+
 Cypress.Commands.add('closestDcy', { prevSubject: true }, (subject, dataCy) => {
   return subject.closest('[data-cy="' + dataCy + '"]');
 });
