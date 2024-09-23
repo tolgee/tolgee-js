@@ -53,8 +53,8 @@ context('UI Dialog', () => {
           .should('not.have.attr', 'disabled');
         getEditor()
           .contains('What To Pack')
-          .click()
           .parent()
+          .click()
           .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
@@ -78,8 +78,8 @@ context('UI Dialog', () => {
           .should('not.have.attr', 'disabled');
         getEditor()
           .contains('What To Pack')
-          .click()
           .parent()
+          .click()
           .clear()
           .realType('{backspace}'.repeat(20) + 'Hello world');
       },
