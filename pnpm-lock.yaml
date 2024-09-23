@@ -1191,11 +1191,11 @@ importers:
         specifier: ^7.0.4
         version: 7.0.4
       '@tolgee/format-icu':
-        specifier: 5.28.6
-        version: 5.28.6
+        specifier: 5.29.1
+        version: link:../../packages/format-icu
       '@tolgee/vue':
-        specifier: 5.28.6
-        version: 5.28.6(vue@3.2.47)
+        specifier: 5.29.1
+        version: link:../../packages/vue
       fastify:
         specifier: ^4.28.1
         version: 4.28.1
@@ -10078,29 +10078,6 @@ packages:
       '@codemirror/state': 6.4.1
       '@codemirror/view': 6.33.0
     dev: true
-
-  /@tolgee/core@5.28.6:
-    resolution: {integrity: sha512-L74YuSmd3dogKj13ks/j/qRORrdK/tx8eCmLlQPnvS512rRLxaBmu5k91ZxgUFy+ZnwWGDkOqezgqWkFXrcuRQ==}
-    dev: false
-
-  /@tolgee/format-icu@5.28.6:
-    resolution: {integrity: sha512-2bSQW4UUl6ts3A9quooGDIMR2yqpMnpXIZEwmEg5KZDroMEFnMWKLGCIv3pt4SpTR3gtVqheWHSHezv816UR0A==}
-    dev: false
-
-  /@tolgee/vue@5.28.6(vue@3.2.47):
-    resolution: {integrity: sha512-tPQSoREuf1CIO3qJA8JOSNb5dFxYQIcKwQa3UvbuePSNpvhlu25EtZBWhzPN7ooA8vOJ/uAIzfvO4oZR6Ak/DQ==}
-    peerDependencies:
-      vue: ^3.0.0
-    dependencies:
-      '@tolgee/web': 5.28.6
-      vue: 3.2.47
-    dev: false
-
-  /@tolgee/web@5.28.6:
-    resolution: {integrity: sha512-9+FrXhYHryp2/WXSOiY9n9XAjeZxIixx9FBjx8z2GBsUhIM9VFDAA4/9bb884Gk5fmk3shQ+tehSSAvLLnihgQ==}
-    dependencies:
-      '@tolgee/core': 5.28.6
-    dev: false
 
   /@tootallnate/once@1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
