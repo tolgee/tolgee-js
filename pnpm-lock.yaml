@@ -1192,10 +1192,10 @@ importers:
         version: 7.0.4
       '@tolgee/format-icu':
         specifier: 5.28.6
-        version: 5.28.6
+        version: link:../../packages/format-icu
       '@tolgee/vue':
         specifier: 5.28.6
-        version: 5.28.6(vue@3.2.47)
+        version: link:../../packages/vue
       fastify:
         specifier: ^4.28.1
         version: 4.28.1
