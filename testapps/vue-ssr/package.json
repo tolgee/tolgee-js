@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-ssr-testapp",
-  "version": "5.28.6",
+  "version": "5.29.0",
   "private": true,
   "type": "module",
   "scripts": {
