@@ -47,6 +47,12 @@ export const TolgeeProvider = defineComponent({
     }
 
     if (tolgeeContext.value.isInitialRender) {
+      if (!props.staticData || !props.language) {
+        throw new Error(
+          'TolgeeProvider: "staticData" and "language" props are required for SSR.'
+        );
+      }
+
       tolgee.value.setEmitterActive(false);
       tolgee.value.addStaticData(props.staticData);
       tolgee.value.changeLanguage(props.language);
