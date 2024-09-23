@@ -64,7 +64,7 @@ context('UI Dialog', () => {
     cy.contains('Hello world').should('be.visible');
   });
 
-  it.only('updates translation properly when languages restricted', () => {
+  it('updates translation properly when languages restricted', () => {
     simulateReqAndResponse({
       permissions: translateEnglish,
       inForm() {
