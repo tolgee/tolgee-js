@@ -1,5 +1,5 @@
 import type { App } from 'vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import {
   getTranslateProps,
   TolgeeInstance,
@@ -7,10 +7,14 @@ import {
   DefaultParamType,
   TranslationKey,
 } from '@tolgee/web';
+import { TolgeeVueContext } from './types';
 
 type Options = {
   tolgee?: TolgeeInstance;
+  enableSSR?: boolean;
 };
+
+type TolgeeT = TolgeeInstance['t'];
 
 export const VueTolgee = {
   install(app: App, options?: Options) {
@@ -20,27 +24,50 @@ export const VueTolgee = {
       throw new Error('Tolgee instance not passed in options');
     }
 
-    const createTFunc = () => {
-      return (...props) => {
-        // @ts-ignore
-        const params = getTranslateProps(...props);
-        return tolgee.t(params);
-      };
-    };
+    const isSsrEnabled = Boolean(options?.enableSSR);
 
-    const tFunc = ref(createTFunc());
-    tolgee.on('update', () => {
-      tFunc.value = createTFunc();
+    const reactiveContext = ref<TolgeeVueContext>({
+      tolgee: tolgee,
+      isInitialRender: isSsrEnabled,
     });
 
-    app.mixin({
-      computed: {
-        $t() {
-          return tFunc.value;
-        },
-      },
-    });
-    app.config.globalProperties.$tolgee = tolgee;
+    app.provide('tolgeeContext', reactiveContext);
+
+    if (isSsrEnabled) {
+      const getOriginalTolgeeInstance = (): TolgeeInstance => ({
+        ...reactiveContext.value.tolgee,
+        t: ((...args: Parameters<TolgeeT>) => {
+          const props = getTranslateProps(...args);
+          return tolgee.t({ ...props });
+        }) as TolgeeT,
+      });
+      const getTolgeeInstanceWithDeactivatedWrapper = (): TolgeeInstance => ({
+        ...reactiveContext.value.tolgee,
+        t: ((...args: Parameters<TolgeeT>) => {
+          const props = getTranslateProps(...args);
+          return tolgee.t({ ...props, noWrap: true });
+        }) as TolgeeT,
+      });
+
+      reactiveContext.value.tolgee = getTolgeeInstanceWithDeactivatedWrapper();
+
+      watch(
+        () => reactiveContext.value.isInitialRender,
+        (isInitialRender) => {
+          if (!isInitialRender) {
+            reactiveContext.value.tolgee = getOriginalTolgeeInstance();
+          }
+        }
+      );
+    }
+
+    app.config.globalProperties.$t = ((...args: Parameters<TolgeeT>) =>
+      reactiveContext.value.tolgee.t(...args)) as TolgeeT;
+
+    // keep it for backward compatibility
+    // but it is not reactive
+    // not recommended to use it
+    app.config.globalProperties.$tolgee = reactiveContext.value.tolgee;
   },
 };
 

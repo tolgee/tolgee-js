@@ -2,13 +2,15 @@
 import {
   defineComponent,
   PropType,
-  getCurrentInstance,
-  provide,
   onBeforeMount,
   onUnmounted,
   ref,
+  inject,
+  onMounted,
+  computed,
 } from 'vue';
-import { TolgeeInstance } from '@tolgee/web';
+import type { Ref, ComputedRef } from 'vue';
+import { TolgeeInstance, TolgeeStaticData } from '@tolgee/web';
 import { TolgeeVueContext } from './types';
 
 export const TolgeeProvider = defineComponent({
@@ -18,28 +20,75 @@ export const TolgeeProvider = defineComponent({
     fallback: {
       type: [Object, String] as PropType<JSX.Element | string>,
     },
+    staticData: {
+      type: Object as PropType<TolgeeStaticData>,
+      required: false,
+    },
+    language: {
+      type: String as PropType<string>,
+      required: false,
+    },
   },
 
   setup(props) {
-    const tolgee: TolgeeInstance | undefined =
-      props.tolgee || getCurrentInstance().proxy.$tolgee;
+    const tolgeeContext: Ref<TolgeeVueContext> = inject('tolgeeContext');
 
-    if (!tolgee) {
+    // for backward compatibility
+    if (props.tolgee) {
+      tolgeeContext.value.tolgee = props.tolgee;
+    }
+
+    const tolgee: ComputedRef<TolgeeInstance> = computed(
+      () => tolgeeContext.value.tolgee
+    );
+
+    if (!tolgee.value) {
       throw new Error('Tolgee instance not provided');
     }
 
-    provide('tolgeeContext', { tolgee } as TolgeeVueContext);
+    if (tolgeeContext.value.isInitialRender) {
+      if (!props.staticData || !props.language) {
+        throw new Error(
+          'TolgeeProvider: "staticData" and "language" props are required for SSR.'
+        );
+      }
 
-    const isLoading = ref(!tolgee.isLoaded());
+      tolgee.value.setEmitterActive(false);
+      tolgee.value.addStaticData(props.staticData);
+      tolgee.value.changeLanguage(props.language);
+      tolgee.value.setEmitterActive(true);
+
+      if (!tolgee.value.isLoaded()) {
+        // warning user, that static data provided are not sufficient
+        // for proper SSR render
+        const missingRecords = tolgee.value
+          .getRequiredRecords(props.language)
+          .map(({ namespace, language }) =>
+            namespace ? `${namespace}:${language}` : language
+          )
+          .filter((key) => !props.staticData?.[key]);
+
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+        );
+      }
+    }
+
+    onMounted(() => {
+      tolgeeContext.value.isInitialRender = false;
+    });
+
+    const isLoading = ref(!tolgee.value.isLoaded());
 
     onBeforeMount(() => {
-      tolgee.run().finally(() => {
+      tolgee.value.run().finally(() => {
         isLoading.value = false;
       });
     });
 
     onUnmounted(() => {
-      tolgee.stop();
+      tolgee.value.stop();
     });
     return { isLoading };
   },

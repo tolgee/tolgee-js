@@ -8,6 +8,7 @@ import {
   Tolgee,
   DevTools,
   useTranslate,
+  VueTolgee,
 } from '..';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
@@ -20,7 +21,6 @@ const fetch = mockCoreFetch();
 const setTitle = jest.fn();
 
 const TestComponent = {
-  inject: ['tolgeeContext'],
   components: { T },
   setup() {
     const { t } = useTranslate();
@@ -76,6 +76,7 @@ describe('T component integration', () => {
         tolgee,
         fallback: 'Loading...',
       },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
 
     await waitFor(() => {

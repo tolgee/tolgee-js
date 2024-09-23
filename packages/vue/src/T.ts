@@ -4,7 +4,8 @@ import {
   TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
-import { defineComponent, PropType } from 'vue';
+import { defineComponent } from 'vue';
+import type { PropType } from 'vue';
 import { useTranslateInternal } from './useTranslateInternal';
 
 export const T = defineComponent({

@@ -1,7 +1,14 @@
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/vue';
 
-import { TolgeeProvider, T, TolgeeInstance, Tolgee, DevTools } from '..';
+import {
+  TolgeeProvider,
+  T,
+  TolgeeInstance,
+  Tolgee,
+  DevTools,
+  VueTolgee,
+} from '..';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
 
@@ -11,7 +18,6 @@ const API_KEY = 'dummyApiKey';
 const fetch = mockCoreFetch();
 
 const TestComponent = {
-  inject: ['tolgeeContext'],
   components: { T },
   template: `
     <div>
@@ -68,6 +74,7 @@ describe('T component integration', () => {
         tolgee,
         fallback: 'Loading...',
       },
+      global: { plugins: [[VueTolgee, { tolgee }]] },
     });
 
     await waitFor(() => {
