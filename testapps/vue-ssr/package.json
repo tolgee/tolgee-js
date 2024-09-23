@@ -11,8 +11,8 @@
   "dependencies": {
     "@fastify/compress": "^7.0.3",
     "@fastify/static": "^7.0.4",
-    "@tolgee/format-icu": "5.28.6",
-    "@tolgee/vue": "5.28.6",
+    "@tolgee/format-icu": "5.29.0",
+    "@tolgee/vue": "5.29.0",
     "fastify": "^4.28.1",
     "vike": "^0.4.193",
     "vike-vue": "^0.8.3",
