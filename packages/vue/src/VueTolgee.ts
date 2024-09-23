@@ -61,6 +61,12 @@ export const VueTolgee = {
       );
     }
 
+    reactiveContext.value.tolgee.on('cache', () => {
+      reactiveContext.value.tolgee = Object.freeze({
+        ...reactiveContext.value.tolgee,
+      });
+    });
+
     app.config.globalProperties.$t = ((...args: Parameters<TolgeeT>) =>
       reactiveContext.value.tolgee.t(...args)) as TolgeeT;
 
