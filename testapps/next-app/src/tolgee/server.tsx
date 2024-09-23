@@ -7,6 +7,8 @@ export const { getTolgee, getTranslate, T } = createServerInstance({
   getLocale: getLocale,
   createTolgee: async (locale) =>
     TolgeeBase().init({
+      // including all locales
+      // on server we are not concerned about bundle size
       staticData: await getStaticData(ALL_LOCALES),
       observerOptions: {
         fullKeyEncode: true,

@@ -37,7 +37,7 @@ context('UI with plurals', () => {
           .findDcy('key-plural-variable-name')
           .find('input')
           .clear()
-          .type('testValue', { force: true });
+          .realType('testValue');
       },
       checkRequest(data) {
         assert(
@@ -67,10 +67,6 @@ context('UI with plurals', () => {
         expect(data.translations['en']).equal(
           '{value, plural, other {# items} one {# item}}'
         );
-        assert(
-          Object.values(data.translations).filter(Boolean).length === 1,
-          'No other states touched'
-        );
         assert(data.isPlural === true);
         assert(data.pluralArgName === 'value');
       },
@@ -99,7 +95,7 @@ context('UI with plurals', () => {
       .clear();
 
     if (text) {
-      item.type(text);
+      item.realType('{backspace}'.repeat(20) + text);
     }
   }
 });

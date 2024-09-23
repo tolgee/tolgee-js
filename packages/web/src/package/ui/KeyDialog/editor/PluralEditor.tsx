@@ -1,7 +1,7 @@
-import { EditorView } from 'codemirror';
 import { TolgeeFormat } from '@tginternal/editor';
 import { getLanguageDirection } from '@tginternal/editor';
 import { RefObject } from 'react';
+import { EditorView } from '@codemirror/view';
 
 import { TranslationPlurals } from './TranslationPlurals';
 import { EditorWrapper } from './EditorWrapper';

@@ -53,9 +53,9 @@ context('UI Dialog', () => {
           .should('not.have.attr', 'disabled');
         getEditor()
           .contains('What To Pack')
-          .click()
           .parent()
-          .type('{selectall}{backspace}Hello world');
+          .click()
+          .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');
@@ -78,10 +78,10 @@ context('UI Dialog', () => {
           .should('not.have.attr', 'disabled');
         getEditor()
           .contains('What To Pack')
-          .click()
           .parent()
+          .click()
           .clear()
-          .type('Hello world');
+          .realType('{backspace}'.repeat(20) + 'Hello world');
       },
       checkRequest(data) {
         assert(data.translations['en'] === 'Hello world');

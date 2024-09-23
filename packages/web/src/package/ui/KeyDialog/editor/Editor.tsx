@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useMemo, useRef } from 'react';
 import { minimalSetup } from 'codemirror';
 import { Compartment, EditorState, Prec } from '@codemirror/state';
-import { EditorView, ViewUpdate, keymap, KeyBinding } from '@codemirror/view';
+import { ViewUpdate, EditorView, keymap, KeyBinding } from '@codemirror/view';
 import { Direction, styled, useTheme } from '@mui/material';
 import {
   tolgeeSyntax,
