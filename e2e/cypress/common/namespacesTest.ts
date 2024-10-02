@@ -12,12 +12,13 @@ export const namespacesTest = (
   describe('translation methods test', () => {
     before(() => {
       cy.visit(url);
-      cy.intercept('GET', '*', (req) => {
-        req.on('response', (res) => {
-          res.delay = 500;
+      if (!options?.skipLoading) {
+        cy.intercept('GET', '*', (req) => {
+          req.on('response', (res) => {
+            res.delay = 500;
+          });
         });
-      });
-
+      }
       cy.contains('Load more', { timeout: 30_000 }).click();
       if (!options?.skipLoading) {
         cy.contains('Loading namespace...').should('exist');

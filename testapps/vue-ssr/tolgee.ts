@@ -1,7 +1,7 @@
 import {
   Tolgee,
   DevTools,
-  NsFallback,
+  type NsFallback,
   getFallbackArray,
   BackendFetch,
 } from '@tolgee/vue';
@@ -15,8 +15,8 @@ export const createTolgee = () => {
     .init({
       availableLanguages: ['en', 'de', 'fr', 'cs'],
       language: 'en',
-      apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
-      apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
+      apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
+      apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
     });
 };
 
