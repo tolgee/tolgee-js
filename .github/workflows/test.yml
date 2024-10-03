@@ -163,7 +163,7 @@ jobs:
       - name: Install for root and for e2e
         run: |
           pnpm install --ignore-workspace
-          pnpm install --no-frozen-lockfile --filter='./e2e'
+          pnpm install --filter='./e2e'
 
       - name: Create branch
         run: git checkout -b test.$(git ls-files -s packages | git hash-object --stdin)
