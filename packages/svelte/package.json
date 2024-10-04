@@ -6,6 +6,10 @@
 		"type": "git",
 		"url": "git+https://github.com/tolgee/tolgee-js.git"
 	},
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"svelte": "./dist/index.js",
 	"homepage": "https://tolgee.io",
 	"keywords": [
 		"localization",
@@ -16,6 +20,7 @@
 		"languages"
 	],
 	"declaration": true,
+	"type": "module",
 	"scripts": {
 		"dev": "vite build --watch",
 		"develop": "vite build --watch",
@@ -31,7 +36,8 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
-		}
+		},
+		"./package.json": "./package.json"
 	},
 	"files": [
 		"dist",
@@ -69,9 +75,6 @@
 		"vitest": "^2.0.0",
 		"vitest-fetch-mock": "^0.3.0"
 	},
-	"svelte": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"type": "module",
 	"publishConfig": {
 		"access": "public"
 	}
