@@ -364,8 +364,8 @@ importers:
         specifier: ^16.0.0
         version: 16.0.0(@angular/common@17.3.7)(@angular/core@17.3.7)(@angular/platform-browser@17.3.7)(@angular/router@17.3.7)
       '@testing-library/jest-dom':
-        specifier: 6.4.5
-        version: 6.4.5(@types/jest@29.5.12)(jest@29.7.0)
+        specifier: ^6.4.5
+        version: 6.5.0
       '@tolgee/format-icu':
         specifier: 5.29.2
         version: link:../format-icu
@@ -10120,39 +10120,6 @@ packages:
       css.escape: 1.5.1
       dom-accessibility-api: 0.6.3
       jest: 29.7.0(@types/node@18.14.6)(ts-node@10.9.1)
-      lodash: 4.17.21
-      redent: 3.0.0
-    dev: true
-
-  /@testing-library/jest-dom@6.4.5(@types/jest@29.5.12)(jest@29.7.0):
-    resolution: {integrity: sha512-AguB9yvTXmCnySBP1lWjfNNUwpbElsaQ567lt2VdGqAdHtpieLgjmcVyv1q7PMIvLbgpDdkWV5Ydv3FEejyp2A==}
-    engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
-    peerDependencies:
-      '@jest/globals': '>= 28'
-      '@types/bun': latest
-      '@types/jest': '>= 28'
-      jest: '>= 28'
-      vitest: '>= 0.32'
-    peerDependenciesMeta:
-      '@jest/globals':
-        optional: true
-      '@types/bun':
-        optional: true
-      '@types/jest':
-        optional: true
-      jest:
-        optional: true
-      vitest:
-        optional: true
-    dependencies:
-      '@adobe/css-tools': 4.4.0
-      '@babel/runtime': 7.25.7
-      '@types/jest': 29.5.12
-      aria-query: 5.3.2
-      chalk: 3.0.0
-      css.escape: 1.5.1
-      dom-accessibility-api: 0.6.3
-      jest: 29.7.0(@types/node@20.11.17)(ts-node@10.8.1)
       lodash: 4.17.21
       redent: 3.0.0
     dev: true

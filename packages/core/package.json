@@ -31,7 +31,6 @@
     "./package.json": "./package.json"
   },
   "directories": {
-    "lib": "lib",
     "dist": "dist"
   },
   "scripts": {
