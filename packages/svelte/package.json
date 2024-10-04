@@ -31,18 +31,13 @@
 		".": {
 			"types": "./dist/index.d.ts",
 			"svelte": "./dist/index.js"
-		},
-		"./package.json": "./package.json"
+		}
 	},
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
-	"directories": {
-		"lib": "lib",
-		"dist": "dist"
-	},
 	"peerDependencies": {
 		"svelte": "^4.0.0"
 	},
