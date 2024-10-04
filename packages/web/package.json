@@ -27,7 +27,7 @@
     "dev": "vite",
     "develop": "concurrently --raw \"tsc --watch --preserveWatchOutput --project tsconfig.prod.json\" \"vite build --watch\"",
     "build": "tsc --project tsconfig.prod.json && vite build && vite build --config vite.config.production.ts && vite build --config vite.config.tools.ts",
-    "test": "jest --collect-coverage",
+    "test": "jest --collect-coverage --runInBand",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "schema": "openapi-typescript 'http://localhost:8080/v3/api-docs/Accessible%20with%20Project%20API%20key%20(V2)' --output ./src/package/ui/client/apiSchema.generated.ts",

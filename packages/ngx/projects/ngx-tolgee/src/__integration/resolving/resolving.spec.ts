@@ -1,3 +1,4 @@
+import '@testing-library/jest-dom';
 import { render, RenderResult, screen } from '@testing-library/angular';
 import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';

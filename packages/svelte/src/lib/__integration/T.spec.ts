@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/svelte';
 

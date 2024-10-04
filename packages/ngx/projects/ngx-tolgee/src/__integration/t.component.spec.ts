@@ -1,10 +1,10 @@
+import '@testing-library/jest-dom';
 import {
   render,
   RenderResult,
   screen,
   waitFor,
 } from '@testing-library/angular';
-import { act } from 'react-dom/test-utils';
 import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
@@ -120,9 +120,7 @@ describe('t component', () => {
 
   describe('language switch', () => {
     beforeEach(async () => {
-      await act(async () => {
-        await tolgee.changeLanguage('en');
-      });
+      await tolgee.changeLanguage('en');
     });
 
     it('changes translation with tags', () => {
