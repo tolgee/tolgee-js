@@ -19,6 +19,8 @@
 		"translation",
 		"languages"
 	],
+	"author": "JanCizmar",
+	"license": "MIT",
 	"declaration": true,
 	"type": "module",
 	"scripts": {
@@ -77,5 +79,6 @@
 	},
 	"publishConfig": {
 		"access": "public"
-	}
+	},
+	"sideEffects": false
 }
