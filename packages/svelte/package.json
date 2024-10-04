@@ -1,73 +1,73 @@
 {
-  "name": "@tolgee/svelte",
-  "version": "5.29.2",
-  "description": "Svelte implementation for Tolgee localization framework",
-  "repository": "https://github.com/tolgee/tolgee-js",
-  "homepage": "https://tolgee.io",
-  "keywords": [
-    "localization",
-    "internationalization",
-    "l10n",
-    "i18n",
-    "translation",
-    "languages"
-  ],
-  "scripts": {
-    "dev": "npm run develop",
-    "develop": "sleep 5 && nodemon --exec svelte-package",
-    "build": "svelte-kit sync && svelte-package",
-    "clean": "rm -rf build build-e2e dist dist-e2e lib .svelte-kit package",
-    "serve": "serve -s dist",
-    "preview": "vite preview",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "test": "jest src --collect-coverage",
-    "lint": "prettier --cache --check . && eslint .",
-    "format": "prettier --cache --write ."
-  },
-  "author": "JanCizmar",
-  "license": "MIT",
-  "peerDependencies": {
-    "svelte": "^3.29.0 || ^4.0.0"
-  },
-  "dependencies": {
-    "@tolgee/web": "5.29.2"
-  },
-  "devDependencies": {
-    "@sveltejs/adapter-auto": "1.0.2",
-    "@sveltejs/kit": "1.2.6",
-    "@sveltejs/package": "1.0.2",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/svelte": "^3.2.2",
-    "@tolgee/format-icu": "5.29.2",
-    "@tolgee/testing": "5.29.2",
-    "@tsconfig/svelte": "^3.0.0",
-    "@types/jest": "^28.1.7",
-    "@typescript-eslint/eslint-plugin": "^5.34.0",
-    "@typescript-eslint/parser": "^5.34.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-svelte3": "^4.0.0",
-    "jest": "^28.1.3",
-    "jest-environment-jsdom": "28.1.2",
-    "jest-fetch-mock": "^3.0.3",
-    "nodemon": "^2.0.19",
-    "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.2.2",
-    "svelte": "^3.55.1",
-    "svelte-check": "^3.0.3",
-    "svelte-jester": "^2.3.2",
-    "svelte-preprocess": "^5.0.1",
-    "svelte2tsx": "^0.6.0",
-    "ts-jest": "^28.0.8",
-    "tslib": "^2.4.1",
-    "typescript": "^4.9.5",
-    "vite": "^4.0.4"
-  },
-  "type": "module",
-  "publishConfig": {
-    "directory": "./package",
-    "access": "public"
-  },
-  "sideEffects": false
+	"name": "@tolgee/svelte",
+	"version": "5.29.1",
+	"description": "Svelte implementation for Tolgee localization framework",
+	"repository": "https://github.com/tolgee/tolgee-js",
+	"homepage": "https://tolgee.io",
+	"keywords": [
+		"localization",
+		"internationalization",
+		"l10n",
+		"i18n",
+		"translation",
+		"languages"
+	],
+	"scripts": {
+		"dev": "vite build --watch",
+		"develop": "vite build --watch",
+		"build": "vite build && npm run package",
+		"preview": "vite preview",
+		"package": "svelte-kit sync && svelte-package && publint",
+		"prepublishOnly": "npm run package",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"test": "vitest run",
+		"lint": "prettier --check . && eslint .",
+		"format": "prettier --write ."
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"svelte": "./dist/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/**/*.test.*",
+		"!dist/**/*.spec.*"
+	],
+	"peerDependencies": {
+		"svelte": "^4.0.0"
+	},
+	"dependencies": {
+		"@tolgee/web": "5.29.1"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/package": "^2.0.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.0",
+		"@testing-library/jest-dom": "^6.5.0",
+		"@testing-library/svelte": "^5.2.3",
+		"@tolgee/format-icu": "5.29.1",
+		"@tolgee/testing": "5.29.1",
+		"@types/eslint": "^9.6.0",
+		"eslint": "^9.0.0",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-svelte": "^2.36.0",
+		"globals": "^15.0.0",
+		"prettier": "^3.1.1",
+		"prettier-plugin-svelte": "^3.1.2",
+		"publint": "^0.2.0",
+		"svelte": "^4.2.7",
+		"svelte-check": "^4.0.0",
+		"typescript": "^5.0.0",
+		"typescript-eslint": "^8.0.0",
+		"vite": "^5.0.11",
+		"vitest": "^2.0.0",
+		"vitest-fetch-mock": "^0.3.0"
+	},
+	"svelte": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"type": "module"
 }

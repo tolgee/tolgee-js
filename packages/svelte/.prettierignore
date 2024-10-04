@@ -1,16 +1,4 @@
-.DS_Store
-node_modules
-/build
-/.svelte-kit
-/package
-.env.local
-.env.*.local
-
-**/i18n/*.json
-CHANGELOG.md
-static/style.css
-
-# Ignore files for PNPM, NPM and YARN
-pnpm-lock.yaml
+# Package Managers
 package-lock.json
+pnpm-lock.yaml
 yarn.lock
