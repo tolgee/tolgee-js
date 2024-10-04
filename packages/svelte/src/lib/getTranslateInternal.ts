@@ -6,7 +6,7 @@ import {
   type TolgeeInstance,
   type TranslateProps,
 } from '@tolgee/web';
-import { getTolgeeContext } from '$lib/index';
+import { getTolgeeContext } from './getTolgeeContext';
 
 const getTranslateInternal = (ns?: NsFallback) => {
   const namespaces = getFallback(ns);
