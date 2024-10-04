@@ -1,40 +1,35 @@
-# vue
+# Example application of using Vue with Tolgee
 
-This template should help get you started developing with Vue 3 in Vite.
+[<img src="https://raw.githubusercontent.com/tolgee/documentation/main/tolgee_logo_text.svg" alt="Tolgee" width="100" />](https://tolgee.io)
 
-## Recommended IDE Setup
+This application is using VITE. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## To run the app in dev mode
 
-## Type Support for `.vue` Imports in TS
+To install dependencies, run:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+    npm install
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+To run the app in dev mode with in-context translating mode:
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1. Create a project on [Tolgee Cloud](https://app.tolgee.io) or use
+   self-hosted [Tolgee Server](https://github.com/tolgee/server).
+2. Generate an API-KEY
+3. Copy file `.env` to `.env.development.local`
+4. Set `VITE_APP_TOLGEE_API_KEY` to API key obtained in previous step
+5. Run `npm run develop`
+6. Have fun
 
-## Customize configuration
+## To run the app in production mode
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+To build the app for production run:
 
-## Project Setup
+    npm run build
 
-```sh
-pnpm install
-```
+Static website will be generated. To start local server with build app, run:
 
-### Compile and Hot-Reload for Development
+    npm run preview
 
-```sh
-pnpm dev
-```
+---
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-pnpm build
-```
+This repository is automatically re-published from [Tolgee JS monorepo](https://github.com/tolgee/tolgee-js).
