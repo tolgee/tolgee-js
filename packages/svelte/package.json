@@ -2,7 +2,10 @@
 	"name": "@tolgee/svelte",
 	"version": "5.29.1",
 	"description": "Svelte implementation for Tolgee localization framework",
-	"repository": "https://github.com/tolgee/tolgee-js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/tolgee/tolgee-js.git"
+	},
 	"homepage": "https://tolgee.io",
 	"keywords": [
 		"localization",
