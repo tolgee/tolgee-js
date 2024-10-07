@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.3](https://github.com/tolgee/tolgee-js/compare/v5.29.2...v5.29.3) (2024-10-07)
+
+
+### Bug Fixes
+
+* update svelte package and app ([fcd1574](https://github.com/tolgee/tolgee-js/commit/fcd157419475fb6db6d43833b92e3c61abfbff54))
+
+
+
+
+
 ## [5.29.2](https://github.com/tolgee/tolgee-js/compare/v5.29.1...v5.29.2) (2024-10-07)
 
 **Note:** Version bump only for package @tolgee/vue-ssr-testapp
