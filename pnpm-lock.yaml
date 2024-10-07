@@ -504,8 +504,8 @@ importers:
   packages/svelte:
     dependencies:
       '@tolgee/web':
-        specifier: 5.29.1
-        version: 5.29.1
+        specifier: 5.29.2
+        version: link:../web
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -526,8 +526,8 @@ importers:
         specifier: ^5.2.3
         version: 5.2.3(svelte@4.2.19)(vite@5.4.8)(vitest@2.1.2)
       '@tolgee/format-icu':
-        specifier: 5.29.1
-        version: 5.29.1
+        specifier: 5.29.2
+        version: link:../format-icu
       '@tolgee/testing':
         specifier: 5.29.2
         version: link:../testing
@@ -1032,7 +1032,7 @@ importers:
         version: link:../../packages/format-icu
       '@tolgee/svelte':
         specifier: 5.29.2
-        version: 5.29.2(svelte@4.2.19)
+        version: link:../../packages/svelte
     devDependencies:
       '@fontsource/fira-mono':
         specifier: ^5.0.0
@@ -10196,39 +10196,6 @@ packages:
       '@codemirror/view': 6.34.1
     dev: true
 
-  /@tolgee/core@5.29.1:
-    resolution: {integrity: sha512-Tv50/UXg2DmaLM8lTon2puwG1GoF65E9jAGw3znPEK0LL0d0qP0vplziNotzO7fCTRtAwDoggYa0znfFpyPprQ==}
-    dev: false
-
-  /@tolgee/core@5.29.2:
-    resolution: {integrity: sha512-staqBYPrJu208ufK7bzqvT89hjGO3Cnt/o3oEZli7/y8JXoBBHSacsipkG/znr1CPYiHeBIBmGWRvHtbRnB76A==}
-    dev: false
-
-  /@tolgee/format-icu@5.29.1:
-    resolution: {integrity: sha512-Ymxm2Fvb9C7yoCrhTsf1EmxkxoAAF0n1Hjmm6wyadc5AfSuk7VZWXL3G7NG3szIPD5IstHawvd2a/FAmnsns9g==}
-    dev: true
-
-  /@tolgee/svelte@5.29.2(svelte@4.2.19):
-    resolution: {integrity: sha512-PGtcjHtG+NDmqvnHo8X3IdhKt4AA0I9VUzP+pLkBiQhYGGpATWdXRbyWOrZO+PiboJsVYpGfcTT35iXWkjafYg==}
-    peerDependencies:
-      svelte: ^3.29.0 || ^4.0.0
-    dependencies:
-      '@tolgee/web': 5.29.2
-      svelte: 4.2.19
-    dev: false
-
-  /@tolgee/web@5.29.1:
-    resolution: {integrity: sha512-9ZJVLgeUKF4rSSvctdQnGZJk7yg+GDHwyRYHKV6b9IN/hno4e6aeWYeiTRXRCP5N0HW2QIhcVHy8/KHxKnPZ+g==}
-    dependencies:
-      '@tolgee/core': 5.29.1
-    dev: false
-
-  /@tolgee/web@5.29.2:
-    resolution: {integrity: sha512-hfXYszxMhB34iSTFbajmlqjcgCNesTPBlJpKFJCWX65h9SwTTSBrC218iiW8s2SxHbBSXHdqr/zrkMC8w2uH9A==}
-    dependencies:
-      '@tolgee/core': 5.29.2
-    dev: false
-
   /@tootallnate/once@1.1.2:
     resolution: {integrity: sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==}
     engines: {node: '>= 6'}
@@ -10377,6 +10344,7 @@ packages:
   /@types/estree@1.0.6:
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
     requiresBuild: true
+    dev: true
 
   /@types/express-serve-static-core@4.17.31:
     resolution: {integrity: sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==}
@@ -12645,6 +12613,7 @@ packages:
     resolution: {integrity: sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+    dev: true
 
   /acorn@8.8.0:
     resolution: {integrity: sha512-QOxyigPVrpZ2GXT+PFyZTl6TtOFc5egxHIP9IlQ+RbupQuX4RkT/Bee4/kQuC02Xkzg84JcT7oLYtDIQxp+v7w==}
@@ -12969,6 +12938,7 @@ packages:
   /aria-query@5.3.2:
     resolution: {integrity: sha512-COROpnaoap1E2F000S62r6A60uHZnmlvomhfyT2DlTcrY1OrBKn2UhH7qn5wTC9zMvD0AY7csdPSNwKP+7WiQw==}
     engines: {node: '>= 0.4'}
+    dev: true
 
   /arr-diff@4.0.0:
     resolution: {integrity: sha512-YVIQ82gZPGBebQV/a8dar4AitzCQs0jjXwMPZllpXMaGjXPYVUawSxQrRsjhjupyVxEvbHgUmIhKVlND+j02kA==}
@@ -13221,6 +13191,7 @@ packages:
   /axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
+    dev: true
 
   /babel-eslint@10.1.0(eslint@8.57.0):
     resolution: {integrity: sha512-ifWaTHQ0ce+448CYop8AdrQiBsGrnC+bMgfyKFdi6EsPLTAWG+QfyDeM6OH+FmWnKvEq5NnBMLvlBUPKQZoDSg==}
@@ -14602,6 +14573,7 @@ packages:
       acorn: 8.12.1
       estree-walker: 3.0.3
       periscopic: 3.1.0
+    dev: true
 
   /codemirror@6.0.1(@lezer/common@1.2.2):
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
@@ -15634,6 +15606,7 @@ packages:
     dependencies:
       mdn-data: 2.0.30
       source-map-js: 1.2.1
+    dev: true
 
   /css-what@6.1.0:
     resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
@@ -17542,6 +17515,7 @@ packages:
     resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
     dependencies:
       '@types/estree': 1.0.6
+    dev: true
 
   /esutils@2.0.3:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
@@ -19930,6 +19904,7 @@ packages:
     resolution: {integrity: sha512-v3rht/LgVcsdZa3O2Nqs+NMowLOxeOm7Ay9+/ARQ2F+qEoANRcqrjAZKGN0v8ymUetZGgkp26LTnGT7H0Qo9Pg==}
     dependencies:
       '@types/estree': 1.0.6
+    dev: true
 
   /is-regex@1.1.4:
     resolution: {integrity: sha512-kvRdxDsxZjhzUX07ZnLydzS1TU/TJlTUHHY4YLL87e37oUA49DfkLqgy+VjFocowy29cKvcSiu+kIv728jTTVg==}
@@ -22294,6 +22269,7 @@ packages:
 
   /locate-character@3.0.0:
     resolution: {integrity: sha512-SW13ws7BjaeJ6p7Q6CO2nchbYEc3X3J6WrmTTDto7yMPqVSZTUyY5Tjbid+Ab8gLnATtygYtiDIJGQRRn2ZOiA==}
+    dev: true
 
   /locate-path@2.0.0:
     resolution: {integrity: sha512-NCI2kiDkyR7VeEKm27Kda/iQHyKJe1Bu0FlTbYp3CqJu+9IFe9bLyAjMxf5ZDDbEg+iMPzB5zYyUTSm8wVTKmA==}
@@ -22487,6 +22463,7 @@ packages:
     resolution: {integrity: sha512-+Wri9p0QHMy+545hKww7YAu5NyzF8iomPL/RQazugQ9+Ez4Ic3mERMd8ZTX5rfK944j+560ZJi8iAwgak1Ac7A==}
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
+    dev: true
 
   /magic-string@0.30.8:
     resolution: {integrity: sha512-ISQTe55T2ao7XtlAStud6qwYPZjE4GK1S/BeVPus4jrq6JuOnQ00YKQC581RWhR122W7msZV263KzVeLoqidyQ==}
@@ -22657,6 +22634,7 @@ packages:
 
   /mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
+    dev: true
 
   /media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -24645,6 +24623,7 @@ packages:
       '@types/estree': 1.0.6
       estree-walker: 3.0.3
       is-reference: 3.0.2
+    dev: true
 
   /picocolors@0.2.1:
     resolution: {integrity: sha512-cMlDqaLEqfSaW8Z7N5Jw+lyIW869EzT73/F5lhtY9cLGoVxSXznfgfXMO0Z5K0o0Q2TkTXq+0KFsdnSe3jDViA==}
@@ -28240,6 +28219,7 @@ packages:
       locate-character: 3.0.0
       magic-string: 0.30.11
       periscopic: 3.1.0
+    dev: true
 
   /svg-tags@1.0.0:
     resolution: {integrity: sha512-ovssysQTa+luh7A5Weu3Rta6FJlFBBbInjOh722LIt6klpU2/HtdUbszju/G4devcvk8PGt7FCLv5wftu3THUA==}
