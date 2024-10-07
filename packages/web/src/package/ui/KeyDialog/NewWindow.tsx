@@ -24,7 +24,11 @@ export const NewWindow = (props: React.PropsWithChildren) => {
     // When container is ready
     if (container) {
       // Create window
-      const win = window.open('', '', 'width=600,height=600,left=200,top=200');
+      const win = window.open(
+        '',
+        '_blank',
+        'width=600,height=600,left=200,top=200,toolbar=0'
+      );
 
       if (!win) {
         return;
@@ -38,6 +42,7 @@ export const NewWindow = (props: React.PropsWithChildren) => {
       newWindow.current = win;
       // Append container
       win.document.body.style.margin = '0px';
+      win.document.body.style.background = 'white';
       win.document.body.appendChild(container);
 
       const onExit = () => {
