@@ -62,7 +62,7 @@
 		"@testing-library/jest-dom": "^6.5.0",
 		"@testing-library/svelte": "^5.2.3",
 		"@tolgee/format-icu": "5.29.1",
-		"@tolgee/testing": "5.29.1",
+		"@tolgee/testing": "5.29.2",
 		"@types/eslint": "^9.6.0",
 		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^9.1.0",
