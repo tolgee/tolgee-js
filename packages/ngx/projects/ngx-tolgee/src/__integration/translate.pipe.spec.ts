@@ -1,10 +1,10 @@
+import '@testing-library/jest-dom';
 import {
   render,
   RenderResult,
   screen,
   waitFor,
 } from '@testing-library/angular';
-import { act } from 'react-dom/test-utils';
 import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
@@ -128,10 +128,8 @@ describe('t component', () => {
 
   describe('language switch', () => {
     beforeEach(async () => {
-      await act(async () => {
-        await tolgee.changeLanguage('en');
-        await sleep(10); // wait while angular executes the the pipe
-      });
+      await tolgee.changeLanguage('en');
+      await sleep(10); // wait while angular executes the the pipe
     });
 
     it('changes translation with tags', () => {

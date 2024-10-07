@@ -10,8 +10,8 @@
   "private": true,
   "scripts": {
     "build": "turbo run build --cache-dir='.turbo'",
-    "test": "turbo run test --cache-dir='.turbo' -- --runInBand && npm run testRoot -- --runInBand",
-    "testRoot": "jest",
+    "test": "turbo run test --cache-dir='.turbo' && npm run testRoot",
+    "testRoot": "jest --runInBand",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "dev:web": "turbo run dev --parallel --no-deps --include-dependencies --cache-dir='.turbo' --scope='@tolgee/web'",
     "develop": "turbo run develop --parallel --include-dependencies --cache-dir='.turbo'",
