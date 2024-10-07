@@ -1,6 +1,6 @@
 {
 	"name": "@tolgee/svelte",
-	"version": "5.29.1",
+	"version": "5.29.2",
 	"description": "Svelte implementation for Tolgee localization framework",
 	"repository": {
 		"type": "git",
@@ -52,7 +52,7 @@
 		"svelte": "^4.0.0"
 	},
 	"dependencies": {
-		"@tolgee/web": "5.29.1"
+		"@tolgee/web": "5.29.2"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
@@ -61,7 +61,7 @@
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@testing-library/jest-dom": "^6.5.0",
 		"@testing-library/svelte": "^5.2.3",
-		"@tolgee/format-icu": "5.29.1",
+		"@tolgee/format-icu": "5.29.2",
 		"@tolgee/testing": "5.29.2",
 		"@types/eslint": "^9.6.0",
 		"eslint": "^9.0.0",
