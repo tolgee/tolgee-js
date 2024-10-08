@@ -29,7 +29,7 @@ export function elementClickable(el: HTMLElement) {
     if (el.getAttribute('disabled') !== null) {
       return false;
     }
-    el = el.parentElement;
+    el = el.parentElement!;
   }
   return true;
 }

@@ -29,9 +29,7 @@ export const getComputedPermissions = (
   const canUploadScreenshots = has('screenshots.upload') && keyCreationOk;
   const canDeleteScreenshots = has('screenshots.delete') && keyCreationOk;
   const canSendBigMeta = has('translations.edit');
-  const isAssignedToTranslation = Object.values(
-    keyData?.translations ?? {}
-  ).find((i) => i.tasks?.[0]?.userAssigned);
+  const isAssignedToTranslation = keyData?.tasks?.find((i) => i?.userAssigned);
 
   const canSubmitForm =
     canEditTranslations ||
@@ -46,7 +44,7 @@ export const getComputedPermissions = (
   };
 
   const canEditTranslation = (language: string) => {
-    const firstTask = keyData?.translations?.[language]?.tasks?.[0];
+    const firstTask = keyData?.tasks?.find((t) => t.languageTag === language);
     return (
       (canEditTranslations &&
         isLanguagePermitted(
@@ -58,7 +56,7 @@ export const getComputedPermissions = (
   };
 
   const canEditState = (language: string) => {
-    const firstTask = keyData?.translations?.[language]?.tasks?.[0];
+    const firstTask = keyData?.tasks?.find((t) => t.languageTag === language);
     return (
       (canEditStates &&
         isLanguagePermitted(
