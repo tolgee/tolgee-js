@@ -12,6 +12,37 @@ export interface paths {
      */
     get: operations["getInfo_2"];
   };
+  "/v2/projects/tasks/{taskNumber}/reopen": {
+    /** Reopen task */
+    put: operations["reopenTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/keys/{keyId}": {
+    /**
+     * Update task key
+     * @description Mark key as done, which updates task progress.
+     */
+    put: operations["updateTaskKey_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/keys": {
+    /** Get task keys */
+    get: operations["getTaskKeys_1"];
+    /** Add or remove task keys */
+    put: operations["updateTaskKeys_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/finish": {
+    /** Finish task */
+    put: operations["finishTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/close": {
+    /** Close task */
+    put: operations["closeTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}": {
+    /** Get task */
+    get: operations["getTask_1"];
+    /** Update task */
+    put: operations["updateTask_1"];
+  };
   "/v2/projects/namespaces/{id}": {
     /** Update namespace */
     put: operations["update_2"];
@@ -212,6 +243,20 @@ export interface paths {
      */
     post: operations["createProject"];
   };
+  "/v2/projects/tasks/create-multiple-tasks": {
+    /** Create multiple tasks */
+    post: operations["createTasks_1"];
+  };
+  "/v2/projects/tasks/calculate-scope": {
+    /** Calculate scope */
+    post: operations["calculateScope_1"];
+  };
+  "/v2/projects/tasks": {
+    /** Get tasks */
+    get: operations["getTasks_2"];
+    /** Create task */
+    post: operations["createTask_1"];
+  };
   "/v2/projects/keys/info": {
     /**
      * Get key info
@@ -393,12 +438,40 @@ export interface paths {
     /** Upload an image for later use */
     post: operations["upload"];
   };
+  "/v2/user-tasks": {
+    /** Get user tasks */
+    get: operations["getTasks"];
+  };
   "/v2/projects/used-namespaces": {
     /**
      * Get used namespaces
      * @description Returns all used project namespaces. Response contains default (null) namespace if used.
      */
     get: operations["getUsedNamespaces_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/xlsx-report": {
+    /**
+     * Get report in XLSX
+     * @description Detailed statistics about the task results
+     */
+    get: operations["getXlsxReport_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/per-user-report": {
+    /**
+     * Get report
+     * @description Detailed statistics for every assignee
+     */
+    get: operations["getPerUserReport_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/blocking-tasks": {
+    /**
+     * Get blocking task numbers
+     * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
+     */
+    get: operations["getBlockingTasks_1"];
+  };
+  "/v2/projects/tasks/possible-assignees": {
+    get: operations["getPossibleAssignees_1"];
   };
   "/v2/projects/namespaces": {
     /** Get namespaces */
@@ -417,6 +490,10 @@ export interface paths {
      * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
      */
     get: operations["searchForKey_1"];
+  };
+  "/v2/projects/activity/revisions/{revisionId}": {
+    /** Get one revision data */
+    get: operations["getSingleRevision_1"];
   };
   "/v2/projects/activity": {
     /** Get project activity */
@@ -587,7 +664,7 @@ export interface components {
   schemas: {
     ErrorResponseTyped: {
       /** @enum {string} */
-      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "address_part_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found";
+      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "email_already_verified" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "address_part_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found" | "cannot_parse_encrypted_slack_login_data" | "slack_workspace_not_found" | "cannot_fetch_user_details_from_slack" | "slack_missing_scope" | "slack_not_connected_to_your_account" | "slack_invalid_command" | "slack_not_subscribed_yet" | "slack_connection_failed" | "tolgee_account_already_connected" | "slack_not_configured" | "slack_workspace_already_connected" | "slack_connection_error" | "email_verification_code_not_valid" | "cannot_subscribe_to_free_plan" | "plan_auto_assignment_only_for_free_plans" | "plan_auto_assignment_only_for_private_plans" | "plan_auto_assignment_organization_ids_not_in_for_organization_ids" | "task_not_found" | "task_not_finished" | "task_not_open";
       params?: Record<string, never>[];
     };
     ErrorResponseBody: {
@@ -623,6 +700,22 @@ export interface components {
        */
       type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      viewLanguageIds?: number[];
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
+       */
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
+      /**
        * @deprecated
        * @description Deprecated (use translateLanguageIds).
        *
@@ -634,14 +727,6 @@ export interface components {
        */
       permittedLanguageIds?: number[];
       /**
-       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example [
-       *   "KEYS_EDIT",
-       *   "TRANSLATIONS_VIEW"
-       * ]
-       */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
-      /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
        * @example [
        *   200001,
@@ -649,14 +734,6 @@ export interface components {
        * ]
        */
       translateLanguageIds?: number[];
-      /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      viewLanguageIds?: number[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
        * @example [
@@ -717,7 +794,7 @@ export interface components {
        *   "TRANSLATIONS_VIEW"
        * ]
        */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
       /**
        * @description The user's permission type. This field is null if uses granular permissions
        * @enum {string}
@@ -787,6 +864,67 @@ export interface components {
       description?: string;
       basePermissions: components["schemas"]["PermissionModel"];
       avatar?: components["schemas"]["Avatar"];
+    };
+    SimpleUserAccountModel: {
+      /** Format: int64 */
+      id: number;
+      username: string;
+      name?: string;
+      avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
+    };
+    TaskModel: {
+      /** Format: int64 */
+      number: number;
+      name: string;
+      description: string;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+      language: components["schemas"]["LanguageModel"];
+      /** Format: int64 */
+      dueDate?: number;
+      assignees: components["schemas"]["SimpleUserAccountModel"][];
+      /** Format: int64 */
+      totalItems: number;
+      /** Format: int64 */
+      doneItems: number;
+      /** Format: int64 */
+      baseWordCount: number;
+      /** Format: int64 */
+      baseCharacterCount: number;
+      author?: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: int64 */
+      createdAt?: number;
+      /** Format: int64 */
+      closedAt?: number;
+      /** @enum {string} */
+      state: "NEW" | "IN_PROGRESS" | "DONE" | "CLOSED";
+    };
+    UpdateTaskKeyRequest: {
+      done: boolean;
+    };
+    UpdateTaskKeyResponse: {
+      /** @description Task key is marked as done */
+      done: boolean;
+      /** @description Task progress is 100% */
+      taskFinished: boolean;
+    };
+    UpdateTaskKeysRequest: {
+      /** @description Keys to add to task */
+      addKeys?: number[];
+      /** @description Keys to remove from task */
+      removeKeys?: number[];
+    };
+    UpdateTaskRequest: {
+      name: string;
+      description: string;
+      /**
+       * Format: int64
+       * @description Due to date in epoch format (milliseconds).
+       * @example 1661172869000
+       */
+      dueDate?: number;
+      assignees: number[];
     };
     UpdateNamespaceDto: {
       name: string;
@@ -1061,21 +1199,16 @@ export interface components {
       overrideKeyDescriptions: boolean;
       /** @description If true, placeholders from other formats will be converted to ICU when possible */
       convertPlaceholdersToIcu: boolean;
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
     };
     ImportSettingsModel: {
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
       /** @description If true, key descriptions will be overridden by the import */
       overrideKeyDescriptions: boolean;
       /** @description If true, placeholders from other formats will be converted to ICU when possible */
       convertPlaceholdersToIcu: boolean;
-    };
-    /** @description User who created the comment */
-    SimpleUserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      avatar?: components["schemas"]["Avatar"];
-      deleted: boolean;
     };
     TranslationCommentModel: {
       /**
@@ -1231,6 +1364,46 @@ export interface components {
       baseLanguageTag?: string;
       /** @description Whether to use ICU placeholder visualization in the editor and it's support. */
       icuPlaceholders: boolean;
+    };
+    CreateMultipleTasksRequest: {
+      tasks: components["schemas"]["CreateTaskRequest"][];
+    };
+    CreateTaskRequest: {
+      name: string;
+      description: string;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+      /**
+       * Format: int64
+       * @description Due to date in epoch format (milliseconds).
+       * @example 1661172869000
+       */
+      dueDate?: number;
+      /**
+       * Format: int64
+       * @description Id of language, this task is attached to.
+       * @example 1
+       */
+      languageId: number;
+      assignees: number[];
+      keys: number[];
+    };
+    CalculateScopeRequest: {
+      /** Format: int64 */
+      languageId: number;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+      keys: number[];
+    };
+    KeysScopeView: {
+      /** Format: int64 */
+      keyCount: number;
+      /** Format: int64 */
+      characterCount: number;
+      /** Format: int64 */
+      wordCount: number;
+      /** Format: int64 */
+      keyCountIncludingConflicts: number;
     };
     GetKeysRequestDto: {
       keys: components["schemas"]["KeyDefinitionDto"][];
@@ -1448,7 +1621,7 @@ export interface components {
        * It is recommended to provide these values to prevent any issues with format detection.
        * @enum {string}
        */
-      format?: "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY";
+      format?: "JSON_I18NEXT" | "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY";
       /**
        * @description The existing language tag in the Tolgee platform to which the imported language should be mapped.
        *
@@ -1510,6 +1683,8 @@ export interface components {
       overrideKeyDescriptions: boolean;
       /** @description If true, placeholders from other formats will be converted to ICU when possible */
       convertPlaceholdersToIcu: boolean;
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
       /** @description Definition of mapping for each file to import. */
       fileMappings: components["schemas"]["ImportFileMapping"][];
       /** @description Keys created by this import will be tagged with these tags. It add tags only to new keys. The keys that already exist will not be tagged. */
@@ -1571,7 +1746,7 @@ export interface components {
        * @description Format to export to
        * @enum {string}
        */
-      format: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
+      format: "JSON" | "JSON_TOLGEE" | "JSON_I18NEXT" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
       /**
        * @description Delimiter to structure file content.
        *
@@ -1611,7 +1786,7 @@ export interface components {
        * For specific formats like `YAML_RUBY` it's ignored.
        * @enum {string}
        */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "ICU";
+      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU";
       /**
        * @description This is a template that defines the structure of the resulting .zip file content.
        *
@@ -1665,6 +1840,7 @@ export interface components {
       isPlural?: boolean;
       /** @description List of services to use. If null, then all enabled services are used. */
       services?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE")[];
+      plural?: boolean;
     };
     PagedModelTranslationMemoryItemModel: {
       _embedded?: {
@@ -1746,6 +1922,50 @@ export interface components {
       createdAt: string;
       location?: string;
     };
+    PagedModelTaskWithProjectModel: {
+      _embedded?: {
+        tasks?: components["schemas"]["TaskWithProjectModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    SimpleProjectModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      description?: string;
+      slug?: string;
+      avatar?: components["schemas"]["Avatar"];
+      baseLanguage?: components["schemas"]["LanguageModel"];
+      icuPlaceholders: boolean;
+    };
+    TaskWithProjectModel: {
+      /** Format: int64 */
+      number: number;
+      name: string;
+      description: string;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+      language: components["schemas"]["LanguageModel"];
+      /** Format: int64 */
+      dueDate?: number;
+      assignees: components["schemas"]["SimpleUserAccountModel"][];
+      /** Format: int64 */
+      totalItems: number;
+      /** Format: int64 */
+      doneItems: number;
+      /** Format: int64 */
+      baseWordCount: number;
+      /** Format: int64 */
+      baseCharacterCount: number;
+      author?: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: int64 */
+      createdAt?: number;
+      /** Format: int64 */
+      closedAt?: number;
+      /** @enum {string} */
+      state: "NEW" | "IN_PROGRESS" | "DONE" | "CLOSED";
+      project: components["schemas"]["SimpleProjectModel"];
+    };
     PagedModelProjectModel: {
       _embedded?: {
         projects?: components["schemas"]["ProjectModel"][];
@@ -1770,6 +1990,30 @@ export interface components {
        */
       name?: string;
     };
+    TaskPerUserReportModel: {
+      user: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: int64 */
+      doneItems: number;
+      /** Format: int64 */
+      baseCharacterCount: number;
+      /** Format: int64 */
+      baseWordCount: number;
+    };
+    TaskKeysResponse: {
+      keys: number[];
+    };
+    PagedModelSimpleUserAccountModel: {
+      _embedded?: {
+        users?: components["schemas"]["SimpleUserAccountModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTaskModel: {
+      _embedded?: {
+        tasks?: components["schemas"]["TaskModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
     PagedModelNamespaceModel: {
       _embedded?: {
         namespaces?: components["schemas"]["NamespaceModel"][];
@@ -1777,23 +2021,23 @@ export interface components {
       page?: components["schemas"]["PageMetadata"];
     };
     KeySearchResultView: {
+      description?: string;
       name: string;
       /** Format: int64 */
       id: number;
       baseTranslation?: string;
-      translation?: string;
-      description?: string;
       namespace?: string;
+      translation?: string;
     };
     KeySearchSearchResultModel: {
       view?: components["schemas"]["KeySearchResultView"];
+      description?: string;
       name: string;
       /** Format: int64 */
       id: number;
       baseTranslation?: string;
-      translation?: string;
-      description?: string;
       namespace?: string;
+      translation?: string;
     };
     PagedModelKeySearchSearchResultModel: {
       _embedded?: {
@@ -1828,6 +2072,7 @@ export interface components {
       exists?: boolean;
     };
     ModifiedEntityModel: {
+      entityClass: string;
       /** Format: int64 */
       entityId: number;
       description?: {
@@ -1841,11 +2086,9 @@ export interface components {
       };
       exists?: boolean;
     };
-    PagedModelProjectActivityModel: {
-      _embedded?: {
-        activities?: components["schemas"]["ProjectActivityModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
+    PropertyModification: {
+      old?: Record<string, never>;
+      new?: Record<string, never>;
     };
     ProjectActivityAuthorModel: {
       /** Format: int64 */
@@ -1861,7 +2104,7 @@ export interface components {
       /** Format: int64 */
       timestamp: number;
       /** @enum {string} */
-      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION";
+      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION" | "TASKS_CREATE" | "TASK_CREATE" | "TASK_UPDATE" | "TASK_KEYS_UPDATE" | "TASK_FINISH" | "TASK_CLOSE" | "TASK_REOPEN" | "TASK_KEY_UPDATE";
       author?: components["schemas"]["ProjectActivityAuthorModel"];
       modifiedEntities?: {
         [key: string]: components["schemas"]["ModifiedEntityModel"][];
@@ -1874,9 +2117,11 @@ export interface components {
       };
       params?: Record<string, never>;
     };
-    PropertyModification: {
-      old?: Record<string, never>;
-      new?: Record<string, never>;
+    PagedModelProjectActivityModel: {
+      _embedded?: {
+        activities?: components["schemas"]["ProjectActivityModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
     };
     PagedModelTagModel: {
       _embedded?: {
@@ -2014,6 +2259,18 @@ export interface components {
     SelectAllResponse: {
       ids: number[];
     };
+    /** @description Tasks related to this key */
+    KeyTaskViewModel: {
+      /** Format: int64 */
+      number: number;
+      /** Format: int64 */
+      languageId: number;
+      languageTag: string;
+      done: boolean;
+      userAssigned: boolean;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+    };
     KeyWithTranslationsModel: {
       /**
        * Format: int64
@@ -2078,6 +2335,8 @@ export interface components {
       translations: {
         [key: string]: components["schemas"]["TranslationViewModel"];
       };
+      /** @description Tasks related to this key */
+      tasks?: components["schemas"]["KeyTaskViewModel"][];
     };
     KeysWithTranslationsPageModel: {
       _embedded?: {
@@ -2173,6 +2432,8 @@ export interface components {
       /** Format: int64 */
       keyCount: number;
       /** Format: int64 */
+      taskCount: number;
+      /** Format: int64 */
       baseWordsCount: number;
       /** Format: double */
       translatedPercentage: number;
@@ -2197,13 +2458,13 @@ export interface components {
     };
     PatWithUserModel: {
       user: components["schemas"]["SimpleUserAccountModel"];
+      description: string;
       /** Format: int64 */
       id: number;
       /** Format: int64 */
       expiresAt?: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      description: string;
       /** Format: int64 */
       createdAt: number;
       /** Format: int64 */
@@ -2215,26 +2476,18 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    SimpleProjectModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      description?: string;
-      slug?: string;
-      avatar?: components["schemas"]["Avatar"];
-      baseLanguage?: components["schemas"]["LanguageModel"];
-      icuPlaceholders: boolean;
-    };
     ApiKeyWithLanguagesModel: {
       /**
        * @deprecated
        * @description Languages for which user has translate permission.
        */
       permittedLanguageIds?: number[];
+      description: string;
       /** Format: int64 */
       id: number;
-      projectName: string;
       userFullName?: string;
+      projectName: string;
+      username?: string;
       scopes: string[];
       /** Format: int64 */
       expiresAt?: number;
@@ -2242,8 +2495,6 @@ export interface components {
       projectId: number;
       /** Format: int64 */
       lastUsedAt?: number;
-      username?: string;
-      description: string;
     };
     ApiKeyPermissionsModel: {
       /**
@@ -2282,7 +2533,7 @@ export interface components {
        *   "TRANSLATIONS_VIEW"
        * ]
        */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage")[];
+      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
       /**
        * @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions
        * @enum {string}
@@ -2318,6 +2569,343 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["PrivateUserAccountModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Reopen task */
+  reopenTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Update task key
+   * @description Mark key as done, which updates task progress.
+   */
+  updateTaskKey_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+        keyId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskKeyRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateTaskKeyResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get task keys */
+  getTaskKeys_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskKeysResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Add or remove task keys */
+  updateTaskKeys_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Finish task */
+  finishTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Close task */
+  closeTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get task */
+  getTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update task */
+  updateTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
         };
       };
       /** @description Bad Request */
@@ -3563,6 +4151,15 @@ export interface operations {
          * @example en-US
          */
         filterNotOutdatedLanguage?: string[];
+        /**
+         * @description Selects only key affected by activity with specidfied revision ID
+         * @example 1234567
+         */
+        filterRevisionId?: number[];
+        /** @description Select only keys which were not successfully translated by batch job with provided id */
+        filterFailedKeysOfJob?: number;
+        /** @description Select only keys which are in specified task */
+        filterTaskNumber?: number[];
         /** @description Zero-based page index (0..N) */
         page?: number;
         /** @description The size of the page to be returned */
@@ -3913,6 +4510,10 @@ export interface operations {
   getAll: {
     parameters: {
       query?: {
+        /** @description Filter projects by id */
+        filterId?: number[];
+        /** @description Filter projects without id */
+        filterNotId?: number[];
         /** @description Zero-based page index (0..N) */
         page?: number;
         /** @description The size of the page to be returned */
@@ -3970,6 +4571,210 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["ProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create multiple tasks */
+  createTasks_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateMultipleTasksRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Calculate scope */
+  calculateScope_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CalculateScopeRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeysScopeView"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get tasks */
+  getTasks_2: {
+    parameters: {
+      query?: {
+        /** @description Filter tasks by state */
+        filterState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
+        /** @description Filter tasks without state */
+        filterNotState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
+        /** @description Filter tasks by assignee */
+        filterAssignee?: number[];
+        /** @description Filter tasks by type */
+        filterType?: ("TRANSLATE" | "REVIEW")[];
+        /** @description Filter tasks by id */
+        filterId?: number[];
+        /** @description Filter tasks without id */
+        filterNotId?: number[];
+        /** @description Filter tasks by project */
+        filterProject?: number[];
+        /** @description Filter tasks without project */
+        filterNotProject?: number[];
+        /** @description Filter tasks by language */
+        filterLanguage?: number[];
+        /** @description Filter tasks by key */
+        filterKey?: number[];
+        /** @description Exclude "done" tasks which are older than specified timestamp */
+        filterDoneMinClosedAt?: number;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create task */
+  createTask_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTaskRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
         };
       };
       /** @description Bad Request */
@@ -4809,7 +5614,7 @@ export interface operations {
          */
         languages?: string[];
         /** @description Format to export to */
-        format?: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
+        format?: "JSON" | "JSON_TOLGEE" | "JSON_I18NEXT" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
         /**
          * @description Delimiter to structure file content.
          *
@@ -4853,7 +5658,7 @@ export interface operations {
          * This property is honored only for generic formats like JSON or YAML.
          * For specific formats like `YAML_RUBY` it's ignored.
          */
-        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "ICU";
+        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU";
         /**
          * @description This is a template that defines the structure of the resulting .zip file content.
          *
@@ -5282,6 +6087,10 @@ export interface operations {
         size?: number;
         /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
+        /** @description Filter languages by id */
+        filterId?: number[];
+        /** @description Filter languages without id */
+        filterNotId?: number[];
       };
     };
     responses: {
@@ -5580,6 +6389,74 @@ export interface operations {
       };
     };
   };
+  /** Get user tasks */
+  getTasks: {
+    parameters: {
+      query?: {
+        /** @description Filter tasks by state */
+        filterState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
+        /** @description Filter tasks without state */
+        filterNotState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
+        /** @description Filter tasks by assignee */
+        filterAssignee?: number[];
+        /** @description Filter tasks by type */
+        filterType?: ("TRANSLATE" | "REVIEW")[];
+        /** @description Filter tasks by id */
+        filterId?: number[];
+        /** @description Filter tasks without id */
+        filterNotId?: number[];
+        /** @description Filter tasks by project */
+        filterProject?: number[];
+        /** @description Filter tasks without project */
+        filterNotProject?: number[];
+        /** @description Filter tasks by language */
+        filterLanguage?: number[];
+        /** @description Filter tasks by key */
+        filterKey?: number[];
+        /** @description Exclude "done" tasks which are older than specified timestamp */
+        filterDoneMinClosedAt?: number;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTaskWithProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
   /**
    * Get used namespaces
    * @description Returns all used project namespaces. Response contains default (null) namespace if used.
@@ -5590,6 +6467,190 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["CollectionModelUsedNamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get report in XLSX
+   * @description Detailed statistics about the task results
+   */
+  getXlsxReport_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get report
+   * @description Detailed statistics for every assignee
+   */
+  getPerUserReport_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskPerUserReportModel"][];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get blocking task numbers
+   * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
+   */
+  getBlockingTasks_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": number[];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  getPossibleAssignees_1: {
+    parameters: {
+      query?: {
+        /** @description Filter users by id */
+        filterId?: number[];
+        /** @description Filter only users that have at least following scopes */
+        filterMinimalScope?: string;
+        /** @description Filter only users that can view language */
+        filterViewLanguageId?: number;
+        /** @description Filter only users that can edit language */
+        filterEditLanguageId?: number;
+        /** @description Filter only users that can edit state of language */
+        filterStateLanguageId?: number;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleUserAccountModel"];
         };
       };
       /** @description Bad Request */
@@ -5730,6 +6791,46 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["PagedModelKeySearchSearchResultModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get one revision data */
+  getSingleRevision_1: {
+    parameters: {
+      path: {
+        revisionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/hal+json": components["schemas"]["ProjectActivityModel"];
         };
       };
       /** @description Bad Request */
@@ -6512,6 +7613,15 @@ export interface operations {
          * @example en-US
          */
         filterNotOutdatedLanguage?: string[];
+        /**
+         * @description Selects only key affected by activity with specidfied revision ID
+         * @example 1234567
+         */
+        filterRevisionId?: number[];
+        /** @description Select only keys which were not successfully translated by batch job with provided id */
+        filterFailedKeysOfJob?: number;
+        /** @description Select only keys which are in specified task */
+        filterTaskNumber?: number[];
       };
     };
     responses: {
@@ -6611,6 +7721,15 @@ export interface operations {
          * @example en-US
          */
         filterNotOutdatedLanguage?: string[];
+        /**
+         * @description Selects only key affected by activity with specidfied revision ID
+         * @example 1234567
+         */
+        filterRevisionId?: number[];
+        /** @description Select only keys which were not successfully translated by batch job with provided id */
+        filterFailedKeysOfJob?: number;
+        /** @description Select only keys which are in specified task */
+        filterTaskNumber?: number[];
       };
     };
     responses: {

@@ -204,7 +204,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const permissions = useComputedPermissions(
       scopesLoadable.data,
-      keyExists,
+      translationsLoadable?.data?._embedded?.keys?.[0],
       languagesLoadable.data?._embedded?.languages
     );
 
