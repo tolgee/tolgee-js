@@ -10,7 +10,6 @@ import {
   encodeMessage,
   INVISIBLE_CHARACTERS,
   removeSecrets,
-  stringToCodePoints,
 } from './secret';
 import { ValueMemory } from './ValueMemory';
 
@@ -49,12 +48,17 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     }
   }
 
-  function getMessage(message: string) {
-    if (message.length <= 4) {
-      const [valueCode] = stringToCodePoints(message);
-      return keyMemory.numberToValue(valueCode);
-    } else {
+  function insertMessage(value: string) {
+    return encodeMessage(value + '\x00');
+  }
+
+  function retrieveMessages(message: string) {
+    if (message[0] === '{') {
+      // there is a json inside - the full key is included, not just number `fullKeyEncode`
       return message;
+    } else {
+      const valueCode = Number(message);
+      return keyMemory.numberToValue(valueCode);
     }
   }
 
@@ -62,9 +66,8 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     unwrap(text: string): Unwrapped {
       const keysAndParams = [] as KeyAndParams[];
       const messages = decodeFromText(text);
-
       messages.forEach((encodedValue: string) => {
-        const message = getMessage(encodedValue);
+        const message = retrieveMessages(encodedValue);
         const decodedVal = decodeValue(message);
         if (decodedVal) {
           const { k: key, d: defaultValue, n: ns } = decodedVal;
@@ -86,11 +89,11 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       if (fullKeyEncode) {
         // don't include default value, as that might be very long when encoded
         const encodedValue = encodeValue({ key, ns });
-        invisibleMark = encodeMessage(encodedValue);
+        invisibleMark = insertMessage(encodedValue);
       } else {
         const encodedValue = encodeValue({ key, ns, defaultValue });
         const code = keyMemory.valueToNumber(encodedValue);
-        invisibleMark = encodeMessage(String.fromCodePoint(code));
+        invisibleMark = insertMessage(String(code));
       }
 
       const value = translation || '';

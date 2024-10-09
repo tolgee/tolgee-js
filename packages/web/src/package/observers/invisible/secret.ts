@@ -25,7 +25,9 @@ function padToWholeBytes(binary: string) {
 }
 
 export function encodeMessage(text: string) {
-  const bytes = toBytes(text).map(Number);
+  // insert a NUL character at the end of the message
+  // so we can distinguish two secret messages right next to each other
+  const bytes = toBytes(text + '\x00').map(Number);
   const binary = bytes
     .map((byte) => padToWholeBytes(byte.toString(2)) + '0')
     .join('');
@@ -56,17 +58,19 @@ export function decodeFromText(text: string) {
   const invisibleMessages = text
     .match(INVISIBLE_REGEX)
     ?.filter((m) => m.length > 8);
-  return invisibleMessages?.map(decodeMessage) || [];
+  const result = [];
+  invisibleMessages?.map(decodeMessage).forEach((val) => {
+    // split by NUL character, which separates multiple messages
+    val.split('\x00').forEach((message) => {
+      if (message.length) {
+        result.push(message);
+      }
+    });
+  });
+
+  return result;
 }
 
 export function removeSecrets(text: string) {
   return text.replace(INVISIBLE_REGEX, '');
-}
-
-export function stringToCodePoints(text: string) {
-  const result: number[] = [];
-  for (const codePoint of text) {
-    result.push(codePoint.codePointAt(0)!);
-  }
-  return result;
 }
