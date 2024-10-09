@@ -40,10 +40,10 @@ describe('Invisible encoder/decoder', () => {
     expect(cleanedMessage).toEqual(originalMessage);
   });
 
-  it('works with two messages right next to each other', () => {
+  it('works with two messages right next to each other (merges them into one)', () => {
     const message =
       'Tolgee' + encodeMessage('secret1') + encodeMessage('secret2');
-    expect(decodeFromText(message)).toEqual(['secret1', 'secret2']);
+    expect(decodeFromText(message)).toEqual(['secret1secret2']);
   });
 
   it('works with two messages spaced with regular text', () => {

@@ -1,6 +1,5 @@
 jest.autoMockOff();
-import { InvisibleWrapper } from './InvisibleWrapper';
-import { MESSAGE_END } from './secret';
+import { InvisibleWrapper, MESSAGE_END } from './InvisibleWrapper';
 
 const key1 = {
   key: 'key1',

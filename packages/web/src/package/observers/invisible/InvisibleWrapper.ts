@@ -13,6 +13,21 @@ import {
 } from './secret';
 import { ValueMemory } from './ValueMemory';
 
+/**
+ * LF character to separate messages (when they are right next to each other)
+ *
+ * We can use the fact that `\n` characters get escaped inside the JSON strings and we don't need them with numbers
+ * so we can safely use newlines to separate strings
+ *
+ * WARNING: don't encode formatted json like this (because then there are newlines):
+ * {
+ *   "a": "b"
+ * }
+ * this is correct:
+ * {"a":"b"}
+ */
+export const MESSAGE_END = '\x0A';
+
 type EncodeValue = {
   // key
   k: string;
@@ -48,31 +63,42 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     }
   }
 
-  function retrieveMessages(message: string) {
-    if (message[0] === '{') {
-      // there is a json inside - the full key is included, not just number `fullKeyEncode`
-      return message;
-    } else {
-      const valueCode = Number(message);
-      return keyMemory.numberToValue(valueCode);
-    }
+  function retrieveMessages(text: string) {
+    return text
+      .split(MESSAGE_END)
+      .filter((m) => m.length)
+      .map((message) => {
+        if (message[0] === '{') {
+          // there is a json inside - the full key is included, not just number `fullKeyEncode`
+          return message;
+        } else {
+          const valueCode = Number(message);
+          return keyMemory.numberToValue(valueCode);
+        }
+      });
+  }
+
+  function encodeWithSeparator(message: string) {
+    return encodeMessage(message + MESSAGE_END);
   }
 
   return Object.freeze({
     unwrap(text: string): Unwrapped {
       const keysAndParams = [] as KeyAndParams[];
-      const messages = decodeFromText(text);
-      messages.forEach((encodedValue: string) => {
-        const message = retrieveMessages(encodedValue);
-        const decodedVal = decodeValue(message);
-        if (decodedVal) {
-          const { k: key, d: defaultValue, n: ns } = decodedVal;
-          keysAndParams.push({
-            key,
-            defaultValue,
-            ns,
-          });
-        }
+      const texts = decodeFromText(text);
+      texts.forEach((encodedValue: string) => {
+        const messages = retrieveMessages(encodedValue);
+        messages.forEach((message) => {
+          const decodedVal = decodeValue(message);
+          if (decodedVal) {
+            const { k: key, d: defaultValue, n: ns } = decodedVal;
+            keysAndParams.push({
+              key,
+              defaultValue,
+              ns,
+            });
+          }
+        });
       });
 
       const result = removeSecrets(text);
@@ -85,11 +111,11 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       if (fullKeyEncode) {
         // don't include default value, as that might be very long when encoded
         const encodedValue = encodeValue({ key, ns });
-        invisibleMark = encodeMessage(encodedValue);
+        invisibleMark = encodeWithSeparator(encodedValue);
       } else {
         const encodedValue = encodeValue({ key, ns, defaultValue });
         const code = keyMemory.valueToNumber(encodedValue);
-        invisibleMark = encodeMessage(String(code));
+        invisibleMark = encodeWithSeparator(String(code));
       }
 
       const value = translation || '';
