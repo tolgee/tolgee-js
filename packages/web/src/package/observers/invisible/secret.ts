@@ -4,7 +4,7 @@ import * as FastTextEncoding from 'fast-text-encoding';
 // eslint-disable-next-line no-console
 console.assert?.(FastTextEncoding);
 
-const MESSAGE_END = '\x03'; // using End of Text (ETX) character to separate messages
+export const MESSAGE_END = '\x0A'; // using LF character to separate messages
 
 export const INVISIBLE_CHARACTERS = ['\u200C', '\u200D'];
 
