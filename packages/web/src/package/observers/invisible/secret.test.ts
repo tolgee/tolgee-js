@@ -45,4 +45,10 @@ describe('Invisible encoder/decoder', () => {
       'Tolgee' + encodeMessage('secret1') + encodeMessage('secret2');
     expect(decodeFromText(message)).toEqual(['secret1', 'secret2']);
   });
+
+  it('works with two messages spaced with regular text', () => {
+    const message =
+      'Tolgee' + encodeMessage('secret1') + 'test' + encodeMessage('secret2');
+    expect(decodeFromText(message)).toEqual(['secret1', 'secret2']);
+  });
 });

@@ -48,10 +48,6 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
     }
   }
 
-  function insertMessage(value: string) {
-    return encodeMessage(value + '\x00');
-  }
-
   function retrieveMessages(message: string) {
     if (message[0] === '{') {
       // there is a json inside - the full key is included, not just number `fullKeyEncode`
@@ -89,11 +85,11 @@ export function InvisibleWrapper({ fullKeyEncode }: Props): WrapperMiddleware {
       if (fullKeyEncode) {
         // don't include default value, as that might be very long when encoded
         const encodedValue = encodeValue({ key, ns });
-        invisibleMark = insertMessage(encodedValue);
+        invisibleMark = encodeMessage(encodedValue);
       } else {
         const encodedValue = encodeValue({ key, ns, defaultValue });
         const code = keyMemory.valueToNumber(encodedValue);
-        invisibleMark = insertMessage(String(code));
+        invisibleMark = encodeMessage(String(code));
       }
 
       const value = translation || '';

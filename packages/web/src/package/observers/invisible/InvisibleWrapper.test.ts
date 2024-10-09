@@ -51,7 +51,7 @@ describe('invisible wrapper', () => {
     expect(unwraped.keys[0].defaultValue).toEqual(undefined);
   });
 
-  it('wraps and unwraps nested keys fully encloded', () => {
+  it('wraps and unwraps nested keys fully encoded', () => {
     // simulating external wrapper
     const externalWrapper = InvisibleWrapper({ fullKeyEncode: true });
     const wrapper = InvisibleWrapper({ fullKeyEncode: false });

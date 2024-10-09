@@ -4,6 +4,8 @@ import * as FastTextEncoding from 'fast-text-encoding';
 // eslint-disable-next-line no-console
 console.assert?.(FastTextEncoding);
 
+const MESSAGE_END = '\x03'; // using End of Text (ETX) character to separate messages
+
 export const INVISIBLE_CHARACTERS = ['\u200C', '\u200D'];
 
 export const INVISIBLE_REGEX = RegExp(
@@ -25,9 +27,9 @@ function padToWholeBytes(binary: string) {
 }
 
 export function encodeMessage(text: string) {
-  // insert a NUL character at the end of the message
+  // insert a message end character
   // so we can distinguish two secret messages right next to each other
-  const bytes = toBytes(text + '\x00').map(Number);
+  const bytes = toBytes(text + MESSAGE_END).map(Number);
   const binary = bytes
     .map((byte) => padToWholeBytes(byte.toString(2)) + '0')
     .join('');
@@ -60,8 +62,8 @@ export function decodeFromText(text: string) {
     ?.filter((m) => m.length > 8);
   const result = [];
   invisibleMessages?.map(decodeMessage).forEach((val) => {
-    // split by NUL character, which separates multiple messages
-    val.split('\x00').forEach((message) => {
+    // split by message end character, which separates multiple messages
+    val.split(MESSAGE_END).forEach((message) => {
       if (message.length) {
         result.push(message);
       }
