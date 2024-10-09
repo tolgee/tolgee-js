@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.4](https://github.com/tolgee/tolgee-js/compare/v5.29.3...v5.29.4) (2024-10-09)
+
+
+### Bug Fixes
+
+* update permissions with tasks ([#3362](https://github.com/tolgee/tolgee-js/issues/3362)) ([6443b1b](https://github.com/tolgee/tolgee-js/commit/6443b1be436751f3ae2fed6749ff7ecfa12d8df9))
+
+
+
+
+
 ## [5.29.3](https://github.com/tolgee/tolgee-js/compare/v5.29.2...v5.29.3) (2024-10-07)
 
 
