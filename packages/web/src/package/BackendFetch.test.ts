@@ -1,38 +1,17 @@
-import { FetchFn } from '@tolgee/core';
 import { createBackendFetch } from './BackendFetch';
+import { createFetchingUtility } from './__test__/fetchingUtillity';
 
 describe('backend fetch', () => {
-  let fetchMock: FetchFn;
-  let infiniteFetch: FetchFn;
-  let failingFetch: FetchFn;
-  let signalHandler: jest.Mock;
+  let f: ReturnType<typeof createFetchingUtility>;
 
   beforeEach(() => {
-    signalHandler = jest.fn();
-    fetchMock = jest.fn(() =>
-      Promise.resolve({
-        json: () => ({
-          status: 'ok',
-        }),
-        ok: true,
-      } as unknown as Response)
-    );
-
-    infiniteFetch = jest.fn(
-      (_, { signal }: RequestInit) =>
-        new Promise(() => {
-          signal.addEventListener('abort', () =>
-            signalHandler('Aborted with signal')
-          );
-        })
-    );
-    failingFetch = jest.fn(() => Promise.reject(new Error('Fetch failed')));
+    f = createFetchingUtility();
   });
 
   it('calls fetch with correct params', () => {
     const plugin = createBackendFetch();
-    plugin.getRecord({ fetch: fetchMock, language: 'de' });
-    expect(fetchMock).toHaveBeenCalledWith(
+    plugin.getRecord({ fetch: f.fetchMock, language: 'de' });
+    expect(f.fetchMock).toHaveBeenCalledWith(
       '/i18n/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
@@ -42,8 +21,8 @@ describe('backend fetch', () => {
 
   it('calls fetch with custom prefix', () => {
     const plugin = createBackendFetch({ prefix: 'http://test.com/test' });
-    plugin.getRecord({ fetch: fetchMock, language: 'de', namespace: 'ns' });
-    expect(fetchMock).toHaveBeenCalledWith(
+    plugin.getRecord({ fetch: f.fetchMock, language: 'de', namespace: 'ns' });
+    expect(f.fetchMock).toHaveBeenCalledWith(
       'http://test.com/test/ns/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
@@ -53,8 +32,8 @@ describe('backend fetch', () => {
 
   it('handles extra slash', () => {
     const plugin = createBackendFetch({ prefix: 'http://test.com/test/' });
-    plugin.getRecord({ fetch: fetchMock, language: 'de' });
-    expect(fetchMock).toHaveBeenCalledWith(
+    plugin.getRecord({ fetch: f.fetchMock, language: 'de' });
+    expect(f.fetchMock).toHaveBeenCalledWith(
       'http://test.com/test/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
@@ -67,8 +46,8 @@ describe('backend fetch', () => {
       prefix: 'http://test.com/test/',
       headers: { Authorization: 'test' },
     });
-    plugin.getRecord({ fetch: fetchMock, language: 'de' });
-    expect(fetchMock).toHaveBeenCalledWith(
+    plugin.getRecord({ fetch: f.fetchMock, language: 'de' });
+    expect(f.fetchMock).toHaveBeenCalledWith(
       'http://test.com/test/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json', Authorization: 'test' },
@@ -81,8 +60,8 @@ describe('backend fetch', () => {
       prefix: 'http://test.com/test/',
       cache: 'no-cache',
     });
-    plugin.getRecord({ fetch: fetchMock, language: 'de' });
-    expect(fetchMock).toHaveBeenCalledWith(
+    plugin.getRecord({ fetch: f.fetchMock, language: 'de' });
+    expect(f.fetchMock).toHaveBeenCalledWith(
       'http://test.com/test/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
@@ -97,19 +76,19 @@ describe('backend fetch', () => {
       timeout: 5,
     });
     await expect(
-      plugin.getRecord({ fetch: infiniteFetch, language: 'de' })
+      plugin.getRecord({ fetch: f.infiniteFetch, language: 'de' })
     ).rejects.toHaveProperty(
       'message',
       'TIMEOUT: http://test.com/test/de.json'
     );
 
-    expect(infiniteFetch).toHaveBeenCalledWith(
+    expect(f.infiniteFetch).toHaveBeenCalledWith(
       'http://test.com/test/de.json',
       expect.objectContaining({
         headers: { Accept: 'application/json' },
       })
     );
-    expect(signalHandler).toHaveBeenCalledWith('Aborted with signal');
+    expect(f.signalHandler).toHaveBeenCalledWith('Aborted with signal');
   });
 
   it('throws the original error', async () => {
@@ -117,7 +96,7 @@ describe('backend fetch', () => {
       prefix: 'http://test.com/test/',
     });
     expect(
-      plugin.getRecord({ fetch: failingFetch, language: 'de' })
+      plugin.getRecord({ fetch: f.failingFetch, language: 'de' })
     ).rejects.toHaveProperty('message', 'Fetch failed');
   });
 
@@ -127,7 +106,7 @@ describe('backend fetch', () => {
       fallbackOnFail: true,
     });
     expect(
-      await plugin.getRecord({ fetch: failingFetch, language: 'de' })
+      await plugin.getRecord({ fetch: f.failingFetch, language: 'de' })
     ).toEqual(undefined);
   });
 
@@ -138,8 +117,8 @@ describe('backend fetch', () => {
       timeout: 5,
     });
     expect(
-      await plugin.getRecord({ fetch: infiniteFetch, language: 'de' })
+      await plugin.getRecord({ fetch: f.infiniteFetch, language: 'de' })
     ).toEqual(undefined);
-    expect(signalHandler).toHaveBeenCalledWith('Aborted with signal');
+    expect(f.signalHandler).toHaveBeenCalledWith('Aborted with signal');
   });
 });
