@@ -22,6 +22,8 @@ function createDevBackend(): BackendDevMiddleware {
           'X-API-Key': apiKey || '',
           'Content-Type': 'application/json',
         },
+        // @ts-ignore - tell next.js to not use cache
+        next: { revalidate: 0 },
       }).then((r) => {
         if (r.ok) {
           return r.json().then((data) => data[language]);

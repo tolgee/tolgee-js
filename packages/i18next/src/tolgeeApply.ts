@@ -8,7 +8,7 @@ export const tolgeeApply = (tolgee: TolgeeInstance, i18n: i18n) => {
         i18n.addResourceBundle(
           language,
           namespace,
-          Object.fromEntries(data),
+          data instanceof Map ? Object.fromEntries(data) : data,
           false,
           true
         );
