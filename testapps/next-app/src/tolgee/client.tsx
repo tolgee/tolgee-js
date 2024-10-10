@@ -13,7 +13,7 @@ type Props = {
 
 const tolgee = TolgeeBase().init();
 
-export const TolgeeNextProvider = ({ locale, locales, children }: Props) => {
+export const TolgeeNextProvider = ({ locale, children, locales }: Props) => {
   const tolgeeSSR = useTolgeeSSR(tolgee, locale, locales);
   const router = useRouter();
 

@@ -1,5 +1,39 @@
-import type { BackendMiddleware, TolgeePlugin } from '@tolgee/core';
+import type { BackendMiddleware, FetchFn, TolgeePlugin } from '@tolgee/core';
 import { GetPath, BackendOptions } from './types';
+
+const fetchWithTimeout = (
+  fetch: FetchFn,
+  url: string,
+  ms: number | undefined,
+  { signal, ...options }: RequestInit
+) => {
+  const controller = new AbortController();
+  return new Promise<Response>((_resolve, _reject) => {
+    const promise = fetch(url, { signal: controller.signal, ...options });
+    let done = false;
+    function resolve(data) {
+      !done && _resolve(data);
+      done = true;
+    }
+    function reject(data) {
+      !done && _reject(data);
+      done = true;
+    }
+    function rejectWithTimout() {
+      const error = new Error(`TIMEOUT: ${url}`);
+      controller.abort(error);
+      reject(error);
+    }
+    if (signal) {
+      signal.addEventListener('abort', rejectWithTimout);
+    }
+    if (ms !== undefined) {
+      const timeout = setTimeout(rejectWithTimout, ms);
+      promise.finally(() => clearTimeout(timeout));
+    }
+    promise.catch(reject).then(resolve);
+  });
+};
 
 function trimSlashes(path: string) {
   if (path.endsWith('/')) {
@@ -27,33 +61,53 @@ const DEFAULT_OPTIONS = {
   headers: {
     Accept: 'application/json',
   },
+  timeout: undefined,
+  fallbackOnFail: false,
 };
 
-function createBackendFetch(
+export function createBackendFetch(
   options?: Partial<BackendOptions>
 ): BackendMiddleware {
-  const { prefix, getPath, getData, headers, ...fetchOptions }: BackendOptions =
-    {
-      ...DEFAULT_OPTIONS,
-      ...options,
-      headers: {
-        ...DEFAULT_OPTIONS.headers,
-        ...options?.headers,
-      },
-    };
+  const {
+    prefix,
+    getPath,
+    getData,
+    headers,
+    timeout,
+    fallbackOnFail,
+    ...fetchOptions
+  }: BackendOptions = {
+    ...DEFAULT_OPTIONS,
+    ...options,
+    headers: {
+      ...DEFAULT_OPTIONS.headers,
+      ...options?.headers,
+    },
+  };
   return {
-    getRecord({ namespace, language, fetch }) {
+    async getRecord({ namespace, language, fetch }) {
       const path = getPath({
         namespace,
         language,
         prefix,
       });
-      return fetch(path, { headers, ...fetchOptions }).then((r) => {
+
+      try {
+        const r = await fetchWithTimeout(fetch, path, timeout, {
+          headers,
+          ...fetchOptions,
+        });
         if (!r.ok) {
           throw new Error(`${r.url} ${r.status}`);
         }
-        return getData(r);
-      });
+        return await getData(r);
+      } catch (e) {
+        if (fallbackOnFail) {
+          return undefined;
+        } else {
+          throw e;
+        }
+      }
     },
   };
 }

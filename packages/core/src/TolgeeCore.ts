@@ -95,6 +95,13 @@ function createTolgee(options: TolgeeOptions) {
     removeActiveNs: controller.removeActiveNs,
 
     /**
+     * Manually load all combinations of languages and namespaces from `Backend` (or `DevBackend` when in dev mode)
+     *
+     * It loads data together and adds them to cache in one operation, to prevent partly loaded state.
+     */
+    loadMatrix: controller.loadMatrix,
+
+    /**
      * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)
      *
      * It loads data together and adds them to cache in one operation, to prevent partly loaded state.
@@ -107,7 +114,7 @@ function createTolgee(options: TolgeeOptions) {
     loadRecord: controller.loadRecord,
 
     /**
-     *
+     * Prefill static data
      */
     addStaticData: controller.addStaticData,
 

@@ -1,46 +1,15 @@
 import { FormatIcu } from '@tolgee/format-icu';
 import { useRouter } from 'next/router';
-import {
-  NsFallback,
-  Tolgee,
-  TolgeeProvider,
-  getFallbackArray,
-  DevTools,
-  useTolgeeSSR,
-} from '@tolgee/react';
+import { Tolgee, TolgeeProvider, DevTools, useTolgeeSSR } from '@tolgee/react';
 
 const apiKey = process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 const apiUrl = process.env.NEXT_PUBLIC_TOLGEE_API_URL;
-
-export const getServerLocales = async (
-  locale: string | undefined,
-  ns?: NsFallback
-) => {
-  const namespaces = ['', ...getFallbackArray(ns)];
-  const result: Record<string, any> = {};
-
-  if (locale) {
-    for (const namespace of namespaces) {
-      if (namespace) {
-        result[`${locale}:${namespace}`] = (
-          await import(`../public/i18n/${namespace}/${locale}.json`)
-        ).default;
-      } else {
-        result[`${locale}`] = (
-          await import(`../public/i18n/${locale}.json`)
-        ).default;
-      }
-    }
-  }
-
-  return result;
-};
 
 type Props = {
   locales: any;
 };
 
-const tolgee = Tolgee()
+export const tolgee = Tolgee()
   .use(FormatIcu())
   .use(DevTools())
   .init({
@@ -48,6 +17,16 @@ const tolgee = Tolgee()
     defaultLanguage: 'en',
     apiKey: apiKey,
     apiUrl: apiUrl,
+    staticData: {
+      en: () => import('../public/i18n/en.json'),
+      cs: () => import('../public/i18n/cs.json'),
+      de: () => import('../public/i18n/de.json'),
+      fr: () => import('../public/i18n/fr.json'),
+      'en:namespaced': () => import('../public/i18n/namespaced/en.json'),
+      'cs:namespaced': () => import('../public/i18n/namespaced/cs.json'),
+      'de:namespaced': () => import('../public/i18n/namespaced/de.json'),
+      'fr:namespaced': () => import('../public/i18n/namespaced/fr.json'),
+    },
   });
 
 export const TolgeeNextProvider = ({

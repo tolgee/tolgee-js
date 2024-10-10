@@ -5,6 +5,7 @@ import {
   OnFormatError,
   FetchFn,
   MissingTranslationHandler,
+  CachePublicRecord,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -85,8 +86,17 @@ export type TolgeeOptionsInternal = {
    *   'locale:namespace': <translations | async function>
    * }
    * ```
+   *
+   * You can also pass list of `CachePublicRecord`, which is in format:
+   *
+   * {
+   *   'language': <locale>,
+   *   'namespace': <namespace>
+   *   'data': <translations>
+   * }
+   *
    */
-  staticData?: TolgeeStaticData;
+  staticData?: TolgeeStaticData | CachePublicRecord[];
 
   /**
    * Switches between invisible and text observer. (Default: invisible)
