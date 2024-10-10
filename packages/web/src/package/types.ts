@@ -17,7 +17,7 @@ export type TolgeeElement = HTMLElement & {
   _tolgee?: boolean;
 };
 
-export type BackendOptions = Omit<RequestInfo, 'headers'> & {
+export type BackendOptions = Omit<RequestInit, 'headers'> & {
   /**
    * Path prefix (default: '/i18n')
    */
@@ -34,6 +34,14 @@ export type BackendOptions = Omit<RequestInfo, 'headers'> & {
    * Extract data from fetch response (default: (r) => r.json())
    */
   getData: (r: Response) => Promise<TreeTranslationsData | undefined>;
+  /**
+   *
+   */
+  timeout: number;
+  /**
+   * In case of error, fallback to next backend
+   */
+  fallbackOnFail: boolean;
 };
 
 export type GetPath = (
