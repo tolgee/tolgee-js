@@ -58,28 +58,31 @@ export function Cache(
    * Fetches production data
    */
   async function fetchProd(keyObject: CacheDescriptorInternal) {
-    let dataOrPromise = undefined as
-      | Promise<TreeTranslationsData | undefined>
-      | undefined;
+    function handleError(e: any) {
+      const error = new RecordFetchError(keyObject, e);
+      events.onError.emit(error);
+      // eslint-disable-next-line no-console
+      console.error(error);
+      throw error;
+    }
+
+    const dataFromBackend = backendGetRecord(keyObject);
+    if (isPromise(dataFromBackend)) {
+      const result = await dataFromBackend.catch(handleError);
+      if (result !== undefined) {
+        return result;
+      }
+    }
+
     const staticDataValue = staticData[encodeCacheKey(keyObject)];
     if (typeof staticDataValue === 'function') {
-      dataOrPromise = staticDataValue();
-    }
-
-    if (!dataOrPromise) {
-      dataOrPromise = backendGetRecord(keyObject);
-    }
-
-    if (isPromise(dataOrPromise)) {
-      return dataOrPromise?.catch((e) => {
-        const error = new RecordFetchError(keyObject, e);
-        events.onError.emit(error);
-        // eslint-disable-next-line no-console
-        console.error(error);
-        throw error;
-      });
+      try {
+        return await staticDataValue();
+      } catch (e) {
+        handleError(e);
+      }
     } else {
-      return dataOrPromise;
+      return staticDataValue;
     }
   }
 
