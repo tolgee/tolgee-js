@@ -122,7 +122,7 @@ describe('language changes', () => {
         'cs:fallback': loadNs,
       },
     });
-    tolgee.run();
+    await tolgee.run();
     expect(loadNs).toBeCalledTimes(2);
     await tolgee.changeLanguage('cs');
     expect(loadNs).toBeCalledTimes(4);
