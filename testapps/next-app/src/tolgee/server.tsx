@@ -12,6 +12,7 @@ export const { getTolgee, getTranslate, T, loadMatrix } = createServerInstance({
       },
       language: locale,
     });
+    // preload all the languages for the server instance
     await tolgee.loadMatrix(ALL_LOCALES);
     return tolgee;
   },
