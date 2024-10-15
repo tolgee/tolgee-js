@@ -130,6 +130,7 @@ export function Controller({ options }: StateServiceProps) {
 
   function loadRequiredRecords(lang?: string, ns?: NsFallback) {
     const descriptors = getRequiredRecords(lang, ns);
+
     if (descriptors.length) {
       return valueOrPromise(self.loadRecords(descriptors), () => {});
     }
@@ -243,8 +244,17 @@ export function Controller({ options }: StateServiceProps) {
       return cache.loadRecords(descriptors, self.isDev());
     },
 
+    loadMatrix(languages: string[], namespaces?: string[]) {
+      const resolvedNamespaces = namespaces ?? self.getRequiredNamespaces();
+      return cache.loadRecordMatrix(
+        languages,
+        resolvedNamespaces,
+        self.isDev()
+      );
+    },
+
     async loadRecord(descriptor: CacheDescriptor) {
-      return (await self.loadRecords([descriptor]))[0];
+      return (await self.loadRecords([descriptor]))[0]?.data;
     },
 
     isLoading(ns?: NsFallback) {

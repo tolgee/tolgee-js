@@ -1,11 +1,11 @@
 // @ts-ignore
 import { cache } from 'react';
+import React from 'react';
 import { TFnType } from '@tolgee/web';
+import { TolgeeInstance } from '@tolgee/web';
 
 import { TBase } from './TBase';
 import { TProps, ParamsTags } from './types';
-import React from 'react';
-import { TolgeeInstance } from '@tolgee/web';
 
 export type CreateServerInstanceOptions = {
   createTolgee: (locale: string) => Promise<TolgeeInstance>;
@@ -22,6 +22,10 @@ export const createServerInstance = ({
     return tolgee;
   }) as (locale: string) => Promise<TolgeeInstance>;
 
+  const getTolgeeStaticInstance = cache(async (locale: string) => {
+    return await createTolgee(locale);
+  });
+
   const getTolgee = async () => {
     const locale = await getLocale();
     const tolgee = await getTolgeeInstance(locale);
@@ -33,10 +37,22 @@ export const createServerInstance = ({
     return tolgee.t;
   };
 
+  const loadMatrix = async (languages: string[], namespaces?: string[]) => {
+    const tolgee = await getTolgeeStaticInstance(languages[0]);
+    return tolgee.loadMatrix(languages, namespaces);
+  };
+
   async function T(props: TProps) {
     const t = await getTranslate();
     return <TBase t={t as TFnType<ParamsTags>} {...props} />;
   }
 
-  return { getTolgeeInstance, getTolgee, getTranslate, T };
+  return {
+    loadMatrix,
+    getTolgeeInstance,
+    getTolgeeStaticInstance,
+    getTolgee,
+    getTranslate,
+    T,
+  };
 };
