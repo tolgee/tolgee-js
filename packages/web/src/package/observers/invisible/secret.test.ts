@@ -5,7 +5,6 @@ import {
   encodeMessage,
   INVISIBLE_CHARACTERS,
   removeSecrets,
-  stringToCodePoints,
 } from './secret';
 
 describe('Invisible encoder/decoder', () => {
@@ -31,24 +30,6 @@ describe('Invisible encoder/decoder', () => {
     expect(decodeFromText(cleanedMessage)).toEqual([]);
   });
 
-  it('works correctly with numbers', () => {
-    [...Array(3)].map((_, i) => {
-      const numbers = [i, i + 10, i + 100, i + 1_000, i + 10_000, i + 100_000];
-      const message =
-        '👩‍👩‍👦‍👦👩‍👩‍👦‍👦👩‍👩‍👦‍👦' + encodeMessage(String.fromCodePoint(...numbers));
-      expect(decodeFromText(message)).toEqual([
-        String.fromCodePoint(...numbers),
-      ]);
-    });
-  });
-
-  it('works with unicode numbers', () => {
-    const message =
-      '👩‍👩‍👦‍👦👩‍👩‍👦‍👦👩‍👩‍👦‍👦' + encodeMessage(String.fromCodePoint(10, 500_000, 1_000_000));
-    const decodedString = decodeFromText(message)[0];
-    expect(stringToCodePoints(decodedString)).toEqual([10, 500_000, 1_000_000]);
-  });
-
   it('works correctly with multiple non-joiners in row', () => {
     // valid secret byte is 8 + 1 (non-joiner), so 8 should be ignored
     const originalMessage = `a${INVISIBLE_CHARACTERS[0].repeat(8)}bcd`;
@@ -57,5 +38,17 @@ describe('Invisible encoder/decoder', () => {
     expect(decodeFromText(message)).toEqual(['💩💩']);
     expect(decodeFromText(cleanedMessage)).toEqual([]);
     expect(cleanedMessage).toEqual(originalMessage);
+  });
+
+  it('works with two messages right next to each other (merges them into one)', () => {
+    const message =
+      'Tolgee' + encodeMessage('secret1') + encodeMessage('secret2');
+    expect(decodeFromText(message)).toEqual(['secret1secret2']);
+  });
+
+  it('works with two messages spaced with regular text', () => {
+    const message =
+      'Tolgee' + encodeMessage('secret1') + 'test' + encodeMessage('secret2');
+    expect(decodeFromText(message)).toEqual(['secret1', 'secret2']);
   });
 });

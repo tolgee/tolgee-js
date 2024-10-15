@@ -62,11 +62,3 @@ export function decodeFromText(text: string) {
 export function removeSecrets(text: string) {
   return text.replace(INVISIBLE_REGEX, '');
 }
-
-export function stringToCodePoints(text: string) {
-  const result: number[] = [];
-  for (const codePoint of text) {
-    result.push(codePoint.codePointAt(0)!);
-  }
-  return result;
-}
