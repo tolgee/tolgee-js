@@ -1,8 +1,8 @@
-import { Link } from '@/navigation';
 import { Navbar } from '@/components/Navbar';
 
 import { TranslationMethodsServer } from './TranslationMethodsServer';
 import { TranslationMethodsClient } from './TranslationMethodsClient';
+import Link from 'next/link';
 
 export default async function AboutPage() {
   return (
