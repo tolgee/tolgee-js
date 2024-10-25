@@ -4,13 +4,12 @@ import { detectLanguageFromHeaders } from '@tolgee/react/server';
 import { cookies, headers } from 'next/headers';
 import { ALL_LANGUAGES, DEFAULT_LANGUAGE } from './shared';
 
-const LANGUAGE_COOKIE = 'NEXT_LANGUAGE';
+const LANGUAGE_COOKIE = 'NEXT_LOCALE';
 
 export async function setLanguage(locale: string) {
   const cookieStore = cookies();
-  cookieStore.set({
-    name: LANGUAGE_COOKIE,
-    value: locale,
+  cookieStore.set(LANGUAGE_COOKIE, locale, {
+    maxAge: 1000 * 60 * 60 * 24 * 365, // one year in milisecods
   });
 }
 
@@ -21,8 +20,7 @@ export async function getLanguage() {
     return locale;
   }
 
-  // try to detect language from headers
+  // try to detect language from headers or use default
   const detected = detectLanguageFromHeaders(headers(), ALL_LANGUAGES);
-  // or use default
   return detected || DEFAULT_LANGUAGE;
 }

@@ -33,8 +33,8 @@ export const TolgeeNextProvider = ({
       options={{ useSuspense: false }}
       fallback="Loading"
       ssr={{
-        staticData,
         language,
+        staticData,
       }}
     >
       {children}

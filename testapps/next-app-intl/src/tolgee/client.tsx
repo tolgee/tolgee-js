@@ -1,9 +1,9 @@
 'use client';
 
-import { TolgeeBase } from './shared';
+import { useEffect } from 'react';
 import { TolgeeProvider, TolgeeStaticData } from '@tolgee/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { TolgeeBase } from './shared';
 
 type Props = {
   staticData: TolgeeStaticData;
@@ -32,10 +32,7 @@ export const TolgeeNextProvider = ({
       tolgee={tolgee}
       options={{ useSuspense: false }}
       fallback="Loading"
-      ssr={{
-        language,
-        staticData,
-      }}
+      ssr={{ language, staticData }}
     >
       {children}
     </TolgeeProvider>
