@@ -5,15 +5,15 @@ import { createServerInstance } from '@tolgee/react/server';
 
 export const { getTolgee, getTranslate, T } = createServerInstance({
   getLocale: getLocale,
-  createTolgee: async (locale) =>
+  createTolgee: async (language) =>
     TolgeeBase().init({
-      // including all locales
+      // including all languages
       // on server we are not concerned about bundle size
       staticData: await getStaticData(ALL_LOCALES),
       observerOptions: {
         fullKeyEncode: true,
       },
-      language: locale,
+      language,
       fetch: async (input, init) => {
         const data = await fetch(input, { ...init, next: { revalidate: 0 } });
         return data;

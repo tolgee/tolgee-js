@@ -1,13 +1,13 @@
 import { getHeaderLanguages } from './getHeaderLanguages';
 
-describe('locale from headers', () => {
-  it('parses correctly single locale', () => {
+describe('language from headers', () => {
+  it('parses correctly single language', () => {
     const headers = new Headers();
     headers.set('Accept-Language', 'en-US');
     expect(getHeaderLanguages(headers)).toEqual(['en-US']);
   });
 
-  it('parses correctly multiple locales', () => {
+  it('parses correctly multiple languages', () => {
     const headers = new Headers();
     headers.set('Accept-Language', 'en-US, en');
     expect(getHeaderLanguages(headers)).toEqual(['en-US', 'en']);
@@ -19,13 +19,13 @@ describe('locale from headers', () => {
     expect(getHeaderLanguages(headers)).toEqual([]);
   });
 
-  it('parses correctly weighted locales', () => {
+  it('parses correctly weighted languages', () => {
     const headers = new Headers();
     headers.set('Accept-Language', 'fr-CH, fr;q=0.9');
     expect(getHeaderLanguages(headers)).toEqual(['fr-CH', 'fr']);
   });
 
-  it('parses correctly weighted locales with star', () => {
+  it('parses correctly weighted languages with star', () => {
     const headers = new Headers();
     headers.set(
       'Accept-Language',

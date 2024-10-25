@@ -6,19 +6,23 @@ import { usePathname, useRouter } from '@/navigation';
 
 export const LangSelector: React.FC = () => {
   const tolgee = useTolgee(['language']);
-  const locale = tolgee.getLanguage();
+  const language = tolgee.getLanguage();
   const router = useRouter();
   const pathname = usePathname();
   const [_, startTransition] = useTransition();
 
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    const nextLocale = event.target.value;
+    const nextLanguage = event.target.value;
     startTransition(() => {
-      router.replace(pathname, { locale: nextLocale });
+      router.replace(pathname, { locale: nextLanguage });
     });
   }
   return (
-    <select className="lang-selector" onChange={onSelectChange} value={locale}>
+    <select
+      className="lang-selector"
+      onChange={onSelectChange}
+      value={language}
+    >
       <option value="en">English</option>
       <option value="cs">Česky</option>
       <option value="fr">Français</option>

@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent } from 'react';
 import { useTolgee } from '@tolgee/react';
-import { setLocale } from '@/tolgee/language';
+import { setLanguage } from '@/tolgee/language';
 
 export const LangSelector: React.FC = () => {
   const tolgee = useTolgee(['language']);
@@ -10,7 +10,7 @@ export const LangSelector: React.FC = () => {
 
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const nextLocale = event.target.value;
-    setLocale(nextLocale);
+    setLanguage(nextLocale);
   }
   return (
     <select className="lang-selector" onChange={onSelectChange} value={locale}>

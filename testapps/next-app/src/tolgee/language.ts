@@ -2,26 +2,27 @@
 
 import { detectLanguageFromHeaders } from '@tolgee/react/server';
 import { cookies, headers } from 'next/headers';
-import { ALL_LOCALES, DEFAULT_LOCALE } from './shared';
+import { ALL_LANGUAGES, DEFAULT_LANGUAGE } from './shared';
 
-const LOCALE_COOKIE = 'NEXT_LOCALE';
+const LANGUAGE_COOKIE = 'NEXT_LANGUAGE';
 
-export async function setLocale(locale: string) {
+export async function setLanguage(locale: string) {
   const cookieStore = cookies();
   cookieStore.set({
-    name: LOCALE_COOKIE,
+    name: LANGUAGE_COOKIE,
     value: locale,
   });
 }
 
-export async function getLocale() {
+export async function getLanguage() {
   const cookieStore = cookies();
-  const locale = cookieStore.get(LOCALE_COOKIE)?.value;
-  if (locale && ALL_LOCALES.includes(locale)) {
+  const locale = cookieStore.get(LANGUAGE_COOKIE)?.value;
+  if (locale && ALL_LANGUAGES.includes(locale)) {
     return locale;
   } else {
     return (
-      detectLanguageFromHeaders(await headers(), ALL_LOCALES) ?? DEFAULT_LOCALE
+      detectLanguageFromHeaders(await headers(), ALL_LANGUAGES) ??
+      DEFAULT_LANGUAGE
     );
   }
 }
