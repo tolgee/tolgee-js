@@ -63,7 +63,7 @@ export const TolgeeNextProvider = ({
       options={{ useSuspense: true }}
       ssr={{
         staticData,
-        language: router.locale!,
+        language: router.locale,
       }}
     >
       {children}
