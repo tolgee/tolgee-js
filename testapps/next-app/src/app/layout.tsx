@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { TolgeeNextProvider } from '@/tolgee/client';
 import { getStaticData } from '@/tolgee/shared';
-import { getLocale } from '@/tolgee/locale';
+import { getLocale } from '@/tolgee/language';
 import './style.css';
 
 type Props = {

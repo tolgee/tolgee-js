@@ -2,7 +2,7 @@
 
 import React, { ChangeEvent } from 'react';
 import { useTolgee } from '@tolgee/react';
-import { setLocale } from '@/tolgee/locale';
+import { setLocale } from '@/tolgee/language';
 
 export const LangSelector: React.FC = () => {
   const tolgee = useTolgee(['language']);

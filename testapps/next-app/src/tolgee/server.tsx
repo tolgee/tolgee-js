@@ -1,6 +1,6 @@
 import { TolgeeBase, ALL_LOCALES, getStaticData } from './shared';
 import { createServerInstance } from '@tolgee/react/server';
-import { getLocale } from './locale';
+import { getLocale } from './language';
 
 export const { getTolgee, getTranslate, T } = createServerInstance({
   getLocale,

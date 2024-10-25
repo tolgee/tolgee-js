@@ -3,7 +3,8 @@ export { DevBackend } from './DevBackend';
 export { getProjectIdFromApiKey } from './tools/decodeApiKey';
 export { BrowserExtensionPlugin } from './BrowserExtensionPlugin/BrowserExtensionPlugin';
 export { LanguageStorage } from './LanguageStorage';
-export { LanguageDetector } from './LanguageDetector';
+export { LanguageDetector, detectLanguage } from './LanguageDetector';
+export { detectLanguageFromHeaders } from './tools/detectLanguageFromHeaders';
 export { BackendFetch } from './BackendFetch';
 export {
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
