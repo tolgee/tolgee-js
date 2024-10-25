@@ -6,6 +6,7 @@ export { LanguageStorage } from './LanguageStorage';
 export { LanguageDetector, detectLanguage } from './LanguageDetector';
 export { detectLanguageFromHeaders } from './tools/detectLanguageFromHeaders';
 export { BackendFetch } from './BackendFetch';
+export { isSSR } from './tools/isSSR';
 export {
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
   TOLGEE_ATTRIBUTE_NAME,

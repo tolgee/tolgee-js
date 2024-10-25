@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { TolgeeInstance } from '@tolgee/web';
+import { TolgeeInstance, TolgeeStaticData } from '@tolgee/web';
 import { ReactOptions, TolgeeReactContext } from './types';
+import { useTolgeeSSR } from './useTolgeeSSR';
 
 export const DEFAULT_REACT_OPTIONS: ReactOptions = {
   useSuspense: true,
@@ -25,6 +26,14 @@ export interface TolgeeProviderProps {
   tolgee: TolgeeInstance;
   options?: ReactOptions;
   fallback?: React.ReactNode;
+  /**
+   * Hard set language to this value, use together with `staticData`
+   */
+  language?: string;
+  /**
+   * If provided, static data will be hard set to Tolgee cache for initial render
+   */
+  staticData?: TolgeeStaticData;
 }
 
 export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
@@ -32,6 +41,8 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   options,
   children,
   fallback,
+  staticData,
+  language,
 }) => {
   const [loading, setLoading] = useState(!tolgee.isLoaded());
 
@@ -56,6 +67,8 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
     }
   }, [tolgee]);
 
+  const tolgeeSSR = useTolgeeSSR(tolgee, language, staticData);
+
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
 
   const TolgeeProviderContext = getProviderInstance();
@@ -63,7 +76,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   if (optionsWithDefault.useSuspense) {
     return (
       <TolgeeProviderContext.Provider
-        value={{ tolgee, options: optionsWithDefault }}
+        value={{ tolgee: tolgeeSSR, options: optionsWithDefault }}
       >
         {loading ? (
           fallback
@@ -76,7 +89,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
 
   return (
     <TolgeeProviderContext.Provider
-      value={{ tolgee, options: optionsWithDefault }}
+      value={{ tolgee: tolgeeSSR, options: optionsWithDefault }}
     >
       {loading ? fallback : children}
     </TolgeeProviderContext.Provider>
