@@ -1,12 +1,27 @@
 import { ReactNode } from 'react';
+import { TolgeeNextProvider } from '@/tolgee/client';
+import { getStaticData } from '@/tolgee/shared';
+import { getLocale } from '@/tolgee/locale';
 import './style.css';
 
 type Props = {
   children: ReactNode;
+  params: { locale: string };
 };
 
-// Since we have a `not-found.tsx` page on the root, a layout file
-// is required, even if it's just passing children through.
-export default function RootLayout({ children }: Props) {
-  return children;
+export default async function LocaleLayout({ children }: Props) {
+  const locale = await getLocale();
+  // it's important you provide all data which are needed for initial render
+  // so current locale and also fallback locales + necessary namespaces
+  const locales = await getStaticData([locale, 'en']);
+
+  return (
+    <html lang={locale}>
+      <body>
+        <TolgeeNextProvider locale={locale} locales={locales}>
+          {children}
+        </TolgeeNextProvider>
+      </body>
+    </html>
+  );
 }
