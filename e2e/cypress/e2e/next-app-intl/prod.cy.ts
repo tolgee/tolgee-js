@@ -1,9 +1,9 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Next with app router in prod mode', () => {
+context('Next with app router (with next-intl) in prod mode', () => {
   const url = 'http://localhost:8127';
-  const translationMethods = url + '/translation-methods';
+  const translationMethods = url + '/en/translation-methods';
   exampleAppTest(url);
   translationMethodsTest(translationMethods, {
     en: [
