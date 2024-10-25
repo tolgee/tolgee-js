@@ -167,11 +167,11 @@ export const config: Config = {
         },
       },
     },
-    'next-app-cookies': {
+    'next-app-intl': {
       commandLineServices: {
         dev: {
           command: 'npm run dev -- -p 8125',
-          cwd: path.resolve(__dirname, '../../testapps/next-app-cookies/'),
+          cwd: path.resolve(__dirname, '../../testapps/next-app-intl/'),
           waitForOutput: 'Ready in ',
           environment: {
             NEXT_BUILD_DIR: 'dist-e2e',
@@ -182,7 +182,7 @@ export const config: Config = {
         },
         prod: {
           command: 'npm run start -- -p 8127',
-          cwd: path.resolve(__dirname, '../../testapps/next-app-cookies/'),
+          cwd: path.resolve(__dirname, '../../testapps/next-app-intl/'),
           waitForOutput: 'Ready in ',
         },
       },
