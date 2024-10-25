@@ -18,7 +18,7 @@ jobs:
             'next',
             'vue',
             'next-app',
-            'next-app-cookies',
+            'next-app-intl',
             'svelte',
             'ngx',
             'react-i18next',
