@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.6-prerelease.fc7efe8f.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.29.6-prerelease.fc7efe8f.0) (2024-10-25)
+
+
+### Bug Fixes
+
+* tolgee provider ([aedf479](https://github.com/tolgee/tolgee-js/commit/aedf479da819a21de7120d6832f193dcb08a3ab7))
+
+
+### Features
+
+* internalize useTolgeeSSR ([c91bb6d](https://github.com/tolgee/tolgee-js/commit/c91bb6d5017f7bcf4b2f5bb176dc20e5f43a9b29))
+
+
+
+
+
 ## [5.29.5](https://github.com/tolgee/tolgee-js/compare/v5.29.4...v5.29.5) (2024-10-15)
 
 **Note:** Version bump only for package @tolgee/react

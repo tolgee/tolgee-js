@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.6-prerelease.fc7efe8f.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.29.6-prerelease.fc7efe8f.0) (2024-10-25)
+
+
+### Features
+
+* improve naming ([528bd29](https://github.com/tolgee/tolgee-js/commit/528bd2923617dc8f9413a80f482289c4fd1aca82))
+
+
+
+
+
 ## [5.29.5](https://github.com/tolgee/tolgee-js/compare/v5.29.4...v5.29.5) (2024-10-15)
 
 **Note:** Version bump only for package @tolgee/next-internal-testapp

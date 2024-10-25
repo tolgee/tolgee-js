@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.6-prerelease.fc7efe8f.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.29.6-prerelease.fc7efe8f.0) (2024-10-25)
+
+
+### Features
+
+* improve naming ([c0be794](https://github.com/tolgee/tolgee-js/commit/c0be794a6d70ad7a64447bc81b0a2a6c33773690))
+
+
+
+
+
 ## [5.29.5](https://github.com/tolgee/tolgee-js/compare/v5.29.4...v5.29.5) (2024-10-15)
 
 **Note:** Version bump only for package @tolgee/format-icu

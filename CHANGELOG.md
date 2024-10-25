@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.6-prerelease.fc7efe8f.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.29.6-prerelease.fc7efe8f.0) (2024-10-25)
+
+
+### Bug Fixes
+
+* next-app ([fc7efe8](https://github.com/tolgee/tolgee-js/commit/fc7efe8fc657ae93167f1d633e589d82ab6d55ab))
+* next-app ([fbe4a23](https://github.com/tolgee/tolgee-js/commit/fbe4a2329670730cd9c2ad550b0173764fc0fdf0))
+* tolgee provider ([aedf479](https://github.com/tolgee/tolgee-js/commit/aedf479da819a21de7120d6832f193dcb08a3ab7))
+
+
+### Features
+
+* add next app with cookies based localization ([19ca60c](https://github.com/tolgee/tolgee-js/commit/19ca60c8e18bc67d727d2698f1ecc0c1e8b817d5))
+* improve naming ([dcc1eee](https://github.com/tolgee/tolgee-js/commit/dcc1eee9dbfc0d08126488b4e48bd90e4e7fec5e))
+* improve naming ([528bd29](https://github.com/tolgee/tolgee-js/commit/528bd2923617dc8f9413a80f482289c4fd1aca82))
+* improve naming ([69912cc](https://github.com/tolgee/tolgee-js/commit/69912cc6bcfe02d8586a04663d5577d221bdac51))
+* improve naming ([c0be794](https://github.com/tolgee/tolgee-js/commit/c0be794a6d70ad7a64447bc81b0a2a6c33773690))
+* internalize useTolgeeSSR ([c91bb6d](https://github.com/tolgee/tolgee-js/commit/c91bb6d5017f7bcf4b2f5bb176dc20e5f43a9b29))
+* language detectors accessible from outside ([830499f](https://github.com/tolgee/tolgee-js/commit/830499f6f50df6990270261ba622cb62d5dfbe32))
+* use language more than locale ([6c8410b](https://github.com/tolgee/tolgee-js/commit/6c8410bd9967d4592e47f77a87133fc79cc04521))
+
+
+
+
+
 ## [5.29.5](https://github.com/tolgee/tolgee-js/compare/v5.29.4...v5.29.5) (2024-10-15)
 
 
