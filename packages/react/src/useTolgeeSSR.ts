@@ -2,7 +2,6 @@ import {
   getTranslateProps,
   TolgeeInstance,
   TolgeeStaticData,
-  isSSR,
 } from '@tolgee/web';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -37,13 +36,11 @@ export function useTolgeeSSR(
   language?: string,
   staticData?: TolgeeStaticData | undefined
 ) {
-  const enabled = Boolean(language || staticData);
-
   const [noWrappingTolgee] = useState(() =>
     getTolgeeWithDeactivatedWrapper(tolgeeInstance)
   );
 
-  const [initialRender, setInitialRender] = useState(enabled);
+  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
     setInitialRender(false);
@@ -53,32 +50,28 @@ export function useTolgeeSSR(
     // we have to prepare tolgee before rendering children
     // so translations are available right away
     // events emitting must be off, to not trigger re-render while rendering
-    if (enabled) {
-      tolgeeInstance.setEmitterActive(false);
-      tolgeeInstance.addStaticData(staticData);
-      tolgeeInstance.changeLanguage(language!);
-      tolgeeInstance.setEmitterActive(true);
-    }
+    tolgeeInstance.setEmitterActive(false);
+    tolgeeInstance.addStaticData(staticData);
+    tolgeeInstance.changeLanguage(language!);
+    tolgeeInstance.setEmitterActive(true);
   }, [language, staticData, tolgeeInstance]);
 
   useState(() => {
-    if (enabled && isSSR()) {
-      // running this function only on first render
-      if (!tolgeeInstance.isLoaded()) {
-        // warning user, that static data provided are not sufficient
-        // for proper SSR render
-        const missingRecords = tolgeeInstance
-          .getRequiredRecords(language)
-          .map(({ namespace, language }) =>
-            namespace ? `${namespace}:${language}` : language
-          )
-          .filter((key) => !staticData?.[key]);
+    // running this function only on first render
+    if (!tolgeeInstance.isLoaded()) {
+      // warning user, that static data provided are not sufficient
+      // for proper SSR render
+      const missingRecords = tolgeeInstance
+        .getRequiredRecords(language)
+        .map(({ namespace, language }) =>
+          namespace ? `${namespace}:${language}` : language
+        )
+        .filter((key) => !staticData?.[key]);
 
-        // eslint-disable-next-line no-console
-        console.warn(
-          `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
-        );
-      }
+      // eslint-disable-next-line no-console
+      console.warn(
+        `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+      );
     }
   });
 

@@ -21,11 +21,7 @@ export const getProviderInstance = () => {
 
 let LAST_TOLGEE_INSTANCE: TolgeeInstance | undefined = undefined;
 
-export interface TolgeeProviderProps {
-  children?: React.ReactNode;
-  tolgee: TolgeeInstance;
-  options?: ReactOptions;
-  fallback?: React.ReactNode;
+export type SSROptions = {
   /**
    * Hard set language to this value, use together with `staticData`
    */
@@ -34,6 +30,22 @@ export interface TolgeeProviderProps {
    * If provided, static data will be hard set to Tolgee cache for initial render
    */
   staticData?: TolgeeStaticData;
+};
+
+export interface TolgeeProviderProps {
+  children?: React.ReactNode;
+  tolgee: TolgeeInstance;
+  options?: ReactOptions;
+  fallback?: React.ReactNode;
+  /**
+   * use this option if you use SSR
+   *
+   * You can pass staticData and language
+   * which will be set to tolgee instance for the initial render
+   *
+   * Don't switch between ssr and non-ssr dynamically
+   */
+  ssr?: SSROptions | boolean;
 }
 
 export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
@@ -41,8 +53,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   options,
   children,
   fallback,
-  staticData,
-  language,
+  ssr,
 }) => {
   // prevent restarting tolgee unnecesarly
   // however if the instance change on hot-reloading
@@ -65,7 +76,14 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
     }
   }, [tolgee]);
 
-  const tolgeeSSR = useTolgeeSSR(tolgee, language, staticData);
+  let tolgeeSSR = tolgee;
+
+  if (ssr) {
+    const { language, staticData } = (
+      typeof ssr === 'boolean' ? {} : ssr
+    ) as SSROptions;
+    tolgeeSSR = useTolgeeSSR(tolgee, language, staticData);
+  }
 
   const [loading, setLoading] = useState(!tolgeeSSR.isLoaded());
 

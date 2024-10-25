@@ -36,7 +36,7 @@ const Home: NextPage = () => {
   }, []);
 
   return ready ? (
-    <TolgeeProvider tolgee={tolgee} language={router.locale}>
+    <TolgeeProvider tolgee={tolgee} ssr={{ language: router.locale! }}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>

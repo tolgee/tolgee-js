@@ -59,10 +59,12 @@ export const TolgeeNextProvider = ({
   return (
     <TolgeeProvider
       tolgee={tolgee}
-      language={router.locale}
-      staticData={staticData}
       fallback="Loading..."
       options={{ useSuspense: true }}
+      ssr={{
+        staticData,
+        language: router.locale!,
+      }}
     >
       {children}
     </TolgeeProvider>

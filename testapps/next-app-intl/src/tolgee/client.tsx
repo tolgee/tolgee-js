@@ -31,9 +31,11 @@ export const TolgeeNextProvider = ({
     <TolgeeProvider
       tolgee={tolgee}
       options={{ useSuspense: false }}
-      language={language}
-      staticData={staticData}
       fallback="Loading"
+      ssr={{
+        language,
+        staticData,
+      }}
     >
       {children}
     </TolgeeProvider>
