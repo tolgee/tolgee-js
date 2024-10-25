@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.29.6-prerelease.4e3062df.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.29.6-prerelease.4e3062df.0) (2024-10-25)
+
+
+### Features
+
+* use language more than locale ([6c8410b](https://github.com/tolgee/tolgee-js/commit/6c8410bd9967d4592e47f77a87133fc79cc04521))
+
+
+
+
+
 ## [5.29.5](https://github.com/tolgee/tolgee-js/compare/v5.29.4...v5.29.5) (2024-10-15)
 
 **Note:** Version bump only for package @tolgee/next-app-testapp
