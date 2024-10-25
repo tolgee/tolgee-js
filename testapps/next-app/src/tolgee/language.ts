@@ -19,10 +19,10 @@ export async function getLanguage() {
   const locale = cookieStore.get(LANGUAGE_COOKIE)?.value;
   if (locale && ALL_LANGUAGES.includes(locale)) {
     return locale;
-  } else {
-    return (
-      detectLanguageFromHeaders(await headers(), ALL_LANGUAGES) ??
-      DEFAULT_LANGUAGE
-    );
   }
+
+  // try to detect language from headers
+  const detected = detectLanguageFromHeaders(headers(), ALL_LANGUAGES);
+  // or use default
+  return detected || DEFAULT_LANGUAGE;
 }
