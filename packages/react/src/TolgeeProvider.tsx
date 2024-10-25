@@ -44,8 +44,6 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   staticData,
   language,
 }) => {
-  const [loading, setLoading] = useState(!tolgee.isLoaded());
-
   // prevent restarting tolgee unnecesarly
   // however if the instance change on hot-reloading
   // we want to restart
@@ -68,6 +66,8 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   }, [tolgee]);
 
   const tolgeeSSR = useTolgeeSSR(tolgee, language, staticData);
+
+  const [loading, setLoading] = useState(!tolgeeSSR.isLoaded());
 
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
 
