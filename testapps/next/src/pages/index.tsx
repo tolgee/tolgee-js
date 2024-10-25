@@ -5,14 +5,14 @@ import { Todos } from '../views/Todos';
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      locales: await getServerLocales(context.locale),
+      staticData: await getServerLocales(context.locale),
     },
   };
 };
 
-const Home: NextPage<{ locales: any }> = ({ locales }) => {
+const Home: NextPage<{ staticData: any }> = ({ staticData }) => {
   return (
-    <TolgeeNextProvider locales={locales}>
+    <TolgeeNextProvider staticData={staticData}>
       <Todos />
     </TolgeeNextProvider>
   );

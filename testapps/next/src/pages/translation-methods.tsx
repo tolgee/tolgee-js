@@ -5,14 +5,14 @@ import { TranslationMethods } from '../views/TranslationMethods';
 export const getStaticProps: GetStaticProps = async (context) => {
   return {
     props: {
-      locales: await getServerLocales(context.locale, ['', 'namespaced']),
+      staticData: await getServerLocales(context.locale, ['', 'namespaced']),
     },
   };
 };
 
-const Home: NextPage<{ locales: any }> = ({ locales }) => {
+const Home: NextPage<{ staticData: any }> = ({ staticData }) => {
   return (
-    <TolgeeNextProvider locales={locales}>
+    <TolgeeNextProvider staticData={staticData}>
       <TranslationMethods />
     </TolgeeNextProvider>
   );

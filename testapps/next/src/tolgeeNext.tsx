@@ -6,7 +6,7 @@ import {
   TolgeeProvider,
   getFallbackArray,
   DevTools,
-  useTolgeeSSR,
+  TolgeeStaticData,
 } from '@tolgee/react';
 
 const apiKey = process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
@@ -37,7 +37,7 @@ export const getServerLocales = async (
 };
 
 type Props = {
-  locales: any;
+  staticData: TolgeeStaticData;
 };
 
 const tolgee = Tolgee()
@@ -51,15 +51,16 @@ const tolgee = Tolgee()
   });
 
 export const TolgeeNextProvider = ({
-  locales,
+  staticData,
   children,
 }: React.PropsWithChildren<Props>) => {
   const router = useRouter();
-  const tolgeeSSR = useTolgeeSSR(tolgee, router.locale, locales);
 
   return (
     <TolgeeProvider
-      tolgee={tolgeeSSR}
+      tolgee={tolgee}
+      language={router.locale}
+      staticData={staticData}
       fallback="Loading..."
       options={{ useSuspense: true }}
     >
