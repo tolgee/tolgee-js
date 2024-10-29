@@ -78,12 +78,10 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
 
   let tolgeeSSR = tolgee;
 
-  if (ssr) {
-    const { language, staticData } = (
-      typeof ssr === 'boolean' ? {} : ssr
-    ) as SSROptions;
-    tolgeeSSR = useTolgeeSSR(tolgee, language, staticData);
-  }
+  const { language, staticData } = (
+    typeof ssr !== 'object' ? {} : ssr
+  ) as SSROptions;
+  tolgeeSSR = useTolgeeSSR(tolgee, language, staticData, Boolean(ssr));
 
   const [loading, setLoading] = useState(!tolgeeSSR.isLoaded());
 
