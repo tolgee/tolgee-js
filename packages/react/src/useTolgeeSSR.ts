@@ -24,12 +24,11 @@ function getTolgeeWithDeactivatedWrapper(
  *
  * It also ensures that the first render is done without wrapping and so it avoids
  * "client different than server" issues.
- *
- * If no language data and static data are provided no action is taken
- *
+ * *
  * @param tolgeeInstance initialized Tolgee instance
  * @param language language that is obtained outside of Tolgee on the server and client
  * @param staticData static data for the language
+ * @param enabled if set to false, no action is taken
  */
 export function useTolgeeSSR(
   tolgeeInstance: TolgeeInstance,
