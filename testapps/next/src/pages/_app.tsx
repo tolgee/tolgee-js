@@ -27,5 +27,8 @@ MyApp.getInitialProps = async (
   context: AppContext
 ): Promise<AppOwnProps & AppInitialProps> => {
   const ctx = await App.getInitialProps(context);
-  return { ...ctx, staticData: await getStaticData([context.ctx.locale!]) };
+  return {
+    ...ctx,
+    staticData: await getStaticData([context.ctx.locale!], ['', 'namespaced']),
+  };
 };
