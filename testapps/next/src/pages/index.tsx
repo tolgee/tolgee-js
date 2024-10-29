@@ -1,11 +1,11 @@
-import type { GetStaticProps, NextPage } from 'next';
-import { getServerLocales, TolgeeNextProvider } from '../tolgeeNext';
+import type { GetServerSideProps, NextPage } from 'next';
+import { tolgee, TolgeeNextProvider } from '../tolgeeNext';
 import { Todos } from '../views/Todos';
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetServerSideProps = async (context) => {
   return {
     props: {
-      locales: await getServerLocales(context.locale),
+      locales: await tolgee.loadMatrix([context.locale!]),
     },
   };
 };
