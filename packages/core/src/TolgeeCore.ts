@@ -107,7 +107,7 @@ function createTolgee(options: TolgeeOptions) {
     loadRecord: controller.loadRecord,
 
     /**
-     *
+     * Prefill static data
      */
     addStaticData: controller.addStaticData,
 
