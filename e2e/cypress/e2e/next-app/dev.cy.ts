@@ -4,7 +4,7 @@ import { exampleAppDevTest } from '../../common/exampleAppDevTest';
 
 context('Next with app router in dev mode', { retries: 5 }, () => {
   const url = 'http://localhost:8122';
-  const translationMethods = url + '/en/translation-methods';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
   translationMethodsTest(translationMethods, {
     en: [

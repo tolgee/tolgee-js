@@ -1,6 +1,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { TolgeeInstance } from '@tolgee/web';
+import { TolgeeInstance, TolgeeStaticData } from '@tolgee/web';
 import { ReactOptions, TolgeeReactContext } from './types';
+import { useTolgeeSSR } from './useTolgeeSSR';
 
 export const DEFAULT_REACT_OPTIONS: ReactOptions = {
   useSuspense: true,
@@ -20,11 +21,31 @@ export const getProviderInstance = () => {
 
 let LAST_TOLGEE_INSTANCE: TolgeeInstance | undefined = undefined;
 
+export type SSROptions = {
+  /**
+   * Hard set language to this value, use together with `staticData`
+   */
+  language?: string;
+  /**
+   * If provided, static data will be hard set to Tolgee cache for initial render
+   */
+  staticData?: TolgeeStaticData;
+};
+
 export interface TolgeeProviderProps {
   children?: React.ReactNode;
   tolgee: TolgeeInstance;
   options?: ReactOptions;
   fallback?: React.ReactNode;
+  /**
+   * use this option if you use SSR
+   *
+   * You can pass staticData and language
+   * which will be set to tolgee instance for the initial render
+   *
+   * Don't switch between ssr and non-ssr dynamically
+   */
+  ssr?: SSROptions | boolean;
 }
 
 export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
@@ -32,9 +53,8 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   options,
   children,
   fallback,
+  ssr,
 }) => {
-  const [loading, setLoading] = useState(!tolgee.isLoaded());
-
   // prevent restarting tolgee unnecesarly
   // however if the instance change on hot-reloading
   // we want to restart
@@ -56,6 +76,15 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
     }
   }, [tolgee]);
 
+  let tolgeeSSR = tolgee;
+
+  const { language, staticData } = (
+    typeof ssr !== 'object' ? {} : ssr
+  ) as SSROptions;
+  tolgeeSSR = useTolgeeSSR(tolgee, language, staticData, Boolean(ssr));
+
+  const [loading, setLoading] = useState(!tolgeeSSR.isLoaded());
+
   const optionsWithDefault = { ...DEFAULT_REACT_OPTIONS, ...options };
 
   const TolgeeProviderContext = getProviderInstance();
@@ -63,7 +92,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
   if (optionsWithDefault.useSuspense) {
     return (
       <TolgeeProviderContext.Provider
-        value={{ tolgee, options: optionsWithDefault }}
+        value={{ tolgee: tolgeeSSR, options: optionsWithDefault }}
       >
         {loading ? (
           fallback
@@ -76,7 +105,7 @@ export const TolgeeProvider: React.FC<TolgeeProviderProps> = ({
 
   return (
     <TolgeeProviderContext.Provider
-      value={{ tolgee, options: optionsWithDefault }}
+      value={{ tolgee: tolgeeSSR, options: optionsWithDefault }}
     >
       {loading ? fallback : children}
     </TolgeeProviderContext.Provider>

@@ -12,7 +12,7 @@ export const createFormatIcu = (): FinalFormatterMiddleware => {
     }
   }
 
-  function getLocale(language: string) {
+  function getLanguage(language: string) {
     if (!locales.get(language)) {
       let localeCandidate: string = String(language).replace(/[^a-zA-Z]/g, '-');
       while (!isLocaleValid(localeCandidate)) {
@@ -33,12 +33,12 @@ export const createFormatIcu = (): FinalFormatterMiddleware => {
       (p) => typeof p === 'function'
     );
 
-    const locale = getLocale(language);
+    const locale = getLanguage(language);
 
     return new IntlMessageFormat(translation, locale, undefined, {
       ignoreTag,
     }).format(params);
   };
 
-  return Object.freeze({ getLocale, format });
+  return Object.freeze({ getLanguage, format });
 };

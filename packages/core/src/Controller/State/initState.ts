@@ -81,8 +81,8 @@ export type TolgeeOptionsInternal = {
    *
    * ```ts
    * {
-   *   'locale': <translations | async function>
-   *   'locale:namespace': <translations | async function>
+   *   'language': <translations | async function>
+   *   'language:namespace': <translations | async function>
    * }
    * ```
    */

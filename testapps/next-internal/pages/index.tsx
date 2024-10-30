@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { T, Tolgee, TolgeeProvider, useTolgeeSSR } from '@tolgee/react';
+import { T, Tolgee, TolgeeProvider } from '@tolgee/react';
 import { InContextTools } from '@tolgee/web/tools';
 import { useRouter } from 'next/router';
 
@@ -26,19 +26,17 @@ const Home: NextPage = () => {
 
   const [ready, setReady] = useState(false);
 
-  const tolgeeSSR = useTolgeeSSR(tolgee, router.locale);
-
   useEffect(() => {
     const queryParams = new URLSearchParams(window.location.search);
     const apiKey =
       queryParams.get('api_key') || process.env.NEXT_PUBLIC_TOLGEE_API_KEY;
 
-    tolgeeSSR.updateOptions({ apiKey });
+    tolgee.updateOptions({ apiKey });
     setReady(true);
   }, []);
 
   return ready ? (
-    <TolgeeProvider tolgee={tolgeeSSR}>
+    <TolgeeProvider tolgee={tolgee} ssr={{ language: router.locale }}>
       <div className={styles.container}>
         <Head>
           <title>Create Next App</title>

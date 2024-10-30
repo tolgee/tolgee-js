@@ -3,7 +3,7 @@ import { translationMethodsTest } from '../../common/translationMethodsTest';
 
 context('Next with app router in prod mode', () => {
   const url = 'http://localhost:8121';
-  const translationMethods = url + '/en/translation-methods';
+  const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
   translationMethodsTest(translationMethods, {
     en: [

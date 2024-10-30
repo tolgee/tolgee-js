@@ -167,6 +167,26 @@ export const config: Config = {
         },
       },
     },
+    'next-app-intl': {
+      commandLineServices: {
+        dev: {
+          command: 'npm run dev -- -p 8125',
+          cwd: path.resolve(__dirname, '../../testapps/next-app-intl/'),
+          waitForOutput: 'Ready in ',
+          environment: {
+            NEXT_BUILD_DIR: 'dist-e2e',
+            NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
+            NEXT_PUBLIC_TOLGEE_API_KEY:
+              'examples-admin-imported-project-implicit',
+          },
+        },
+        prod: {
+          command: 'npm run start -- -p 8127',
+          cwd: path.resolve(__dirname, '../../testapps/next-app-intl/'),
+          waitForOutput: 'Ready in ',
+        },
+      },
+    },
     'vue-ssr': {
       commandLineServices: {
         dev: {

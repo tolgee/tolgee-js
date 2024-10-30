@@ -12,10 +12,10 @@ describe('format icu', () => {
     expect(result).toEqual('result is 42,000');
   });
 
-  it('fixes invalid locale', () => {
+  it('fixes invalid language', () => {
     const formatter = createFormatIcu() as any;
-    expect(formatter.getLocale('en_GB')).toEqual('en-GB');
-    expect(formatter.getLocale('en_GB-nonsenceeeee')).toEqual('en-GB');
-    expect(formatter.getLocale('cs CZ')).toEqual('cs-CZ');
+    expect(formatter.getLanguage('en_GB')).toEqual('en-GB');
+    expect(formatter.getLanguage('en_GB-nonsenceeeee')).toEqual('en-GB');
+    expect(formatter.getLanguage('cs CZ')).toEqual('cs-CZ');
   });
 });

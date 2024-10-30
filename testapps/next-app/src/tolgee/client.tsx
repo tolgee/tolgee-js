@@ -1,35 +1,41 @@
 'use client';
 
 import { TolgeeBase } from './shared';
-import { TolgeeProvider, useTolgeeSSR } from '@tolgee/react';
+import { TolgeeProvider, TolgeeStaticData } from '@tolgee/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 type Props = {
-  locales: any;
-  locale: string;
+  language: string;
+  staticData: TolgeeStaticData;
   children: React.ReactNode;
 };
 
 const tolgee = TolgeeBase().init();
 
-export const TolgeeNextProvider = ({ locale, locales, children }: Props) => {
-  const tolgeeSSR = useTolgeeSSR(tolgee, locale, locales);
+export const TolgeeNextProvider = ({
+  language,
+  staticData,
+  children,
+}: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    const { unsubscribe } = tolgeeSSR.on('permanentChange', () => {
+    const { unsubscribe } = tolgee.on('permanentChange', () => {
       router.refresh();
     });
-
     return () => unsubscribe();
-  }, [tolgeeSSR, router]);
+  }, [tolgee, router]);
 
   return (
     <TolgeeProvider
-      tolgee={tolgeeSSR}
+      tolgee={tolgee}
       options={{ useSuspense: false }}
       fallback="Loading"
+      ssr={{
+        language,
+        staticData,
+      }}
     >
       {children}
     </TolgeeProvider>
