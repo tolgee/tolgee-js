@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.30.2-prerelease.4588b3b3.0](https://github.com/tolgee/tolgee-js/compare/v5.30.1...v5.30.2-prerelease.4588b3b3.0) (2024-11-01)
+
+
+### Bug Fixes
+
+* update intl-messageformat ([4588b3b](https://github.com/tolgee/tolgee-js/commit/4588b3b3e3726cc7d01a4556d8b71dd7dafe709d))
+
+
+
+
+
 ## [5.30.1](https://github.com/tolgee/tolgee-js/compare/v5.30.0...v5.30.1) (2024-11-01)
 
 **Note:** Version bump only for package @tolgee/format-icu
