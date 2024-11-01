@@ -5,7 +5,7 @@
   export let keyName: TranslationKey;
   export let params: Record<string, unknown> | undefined = undefined;
   export let noWrap = false;
-  export let defaultValue = undefined;
+  export let defaultValue: string | undefined = undefined;
   export let ns: NsType = undefined;
   export let language: string = undefined;
 
