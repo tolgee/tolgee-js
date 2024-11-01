@@ -8,7 +8,6 @@ import { NavbarComponent } from './component/navbar/navbar.component';
 import { LangSelectorComponent } from './component/lang-selector/lang-selector.component';
 
 import {
-  BackendFetch,
   DevTools,
   NgxTolgeeModule,
   Tolgee,
@@ -42,7 +41,6 @@ import { CommonModule } from '@angular/common';
         return Tolgee()
           .use(FormatIcu())
           .use(DevTools())
-          .use(BackendFetch({}))
           .init({
             availableLanguages: ['en', 'cs', 'fr', 'de'],
             staticData: {

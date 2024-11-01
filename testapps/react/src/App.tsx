@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { Tolgee, TolgeeProvider, BackendFetch, DevTools } from '@tolgee/react';
 
 import { Todos } from './Todos';
