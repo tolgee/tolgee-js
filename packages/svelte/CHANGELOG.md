@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.30.1](https://github.com/tolgee/tolgee-js/compare/v5.30.0...v5.30.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* Svelte types ([#3395](https://github.com/tolgee/tolgee-js/issues/3395)) ([e68d606](https://github.com/tolgee/tolgee-js/commit/e68d6067f311155b1c838e0bbf0423270888e855))
+
+
+
+
+
 # [5.30.0](https://github.com/tolgee/tolgee-js/compare/v5.29.5...v5.30.0) (2024-10-30)
 
 **Note:** Version bump only for package @tolgee/svelte

@@ -197,7 +197,7 @@ importers:
         specifier: ^5.16.5
         version: 5.16.5
       '@tolgee/core':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../core
       '@types/jest':
         specifier: ^27.0.2
@@ -245,7 +245,7 @@ importers:
   packages/i18next:
     dependencies:
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../web
     devDependencies:
       '@rollup/plugin-typescript':
@@ -258,7 +258,7 @@ importers:
         specifier: ^5.11.4
         version: 5.16.5
       '@tolgee/testing':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../testing
       '@types/jest':
         specifier: ^28.1.6
@@ -336,7 +336,7 @@ importers:
         specifier: 17.3.7
         version: 17.3.7(@angular/common@17.3.7)(@angular/core@17.3.7)(@angular/platform-browser@17.3.7)(rxjs@7.5.7)
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../web
       rxjs:
         specifier: ~7.5.7
@@ -367,10 +367,10 @@ importers:
         specifier: ^6.4.5
         version: 6.5.0
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../testing
       '@types/jasmine':
         specifier: ~3.10.3
@@ -409,14 +409,14 @@ importers:
   packages/ngx/projects/ngx-tolgee:
     dependencies:
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../../web
     publishDirectory: ../../dist/ngx-tolgee
 
   packages/react:
     dependencies:
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../web
     devDependencies:
       '@rollup/plugin-node-resolve':
@@ -435,10 +435,10 @@ importers:
         specifier: ^14.0.0
         version: 14.0.0(react-dom@18.3.1)(react@18.3.1)
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../testing
       '@types/jest':
         specifier: ^27.0.2
@@ -504,7 +504,7 @@ importers:
   packages/svelte:
     dependencies:
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../web
     devDependencies:
       '@sveltejs/adapter-auto':
@@ -526,10 +526,10 @@ importers:
         specifier: ^5.2.3
         version: 5.2.3(svelte@4.2.19)(vite@5.4.8)(vitest@2.1.2)
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../testing
       '@types/eslint':
         specifier: ^9.6.0
@@ -582,7 +582,7 @@ importers:
   packages/vue:
     dependencies:
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../web
     devDependencies:
       '@rollup/plugin-node-resolve':
@@ -598,10 +598,10 @@ importers:
         specifier: ^6.6.1
         version: 6.6.1(@vue/compiler-sfc@3.5.11)(vue@3.2.47)
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../format-icu
       '@tolgee/testing':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../testing
       '@types/jest':
         specifier: ^27.0.2
@@ -655,7 +655,7 @@ importers:
   packages/web:
     dependencies:
       '@tolgee/core':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../core
     devDependencies:
       '@emotion/react':
@@ -758,10 +758,10 @@ importers:
   testapps/next:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/react
       next:
         specifier: 14.2.3
@@ -789,13 +789,13 @@ importers:
   testapps/next-app:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/react
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/web
       next:
         specifier: 14.2.13
@@ -823,13 +823,13 @@ importers:
   testapps/next-app-intl:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/react
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/web
       next:
         specifier: 14.2.13
@@ -860,10 +860,10 @@ importers:
   testapps/next-internal:
     dependencies:
       '@tolgee/react':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/react
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/web
       next:
         specifier: 14.2.3
@@ -918,10 +918,10 @@ importers:
         specifier: ^17.3.7
         version: 17.3.7(@angular/common@17.3.7)(@angular/core@17.3.7)(@angular/platform-browser@17.3.7)(rxjs@7.5.7)
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/ngx':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/ngx/dist/ngx-tolgee
       express:
         specifier: ^4.18.2
@@ -970,10 +970,10 @@ importers:
   testapps/react:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/react':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/react
       react:
         specifier: ^18.3.1
@@ -1016,7 +1016,7 @@ importers:
   testapps/react-i18next:
     dependencies:
       '@tolgee/i18next':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/i18next
       react:
         specifier: ^18.3.1
@@ -1062,10 +1062,10 @@ importers:
   testapps/svelte:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/svelte':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/svelte
     devDependencies:
       '@fontsource/fira-mono':
@@ -1123,10 +1123,10 @@ importers:
   testapps/vue:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/vue':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/vue
       vue:
         specifier: ^3.2.45
@@ -1160,7 +1160,7 @@ importers:
   testapps/vue-i18next:
     dependencies:
       '@tolgee/i18next':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/i18next
       core-js:
         specifier: ^3.25.3
@@ -1206,10 +1206,10 @@ importers:
         specifier: ^7.0.4
         version: 7.0.4
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/vue':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/vue
       fastify:
         specifier: ^4.28.1
@@ -1252,10 +1252,10 @@ importers:
   testapps/web:
     dependencies:
       '@tolgee/format-icu':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/format-icu
       '@tolgee/web':
-        specifier: 5.30.0
+        specifier: 5.30.1
         version: link:../../packages/web
     devDependencies:
       concurrently:
