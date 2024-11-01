@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.1](https://github.com/tolgee/tolgee-js/compare/v5.31.0...v5.31.1) (2024-11-01)
+
+
+### Bug Fixes
+
+* update intl-messageformat ([#3396](https://github.com/tolgee/tolgee-js/issues/3396)) ([04719b9](https://github.com/tolgee/tolgee-js/commit/04719b9f5a344fa75fb58cd370f02bd0768a8aad))
+
+
+
+
+
 # [5.31.0](https://github.com/tolgee/tolgee-js/compare/v5.30.1...v5.31.0) (2024-11-01)
 
 
