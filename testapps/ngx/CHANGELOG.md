@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.31.0](https://github.com/tolgee/tolgee-js/compare/v5.30.1...v5.31.0) (2024-11-01)
+
+
+### Features
+
+* ability to have fallbacks and timeouts with backend plugin ([#3385](https://github.com/tolgee/tolgee-js/issues/3385)) ([2406876](https://github.com/tolgee/tolgee-js/commit/24068769edb00ba757f1c8235c392a8cac5ce305))
+
+
+
+
+
 ## [5.30.1](https://github.com/tolgee/tolgee-js/compare/v5.30.0...v5.30.1) (2024-11-01)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
