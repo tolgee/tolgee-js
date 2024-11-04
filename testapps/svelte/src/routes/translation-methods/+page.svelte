@@ -8,12 +8,14 @@
   let revealed = false;
 </script>
 
+{#snippet menuItems()}
+  <div>
+    <a href="/">The example app</a>
+  </div>
+{/snippet}
+
 <main class="translation-methods">
-  <Navbar>
-    <div slot="menu-items">
-      <a href="/">The example app</a>
-    </div>
-  </Navbar>
+  <Navbar menuItems={menuItems} />
 
   <div class="tiles">
     <div>
