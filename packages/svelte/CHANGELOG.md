@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.2](https://github.com/tolgee/tolgee-js/compare/v5.31.1...v5.31.2) (2024-11-05)
+
+
+### Bug Fixes
+
+* make svelte integration work with svelte 5 ([#3398](https://github.com/tolgee/tolgee-js/issues/3398)) ([b4422f0](https://github.com/tolgee/tolgee-js/commit/b4422f0a01f13b5454347cdf37c68a9286d3a74e)), closes [#3397](https://github.com/tolgee/tolgee-js/issues/3397)
+
+
+
+
+
 ## [5.31.1](https://github.com/tolgee/tolgee-js/compare/v5.31.0...v5.31.1) (2024-11-01)
 
 **Note:** Version bump only for package @tolgee/svelte
