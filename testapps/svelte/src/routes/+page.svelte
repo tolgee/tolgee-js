@@ -10,16 +10,12 @@
       items = JSON.parse(localStorage.getItem('tolgee-example-app-items') || '');
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.error(
-        'Something went wrong while parsing stored items. Items are reset.'
-      );
+      console.error('Something went wrong while parsing stored items. Items are reset.');
       if (typeof localStorage !== 'undefined') {
         localStorage.removeItem('tolgee-example-app-items');
       }
     }
-    return items?.length
-      ? items
-      : ['Passport', 'Maps and directions', 'Travel guide'];
+    return items?.length ? items : ['Passport', 'Maps and directions', 'Travel guide'];
   };
 
   let items = getInitialItems();
@@ -47,31 +43,30 @@
   };
 </script>
 
+{#snippet menuItems()}
+  <div>
+    <a href="/translation-methods">
+      <T keyName="menu-item-translation-methods" />
+    </a>
+  </div>
+{/snippet}
+
 <div class="background-wrapper">
   <div class="example">
-    <Navbar>
-      <div slot="menu-items">
-        <a href="/translation-methods">
-          <T keyName="menu-item-translation-methods"/>
-        </a>
-      </div>
-    </Navbar>
+    <Navbar {menuItems} />
 
     <header>
-      <img src="/img/appLogo.svg" alt="App logo"/>
+      <img src="/img/appLogo.svg" alt="App logo" />
       <h1 class="header__title">
-        <T keyName="app-title"/>
+        <T keyName="app-title" />
       </h1>
     </header>
     <section class="items">
       <form class="items__new-item" on:submit|preventDefault={onAdd}>
-        <input
-          bind:value={newItemValue}
-          placeholder={$t({ key: 'add-item-input-placeholder', })}
-        />
+        <input bind:value={newItemValue} placeholder={$t({ key: 'add-item-input-placeholder' })} />
         <button type="submit" disabled={!newItemValue} class="button">
           <img src="/img/iconAdd.svg" alt="Add" />
-          <T keyName="add-item-add-button"/>
+          <T keyName="add-item-add-button" />
         </button>
       </form>
       <div class="items__list">
@@ -79,7 +74,7 @@
           <div class="item">
             <div class="item__text">{item}</div>
             <button on:click={() => onDelete(index)}>
-              <T keyName="delete-item-button"/>
+              <T keyName="delete-item-button" />
             </button>
           </div>
         {/each}
@@ -91,7 +86,7 @@
         </button>
         <button class="button button--secondary" on:click={onAction('email')}>
           <img src="/img/iconMail.svg" alt="Send" />
-          <T keyName="send-via-email"/>
+          <T keyName="send-via-email" />
         </button>
       </div>
     </section>

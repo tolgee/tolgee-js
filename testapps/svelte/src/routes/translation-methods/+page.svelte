@@ -1,6 +1,6 @@
 <script>
   import { T, getTranslate } from '@tolgee/svelte';
-    import Namespaces from '../../component/Namespaces.svelte';
+  import Namespaces from '../../component/Namespaces.svelte';
   import Navbar from '../../component/Navbar.svelte';
 
   const { t } = getTranslate();
@@ -8,12 +8,14 @@
   let revealed = false;
 </script>
 
+{#snippet menuItems()}
+  <div>
+    <a href="/">The example app</a>
+  </div>
+{/snippet}
+
 <main class="translation-methods">
-  <Navbar>
-    <div slot="menu-items">
-      <a href="/">The example app</a>
-    </div>
-  </Navbar>
+  <Navbar {menuItems} />
 
   <div class="tiles">
     <div>
@@ -91,7 +93,7 @@
   </div>
   {#if !revealed}
     <div class="load-more-section">
-      <button class="button" on:click={() => revealed = true}>Load more</button>
+      <button class="button" on:click={() => (revealed = true)}>Load more</button>
     </div>
   {:else}
     <Namespaces />

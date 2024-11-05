@@ -1,6 +1,13 @@
 <script lang="ts">
   import { TolgeeProvider, Tolgee, DevTools, BackendFetch } from '@tolgee/svelte';
-  import { FormatIcu } from '@tolgee/format-icu'
+  import { FormatIcu } from '@tolgee/format-icu';
+  import type { Snippet } from 'svelte';
+
+  type Props = {
+    children: Snippet;
+  };
+
+  let { children }: Props = $props();
 
   const tolgee = Tolgee()
     .use(DevTools())
@@ -10,11 +17,11 @@
       apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
       apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
       language: 'en',
-      availableLanguages: ['en', 'de', 'cs', 'fr'],
-    }); 
+      availableLanguages: ['en', 'de', 'cs', 'fr']
+    });
 </script>
 
-<TolgeeProvider tolgee={tolgee}>
+<TolgeeProvider {tolgee}>
   <div slot="fallback">Loading...</div>
-  <slot />
+  {@render children?.()}
 </TolgeeProvider>
