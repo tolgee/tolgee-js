@@ -1,15 +1,15 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import LangSelector from './LangSelector.svelte';
+  import type { Snippet } from 'svelte';
+  import LangSelector from './LangSelector.svelte';
 
-	type Props = {
-		menuItems: Snippet;
-	};
+  type Props = {
+    menuItems: Snippet;
+  };
 
-	const { menuItems }: Props = $props();
+  const { menuItems }: Props = $props();
 </script>
 
 <div class="navbar">
-	{@render menuItems?.()}
-	<LangSelector />
+  {@render menuItems?.()}
+  <LangSelector />
 </div>
