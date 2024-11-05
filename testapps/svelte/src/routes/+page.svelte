@@ -44,16 +44,16 @@
 </script>
 
 {#snippet menuItems()}
-  <div>
-    <a href="/translation-methods">
-      <T keyName="menu-item-translation-methods" />
-    </a>
-  </div>
+	<div>
+		<a href="/translation-methods">
+			<T keyName="menu-item-translation-methods" />
+		</a>
+	</div>
 {/snippet}
 
 <div class="background-wrapper">
 	<div class="example">
-		<Navbar menuItems={menuItems} />
+		<Navbar {menuItems} />
 
 		<header>
 			<img src="/img/appLogo.svg" alt="App logo" />
