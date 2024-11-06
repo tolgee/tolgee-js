@@ -10,7 +10,7 @@ export function detectLanguage(language: string, availableLanguages: string[]) {
   const getTwoLetters = (fullTag: string) =>
     fullTag.replace(/^(.+?)(-.*)?$/, '$1');
 
-  const preferredTwoLetter = getTwoLetters(window.navigator.language);
+  const preferredTwoLetter = getTwoLetters(language);
   const twoLetterMatch = availableLanguages.find(
     (l) => getTwoLetters(l) === preferredTwoLetter
   );
