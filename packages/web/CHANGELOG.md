@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.3](https://github.com/tolgee/tolgee-js/compare/v5.31.2...v5.31.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* language detector incorrectly touching window ([#3401](https://github.com/tolgee/tolgee-js/issues/3401)) ([624debb](https://github.com/tolgee/tolgee-js/commit/624debb5229ba1943ccea72c65dc1121b40bbac2))
+
+
+
+
+
 ## [5.31.2](https://github.com/tolgee/tolgee-js/compare/v5.31.1...v5.31.2) (2024-11-05)
 
 **Note:** Version bump only for package @tolgee/web

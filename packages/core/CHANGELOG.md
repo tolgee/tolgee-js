@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.3](https://github.com/tolgee/tolgee-js/compare/v5.31.2...v5.31.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* add hint to simple parser error message ([#3399](https://github.com/tolgee/tolgee-js/issues/3399)) ([3587074](https://github.com/tolgee/tolgee-js/commit/358707421c721a0454f6be9d2963ccf27820ba76)), closes [#3394](https://github.com/tolgee/tolgee-js/issues/3394)
+
+
+
+
+
 ## [5.31.2](https://github.com/tolgee/tolgee-js/compare/v5.31.1...v5.31.2) (2024-11-05)
 
 **Note:** Version bump only for package @tolgee/core
