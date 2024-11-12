@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.4](https://github.com/tolgee/tolgee-js/compare/v5.31.3...v5.31.4) (2024-11-12)
+
+
+### Bug Fixes
+
+* default value prefilled in form ([#3402](https://github.com/tolgee/tolgee-js/issues/3402)) ([8d77ef5](https://github.com/tolgee/tolgee-js/commit/8d77ef59e3a52bc3a4106f86adaceeab4ef12674))
+
+
+
+
+
 ## [5.31.3](https://github.com/tolgee/tolgee-js/compare/v5.31.2...v5.31.3) (2024-11-07)
 
 
