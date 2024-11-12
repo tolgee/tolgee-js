@@ -27,8 +27,12 @@ import {
 } from '../State/translationStates';
 import { useComputedPermissions } from './usePermissions';
 import { HttpError } from '../../client/HttpError';
+import { components } from '../../client/apiSchema.generated';
+import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
 
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
+
+type LanguageModel = components['schemas']['LanguageModel'];
 
 type FormTranslations = {
   [key: string]: {
@@ -75,9 +79,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     }
 
     const [saving, setSaving] = useState(false);
-
-    const [translationsFormTouched, setTranslationsFormTouched] =
-      useState(false);
 
     const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
     const [tags, setTags] = useState<string[]>([]);
@@ -128,6 +129,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           const selectedLanguages = getInitialLanguages(
             data._embedded?.languages?.map((l) => l.tag!) || []
           );
+          initializeWithDefaultValue(undefined, data._embedded?.languages);
           setSelectedLanguages(selectedLanguages);
           setPreferredLanguages(selectedLanguages);
         },
@@ -176,7 +178,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           if (_pluralArgName === undefined && isPlural) {
             setPluralArgName(firstKey?.keyPluralArgName);
           }
-          _setTranslationsForm(result);
+          initializeWithDefaultValue(result, undefined);
           if (firstKey) {
             setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           } else {
@@ -192,6 +194,46 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         },
       },
     });
+
+    function initializeWithDefaultValue(
+      translationData: FormTranslations | undefined,
+      languagesData: LanguageModel[] | undefined
+    ) {
+      const data =
+        translationData ??
+        (translationsLoadable.isSuccess ? undefined : translationsForm);
+      const languages =
+        languagesData ?? languagesLoadable.data._embedded.languages;
+
+      if (!data || !languages) {
+        return undefined;
+      }
+
+      const baseLang = languages.find((l) => l.base);
+      const baseLangIncluded = selectedLanguages.includes(baseLang.tag);
+      const baseValueEmpty = isTranslationEmpty(
+        data?.[baseLang.tag]?.value,
+        isPlural
+      );
+
+      if (data && baseLangIncluded && baseValueEmpty && props.defaultValue) {
+        _setTranslationsForm({
+          ...data,
+          [baseLang.tag]: {
+            state: data?.[baseLang.tag]?.state ?? 'UNTRANSLATED',
+            value: getTolgeeFormat(
+              props.defaultValue,
+              isPlural,
+              !icuPlaceholders
+            ),
+          },
+        });
+      } else {
+        _setTranslationsForm({
+          ...data,
+        });
+      }
+    }
 
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
     const isPlural =
@@ -230,13 +272,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     function onInputChange(key: string, value: TolgeeFormat) {
       setSubmitError(undefined);
       setSuccess(false);
-      setTranslationsFormTouched(true);
       setTranslation(key, value);
     }
 
     function onStateChange(key: string, value: StateType) {
       setSuccess(false);
-      setTranslationsFormTouched(true);
       setState(key, value);
     }
 
@@ -402,44 +442,6 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         )
       );
     }
-
-    // sets the default value for base language if is not stored already
-    useEffect(() => {
-      if (
-        props.defaultValue &&
-        availableLanguages &&
-        selectedLanguages &&
-        translationsForm &&
-        keyData
-      ) {
-        const baseLanguageDefinition = availableLanguages.find((l) => l.base);
-        if (
-          baseLanguageDefinition &&
-          selectedLanguages.includes(baseLanguageDefinition.tag!) &&
-          !translationsFormTouched
-        ) {
-          const wasBaseTranslationProvided =
-            keyData?.translations?.[baseLanguageDefinition.tag!] !== undefined;
-
-          if (!wasBaseTranslationProvided) {
-            setTranslation(
-              baseLanguageDefinition.tag!,
-              getTolgeeFormat(
-                props.defaultValue ?? '',
-                isPlural,
-                !icuPlaceholders
-              )
-            );
-          }
-        }
-      }
-    }, [
-      availableLanguages,
-      translationsForm,
-      selectedLanguages,
-      props.defaultValue,
-      keyData,
-    ]);
 
     const versionError = checkPlatformVersion(
       MINIMAL_PLATFORM_VERSION,
