@@ -86,6 +86,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [_pluralArgName, setPluralArgName] = useState<string>();
     const [submitError, setSubmitError] = useState<HttpError>();
 
+    const filterTagMissing =
+      Boolean(props.uiProps.filterTag.length) &&
+      !props.uiProps.filterTag.find((t) => tags.includes(t));
     useEffect(() => {
       // reset when key changes
       setIsPlural(undefined);
@@ -182,7 +185,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           if (firstKey) {
             setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           } else {
-            setTags(props.uiProps.tagNewKeys ?? []);
+            setTags([
+              ...(props.uiProps.filterTag ?? []),
+              ...(props.uiProps.tagNewKeys ?? []),
+            ]);
           }
           setScreenshots(
             firstKey?.screenshots?.map((sc) => ({
@@ -351,12 +357,14 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               path: { id: keyData.keyId! },
             }));
 
-        changeInTolgeeCache(
-          props.keyName,
-          selectedNs,
-          Object.entries(newTranslations),
-          props.uiProps.changeTranslation
-        );
+        if (!filterTagMissing) {
+          changeInTolgeeCache(
+            props.keyName,
+            selectedNs,
+            Object.entries(newTranslations),
+            props.uiProps.changeTranslation
+          );
+        }
 
         props.uiProps.onPermanentChange({
           key: props.keyName,
@@ -495,6 +503,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       pluralsSupported,
       icuPlaceholders,
       submitError,
+      filterTagMissing,
     } as const;
 
     const actions = {

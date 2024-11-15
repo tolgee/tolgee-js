@@ -32,7 +32,7 @@ export const PluralFormCheckbox = () => {
   const expanded = _expanded && isPlural;
 
   return (
-    <Box display="grid" mt={2}>
+    <Box display="grid">
       <Box justifyContent="start" display="flex" alignItems="center">
         <FormControlLabel
           data-cy="key-plural-checkbox"

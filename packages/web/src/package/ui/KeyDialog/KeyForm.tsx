@@ -1,4 +1,11 @@
-import { IconButton, Button, styled, useTheme, Link } from '@mui/material';
+import {
+  IconButton,
+  Button,
+  styled,
+  useTheme,
+  Link,
+  Typography,
+} from '@mui/material';
 import { OpenInNew } from '@mui/icons-material';
 
 import { TranslationFields } from './TranslationFields';
@@ -53,11 +60,18 @@ const ScKeyHint = styled('span')`
 `;
 
 const ScFieldsWrapper = styled('div')`
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const ScTagsWrapper = styled('div')`
   margin-top: 5px;
+`;
+
+const ScTagsError = styled(Typography)`
+  color: ${({ theme }) => theme.palette.error.main};
+  font-size: 12px;
+  font-weight: 400;
+  min-height: 18px;
 `;
 
 const ScGalleryWrapper = styled('div')`
@@ -103,6 +117,8 @@ export const KeyForm = () => {
   const fallbackNamespaces = useDialogContext((c) => c.fallbackNamespaces);
   const selectedNs = useDialogContext((c) => c.selectedNs);
   const permissions = useDialogContext((c) => c.permissions);
+  const filterTagMissing = useDialogContext((c) => c.filterTagMissing);
+  const filterTag = useDialogContext((c) => c.uiProps.filterTag);
 
   const screenshotsView = permissions.canViewScreenshots;
   const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
@@ -181,6 +197,17 @@ export const KeyForm = () => {
         <ScTagsWrapper>
           <ScFieldTitle>Tags</ScFieldTitle>
           <Tags />
+          <ScTagsError>
+            {filterTagMissing ? (
+              <Tooltip title="You need to include at least one of filtered tags, otherwise the translation won't be used in current application.">
+                <span>
+                  Missing one of filtered tags ({filterTag.join(', ')})
+                </span>
+              </Tooltip>
+            ) : (
+              ''
+            )}
+          </ScTagsError>
         </ScTagsWrapper>
       )}
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
@@ -207,7 +234,7 @@ export const KeyForm = () => {
         </Button>
         <LoadingButton
           loading={saving}
-          disabled={saving || formDisabled}
+          disabled={saving || formDisabled || filterTagMissing}
           onClick={onSave}
           color="primary"
           variant="contained"
