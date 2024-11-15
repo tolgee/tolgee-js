@@ -357,14 +357,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               path: { id: keyData.keyId! },
             }));
 
-        if (!filterTagMissing) {
-          changeInTolgeeCache(
-            props.keyName,
-            selectedNs,
-            Object.entries(newTranslations),
-            props.uiProps.changeTranslation
-          );
-        }
+        changeInTolgeeCache(
+          props.keyName,
+          selectedNs,
+          Object.entries(newTranslations),
+          props.uiProps.changeTranslation
+        );
 
         props.uiProps.onPermanentChange({
           key: props.keyName,
