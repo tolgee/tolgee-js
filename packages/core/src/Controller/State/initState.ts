@@ -121,7 +121,7 @@ export type TolgeeOptionsInternal = {
   tagNewKeys?: string[];
 
   /**
-   * Use only keys marked with one listed tags
+   * Use only keys marked with one one of the listed tags
    */
   filterTag?: string[];
 };
