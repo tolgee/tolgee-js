@@ -13,20 +13,16 @@ export const FilterTagMissingInfo = () => {
   if (filterTag)
     return (
       <Alert severity="error" sx={{ mt: 1, mb: 1, fontSize: 15 }}>
-        <AlertTitle>Missing Filtered Tag</AlertTitle>
+        <AlertTitle>Missing Required Tag</AlertTitle>
         {filterTag.length > 1 ? (
           <Box>
             This app is configured to use only keys tagged with the{' '}
-            <MissingTagsList tags={filterTag} /> with the "filterTag" option. To
-            use the selected key in this app, add at least one of the filtered
-            tags or use another key name in the code.
+            <MissingTagsList tags={filterTag} />. Add one of them to continue.
           </Box>
         ) : (
           <Box>
             This app is configured to use only keys tagged with the{' '}
-            <MissingTagsList tags={filterTag} /> with the "filterTag" option. To
-            use the selected key in this app, add the tag or use another key
-            name in the code.
+            <MissingTagsList tags={filterTag} />. Add this tag to continue.
           </Box>
         )}
         <Box mt={1}>Read more in the docs.</Box>
