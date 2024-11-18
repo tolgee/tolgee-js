@@ -15,7 +15,7 @@ export const tolgee = Tolgee()
     availableLanguages: ['en', 'cs', 'fr', 'de'],
     defaultLanguage: 'en',
     tagNewKeys: ['draft'],
-    filterTag: ['test'],
+    filterTag: ['test', 'new', 'base'],
   });
 
 export const useTolgee = (events?: TolgeeEvent[]): TolgeeInstance => {
