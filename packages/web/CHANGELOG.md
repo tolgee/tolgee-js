@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.31.5](https://github.com/tolgee/tolgee-js/compare/v5.31.4...v5.31.5) (2024-11-18)
+
+
+### Bug Fixes
+
+* double chars unicode characters breaking placeholders ([#3403](https://github.com/tolgee/tolgee-js/issues/3403)) ([58318c0](https://github.com/tolgee/tolgee-js/commit/58318c09845b9c29337a9d7df75c49ce5e61fdb4))
+
+
+
+
+
 ## [5.31.4](https://github.com/tolgee/tolgee-js/compare/v5.31.3...v5.31.4) (2024-11-12)
 
 
