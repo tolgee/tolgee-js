@@ -87,7 +87,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [submitError, setSubmitError] = useState<HttpError>();
 
     const filterTagMissing =
-      Boolean(props.uiProps.filterTag.length) &&
+      Boolean(props.uiProps.filterTag?.length) &&
       tags &&
       !props.uiProps.filterTag.find((t) => tags.includes(t));
     useEffect(() => {
