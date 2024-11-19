@@ -25,7 +25,15 @@ export const FilterTagMissingInfo = () => {
             <MissingTagsList tags={filterTag} />. Add this tag to continue.
           </Box>
         )}
-        <Box mt={1}>Read more in the docs.</Box>
+        <Box mt={1}>
+          <a
+            href="https://docs.tolgee.io/js-sdk/filter_by_tags"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Read more in the docs
+          </a>
+        </Box>
       </Alert>
     );
 };
