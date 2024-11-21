@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.32.0](https://github.com/tolgee/tolgee-js/compare/v5.31.5...v5.32.0) (2024-11-21)
+
+
+### Features
+
+* filtering keys by tag ([#3404](https://github.com/tolgee/tolgee-js/issues/3404)) ([a61f250](https://github.com/tolgee/tolgee-js/commit/a61f250138c72cb628bd4766d191877aff0ed054))
+
+
+
+
+
 ## [5.31.5](https://github.com/tolgee/tolgee-js/compare/v5.31.4...v5.31.5) (2024-11-18)
 
 **Note:** Version bump only for package @tolgee/i18next
