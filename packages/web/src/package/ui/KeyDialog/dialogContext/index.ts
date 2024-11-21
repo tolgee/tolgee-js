@@ -81,11 +81,15 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [saving, setSaving] = useState(false);
 
     const [selectedNs, setSelectedNs] = useState<string>(props.namespace);
-    const [tags, setTags] = useState<string[]>([]);
+    const [tags, setTags] = useState<string[] | undefined>(undefined);
     const [_isPlural, setIsPlural] = useState<boolean>();
     const [_pluralArgName, setPluralArgName] = useState<string>();
     const [submitError, setSubmitError] = useState<HttpError>();
 
+    const filterTagMissing =
+      Boolean(props.uiProps.filterTag?.length) &&
+      tags &&
+      !props.uiProps.filterTag.find((t) => tags.includes(t));
     useEffect(() => {
       // reset when key changes
       setIsPlural(undefined);
@@ -182,7 +186,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           if (firstKey) {
             setTags(firstKey?.keyTags?.map((t) => t.name) || []);
           } else {
-            setTags(props.uiProps.tagNewKeys ?? []);
+            setTags([
+              ...(props.uiProps.filterTag ?? []),
+              ...(props.uiProps.tagNewKeys ?? []),
+            ]);
           }
           setScreenshots(
             firstKey?.screenshots?.map((sc) => ({
@@ -486,7 +493,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       screenshotDetail,
       linkToPlatform,
       keyExists,
-      tags,
+      tags: tags || [],
       permissions,
       canTakeScreenshots,
       isPlural,
@@ -495,6 +502,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       pluralsSupported,
       icuPlaceholders,
       submitError,
+      filterTagMissing,
     } as const;
 
     const actions = {

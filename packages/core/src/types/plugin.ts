@@ -14,6 +14,7 @@ export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
   projectId?: number | string;
+  filterTag?: string[];
 };
 
 export type CommonProps = {
@@ -160,6 +161,7 @@ export type UiProps = {
   changeTranslation: ChangeTranslationInterface;
   onPermanentChange: (props: TranslationDescriptor) => void;
   tagNewKeys?: string[];
+  filterTag?: string[];
 };
 
 export type UiKeyOption = {

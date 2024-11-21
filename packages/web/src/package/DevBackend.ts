@@ -3,21 +3,36 @@ import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
-    getRecord({ apiUrl, apiKey, language, namespace, projectId, fetch }) {
+    getRecord({
+      apiUrl,
+      apiKey,
+      language,
+      namespace,
+      projectId,
+      filterTag,
+      fetch,
+    }) {
       const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
-      let url =
-        pId !== undefined
-          ? `${apiUrl}/v2/projects/${pId}/translations/${language}`
-          : `${apiUrl}/v2/projects/translations/${language}`;
+      const url = new URL(apiUrl);
+
+      if (pId !== undefined) {
+        url.pathname = `/v2/projects/${pId}/translations/${language}`;
+      } else {
+        url.pathname = `/v2/projects/translations/${language}`;
+      }
 
       if (namespace) {
-        url += `?ns=${namespace}`;
+        url.searchParams.append('ns', namespace);
       }
+      filterTag?.forEach((tag) => {
+        url.searchParams.append('filterTag', tag);
+      });
 
       if (getApiKeyType(apiKey) === 'tgpat' && projectId === undefined) {
         throw new Error("You need to specify 'projectId' when using PAT key");
       }
-      return fetch(url, {
+
+      return fetch(url.toString(), {
         headers: {
           'X-API-Key': apiKey || '',
           'Content-Type': 'application/json',

@@ -6,7 +6,7 @@ import i18n from 'i18next';
 import { DevTools, Tolgee } from '@tolgee/web';
 import { withTolgee, I18nextPlugin } from '..';
 
-const API_URL = 'http://localhost';
+const API_URL = 'http://localhost/';
 const API_KEY = 'dummyApiKey';
 
 const fetch = mockCoreFetch();

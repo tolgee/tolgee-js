@@ -187,8 +187,14 @@ export function Plugins(
     addPlugin,
     findPositions: findPositions,
     run() {
-      const { apiKey, apiUrl, projectId, observerOptions, tagNewKeys } =
-        getInitialOptions();
+      const {
+        apiKey,
+        apiUrl,
+        projectId,
+        observerOptions,
+        tagNewKeys,
+        filterTag,
+      } = getInitialOptions();
       instances.ui = plugins.ui?.({
         apiKey: apiKey!,
         apiUrl: apiUrl!,
@@ -198,6 +204,7 @@ export function Plugins(
         findPositions,
         onPermanentChange: (data) => events.onPermanentChange.emit(data),
         tagNewKeys,
+        filterTag,
       });
 
       instances.observer?.run({
@@ -259,13 +266,14 @@ export function Plugins(
     }) as BackendGetRecordInternal,
 
     getBackendDevRecord: (async ({ language, namespace }) => {
-      const { apiKey, apiUrl, projectId } = getInitialOptions();
+      const { apiKey, apiUrl, projectId, filterTag } = getInitialOptions();
       return instances.devBackend?.getRecord({
         apiKey,
         apiUrl,
         projectId,
         language,
         namespace,
+        filterTag,
         ...getCommonProps(),
       });
     }) as BackendGetRecordInternal,

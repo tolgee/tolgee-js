@@ -119,6 +119,11 @@ export type TolgeeOptionsInternal = {
    * Specify tags that will be preselected for non-existant keys.
    */
   tagNewKeys?: string[];
+
+  /**
+   * Use only keys tagged with one of the listed tags
+   */
+  filterTag?: string[];
 };
 
 export type TolgeeOptions = Partial<

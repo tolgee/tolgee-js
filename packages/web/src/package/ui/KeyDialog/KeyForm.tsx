@@ -14,6 +14,7 @@ import { PluralFormCheckbox } from './PluralFormCheckbox';
 import { ErrorAlert } from './ErrorAlert';
 import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
+import { FilterTagMissingInfo } from './Tags/FilterTagMissingInfo';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -53,7 +54,7 @@ const ScKeyHint = styled('span')`
 `;
 
 const ScFieldsWrapper = styled('div')`
-  margin-top: 20px;
+  margin-top: 10px;
 `;
 
 const ScTagsWrapper = styled('div')`
@@ -103,6 +104,7 @@ export const KeyForm = () => {
   const fallbackNamespaces = useDialogContext((c) => c.fallbackNamespaces);
   const selectedNs = useDialogContext((c) => c.selectedNs);
   const permissions = useDialogContext((c) => c.permissions);
+  const filterTagMissing = useDialogContext((c) => c.filterTagMissing);
 
   const screenshotsView = permissions.canViewScreenshots;
   const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
@@ -181,6 +183,7 @@ export const KeyForm = () => {
         <ScTagsWrapper>
           <ScFieldTitle>Tags</ScFieldTitle>
           <Tags />
+          {filterTagMissing && <FilterTagMissingInfo />}
         </ScTagsWrapper>
       )}
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
@@ -207,7 +210,7 @@ export const KeyForm = () => {
         </Button>
         <LoadingButton
           loading={saving}
-          disabled={saving || formDisabled}
+          disabled={saving || formDisabled || filterTagMissing}
           onClick={onSave}
           color="primary"
           variant="contained"
