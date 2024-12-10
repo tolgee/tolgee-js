@@ -14,7 +14,7 @@
     "@tolgee/format-icu": "5.32.0",
     "@tolgee/react": "5.32.0",
     "@tolgee/web": "5.32.0",
-    "next": "14.2.13",
+    "next": "14.2.20",
     "next-intl": "3.19.4",
     "react": "18.3.1",
     "react-dom": "18.3.1"
