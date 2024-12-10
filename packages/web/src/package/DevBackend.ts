@@ -1,5 +1,6 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
 import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
+import { createUrl } from './tools/url';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
@@ -13,12 +14,11 @@ function createDevBackend(): BackendDevMiddleware {
       fetch,
     }) {
       const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
-      const url = new URL(apiUrl);
-
+      let url: URL;
       if (pId !== undefined) {
-        url.pathname = `/v2/projects/${pId}/translations/${language}`;
+        url = createUrl(apiUrl, `/v2/projects/${pId}/translations/${language}`);
       } else {
-        url.pathname = `/v2/projects/translations/${language}`;
+        url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
       }
 
       if (namespace) {
