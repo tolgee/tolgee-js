@@ -4,9 +4,10 @@ export const createFetchingUtility = () => {
     signalHandler,
     fetchMock: jest.fn(() =>
       Promise.resolve({
-        json: () => ({
-          status: 'ok',
-        }),
+        json: () =>
+          Promise.resolve({
+            status: 'ok',
+          }),
         ok: true,
       } as unknown as Response)
     ),
@@ -20,5 +21,16 @@ export const createFetchingUtility = () => {
         })
     ),
     failingFetch: jest.fn(() => Promise.reject(new Error('Fetch failed'))),
+    fetchWithResponse: (
+      response: any = {
+        status: 'ok',
+      }
+    ) =>
+      jest.fn(() =>
+        Promise.resolve({
+          json: () => Promise.resolve(response),
+          ok: true,
+        } as unknown as Response)
+      ),
   };
 };
