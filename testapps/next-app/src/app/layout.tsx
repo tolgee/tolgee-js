@@ -6,7 +6,6 @@ import './style.css';
 
 type Props = {
   children: ReactNode;
-  params: { locale: string };
 };
 
 export default async function LocaleLayout({ children }: Props) {
