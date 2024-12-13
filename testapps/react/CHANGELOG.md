@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.33.0](https://github.com/tolgee/tolgee-js/compare/v5.32.0...v5.33.0) (2024-12-13)
+
+
+### Features
+
+* relative urls and support react 19 ([#3407](https://github.com/tolgee/tolgee-js/issues/3407)) ([c018ef2](https://github.com/tolgee/tolgee-js/commit/c018ef2669bfca32208a8307b5b6521b50d0a15c)), closes [#3405](https://github.com/tolgee/tolgee-js/issues/3405)
+
+
+
+
+
 # [5.32.0](https://github.com/tolgee/tolgee-js/compare/v5.31.5...v5.32.0) (2024-11-21)
 
 **Note:** Version bump only for package @tolgee/react-testapp

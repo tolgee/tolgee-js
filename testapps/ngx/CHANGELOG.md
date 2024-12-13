@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [5.33.0](https://github.com/tolgee/tolgee-js/compare/v5.32.0...v5.33.0) (2024-12-13)
+
+**Note:** Version bump only for package @tolgee/ngx-testapp
+
+
+
+
+
 # [5.32.0](https://github.com/tolgee/tolgee-js/compare/v5.31.5...v5.32.0) (2024-11-21)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
