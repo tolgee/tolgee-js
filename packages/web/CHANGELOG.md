@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.33.1](https://github.com/tolgee/tolgee-js/compare/v5.33.0...v5.33.1) (2024-12-13)
+
+
+### Bug Fixes
+
+* window undefined on server ([#3408](https://github.com/tolgee/tolgee-js/issues/3408)) ([21a5f36](https://github.com/tolgee/tolgee-js/commit/21a5f363faf2063b48cacddfbb680f9e91b585fd))
+
+
+
+
+
 # [5.33.0](https://github.com/tolgee/tolgee-js/compare/v5.32.0...v5.33.0) (2024-12-13)
 
 
