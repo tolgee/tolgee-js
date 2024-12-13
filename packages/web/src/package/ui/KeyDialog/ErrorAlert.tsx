@@ -2,6 +2,7 @@ import { Alert, AlertTitle } from '@mui/material';
 import { HttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
+import { createUrl } from '../../tools/url';
 
 type Props = {
   error: HttpError | Error;
@@ -14,7 +15,7 @@ export const ErrorAlert = ({ error, severity = 'error' }: Props) => {
   return (
     <Alert sx={{ mt: 2 }} severity={severity}>
       {error instanceof HttpError
-        ? getErrorContent(error, apiUrl)
+        ? getErrorContent(error, createUrl(apiUrl).toString())
         : error.message}
     </Alert>
   );

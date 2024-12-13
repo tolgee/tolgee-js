@@ -5,6 +5,7 @@ import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
+import { createUrl } from '../../tools/url';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -82,7 +83,8 @@ async function customFetch(
     'X-API-Key': options.apiKey,
   };
 
-  return fetchFn(options.apiUrl + input, init).then(async (r) => {
+  const url = createUrl(options.apiUrl, input.toString()).toString();
+  return fetchFn(url, init).then(async (r) => {
     if (!r.ok) {
       const data = await getResObject(r);
       throw errorFromResponse(r.status, data);
