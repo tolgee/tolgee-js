@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.33.2-prerelease.beeabbb5.0](https://github.com/tolgee/tolgee-js/compare/v5.33.1...v5.33.2-prerelease.beeabbb5.0) (2024-12-17)
+
+
+### Bug Fixes
+
+* request locale warning ([beeabbb](https://github.com/tolgee/tolgee-js/commit/beeabbb5df5099fc537239b8b6b7f6e05e56fb6d))
+
+
+
+
+
 ## [5.33.1](https://github.com/tolgee/tolgee-js/compare/v5.33.0...v5.33.1) (2024-12-13)
 
 **Note:** Version bump only for package @tolgee/next-app-intl-testapp

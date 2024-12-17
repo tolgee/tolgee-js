@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.33.2-prerelease.beeabbb5.0](https://github.com/tolgee/tolgee-js/compare/v5.33.1...v5.33.2-prerelease.beeabbb5.0) (2024-12-17)
+
+
+### Bug Fixes
+
+* next 15 missing key warning ([6fed2e6](https://github.com/tolgee/tolgee-js/commit/6fed2e6aac7dfa570f496a9b87c1b6e97e0b2a42))
+
+
+
+
+
 ## [5.33.1](https://github.com/tolgee/tolgee-js/compare/v5.33.0...v5.33.1) (2024-12-13)
 
 **Note:** Version bump only for package @tolgee/react
