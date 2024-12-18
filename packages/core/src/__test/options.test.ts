@@ -41,7 +41,7 @@ describe('initial options', () => {
     expect(restrictedElements).toEqual(['a']);
     expect(highlightColor).toEqual('red');
     expect(inputPrefix).toEqual('%-%tolgee:');
-    expect(defaultNs).toEqual('');
+    expect(defaultNs).toEqual(undefined);
   });
 
   it('sanitizes url', () => {

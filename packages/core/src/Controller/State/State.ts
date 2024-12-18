@@ -102,7 +102,8 @@ export function State(
     },
     getRequiredNamespaces() {
       return unique([
-        ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
+        self.getDefaultNs(),
+        ...(state.initialOptions.ns || []),
         ...getFallbackArray(state.initialOptions.fallbackNs),
         ...state.activeNamespaces.keys(),
       ]);
@@ -126,8 +127,16 @@ export function State(
       return getFallbackArray(state.initialOptions.fallbackNs);
     },
 
+    getNs() {
+      return state.initialOptions.ns?.length
+        ? state.initialOptions.ns
+        : [state.initialOptions.defaultNs ?? ''];
+    },
+
     getDefaultNs(ns?: NsType) {
-      return ns === undefined ? state.initialOptions.defaultNs : ns;
+      return ns === undefined
+        ? state.initialOptions.defaultNs ?? state.initialOptions.ns?.[0] ?? ''
+        : ns;
     },
 
     getAvailableLanguages() {
@@ -145,7 +154,7 @@ export function State(
       return {
         namespace:
           descriptor.namespace === undefined
-            ? self.getInitialOptions().defaultNs
+            ? self.getDefaultNs()
             : descriptor.namespace,
         language: descriptor.language,
       };

@@ -61,7 +61,7 @@ export type TolgeeOptionsInternal = {
   fallbackLanguage?: FallbackLanguageOption;
 
   /**
-   * Namespaces which should be always fetched
+   * Namespaces which should be always fetched (default: [defaultNs] or [''])
    */
   ns?: string[];
 
@@ -71,9 +71,9 @@ export type TolgeeOptionsInternal = {
   fallbackNs?: FallbackGeneral;
 
   /**
-   * Default namespace when no namespace defined (default: '')
+   * Default namespace when no namespace defined (default: first from `ns`)
    */
-  defaultNs: string;
+  defaultNs?: string;
 
   /**
    * These data go directly to cache or you can specify async
@@ -142,7 +142,6 @@ export type State = {
 };
 
 const defaultValues: TolgeeOptionsInternal = {
-  defaultNs: '',
   observerOptions: defaultObserverOptions,
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
