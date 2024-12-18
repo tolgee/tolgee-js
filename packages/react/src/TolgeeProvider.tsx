@@ -8,7 +8,7 @@ import { ReactOptions, TolgeeReactContext } from './types';
 import { useTolgeeSSR } from './useTolgeeSSR';
 
 export const DEFAULT_REACT_OPTIONS: ReactOptions = {
-  useSuspense: true,
+  useSuspense: false,
 };
 
 let ProviderInstance: React.Context<TolgeeReactContext | undefined>;

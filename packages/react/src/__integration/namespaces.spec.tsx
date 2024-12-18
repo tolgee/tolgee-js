@@ -36,7 +36,7 @@ describe('useTranslations namespaces', () => {
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
     tolgee = Tolgee()
-      .use(GlobalContextPlugin({ useSuspense: false }))
+      .use(GlobalContextPlugin())
       .use(DevTools())
       .use(FormatIcu())
       .init({
