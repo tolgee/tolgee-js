@@ -161,10 +161,10 @@ export function Controller({ options }: StateServiceProps) {
         state.setInitialLoading(false);
         fetchingObserver.notify();
         loadingObserver.notify();
-        events.onInitialLoaded.emit();
+        events.onInitialLoaded.emit(undefined);
       });
     } else {
-      events.onInitialLoaded.emit();
+      events.onInitialLoaded.emit(undefined);
     }
   }
 

@@ -2,8 +2,11 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   DevCredentials,
+  LanguageEvent,
   NsFallback,
   NsType,
+  PendingLanguageEvent,
+  RunningEvent,
 } from '../../types';
 
 import { decodeCacheKey } from '../Cache/helpers';
@@ -17,9 +20,9 @@ import {
 import { initState, TolgeeOptions } from './initState';
 
 export function State(
-  onLanguageChange: EventEmitterInstance<string>,
-  onPendingLanguageChange: EventEmitterInstance<string>,
-  onRunningChange: EventEmitterInstance<boolean>
+  onLanguageChange: EventEmitterInstance<LanguageEvent>,
+  onPendingLanguageChange: EventEmitterInstance<PendingLanguageEvent>,
+  onRunningChange: EventEmitterInstance<RunningEvent>
 ) {
   let state = initState();
   let devCredentials: DevCredentials = undefined;

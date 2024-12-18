@@ -1,4 +1,3 @@
-import type { NsFallback } from './general';
 import type { CacheDescriptorWithKey } from './cache';
 import { TolgeeError } from './errors';
 
@@ -6,19 +5,26 @@ export type Subscription = {
   unsubscribe: () => void;
 };
 
-export type SubscriptionSelective = {
-  unsubscribe: () => void;
-  /**
-   * Subscribes to namespace(s)
-   * @param ns - namespace(s), if empty default namespace is used
-   *
-   * Can be used multiple times to subscribe for more.
-   */
-  subscribeNs(ns?: NsFallback): SubscriptionSelective;
-};
+export type ListenerEvent<E extends string, T> = { type: E; value: T };
+export type Listener<E extends ListenerEvent<string, any>> = (e: E) => void;
+export type CombinedListener<E extends ListenerEvent<string, any>> = (
+  e: E[]
+) => void;
 
-export type ListenerEvent<T> = { value: T };
-export type Listener<T> = (e: ListenerEvent<T>) => void;
+export type LanguageEvent = ListenerEvent<'language', string>;
+export type PendingLanguageEvent = ListenerEvent<'pendingLanguage', string>;
+export type LoadingEvent = ListenerEvent<'loading', boolean>;
+export type FetchingEvent = ListenerEvent<'fetching', boolean>;
+export type InitialLoadEvent = ListenerEvent<'initialLoad', void>;
+export type RunningEvent = ListenerEvent<'running', boolean>;
+export type CacheEvent = ListenerEvent<'cache', CacheDescriptorWithKey>;
+export type ErrorEvent = ListenerEvent<'error', TolgeeError>;
+export type PermanentChangeEvent = ListenerEvent<
+  'permanentChange',
+  TranslationDescriptor
+>;
+
+export type UpdateEvent = LanguageEvent | CacheEvent | InitialLoadEvent;
 
 export type TolgeeEvent =
   | 'language'
@@ -49,54 +55,57 @@ export type TolgeeOn<E extends keyof EventType = keyof EventType> = {
    * Emitted when any key needs (or might need) to be re-rendered.
    * Similar to tolgee.onNsUpdate, except for all namespaces.
    */
-  (event: 'update', handler: Listener<void>): Subscription;
+  (event: 'update', handler: CombinedListener<UpdateEvent>): Subscription;
 
   /**
    * Emitted on language change.
    */
-  (event: 'language', handler: Listener<string>): Subscription;
+  (event: 'language', handler: Listener<LanguageEvent>): Subscription;
 
   /**
    * Emitted on pendingLanguage change.
    */
-  (event: 'pendingLanguage', handler: Listener<string>): Subscription;
+  (
+    event: 'pendingLanguage',
+    handler: Listener<PendingLanguageEvent>
+  ): Subscription;
 
   /**
    * Emitted on loading change. Changes when tolgee is loading some data for the first time.
    */
-  (event: 'loading', handler: Listener<boolean>): Subscription;
+  (event: 'loading', handler: Listener<LoadingEvent>): Subscription;
 
   /**
    * Emitted on fetching change. Changes when tolgee is fetching any data.
    */
-  (event: 'fetching', handler: Listener<boolean>): Subscription;
+  (event: 'fetching', handler: Listener<FetchingEvent>): Subscription;
 
   /**
    * Emitted when `tolgee.run` method finishes.
    */
-  (event: 'initialLoad', handler: Listener<void>): Subscription;
+  (event: 'initialLoad', handler: Listener<InitialLoadEvent>): Subscription;
 
   /**
    * Emitted when internal `running` state changes.
    */
-  (event: 'running', handler: Listener<boolean>): Subscription;
+  (event: 'running', handler: Listener<RunningEvent>): Subscription;
 
   /**
    * Emitted when cache changes.
    */
-  (event: 'cache', handler: Listener<CacheDescriptorWithKey>): Subscription;
+  (event: 'cache', handler: Listener<CacheEvent>): Subscription;
 
   /**
    * Emitted on errors
    */
-  (event: 'error', handler: Listener<TolgeeError>): Subscription;
+  (event: 'error', handler: Listener<ErrorEvent>): Subscription;
 
   /**
    * Translation was changed or created via dev tools
    */
   (
     event: 'permanentChange',
-    handler: Listener<CacheDescriptorWithKey>
+    handler: Listener<PermanentChangeEvent>
   ): Subscription;
 
   (event: E, handler: unknown): Subscription;

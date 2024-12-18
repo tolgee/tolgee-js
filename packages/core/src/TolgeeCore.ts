@@ -36,21 +36,6 @@ function createTolgee(options: TolgeeOptions) {
     on: controller.on,
 
     /**
-     * Listen for specific namespaces changes.
-     *
-     * ```
-     * const sub = tolgee.onUpdate(handler)
-     *
-     * // subscribe to selected namespace
-     * sub.subscribeNs(['common'])
-     *
-     * // unsubscribe
-     * sub.unsubscribe()
-     * ```
-     */
-    onNsUpdate: controller.onUpdate.listenSome,
-
-    /**
      * Turn off/on events emitting. Is on by default.
      */
     setEmitterActive: controller.setEmitterActive,

@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
 import {
-  SubscriptionSelective,
   TranslateProps,
   NsFallback,
   getFallbackArray,
@@ -27,25 +26,13 @@ export const useTranslateInternal = (
   // dummy state to enable re-rendering
   const { rerender, instance } = useRerender();
 
-  const subscriptionRef = useRef<SubscriptionSelective>();
-
   const subscriptionQueue = useRef([] as NsFallback[]);
   subscriptionQueue.current = [];
-
-  const subscribeToNs = (ns: NsFallback) => {
-    subscriptionQueue.current.push(ns);
-    subscriptionRef.current?.subscribeNs(ns);
-  };
 
   const isLoaded = tolgee.isLoaded(namespaces);
 
   useEffect(() => {
-    const subscription = tolgee.onNsUpdate(rerender);
-    subscriptionRef.current = subscription;
-    subscription.subscribeNs(namespaces);
-    subscriptionQueue.current.forEach((ns) => {
-      subscription!.subscribeNs(ns);
-    });
+    const subscription = tolgee.on('update', rerender);
 
     return () => {
       subscription.unsubscribe();
@@ -60,7 +47,6 @@ export const useTranslateInternal = (
   const t = useCallback(
     (props: TranslateProps<any>) => {
       const fallbackNs = props.ns ?? namespaces?.[0];
-      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs }) as any;
     },
     [tolgee, instance]
