@@ -14,9 +14,9 @@ export const tolgee = Tolgee()
       cs: () => import('../messages/cs.json'),
       de: () => import('../messages/de.json'),
       fr: () => import('../messages/fr.json'),
-      'namespaced:en': () => import('../messages/namespaced/en.json'),
-      'namespaced:cs': () => import('../messages/namespaced/cs.json'),
-      'namespaced:de': () => import('../messages/namespaced/de.json'),
-      'namespaced:fr': () => import('../messages/namespaced/fr.json'),
+      'en:namespaced': () => import('../messages/namespaced/en.json'),
+      'cs:namespaced': () => import('../messages/namespaced/cs.json'),
+      'de:namespaced': () => import('../messages/namespaced/de.json'),
+      'fr:namespaced': () => import('../messages/namespaced/fr.json'),
     },
   });
