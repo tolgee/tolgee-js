@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.33.2](https://github.com/tolgee/tolgee-js/compare/v5.33.1...v5.33.2) (2024-12-18)
+
+
+### Bug Fixes
+
+* compatibility with next 15 ([#3410](https://github.com/tolgee/tolgee-js/issues/3410)) ([1e0a858](https://github.com/tolgee/tolgee-js/commit/1e0a8582dea1e4f5c178ff5104be5ff7251b98db))
+
+
+
+
+
 ## [5.33.1](https://github.com/tolgee/tolgee-js/compare/v5.33.0...v5.33.1) (2024-12-13)
 
 **Note:** Version bump only for package @tolgee/next-testapp
