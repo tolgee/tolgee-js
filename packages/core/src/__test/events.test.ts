@@ -1,5 +1,4 @@
 import { TolgeeCore } from '../index';
-import { wait } from '@tolgee/testing/wait';
 
 describe('events', () => {
   it('emits language change event', async () => {
@@ -14,8 +13,8 @@ describe('events', () => {
     const tolgee = TolgeeCore().init({
       language: 'en',
       staticData: {
-        en: () => wait(0).then(() => ({ test: 'Test' })),
-        es: () => wait(0).then(() => ({ test: 'El Test' })),
+        en: () => Promise.resolve().then(() => ({ test: 'Test' })),
+        es: () => Promise.resolve().then(() => ({ test: 'El Test' })),
       },
     });
     await tolgee.run();
