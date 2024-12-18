@@ -8,29 +8,19 @@ export const ALL_LANGUAGES = ['en', 'cs', 'de', 'fr'];
 
 export const DEFAULT_LANGUAGE = 'en';
 
-export async function getStaticData(
-  languages: string[],
-  namespaces: string[] = ['']
-) {
-  const result: Record<string, any> = {};
-  for (const lang of languages) {
-    for (const namespace of namespaces) {
-      if (namespace) {
-        result[`${lang}:${namespace}`] = (
-          await import(`../../messages/${namespace}/${lang}.json`)
-        ).default;
-      } else {
-        result[lang] = (await import(`../../messages/${lang}.json`)).default;
-      }
-    }
-  }
-  return result;
-}
-
 export function TolgeeBase() {
-  return Tolgee().use(FormatIcu()).use(DevTools()).updateDefaults({
-    apiKey,
-    apiUrl,
-    fallbackLanguage: 'en',
-  });
+  return Tolgee()
+    .use(FormatIcu())
+    .use(DevTools())
+    .updateDefaults({
+      apiKey,
+      apiUrl,
+      fallbackLanguage: 'en',
+      staticData: {
+        en: () => import('../../messages/en.json'),
+        cs: () => import('../../messages/cs.json'),
+        de: () => import('../../messages/de.json'),
+        fr: () => import('../../messages/fr.json'),
+      },
+    });
 }

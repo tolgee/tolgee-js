@@ -2,8 +2,11 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   DevCredentials,
+  LanguageEvent,
   NsFallback,
   NsType,
+  PendingLanguageEvent,
+  RunningEvent,
 } from '../../types';
 
 import { decodeCacheKey } from '../Cache/helpers';
@@ -17,9 +20,9 @@ import {
 import { initState, TolgeeOptions } from './initState';
 
 export function State(
-  onLanguageChange: EventEmitterInstance<string>,
-  onPendingLanguageChange: EventEmitterInstance<string>,
-  onRunningChange: EventEmitterInstance<boolean>
+  onLanguageChange: EventEmitterInstance<LanguageEvent>,
+  onPendingLanguageChange: EventEmitterInstance<PendingLanguageEvent>,
+  onRunningChange: EventEmitterInstance<RunningEvent>
 ) {
   let state = initState();
   let devCredentials: DevCredentials = undefined;
@@ -99,7 +102,8 @@ export function State(
     },
     getRequiredNamespaces() {
       return unique([
-        ...(state.initialOptions.ns || [state.initialOptions.defaultNs]),
+        self.getDefaultNs(),
+        ...(state.initialOptions.ns || []),
         ...getFallbackArray(state.initialOptions.fallbackNs),
         ...state.activeNamespaces.keys(),
       ]);
@@ -123,8 +127,16 @@ export function State(
       return getFallbackArray(state.initialOptions.fallbackNs);
     },
 
+    getNs() {
+      return state.initialOptions.ns?.length
+        ? state.initialOptions.ns
+        : [state.initialOptions.defaultNs ?? ''];
+    },
+
     getDefaultNs(ns?: NsType) {
-      return ns === undefined ? state.initialOptions.defaultNs : ns;
+      return ns === undefined
+        ? state.initialOptions.defaultNs ?? state.initialOptions.ns?.[0] ?? ''
+        : ns;
     },
 
     getAvailableLanguages() {
@@ -138,11 +150,15 @@ export function State(
       }
     },
 
+    getAvailableNs() {
+      return state.initialOptions.availableNs;
+    },
+
     withDefaultNs(descriptor: CacheDescriptor): CacheDescriptorInternal {
       return {
         namespace:
           descriptor.namespace === undefined
-            ? self.getInitialOptions().defaultNs
+            ? self.getDefaultNs()
             : descriptor.namespace,
         language: descriptor.language,
       };

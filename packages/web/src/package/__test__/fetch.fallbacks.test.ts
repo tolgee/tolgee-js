@@ -38,9 +38,7 @@ describe('tolgee with fallback backend fetch', () => {
         availableLanguages: ['en'],
         fetch: f.infiniteFetch,
       });
-    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual(
-      new Map()
-    );
+    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual({});
     expect(f.infiniteFetch).toHaveBeenCalledTimes(3);
   });
 
@@ -56,9 +54,9 @@ describe('tolgee with fallback backend fetch', () => {
           en: { test: 'test' },
         },
       });
-    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual(
-      new Map([['test', 'test']])
-    );
+    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual({
+      test: 'test',
+    });
     expect(f.infiniteFetch).toHaveBeenCalledTimes(2);
   });
 
@@ -74,9 +72,9 @@ describe('tolgee with fallback backend fetch', () => {
           en: () => Promise.resolve({ test: 'test' }),
         },
       });
-    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual(
-      new Map([['test', 'test']])
-    );
+    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual({
+      test: 'test',
+    });
     expect(f.infiniteFetch).toHaveBeenCalledTimes(2);
   });
 });

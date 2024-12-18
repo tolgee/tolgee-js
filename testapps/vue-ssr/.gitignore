@@ -28,3 +28,6 @@ coverage
 *.sw?
 
 tsconfig.tsbuildinfo
+
+vite.config.ts.*
+tsconfig.tsbuildinfo

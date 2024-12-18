@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { TolgeeCore, TolgeeInstance } from '../TolgeeCore';
-import { TolgeePlugin, TreeTranslationsData } from '../types';
-import { resolvablePromise } from './testTools';
+import { TreeTranslationsData } from '../types';
+import { DevToolsPlugin, DevToolsThrow, resolvablePromise } from './testTools';
 
 function waitForInitialLoad(tolgee: TolgeeInstance) {
   return new Promise<void>((resolve) => {
@@ -11,30 +11,6 @@ function waitForInitialLoad(tolgee: TolgeeInstance) {
     });
   });
 }
-
-const DevToolsPlugin =
-  (postfix = ''): TolgeePlugin =>
-  (tolgee, tools) => {
-    tolgee.updateOptions({ apiKey: 'test', apiUrl: 'test' });
-    tools.setDevBackend({
-      getRecord({ language, namespace }) {
-        return Promise.resolve({
-          test: { sub: `${language}.${namespace || 'default'}${postfix}` },
-        });
-      },
-    });
-    return tolgee;
-  };
-
-const DevToolsThrow = (): TolgeePlugin => (tolgee, tools) => {
-  tolgee.updateOptions({ apiKey: 'test', apiUrl: 'test' });
-  tools.setDevBackend({
-    getRecord() {
-      return Promise.reject();
-    },
-  });
-  return tolgee;
-};
 
 describe('cache', () => {
   let tolgee: TolgeeInstance;
