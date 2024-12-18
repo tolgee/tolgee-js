@@ -118,7 +118,7 @@ function createTolgee(options: TolgeeOptions) {
     isLoaded: controller.isLoaded,
 
     /**
-     * Returns records needed for instance to be `loaded`
+     * Returns all records needed for instance to be `loaded`
      */
     getRequiredRecords: controller.getRequiredRecords,
 

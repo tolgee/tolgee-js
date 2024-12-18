@@ -134,11 +134,18 @@ export function Controller({ options }: StateServiceProps) {
     );
   }
 
-  function loadRequiredRecords(lang?: string, ns?: NsFallback) {
+  function loadRequiredRecords(
+    lang?: string,
+    ns?: NsFallback,
+    options?: LoadOptions
+  ) {
     const descriptors = getRequiredRecords(lang, ns);
 
     if (descriptors.length) {
-      return valueOrPromise(self.loadRecords(descriptors), (value) => value);
+      return valueOrPromise(
+        self.loadRecords(descriptors, options),
+        (value) => value
+      );
     }
     return [];
   }
@@ -307,7 +314,10 @@ export function Controller({ options }: StateServiceProps) {
       if (!language) {
         await initializeLanguage();
       }
-      return loadRequiredRecords(language);
+      return loadRequiredRecords(language, undefined, {
+        dev: self.isDev(),
+        noCache: true,
+      });
     },
 
     run() {
