@@ -1,25 +1,6 @@
 import { FormatIcu } from '@tolgee/format-icu';
 import { Tolgee, DevTools } from '@tolgee/react';
 
-export async function getStaticData(
-  languages: string[],
-  namespaces: string[] = ['']
-) {
-  const result: Record<string, any> = {};
-  for (const lang of languages) {
-    for (const namespace of namespaces) {
-      if (namespace) {
-        result[`${lang}:${namespace}`] = (
-          await import(`../messages/${namespace}/${lang}.json`)
-        ).default;
-      } else {
-        result[lang] = (await import(`../messages/${lang}.json`)).default;
-      }
-    }
-  }
-  return result;
-}
-
 export const tolgee = Tolgee()
   .use(FormatIcu())
   .use(DevTools())
@@ -28,4 +9,14 @@ export const tolgee = Tolgee()
     defaultLanguage: 'en',
     apiKey: process.env.NEXT_PUBLIC_TOLGEE_API_KEY,
     apiUrl: process.env.NEXT_PUBLIC_TOLGEE_API_URL,
+    staticData: {
+      en: () => import('../messages/en.json'),
+      cs: () => import('../messages/cs.json'),
+      de: () => import('../messages/de.json'),
+      fr: () => import('../messages/fr.json'),
+      'namespaced:en': () => import('../messages/namespaced/en.json'),
+      'namespaced:cs': () => import('../messages/namespaced/cs.json'),
+      'namespaced:de': () => import('../messages/namespaced/de.json'),
+      'namespaced:fr': () => import('../messages/namespaced/fr.json'),
+    },
   });

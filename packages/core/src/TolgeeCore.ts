@@ -80,6 +80,11 @@ function createTolgee(options: TolgeeOptions) {
     removeActiveNs: controller.removeActiveNs,
 
     /**
+     * Load required records with fallback languages and namespaces
+     */
+    load: controller.load,
+
+    /**
      * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)
      *
      * It loads data together and adds them to cache in one operation, to prevent partly loaded state.

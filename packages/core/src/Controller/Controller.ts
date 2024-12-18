@@ -6,6 +6,8 @@ import {
   TFnType,
   NsType,
   KeyAndNamespacesInternal,
+  CacheDescriptorInternal,
+  LoadOptions,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from '../helpers';
@@ -117,22 +119,37 @@ export function Controller({ options }: StateServiceProps) {
   function getRequiredRecords(lang?: string, ns?: NsFallback) {
     const languages = state.getFallbackLangs(lang);
     const namespaces = getRequiredNamespaces(ns);
-    const result: CacheDescriptor[] = [];
+    const result: CacheDescriptorInternal[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cache.exists({ language, namespace }, true)) {
-          result.push({ language, namespace });
-        }
+        result.push({ language, namespace });
       });
     });
     return result;
   }
 
+  function getMissingRecords(lang?: string, ns?: NsFallback) {
+    return getRequiredRecords(lang, ns).filter(
+      (descriptor) => !cache.exists(descriptor, true)
+    );
+  }
+
   function loadRequiredRecords(lang?: string, ns?: NsFallback) {
     const descriptors = getRequiredRecords(lang, ns);
+
     if (descriptors.length) {
-      return valueOrPromise(self.loadRecords(descriptors), () => {});
+      return valueOrPromise(self.loadRecords(descriptors), (value) => value);
     }
+    return [];
+  }
+
+  function loadMissingRecords(lang?: string, ns?: NsFallback) {
+    const descriptors = getMissingRecords(lang, ns);
+
+    if (descriptors.length) {
+      return valueOrPromise(self.loadRecords(descriptors), (value) => value);
+    }
+    return [];
   }
 
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
@@ -149,9 +166,9 @@ export function Controller({ options }: StateServiceProps) {
 
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
-      // fail if there is no language
       if (state.getInitialOptions().autoLoadRequiredData) {
-        return loadRequiredRecords();
+        // fail if there is no language
+        return loadMissingRecords();
       }
     });
 
@@ -241,12 +258,14 @@ export function Controller({ options }: StateServiceProps) {
       }
     },
 
-    loadRecords(descriptors: CacheDescriptor[]) {
-      return cache.loadRecords(descriptors, self.isDev());
+    loadRecords(descriptors: CacheDescriptor[], options?: LoadOptions) {
+      return cache.loadRecords(descriptors, { dev: self.isDev(), ...options });
     },
 
-    async loadRecord(descriptor: CacheDescriptor) {
-      return (await self.loadRecords([descriptor]))[0];
+    async loadRecord(descriptor: CacheDescriptor, options?: LoadOptions) {
+      return (
+        await self.loadRecords([descriptor], { noCache: true, ...options })
+      )[0]?.data;
     },
 
     isLoading(ns?: NsFallback) {
@@ -282,6 +301,13 @@ export function Controller({ options }: StateServiceProps) {
       return Boolean(
         state.getInitialOptions().apiKey && state.getInitialOptions().apiUrl
       );
+    },
+
+    async load(language?: string) {
+      if (!language) {
+        await initializeLanguage();
+      }
+      return loadRequiredRecords(language);
     },
 
     run() {

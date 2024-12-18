@@ -1,5 +1,9 @@
 import React, { Suspense, useEffect, useState } from 'react';
-import { TolgeeInstance, TolgeeStaticData } from '@tolgee/web';
+import {
+  CachePublicRecord,
+  TolgeeInstance,
+  TolgeeStaticData,
+} from '@tolgee/web';
 import { ReactOptions, TolgeeReactContext } from './types';
 import { useTolgeeSSR } from './useTolgeeSSR';
 
@@ -29,7 +33,7 @@ export type SSROptions = {
   /**
    * If provided, static data will be hard set to Tolgee cache for initial render
    */
-  staticData?: TolgeeStaticData;
+  staticData?: TolgeeStaticData | CachePublicRecord[];
 };
 
 export interface TolgeeProviderProps {

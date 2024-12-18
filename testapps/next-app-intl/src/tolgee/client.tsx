@@ -1,12 +1,16 @@
 'use client';
 
 import { useEffect } from 'react';
-import { TolgeeProvider, TolgeeStaticData } from '@tolgee/react';
+import {
+  CachePublicRecord,
+  TolgeeProvider,
+  TolgeeStaticData,
+} from '@tolgee/react';
 import { useRouter } from 'next/navigation';
 import { TolgeeBase } from './shared';
 
 type Props = {
-  staticData: TolgeeStaticData;
+  staticData: TolgeeStaticData | CachePublicRecord[];
   language: string;
   children: React.ReactNode;
 };

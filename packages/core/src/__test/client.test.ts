@@ -28,14 +28,14 @@ describe('using tolgee as client', () => {
     });
     expect(promiseEnTest).toBeCalledTimes(1);
     expect(promiseEnCommon).not.toBeCalled();
-    expect(enTest).toEqual(new Map([['test', 'Test']]));
+    expect(enTest).toEqual({ test: 'Test' });
 
     const enCommon = await tolgee.loadRecord({
       language: 'en',
       namespace: 'common',
     });
     expect(promiseEnCommon).toBeCalledTimes(1);
-    expect(enCommon).toEqual(new Map([['cancel', 'Cancel']]));
+    expect(enCommon).toEqual({ cancel: 'Cancel' });
 
     const esTest = await tolgee.loadRecord({
       language: 'es',
@@ -43,6 +43,6 @@ describe('using tolgee as client', () => {
     });
     expect(promiseEsTest).toBeCalledTimes(1);
     expect(promiseEsCommon).not.toBeCalled();
-    expect(esTest).toEqual(new Map([['test', 'Testa']]));
+    expect(esTest).toEqual({ test: 'Testa' });
   });
 });

@@ -5,6 +5,7 @@ import {
   OnFormatError,
   FetchFn,
   MissingTranslationHandler,
+  CachePublicRecord,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -22,6 +23,8 @@ export const DEFAULT_MISSING_TRANSLATION: MissingTranslationHandler = ({
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
 };
+
+export type TolgeeStaticDataProp = TolgeeStaticData | CachePublicRecord[];
 
 export type TolgeeOptionsInternal = {
   /**
@@ -85,8 +88,17 @@ export type TolgeeOptionsInternal = {
    *   'language:namespace': <translations | async function>
    * }
    * ```
+   *
+   * You can also pass list of `CachePublicRecord`, which is in format:
+   *
+   * {
+   *   'language': <locale>,
+   *   'namespace': <namespace>
+   *   'data': <translations>
+   * }
+   *
    */
-  staticData?: TolgeeStaticData;
+  staticData?: TolgeeStaticDataProp;
 
   /**
    * Switches between invisible and text observer. (Default: invisible)

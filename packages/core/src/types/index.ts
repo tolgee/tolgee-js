@@ -9,6 +9,7 @@ export type {
   TolgeeOptions,
   TolgeeOptionsInternal,
   TolgeeStaticData,
+  TolgeeStaticDataProp,
 } from '../Controller/State/initState';
 
 export type {
