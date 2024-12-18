@@ -1,5 +1,4 @@
-import { act } from 'react-dom/test-utils';
-import React from 'react';
+import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import { TolgeeProvider, DevTools, TolgeeInstance, Tolgee } from '../index';

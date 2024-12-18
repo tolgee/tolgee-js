@@ -3,6 +3,14 @@ import React from 'react';
 
 import { ParamsTags } from './types';
 
+function unwrapSingleElementArray(value: any) {
+  if (Array.isArray(value) && value.length === 1) {
+    return value[0];
+  } else {
+    return value;
+  }
+}
+
 export const wrapTagHandlers = (
   params: TranslateParams<ParamsTags> | undefined
 ) => {
@@ -33,10 +41,13 @@ export const wrapTagHandlers = (
 };
 
 export const addReactKeys = (
-  val: React.ReactNode | React.ReactNode[] | undefined
+  children: React.ReactNode | React.ReactNode[] | undefined
 ) => {
+  const val = unwrapSingleElementArray(children);
   if (Array.isArray(val)) {
-    return React.Children.toArray(val);
+    return val.map((item, i) => (
+      <React.Fragment key={i}>{item}</React.Fragment>
+    ));
   } else {
     return val;
   }

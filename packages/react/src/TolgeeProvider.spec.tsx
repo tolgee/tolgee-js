@@ -3,10 +3,10 @@ jest.autoMockOff();
 import { Tolgee, TolgeeInstance, TolgeePlugin } from '@tolgee/web';
 
 import '@testing-library/jest-dom';
-import React from 'react';
+import React, { act } from 'react';
 import { TolgeeProvider } from './TolgeeProvider';
 
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { createResolvablePromise } from '@tolgee/testing/createResolvablePromise';
 
 describe('Tolgee Provider Component', () => {

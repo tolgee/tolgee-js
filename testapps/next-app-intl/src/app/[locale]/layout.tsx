@@ -2,16 +2,15 @@ import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { TolgeeNextProvider } from '@/tolgee/client';
 import { ALL_LANGUAGES, getStaticData } from '@/tolgee/shared';
+import React from 'react';
 
 type Props = {
   children: ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 };
 
-export default async function LocaleLayout({
-  children,
-  params: { locale },
-}: Props) {
+export default async function LocaleLayout({ children, params }: Props) {
+  const { locale } = await params;
   if (!ALL_LANGUAGES.includes(locale)) {
     notFound();
   }

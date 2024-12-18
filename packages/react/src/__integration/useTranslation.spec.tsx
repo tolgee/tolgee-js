@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { DevTools, useTranslate, GlobalContextPlugin } from '..';
 import { render, screen, waitFor } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import { Tolgee, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockCoreFetch } from '@tolgee/testing/fetchMock';
