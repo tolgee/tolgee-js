@@ -142,6 +142,9 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
+      '@tolgee/testing':
+        specifier: 5.32.0
+        version: link:../testing
       '@types/jest':
         specifier: ^27.0.2
         version: 27.5.2
