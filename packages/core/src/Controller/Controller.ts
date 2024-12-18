@@ -150,7 +150,7 @@ export function Controller({ options }: StateServiceProps) {
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
       // fail if there is no language
-      if (state.getInitialOptions().loadRecordsOnRun) {
+      if (state.getInitialOptions().autoLoadRequiredData) {
         return loadRequiredRecords();
       }
     });
@@ -220,7 +220,7 @@ export function Controller({ options }: StateServiceProps) {
       }
       state.setPendingLanguage(language);
 
-      if (state.isRunning()) {
+      if (state.isRunning() && state.getInitialOptions().autoLoadRequiredData) {
         await loadRequiredRecords(language);
       }
 

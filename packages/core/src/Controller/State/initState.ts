@@ -126,9 +126,9 @@ export type TolgeeOptionsInternal = {
   filterTag?: string[];
 
   /**
-   * automatically load required records on `run`
+   * automatically load required records on `run` and `changeLanguage` (default: true)
    */
-  loadRecordsOnRun: boolean;
+  autoLoadRequiredData: boolean;
 };
 
 export type TolgeeOptions = Partial<
@@ -151,7 +151,7 @@ const defaultValues: TolgeeOptionsInternal = {
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
   apiUrl: DEFAULT_API_URL,
-  loadRecordsOnRun: true,
+  autoLoadRequiredData: true,
   fetch: createFetchFunction(),
   onTranslationMissing: DEFAULT_MISSING_TRANSLATION,
 };
