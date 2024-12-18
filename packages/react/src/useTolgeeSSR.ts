@@ -1,4 +1,5 @@
 import {
+  CachePublicRecord,
   getTranslateProps,
   TolgeeInstance,
   TolgeeStaticData,
@@ -33,7 +34,7 @@ function getTolgeeWithDeactivatedWrapper(
 export function useTolgeeSSR(
   tolgeeInstance: TolgeeInstance,
   language?: string,
-  staticData?: TolgeeStaticData | undefined,
+  data?: TolgeeStaticData | CachePublicRecord[] | undefined,
   enabled = true
 ) {
   const [noWrappingTolgee] = useState(() =>
@@ -52,23 +53,24 @@ export function useTolgeeSSR(
       // so translations are available right away
       // events emitting must be off, to not trigger re-render while rendering
       tolgeeInstance.setEmitterActive(false);
-      tolgeeInstance.addStaticData(staticData);
+      tolgeeInstance.addStaticData(data);
       tolgeeInstance.changeLanguage(language!);
       tolgeeInstance.setEmitterActive(true);
     }
-  }, [language, staticData, tolgeeInstance]);
+  }, [language, data, tolgeeInstance]);
 
   useState(() => {
     // running this function only on first render
     if (!tolgeeInstance.isLoaded() && enabled) {
       // warning user, that static data provided are not sufficient
       // for proper SSR render
-      const missingRecords = tolgeeInstance
-        .getRequiredRecords(language)
+      const requiredRecords = tolgeeInstance.getRequiredDescriptors(language);
+      const providedRecords = tolgeeInstance.getAllRecords();
+      const missingRecords = requiredRecords
         .map(({ namespace, language }) =>
           namespace ? `${namespace}:${language}` : language
         )
-        .filter((key) => !staticData?.[key]);
+        .filter((key) => !providedRecords.find((r) => r?.cacheKey === key));
 
       // eslint-disable-next-line no-console
       console.warn(

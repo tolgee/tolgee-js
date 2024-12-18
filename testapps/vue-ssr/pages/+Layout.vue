@@ -1,5 +1,5 @@
 <template>
-  <TolgeeProvider v-bind:staticData="staticData" language="en">
+  <TolgeeProvider :ssr="{ staticData, language: 'en' }">
     <slot></slot>
   </TolgeeProvider>
 </template>

@@ -1,16 +1,20 @@
 import { EventEmitter } from './EventEmitter';
-import { EventEmitterSelective } from './EventEmitterSelective';
 import {
-  CacheDescriptorWithKey,
-  TolgeeError,
+  CacheEvent,
+  FetchingEvent,
+  InitialLoadEvent,
+  LanguageEvent,
+  LoadingEvent,
+  PendingLanguageEvent,
+  PermanentChangeEvent,
+  RunningEvent,
   TolgeeOn,
-  TranslationDescriptor,
+  UpdateEvent,
+  ErrorEvent,
 } from '../../types';
+import { EventEmitterCombined } from './EventEmitterCombined';
 
-export function Events(
-  getFallbackNs: () => string[],
-  getDefaultNs: () => string
-) {
+export function Events() {
   let emitterActive = true;
 
   function isActive() {
@@ -18,16 +22,22 @@ export function Events(
   }
 
   const self = Object.freeze({
-    onPendingLanguageChange: EventEmitter<string>(isActive),
-    onLanguageChange: EventEmitter<string>(isActive),
-    onLoadingChange: EventEmitter<boolean>(isActive),
-    onFetchingChange: EventEmitter<boolean>(isActive),
-    onInitialLoaded: EventEmitter<void>(isActive),
-    onRunningChange: EventEmitter<boolean>(isActive),
-    onCacheChange: EventEmitter<CacheDescriptorWithKey>(isActive),
-    onUpdate: EventEmitterSelective(isActive, getFallbackNs, getDefaultNs),
-    onPermanentChange: EventEmitter<TranslationDescriptor>(isActive),
-    onError: EventEmitter<TolgeeError>(isActive),
+    onPendingLanguageChange: EventEmitter<PendingLanguageEvent>(
+      'pendingLanguage',
+      isActive
+    ),
+    onLanguageChange: EventEmitter<LanguageEvent>('language', isActive),
+    onLoadingChange: EventEmitter<LoadingEvent>('loading', isActive),
+    onFetchingChange: EventEmitter<FetchingEvent>('fetching', isActive),
+    onInitialLoaded: EventEmitter<InitialLoadEvent>('initialLoad', isActive),
+    onRunningChange: EventEmitter<RunningEvent>('running', isActive),
+    onCacheChange: EventEmitter<CacheEvent>('cache', isActive),
+    onPermanentChange: EventEmitter<PermanentChangeEvent>(
+      'permanentChange',
+      isActive
+    ),
+    onError: EventEmitter<ErrorEvent>('error', isActive),
+    onUpdate: EventEmitterCombined<UpdateEvent>(isActive),
     setEmitterActive(active: boolean) {
       emitterActive = active;
     },
@@ -57,11 +67,9 @@ export function Events(
     }) as TolgeeOn,
   });
 
-  self.onInitialLoaded.listen(() => self.onUpdate.emit());
-  self.onLanguageChange.listen(() => self.onUpdate.emit());
-  self.onCacheChange.listen(({ value }) =>
-    self.onUpdate.emit([value.namespace], true)
-  );
+  self.onInitialLoaded.listen((e) => self.onUpdate.emit(e, false));
+  self.onLanguageChange.listen((e) => self.onUpdate.emit(e, false));
+  self.onCacheChange.listen((e) => self.onUpdate.emit(e, true));
 
   return self;
 }

@@ -1,13 +1,14 @@
-import { Subscription, Listener } from '../../types';
+import { Subscription, Handler, ListenerEvent } from '../../types';
 
-export function EventEmitter<T>(
+export const EventEmitter = <Event extends ListenerEvent<string, any>>(
+  type: Event['type'],
   isActive: () => boolean
-): EventEmitterInstance<T> {
-  let handlers: Listener<T>[] = [];
+): EventEmitterInstance<Event> => {
+  let handlers: Handler<Event>[] = [];
 
-  return Object.freeze({
-    listen(handler: Listener<T>): Subscription {
-      const handlerWrapper: Listener<T> = (e) => {
+  return {
+    listen(handler: (e: Event) => void): Subscription {
+      const handlerWrapper: Handler<Event> = (e) => {
         handler(e);
       };
 
@@ -19,15 +20,22 @@ export function EventEmitter<T>(
         },
       };
     },
-    emit(data: T) {
+    emit(data: Event['value']) {
       if (isActive()) {
-        handlers.forEach((handler) => handler({ value: data }));
+        handlers.forEach((handler) =>
+          handler({ type: type, value: data } as Event)
+        );
       }
     },
-  });
-}
-
-export type EventEmitterInstance<T> = {
-  readonly listen: (handler: Listener<T>) => Subscription;
-  readonly emit: (data: T) => void;
+  } as unknown as EventEmitterInstance<Event>;
 };
+
+export type EventEmitterInstance<Event> =
+  Event extends ListenerEvent<infer E, infer T>
+    ? {
+        readonly listen: (
+          handler: Handler<ListenerEvent<E, T>>
+        ) => Subscription;
+        readonly emit: (data: T) => void;
+      }
+    : never;
