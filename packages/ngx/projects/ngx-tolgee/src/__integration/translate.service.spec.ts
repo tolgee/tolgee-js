@@ -1,6 +1,8 @@
 import { TranslateService } from '../lib/translate.service';
 import { Tolgee, TolgeeInstance, DevTools } from '@tolgee/web';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
+import mockTranslations from '@tolgee/testing/mockTranslations';
+import { wait } from '@tolgee/testing/wait';
 
 let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
@@ -11,17 +13,18 @@ describe('translation service', () => {
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
     tolgee = {
-      ...Tolgee().use(DevTools()).init({
-        staticData: staticDataMock.promises,
-        language: 'en',
-      }),
+      ...Tolgee()
+        .use(DevTools())
+        .init({
+          staticData: { ...staticDataMock.promises, en: mockTranslations.en },
+          language: 'en',
+        }),
     };
     service = new TranslateService(tolgee, {
       runOutsideAngular: jest.fn((fn) => fn()),
       run: jest.fn((fn) => fn()),
     } as any);
     onSpy = jest.spyOn(tolgee, 'on');
-    staticDataMock.resolvablePromises.en.resolve();
     await tolgee.run();
   });
 
@@ -30,6 +33,7 @@ describe('translation service', () => {
     service.on('language').subscribe(languageCallback);
     const promise = tolgee.changeLanguage('cs');
     expect(languageCallback).toHaveBeenCalledTimes(0);
+    await wait(0);
     staticDataMock.resolvablePromises.cs.resolve();
     await promise;
     expect(languageCallback).toHaveBeenCalledTimes(1);
@@ -60,6 +64,7 @@ describe('translation service', () => {
     const languageCallback = jest.fn();
     service.languageAsync.subscribe(languageCallback);
     const changePromise = service.changeLanguage('cs');
+    await wait(0);
     staticDataMock.resolvablePromises.cs.resolve();
     await changePromise;
     expect(service.language).toEqual('cs');

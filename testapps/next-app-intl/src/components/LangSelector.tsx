@@ -12,9 +12,9 @@ export const LangSelector: React.FC = () => {
   const [_, startTransition] = useTransition();
 
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    const nextLanguage = event.target.value;
+    const newLocale = event.target.value;
     startTransition(() => {
-      router.replace(pathname, { locale: nextLanguage });
+      router.replace(pathname, { locale: newLocale });
     });
   }
   return (

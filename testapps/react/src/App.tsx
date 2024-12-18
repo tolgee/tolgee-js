@@ -21,7 +21,7 @@ export const App = () => {
   const currentRoute = window.location.pathname;
 
   return (
-    <TolgeeProvider tolgee={tolgee}>
+    <TolgeeProvider tolgee={tolgee} options={{ useSuspense: true }}>
       {currentRoute === '/translation-methods' ? (
         <TranslationMethods />
       ) : (

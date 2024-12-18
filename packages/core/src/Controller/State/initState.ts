@@ -5,6 +5,7 @@ import {
   OnFormatError,
   FetchFn,
   MissingTranslationHandler,
+  CachePublicRecord,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -22,6 +23,8 @@ export const DEFAULT_MISSING_TRANSLATION: MissingTranslationHandler = ({
 export type TolgeeStaticData = {
   [key: string]: TreeTranslationsData | (() => Promise<TreeTranslationsData>);
 };
+
+export type TolgeeStaticDataProp = TolgeeStaticData | CachePublicRecord[];
 
 export type TolgeeOptionsInternal = {
   /**
@@ -50,8 +53,8 @@ export type TolgeeOptionsInternal = {
   defaultLanguage?: string;
 
   /**
-   * Languages which can be used for language detection
-   * and also limits which values can be stored
+   * Specify all available languages. Required for language detection or loading all languages at once (loadMatrix).
+   * It also limits which values can be stored. Is derrived from `staticData` keys if not provided.
    */
   availableLanguages?: string[];
 
@@ -61,7 +64,7 @@ export type TolgeeOptionsInternal = {
   fallbackLanguage?: FallbackLanguageOption;
 
   /**
-   * Namespaces which should be always fetched
+   * Namespaces which should be always fetched (default: [defaultNs] or [''])
    */
   ns?: string[];
 
@@ -71,9 +74,14 @@ export type TolgeeOptionsInternal = {
   fallbackNs?: FallbackGeneral;
 
   /**
-   * Default namespace when no namespace defined (default: '')
+   * Default namespace when no namespace defined (default: first from `ns`)
    */
-  defaultNs: string;
+  defaultNs?: string;
+
+  /**
+   * Specify all available namespaces. Required for loading all namespaces at once (loadMatrix).
+   */
+  availableNs?: string[];
 
   /**
    * These data go directly to cache or you can specify async
@@ -85,8 +93,17 @@ export type TolgeeOptionsInternal = {
    *   'language:namespace': <translations | async function>
    * }
    * ```
+   *
+   * You can also pass list of `CachePublicRecord`, which is in format:
+   *
+   * {
+   *   'language': <locale>,
+   *   'namespace': <namespace>
+   *   'data': <translations>
+   * }
+   *
    */
-  staticData?: TolgeeStaticData;
+  staticData?: TolgeeStaticDataProp;
 
   /**
    * Switches between invisible and text observer. (Default: invisible)
@@ -124,6 +141,16 @@ export type TolgeeOptionsInternal = {
    * Use only keys tagged with one of the listed tags
    */
   filterTag?: string[];
+
+  /**
+   * automatically load required records on `run` and `changeLanguage` (default: true)
+   */
+  autoLoadRequiredData: boolean;
+
+  /**
+   * no internal cache is being held inside tolgee
+   */
+  disableCache: boolean;
 };
 
 export type TolgeeOptions = Partial<
@@ -142,13 +169,14 @@ export type State = {
 };
 
 const defaultValues: TolgeeOptionsInternal = {
-  defaultNs: '',
   observerOptions: defaultObserverOptions,
   observerType: 'invisible',
   onFormatError: DEFAULT_FORMAT_ERROR,
   apiUrl: DEFAULT_API_URL,
+  autoLoadRequiredData: true,
   fetch: createFetchFunction(),
   onTranslationMissing: DEFAULT_MISSING_TRANSLATION,
+  disableCache: false,
 };
 
 export const combineOptions = <T extends TolgeeOptions>(

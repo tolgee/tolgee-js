@@ -36,21 +36,6 @@ function createTolgee(options: TolgeeOptions) {
     on: controller.on,
 
     /**
-     * Listen for specific namespaces changes.
-     *
-     * ```
-     * const sub = tolgee.onUpdate(handler)
-     *
-     * // subscribe to selected namespace
-     * sub.subscribeNs(['common'])
-     *
-     * // unsubscribe
-     * sub.unsubscribe()
-     * ```
-     */
-    onNsUpdate: controller.onUpdate.listenSome,
-
-    /**
      * Turn off/on events emitting. Is on by default.
      */
     setEmitterActive: controller.setEmitterActive,
@@ -95,6 +80,18 @@ function createTolgee(options: TolgeeOptions) {
     removeActiveNs: controller.removeActiveNs,
 
     /**
+     * Load records which would be loaded by `run` function
+     *
+     * You can provide language if not previously set on tolgee instance
+     */
+    loadRequired: controller.loadRequired,
+
+    /**
+     * Load records in matrix (languages x namespaces)
+     */
+    loadMatrix: controller.loadMatrix,
+
+    /**
      * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)
      *
      * It loads data together and adds them to cache in one operation, to prevent partly loaded state.
@@ -128,9 +125,9 @@ function createTolgee(options: TolgeeOptions) {
     isLoaded: controller.isLoaded,
 
     /**
-     * Returns records needed for instance to be `loaded`
+     * Returns descriptors of records needed for instance to be `loaded`
      */
-    getRequiredRecords: controller.getRequiredRecords,
+    getRequiredDescriptors: controller.getRequiredDescriptors,
 
     /**
      * @return `true` if tolgee is loading initial data (triggered by `run`).

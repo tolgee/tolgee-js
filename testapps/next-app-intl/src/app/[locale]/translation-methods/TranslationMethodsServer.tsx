@@ -39,9 +39,7 @@ export const TranslationMethodsServer = async () => {
                   i: <i />,
                   key: 'value',
                 }}
-              >
-                Hey
-              </T>
+              />
             </span>
           </div>
         </div>

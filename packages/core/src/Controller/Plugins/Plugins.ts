@@ -267,6 +267,11 @@ export function Plugins(
 
     getBackendDevRecord: (async ({ language, namespace }) => {
       const { apiKey, apiUrl, projectId, filterTag } = getInitialOptions();
+
+      if (!apiKey || !apiUrl || !self.hasDevBackend()) {
+        return undefined;
+      }
+
       return instances.devBackend?.getRecord({
         apiKey,
         apiUrl,

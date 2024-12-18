@@ -45,7 +45,7 @@ describe('useTranslations namespaces', () => {
     });
 
     const runPromise = tolgee.run();
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await runPromise;
     render(TestComponent, {
       global: { plugins: [[VueTolgee, { tolgee }]] },
@@ -54,7 +54,7 @@ describe('useTranslations namespaces', () => {
 
   it('loads namespace after render', async () => {
     expect(screen.queryByTestId('loading')).toContainHTML('Loading...');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).toBeFalsy();
       expect(screen.queryByTestId('test')).toContainHTML('Český test');
@@ -63,7 +63,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with english fallback', async () => {
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('test_english_fallback')).toContainHTML(
         'Test english fallback'
@@ -76,7 +76,7 @@ describe('useTranslations namespaces', () => {
 
   it('works with ns fallback', async () => {
     expect(screen.queryByTestId('ns_fallback')).toContainHTML('fallback');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
@@ -85,7 +85,7 @@ describe('useTranslations namespaces', () => {
 
   it('works with language and ns fallback', async () => {
     tolgee.changeLanguage('en');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
@@ -93,7 +93,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with default value', async () => {
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('non_existant')).toContainHTML(
         'Non existant'
