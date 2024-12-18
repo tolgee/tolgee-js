@@ -43,13 +43,15 @@
       "dependsOn": [
         "^develop"
       ],
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "dev": {
       "dependsOn": [
         "^dev"
       ],
-      "cache": false
+      "cache": false,
+      "persistent": true
     },
     "clean": {
       "dependsOn": [],
