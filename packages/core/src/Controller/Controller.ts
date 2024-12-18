@@ -150,7 +150,9 @@ export function Controller({ options }: StateServiceProps) {
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
       // fail if there is no language
-      return loadRequiredRecords();
+      if (state.getInitialOptions().loadRecordsOnRun) {
+        return loadRequiredRecords();
+      }
     });
 
     if (isPromise(data)) {

@@ -1,6 +1,6 @@
 import { TolgeePlugin } from '@tolgee/web';
 
 export const I18nextPlugin = (): TolgeePlugin => (tolgee) => {
-  tolgee.updateOptions({ ns: [], defaultNs: undefined });
+  tolgee.updateOptions({ loadRecordsOnRun: false });
   return tolgee;
 };
