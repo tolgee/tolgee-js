@@ -22,13 +22,13 @@ jobs:
       - name: Build
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 22
 
       - uses: pnpm/action-setup@v3
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8.6.12
+          version: 8.15.9
           run_install: false
 
       - name: Set git globals
