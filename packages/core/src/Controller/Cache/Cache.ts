@@ -7,9 +7,10 @@ import {
   TreeTranslationsData,
   BackendGetRecordInternal,
   RecordFetchError,
+  LoadOptions,
 } from '../../types';
 import { getFallbackArray, isPromise, unique } from '../../helpers';
-import { TolgeeStaticData } from '../State/initState';
+import { TolgeeStaticData, TolgeeStaticDataProp } from '../State/initState';
 import { ValueObserverInstance } from '../ValueObserver';
 
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
@@ -33,6 +34,7 @@ export function Cache(
   backendGetDevRecord: BackendGetRecordInternal,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
   isInitialLoading: () => boolean,
+  isCacheDisabled: () => boolean,
   fetchingObserver: ValueObserverInstance<boolean>,
   loadingObserver: ValueObserverInstance<boolean>
 ) {
@@ -46,12 +48,14 @@ export function Cache(
     data: TreeTranslationsData,
     recordVersion: number
   ) {
-    const cacheKey = encodeCacheKey(descriptor);
-    cache.set(cacheKey, {
-      data: flattenTranslations(data),
-      version: recordVersion,
-    });
-    events.onCacheChange.emit(descriptor);
+    if (!isCacheDisabled()) {
+      const cacheKey = encodeCacheKey(descriptor);
+      cache.set(cacheKey, {
+        data: flattenTranslations(data),
+        version: recordVersion,
+      });
+      events.onCacheChange.emit(descriptor);
+    }
   }
 
   /**
@@ -108,8 +112,16 @@ export function Cache(
   }
 
   const self = Object.freeze({
-    addStaticData(data: TolgeeStaticData | undefined) {
-      if (data) {
+    addStaticData(data: TolgeeStaticDataProp | undefined) {
+      if (Array.isArray(data)) {
+        for (const record of data) {
+          const key = encodeCacheKey(record);
+          const existing = cache.get(key);
+          if (!existing || existing.version === 0) {
+            addRecordInternal(record, record.data, 0);
+          }
+        }
+      } else if (data) {
         staticData = { ...staticData, ...data };
         Object.entries(data).forEach(([key, value]) => {
           if (typeof value !== 'function') {
@@ -141,7 +153,22 @@ export function Cache(
     },
 
     getRecord(descriptor: CacheDescriptor) {
-      return cache.get(encodeCacheKey(withDefaultNs(descriptor)))?.data;
+      const descriptorWithNs = withDefaultNs(descriptor);
+      const cacheKey = encodeCacheKey(descriptorWithNs);
+      const cacheRecord = cache.get(cacheKey);
+      if (!cacheRecord) {
+        return undefined;
+      }
+      return {
+        ...descriptorWithNs,
+        cacheKey,
+        data: Object.fromEntries(cacheRecord?.data.entries() ?? []),
+      };
+    },
+
+    getAllRecords() {
+      const entries = Array.from(cache.entries());
+      return entries.map(([key]) => self.getRecord(decodeCacheKey(key)));
     },
 
     getTranslation(descriptor: CacheDescriptorInternal, key: string) {
@@ -206,29 +233,45 @@ export function Cache(
       );
     },
 
-    isLoading(language: string | undefined, ns?: NsFallback) {
+    isLoading(language: string, ns?: NsFallback) {
       const namespaces = getFallbackArray(ns);
 
+      if (isInitialLoading()) {
+        return true;
+      }
+
+      const pendingCacheKeys = Array.from(asyncRequests.keys());
+
       return Boolean(
-        isInitialLoading() ||
-          Array.from(asyncRequests.keys()).find((key) => {
-            const descriptor = decodeCacheKey(key);
-            return (
-              (!namespaces.length ||
-                namespaces.includes(descriptor.namespace)) &&
-              !self.exists({
-                namespace: descriptor.namespace,
-                language: language!,
-              })
-            );
-          })
+        pendingCacheKeys.find((key) => {
+          const descriptor = decodeCacheKey(key);
+          return (
+            (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
+            !self.exists({
+              namespace: descriptor.namespace,
+              language: language,
+            })
+          );
+        })
       );
     },
 
-    async loadRecords(descriptors: CacheDescriptor[], isDev: boolean) {
+    async loadRecords(descriptors: CacheDescriptor[], options?: LoadOptions) {
       const withPromises = descriptors.map((descriptor) => {
         const keyObject = withDefaultNs(descriptor);
         const cacheKey = encodeCacheKey(keyObject);
+        if (options?.useCache) {
+          const exists = self.exists(keyObject, true);
+
+          if (exists) {
+            return {
+              new: false,
+              keyObject,
+              cacheKey,
+            };
+          }
+        }
+
         const existingPromise = asyncRequests.get(cacheKey);
 
         if (existingPromise) {
@@ -240,7 +283,7 @@ export function Cache(
           };
         }
         const dataPromise =
-          fetchData(keyObject, isDev) || Promise.resolve(undefined);
+          fetchData(keyObject, !options?.noDev) || Promise.resolve(undefined);
         asyncRequests.set(cacheKey, dataPromise);
         return {
           new: true,
@@ -252,16 +295,20 @@ export function Cache(
       fetchingObserver.notify();
       loadingObserver.notify();
 
-      const results = await Promise.all(withPromises.map((val) => val.promise));
+      const promisesToWait = withPromises
+        .map((val) => val.promise)
+        .filter(Boolean);
 
-      withPromises.forEach((value, i) => {
+      const fetchedData = await Promise.all(promisesToWait);
+
+      withPromises.forEach((value) => {
         const promiseChanged =
           asyncRequests.get(value.cacheKey) !== value.promise;
         // if promise has changed in between, it means cache been invalidated or
         // new data are being fetched
         if (value.new && !promiseChanged) {
           asyncRequests.delete(value.cacheKey);
-          const data = results[i];
+          const data = fetchedData[0];
           if (data) {
             self.addRecord(value.keyObject, data);
           } else if (!self.getRecord(value.keyObject)) {
@@ -269,20 +316,15 @@ export function Cache(
             self.addRecord(value.keyObject, {});
           }
         }
+        if (value.promise) {
+          fetchedData.shift();
+        }
       });
       fetchingObserver.notify();
       loadingObserver.notify();
 
-      return withPromises.map((val) => self.getRecord(val.keyObject)!);
-    },
-
-    getAllRecords() {
-      const entries = Array.from(cache.entries());
-      return entries.map(([key, entry]) => {
-        return {
-          ...decodeCacheKey(key),
-          data: entry.data,
-        };
+      return withPromises.map((val) => {
+        return self.getRecord(val.keyObject)!;
       });
     },
   });

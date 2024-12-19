@@ -20,9 +20,7 @@ describe('can handle relative urls in apiUrl', () => {
         apiUrl: '/test',
         apiKey: 'test',
       });
-    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual(
-      new Map()
-    );
+    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual({});
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const args = fetchMock.mock.calls[0] as any;
     expect(args[0]).toEqual(
@@ -41,9 +39,7 @@ describe('can handle relative urls in apiUrl', () => {
         apiUrl: 'https://test.com/abcd',
         apiKey: 'test',
       });
-    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual(
-      new Map()
-    );
+    await expect(tolgee.loadRecord({ language: 'en' })).resolves.toEqual({});
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const args = fetchMock.mock.calls[0] as any;
     expect(args[0]).toEqual(

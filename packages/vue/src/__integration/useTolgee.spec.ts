@@ -58,13 +58,13 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ initialLoad: 'true' });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await runPromise;
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
     tolgee.changeLanguage('en');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       checkState({ initialLoad: 'false' });
     });
@@ -75,11 +75,11 @@ describe('useTranslation hook integration', () => {
       props: { events: ['language'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await runPromise;
     checkState({ language: 'cs' });
     tolgee.changeLanguage('en');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       checkState({ language: 'en' });
     });
@@ -90,11 +90,11 @@ describe('useTranslation hook integration', () => {
       props: { events: ['pendingLanguage'] },
       global: { plugins: [[VueTolgee, { tolgee }]] },
     });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await runPromise;
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     tolgee.changeLanguage('en');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(async () => {
       checkState({ language: 'cs', pendingLanguage: 'en' });
     });
@@ -107,7 +107,7 @@ describe('useTranslation hook integration', () => {
     });
 
     checkState({ loading: 'true', fetching: 'true' });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await runPromise;
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
@@ -116,7 +116,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'false', fetching: 'true' });
     });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });
@@ -124,7 +124,7 @@ describe('useTranslation hook integration', () => {
     await waitFor(() => {
       checkState({ loading: 'true', fetching: 'true' });
     });
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(async () => {
       checkState({ loading: 'false', fetching: 'false' });
     });

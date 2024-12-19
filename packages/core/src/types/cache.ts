@@ -2,6 +2,8 @@ export type TranslationValue = string | undefined | null;
 
 export type TranslationsFlat = Map<string, TranslationValue>;
 
+export type TranslationsFlatRecord = Record<string, TranslationValue>;
+
 export type TreeTranslationsData = {
   [key: string]: TranslationValue | TreeTranslationsData;
 };
@@ -31,7 +33,23 @@ export type ChangeTranslationInterface = (
 ) => TranslationChanger;
 
 export type CachePublicRecord = {
-  data: TranslationsFlat;
+  data: TranslationsFlatRecord;
   language: string;
   namespace: string;
 };
+
+export type LoadOptions = {
+  noDev?: boolean;
+  useCache?: boolean;
+};
+
+export type LoadRequiredOptions = LoadOptions & {
+  language?: string;
+};
+
+export type MatrixOptions = {
+  languages: string[] | 'all';
+  namespaces: string[] | 'all';
+};
+
+export type LoadMatrixOptions = LoadOptions & MatrixOptions;

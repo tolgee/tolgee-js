@@ -59,9 +59,7 @@ export class TranslateService implements OnDestroy {
       // noinspection JSIgnoredPromiseFromCall
       translate();
 
-      const subscription = this.tolgee
-        .onNsUpdate(translate)
-        .subscribeNs(params.ns);
+      const subscription = this.tolgee.on('update', translate)
 
       return () => {
         this.tolgee.removeActiveNs(params.ns);
@@ -121,7 +119,7 @@ export class TranslateService implements OnDestroy {
    * @param event the event to listen
    */
   on<Event extends keyof EventType>(event: Event) {
-    return new Observable<ListenerEvent<EventType[Event]>>((subscriber) => {
+    return new Observable<ListenerEvent<Event, EventType[Event]>>((subscriber) => {
       const subscription = this.tolgee.on(event, (value) => {
         this._ngZone.run(() => {
           subscriber.next(value as any);

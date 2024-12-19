@@ -6,9 +6,14 @@ import {
   TFnType,
   NsType,
   KeyAndNamespacesInternal,
+  CacheDescriptorInternal,
+  LoadOptions,
+  LoadRequiredOptions,
+  LoadMatrixOptions,
+  MatrixOptions,
 } from '../types';
 import { Cache } from './Cache/Cache';
-import { getFallbackArray } from '../helpers';
+import { getFallbackArray, unique } from '../helpers';
 import { Plugins } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
@@ -55,6 +60,7 @@ export function Controller({ options }: StateServiceProps) {
     pluginService.getBackendDevRecord,
     state.withDefaultNs,
     state.isInitialLoading,
+    state.isCacheDisabled,
     fetchingObserver,
     loadingObserver
   );
@@ -82,16 +88,16 @@ export function Controller({ options }: StateServiceProps) {
   // gets all namespaces where translation could be located
   // takes (ns|default, fallback ns)
   function getDefaultAndFallbackNs(ns?: NsType) {
-    return [...getFallbackArray(getDefaultNs(ns)), ...getFallbackNs()];
+    return unique([...getFallbackArray(getDefaultNs(ns)), ...getFallbackNs()]);
   }
 
   // gets all namespaces which need to be loaded
   // takes (ns|default, initial ns, fallback ns, active ns)
-  function getRequiredNamespaces(ns: NsFallback) {
-    return [
+  function getRequiredNamespaces(ns?: NsFallback) {
+    return unique([
       ...getFallbackArray(ns ?? getDefaultNs()),
       ...state.getRequiredNamespaces(),
-    ];
+    ]);
   }
 
   function changeTranslation(
@@ -117,22 +123,44 @@ export function Controller({ options }: StateServiceProps) {
   function getRequiredRecords(lang?: string, ns?: NsFallback) {
     const languages = state.getFallbackLangs(lang);
     const namespaces = getRequiredNamespaces(ns);
-    const result: CacheDescriptor[] = [];
+    const result: CacheDescriptorInternal[] = [];
     languages.forEach((language) => {
       namespaces.forEach((namespace) => {
-        if (!cache.exists({ language, namespace }, true)) {
-          result.push({ language, namespace });
-        }
+        result.push({ language, namespace });
       });
     });
     return result;
   }
 
-  function loadRequiredRecords(lang?: string, ns?: NsFallback) {
-    const descriptors = getRequiredRecords(lang, ns);
-    if (descriptors.length) {
-      return valueOrPromise(self.loadRecords(descriptors), () => {});
+  function getMissingRecords(lang?: string, ns?: NsFallback) {
+    return getRequiredRecords(lang, ns).filter(
+      (descriptor) => !cache.exists(descriptor, true)
+    );
+  }
+
+  function getMatrixRecords(options: MatrixOptions) {
+    let languages: string[] = [];
+    let namespaces: string[] = [];
+    if (Array.isArray(options.languages)) {
+      languages = options.languages;
+    } else if (options.languages === 'all') {
+      languages = self.getAvailableLanguages()!;
     }
+
+    if (Array.isArray(options.namespaces)) {
+      namespaces = options.namespaces;
+    } else if (options.namespaces === 'all') {
+      namespaces = getRequiredNamespaces();
+    }
+
+    const records: CacheDescriptorInternal[] = [];
+
+    languages.forEach((language) => {
+      namespaces.forEach((namespace) => {
+        records.push({ language, namespace });
+      });
+    });
+    return records;
   }
 
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
@@ -149,8 +177,13 @@ export function Controller({ options }: StateServiceProps) {
 
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
-      // fail if there is no language
-      return loadRequiredRecords();
+      const missingRecords = getMissingRecords();
+      if (
+        missingRecords.length &&
+        state.getInitialOptions().autoLoadRequiredData
+      ) {
+        return cache.loadRecords(missingRecords, { useCache: true });
+      }
     });
 
     if (isPromise(data)) {
@@ -218,8 +251,10 @@ export function Controller({ options }: StateServiceProps) {
       }
       state.setPendingLanguage(language);
 
-      if (state.isRunning()) {
-        await loadRequiredRecords(language);
+      if (state.isRunning() && state.getInitialOptions().autoLoadRequiredData) {
+        await cache.loadRecords(getRequiredRecords(language), {
+          useCache: true,
+        });
       }
 
       if (language === state.getPendingLanguage()) {
@@ -235,16 +270,14 @@ export function Controller({ options }: StateServiceProps) {
         state.addActiveNs(ns);
       }
       if (state.isRunning()) {
-        await loadRequiredRecords(undefined, ns);
+        await cache.loadRecords(getRequiredRecords(undefined, ns), {
+          useCache: true,
+        });
       }
     },
 
-    loadRecords(descriptors: CacheDescriptor[]) {
-      return cache.loadRecords(descriptors, self.isDev());
-    },
-
-    async loadRecord(descriptor: CacheDescriptor) {
-      return (await self.loadRecords([descriptor]))[0];
+    async loadRecord(descriptor: CacheDescriptor, options?: LoadOptions) {
+      return (await self.loadRecords([descriptor], options))[0]?.data;
     },
 
     isLoading(ns?: NsFallback) {
@@ -280,6 +313,19 @@ export function Controller({ options }: StateServiceProps) {
       return Boolean(
         state.getInitialOptions().apiKey && state.getInitialOptions().apiUrl
       );
+    },
+
+    async loadRequired(options?: LoadRequiredOptions) {
+      if (!options?.language) {
+        await initializeLanguage();
+      }
+      const requiredRecords = getRequiredRecords();
+      return self.loadRecords(requiredRecords, options);
+    },
+
+    async loadMatrix(options: LoadMatrixOptions) {
+      const records = getMatrixRecords(options);
+      return self.loadRecords(records, options);
     },
 
     run() {

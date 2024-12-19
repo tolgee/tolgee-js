@@ -21,11 +21,10 @@ export const useTranslateInternal = (ns?: NsFallback) => {
   }
   const t = ref(createTFunction());
 
-  const subscription = tolgee.value.onNsUpdate(() => {
+  const subscription = tolgee.value.on('update', () => {
     t.value = createTFunction();
     isLoading.value = !tolgee.value.isLoaded(namespaces);
   });
-  subscription.subscribeNs(namespaces);
   tolgee.value.addActiveNs(namespaces);
 
   onUnmounted(() => {
@@ -35,14 +34,9 @@ export const useTranslateInternal = (ns?: NsFallback) => {
 
   const isLoading = ref(!tolgee.value.isLoaded(namespaces));
 
-  const subscribeToNs = (ns: NsFallback) => {
-    subscription.subscribeNs(ns);
-  };
-
   function createTFunction() {
     return (props: TranslateProps<any>) => {
       const fallbackNs = props.ns ?? namespaces?.[0];
-      subscribeToNs(fallbackNs);
       return tolgee.value.t({ ...props, ns: fallbackNs }) as any;
     };
   }
