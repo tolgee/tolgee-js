@@ -9,14 +9,14 @@ type Props = {
 };
 
 export default async function LocaleLayout({ children }: Props) {
-  const locale = await getLanguage();
+  const language = await getLanguage();
   const tolgee = await getTolgee();
-  const staticData = await tolgee.load(locale);
+  const staticData = await tolgee.load();
 
   return (
-    <html lang={locale}>
+    <html lang={language}>
       <body>
-        <TolgeeNextProvider language={locale} staticData={staticData}>
+        <TolgeeNextProvider language={language} staticData={staticData}>
           {children}
         </TolgeeNextProvider>
       </body>

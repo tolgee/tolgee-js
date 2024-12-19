@@ -47,6 +47,10 @@ export function State(
       return state.isInitialLoading;
     },
 
+    isCacheDisabled() {
+      return state.initialOptions.disableCache;
+    },
+
     setInitialLoading(value: boolean) {
       state.isInitialLoading = value;
     },

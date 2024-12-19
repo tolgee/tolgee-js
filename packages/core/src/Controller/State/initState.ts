@@ -141,6 +141,11 @@ export type TolgeeOptionsInternal = {
    * automatically load required records on `run` and `changeLanguage` (default: true)
    */
   autoLoadRequiredData: boolean;
+
+  /**
+   * no internal cache is being held inside tolgee
+   */
+  disableCache: boolean;
 };
 
 export type TolgeeOptions = Partial<
@@ -166,6 +171,7 @@ const defaultValues: TolgeeOptionsInternal = {
   autoLoadRequiredData: true,
   fetch: createFetchFunction(),
   onTranslationMissing: DEFAULT_MISSING_TRANSLATION,
+  disableCache: false,
 };
 
 export const combineOptions = <T extends TolgeeOptions>(

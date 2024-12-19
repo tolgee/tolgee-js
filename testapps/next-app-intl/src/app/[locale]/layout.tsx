@@ -19,7 +19,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   // it's important you provide all data which are needed for initial render
   // so current locale and also fallback locales + necessary namespaces
   const tolgee = await getTolgee();
-  const records = await tolgee.load(locale);
+  const records = await tolgee.load();
 
   return (
     <html lang={locale}>

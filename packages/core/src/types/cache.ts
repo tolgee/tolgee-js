@@ -39,6 +39,10 @@ export type CachePublicRecord = {
 };
 
 export type LoadOptions = {
-  dev?: boolean;
+  noDev?: boolean;
   noCache?: boolean;
+};
+
+export type LoadRequiredOptions = LoadOptions & {
+  language?: string;
 };

@@ -34,6 +34,7 @@ export function Cache(
   backendGetDevRecord: BackendGetRecordInternal,
   withDefaultNs: (descriptor: CacheDescriptor) => CacheDescriptorInternal,
   isInitialLoading: () => boolean,
+  isCacheDisabled: () => boolean,
   fetchingObserver: ValueObserverInstance<boolean>,
   loadingObserver: ValueObserverInstance<boolean>
 ) {
@@ -47,12 +48,14 @@ export function Cache(
     data: TreeTranslationsData,
     recordVersion: number
   ) {
-    const cacheKey = encodeCacheKey(descriptor);
-    cache.set(cacheKey, {
-      data: flattenTranslations(data),
-      version: recordVersion,
-    });
-    events.onCacheChange.emit(descriptor);
+    if (!isCacheDisabled()) {
+      const cacheKey = encodeCacheKey(descriptor);
+      cache.set(cacheKey, {
+        data: flattenTranslations(data),
+        version: recordVersion,
+      });
+      events.onCacheChange.emit(descriptor);
+    }
   }
 
   /**
@@ -230,22 +233,26 @@ export function Cache(
       );
     },
 
-    isLoading(language: string | undefined, ns?: NsFallback) {
+    isLoading(language: string, ns?: NsFallback) {
       const namespaces = getFallbackArray(ns);
 
+      if (isInitialLoading()) {
+        return true;
+      }
+
+      const pendingCacheKeys = Array.from(asyncRequests.keys());
+
       return Boolean(
-        isInitialLoading() ||
-          Array.from(asyncRequests.keys()).find((key) => {
-            const descriptor = decodeCacheKey(key);
-            return (
-              (!namespaces.length ||
-                namespaces.includes(descriptor.namespace)) &&
-              !self.exists({
-                namespace: descriptor.namespace,
-                language: language!,
-              })
-            );
-          })
+        pendingCacheKeys.find((key) => {
+          const descriptor = decodeCacheKey(key);
+          return (
+            (!namespaces.length || namespaces.includes(descriptor.namespace)) &&
+            !self.exists({
+              namespace: descriptor.namespace,
+              language: language,
+            })
+          );
+        })
       );
     },
 
@@ -276,8 +283,7 @@ export function Cache(
           };
         }
         const dataPromise =
-          fetchData(keyObject, Boolean(options?.dev)) ||
-          Promise.resolve(undefined);
+          fetchData(keyObject, !options?.noDev) || Promise.resolve(undefined);
         asyncRequests.set(cacheKey, dataPromise);
         return {
           new: true,

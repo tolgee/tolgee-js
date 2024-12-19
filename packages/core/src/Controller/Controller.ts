@@ -8,6 +8,7 @@ import {
   KeyAndNamespacesInternal,
   CacheDescriptorInternal,
   LoadOptions,
+  LoadRequiredOptions,
 } from '../types';
 import { Cache } from './Cache/Cache';
 import { getFallbackArray } from '../helpers';
@@ -57,6 +58,7 @@ export function Controller({ options }: StateServiceProps) {
     pluginService.getBackendDevRecord,
     state.withDefaultNs,
     state.isInitialLoading,
+    state.isCacheDisabled,
     fetchingObserver,
     loadingObserver
   );
@@ -134,31 +136,6 @@ export function Controller({ options }: StateServiceProps) {
     );
   }
 
-  function loadRequiredRecords(
-    lang?: string,
-    ns?: NsFallback,
-    options?: LoadOptions
-  ) {
-    const descriptors = getRequiredRecords(lang, ns);
-
-    if (descriptors.length) {
-      return valueOrPromise(
-        self.loadRecords(descriptors, options),
-        (value) => value
-      );
-    }
-    return [];
-  }
-
-  function loadMissingRecords(lang?: string, ns?: NsFallback) {
-    const descriptors = getMissingRecords(lang, ns);
-
-    if (descriptors.length) {
-      return valueOrPromise(self.loadRecords(descriptors), (value) => value);
-    }
-    return [];
-  }
-
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
     const languages = state.getFallbackLangs();
     const namespaces = getDefaultAndFallbackNs(ns ?? undefined);
@@ -173,9 +150,12 @@ export function Controller({ options }: StateServiceProps) {
 
   function loadInitial() {
     const data = valueOrPromise(initializeLanguage(), () => {
-      if (state.getInitialOptions().autoLoadRequiredData) {
-        // fail if there is no language
-        return loadMissingRecords();
+      const missingRecords = getMissingRecords();
+      if (
+        missingRecords.length &&
+        state.getInitialOptions().autoLoadRequiredData
+      ) {
+        return cache.loadRecords(missingRecords);
       }
     });
 
@@ -245,7 +225,7 @@ export function Controller({ options }: StateServiceProps) {
       state.setPendingLanguage(language);
 
       if (state.isRunning() && state.getInitialOptions().autoLoadRequiredData) {
-        await loadRequiredRecords(language);
+        await cache.loadRecords(getRequiredRecords(language));
       }
 
       if (language === state.getPendingLanguage()) {
@@ -261,12 +241,8 @@ export function Controller({ options }: StateServiceProps) {
         state.addActiveNs(ns);
       }
       if (state.isRunning()) {
-        await loadRequiredRecords(undefined, ns);
+        await cache.loadRecords(getRequiredRecords(undefined, ns));
       }
-    },
-
-    loadRecords(descriptors: CacheDescriptor[], options?: LoadOptions) {
-      return cache.loadRecords(descriptors, { dev: self.isDev(), ...options });
     },
 
     async loadRecord(descriptor: CacheDescriptor, options?: LoadOptions) {
@@ -310,14 +286,12 @@ export function Controller({ options }: StateServiceProps) {
       );
     },
 
-    async load(language?: string) {
-      if (!language) {
+    async load(options?: LoadRequiredOptions) {
+      if (!options?.language) {
         await initializeLanguage();
       }
-      return loadRequiredRecords(language, undefined, {
-        dev: self.isDev(),
-        noCache: true,
-      });
+      const requiredRecords = getRequiredRecords();
+      return self.loadRecords(requiredRecords, options);
     },
 
     run() {

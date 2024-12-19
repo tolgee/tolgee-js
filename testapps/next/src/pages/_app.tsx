@@ -29,6 +29,8 @@ MyApp.getInitialProps = async (
   const ctx = await App.getInitialProps(context);
   return {
     ...ctx,
-    staticData: await tolgee.load(context.ctx.locale!),
+    staticData: await tolgee.load({
+      language: context.ctx.locale!,
+    }),
   };
 };
