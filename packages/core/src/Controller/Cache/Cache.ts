@@ -259,7 +259,6 @@ export function Cache(
           if (exists) {
             return {
               new: false,
-              promise: Promise.resolve(self.getRecord(keyObject)?.data),
               keyObject,
               cacheKey,
             };
@@ -290,22 +289,29 @@ export function Cache(
       fetchingObserver.notify();
       loadingObserver.notify();
 
-      const results = await Promise.all(withPromises.map((val) => val.promise));
+      const promisesToWait = withPromises
+        .map((val) => val.promise)
+        .filter(Boolean);
 
-      withPromises.forEach((value, i) => {
+      const fetchedData = await Promise.all(promisesToWait);
+
+      withPromises.forEach((value) => {
         const promiseChanged =
           asyncRequests.get(value.cacheKey) !== value.promise;
         // if promise has changed in between, it means cache been invalidated or
         // new data are being fetched
         if (value.new && !promiseChanged) {
           asyncRequests.delete(value.cacheKey);
-          const data = results[i];
+          const data = fetchedData[0];
           if (data) {
             self.addRecord(value.keyObject, data);
           } else if (!self.getRecord(value.keyObject)) {
             // if no data exist, put empty object
             self.addRecord(value.keyObject, {});
           }
+        }
+        if (value.promise) {
+          fetchedData.shift();
         }
       });
       fetchingObserver.notify();
