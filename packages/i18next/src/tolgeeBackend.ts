@@ -14,7 +14,9 @@ export const tolgeeBackend = (tolgee: TolgeeInstance): Module => {
         });
         callback(
           null,
-          translations ? Object.fromEntries(translations) : undefined
+          translations instanceof Map
+            ? Object.fromEntries(translations)
+            : translations
         );
       } catch (e) {
         // eslint-disable-next-line no-console

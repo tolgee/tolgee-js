@@ -40,9 +40,7 @@ export const TranslationMethodsClient = () => {
                   i: <i />,
                   key: 'value',
                 }}
-              >
-                Hey
-              </T>
+              />
             </span>
           </div>
         </div>

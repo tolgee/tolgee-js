@@ -9,6 +9,7 @@ import { wait } from '@tolgee/testing/wait';
 import { NgxTolgeeModule } from '../../lib/ngx-tolgee.module';
 import { TOLGEE_INSTANCE } from '../../lib/tolgee-instance-token';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
+import mockTranslations from '@tolgee/testing/mockTranslations';
 
 let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
@@ -57,8 +58,11 @@ describe('resolving', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     staticDataMock = mockStaticDataAsync();
-    staticDataMock.resolvablePromises.en.resolve();
-    staticDataMock.resolvablePromises.cs.resolve();
+    staticDataMock.promises = {
+      ...staticDataMock.promises,
+      en: mockTranslations.en,
+      cs: mockTranslations.cs,
+    } as any;
   });
 
   it('waits for namespace load before module is rendered', async () => {

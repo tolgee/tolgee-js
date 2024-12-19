@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { TolgeeNextProvider } from '@/tolgee/client';
-import { getStaticData } from '@/tolgee/shared';
+import { getTolgee } from '@/tolgee/server';
 import { getLanguage } from '@/tolgee/language';
 import './style.css';
 
@@ -9,15 +9,14 @@ type Props = {
 };
 
 export default async function LocaleLayout({ children }: Props) {
-  const locale = await getLanguage();
-  // it's important you provide all data which are needed for initial render
-  // so current language and also fallback languages + necessary namespaces
-  const staticData = await getStaticData([locale, 'en']);
+  const language = await getLanguage();
+  const tolgee = await getTolgee();
+  const staticData = await tolgee.loadRequired();
 
   return (
-    <html lang={locale}>
+    <html lang={language}>
       <body>
-        <TolgeeNextProvider language={locale} staticData={staticData}>
+        <TolgeeNextProvider language={language} staticData={staticData}>
           {children}
         </TolgeeNextProvider>
       </body>
