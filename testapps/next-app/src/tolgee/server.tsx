@@ -12,7 +12,7 @@ export const { getTolgee, getTranslate, T, getTolgeeStaticInstance } =
         },
         language,
       });
-      await tolgee.load();
+      await tolgee.loadRequired();
       return tolgee;
     },
   });

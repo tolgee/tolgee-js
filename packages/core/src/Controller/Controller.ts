@@ -9,9 +9,11 @@ import {
   CacheDescriptorInternal,
   LoadOptions,
   LoadRequiredOptions,
+  LoadMatrixOptions,
+  MatrixOptions,
 } from '../types';
 import { Cache } from './Cache/Cache';
-import { getFallbackArray } from '../helpers';
+import { getFallbackArray, unique } from '../helpers';
 import { Plugins } from './Plugins/Plugins';
 import { ValueObserver } from './ValueObserver';
 import { State } from './State/State';
@@ -86,16 +88,16 @@ export function Controller({ options }: StateServiceProps) {
   // gets all namespaces where translation could be located
   // takes (ns|default, fallback ns)
   function getDefaultAndFallbackNs(ns?: NsType) {
-    return [...getFallbackArray(getDefaultNs(ns)), ...getFallbackNs()];
+    return unique([...getFallbackArray(getDefaultNs(ns)), ...getFallbackNs()]);
   }
 
   // gets all namespaces which need to be loaded
   // takes (ns|default, initial ns, fallback ns, active ns)
-  function getRequiredNamespaces(ns: NsFallback) {
-    return [
+  function getRequiredNamespaces(ns?: NsFallback) {
+    return unique([
       ...getFallbackArray(ns ?? getDefaultNs()),
       ...state.getRequiredNamespaces(),
-    ];
+    ]);
   }
 
   function changeTranslation(
@@ -136,6 +138,31 @@ export function Controller({ options }: StateServiceProps) {
     );
   }
 
+  function getMatrixRecords(options: MatrixOptions) {
+    let languages: string[] = [];
+    let namespaces: string[] = [];
+    if (Array.isArray(options.languages)) {
+      languages = options.languages;
+    } else if (options.languages === 'all') {
+      languages = self.getAvailableLanguages()!;
+    }
+
+    if (Array.isArray(options.namespaces)) {
+      namespaces = options.namespaces;
+    } else if (options.namespaces === 'all') {
+      namespaces = getRequiredNamespaces();
+    }
+
+    const records: CacheDescriptorInternal[] = [];
+
+    languages.forEach((language) => {
+      namespaces.forEach((namespace) => {
+        records.push({ language, namespace });
+      });
+    });
+    return records;
+  }
+
   function getTranslationNs({ key, ns }: KeyAndNamespacesInternal) {
     const languages = state.getFallbackLangs();
     const namespaces = getDefaultAndFallbackNs(ns ?? undefined);
@@ -155,7 +182,7 @@ export function Controller({ options }: StateServiceProps) {
         missingRecords.length &&
         state.getInitialOptions().autoLoadRequiredData
       ) {
-        return cache.loadRecords(missingRecords);
+        return cache.loadRecords(missingRecords, { useCache: true });
       }
     });
 
@@ -225,7 +252,9 @@ export function Controller({ options }: StateServiceProps) {
       state.setPendingLanguage(language);
 
       if (state.isRunning() && state.getInitialOptions().autoLoadRequiredData) {
-        await cache.loadRecords(getRequiredRecords(language));
+        await cache.loadRecords(getRequiredRecords(language), {
+          useCache: true,
+        });
       }
 
       if (language === state.getPendingLanguage()) {
@@ -241,14 +270,14 @@ export function Controller({ options }: StateServiceProps) {
         state.addActiveNs(ns);
       }
       if (state.isRunning()) {
-        await cache.loadRecords(getRequiredRecords(undefined, ns));
+        await cache.loadRecords(getRequiredRecords(undefined, ns), {
+          useCache: true,
+        });
       }
     },
 
     async loadRecord(descriptor: CacheDescriptor, options?: LoadOptions) {
-      return (
-        await self.loadRecords([descriptor], { noCache: true, ...options })
-      )[0]?.data;
+      return (await self.loadRecords([descriptor], options))[0]?.data;
     },
 
     isLoading(ns?: NsFallback) {
@@ -286,12 +315,17 @@ export function Controller({ options }: StateServiceProps) {
       );
     },
 
-    async load(options?: LoadRequiredOptions) {
+    async loadRequired(options?: LoadRequiredOptions) {
       if (!options?.language) {
         await initializeLanguage();
       }
       const requiredRecords = getRequiredRecords();
       return self.loadRecords(requiredRecords, options);
+    },
+
+    async loadMatrix(options: LoadMatrixOptions) {
+      const records = getMatrixRecords(options);
+      return self.loadRecords(records, options);
     },
 
     run() {

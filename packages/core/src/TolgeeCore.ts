@@ -80,9 +80,16 @@ function createTolgee(options: TolgeeOptions) {
     removeActiveNs: controller.removeActiveNs,
 
     /**
-     * Load required records with fallback languages and namespaces
+     * Load records which would be loaded by `run` function
+     *
+     * You can provide language if not previously set on tolgee instance
      */
-    load: controller.load,
+    loadRequired: controller.loadRequired,
+
+    /**
+     * Load records in matrix (languages x namespaces)
+     */
+    loadMatrix: controller.loadMatrix,
 
     /**
      * Manually load multiple records from `Backend` (or `DevBackend` when in dev mode)

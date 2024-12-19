@@ -40,9 +40,16 @@ export type CachePublicRecord = {
 
 export type LoadOptions = {
   noDev?: boolean;
-  noCache?: boolean;
+  useCache?: boolean;
 };
 
 export type LoadRequiredOptions = LoadOptions & {
   language?: string;
 };
+
+export type MatrixOptions = {
+  languages: string[] | 'all';
+  namespaces: string[] | 'all';
+};
+
+export type LoadMatrixOptions = LoadOptions & MatrixOptions;

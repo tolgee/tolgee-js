@@ -260,7 +260,7 @@ export function Cache(
       const withPromises = descriptors.map((descriptor) => {
         const keyObject = withDefaultNs(descriptor);
         const cacheKey = encodeCacheKey(keyObject);
-        if (!options?.noCache) {
+        if (options?.useCache) {
           const exists = self.exists(keyObject, true);
 
           if (exists) {

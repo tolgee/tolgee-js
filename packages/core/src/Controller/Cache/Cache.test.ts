@@ -103,7 +103,9 @@ describe('cache', () => {
   it('uses cache when fetching twice the same thing', async () => {
     await cache.loadRecords([{ language: 'en' }]);
     expect(mockedBackendGetDevRecord).toBeCalledTimes(1);
-    const result = await cache.loadRecords([{ language: 'en' }]);
+    const result = await cache.loadRecords([{ language: 'en' }], {
+      useCache: true,
+    });
     expect(mockedBackendGetDevRecord).toBeCalledTimes(1);
     expect(result[0].data).toEqual({
       language: 'en',
@@ -117,6 +119,7 @@ describe('cache', () => {
     expect(mockedBackendGetRecord).toBeCalledTimes(1);
     const result = await cache.loadRecords([{ language: 'en' }], {
       noDev: true,
+      useCache: true,
     });
     expect(mockedBackendGetRecord).toBeCalledTimes(1);
     expect(result[0].data).toEqual({
@@ -129,17 +132,17 @@ describe('cache', () => {
   it('does not use cache when `noCache` is on', async () => {
     await cache.loadRecords([{ language: 'en' }]);
     expect(mockedBackendGetDevRecord).toBeCalledTimes(1);
-    await cache.loadRecords([{ language: 'en' }], { noCache: true });
+    await cache.loadRecords([{ language: 'en' }]);
     expect(mockedBackendGetDevRecord).toBeCalledTimes(2);
   });
 
   it('correctly returns combination of non-cached and cached', async () => {
     await cache.loadRecords([{ language: 'en' }]);
     expect(mockedBackendGetDevRecord).toBeCalledTimes(1);
-    const result = await cache.loadRecords([
-      { language: 'en' },
-      { language: 'en', namespace: 'new' },
-    ]);
+    const result = await cache.loadRecords(
+      [{ language: 'en' }, { language: 'en', namespace: 'new' }],
+      { useCache: true }
+    );
     expect(mockedBackendGetDevRecord).toBeCalledTimes(2);
     expect(result).toEqual([
       {
@@ -179,7 +182,7 @@ describe('cache', () => {
     expect(onLoadingChange).toBeCalledTimes(2);
     expect(onFetchingChange).toBeCalledTimes(2);
     cache.invalidate();
-    await cache.loadRecords([{ language: 'en' }], { noCache: true });
+    await cache.loadRecords([{ language: 'en' }]);
     expect(onFetchingChange).toBeCalledTimes(4);
     expect(onLoadingChange).toBeCalledTimes(2);
   });

@@ -11,7 +11,7 @@ type Props = {
 export default async function LocaleLayout({ children }: Props) {
   const language = await getLanguage();
   const tolgee = await getTolgee();
-  const staticData = await tolgee.load();
+  const staticData = await tolgee.loadRequired();
 
   return (
     <html lang={language}>

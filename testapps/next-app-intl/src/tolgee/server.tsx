@@ -13,7 +13,7 @@ export const { getTolgee, getTranslate, T } = createServerInstance({
       language,
     });
     // preload all the languages for the server instance
-    await tolgee.load();
+    await tolgee.loadRequired();
     return tolgee;
   },
 });
