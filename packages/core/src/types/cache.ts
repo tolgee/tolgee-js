@@ -1,8 +1,6 @@
 export type TranslationValue = string | undefined | null;
 
-export type TranslationsFlat = Map<string, TranslationValue>;
-
-export type TranslationsFlatRecord = Record<string, TranslationValue>;
+export type TranslationsFlat = Record<string, TranslationValue>;
 
 export type TreeTranslationsData = {
   [key: string]: TranslationValue | TreeTranslationsData;
@@ -33,9 +31,16 @@ export type ChangeTranslationInterface = (
 ) => TranslationChanger;
 
 export type CachePublicRecord = {
-  data: TranslationsFlatRecord;
+  data: TranslationsFlat;
   language: string;
   namespace: string;
+};
+
+export type CacheInternalRecord = {
+  data: TranslationsFlat;
+  language: string;
+  namespace: string;
+  cacheKey: string;
 };
 
 export type LoadOptions = {

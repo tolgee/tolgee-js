@@ -2,12 +2,13 @@ import {
   CacheDescriptor,
   CacheDescriptorInternal,
   NsFallback,
-  TranslationsFlat,
   TranslationValue,
   TreeTranslationsData,
   BackendGetRecordInternal,
   RecordFetchError,
   LoadOptions,
+  CacheInternalRecord,
+  TranslationsFlat,
 } from '../../types';
 import { getFallbackArray, isPromise, unique } from '../../helpers';
 import { TolgeeStaticData, TolgeeStaticDataProp } from '../State/initState';
@@ -45,17 +46,15 @@ export function Cache(
 
   function addRecordInternal(
     descriptor: CacheDescriptorInternal,
-    data: TreeTranslationsData,
+    data: TranslationsFlat,
     recordVersion: number
   ) {
-    if (!isCacheDisabled()) {
-      const cacheKey = encodeCacheKey(descriptor);
-      cache.set(cacheKey, {
-        data: flattenTranslations(data),
-        version: recordVersion,
-      });
-      events.onCacheChange.emit(descriptor);
-    }
+    const cacheKey = encodeCacheKey(descriptor);
+    cache.set(cacheKey, {
+      data: flattenTranslations(data),
+      version: recordVersion,
+    });
+    events.onCacheChange.emit(decodeCacheKey(cacheKey));
   }
 
   /**
@@ -118,7 +117,7 @@ export function Cache(
           const key = encodeCacheKey(record);
           const existing = cache.get(key);
           if (!existing || existing.version === 0) {
-            addRecordInternal(record, record.data, 0);
+            addRecordInternal(record, flattenTranslations(record.data), 0);
           }
         }
       } else if (data) {
@@ -128,7 +127,7 @@ export function Cache(
             const descriptor = decodeCacheKey(key);
             const existing = cache.get(key);
             if (!existing || existing.version === 0) {
-              addRecordInternal(descriptor, value, 0);
+              addRecordInternal(descriptor, flattenTranslations(value), 0);
             }
           }
         });
@@ -141,7 +140,7 @@ export function Cache(
     },
 
     addRecord(descriptor: CacheDescriptorInternal, data: TreeTranslationsData) {
-      addRecordInternal(descriptor, data, version);
+      addRecordInternal(descriptor, flattenTranslations(data), version);
     },
 
     exists(descriptor: CacheDescriptorInternal, strict = false) {
@@ -152,7 +151,7 @@ export function Cache(
       return Boolean(record);
     },
 
-    getRecord(descriptor: CacheDescriptor) {
+    getRecord(descriptor: CacheDescriptor): CacheInternalRecord | undefined {
       const descriptorWithNs = withDefaultNs(descriptor);
       const cacheKey = encodeCacheKey(descriptorWithNs);
       const cacheRecord = cache.get(cacheKey);
@@ -162,7 +161,7 @@ export function Cache(
       return {
         ...descriptorWithNs,
         cacheKey,
-        data: Object.fromEntries(cacheRecord?.data.entries() ?? []),
+        data: cacheRecord.data,
       };
     },
 
@@ -172,15 +171,14 @@ export function Cache(
     },
 
     getTranslation(descriptor: CacheDescriptorInternal, key: string) {
-      return cache.get(encodeCacheKey(descriptor))?.data.get(key);
+      return cache.get(encodeCacheKey(descriptor))?.data[key];
     },
 
     getTranslationNs(namespaces: string[], languages: string[], key: string) {
       for (const namespace of namespaces) {
         for (const language of languages) {
-          const value = cache
-            .get(encodeCacheKey({ language, namespace }))
-            ?.data.get(key);
+          const value = cache.get(encodeCacheKey({ language, namespace }))
+            ?.data[key];
           if (value !== undefined && value !== null) {
             return [namespace];
           }
@@ -196,9 +194,8 @@ export function Cache(
     ) {
       for (const namespace of namespaces) {
         for (const language of languages) {
-          const value = cache
-            .get(encodeCacheKey({ language, namespace }))
-            ?.data.get(key);
+          const value = cache.get(encodeCacheKey({ language, namespace }))
+            ?.data[key];
           if (value !== undefined && value !== null) {
             return value;
           }
@@ -213,8 +210,10 @@ export function Cache(
       value: TranslationValue
     ) {
       const record = cache.get(encodeCacheKey(descriptor))?.data;
-      record?.set(key, value);
-      events.onCacheChange.emit({ ...descriptor, key });
+      if (record?.[key]) {
+        record[key] = value;
+        events.onCacheChange.emit({ ...descriptor, key });
+      }
     },
 
     isFetching(ns?: NsFallback) {
@@ -256,8 +255,20 @@ export function Cache(
       );
     },
 
-    async loadRecords(descriptors: CacheDescriptor[], options?: LoadOptions) {
-      const withPromises = descriptors.map((descriptor) => {
+    async loadRecords(
+      descriptors: CacheDescriptor[],
+      options?: LoadOptions
+    ): Promise<CacheInternalRecord[]> {
+      type WithPromise = {
+        new: boolean;
+        language: string;
+        namespace: string;
+        cacheKey: string;
+        promise?: Promise<TreeTranslationsData | undefined>;
+        data?: TranslationsFlat;
+      };
+
+      const withPromises: WithPromise[] = descriptors.map((descriptor) => {
         const keyObject = withDefaultNs(descriptor);
         const cacheKey = encodeCacheKey(keyObject);
         if (options?.useCache) {
@@ -265,10 +276,11 @@ export function Cache(
 
           if (exists) {
             return {
+              ...keyObject,
               new: false,
-              keyObject,
               cacheKey,
-            };
+              data: self.getRecord(keyObject)!.data,
+            } as WithPromise;
           }
         }
 
@@ -276,19 +288,22 @@ export function Cache(
 
         if (existingPromise) {
           return {
+            ...keyObject,
             new: false,
             promise: existingPromise,
-            keyObject,
             cacheKey,
           };
         }
+
         const dataPromise =
           fetchData(keyObject, !options?.noDev) || Promise.resolve(undefined);
+
         asyncRequests.set(cacheKey, dataPromise);
+
         return {
+          ...keyObject,
           new: true,
           promise: dataPromise,
-          keyObject,
           cacheKey,
         };
       });
@@ -302,30 +317,34 @@ export function Cache(
       const fetchedData = await Promise.all(promisesToWait);
 
       withPromises.forEach((value) => {
-        const promiseChanged =
-          asyncRequests.get(value.cacheKey) !== value.promise;
+        if (value.promise) {
+          value.data = flattenTranslations(fetchedData[0] ?? {});
+          fetchedData.shift();
+        }
         // if promise has changed in between, it means cache been invalidated or
         // new data are being fetched
+        const promiseChanged =
+          asyncRequests.get(value.cacheKey) !== value.promise;
         if (value.new && !promiseChanged) {
           asyncRequests.delete(value.cacheKey);
-          const data = fetchedData[0];
-          if (data) {
-            self.addRecord(value.keyObject, data);
-          } else if (!self.getRecord(value.keyObject)) {
+          if (value.data) {
+            self.addRecord(value, value.data);
+          } else if (!self.getRecord(value)) {
             // if no data exist, put empty object
-            self.addRecord(value.keyObject, {});
+            // so we know we don't have to fetch again
+            self.addRecord(value, {});
           }
-        }
-        if (value.promise) {
-          fetchedData.shift();
         }
       });
       fetchingObserver.notify();
       loadingObserver.notify();
 
-      return withPromises.map((val) => {
-        return self.getRecord(val.keyObject)!;
-      });
+      return withPromises.map((val) => ({
+        language: val.language,
+        namespace: val.namespace,
+        data: val.data ?? {},
+        cacheKey: val.cacheKey,
+      }));
     },
   });
 
