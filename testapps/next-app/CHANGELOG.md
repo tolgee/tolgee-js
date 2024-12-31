@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [5.33.3-prerelease.4a586561.0](https://github.com/tolgee/tolgee-js/compare/v5.33.2...v5.33.3-prerelease.4a586561.0) (2024-12-31)
+
+
+### Performance Improvements
+
+* sdk version 6 ([4a58656](https://github.com/tolgee/tolgee-js/commit/4a5865614cc1979d90a2f0b17196dae3205f94b6))
+
+
+### BREAKING CHANGES
+
+* - cache now returning plain objects instead of maps
+- renamed and updated getRequiredRecords
+- onNsUpdate removed in favor of `update` event
+- useSuspense in rect TolgeeProvider is now off by default
+- TolgeeProvider for vue has now standardized API
+
+
+
+
+
 ## [5.33.2](https://github.com/tolgee/tolgee-js/compare/v5.33.1...v5.33.2) (2024-12-18)
 
 
