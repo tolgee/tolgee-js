@@ -9,23 +9,21 @@
   let isLoading: boolean = !tolgee.isLoaded();
 
   setContext('tolgeeContext', {
-    tolgee,
+    tolgee
   } as TolgeeSvelteContext);
 
   onMount(() => {
     tolgee.run().finally(() => {
-      isLoading = false
-    })
+      isLoading = false;
+    });
   });
   onDestroy(tolgee.stop);
 </script>
 
-{#if !isLoading }
+{#if !isLoading}
   <slot />
-{:else }
-  {#if fallback}
-    {fallback}
-  {:else}
-    <slot name="fallback" />
-  {/if}
+{:else if fallback}
+  {fallback}
+{:else}
+  <slot name="fallback" />
 {/if}

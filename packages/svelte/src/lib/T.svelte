@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { NsType, TranslationKey } from '@tolgee/web';
+  import type { NsType, TranslationKey } from '@tolgee/web';
   import getTranslateInternal from './getTranslateInternal';
 
   export let keyName: TranslationKey;
@@ -13,7 +13,7 @@
     console.error('Missing keyName prop!');
   }
 
-  const { t } = getTranslateInternal()
+  const { t } = getTranslateInternal();
 </script>
 
 {$t({
@@ -22,5 +22,5 @@
   noWrap: noWrap,
   defaultValue: defaultValue,
   ns,
-  language,
+  language
 })}

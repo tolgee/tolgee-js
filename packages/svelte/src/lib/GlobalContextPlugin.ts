@@ -5,7 +5,7 @@ let globalContext: TolgeeSvelteContext | undefined;
 
 export const GlobalContextPlugin = (): TolgeePlugin => (tolgee) => {
   globalContext = {
-    tolgee,
+    tolgee
   };
   return tolgee;
 };

@@ -9,13 +9,13 @@ export const resolvablePromise = <T = any>() => {
 };
 
 export const DevToolsPlugin =
-  (postfix = ''): TolgeePlugin =>
+  (suffix = ''): TolgeePlugin =>
   (tolgee, tools) => {
     tolgee.updateOptions({ apiKey: 'test', apiUrl: 'test' });
     tools.setDevBackend({
       getRecord({ language, namespace }) {
         return Promise.resolve({
-          test: { sub: `${language}.${namespace || 'default'}${postfix}` },
+          test: { sub: `${language}.${namespace || 'default'}${suffix}` },
         });
       },
     });
@@ -23,12 +23,12 @@ export const DevToolsPlugin =
   };
 
 export const BackendPlugin =
-  (postfix = ''): TolgeePlugin =>
+  (suffix = ''): TolgeePlugin =>
   (tolgee, tools) => {
     tools.addBackend({
       getRecord({ language, namespace }) {
         return Promise.resolve({
-          test: { sub: `${language}.${namespace || 'default'}${postfix}` },
+          test: { sub: `${language}.${namespace || 'default'}${suffix}` },
         });
       },
     });

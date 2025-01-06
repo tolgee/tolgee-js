@@ -12,98 +12,98 @@ const API_URL = 'http://localhost';
 type CheckStateProps = Partial<Record<TolgeeEvent, string>>;
 
 const checkState = (props: CheckStateProps) => {
-	Object.entries(props).forEach(([event, value]) => {
-		expect(screen.queryByTestId(event)).toContainHTML(value);
-	});
+  Object.entries(props).forEach(([event, value]) => {
+    expect(screen.queryByTestId(event)).toContainHTML(value);
+  });
 };
 
 describe('getTolgee', () => {
-	let tolgee: TolgeeInstance;
-	let runPromise: Promise<void>;
-	let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
+  let tolgee: TolgeeInstance;
+  let runPromise: Promise<void>;
+  let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
 
-	beforeEach(async () => {
-		staticDataMock = mockStaticDataAsync();
-		tolgee = Tolgee().use(GlobalContextPlugin()).use(DevTools()).use(FormatIcu()).init({
-			apiUrl: API_URL,
-			language: 'cs',
-			staticData: staticDataMock.promises
-		});
-		runPromise = tolgee.run();
-	});
+  beforeEach(async () => {
+    staticDataMock = mockStaticDataAsync();
+    tolgee = Tolgee().use(GlobalContextPlugin()).use(DevTools()).use(FormatIcu()).init({
+      apiUrl: API_URL,
+      language: 'cs',
+      staticData: staticDataMock.promises
+    });
+    runPromise = tolgee.run();
+  });
 
-	it('updates initialLoading', async () => {
-		render(TestComponent, {
-			props: { events: ['initialLoad'] }
-		});
+  it('updates initialLoading', async () => {
+    render(TestComponent, {
+      props: { events: ['initialLoad'] }
+    });
 
-		checkState({ initialLoad: 'true' });
-		staticDataMock.resolvePending();
-		await runPromise;
-		await waitFor(() => {
-			checkState({ initialLoad: 'false' });
-		});
-		tolgee.changeLanguage('en');
-		staticDataMock.resolvePending();
-		await waitFor(() => {
-			checkState({ initialLoad: 'false' });
-		});
-	});
+    checkState({ initialLoad: 'true' });
+    staticDataMock.resolvePending();
+    await runPromise;
+    await waitFor(() => {
+      checkState({ initialLoad: 'false' });
+    });
+    tolgee.changeLanguage('en');
+    staticDataMock.resolvePending();
+    await waitFor(() => {
+      checkState({ initialLoad: 'false' });
+    });
+  });
 
-	it('updates language', async () => {
-		render(TestComponent, {
-			props: { events: ['language'] }
-		});
-		staticDataMock.resolvePending();
-		await runPromise;
-		checkState({ language: 'cs' });
-		tolgee.changeLanguage('en');
-		staticDataMock.resolvePending();
-		await waitFor(() => {
-			checkState({ language: 'en' });
-		});
-	});
+  it('updates language', async () => {
+    render(TestComponent, {
+      props: { events: ['language'] }
+    });
+    staticDataMock.resolvePending();
+    await runPromise;
+    checkState({ language: 'cs' });
+    tolgee.changeLanguage('en');
+    staticDataMock.resolvePending();
+    await waitFor(() => {
+      checkState({ language: 'en' });
+    });
+  });
 
-	it('updates pending language', async () => {
-		render(TestComponent, {
-			props: { events: ['pendingLanguage'] }
-		});
-		staticDataMock.resolvePending();
-		await runPromise;
-		checkState({ language: 'cs', pendingLanguage: 'cs' });
-		tolgee.changeLanguage('en');
-		staticDataMock.resolvePending();
-		await waitFor(async () => {
-			checkState({ language: 'cs', pendingLanguage: 'en' });
-		});
-	});
+  it('updates pending language', async () => {
+    render(TestComponent, {
+      props: { events: ['pendingLanguage'] }
+    });
+    staticDataMock.resolvePending();
+    await runPromise;
+    checkState({ language: 'cs', pendingLanguage: 'cs' });
+    tolgee.changeLanguage('en');
+    staticDataMock.resolvePending();
+    await waitFor(async () => {
+      checkState({ language: 'cs', pendingLanguage: 'en' });
+    });
+  });
 
-	it('updates fetching and loading', async () => {
-		render(TestComponent, {
-			props: { events: ['loading', 'fetching'] }
-		});
+  it('updates fetching and loading', async () => {
+    render(TestComponent, {
+      props: { events: ['loading', 'fetching'] }
+    });
 
-		checkState({ loading: 'true', fetching: 'true' });
-		staticDataMock.resolvePending();
-		await runPromise;
-		await waitFor(async () => {
-			checkState({ loading: 'false', fetching: 'false' });
-		});
-		tolgee.changeLanguage('en');
-		await waitFor(() => {
-			checkState({ loading: 'false', fetching: 'true' });
-		});
-		staticDataMock.resolvePending();
-		await waitFor(async () => {
-			checkState({ loading: 'false', fetching: 'false' });
-		});
-		tolgee.addActiveNs('test');
-		await waitFor(() => {
-			checkState({ loading: 'true', fetching: 'true' });
-		});
-		staticDataMock.resolvePending();
-		await waitFor(async () => {
-			checkState({ loading: 'false', fetching: 'false' });
-		});
-	});
+    checkState({ loading: 'true', fetching: 'true' });
+    staticDataMock.resolvePending();
+    await runPromise;
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
+    });
+    tolgee.changeLanguage('en');
+    await waitFor(() => {
+      checkState({ loading: 'false', fetching: 'true' });
+    });
+    staticDataMock.resolvePending();
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
+    });
+    tolgee.addActiveNs('test');
+    await waitFor(() => {
+      checkState({ loading: 'true', fetching: 'true' });
+    });
+    staticDataMock.resolvePending();
+    await waitFor(async () => {
+      checkState({ loading: 'false', fetching: 'false' });
+    });
+  });
 });

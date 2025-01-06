@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {getTranslate} from '$lib/index'
+  import { getTranslate } from '$lib/index';
   const { isLoading, t } = getTranslate('test');
 </script>
 

@@ -4,7 +4,7 @@ import {
   type DefaultParamType,
   type NsFallback,
   type TFnType,
-  type TranslationKey,
+  type TranslationKey
 } from '@tolgee/web';
 import getTranslateInternal from './getTranslateInternal';
 
@@ -17,7 +17,7 @@ const getTranslate = (ns?: NsFallback): UseTranslateResult => {
   const { t: tInternal, isLoading } = getTranslateInternal(ns);
 
   const t = derived(tInternal, (value) => (...params) => {
-    //@ts-ignore
+    // @ts-expect-error passing params as they were
     const props = getTranslateProps(...params);
     return value(props);
   }) as Readable<TFnType>;

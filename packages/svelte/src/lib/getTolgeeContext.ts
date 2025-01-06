@@ -7,8 +7,7 @@ import type { TolgeeSvelteContext } from './types';
  * @throws Error when context is not defined.
  */
 export const getTolgeeContext = (): TolgeeSvelteContext => {
-  const context = (getContext('tolgeeContext') ||
-    getGlobalContext()) as TolgeeSvelteContext;
+  const context = (getContext('tolgeeContext') || getGlobalContext()) as TolgeeSvelteContext;
   if (context === undefined) {
     throw Error(
       'Tolgee context is undefined. Trying to use getTranslate method or T component outside TolgeeProvider?'
