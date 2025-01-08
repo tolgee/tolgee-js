@@ -1,11 +1,11 @@
 import type { AppContext, AppInitialProps, AppProps } from 'next/app';
 import { useRouter } from 'next/router';
-import { TolgeeProvider, TolgeeStaticData } from '@tolgee/react';
+import { TolgeeProvider, TolgeeStaticDataProp } from '@tolgee/react';
 
-import { getStaticData, tolgee } from '../tolgee';
+import { tolgee } from '../tolgee';
 import App from 'next/app';
 
-type AppOwnProps = { staticData: TolgeeStaticData };
+type AppOwnProps = { staticData: TolgeeStaticDataProp };
 
 export default function MyApp({
   Component,
@@ -29,6 +29,8 @@ MyApp.getInitialProps = async (
   const ctx = await App.getInitialProps(context);
   return {
     ...ctx,
-    staticData: await getStaticData([context.ctx.locale!], ['', 'namespaced']),
+    staticData: await tolgee.loadRequired({
+      language: context.ctx.locale!,
+    }),
   };
 };

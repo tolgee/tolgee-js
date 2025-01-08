@@ -1,6 +1,10 @@
-import { CacheDescriptorInternal, TreeTranslationsData } from '../../types';
+import {
+  CacheDescriptorInternal,
+  TranslationsFlat,
+  TreeTranslationsData,
+} from '../../types';
 
-export const flattenTranslations = (
+export const flattenTranslationsToMap = (
   data: TreeTranslationsData
 ): Map<string, string> => {
   const result: Map<string, string> = new Map();
@@ -10,7 +14,7 @@ export const flattenTranslations = (
       return;
     }
     if (typeof value === 'object') {
-      flattenTranslations(value).forEach((flatValue, flatKey) => {
+      flattenTranslationsToMap(value).forEach((flatValue, flatKey) => {
         result.set(key + '.' + flatKey, flatValue);
       });
       return;
@@ -20,6 +24,11 @@ export const flattenTranslations = (
   return result;
 };
 
+export const flattenTranslations = (
+  data: TreeTranslationsData
+): TranslationsFlat => {
+  return Object.fromEntries(flattenTranslationsToMap(data).entries());
+};
 export const decodeCacheKey = (key: string): CacheDescriptorInternal => {
   const [firstPart, ...rest] = key.split(':');
   // if namespaces contains ":" it won't get lost

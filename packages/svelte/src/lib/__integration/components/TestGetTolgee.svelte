@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { getTolgee } from "$lib/getTolgee";
-  import type { TolgeeEvent } from "@tolgee/web";
+  import { getTolgee } from '$lib/getTolgee';
+  import type { TolgeeEvent } from '@tolgee/web';
 
-  export let events: TolgeeEvent[] = []
-  const tolgee = getTolgee(events)
+  export let events: TolgeeEvent[] = [];
+  const tolgee = getTolgee(events);
 </script>
 
 <div>
@@ -14,4 +14,3 @@
   <div data-testid="initialLoad">{String($tolgee.isInitialLoading())}</div>
   <div data-testid="running">{String($tolgee.isRunning())}</div>
 </div>
-

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { TolgeeInstance } from '@tolgee/web';
-	import { TolgeeProvider } from '$lib';
+  import type { TolgeeInstance } from '@tolgee/web';
+  import { TolgeeProvider } from '$lib';
 
-	export let tolgee: TolgeeInstance;
+  export let tolgee: TolgeeInstance;
 </script>
 
 <TolgeeProvider {tolgee} fallback="loading">
-	<div>It's rendered!</div>
+  <div>It's rendered!</div>
 </TolgeeProvider>

@@ -4,7 +4,7 @@ import {
   getFallback,
   type NsFallback,
   type TolgeeInstance,
-  type TranslateProps,
+  type TranslateProps
 } from '@tolgee/web';
 import { getTolgeeContext } from './getTolgeeContext';
 
@@ -22,12 +22,11 @@ const getTranslateInternal = (ns?: NsFallback) => {
 
   const t = writable(tFunction);
 
-  const subscription = tolgee.onNsUpdate(() => {
+  const subscription = tolgee.on('update', () => {
     t.set(createTFunction());
     isLoading.set(!tolgee.isLoaded(namespaces));
   });
 
-  subscription.subscribeNs(namespaces);
   tolgee.addActiveNs(namespaces);
 
   onDestroy(() => {
@@ -37,22 +36,17 @@ const getTranslateInternal = (ns?: NsFallback) => {
 
   const isLoading = writable(!tolgee.isLoaded(namespaces));
 
-  const subscribeToNs = (ns: NsFallback) => {
-    subscription.subscribeNs(ns);
-  };
-
   function createTFunction() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (props: TranslateProps<any>) => {
       const fallbackNs = props.ns ?? namespaces?.[0];
-      subscribeToNs(fallbackNs);
       return tolgee.t({ ...props, ns: fallbackNs });
     };
   }
 
   return {
     t: t,
-    isLoading,
+    isLoading
   };
 };
 

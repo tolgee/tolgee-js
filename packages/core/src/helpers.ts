@@ -4,6 +4,7 @@ import {
   FallbackLanguageOption,
   FetchFn,
   TolgeeError,
+  ErrorEvent,
 } from './types';
 import { EventEmitterInstance } from './Controller/Events/EventEmitter';
 
@@ -25,7 +26,7 @@ export function valueOrPromise<T, R>(
 }
 
 export function handleRegularOrAsyncErr<T>(
-  onError: EventEmitterInstance<TolgeeError>,
+  onError: EventEmitterInstance<ErrorEvent>,
   createError: (e: any) => TolgeeError,
   callback: () => Promise<T> | T
 ): Promise<T> | T {

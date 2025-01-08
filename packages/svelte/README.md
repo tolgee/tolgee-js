@@ -70,21 +70,21 @@ Then use the library in your app:
 
 ```svelte
 <script lang="ts">
-	import { TolgeeProvider, Tolgee, SveltePlugin, FormatSimple } from '@tolgee/svelte';
+  import { TolgeeProvider, Tolgee, SveltePlugin, FormatSimple } from '@tolgee/svelte';
 
-	const tolgee = Tolgee()
-		.use(SveltePlugin())
-		.use(FormatSimple())
-		.init({
-			apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
-			apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
-			language: 'en'
-		});
+  const tolgee = Tolgee()
+    .use(SveltePlugin())
+    .use(FormatSimple())
+    .init({
+      apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
+      apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
+      language: 'en'
+    });
 </script>
 
 <TolgeeProvider {tolgee}>
-	<div slot="fallback">Loading...</div>
-	<slot />
+  <div slot="fallback">Loading...</div>
+  <slot />
 </TolgeeProvider>
 ```
 
@@ -96,7 +96,7 @@ To translate texts using Tolgee Svelte integration, you can use `T` component or
 
 ```svelte
 <script>
-	import { T } from '@tolgee/svelte';
+  import { T } from '@tolgee/svelte';
 </script>
 
 <T keyName="key" defaultValue="This is default" />
@@ -108,9 +108,9 @@ The `getTranslate` function returns a store containing the function, which trans
 
 ```svelte
 <script>
-	import { getTranslate } from '@tolgee/svelte';
+  import { getTranslate } from '@tolgee/svelte';
 
-	const { t } = getTranslate();
+  const { t } = getTranslate();
 </script>
 
 {$t('this_is_a_key', { key: 'value', key2: 'value2' })}
@@ -122,13 +122,13 @@ To change the current language, use `getTolgee` method. For example, you can bin
 
 ```svelte
 <script lang="ts">
-	import { getTolgee } from '@tolgee/svelte';
+  import { getTolgee } from '@tolgee/svelte';
 
-	const tolgee = getTolgee(['language']);
+  const tolgee = getTolgee(['language']);
 
-	function handleLanguageChange(e) {
-		$tolgee.changeLanguage(e.currentTarget.value);
-	}
+  function handleLanguageChange(e) {
+    $tolgee.changeLanguage(e.currentTarget.value);
+  }
 </script>
 
 <select value={$tolgee.getLanguage()} on:change={handleLanguageChange}> ... </select>

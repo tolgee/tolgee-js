@@ -36,7 +36,7 @@ describe('useTranslations namespaces', () => {
   beforeEach(async () => {
     staticDataMock = mockStaticDataAsync();
     tolgee = Tolgee()
-      .use(GlobalContextPlugin({ useSuspense: false }))
+      .use(GlobalContextPlugin())
       .use(DevTools())
       .use(FormatIcu())
       .init({
@@ -49,9 +49,7 @@ describe('useTranslations namespaces', () => {
 
     await act(async () => {
       const runPromise = tolgee.run();
-      staticDataMock.resolvablePromises.cs.resolve();
-      staticDataMock.resolvablePromises.en.resolve();
-      staticDataMock.resolvablePromises['en:fallback'].resolve();
+      staticDataMock.resolvePending();
       await runPromise;
       render(<TestComponent />);
     });
@@ -63,7 +61,7 @@ describe('useTranslations namespaces', () => {
 
   it('loads namespace after render', async () => {
     expect(screen.queryByTestId('loading')).toContainHTML('Loading...');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).toBeFalsy();
       expect(screen.queryByTestId('test')).toContainHTML('Český test');
@@ -72,7 +70,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with english fallback', async () => {
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('test_english_fallback')).toContainHTML(
         'Test english fallback'
@@ -85,7 +83,7 @@ describe('useTranslations namespaces', () => {
 
   it('works with ns fallback', async () => {
     expect(screen.queryByTestId('ns_fallback')).toContainHTML('fallback');
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('ns_fallback')).toContainHTML('Fallback');
       expect(screen.queryByTestId('ns_fallback')).toHaveAttribute('_tolgee');
@@ -98,7 +96,7 @@ describe('useTranslations namespaces', () => {
     );
     await act(async () => {
       const changePromise = tolgee.changeLanguage('en');
-      staticDataMock.resolveAll();
+      staticDataMock.resolvePending();
       await changePromise;
     });
     expect(screen.queryByTestId('ns_fallback')).toContainHTML(
@@ -107,7 +105,7 @@ describe('useTranslations namespaces', () => {
   });
 
   it('works with default value', async () => {
-    staticDataMock.resolveAll();
+    staticDataMock.resolvePending();
     await waitFor(() => {
       expect(screen.queryByTestId('non_existant')).toContainHTML(
         'Non existant'

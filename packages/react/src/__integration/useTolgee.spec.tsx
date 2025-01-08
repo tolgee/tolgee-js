@@ -5,6 +5,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { Tolgee, TolgeeEvent, TolgeeInstance } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
+import { wait } from '@tolgee/testing/wait';
 
 const API_URL = 'http://localhost';
 
@@ -66,6 +67,7 @@ describe('useTranslation hook integration', () => {
     checkState({ initialLoad: 'true' });
 
     await act(async () => {
+      await wait(0);
       staticDataMock.resolvablePromises.cs.resolve();
       await runPromise;
     });
@@ -74,6 +76,7 @@ describe('useTranslation hook integration', () => {
     });
     await act(async () => {
       tolgee.changeLanguage('en');
+      await wait(0);
       staticDataMock.resolvablePromises.en.resolve();
     });
     await waitFor(() => {
@@ -90,6 +93,7 @@ describe('useTranslation hook integration', () => {
     checkState({ language: 'cs' });
     await act(async () => {
       tolgee.changeLanguage('en');
+      await wait(0);
       staticDataMock.resolvablePromises.en.resolve();
     });
     checkState({ language: 'en' });
@@ -104,6 +108,7 @@ describe('useTranslation hook integration', () => {
     checkState({ language: 'cs', pendingLanguage: 'cs' });
     await act(async () => {
       tolgee.changeLanguage('en');
+      await wait(0);
       staticDataMock.resolvablePromises.en.resolve();
     });
     await waitFor(async () => {
