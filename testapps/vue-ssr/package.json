@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/vue-ssr-testapp",
-  "version": "5.33.2",
+  "version": "6.0.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,8 +12,8 @@
   "dependencies": {
     "@fastify/compress": "^7.0.3",
     "@fastify/static": "^7.0.4",
-    "@tolgee/format-icu": "5.33.2",
-    "@tolgee/vue": "5.33.2",
+    "@tolgee/format-icu": "6.0.0",
+    "@tolgee/vue": "6.0.0",
     "fastify": "^4.28.1",
     "vike": "^0.4.193",
     "vike-vue": "^0.8.3",

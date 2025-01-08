@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.0.0](https://github.com/tolgee/tolgee-js/compare/v5.33.2...v6.0.0) (2025-01-08)
+
+
+* feat!: SDK version 6 (#3409) ([2a5eefc](https://github.com/tolgee/tolgee-js/commit/2a5eefcc84ee51f685ae06846d2079218c4e6fb2)), closes [#3409](https://github.com/tolgee/tolgee-js/issues/3409)
+
+
+### BREAKING CHANGES
+
+* - cache now returning plain objects instead of maps
+- renamed and updated getRequiredRecords
+- onNsUpdate removed in favor of update event
+- useSuspense in rect TolgeeProvider is now off by default
+- TolgeeProvider for vue has now standardized API
+
+
+
+
+
 ## [5.33.2](https://github.com/tolgee/tolgee-js/compare/v5.33.1...v5.33.2) (2024-12-18)
 
 **Note:** Version bump only for package @tolgee/vue-ssr-testapp
