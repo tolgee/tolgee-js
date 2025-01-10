@@ -3,7 +3,6 @@
   "version": "6.0.0",
   "description": "Tolgee for web",
   "declaration": true,
-  "type": "module",
   "main": "./index.cjs",
   "types": "./lib/entry-production.d.ts",
   "exports": {
