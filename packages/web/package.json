@@ -5,7 +5,7 @@
   "declaration": true,
   "type": "module",
   "main": "./index.cjs",
-  "types": "./types/index.d.ts",
+  "types": "./lib/entry-production.d.ts",
   "exports": {
     ".": {
       "production": {
@@ -14,12 +14,12 @@
       },
       "import": "./dist/tolgee-web.development.esm.js",
       "require": "./index.cjs",
-      "types": "./types/index.d.ts"
+      "types": "./lib/entry-production.d.ts"
     },
     "./tools": {
       "import": "./dist/tolgee-in-context-tools.esm.js",
       "require": "./dist/tolgee-in-context-tools.umd.cjs",
-      "types": "./types/tools.d.ts"
+      "types": "./lib/entry-tools.d.ts"
     },
     "./package.json": "./package.json"
   },
