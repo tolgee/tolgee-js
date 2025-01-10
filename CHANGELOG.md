@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1-prerelease.8d24de83.0](https://github.com/tolgee/tolgee-js/compare/v6.0.0...v6.0.1-prerelease.8d24de83.0) (2025-01-10)
+
+
+### Bug Fixes
+
+* drop custom d.ts files for web package ([1838aac](https://github.com/tolgee/tolgee-js/commit/1838aacfb3dbbe7aeb52ad057e5665d716d7b968))
+* drop type module in web package ([8d24de8](https://github.com/tolgee/tolgee-js/commit/8d24de83af5a628abe7c5b0b8e0834976463a95a))
+
+
+
+
+
 # [6.0.0](https://github.com/tolgee/tolgee-js/compare/v5.33.2...v6.0.0) (2025-01-08)
 
 
