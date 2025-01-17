@@ -13,6 +13,7 @@ import { TranslateParams, TranslationKey } from '@tolgee/web';
 @Component({
   selector: '[t]',
   template: ``,
+  standalone: false
 })
 export class TComponent implements OnInit, OnDestroy, OnChanges {
   @Input() key: TranslationKey;

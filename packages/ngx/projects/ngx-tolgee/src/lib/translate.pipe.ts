@@ -16,6 +16,7 @@ import {
 @Pipe({
   name: 'translate',
   pure: false,
+  standalone: false,
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
   private value = '';
