@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.0.1](https://github.com/tolgee/tolgee-js/compare/v6.0.0...v6.0.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* added standalone false to angular components/pipes  ([#3421](https://github.com/tolgee/tolgee-js/issues/3421)) ([50bda10](https://github.com/tolgee/tolgee-js/commit/50bda10045426bf815ce7ef4890eebce6538d58f))
+
+
+
+
+
 # [6.0.0](https://github.com/tolgee/tolgee-js/compare/v5.33.2...v6.0.0) (2025-01-08)
 
 
