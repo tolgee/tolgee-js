@@ -97,7 +97,7 @@ jobs:
 
       - name: Update version with lerna
         run: |
-          lerna version prerelease --yes --conventional-prerelease --preid test.$(git ls-files -s packages | git hash-object --stdin) --ignore-scripts \
+          lerna version prerelease --yes --conventional-prerelease --preid "test.$(git ls-files -s packages | git hash-object --stdin)" --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
 
       - name: Set TOLGEE_UI_VERSION
@@ -170,7 +170,7 @@ jobs:
 
       - name: Update version with lerna
         run: |
-          lerna version prerelease --yes --conventional-prerelease --preid test.$(git ls-files -s packages | git hash-object --stdin) --ignore-scripts \
+          lerna version prerelease --yes --conventional-prerelease --preid "test.$(git ls-files -s packages | git hash-object --stdin)" --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
 
       - name: Remove 'workspace' field from package.json
