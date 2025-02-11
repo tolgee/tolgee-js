@@ -95,6 +95,9 @@ jobs:
           pnpm install --ignore-workspace
           pnpm install --no-frozen-lockfile --filter='./packages/*'
 
+      - name: test
+        run: echo "test.$(git ls-files -s packages | git hash-object --stdin)"
+
       - name: Update version with lerna
         run: |
           lerna version prerelease --yes --conventional-prerelease --preid "test.$(git ls-files -s packages | git hash-object --stdin)" --ignore-scripts \
