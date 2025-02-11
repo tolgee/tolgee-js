@@ -17,18 +17,25 @@ export const TranslationMethods = () => {
 
       <div className="tiles">
         <div>
-          <h1>T component with default</h1>
-          <div>{t('this_key_does_not_exist', 'This is default')}</div>
-        </div>
-        <div>
-          <h1>T component without default</h1>
+          <h1>t function without default</h1>
           <div>{t('this_is_a_key')}</div>
         </div>
+
         <div>
-          <h1>T component with params</h1>
+          <h1>t function with params</h1>
           <div>
             {t('this_is_a_key_with_params', { key: 'value', key2: 'value2' })}
           </div>
+        </div>
+
+        <div>
+          <h1>t function with noWrap</h1>
+          <div>{t('this_is_a_key', { noWrap: true })}</div>
+        </div>
+
+        <div>
+          <h1>t function with default</h1>
+          <div>{t('this_key_does_not_exist', 'This is default')}</div>
         </div>
       </div>
       {!revealed ? (
