@@ -30,4 +30,11 @@ declare module 'i18next' {
   interface i18n {
     tolgee: TolgeeInstance;
   }
+
+  interface TOptionsBase {
+    /**
+     * Omit tolgee wrapper
+     */
+    noWrap?: boolean;
+  }
 }

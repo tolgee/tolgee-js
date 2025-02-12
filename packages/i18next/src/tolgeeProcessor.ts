@@ -20,6 +20,10 @@ export const tolgeeProcessor = (tolgee: TolgeeInstance): Module => {
       const ns =
         namespaces?.[0] ?? options.ns ?? translator?.options?.defaultNS;
 
+      if (options.noWrap) {
+        return value;
+      }
+
       return tolgee.wrap({
         key,
         defaultValue: options.defaultValue,
