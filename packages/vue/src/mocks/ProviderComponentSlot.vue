@@ -5,11 +5,10 @@
   </TolgeeProvider>
 </template>
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core';
 import ComponentUsingProvider from './ComponentUsingProvider.vue';
 import { TolgeeProvider } from '../TolgeeProvider';
 import { TolgeeInstance } from '@/../core/lib';
-import { PropType } from 'vue';
+import { PropType, defineComponent } from 'vue';
 
 export default defineComponent({
   components: { ComponentUsingProvider, TolgeeProvider },
