@@ -11,7 +11,7 @@ context('React i18next app in prod mode', () => {
       { text: 'This is default', count: 1 },
       {
         text: 'This is a key',
-        count: 1,
+        count: 2,
       },
       { text: 'This is key with params value value2', count: 1 },
     ],
@@ -19,7 +19,7 @@ context('React i18next app in prod mode', () => {
       { text: 'This is default', count: 1 },
       {
         text: 'Dies ist ein Schlüssel',
-        count: 1,
+        count: 2,
       },
       {
         text: 'Dies ist ein Schlüssel mit den Parametern value value2',
