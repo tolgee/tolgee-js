@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.1.1](https://github.com/tolgee/tolgee-js/compare/v6.1.0...v6.1.1) (2025-02-14)
+
+
+### Bug Fixes
+
+* avoid using @vue/runtime-core ([#3431](https://github.com/tolgee/tolgee-js/issues/3431)) ([830cc5c](https://github.com/tolgee/tolgee-js/commit/830cc5ce80b5329e26c4ce3e3ecf45311e203b9e))
+
+
+
+
+
 # [6.1.0](https://github.com/tolgee/tolgee-js/compare/v6.0.1...v6.1.0) (2025-02-13)
 
 
