@@ -863,37 +863,6 @@ importers:
         specifier: ^5.3.2
         version: 5.4.5
 
-  testapps/next-internal:
-    dependencies:
-      '@tolgee/react':
-        specifier: 6.1.1
-        version: link:../../packages/react
-      '@tolgee/web':
-        specifier: 6.1.1
-        version: link:../../packages/web
-      next:
-        specifier: 15.1.0
-        version: 15.1.0(@babel/core@7.26.0)(react-dom@18.3.1)(react@18.3.1)
-      react:
-        specifier: 18.3.1
-        version: 18.3.1
-      react-dom:
-        specifier: 18.3.1
-        version: 18.3.1(react@18.3.1)
-    devDependencies:
-      '@types/react':
-        specifier: 18.3.16
-        version: 18.3.16
-      eslint:
-        specifier: 8.57.0
-        version: 8.57.0
-      eslint-config-next:
-        specifier: 13.2.3
-        version: 13.2.3(eslint@8.57.0)(typescript@4.9.5)
-      typescript:
-        specifier: 4.9.5
-        version: 4.9.5
-
   testapps/ngx:
     dependencies:
       '@angular/animations':
