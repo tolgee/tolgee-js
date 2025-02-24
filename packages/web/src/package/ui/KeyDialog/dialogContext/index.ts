@@ -3,6 +3,7 @@ import { UiProps } from '@tolgee/core';
 import {
   TolgeeFormat,
   getTolgeeFormat,
+  getTolgeePlurals,
   tolgeeFormatGenerateIcu,
 } from '@tginternal/editor';
 
@@ -166,25 +167,34 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         keepPreviousData: true,
         onSuccess(data) {
           const result: FormTranslations = {};
-          const firstKey = data._embedded?.keys?.[0];
-          const isPlural = Boolean(firstKey?.keyIsPlural);
-          data.selectedLanguages?.forEach((lang) => {
-            const translation = firstKey?.translations[lang.tag];
-            result[lang.tag] = {
-              value: getTolgeeFormat(
-                translation?.text || '',
-                isPlural,
-                !icuPlaceholders
-              ),
-              state: translation?.state || 'UNTRANSLATED',
-            };
-          });
-          if (_pluralArgName === undefined && isPlural) {
-            setPluralArgName(firstKey?.keyPluralArgName);
+          const keyData = data._embedded?.keys?.[0];
+          if (keyData) {
+            const isPlural = Boolean(keyData.keyIsPlural);
+            data.selectedLanguages?.forEach((lang) => {
+              const translation = keyData?.translations[lang.tag];
+              result[lang.tag] = {
+                value: getTolgeeFormat(
+                  translation?.text || '',
+                  isPlural,
+                  !icuPlaceholders
+                ),
+                state: translation?.state || 'UNTRANSLATED',
+              };
+            });
+            if (_pluralArgName === undefined && isPlural) {
+              setPluralArgName(keyData?.keyPluralArgName);
+            }
+          } else if (props.defaultValue) {
+            const parsed = getTolgeePlurals(
+              props.defaultValue,
+              !icuPlaceholders
+            );
+            setIsPlural(Boolean(parsed.parameter));
+            setPluralArgName(parsed.parameter);
           }
           initializeWithDefaultValue(result, undefined);
-          if (firstKey) {
-            setTags(firstKey?.keyTags?.map((t) => t.name) || []);
+          if (keyData) {
+            setTags(keyData?.keyTags?.map((t) => t.name) || []);
           } else {
             setTags([
               ...(props.uiProps.filterTag ?? []),
@@ -192,7 +202,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             ]);
           }
           setScreenshots(
-            firstKey?.screenshots?.map((sc) => ({
+            keyData?.screenshots?.map((sc) => ({
               ...sc,
               filename: sc.filename!,
               justUploaded: false,
@@ -228,11 +238,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           ...data,
           [baseLang.tag]: {
             state: data?.[baseLang.tag]?.state ?? 'UNTRANSLATED',
-            value: getTolgeeFormat(
-              props.defaultValue,
-              isPlural,
-              !icuPlaceholders
-            ),
+            value: getTolgeePlurals(props.defaultValue, !icuPlaceholders),
           },
         });
       } else {
