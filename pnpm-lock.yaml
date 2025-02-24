@@ -685,6 +685,9 @@ importers:
       '@tginternal/editor':
         specifier: ^1.15.2
         version: 1.15.2(@codemirror/lint@6.8.4)(@codemirror/state@6.5.0)(@codemirror/view@6.36.0)
+      '@tolgee/format-icu':
+        specifier: 6.1.1
+        version: link:../format-icu
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12

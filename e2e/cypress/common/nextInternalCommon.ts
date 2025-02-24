@@ -13,7 +13,7 @@ export const openUI = (translation = 'What To Pack') => {
 export const visitWithApiKey = (scopes: Scope[]) => {
   createApiKey({ projectId: 1, scopes })
     .then((data) => {
-      cy.visit(`http://localhost:8114/?api_key=${data.key}`);
+      cy.visit(`http://localhost:8114/translation-methods?api_key=${data.key}`);
     })
     .then(() =>
       localStorage.setItem('__tolgee_preferredLanguages', '["en","de"]')

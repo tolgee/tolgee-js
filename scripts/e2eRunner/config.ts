@@ -53,14 +53,13 @@ export const config: Config = {
         },
       },
     },
-    'next-internal': {
+    'web-internal': {
       commandLineServices: {
         dev: {
-          command: 'npm run dev -- -p 8114',
-          cwd: path.resolve(__dirname, '../../testapps/next-internal/'),
-          waitForOutput: 'Ready in ',
+          command: 'npm run dev -- --port 8114 --host',
+          cwd: path.resolve(__dirname, '../../packages/web/'),
           environment: {
-            NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
           },
         },
       },
