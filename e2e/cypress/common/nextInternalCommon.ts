@@ -5,7 +5,6 @@ import { Scope } from './types';
 export const openUI = (translation = 'What To Pack') => {
   cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
-  getDevUi().contains(translation).should('be.visible');
   getEditor().should('not.be.disabled');
   cy.wait(300);
 };

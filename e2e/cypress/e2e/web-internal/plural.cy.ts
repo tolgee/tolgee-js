@@ -73,6 +73,26 @@ context('UI with plurals', () => {
     });
   });
 
+  it('correctly detects plural from default value', () => {
+    cy.visit('http://localhost:8114/translation-methods');
+    openUI('2 items');
+    getDevUi().contains('Quick translation');
+    getDevUi().contains("(key doesn't exist yet)");
+    getDevUi()
+      .findDcy('key-plural-checkbox')
+      .find('input')
+      .should('be.checked');
+    getDevUi()
+      .findDcy('key-plural-variable-name')
+      .find('input')
+      .should('have.value', 'plural_value');
+    checkPluralValue('en', 'one', '#1 item');
+    checkPluralValue('en', 'other', '#10 items');
+    setPluralValue('cs', 'one', '# polozka');
+    setPluralValue('cs', 'few', '# polozky');
+    setPluralValue('cs', 'other', '# polozek');
+  });
+
   function checkPluralValue(language: string, variant: string, text: string) {
     getDevUi()
       .findDcyWithCustom({
