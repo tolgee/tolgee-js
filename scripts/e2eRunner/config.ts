@@ -8,6 +8,19 @@ export const config: Config = {
     },
   },
   tests: {
+    // tests of context editing dialog
+    // directly in web package (not in testapps)
+    'web-internal': {
+      commandLineServices: {
+        dev: {
+          command: 'npm run dev -- --port 8114 --host',
+          cwd: path.resolve(__dirname, '../../packages/web/'),
+          environment: {
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
+          },
+        },
+      },
+    },
     react: {
       commandLineServices: {
         dev: {
@@ -50,19 +63,6 @@ export const config: Config = {
           command: 'npm run start -- -p 8107',
           cwd: path.resolve(__dirname, '../../testapps/next/'),
           waitForOutput: 'Ready in ',
-        },
-      },
-    },
-    // internal tests of context editing dialog
-    // directly on web package
-    web: {
-      commandLineServices: {
-        dev: {
-          command: 'npm run dev -- --port 8114 --host',
-          cwd: path.resolve(__dirname, '../../packages/web/'),
-          environment: {
-            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
-          },
         },
       },
     },
