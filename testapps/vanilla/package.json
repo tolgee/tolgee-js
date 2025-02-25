@@ -1,5 +1,5 @@
 {
-  "name": "@tolgee/web-testapp",
+  "name": "@tolgee/vanilla-testapp",
   "version": "6.1.1",
   "description": "Test applications for Tolgee JS core.",
   "main": "index.js",

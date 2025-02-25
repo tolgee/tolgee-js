@@ -123,7 +123,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOLGEE_MACHINE_PAT}}
 
       - id: set-dirs
-        run: echo "dirs=$(( ls -1; echo '../packages/web-internal' ) | jq -R -s -c 'split("\n") | map(select(length > 0))')" >> "$GITHUB_OUTPUT" >> $GITHUB_OUTPUT
+        run: echo "dirs=$(( ls -1; echo '../packages/web' ) | jq -R -s -c 'split("\n") | map(select(length > 0))')" >> "$GITHUB_OUTPUT" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
 
     outputs:

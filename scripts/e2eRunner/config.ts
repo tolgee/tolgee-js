@@ -24,11 +24,11 @@ export const config: Config = {
         },
       },
     },
-    web: {
+    vanilla: {
       commandLineServices: {
         core: {
           command: 'npm run serve',
-          cwd: path.resolve(__dirname, '../../testapps/web/'),
+          cwd: path.resolve(__dirname, '../../testapps/vanilla/'),
           waitForOutput: 'INFO: Accepting connections',
         },
       },
@@ -53,7 +53,9 @@ export const config: Config = {
         },
       },
     },
-    'web-internal': {
+    // internal tests of context editing dialog
+    // directly on web package
+    web: {
       commandLineServices: {
         dev: {
           command: 'npm run dev -- --port 8114 --host',
