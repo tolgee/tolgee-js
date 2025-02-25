@@ -450,7 +450,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           ([language, value]) =>
             [
               language,
-              tolgeeFormatGenerateIcu(value.value, !icuPlaceholders),
+              tolgeeFormatGenerateIcu(
+                { ...value.value, parameter: pluralArgName },
+                !icuPlaceholders
+              ),
             ] as [string, string]
         )
       );
