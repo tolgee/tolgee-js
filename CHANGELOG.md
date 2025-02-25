@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.1](https://github.com/tolgee/tolgee-js/compare/v6.2.0...v6.2.1) (2025-02-25)
+
+
+### Bug Fixes
+
+* plural variable name change not generating screenshots correctly ([#3438](https://github.com/tolgee/tolgee-js/issues/3438)) ([6e1aa92](https://github.com/tolgee/tolgee-js/commit/6e1aa9276a1659d943d6c6019a60548d5808481c)), closes [#3419](https://github.com/tolgee/tolgee-js/issues/3419)
+
+
+
+
+
 # [6.2.0](https://github.com/tolgee/tolgee-js/compare/v6.1.1...v6.2.0) (2025-02-25)
 
 
