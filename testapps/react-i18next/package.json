@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/react-i18next-testapp",
-  "version": "6.1.1",
+  "version": "6.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tolgee/i18next": "6.1.1",
+    "@tolgee/i18next": "6.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-i18next": "^14.0.0"

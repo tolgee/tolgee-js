@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.2.0](https://github.com/tolgee/tolgee-js/compare/v6.1.1...v6.2.0) (2025-02-25)
+
+
+### Features
+
+* correctly initialize plural from default value in in-context form ([#3436](https://github.com/tolgee/tolgee-js/issues/3436)) ([6253348](https://github.com/tolgee/tolgee-js/commit/625334838a1ff09997fe7fee354362f59b281b7c))
+
+
+
+
+
 ## [6.1.1](https://github.com/tolgee/tolgee-js/compare/v6.1.0...v6.1.1) (2025-02-14)
 
 **Note:** Version bump only for package @tolgee/web-testapp
