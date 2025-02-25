@@ -203,7 +203,7 @@ jobs:
             e2e/cypress/screenshots/**/*
 
   cypress-web-internal:
-    name: E2e
+    name: E2e web-internal
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
