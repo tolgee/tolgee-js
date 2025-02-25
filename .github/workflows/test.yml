@@ -192,7 +192,7 @@ jobs:
         working-directory: testapps/${{matrix.app}}
 
       - name: Run e2e tests
-        run: pnpm run e2e run --headed "$(basename {{matrix.app}})" --stdout prod,dev --skip-build
+        run: pnpm run e2e run --headed $(basename ${{matrix.app}}) --stdout prod,dev --skip-build
 
       - uses: actions/upload-artifact@v4
         if: failure()
