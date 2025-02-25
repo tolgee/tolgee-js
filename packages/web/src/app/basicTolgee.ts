@@ -1,21 +1,28 @@
 import { TolgeeEvent, TolgeeInstance } from '@tolgee/core';
+import { FormatIcu } from '@tolgee/format-icu';
 import { useCallback, useEffect, useState } from 'react';
 import { BackendFetch, DevTools, Tolgee } from '../package/entry-development';
+
+export const ALL_LOCALES = ['en', 'de'];
 
 export const secrets = {
   apiUrl: import.meta.env.VITE_APP_TOLGEE_API_URL,
   apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
 };
 
+const apiKeyFromUrl = new URLSearchParams(window.location.search).get(
+  'api_key'
+);
+
 export const tolgee = Tolgee()
   .use(DevTools())
   .use(BackendFetch())
+  .use(FormatIcu())
   .init({
-    ...secrets,
-    availableLanguages: ['en', 'cs', 'fr', 'de'],
+    apiUrl: secrets.apiUrl,
+    apiKey: apiKeyFromUrl || secrets.apiKey,
+    availableLanguages: ALL_LOCALES,
     defaultLanguage: 'en',
-    tagNewKeys: ['draft'],
-    filterTag: ['test'],
   });
 
 export const useTolgee = (events?: TolgeeEvent[]): TolgeeInstance => {

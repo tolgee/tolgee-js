@@ -111,7 +111,11 @@ export const TranslationTextField = ({
         </Tooltip>
         <PluralEditor
           mode={mode}
-          value={value ? { ...value, parameter } : { variants: { other: '' } }}
+          value={
+            value
+              ? { ...value, parameter }
+              : { variants: { other: '' }, parameter }
+          }
           onChange={onChange}
           locale={language?.tag || 'en'}
           editorProps={{ direction: 'ltr', disabled }}

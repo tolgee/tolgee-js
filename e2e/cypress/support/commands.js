@@ -26,21 +26,29 @@
 
 import 'cypress-real-events';
 
-Cypress.Commands.add('closestDcy', { prevSubject: true }, (subject, dataCy) => {
-  return subject.closest('[data-cy="' + dataCy + '"]');
-});
+Cypress.Commands.add(
+  'closestDcy',
+  { prevSubject: 'element' },
+  (subject, dataCy) => {
+    return cy.wrap(subject).closest(`[data-cy="${dataCy}"]`);
+  }
+);
 
-Cypress.Commands.add('gcy', (dataCy) => {
-  return cy.get('[data-cy="' + dataCy + '"]');
-});
-
-Cypress.Commands.add('findDcy', { prevSubject: true }, (subject, dataCy) => {
-  return subject.find('[data-cy="' + dataCy + '"]');
+Cypress.Commands.add('gcy', (dataCy, options) => {
+  return cy.get('[data-cy="' + dataCy + '"]', options);
 });
 
 Cypress.Commands.add(
+  'findDcy',
+  { prevSubject: 'element' },
+  (subject, dataCy) => {
+    return cy.wrap(subject).find(`[data-cy="${dataCy}"]`);
+  }
+);
+
+Cypress.Commands.add(
   'findDcyWithCustom',
-  { prevSubject: true },
+  { prevSubject: 'element' },
   (subject, { value, ...other }, options) =>
     subject.find(
       `[data-cy="${value}"]${Object.entries(other)

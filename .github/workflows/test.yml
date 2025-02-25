@@ -123,7 +123,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{secrets.TOLGEE_MACHINE_PAT}}
 
       - id: set-dirs
-        run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        run: echo "dirs=$(ls | jq -R -s -c 'split("\n")[:-1] | map(select(. != "web-internal"))')" >> $GITHUB_OUTPUT
         working-directory: e2e/cypress/e2e
 
     outputs:
@@ -192,7 +192,60 @@ jobs:
         working-directory: testapps/${{matrix.app}}
 
       - name: Run e2e tests
-        run: pnpm run e2e run --headed ${{matrix.app}} --stdout prod,dev --skip-build
+        run: pnpm run e2e run --headed $(basename ${{matrix.app}}) --stdout prod,dev --skip-build
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress
+          path: |
+            e2e/cypress/videos/**/*
+            e2e/cypress/screenshots/**/*
+
+  cypress-web-internal:
+    name: E2e web-internal
+    needs: prepare
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [18, 20]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 8.15.9
+          run_install: false
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            .pnpm-store/v3
+            ~/.cache/Cypress
+          key: ${{ runner.os }}-pnpm-cypress-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-cypress-
+
+      - name: Install for root and for e2e
+        run: |
+          pnpm install --ignore-workspace
+          pnpm install --filter='./e2e'
+
+      - name: Build web package
+        run: |
+          pnpm build --filter="@tolgee/web"
+
+      - name: Run e2e tests
+        run: pnpm run e2e run --headed web-internal --stdout prod,dev --skip-build
 
       - uses: actions/upload-artifact@v4
         if: failure()

@@ -1,33 +1,28 @@
 import { useEffect } from 'react';
 import { useTolgee } from './basicTolgee';
-import { styled } from '@mui/material';
 
-const StyledContainer = styled('div')`
-  margin: 100px auto;
-  max-width: 300px;
-`;
+import { Todos } from './Todos';
+import { TranslationMethods } from './TranslationMethods';
 
 export const App = () => {
-  const tolgee = useTolgee(['update', 'language']);
+  const currentRoute = window.location.pathname;
+  const tolgee = useTolgee(['initialLoad']);
 
   useEffect(() => {
     tolgee.run();
   }, []);
 
+  if (!tolgee.isLoaded()) {
+    return null;
+  }
+
   return (
-    <StyledContainer>
-      <div title="test">{tolgee.t('app-title')}</div>
-      <div>
-        {tolgee.t('app-title')}
-        {tolgee.t('add-item-input-placeholder')}
-      </div>
-      <button disabled>{tolgee.t('app-title')}</button>
-      <div style={{ pointerEvents: 'none' }}>
-        <div>{tolgee.t('app-title')}</div>
-      </div>
-      <div>
-        <div>{tolgee.t('new-key')}</div>
-      </div>
-    </StyledContainer>
+    <>
+      {currentRoute === '/translation-methods' ? (
+        <TranslationMethods />
+      ) : (
+        <Todos />
+      )}
+    </>
   );
 };

@@ -8,6 +8,20 @@ export const config: Config = {
     },
   },
   tests: {
+    // tests of context editing dialog
+    // directly in web package (not in testapps)
+    'web-internal': {
+      commandLineServices: {
+        dev: {
+          command: 'npm run dev -- --port 8114 --host',
+          cwd: path.resolve(__dirname, '../../packages/web/'),
+          environment: {
+            VITE_APP_TOLGEE_API_URL: 'http://localhost:8202',
+            VITE_APP_TOLGEE_API_KEY: 'examples-admin-imported-project-implicit',
+          },
+        },
+      },
+    },
     react: {
       commandLineServices: {
         dev: {
@@ -24,11 +38,11 @@ export const config: Config = {
         },
       },
     },
-    web: {
+    vanilla: {
       commandLineServices: {
         core: {
           command: 'npm run serve',
-          cwd: path.resolve(__dirname, '../../testapps/web/'),
+          cwd: path.resolve(__dirname, '../../testapps/vanilla/'),
           waitForOutput: 'INFO: Accepting connections',
         },
       },
@@ -50,18 +64,6 @@ export const config: Config = {
           command: 'npm run start -- -p 8107',
           cwd: path.resolve(__dirname, '../../testapps/next/'),
           waitForOutput: 'Ready in ',
-        },
-      },
-    },
-    'next-internal': {
-      commandLineServices: {
-        dev: {
-          command: 'npm run dev -- -p 8114',
-          cwd: path.resolve(__dirname, '../../testapps/next-internal/'),
-          waitForOutput: 'Ready in ',
-          environment: {
-            NEXT_PUBLIC_TOLGEE_API_URL: 'http://localhost:8202',
-          },
         },
       },
     },

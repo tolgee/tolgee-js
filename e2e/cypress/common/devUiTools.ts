@@ -3,5 +3,5 @@ export const getDevUiRoot = () => {
 };
 
 export const getDevUi = () => {
-  return getDevUiRoot().shadow();
+  return getDevUiRoot().shadow().find('div').first();
 };
