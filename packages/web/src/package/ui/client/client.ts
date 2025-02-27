@@ -24,7 +24,9 @@ type Params = {
 async function getResObject(r: Response) {
   const textBody = await r.text();
   try {
-    return JSON.parse(textBody);
+    if (textBody) {
+      return JSON.parse(textBody);
+    }
   } catch (e) {
     throw new HttpError('fetch_error');
   }
