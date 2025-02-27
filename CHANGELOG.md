@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.2](https://github.com/tolgee/tolgee-js/compare/v6.2.1...v6.2.2) (2025-02-27)
+
+
+### Bug Fixes
+
+* prevent failing when response without body ([#3437](https://github.com/tolgee/tolgee-js/issues/3437)) ([c9c313e](https://github.com/tolgee/tolgee-js/commit/c9c313e77a603bb27d7da4f8a51050d3f708a37a))
+
+
+
+
+
 ## [6.2.1](https://github.com/tolgee/tolgee-js/compare/v6.2.0...v6.2.1) (2025-02-25)
 
 
