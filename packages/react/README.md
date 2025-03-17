@@ -130,8 +130,8 @@ t("key_to_translate")
    
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 

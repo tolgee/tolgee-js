@@ -58,8 +58,8 @@ To learn more, visit [https://tolgee.io](https://tolgee.io)
 | [@tolgee/i18next](https://github.com/tolgee/tolgee-js/tree/main/packages/i18next)                     | [![@tolgee/i18next version](https://img.shields.io/npm/v/@tolgee/i18next?label=npm)](https://www.npmjs.com/package/@tolgee/i18next) |
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 

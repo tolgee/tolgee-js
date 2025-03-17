@@ -16,12 +16,7 @@ Then use the library in your app:
 
 ```svelte
 <script lang="ts">
-  import {
-    TolgeeProvider,
-    Tolgee,
-    SveltePlugin,
-    FormatSimple,
-  } from '@tolgee/svelte';
+  import { TolgeeProvider, Tolgee, SveltePlugin, FormatSimple } from '@tolgee/svelte';
 
   const tolgee = Tolgee()
     .use(SveltePlugin())
@@ -29,7 +24,7 @@ Then use the library in your app:
     .init({
       apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
       apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
-      language: 'en',
+      language: 'en'
     });
 </script>
 

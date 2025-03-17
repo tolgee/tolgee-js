@@ -93,8 +93,8 @@ tolgee.t('test', 'Hello, I am {name}.', { name: 'John' })
 Check our [ICU format documentation](https://tolgee.io/platform/icu_message_format) to learn more.
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 

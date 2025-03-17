@@ -69,12 +69,7 @@ Then use the library in your app:
 
 ```svelte
 <script lang="ts">
-  import {
-    TolgeeProvider,
-    Tolgee,
-    SveltePlugin,
-    FormatSimple,
-  } from '@tolgee/svelte';
+  import { TolgeeProvider, Tolgee, SveltePlugin, FormatSimple } from '@tolgee/svelte';
 
   const tolgee = Tolgee()
     .use(SveltePlugin())
@@ -82,7 +77,7 @@ Then use the library in your app:
     .init({
       apiUrl: import.meta.env.VITE_TOLGEE_API_URL,
       apiKey: import.meta.env.VITE_TOLGEE_API_KEY,
-      language: 'en',
+      language: 'en'
     });
 </script>
 
@@ -146,8 +141,8 @@ To change the current language, use `getTolgee` method. For example, you can bin
    
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 

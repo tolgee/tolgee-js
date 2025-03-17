@@ -92,8 +92,8 @@ tg.run();
 To learn more, check [the docs](https://tolgee.io/js-sdk/5.0.0-alpha.1/).
 
 
-## Why to use Tolgee?
-Because it saves a lot of time, you would spend on localization tasks without it. Because it enables you to provide perfectly translated software.
+## Why use Tolgee?
+Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
 
