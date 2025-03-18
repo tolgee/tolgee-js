@@ -177,4 +177,30 @@ describe('cache', () => {
     expect(tolgee.t('hello')).toEqual('Hello');
     expect(tolgee.t('hello', { language: 'cs' })).toEqual('Ahoj');
   });
+
+  it('updates cache correctly', () => {
+    tolgee = TolgeeCore().init({
+      language: 'en',
+      staticData: {
+        en: { hello: 'Hello' },
+        cs: { hello: 'Ahoj' },
+      },
+    });
+
+    tolgee.changeTranslation({ language: 'en' }, 'hello', 'New translation');
+    expect(tolgee.t('hello')).toEqual('New translation');
+  });
+
+  it("updates translation correctly even when key doesn't exist yet", () => {
+    tolgee = TolgeeCore().init({
+      language: 'en',
+      staticData: {
+        en: { hello: 'Hello' },
+        cs: { hello: 'Ahoj' },
+      },
+    });
+
+    tolgee.changeTranslation({ language: 'en' }, 'new_key', 'New translation');
+    expect(tolgee.t('new_key')).toEqual('New translation');
+  });
 });

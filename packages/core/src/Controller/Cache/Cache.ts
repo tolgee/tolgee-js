@@ -209,7 +209,7 @@ export function Cache(
       value: TranslationValue
     ) {
       const record = cache.get(encodeCacheKey(descriptor))?.data;
-      if (record?.[key]) {
+      if (record) {
         record[key] = value;
         events.onCacheChange.emit({ ...descriptor, key });
       }
