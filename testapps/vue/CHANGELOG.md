@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.4](https://github.com/tolgee/tolgee-js/compare/v6.2.3...v6.2.4) (2025-03-19)
+
+**Note:** Version bump only for package @tolgee/vue-testapp
+
+
+
+
+
 ## [6.2.3](https://github.com/tolgee/tolgee-js/compare/v6.2.2...v6.2.3) (2025-03-18)
 
 **Note:** Version bump only for package @tolgee/vue-testapp
