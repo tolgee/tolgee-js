@@ -52,6 +52,7 @@ export const LanguageSelect: React.FC = () => {
           style={{ maxWidth: 250 }}
         >
           <StyledSelect
+            data-cy="language-select"
             multiple
             value={selected.map((o) => o.value)}
             onChange={(e) => onChange(e.target.value as string | string[])}
@@ -63,7 +64,12 @@ export const LanguageSelect: React.FC = () => {
             }}
           >
             {options.map((option) => (
-              <MenuItem key={option.value} value={option.value} dense>
+              <MenuItem
+                data-cy="language-select-item"
+                key={option.value}
+                value={option.value}
+                dense
+              >
                 <Checkbox
                   size="small"
                   checked={Boolean(

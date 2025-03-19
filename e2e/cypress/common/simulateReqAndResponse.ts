@@ -1,4 +1,4 @@
-import { components } from '../../../packages/web/src/ui/client/apiSchema.generated';
+import { components } from '../../../packages/web/src/package/ui/client/apiSchema.generated';
 import { getDevUi } from './devUiTools';
 import { openUI, visitWithApiKey } from './nextInternalCommon';
 import testLanguages from './testLanguages';
@@ -11,12 +11,20 @@ type Props = {
   permissions: ApiKeyPermissionsModel;
   inForm: () => void;
   checkRequest?: (data: ComplexEditKeyDto) => void;
+  checkPage?: () => void;
+  language?: string;
+  translation?: string;
+  selectedLanguages?: string[];
 };
 
 export const simulateReqAndResponse = ({
   permissions,
   inForm,
   checkRequest,
+  checkPage,
+  language,
+  translation,
+  selectedLanguages,
 }: Props) => {
   const randomId = String(Math.random());
   // simulating restricted languages in api key info (english only)
@@ -29,8 +37,12 @@ export const simulateReqAndResponse = ({
   cy.intercept({ path: '/v2/projects/*/languages**', method: 'get' }, (req) => {
     req.reply(testLanguages);
   });
-  visitWithApiKey(permissions.scopes as any);
-  openUI();
+  visitWithApiKey(permissions.scopes as any, selectedLanguages);
+
+  if (language) {
+    cy.get('.lang-selector').select('Česky');
+  }
+  openUI(translation);
   inForm();
   cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) => {
     checkRequest?.(req.body);
@@ -38,6 +50,8 @@ export const simulateReqAndResponse = ({
     req.reply({ response: 'success' });
   }).as(randomId);
 
-  getDevUi().contains('Update').click();
-  return cy.wait(`@${randomId}`);
+  getDevUi().findDcy('key-form-submit').click();
+  return cy.wait(`@${randomId}`).then(() => {
+    checkPage?.();
+  });
 };

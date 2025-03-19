@@ -28,6 +28,11 @@ export const TranslationMethods = () => {
             )}
           </div>
         </div>
+
+        <div>
+          <h1>Default value</h1>
+          <div>{t('default-value', 'This is default')}</div>
+        </div>
       </div>
     </main>
   );
