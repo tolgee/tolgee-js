@@ -4,6 +4,9 @@
 
 This application is using VITE. To learn more about Tolgee, visit [https://tolgee.io](https://tolgee.io).
 
+## Preview
+![React_Showcase_Tolgee](https://github.com/user-attachments/assets/a4c9b2f5-6874-4617-b9bd-a29edbdb6843)
+
 ## To run the app in dev mode
 
 To install dependencies, run:
