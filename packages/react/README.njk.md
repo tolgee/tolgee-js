@@ -35,7 +35,7 @@ const tolgee = Tolgee()
 
 ## Usage
 
-![react-infinite](https://user-images.githubusercontent.com/18496315/137308502-844f5ccf-1895-414d-bf40-6707cb691853.gif)
+![React_Showcase_Tolgee](https://github.com/user-attachments/assets/a4c9b2f5-6874-4617-b9bd-a29edbdb6843)
 
 To translate texts using Tolgee React integration, you can use `T` component or `useTranslate` hook.
 
