@@ -23,7 +23,7 @@ To learn more, visit [https://tolgee.io](https://tolgee.io)
 {{ macros.why() }}
 
 ## Preview
-![react-infinite](https://user-images.githubusercontent.com/18496315/137308502-844f5ccf-1895-414d-bf40-6707cb691853.gif)
+![React_Showcase_Tolgee](https://github.com/user-attachments/assets/a4c9b2f5-6874-4617-b9bd-a29edbdb6843)
 
 To learn more, visit [https://tolgee.io](https://tolgee.io)
 
