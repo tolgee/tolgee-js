@@ -1,7 +1,7 @@
 {
   "name": "@tolgee/ngx-workspace",
   "private": true,
-  "version": "6.2.2",
+  "version": "6.2.4",
   "keywords": [
     "localization",
     "internationalization",
@@ -27,7 +27,7 @@
     "@angular/platform-browser": "17.3.7",
     "@angular/platform-browser-dynamic": "17.3.7",
     "@angular/router": "17.3.7",
-    "@tolgee/web": "6.2.2",
+    "@tolgee/web": "6.2.4",
     "rxjs": "~7.5.7",
     "tslib": "^2.6.2",
     "zone.js": "0.14.5"
@@ -39,8 +39,8 @@
     "@angular/language-service": "17.3.7",
     "@testing-library/angular": "^16.0.0",
     "@testing-library/jest-dom": "^6.4.5",
-    "@tolgee/format-icu": "6.2.2",
-    "@tolgee/testing": "6.2.2",
+    "@tolgee/format-icu": "6.2.4",
+    "@tolgee/testing": "6.2.4",
     "@types/jasmine": "~3.10.3",
     "@types/jasminewd2": "~2.0.3",
     "@types/jest": "^29.5.12",

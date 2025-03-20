@@ -215,6 +215,7 @@ export const KeyForm = () => {
           color="primary"
           variant="contained"
           style={{ marginLeft: '10px' }}
+          data-cy="key-form-submit"
         >
           {success
             ? 'Saved! ✓'

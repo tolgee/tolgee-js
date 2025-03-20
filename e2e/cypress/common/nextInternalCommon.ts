@@ -9,13 +9,16 @@ export const openUI = (translation = 'What To Pack') => {
   cy.wait(300);
 };
 
-export const visitWithApiKey = (scopes: Scope[]) => {
+export const visitWithApiKey = (scopes: Scope[], languages = ['en', 'de']) => {
   createApiKey({ projectId: 1, scopes })
     .then((data) => {
       cy.visit(`http://localhost:8114/translation-methods?api_key=${data.key}`);
     })
     .then(() =>
-      localStorage.setItem('__tolgee_preferredLanguages', '["en","de"]')
+      localStorage.setItem(
+        '__tolgee_preferredLanguages',
+        JSON.stringify(languages)
+      )
     );
   cy.contains('What To Pack').invoke('attr', '_tolgee').should('exist');
 };

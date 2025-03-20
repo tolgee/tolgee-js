@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.4](https://github.com/tolgee/tolgee-js/compare/v6.2.3...v6.2.4) (2025-03-19)
+
+
+### Bug Fixes
+
+* translation not updating to empty value ([#3443](https://github.com/tolgee/tolgee-js/issues/3443)) ([7fbdafb](https://github.com/tolgee/tolgee-js/commit/7fbdafb11cb23a00bfbcab626ebe9eaaf1544d1c))
+
+
+
+
+
+## [6.2.3](https://github.com/tolgee/tolgee-js/compare/v6.2.2...v6.2.3) (2025-03-18)
+
+
+### Bug Fixes
+
+* translation not updating in cache when new translation added ([#3442](https://github.com/tolgee/tolgee-js/issues/3442)) ([4eeed34](https://github.com/tolgee/tolgee-js/commit/4eeed346d1fa7e3ffd25d876d31aa0f15231242c)), closes [#3441](https://github.com/tolgee/tolgee-js/issues/3441)
+
+
+
+
+
 ## [6.2.2](https://github.com/tolgee/tolgee-js/compare/v6.2.1...v6.2.2) (2025-02-27)
 
 

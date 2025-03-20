@@ -120,4 +120,23 @@ context('UI Dialog', () => {
       },
     });
   });
+
+  it('updates translation to empty value correctly', () => {
+    simulateReqAndResponse({
+      language: 'Česky',
+      translation: 'Co sbalit',
+      permissions: fullPermissions,
+      selectedLanguages: ['en', 'cs'],
+      inForm() {
+        getDevUi()
+          .findDcy('global-editor')
+          .eq(1)
+          .click()
+          .realType('{backspace}'.repeat(20));
+      },
+      checkPage() {
+        cy.contains('app-title');
+      },
+    });
+  });
 });
