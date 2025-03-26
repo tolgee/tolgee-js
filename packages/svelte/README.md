@@ -141,7 +141,7 @@ To change the current language, use `getTolgee` method. For example, you can bin
    
 
 
-## Why use Tolgee?
+## Why to use Tolgee?
 Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features

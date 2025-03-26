@@ -43,6 +43,9 @@ This repository contains browser integration packages of the Tolgee Localization
 
 It provides the ability to easily manage localization texts directly in the context of a web application developed by you.
 
+## Preview
+![Tolgee Demo Example](https://github.com/user-attachments/assets/ca0d0ea0-a440-409f-a3cd-f93ef01dc197)
+
 To learn more, visit [https://tolgee.io](https://tolgee.io)
 
 ## Packages
@@ -58,7 +61,7 @@ To learn more, visit [https://tolgee.io](https://tolgee.io)
 | [@tolgee/i18next](https://github.com/tolgee/tolgee-js/tree/main/packages/i18next)                     | [![@tolgee/i18next version](https://img.shields.io/npm/v/@tolgee/i18next?label=npm)](https://www.npmjs.com/package/@tolgee/i18next) |
 
 
-## Why use Tolgee?
+## Why to use Tolgee?
 Tolgee saves a lot of time you would spend on localization tasks otherwise. It enables you to provide perfectly translated software.
 
 ### Features
@@ -72,11 +75,6 @@ Tolgee saves a lot of time you would spend on localization tasks otherwise. It e
 ![Frame 47](https://user-images.githubusercontent.com/18496315/188637819-ac4eb02d-7859-4ca8-9807-27818a52782d.png)
 Read more on the [Tolgee website](https://tolgee.io)
 
-
-## Preview
-![React_Showcase_Tolgee](https://github.com/user-attachments/assets/a4c9b2f5-6874-4617-b9bd-a29edbdb6843)
-
-To learn more, visit [https://tolgee.io](https://tolgee.io)
 
 
 ## Contributors
