@@ -7,6 +7,8 @@ For more information about using Tolgee with React, visit the [docs 📖](https:
 
 Localize (translate) your CRA, Next.js, or other React projects to multiple languages with Tolgee. Integration of Tolgee is extremely simple! 🇯🇵 🇰🇷 🇩🇪 🇨🇳 🇺🇸 🇫🇷 🇪🇸 🇮🇹 🇷🇺 🇬🇧
 
+![Tolgee Demo Example](https://github.com/user-attachments/assets/ca0d0ea0-a440-409f-a3cd-f93ef01dc197)
+
 {{ macros.integrationLinks('Tolgee for React docs', macros.v5link('integrations/react/installation')) }}
 
 {{ macros.installation('react') }}
@@ -34,8 +36,6 @@ const tolgee = Tolgee()
 ```
 
 ## Usage
-
-![react-infinite](https://user-images.githubusercontent.com/18496315/137308502-844f5ccf-1895-414d-bf40-6707cb691853.gif)
 
 To translate texts using Tolgee React integration, you can use `T` component or `useTranslate` hook.
 

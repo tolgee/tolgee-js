@@ -6,6 +6,9 @@ This repository contains browser integration packages of the Tolgee Localization
 
 It provides the ability to easily manage localization texts directly in the context of a web application developed by you.
 
+## Preview
+![Tolgee Demo Example](https://github.com/user-attachments/assets/ca0d0ea0-a440-409f-a3cd-f93ef01dc197)
+
 To learn more, visit [https://tolgee.io](https://tolgee.io)
 
 ## Packages
@@ -22,20 +25,7 @@ To learn more, visit [https://tolgee.io](https://tolgee.io)
 
 {{ macros.why() }}
 
-## Preview
-![react-infinite](https://user-images.githubusercontent.com/18496315/137308502-844f5ccf-1895-414d-bf40-6707cb691853.gif)
-
-To learn more, visit [https://tolgee.io](https://tolgee.io)
-
 {{ macros.contributors() }}
-
-## Launching Tolgee Rewards
-Contributed to Tolgee? Here is a big thank you from our community to you.
-Claim your badge and showcase them with pride.
-Let us inspire more folks!
-
-![Tolgee Badges](https://aviyel.com/assets/uploads/rewards/share/project/28/512/share.png)
-### **[Claim Now!](https://aviyel.com/projects/28/tolgee/rewards)**
 
 <br>
 
