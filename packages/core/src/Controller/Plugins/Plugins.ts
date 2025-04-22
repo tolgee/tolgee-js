@@ -208,7 +208,7 @@ export function Plugins(
       });
 
       instances.observer?.run({
-        mouseHighlight: true,
+        mouseHighlight: Boolean(instances.ui),
         options: observerOptions,
         translate,
         onClick,
