@@ -1,9 +1,11 @@
 import { TolgeeCore, TolgeeInstance } from '@tolgee/core';
-import { screen, waitFor } from '@testing-library/dom';
+import { fireEvent, screen, waitFor } from '@testing-library/dom';
 import {
   TOLGEE_ATTRIBUTE_NAME,
+  TOLGEE_HIGHLIGHTER_CLASS,
   TOLGEE_WRAPPED_ONLY_DATA_ATTRIBUTE,
 } from '../constants';
+import { ContextUi } from '../ContextUi';
 import { ObserverPlugin } from '../ObserverPlugin';
 
 export const testObserver = (observerType: 'invisible' | 'text') => {
@@ -105,6 +107,76 @@ export const testObserver = (observerType: 'invisible' | 'text') => {
             .queryByTestId('translation')
             ?.getAttribute(TOLGEE_ATTRIBUTE_NAME)
         ).toBeFalsy();
+      });
+    });
+
+    it("doesn't show highlight when there is no UI", async () => {
+      tolgee.run();
+      document.body.innerHTML = `
+        <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
+      `;
+
+      await waitFor(() => {
+        expect(
+          screen
+            .queryByTestId('translation')
+            ?.getAttribute(TOLGEE_ATTRIBUTE_NAME)
+        ).not.toBeFalsy();
+      });
+
+      const element = screen.queryByTestId('translation');
+
+      document.elementsFromPoint = jest.fn(() => [element]);
+
+      fireEvent(
+        element,
+        new MouseEvent('mousemove', {
+          altKey: true,
+          clientX: element.clientLeft,
+          clientY: element.clientTop,
+        })
+      );
+
+      await waitFor(() => {
+        expect(
+          document.querySelector(`.${TOLGEE_HIGHLIGHTER_CLASS}`)
+        ).toBeNull();
+      });
+    });
+
+    it('show highlight when there is UI', async () => {
+      // adding ui plugin
+      tolgee.addPlugin(ContextUi());
+      tolgee.run();
+      document.body.innerHTML = `
+        <span data-testid="translation">${tolgee.t({ key: 'hello' })}</span>
+      `;
+
+      await waitFor(() => {
+        expect(
+          screen
+            .queryByTestId('translation')
+            ?.getAttribute(TOLGEE_ATTRIBUTE_NAME)
+        ).not.toBeFalsy();
+      });
+
+      const element = screen.queryByTestId('translation');
+
+      document.elementsFromPoint = jest.fn(() => [element]);
+
+      fireEvent(
+        element,
+        new MouseEvent('mousemove', {
+          altKey: true,
+          clientX: element.clientLeft,
+          clientY: element.clientTop,
+        })
+      );
+
+      await waitFor(() => {
+        expect(
+          document.querySelector(`.${TOLGEE_HIGHLIGHTER_CLASS}`)
+        ).not.toBeNull();
       });
     });
   });
