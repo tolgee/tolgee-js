@@ -67,8 +67,7 @@ jobs:
 
       - name: Update README
         run: |
-          echo '> This repo is just a dummy. Submit issues [in monorepo](https://github.com/tolgee/tolgee-js) or [check the source code here](https://github.com/tolgee/tolgee-js/tree/main/testapps/${{ matrix.project }}).' | cat - README.md > temp && mv temp README.md
-        working-directory: testapps/${{ matrix.project }}
+          bash "$GITHUB_WORKSPACE/root/.github/scripts/update-readme.sh" "${{ matrix.project }}"
 
       - name: Commit & Push files
         run: |
