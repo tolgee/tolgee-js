@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.6](https://github.com/tolgee/tolgee-js/compare/v6.2.5...v6.2.6) (2025-06-11)
+
+
+### Bug Fixes
+
+* make createUrl more robust ([#3459](https://github.com/tolgee/tolgee-js/issues/3459)) ([e7e8546](https://github.com/tolgee/tolgee-js/commit/e7e854606eca453f10268703d4fa752782f42e1c)), closes [#3458](https://github.com/tolgee/tolgee-js/issues/3458)
+
+
+
+
+
 ## [6.2.5](https://github.com/tolgee/tolgee-js/compare/v6.2.4...v6.2.5) (2025-04-23)
 
 

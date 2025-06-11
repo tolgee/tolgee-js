@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/web",
-  "version": "6.2.5",
+  "version": "6.2.6",
   "description": "Tolgee for web",
   "declaration": true,
   "type": "module",
@@ -45,7 +45,7 @@
     "index.cjs"
   ],
   "dependencies": {
-    "@tolgee/core": "6.2.5"
+    "@tolgee/core": "6.2.6"
   },
   "devDependencies": {
     "@emotion/react": "^11.11.4",
@@ -56,7 +56,7 @@
     "@testing-library/dom": "^9.3.4",
     "@testing-library/jest-dom": "^6.4.2",
     "@tginternal/editor": "^1.15.2",
-    "@tolgee/format-icu": "6.2.5",
+    "@tolgee/format-icu": "6.2.6",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.3.16",
     "@types/react-dom": "^18.3.5",
