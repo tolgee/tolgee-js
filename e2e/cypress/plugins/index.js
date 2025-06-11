@@ -13,15 +13,14 @@
 // the project's config changing)
 
 const dotenvPlugin = require('cypress-dotenv');
-const extensionLoader = require('cypress-browser-extension-plugin/loader');
 
 /**
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
   on('before:browser:launch', (browser, launchOptions) => {
-    launchOptions.extensions.push('extension')
-    return launchOptions
+    launchOptions.extensions.push('extension');
+    return launchOptions;
   });
   config = dotenvPlugin(config);
   return config;

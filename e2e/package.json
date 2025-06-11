@@ -4,8 +4,8 @@
   "private": true,
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {
-    "cy:run": "cypress run",
-    "cy:open": "cypress open --browser chrome",
+    "cy:run": "cypress run --browser edge",
+    "cy:open": "cypress open",
     "cy:folders-json": "node scripts/listTests.js",
     "download-extension": "sh scripts/downloadTolgeeExtension.sh",
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 --report-unused-disable-directives ."
@@ -14,7 +14,6 @@
   "license": "BSD",
   "devDependencies": {
     "cypress": "^10.3.1",
-    "cypress-browser-extension-plugin": "^0.1.0",
     "cypress-dotenv": "^2.0.0",
     "cypress-file-upload": "^5.0.8",
     "cypress-xpath": "^2.0.1",

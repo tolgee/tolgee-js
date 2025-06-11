@@ -15,7 +15,7 @@ export const CypressRunner = ({
   const isRun = runType === 'run';
   const headedParam = headed ? '--headed' : '';
   const specParam = spec && isRun ? `--spec "cypress/e2e/${spec}/**"` : '';
-  const args = isRun ? `--browser chrome ${headedParam}` : '';
+  const args = `--browser edge ${headedParam}`;
 
   const run = () =>
     new Promise<number>((resolve, reject) => {

@@ -1,4 +1,4 @@
-import { joinUrls } from './url';
+import { createUrl, joinUrls } from './url';
 
 describe('url module', () => {
   it('joins urls without double slash', () => {
@@ -11,5 +11,16 @@ describe('url module', () => {
 
   it("doesn't touch the protocol", () => {
     expect(joinUrls('https://test.com/', '/c/')).toEqual('https://test.com/c/');
+  });
+
+  it("won't fail when origin invalid", () => {
+    jest.spyOn(window, 'location', 'get').mockReturnValue({
+      ...window.location,
+      origin: 'null',
+    });
+
+    expect(createUrl('https://test.com/', '/c/').toString()).toEqual(
+      'https://test.com/c/'
+    );
   });
 });

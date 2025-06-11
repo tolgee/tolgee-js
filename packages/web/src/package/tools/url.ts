@@ -16,7 +16,15 @@ export function joinUrls(...parts: string[]): string {
 }
 
 export function createUrl(...parts: string[]): URL {
+  const url = joinUrls(...parts);
   const base =
     typeof window === 'undefined' ? undefined : window.location.origin;
-  return new URL(joinUrls(...parts), base);
+
+  try {
+    return new URL(url, base);
+  } catch {
+    // there might be a weird value in `base`
+    // https://github.com/tolgee/tolgee-js/issues/3458
+    return new URL(url);
+  }
 }

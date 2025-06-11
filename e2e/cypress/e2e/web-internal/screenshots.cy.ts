@@ -3,6 +3,13 @@ import { getByAriaLabel } from '../../common/selectors';
 import { openUI, visitWithApiKey } from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
 
+/**
+ * Chrome 137 has broken the extension support of cypress
+ * https://github.com/cypress-io/cypress/issues/31690
+ *
+ * Currently solved by running tests in edge in github
+ */
+
 context('UI Dialog', () => {
   beforeEach(() => {
     login();
