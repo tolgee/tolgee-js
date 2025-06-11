@@ -7,8 +7,7 @@ import { getDevUi } from '../../common/devUiTools';
  * Chrome 137 has broken the extension support of cypress
  * https://github.com/cypress-io/cypress/issues/31690
  *
- * As there is no immediate alternative, I'm skipping these tests for now
- * Hopefully alternative appears
+ * Currently solved by running tests in edge in github
  */
 
 context('UI Dialog', () => {
@@ -16,7 +15,7 @@ context('UI Dialog', () => {
     login();
   });
 
-  it.skip('makes screenshot', () => {
+  it('makes screenshot', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -44,7 +43,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Take screenshot').should('not.exist');
   });
 
-  it.skip('screenshots editable', () => {
+  it('screenshots editable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -67,7 +66,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Delete').should('not.exist');
   });
 
-  it.skip('screenshots deletable', () => {
+  it('screenshots deletable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
