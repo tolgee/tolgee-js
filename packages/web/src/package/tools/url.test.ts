@@ -12,8 +12,11 @@ describe('url module', () => {
   it("won't fail when origin invalid", () => {
     expect(joinUrls('https://test.com/', '/c/')).toEqual('https://test.com/c/');
 
-    // @ts-ignore
-    window.location = { ...window.location, origin: 'null' };
+    jest.spyOn(window, 'location', 'get').mockReturnValue({
+      ...window.location,
+      origin: 'null',
+    });
+
     expect(createUrl('https://test.com/', '/c/').toString()).toEqual(
       'https://test.com/c/'
     );
