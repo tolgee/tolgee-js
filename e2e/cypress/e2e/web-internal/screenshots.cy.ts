@@ -3,12 +3,20 @@ import { getByAriaLabel } from '../../common/selectors';
 import { openUI, visitWithApiKey } from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
 
+/**
+ * Chrome 137 has broken the extension support of cypress
+ * https://github.com/cypress-io/cypress/issues/31690
+ *
+ * As there is no immediate alternative, I'm skipping these tests for now
+ * Hopefully alternative appears
+ */
+
 context('UI Dialog', () => {
   beforeEach(() => {
     login();
   });
 
-  it('makes screenshot', () => {
+  it.skip('makes screenshot', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -36,7 +44,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Take screenshot').should('not.exist');
   });
 
-  it('screenshots editable', () => {
+  it.skip('screenshots editable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
@@ -59,7 +67,7 @@ context('UI Dialog', () => {
     getByAriaLabel('Delete').should('not.exist');
   });
 
-  it('screenshots deletable', () => {
+  it.skip('screenshots deletable', () => {
     visitWithApiKey([
       'translations.view',
       'keys.edit',
