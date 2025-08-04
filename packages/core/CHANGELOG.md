@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.7-prerelease.9693344d.0](https://github.com/tolgee/tolgee-js/compare/v6.2.6...v6.2.7-prerelease.9693344d.0) (2025-08-04)
+
+**Note:** Version bump only for package @tolgee/core
+
+
+
+
+
 ## [6.2.6](https://github.com/tolgee/tolgee-js/compare/v6.2.5...v6.2.6) (2025-06-11)
 
 **Note:** Version bump only for package @tolgee/core
