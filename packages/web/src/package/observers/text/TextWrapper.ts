@@ -139,7 +139,7 @@ export function TextWrapper({
 
   function escapeParam(param: any) {
     if (typeof param === 'string') {
-      return param.replace(/[,:|\\]/gs, '\\$&');
+      return param.replace(/[,:|\\]/g, '\\$&');
     }
     if (typeof param === 'number' || typeof param === 'bigint') {
       return param.toString();
@@ -176,7 +176,7 @@ export function TextWrapper({
     },
 
     unwrap(text: string) {
-      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
+      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'g');
 
       const keysAndParams: KeyAndParams[] = [];
 
