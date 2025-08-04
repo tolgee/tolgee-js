@@ -176,10 +176,7 @@ export function TextWrapper({
     },
 
     unwrap(text: string) {
-      const matchRegexp = new RegExp(
-        getRawUnWrapRegex(),
-        typeof /x/.dotAll !== 'undefined' ? 'gs' : 'g'
-      );
+      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
 
       const keysAndParams: KeyAndParams[] = [];
 
