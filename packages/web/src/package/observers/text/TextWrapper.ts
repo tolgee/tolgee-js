@@ -176,7 +176,7 @@ export function TextWrapper({
     },
 
     unwrap(text: string) {
-      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'g');
+      const matchRegexp = new RegExp(getRawUnWrapRegex(), 'gs');
 
       const keysAndParams: KeyAndParams[] = [];
 
