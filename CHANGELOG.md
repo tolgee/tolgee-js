@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.7](https://github.com/tolgee/tolgee-js/compare/v6.2.6...v6.2.7) (2025-08-05)
+
+
+### Bug Fixes
+
+* remove unnecessary regex flags ([#3467](https://github.com/tolgee/tolgee-js/issues/3467)) ([11bee8f](https://github.com/tolgee/tolgee-js/commit/11bee8f0f064fa5d6ade0a99912cf96ffd6288c0)), closes [#3466](https://github.com/tolgee/tolgee-js/issues/3466)
+
+
+
+
+
 ## [6.2.6](https://github.com/tolgee/tolgee-js/compare/v6.2.5...v6.2.6) (2025-06-11)
 
 
