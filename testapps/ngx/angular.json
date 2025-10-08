@@ -19,12 +19,12 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/sampleapp/browser",
             "index": "projects/sampleapp/src/index.html",
-            "main": "projects/sampleapp/src/main.ts",
-            "polyfills": "projects/sampleapp/src/polyfills.ts",
+            "browser": "projects/sampleapp/src/main.ts",
+            "polyfills": ["projects/sampleapp/src/polyfills.ts"],
             "tsConfig": "projects/sampleapp/tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -49,25 +49,21 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ]
             },
             "stage": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -79,9 +75,7 @@
               ]
             },
             "e2e": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
