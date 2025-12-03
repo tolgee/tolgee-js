@@ -18,7 +18,7 @@ export function joinUrls(...parts: string[]): string {
 export function createUrl(...parts: string[]): URL {
   const url = joinUrls(...parts);
   const base =
-    typeof window === 'undefined' ? undefined : window.location.origin;
+    typeof window === 'undefined' ? undefined : window.location?.origin;
 
   try {
     return new URL(url, base);
