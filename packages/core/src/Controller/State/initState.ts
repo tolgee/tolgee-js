@@ -48,6 +48,11 @@ export type TolgeeOptionsInternal = {
   projectId?: number | string;
 
   /**
+   * Branch to use for translations (default: none or default branch)
+   */
+  branch?: string;
+
+  /**
    * Used when auto detection is not available or is turned off
    */
   defaultLanguage?: string;

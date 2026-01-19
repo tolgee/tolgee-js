@@ -45,12 +45,24 @@ const ScHeadingRight = styled('div')`
   flex-grow: 1;
 `;
 
-const ScKey = styled('p')`
+const ScTitle = styled(ScFieldTitle)`
+  justify-content: start;
+  gap: 4px;
+  align-items: center;
+`;
+
+const ScValue = styled('p')`
   margin: 0px;
 `;
 
-const ScKeyHint = styled('span')`
+const ScHint = styled('span')`
   color: grey;
+`;
+
+const ScLinkIcon = styled(Link)`
+  display: grid;
+  font-size: 16px;
+  margin: 0px 0px;
 `;
 
 const ScFieldsWrapper = styled('div')`
@@ -72,18 +84,6 @@ const ScControls = styled('div')`
   min-height: 36px;
 `;
 
-const ScKeyTitle = styled(ScFieldTitle)`
-  justify-content: start;
-  gap: 4px;
-  align-items: center;
-`;
-
-const ScLinkIcon = styled(Link)`
-  display: grid;
-  font-size: 16px;
-  margin: 0px 0px;
-`;
-
 export const KeyForm = () => {
   const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
@@ -95,6 +95,7 @@ export const KeyForm = () => {
   const input = useDialogContext((c) => c.input);
   const keyData = useDialogContext((c) => c.keyData);
   const formDisabled = useDialogContext((c) => c.formDisabled);
+  const readOnly = useDialogContext((c) => c.readOnly);
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
   const submitError = useDialogContext((c) => c.submitError);
@@ -105,6 +106,7 @@ export const KeyForm = () => {
   const selectedNs = useDialogContext((c) => c.selectedNs);
   const permissions = useDialogContext((c) => c.permissions);
   const filterTagMissing = useDialogContext((c) => c.filterTagMissing);
+  const branch = useDialogContext((c) => c.uiProps.branch);
 
   const screenshotsView = permissions.canViewScreenshots;
   const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
@@ -152,7 +154,13 @@ export const KeyForm = () => {
         )}
         <ScHeadingRight>{!loading && <LanguageSelect />}</ScHeadingRight>
       </ScHeading>
-      <ScKeyTitle>
+      {branch && (
+        <>
+          <ScTitle>Branch</ScTitle>
+          <ScValue>{branch}</ScValue>
+        </>
+      )}
+      <ScTitle>
         Key
         {linkToPlatform && (
           <Tooltip title="Open key in Tolgee platform">
@@ -167,13 +175,11 @@ export const KeyForm = () => {
             </ScLinkIcon>
           </Tooltip>
         )}
-      </ScKeyTitle>
-      <ScKey>
+      </ScTitle>
+      <ScValue>
         {input}
-        <ScKeyHint>
-          {!keyExists && ready && " (key doesn't exist yet)"}
-        </ScKeyHint>
-      </ScKey>
+        <ScHint>{!keyExists && ready && " (key doesn't exist yet)"}</ScHint>
+      </ScValue>
       <NsSelect
         options={fallbackNamespaces}
         value={selectedNs}
@@ -199,7 +205,11 @@ export const KeyForm = () => {
       )}
       {formDisabled && ready && (
         <ErrorAlert
-          error={new HttpError('permissions_not_sufficient_to_edit')}
+          error={
+            readOnly
+              ? new HttpError('operation_not_permitted_in_read_only_mode')
+              : new HttpError('permissions_not_sufficient_to_edit')
+          }
           severity="info"
         />
       )}

@@ -7,9 +7,10 @@ function createDevBackend(): BackendDevMiddleware {
     getRecord({
       apiUrl,
       apiKey,
+      projectId,
+      branch,
       language,
       namespace,
-      projectId,
       filterTag,
       fetch,
     }) {
@@ -21,6 +22,9 @@ function createDevBackend(): BackendDevMiddleware {
         url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
       }
 
+      if (branch) {
+        url.searchParams.append('branch', branch);
+      }
       if (namespace) {
         url.searchParams.append('ns', namespace);
       }
