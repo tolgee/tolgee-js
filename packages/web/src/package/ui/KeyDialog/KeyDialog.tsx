@@ -34,6 +34,7 @@ export const KeyDialog = ({ uiProps, keyData }: Props) => {
       apiUrl={uiProps.apiUrl}
       apiKey={uiProps.apiKey}
       projectId={uiProps.projectId}
+      branch={uiProps.branch}
     >
       {open && (
         <DialogProvider

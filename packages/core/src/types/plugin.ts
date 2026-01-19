@@ -14,6 +14,7 @@ export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
   projectId?: number | string;
+  branch?: string;
   filterTag?: string[];
 };
 
@@ -156,6 +157,7 @@ export type UiProps = {
   apiUrl: string;
   apiKey: string;
   projectId: number | string | undefined;
+  branch?: string;
   highlight: HighlightInterface;
   findPositions: (key?: string | undefined, ns?: NsFallback) => KeyPosition[];
   changeTranslation: ChangeTranslationInterface;

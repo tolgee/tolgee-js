@@ -5,47 +5,460 @@
 
 
 export interface paths {
-  "/v2/user": {
+  "/v2/api-keys/current": {
     /**
-     * Get user info
-     * @description Returns information about currently authenticated user.
+     * Get current API key info
+     * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
      */
-    get: operations["getInfo_2"];
+    get: operations["getCurrent_1"];
   };
-  "/v2/projects/tasks/{taskNumber}/reopen": {
-    /** Reopen task */
-    put: operations["reopenTask_1"];
-  };
-  "/v2/projects/tasks/{taskNumber}/keys/{keyId}": {
+  "/v2/api-keys/current-permissions": {
     /**
-     * Update task key
-     * @description Mark key as done, which updates task progress.
+     * Get current permission info
+     * @description Returns current PAK or PAT permissions for current user, api-key and project
      */
-    put: operations["updateTaskKey_1"];
+    get: operations["getCurrentPermissions"];
   };
-  "/v2/projects/tasks/{taskNumber}/keys": {
-    /** Get task keys */
-    get: operations["getTaskKeys_1"];
-    /** Add or remove task keys */
-    put: operations["updateTaskKeys_1"];
+  "/v2/auth-provider": {
+    /** Get current third party authentication provider */
+    get: operations["getCurrentAuthProvider"];
+    /** Initiate provider change to remove current third party authentication provider */
+    delete: operations["deleteCurrentAuthProvider"];
   };
-  "/v2/projects/tasks/{taskNumber}/finish": {
-    /** Finish task */
-    put: operations["finishTask_1"];
+  "/v2/auth-provider/change": {
+    /** Get info about authentication provider which can replace the current one */
+    get: operations["getChangedAuthProvider"];
+    /** Accept change of the third party authentication provider */
+    post: operations["acceptChangeAuthProvider"];
+    /** Reject change of the third party authentication provider */
+    delete: operations["rejectChangeAuthProvider"];
   };
-  "/v2/projects/tasks/{taskNumber}/close": {
-    /** Close task */
-    put: operations["closeTask_1"];
+  "/v2/image-upload": {
+    /** Upload an image for later use */
+    post: operations["upload"];
   };
-  "/v2/projects/tasks/{taskNumber}": {
-    /** Get task */
-    get: operations["getTask_1"];
-    /** Update task */
-    put: operations["updateTask_1"];
+  "/v2/image-upload/{ids}": {
+    /** Delete uploaded images */
+    delete: operations["delete_16"];
   };
-  "/v2/projects/namespaces/{id}": {
-    /** Update namespace */
-    put: operations["update_2"];
+  "/v2/notification": {
+    /** Gets notifications of the currently logged in user, newest is first. */
+    get: operations["getNotifications"];
+  };
+  "/v2/notification-settings": {
+    /**
+     * Get notification settings
+     * @description Returns notification settings of the currently logged in user
+     */
+    get: operations["getNotificationsSettings"];
+    /**
+     * Save notification setting
+     * @description Saves new value for given parameters
+     */
+    put: operations["putNotificationSetting"];
+  };
+  "/v2/notifications-mark-seen": {
+    /** Marks notifications of the currently logged in user with given IDs as seen. */
+    put: operations["markNotificationsAsSeen"];
+  };
+  "/v2/organizations": {
+    /**
+     * Get all permitted organizations
+     * @description Returns all organizations, which is current user allowed to view
+     */
+    get: operations["getAll_10"];
+    /** Create organization */
+    post: operations["create_13"];
+  };
+  "/v2/organizations/{id}": {
+    /** Get one organization */
+    get: operations["get_15"];
+  };
+  "/v2/organizations/{organizationId}/glossaries": {
+    /** Get all organization glossaries */
+    get: operations["getAll_12"];
+    /** Create glossary */
+    post: operations["create_14"];
+  };
+  "/v2/organizations/{organizationId}/glossaries-with-stats": {
+    /** Get all organization glossaries with some additional statistics */
+    get: operations["getAllWithStats"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}": {
+    /** Get glossary */
+    get: operations["get_13"];
+    /** Update glossary */
+    put: operations["update_8"];
+    /** Delete glossary */
+    delete: operations["delete_7"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/assigned-projects": {
+    /** Get all projects assigned to glossary */
+    get: operations["getAssignedProjects"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/export": {
+    /** Export glossary terms as CSV */
+    get: operations["export"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/import": {
+    /** Import glossary terms from CSV */
+    post: operations["importCsv"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/languages": {
+    /** Get all languages in use by the glossary */
+    get: operations["getLanguages"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms": {
+    /** Get all glossary terms */
+    get: operations["getAll_13"];
+    /** Create a new glossary term */
+    post: operations["create_15"];
+    /** Batch delete multiple terms */
+    delete: operations["deleteMultiple"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}": {
+    /** Get glossary term */
+    get: operations["get_14"];
+    /** Update glossary term */
+    put: operations["update_9"];
+    /** Delete glossary term */
+    delete: operations["delete_8"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}/translations": {
+    /** Set a new glossary term translation for language */
+    post: operations["update_12"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}/translations/{languageTag}": {
+    /** Get glossary term translation for language */
+    get: operations["get_23"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/termsIds": {
+    /** Get all glossary terms ids */
+    get: operations["getAllIds"];
+  };
+  "/v2/organizations/{organizationId}/glossaries/{glossaryId}/termsWithTranslations": {
+    /** Get all glossary terms with translations */
+    get: operations["getAllWithTranslations"];
+  };
+  "/v2/organizations/{organizationId}/machine-translation-credit-balance": {
+    /**
+     * Get credit balance for organization
+     * @description Returns machine translation credit balance for organization
+     */
+    get: operations["getOrganizationCredits"];
+  };
+  "/v2/organizations/{slug}": {
+    /** Get organization by slug */
+    get: operations["get_22"];
+  };
+  "/v2/pats/current": {
+    /**
+     * Return current PAK
+     * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
+     */
+    get: operations["getCurrent"];
+  };
+  "/v2/projects": {
+    /**
+     * Get all permitted
+     * @description Returns all projects where current user has any permission
+     */
+    get: operations["getAll"];
+    /**
+     * Create project
+     * @description Creates a new project with languages and initial settings.
+     */
+    post: operations["createProject"];
+  };
+  "/v2/projects/activity": {
+    /** Get project activity */
+    get: operations["getActivity_1"];
+  };
+  "/v2/projects/activity/revisions/{revisionId}": {
+    /** Get one revision data */
+    get: operations["getSingleRevision_1"];
+  };
+  "/v2/projects/batch-jobs": {
+    /** List batch operations */
+    get: operations["list_4"];
+  };
+  "/v2/projects/batch-jobs/{id}": {
+    /** Get batch operation */
+    get: operations["get_21"];
+  };
+  "/v2/projects/batch-jobs/{id}/cancel": {
+    /**
+     * Stop batch operation
+     * @description Stops batch operation if possible.
+     */
+    put: operations["cancel_1"];
+  };
+  "/v2/projects/big-meta": {
+    /**
+     * Store Big Meta
+     * @description Stores a bigMeta for a project
+     */
+    post: operations["store_3"];
+  };
+  "/v2/projects/current-batch-jobs": {
+    /**
+     * Get all running and pending batch operations
+     * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
+     */
+    get: operations["currentJobs_1"];
+  };
+  "/v2/projects/export": {
+    /**
+     * Export data
+     * @description
+     *       Exports project data in various formats (JSON, properties, YAML, etc.).
+     *
+     *       ## HTTP Conditional Requests Support
+     *
+     *       This endpoint supports HTTP conditional requests using both If-Modified-Since and If-None-Match headers:
+     *
+     *       - **If-Modified-Since header provided**: The server checks if the project data has been modified since the specified date
+     *       - **If-None-Match header provided**: The server checks if the project data has changed by comparing the eTag value
+     *       - **Data not modified**: Returns HTTP 304 Not Modified with empty body
+     *       - **Data modified or no header**: Returns HTTP 200 OK with the exported data, Last-Modified header, and ETag header
+     *
+     *       The Last-Modified header in the response contains the timestamp of the last project modification,
+     *       and the ETag header contains a unique identifier for the current project state. Both can be used
+     *       for subsequent conditional requests to avoid unnecessary data transfer when the project hasn't changed.
+     *
+     *       Cache-Control header is set to max-age=0 to ensure validation on each request.
+     */
+    get: operations["exportData_1"];
+    /**
+     * Export data (post)
+     * @description
+     *       Exports project data in various formats (JSON, properties, YAML, etc.).
+     *       Useful when exceeding allowed URL size with GET requests.
+     *
+     *       ## HTTP Conditional Requests Support
+     *
+     *       This endpoint supports HTTP conditional requests using both If-Modified-Since and If-None-Match headers:
+     *
+     *       - **If-Modified-Since header provided**: The server checks if the project data has been modified since the specified date
+     *       - **If-None-Match header provided**: The server checks if the project data has changed by comparing the eTag value
+     *       - **Data not modified**: Returns HTTP 304 Not Modified with empty body
+     *       - **Data modified or no header**: Returns HTTP 200 OK with the exported data, Last-Modified header, and ETag header
+     *
+     *       Note: This endpoint uses a custom implementation that returns 304 Not Modified for all HTTP methods
+     *       (including POST) when conditional headers indicate the data hasn't changed. This differs from Spring's
+     *       default behavior which returns 412 for POST requests, but is appropriate here since POST is used only
+     *       to accommodate large request parameters, not to modify data.
+     *
+     *       The Last-Modified header in the response contains the timestamp of the last project modification,
+     *       and the ETag header contains a unique identifier for the current project state. Both can be used
+     *       for subsequent conditional requests to avoid unnecessary data transfer when the project hasn't changed.
+     *
+     *       Cache-Control header is set to max-age=0 to ensure validation on each request.
+     */
+    post: operations["exportPost_1"];
+  };
+  "/v2/projects/import": {
+    /**
+     * Add files
+     * @description Prepares provided files to import.
+     */
+    post: operations["addFiles_1"];
+    /**
+     * Delete
+     * @description Deletes prepared import data.
+     */
+    delete: operations["cancelImport_1"];
+  };
+  "/v2/projects/import-settings": {
+    /**
+     * Get Import Settings
+     * @description Returns import settings for the authenticated user and the project.
+     */
+    get: operations["get_1"];
+    /**
+     * Set Import Settings
+     * @description Stores import settings for the authenticated user and the project.
+     */
+    put: operations["store_1"];
+  };
+  "/v2/projects/import/all-namespaces": {
+    /**
+     * Get namespaces
+     * @description Returns all existing and imported namespaces
+     */
+    get: operations["getAllNamespaces_1"];
+  };
+  "/v2/projects/import/apply": {
+    /**
+     * Apply import
+     * @description Imports the data prepared in previous step
+     */
+    put: operations["applyImport_1"];
+  };
+  "/v2/projects/import/apply-streaming": {
+    /**
+     * Apply import (streaming)
+     * @description Imports the data prepared in previous step. Streams current status.
+     */
+    put: operations["applyImportStreaming_1"];
+  };
+  "/v2/projects/import/result": {
+    /**
+     * Get result
+     * @description Returns the result of preparation.
+     */
+    get: operations["getImportResult_1"];
+  };
+  "/v2/projects/import/result/files/{fileId}/select-namespace": {
+    /**
+     * Select namespace
+     * @description Sets namespace for file to import.
+     */
+    put: operations["selectNamespace_1"];
+  };
+  "/v2/projects/import/result/files/{importFileId}/issues": {
+    /**
+     * Get file issues
+     * @description Returns issues for uploaded file.
+     */
+    get: operations["getImportFileIssues_1"];
+  };
+  "/v2/projects/import/result/languages/{importLanguageId}/reset-existing": {
+    /**
+     * Reset existing language pairing
+     * @description Resets existing language paired with language to import.
+     */
+    put: operations["resetExistingLanguage_1"];
+  };
+  "/v2/projects/import/result/languages/{importLanguageId}/select-existing/{existingLanguageId}": {
+    /**
+     * Pair existing language
+     * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
+     */
+    put: operations["selectExistingLanguage_1"];
+  };
+  "/v2/projects/import/result/languages/{languageId}": {
+    /**
+     * Get import language
+     * @description Returns language prepared to import.
+     */
+    get: operations["getImportLanguage_1"];
+    /**
+     * Delete language
+     * @description Deletes language prepared to import.
+     */
+    delete: operations["deleteLanguage_3"];
+  };
+  "/v2/projects/import/result/languages/{languageId}/resolve-all/set-keep-existing": {
+    /**
+     * Resolve all translation conflicts (keep existing)
+     * @description Resolves all translation conflicts for provided language. The old translations will be kept.
+     */
+    put: operations["resolveTranslationSetKeepExisting_3"];
+  };
+  "/v2/projects/import/result/languages/{languageId}/resolve-all/set-override": {
+    /**
+     * Resolve all translation conflicts (override)
+     * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
+     */
+    put: operations["resolveTranslationSetOverride_3"];
+  };
+  "/v2/projects/import/result/languages/{languageId}/translations": {
+    /**
+     * Get translations
+     * @description Returns translations prepared to import.
+     */
+    get: operations["getImportTranslations_1"];
+  };
+  "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-keep-existing": {
+    /**
+     * Resolve conflict (keep existing)
+     * @description Resolves translation conflict. The old translation will be kept.
+     */
+    put: operations["resolveTranslationSetKeepExisting_1"];
+  };
+  "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-override": {
+    /**
+     * Resolve conflict (override)
+     * @description Resolves translation conflict. The old translation will be overridden.
+     */
+    put: operations["resolveTranslationSetOverride_1"];
+  };
+  "/v2/projects/keys": {
+    /** Get all keys */
+    get: operations["getAll_8"];
+    /** Create new key */
+    post: operations["create_8"];
+    /**
+     * Delete one or multiple keys (post)
+     * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
+     */
+    delete: operations["delete_12"];
+  };
+  "/v2/projects/keys/create": {
+    /** Create new key */
+    post: operations["create_7"];
+  };
+  "/v2/projects/keys/import": {
+    /**
+     * Import keys
+     * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
+     */
+    post: operations["importKeys_3"];
+  };
+  "/v2/projects/keys/import-resolvable": {
+    /**
+     * Import keys (resolvable)
+     * @deprecated
+     * @description
+     *       Import's new keys with translations. Translations can be updated, when specified.\n\n
+     *       DEPRECATED: Use /v2/projects/{projectId}/single-step-import-resolvable instead.
+     */
+    post: operations["importKeys_1"];
+  };
+  "/v2/projects/keys/info": {
+    /**
+     * Get key info
+     * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
+     */
+    post: operations["getInfo_2"];
+  };
+  "/v2/projects/keys/search": {
+    /**
+     * Search for keys
+     * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
+     *
+     * Sort is ignored for this request.
+     */
+    get: operations["searchForKey_1"];
+  };
+  "/v2/projects/keys/select": {
+    /**
+     * Select keys
+     * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+     */
+    get: operations["selectKeys_3"];
+  };
+  "/v2/projects/keys/{ids}": {
+    /** Delete one or multiple keys */
+    delete: operations["delete_15"];
+  };
+  "/v2/projects/keys/{id}": {
+    /** Get one key */
+    get: operations["get_9"];
+    /** Edit key name */
+    put: operations["edit_1"];
+  };
+  "/v2/projects/keys/{id}/big-meta": {
+    /** Get Big Meta for key */
+    get: operations["getBigMeta_1"];
+  };
+  "/v2/projects/keys/{id}/complex-update": {
+    /**
+     * Edit key and related data
+     * @description Edits key name, translations, tags, screenshots, and other data
+     */
+    put: operations["complexEdit_1"];
   };
   "/v2/projects/keys/{id}/disabled-languages": {
     /**
@@ -59,22 +472,25 @@ export interface paths {
      */
     put: operations["setDisabledLanguages_1"];
   };
-  "/v2/projects/keys/{id}/complex-update": {
+  "/v2/projects/keys/{keyId}/auto-translate": {
     /**
-     * Edit key and related data
-     * @description Edits key name, translations, tags, screenshots, and other data
+     * Auto translates keys
+     * @description Uses enabled auto-translation methods.
+     * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
+     *
+     * This will replace the the existing translation with the result obtained from specified source!
      */
-    put: operations["complexEdit_1"];
+    put: operations["autoTranslate_1"];
   };
-  "/v2/projects/keys/{id}": {
-    /** Get one key */
-    get: operations["get_7"];
-    /** Edit key name */
-    put: operations["edit_1"];
+  "/v2/projects/keys/{keyId}/screenshots": {
+    /** Get screenshots */
+    get: operations["getKeyScreenshots"];
+    /** Upload screenshot */
+    post: operations["uploadScreenshot"];
   };
-  "/v2/projects/tag-complex": {
-    /** Execute complex tag operation */
-    put: operations["executeComplexTagOperation_1"];
+  "/v2/projects/keys/{keyId}/screenshots/{ids}": {
+    /** Delete screenshots */
+    delete: operations["deleteScreenshots"];
   };
   "/v2/projects/keys/{keyId}/tags": {
     /**
@@ -83,117 +499,274 @@ export interface paths {
      */
     put: operations["tagKey_1"];
   };
-  "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-override": {
+  "/v2/projects/keys/{keyId}/tags/{tagId}": {
     /**
-     * Resolve conflict (override)
-     * @description Resolves translation conflict. The old translation will be overridden.
+     * Remove tag
+     * @description Removes tag with provided id from key with provided id
      */
-    put: operations["resolveTranslationSetOverride_1"];
+    delete: operations["removeTag_1"];
   };
-  "/v2/projects/import/result/languages/{languageId}/translations/{translationId}/resolve/set-keep-existing": {
-    /**
-     * Resolve conflict (keep existing)
-     * @description Resolves translation conflict. The old translation will be kept.
-     */
-    put: operations["resolveTranslationSetKeepExisting_1"];
+  "/v2/projects/labels": {
+    /** Get available project labels */
+    get: operations["getAll_2"];
+    /** Create label */
+    post: operations["createLabel_1"];
   };
-  "/v2/projects/import/result/languages/{languageId}/resolve-all/set-override": {
-    /**
-     * Resolve all translation conflicts (override)
-     * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
-     */
-    put: operations["resolveTranslationSetOverride_3"];
+  "/v2/projects/labels/ids": {
+    /** Get labels by ids */
+    get: operations["getLabelsByIds_1"];
   };
-  "/v2/projects/import/result/languages/{languageId}/resolve-all/set-keep-existing": {
-    /**
-     * Resolve all translation conflicts (keep existing)
-     * @description Resolves all translation conflicts for provided language. The old translations will be kept.
-     */
-    put: operations["resolveTranslationSetKeepExisting_3"];
+  "/v2/projects/labels/{labelId}": {
+    /** Update label */
+    put: operations["updateLabel_1"];
+    /** Delete label */
+    delete: operations["deleteLabel_1"];
   };
-  "/v2/projects/import/result/languages/{importLanguageId}/select-existing/{existingLanguageId}": {
-    /**
-     * Pair existing language
-     * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
-     */
-    put: operations["selectExistingLanguage_1"];
+  "/v2/projects/languages": {
+    /** Get all languages */
+    get: operations["getAll_6"];
+    /** Create language */
+    post: operations["createLanguage_1"];
   };
-  "/v2/projects/import/result/languages/{importLanguageId}/reset-existing": {
-    /**
-     * Reset existing language pairing
-     * @description Resets existing language paired with language to import.
-     */
-    put: operations["resetExistingLanguage_1"];
+  "/v2/projects/languages/{languageId}": {
+    /** Get one language */
+    get: operations["get_7"];
+    /** Update language */
+    put: operations["editLanguage_1"];
+    /** Delete specific language */
+    delete: operations["deleteLanguage_1"];
   };
-  "/v2/projects/import/result/files/{fileId}/select-namespace": {
-    /**
-     * Select namespace
-     * @description Sets namespace for file to import.
-     */
-    put: operations["selectNamespace_1"];
+  "/v2/projects/languages/{languageId}/key/{keyId}/suggestion": {
+    /** Get suggestions */
+    get: operations["getSuggestions_1"];
+    /** Create translation suggestion */
+    post: operations["createSuggestion_1"];
   };
-  "/v2/projects/import/apply-streaming": {
+  "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}": {
     /**
-     * Apply import (streaming)
-     * @description Imports the data prepared in previous step. Streams current status.
+     * Delete suggestion
+     * @description User can only delete suggestion created by them
      */
-    put: operations["applyImportStreaming_1"];
+    delete: operations["deleteSuggestion_1"];
   };
-  "/v2/projects/import/apply": {
-    /**
-     * Apply import
-     * @description Imports the data prepared in previous step
-     */
-    put: operations["applyImport_1"];
+  "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}/accept": {
+    /** Accept suggestion */
+    put: operations["acceptSuggestion_1"];
   };
-  "/v2/projects/import-settings": {
-    /**
-     * Get Import Settings
-     * @description Returns import settings for the authenticated user and the project.
-     */
-    get: operations["get_11"];
-    /**
-     * Set Import Settings
-     * @description Stores import settings for the authenticated user and the project.
-     */
-    put: operations["store_1"];
+  "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}/decline": {
+    /** Decline suggestion */
+    put: operations["declineSuggestion_1"];
   };
-  "/v2/projects/batch-jobs/{id}/cancel": {
-    /**
-     * Stop batch operation
-     * @description Stops batch operation if possible.
-     */
-    put: operations["cancel_1"];
+  "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}/set-active": {
+    /** Set suggestion active */
+    put: operations["suggestionSetActive_1"];
   };
-  "/v2/projects/translations/{translationId}/set-state/{state}": {
+  "/v2/projects/my-batch-jobs": {
+    /**
+     * List user batch operations
+     * @description List all batch operations started by current user
+     */
+    get: operations["myList_1"];
+  };
+  "/v2/projects/namespace-by-name/{name}": {
+    /**
+     * Get namespace by name
+     * @description Returns information about a namespace by its name
+     */
+    get: operations["getByName_1"];
+  };
+  "/v2/projects/namespaces": {
+    /** Get namespaces */
+    get: operations["getAllNamespaces_3"];
+  };
+  "/v2/projects/namespaces/{id}": {
+    /** Update namespace */
+    put: operations["update_4"];
+  };
+  "/v2/projects/single-step-import": {
+    /**
+     * Single step import
+     * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
+     */
+    post: operations["singleStepFromFiles_1"];
+  };
+  "/v2/projects/single-step-import-resolvable": {
+    /** Single step import from body */
+    post: operations["singleStepResolvableImport_1"];
+  };
+  "/v2/projects/start-batch-job/ai-playground-translate": {
+    /** Translates via llm and stores result in AiPlaygroundResult */
+    post: operations["aiPlaygroundTranslate_1"];
+  };
+  "/v2/projects/start-batch-job/assign-translation-label": {
+    /** Assign labels to translations */
+    post: operations["assignTranslationLabel_1"];
+  };
+  "/v2/projects/start-batch-job/clear-translations": {
+    /**
+     * Clear translation values
+     * @description Clear translation values for provided keys in selected languages.
+     */
+    post: operations["clearTranslations_1"];
+  };
+  "/v2/projects/start-batch-job/copy-translations": {
+    /**
+     * Copy translation values
+     * @description Copy translation values from one language to other languages.
+     */
+    post: operations["copyTranslations_1"];
+  };
+  "/v2/projects/start-batch-job/delete-keys": {
+    /** Delete keys */
+    post: operations["deleteKeys_1"];
+  };
+  "/v2/projects/start-batch-job/machine-translate": {
+    /**
+     * Machine Translation
+     * @description Translate provided keys to provided languages through primary MT provider.
+     */
+    post: operations["machineTranslation_1"];
+  };
+  "/v2/projects/start-batch-job/pre-translate-by-tm": {
+    /**
+     * Pre-translate by TM
+     * @description Pre-translate provided keys to provided languages by TM.
+     */
+    post: operations["translate_1"];
+  };
+  "/v2/projects/start-batch-job/set-keys-namespace": {
+    /** Set keys namespace */
+    post: operations["setKeysNamespace_1"];
+  };
+  "/v2/projects/start-batch-job/set-translation-state": {
     /** Set translation state */
-    put: operations["setTranslationState_1"];
+    post: operations["setTranslationState_3"];
   };
-  "/v2/projects/translations/{translationId}/comments/{commentId}/set-state/{state}": {
-    /** Set state of translation comment */
-    put: operations["setState_1"];
+  "/v2/projects/start-batch-job/tag-keys": {
+    /** Add tags */
+    post: operations["tagKeys_1"];
   };
-  "/v2/projects/translations/{translationId}/comments/{commentId}": {
-    /** Get one translation comment */
-    get: operations["get_15"];
-    /** Update translation comment */
-    put: operations["update_6"];
-    /** Delete translation comment */
-    delete: operations["delete_9"];
+  "/v2/projects/start-batch-job/unassign-translation-label": {
+    /** Unassign labels from translations */
+    post: operations["unassignTranslationLabel_1"];
   };
-  "/v2/projects/translations/{translationId}/set-outdated-flag/{state}": {
+  "/v2/projects/start-batch-job/untag-keys": {
+    /** Remove tags */
+    post: operations["untagKeys_1"];
+  };
+  "/v2/projects/stats": {
+    /** Get project stats */
+    get: operations["getProjectStats_1"];
+  };
+  "/v2/projects/stats/daily-activity": {
+    /** Get project daily amount of events */
+    get: operations["getProjectDailyActivity_1"];
+  };
+  "/v2/projects/suggest/machine-translations": {
     /**
-     * Set outdated value
-     * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+     * Get machine translation suggestions
+     * @description Suggests machine translations from enabled services
      */
-    put: operations["setOutdated_1"];
+    post: operations["suggestMachineTranslations_1"];
   };
-  "/v2/projects/translations/{translationId}/dismiss-auto-translated-state": {
+  "/v2/projects/suggest/machine-translations-streaming": {
     /**
-     * Dismiss auto-translated
-     * @description Removes "auto translated" indication
+     * Get machine translation suggestions (streaming)
+     * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
      */
-    put: operations["dismissAutoTranslatedState_1"];
+    post: operations["suggestMachineTranslationsStreaming_1"];
+  };
+  "/v2/projects/suggest/translation-memory": {
+    /**
+     * Get suggestions from translation memory
+     * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
+     */
+    post: operations["suggestTranslationMemory_1"];
+  };
+  "/v2/projects/tag-complex": {
+    /** Execute complex tag operation */
+    put: operations["executeComplexTagOperation_1"];
+  };
+  "/v2/projects/tags": {
+    /** Get tags */
+    get: operations["getAll_15"];
+  };
+  "/v2/projects/tasks": {
+    /** Get tasks */
+    get: operations["getTasks_1"];
+    /** Create task */
+    post: operations["createTask_1"];
+  };
+  "/v2/projects/tasks/calculate-scope": {
+    /** Calculate scope */
+    post: operations["calculateScope_1"];
+  };
+  "/v2/projects/tasks/create-multiple-tasks": {
+    /** Create multiple tasks */
+    post: operations["createTasks_1"];
+  };
+  "/v2/projects/tasks/possible-assignees": {
+    /** Get possible assignees */
+    get: operations["getPossibleAssignees_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}": {
+    /** Get task */
+    get: operations["getTask_1"];
+    /** Update task */
+    put: operations["updateTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/blocking-tasks": {
+    /**
+     * Get blocking task numbers
+     * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
+     */
+    get: operations["getBlockingTasks_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/cancel": {
+    /** Close task */
+    put: operations["cancelTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/close": {
+    /**
+     * Close task
+     * @deprecated
+     */
+    put: operations["closeTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/finish": {
+    /** Finish task */
+    put: operations["finishTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/keys": {
+    /** Get task keys */
+    get: operations["getTaskKeys_1"];
+    /** Add or remove task keys */
+    put: operations["updateTaskKeys_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/keys/{keyId}": {
+    /**
+     * Update task key
+     * @description Mark key as done, which updates task progress.
+     */
+    put: operations["updateTaskKey_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/per-user-report": {
+    /**
+     * Get report
+     * @description Detailed statistics for every assignee
+     */
+    get: operations["getPerUserReport_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/reopen": {
+    /** Reopen task */
+    put: operations["reopenTask_1"];
+  };
+  "/v2/projects/tasks/{taskNumber}/xlsx-report": {
+    /**
+     * Get report in XLSX
+     * @description Detailed statistics about the task results
+     */
+    get: operations["getXlsxReport_1"];
   };
   "/v2/projects/translations": {
     /** Get translations in project */
@@ -209,379 +782,16 @@ export interface paths {
      */
     post: operations["createOrUpdateTranslations_1"];
   };
-  "/v2/projects/languages/{languageId}": {
-    /** Get one language */
-    get: operations["get_17"];
-    /** Update language */
-    put: operations["editLanguage_1"];
-    /** Delete specific language */
-    delete: operations["deleteLanguage_3"];
-  };
-  "/v2/projects/keys/{keyId}/auto-translate": {
-    /**
-     * Auto translates keys
-     * @description Uses enabled auto-translation methods.
-     * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
-     *
-     * This will replace the the existing translation with the result obtained from specified source!
-     */
-    put: operations["autoTranslate_1"];
-  };
-  "/v2/organizations/{id}": {
-    /** Get one organization */
-    get: operations["get_20"];
-  };
-  "/v2/projects": {
-    /**
-     * Get all permitted
-     * @description Returns all projects where current user has any permission
-     */
-    get: operations["getAll"];
-    /**
-     * Create project
-     * @description Creates a new project with languages and initial settings.
-     */
-    post: operations["createProject"];
-  };
-  "/v2/projects/tasks/create-multiple-tasks": {
-    /** Create multiple tasks */
-    post: operations["createTasks_1"];
-  };
-  "/v2/projects/tasks/calculate-scope": {
-    /** Calculate scope */
-    post: operations["calculateScope_1"];
-  };
-  "/v2/projects/tasks": {
-    /** Get tasks */
-    get: operations["getTasks_2"];
-    /** Create task */
-    post: operations["createTask_1"];
-  };
-  "/v2/projects/keys/info": {
-    /**
-     * Get key info
-     * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
-     */
-    post: operations["getInfo_1"];
-  };
-  "/v2/projects/keys/import-resolvable": {
-    /**
-     * Import keys (resolvable)
-     * @description Import's new keys with translations. Translations can be updated, when specified.
-     */
-    post: operations["importKeys_1"];
-  };
-  "/v2/projects/keys/import": {
-    /**
-     * Import keys
-     * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
-     */
-    post: operations["importKeys_3"];
-  };
-  "/v2/projects/keys/create": {
-    /** Create new key */
-    post: operations["create_3"];
-  };
-  "/v2/projects/keys": {
-    /** Get all keys */
-    get: operations["getAll_2"];
-    /** Create new key */
-    post: operations["create_4"];
-    /**
-     * Delete one or multiple keys (post)
-     * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
-     */
-    delete: operations["delete_5"];
-  };
-  "/v2/projects/start-batch-job/untag-keys": {
-    /** Remove tags */
-    post: operations["untagKeys_1"];
-  };
-  "/v2/projects/start-batch-job/tag-keys": {
-    /** Add tags */
-    post: operations["tagKeys_1"];
-  };
-  "/v2/projects/start-batch-job/set-translation-state": {
-    /** Set translation state */
-    post: operations["setTranslationState_3"];
-  };
-  "/v2/projects/start-batch-job/set-keys-namespace": {
-    /** Set keys namespace */
-    post: operations["setKeysNamespace_1"];
-  };
-  "/v2/projects/start-batch-job/pre-translate-by-tm": {
-    /**
-     * Pre-translate by TM
-     * @description Pre-translate provided keys to provided languages by TM.
-     */
-    post: operations["translate_1"];
-  };
-  "/v2/projects/start-batch-job/machine-translate": {
-    /**
-     * Machine Translation
-     * @description Translate provided keys to provided languages through primary MT provider.
-     */
-    post: operations["machineTranslation_1"];
-  };
-  "/v2/projects/start-batch-job/delete-keys": {
-    /** Delete keys */
-    post: operations["deleteKeys_1"];
-  };
-  "/v2/projects/start-batch-job/copy-translations": {
-    /**
-     * Copy translation values
-     * @description Copy translation values from one language to other languages.
-     */
-    post: operations["copyTranslations_1"];
-  };
-  "/v2/projects/start-batch-job/clear-translations": {
-    /**
-     * Clear translation values
-     * @description Clear translation values for provided keys in selected languages.
-     */
-    post: operations["clearTranslations_1"];
-  };
-  "/v2/projects/single-step-import": {
-    /**
-     * Single step import
-     * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
-     */
-    post: operations["doImport_1"];
-  };
-  "/v2/projects/import": {
-    /**
-     * Add files
-     * @description Prepares provided files to import.
-     */
-    post: operations["addFiles_1"];
-    /**
-     * Delete
-     * @description Deletes prepared import data.
-     */
-    delete: operations["cancelImport_1"];
-  };
-  "/v2/projects/export": {
-    /** Export data */
-    get: operations["export_1"];
-    /**
-     * Export data (post)
-     * @description Exports data (post). Useful when exceeding allowed URL size.
-     */
-    post: operations["exportPost_1"];
-  };
-  "/v2/projects/big-meta": {
-    /**
-     * Store Big Meta
-     * @description Stores a bigMeta for a project
-     */
-    post: operations["store_3"];
-  };
-  "/v2/projects/translations/{translationId}/comments": {
-    /**
-     * Get translation comments
-     * @description Returns translation comments of translation
-     */
-    get: operations["getAll_6"];
-    /** Create translation comment */
-    post: operations["create_8"];
-  };
   "/v2/projects/translations/create-comment": {
     /**
      * Create translation comment
      * @description Creates a translation comment. Empty translation is stored, when not exists.
      */
-    post: operations["create_10"];
+    post: operations["create_4"];
   };
-  "/v2/projects/suggest/translation-memory": {
-    /**
-     * Get suggestions from translation memory
-     * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
-     */
-    post: operations["suggestTranslationMemory_1"];
-  };
-  "/v2/projects/suggest/machine-translations-streaming": {
-    /**
-     * Get machine translation suggestions (streaming)
-     * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
-     */
-    post: operations["suggestMachineTranslationsStreaming_1"];
-  };
-  "/v2/projects/suggest/machine-translations": {
-    /**
-     * Get machine translation suggestions
-     * @description Suggests machine translations from enabled services
-     */
-    post: operations["suggestMachineTranslations_1"];
-  };
-  "/v2/projects/languages": {
-    /** Get all languages */
-    get: operations["getAll_8"];
-    /** Create language */
-    post: operations["createLanguage_1"];
-  };
-  "/v2/projects/keys/{keyId}/screenshots": {
-    /** Get screenshots */
-    get: operations["getKeyScreenshots"];
-    /** Upload screenshot */
-    post: operations["uploadScreenshot"];
-  };
-  "/v2/organizations": {
-    /**
-     * Get all permitted organizations
-     * @description Returns all organizations, which is current user allowed to view
-     */
-    get: operations["getAll_10"];
-    /** Create organization */
-    post: operations["create_12"];
-  };
-  "/v2/image-upload": {
-    /** Upload an image for later use */
-    post: operations["upload"];
-  };
-  "/v2/user-tasks": {
-    /** Get user tasks */
-    get: operations["getTasks"];
-  };
-  "/v2/projects/used-namespaces": {
-    /**
-     * Get used namespaces
-     * @description Returns all used project namespaces. Response contains default (null) namespace if used.
-     */
-    get: operations["getUsedNamespaces_1"];
-  };
-  "/v2/projects/tasks/{taskNumber}/xlsx-report": {
-    /**
-     * Get report in XLSX
-     * @description Detailed statistics about the task results
-     */
-    get: operations["getXlsxReport_1"];
-  };
-  "/v2/projects/tasks/{taskNumber}/per-user-report": {
-    /**
-     * Get report
-     * @description Detailed statistics for every assignee
-     */
-    get: operations["getPerUserReport_1"];
-  };
-  "/v2/projects/tasks/{taskNumber}/blocking-tasks": {
-    /**
-     * Get blocking task numbers
-     * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
-     */
-    get: operations["getBlockingTasks_1"];
-  };
-  "/v2/projects/tasks/possible-assignees": {
-    get: operations["getPossibleAssignees_1"];
-  };
-  "/v2/projects/namespaces": {
-    /** Get namespaces */
-    get: operations["getAllNamespaces_1"];
-  };
-  "/v2/projects/namespace-by-name/{name}": {
-    /**
-     * Get namespace by name
-     * @description Returns information about a namespace by its name
-     */
-    get: operations["getByName_1"];
-  };
-  "/v2/projects/keys/search": {
-    /**
-     * Search for keys
-     * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
-     */
-    get: operations["searchForKey_1"];
-  };
-  "/v2/projects/activity/revisions/{revisionId}": {
-    /** Get one revision data */
-    get: operations["getSingleRevision_1"];
-  };
-  "/v2/projects/activity": {
-    /** Get project activity */
-    get: operations["getActivity_1"];
-  };
-  "/v2/projects/tags": {
-    /** Get tags */
-    get: operations["getAll_4"];
-  };
-  "/v2/projects/my-batch-jobs": {
-    /**
-     * List user batch operations
-     * @description List all batch operations started by current user
-     */
-    get: operations["myList_1"];
-  };
-  "/v2/projects/keys/{id}/big-meta": {
-    /** Get Big Meta for key */
-    get: operations["getBigMeta_1"];
-  };
-  "/v2/projects/import/result/languages/{languageId}/translations": {
-    /**
-     * Get translations
-     * @description Returns translations prepared to import.
-     */
-    get: operations["getImportTranslations_1"];
-  };
-  "/v2/projects/import/result/languages/{languageId}": {
-    /**
-     * Get import language
-     * @description Returns language prepared to import.
-     */
-    get: operations["getImportLanguage_1"];
-    /**
-     * Delete language
-     * @description Deletes language prepared to import.
-     */
-    delete: operations["deleteLanguage_1"];
-  };
-  "/v2/projects/import/result/files/{importFileId}/issues": {
-    /**
-     * Get file issues
-     * @description Returns issues for uploaded file.
-     */
-    get: operations["getImportFileIssues_1"];
-  };
-  "/v2/projects/import/result": {
-    /**
-     * Get result
-     * @description Returns the result of preparation.
-     */
-    get: operations["getImportResult_1"];
-  };
-  "/v2/projects/import/all-namespaces": {
-    /**
-     * Get namespaces
-     * @description Returns all existing and imported namespaces
-     */
-    get: operations["getAllNamespaces_3"];
-  };
-  "/v2/projects/current-batch-jobs": {
-    /**
-     * Get all running and pending batch operations
-     * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
-     */
-    get: operations["currentJobs_1"];
-  };
-  "/v2/projects/batch-jobs/{id}": {
-    /** Get batch operation */
-    get: operations["get_13"];
-  };
-  "/v2/projects/batch-jobs": {
-    /** List batch operations */
-    get: operations["list_4"];
-  };
-  "/v2/projects/translations/{translationId}/history": {
-    /**
-     * Get translation history
-     * @description Sorting is not supported for supported. It is automatically sorted from newest to oldest.
-     */
-    get: operations["getTranslationHistory_1"];
-  };
-  "/v2/projects/translations/{languages}": {
-    /**
-     * Get all translations
-     * @description Returns all translations for specified languages
-     */
-    get: operations["getAllTranslations_1"];
+  "/v2/projects/translations/label": {
+    /** Add label to translation by key and language id */
+    put: operations["assignLabel_3"];
   };
   "/v2/projects/translations/select-all": {
     /**
@@ -590,71 +800,89 @@ export interface paths {
      */
     get: operations["selectKeys_1"];
   };
-  "/v2/projects/keys/select": {
+  "/v2/projects/translations/{languages}": {
     /**
-     * Select keys
-     * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+     * Get all translations
+     * @description Returns all translations for specified languages
      */
-    get: operations["selectKeys_3"];
+    get: operations["getAllTranslations_1"];
   };
-  "/v2/projects/stats/daily-activity": {
-    /** Get project daily amount of events */
-    get: operations["getProjectDailyActivity_1"];
-  };
-  "/v2/projects/stats": {
-    /** Get project stats */
-    get: operations["getProjectStats_1"];
-  };
-  "/v2/pats/current": {
+  "/v2/projects/translations/{translationId}/comments": {
     /**
-     * Return current PAK
-     * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
+     * Get translation comments
+     * @description Returns translation comments of translation
      */
-    get: operations["getCurrent"];
+    get: operations["getAll_4"];
+    /** Create translation comment */
+    post: operations["create_2"];
   };
-  "/v2/organizations/{slug}": {
-    /** Get organization by slug */
-    get: operations["get_19"];
-  };
-  "/v2/organizations/{organizationId}/machine-translation-credit-balance": {
-    /**
-     * Get credit balance for organization
-     * @description Returns machine translation credit balance for organization
-     */
-    get: operations["getOrganizationCredits"];
-  };
-  "/v2/api-keys/current": {
-    /**
-     * Get current API key info
-     * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
-     */
-    get: operations["getCurrent_1"];
-  };
-  "/v2/api-keys/current-permissions": {
-    /**
-     * Get current permission info
-     * @description Returns current PAK or PAT permissions for current user, api-key and project
-     */
-    get: operations["getCurrentPermissions"];
-  };
-  "/v2/projects/keys/{ids}": {
-    /** Delete one or multiple keys */
+  "/v2/projects/translations/{translationId}/comments/{commentId}": {
+    /** Get one translation comment */
+    get: operations["get_5"];
+    /** Update translation comment */
+    put: operations["update_2"];
+    /** Delete translation comment */
     delete: operations["delete_3"];
   };
-  "/v2/projects/keys/{keyId}/tags/{tagId}": {
+  "/v2/projects/translations/{translationId}/comments/{commentId}/set-state/{state}": {
+    /** Set state of translation comment */
+    put: operations["setState_1"];
+  };
+  "/v2/projects/translations/{translationId}/dismiss-auto-translated-state": {
     /**
-     * Remove tag
-     * @description Removes tag with provided id from key with provided id
+     * Dismiss auto-translated
+     * @description Removes "auto translated" indication
      */
-    delete: operations["removeTag_1"];
+    put: operations["dismissAutoTranslatedState_1"];
   };
-  "/v2/projects/keys/{keyId}/screenshots/{ids}": {
-    /** Delete screenshots */
-    delete: operations["deleteScreenshots"];
+  "/v2/projects/translations/{translationId}/history": {
+    /**
+     * Get translation history
+     * @description Sorting is not supported for supported. It is automatically sorted from newest to oldest.
+     */
+    get: operations["getTranslationHistory_1"];
   };
-  "/v2/image-upload/{ids}": {
-    /** Delete uploaded images */
-    delete: operations["delete_12"];
+  "/v2/projects/translations/{translationId}/label/{labelId}": {
+    /** Add label to translation */
+    put: operations["assignLabel_1"];
+    /** Remove label from translation */
+    delete: operations["unassignLabel_1"];
+  };
+  "/v2/projects/translations/{translationId}/set-outdated-flag/{state}": {
+    /**
+     * Set outdated value
+     * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+     */
+    put: operations["setOutdated_1"];
+  };
+  "/v2/projects/translations/{translationId}/set-state/{state}": {
+    /** Set translation state */
+    put: operations["setTranslationState_1"];
+  };
+  "/v2/projects/used-namespaces": {
+    /**
+     * Get used namespaces
+     * @description Returns all used project namespaces. Response contains default (null) namespace if used.
+     */
+    get: operations["getUsedNamespaces_1"];
+  };
+  "/v2/user": {
+    /**
+     * Get user info
+     * @description Returns information about currently authenticated user.
+     */
+    get: operations["getInfo"];
+  };
+  "/v2/user-tasks": {
+    /** Get user tasks */
+    get: operations["getTasks_2"];
+  };
+  "/v2/user/sso": {
+    /**
+     * Get information about SSO configuration
+     * @description Returns information about sso configuration affecting the user.
+     */
+    get: operations["getSso"];
   };
 }
 
@@ -662,502 +890,242 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    ErrorResponseTyped: {
-      /** @enum {string} */
-      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "email_already_verified" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "address_part_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found" | "cannot_parse_encrypted_slack_login_data" | "slack_workspace_not_found" | "cannot_fetch_user_details_from_slack" | "slack_missing_scope" | "slack_not_connected_to_your_account" | "slack_invalid_command" | "slack_not_subscribed_yet" | "slack_connection_failed" | "tolgee_account_already_connected" | "slack_not_configured" | "slack_workspace_already_connected" | "slack_connection_error" | "email_verification_code_not_valid" | "cannot_subscribe_to_free_plan" | "plan_auto_assignment_only_for_free_plans" | "plan_auto_assignment_only_for_private_plans" | "plan_auto_assignment_organization_ids_not_in_for_organization_ids" | "task_not_found" | "task_not_finished" | "task_not_open";
-      params?: Record<string, never>[];
+    AcceptAuthProviderChangeRequest: {
+      id: string;
     };
-    ErrorResponseBody: {
-      code: string;
-      params?: Record<string, never>[];
+    ApiKeyPermissionsModel: {
+      project: components["schemas"]["SimpleProjectModel"];
+      /**
+       * Format: int64
+       * @description The API key's project id or the one provided as query param
+       */
+      projectId: number;
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
+       */
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view")[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      stateChangeLanguageIds?: number[];
+      /**
+       * @description List of languages user can suggest to. If null, suggesting to all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      suggestLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions
+       * @enum {string}
+       */
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      viewLanguageIds?: number[];
+    };
+    ApiKeyWithLanguagesModel: {
+      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /**
+       * @deprecated
+       * @description Languages for which user has translate permission.
+       */
+      permittedLanguageIds?: number[];
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      scopes: string[];
+      userFullName?: string;
+      username?: string;
+    };
+    AuthProviderDto: {
+      /** @enum {string} */
+      authType?: "GOOGLE" | "GITHUB" | "OAUTH2" | "SSO" | "SSO_GLOBAL";
+      id?: string;
+      ssoDomain?: string;
     };
     Avatar: {
       large: string;
       thumbnail: string;
     };
-    PrivateUserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      emailAwaitingVerification?: string;
-      mfaEnabled: boolean;
-      avatar?: components["schemas"]["Avatar"];
-      /** @enum {string} */
-      accountType: "LOCAL" | "MANAGED" | "THIRD_PARTY";
-      /** @enum {string} */
-      globalServerRole: "USER" | "ADMIN";
-      deletable: boolean;
-      needsSuperJwtToken: boolean;
-    };
-    ComputedPermissionModel: {
-      permissionModel?: components["schemas"]["PermissionModel"];
-      /** @enum {string} */
-      origin: "ORGANIZATION_BASE" | "DIRECT" | "ORGANIZATION_OWNER" | "NONE" | "SERVER_ADMIN";
-      /**
-       * @description The user's permission type. This field is null if uses granular permissions
-       * @enum {string}
-       */
-      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
-      /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      viewLanguageIds?: number[];
-      /**
-       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example [
-       *   "KEYS_EDIT",
-       *   "TRANSLATIONS_VIEW"
-       * ]
-       */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
-      /**
-       * @deprecated
-       * @description Deprecated (use translateLanguageIds).
-       *
-       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      permittedLanguageIds?: number[];
-      /**
-       * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      translateLanguageIds?: number[];
-      /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      stateChangeLanguageIds?: number[];
-    };
-    LanguageModel: {
-      /** Format: int64 */
-      id: number;
-      /**
-       * @description Language name in english
-       * @example Czech
-       */
-      name: string;
-      /**
-       * @description Language tag according to BCP 47 definition
-       * @example cs-CZ
-       */
-      tag: string;
-      /**
-       * @description Language name in this language
-       * @example čeština
-       */
-      originalName?: string;
-      /**
-       * @description Language flag emoji as UTF-8 emoji
-       * @example 🇨🇿
-       */
-      flagEmoji?: string;
-      /**
-       * @description Whether is base language of project
-       * @example false
-       */
-      base: boolean;
-    };
-    NamespaceModel: {
+    BatchJobModel: {
       /**
        * Format: int64
-       * @description The id of namespace
-       * @example 10000048
+       * @description The activity revision id, that stores the activity details of the job
+       */
+      activityRevisionId?: number;
+      /** @description The user who started the job */
+      author?: components["schemas"]["SimpleUserAccountModel"];
+      /**
+       * Format: int64
+       * @description The time when the job created
+       */
+      createdAt: number;
+      /** @description If the job failed, this is the error message */
+      errorMessage?: string;
+      /**
+       * Format: int64
+       * @description Batch job id
        */
       id: number;
-      /** @example homepage */
-      name: string;
-    };
-    /**
-     * @description Current user's direct permission
-     * @example MANAGE
-     */
-    PermissionModel: {
       /**
-       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example [
-       *   "KEYS_EDIT",
-       *   "TRANSLATIONS_VIEW"
-       * ]
+       * Format: int32
+       * @description Total items, that have been processed so far
        */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
+      progress: number;
       /**
-       * @description The user's permission type. This field is null if uses granular permissions
+       * @description Status of the batch job
        * @enum {string}
        */
-      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
+      status: "PENDING" | "RUNNING" | "SUCCESS" | "FAILED" | "CANCELLED" | "DEBOUNCED";
       /**
-       * @deprecated
-       * @description Deprecated (use translateLanguageIds).
-       *
-       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
+       * Format: int32
+       * @description Total items
        */
-      permittedLanguageIds?: number[];
+      totalItems: number;
       /**
-       * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
+       * @description Type of the batch job
+       * @enum {string}
        */
-      translateLanguageIds?: number[];
+      type: "AI_PLAYGROUND_TRANSLATE" | "PRE_TRANSLATE_BT_TM" | "MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "DELETE_KEYS" | "SET_TRANSLATIONS_STATE" | "CLEAR_TRANSLATIONS" | "COPY_TRANSLATIONS" | "TAG_KEYS" | "UNTAG_KEYS" | "SET_KEYS_NAMESPACE" | "AUTOMATION" | "BILLING_TRIAL_EXPIRATION_NOTICE" | "ASSIGN_TRANSLATION_LABEL" | "UNASSIGN_TRANSLATION_LABEL";
       /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
+       * Format: int64
+       * @description The time when the job was last updated (status change)
        */
-      viewLanguageIds?: number[];
-      /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      stateChangeLanguageIds?: number[];
+      updatedAt: number;
     };
-    ProjectModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-      description?: string;
-      slug?: string;
-      avatar?: components["schemas"]["Avatar"];
-      organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
-      baseLanguage?: components["schemas"]["LanguageModel"];
-      defaultNamespace?: components["schemas"]["NamespaceModel"];
-      /** @enum {string} */
-      organizationRole?: "MEMBER" | "OWNER";
-      directPermission?: components["schemas"]["PermissionModel"];
-      computedPermission: components["schemas"]["ComputedPermissionModel"];
-      /** @description Whether to disable ICU placeholder visualization in the editor and it's support. */
-      icuPlaceholders: boolean;
+    BigMetaDto: {
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
     };
-    SimpleOrganizationModel: {
+    CalculateScopeRequest: {
+      branch?: string;
+      keys: number[];
       /** Format: int64 */
-      id: number;
-      /** @example Beautiful organization */
-      name: string;
-      /** @example btforg */
-      slug: string;
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
-      basePermissions: components["schemas"]["PermissionModel"];
-      avatar?: components["schemas"]["Avatar"];
-    };
-    SimpleUserAccountModel: {
-      /** Format: int64 */
-      id: number;
-      username: string;
-      name?: string;
-      avatar?: components["schemas"]["Avatar"];
-      deleted: boolean;
-    };
-    TaskModel: {
-      /** Format: int64 */
-      number: number;
-      name: string;
-      description: string;
+      languageId: number;
       /** @enum {string} */
       type: "TRANSLATE" | "REVIEW";
-      language: components["schemas"]["LanguageModel"];
-      /** Format: int64 */
-      dueDate?: number;
-      assignees: components["schemas"]["SimpleUserAccountModel"][];
-      /** Format: int64 */
-      totalItems: number;
-      /** Format: int64 */
-      doneItems: number;
-      /** Format: int64 */
-      baseWordCount: number;
-      /** Format: int64 */
-      baseCharacterCount: number;
-      author?: components["schemas"]["SimpleUserAccountModel"];
-      /** Format: int64 */
-      createdAt?: number;
-      /** Format: int64 */
-      closedAt?: number;
-      /** @enum {string} */
-      state: "NEW" | "IN_PROGRESS" | "DONE" | "CLOSED";
     };
-    UpdateTaskKeyRequest: {
-      done: boolean;
-    };
-    UpdateTaskKeyResponse: {
-      /** @description Task key is marked as done */
-      done: boolean;
-      /** @description Task progress is 100% */
-      taskFinished: boolean;
-    };
-    UpdateTaskKeysRequest: {
-      /** @description Keys to add to task */
-      addKeys?: number[];
-      /** @description Keys to remove from task */
-      removeKeys?: number[];
-    };
-    UpdateTaskRequest: {
-      name: string;
-      description: string;
-      /**
-       * Format: int64
-       * @description Due to date in epoch format (milliseconds).
-       * @example 1661172869000
-       */
-      dueDate?: number;
-      assignees: number[];
-    };
-    UpdateNamespaceDto: {
-      name: string;
-    };
-    SetDisabledLanguagesRequest: {
+    ClearTranslationsRequest: {
+      keyIds: number[];
       languageIds: number[];
+    };
+    CollectionModelBatchJobModel: {
+      _embedded?: {
+        batchJobs?: components["schemas"]["BatchJobModel"][];
+      };
+    };
+    CollectionModelGlossaryLanguageDto: {
+      _embedded?: {
+        glossaryLanguageDtoList?: components["schemas"]["GlossaryLanguageDto"][];
+      };
+    };
+    CollectionModelImportNamespaceModel: {
+      _embedded?: {
+        namespaces?: components["schemas"]["ImportNamespaceModel"][];
+      };
+    };
+    CollectionModelKeyWithBaseTranslationModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeyWithBaseTranslationModel"][];
+      };
+    };
+    CollectionModelKeyWithDataModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeyWithDataModel"][];
+      };
     };
     CollectionModelLanguageModel: {
       _embedded?: {
         languages?: components["schemas"]["LanguageModel"][];
       };
     };
+    CollectionModelLong: {
+      _embedded?: {
+        longList?: number[];
+      };
+    };
+    CollectionModelScreenshotModel: {
+      _embedded?: {
+        screenshots?: components["schemas"]["ScreenshotModel"][];
+      };
+    };
+    CollectionModelSimpleProjectModel: {
+      _embedded?: {
+        projects?: components["schemas"]["SimpleProjectModel"][];
+      };
+    };
+    CollectionModelUsedNamespaceModel: {
+      _embedded?: {
+        namespaces?: components["schemas"]["UsedNamespaceModel"][];
+      };
+    };
     ComplexEditKeyDto: {
+      /** @description Branch of the key. If not provided, default branch will be used */
+      branch?: string;
+      /** @description Custom values of the key. If not provided, custom values won't be modified */
+      custom?: {
+        [key: string]: unknown;
+      };
+      /** @description Description of the key. It's also used as a context for Tolgee AI translator */
+      description?: string;
+      /** @description If key is pluralized. If it will be reflected in the editor. If null, value won't be modified. */
+      isPlural?: boolean;
       /** @description Name of the key */
       name: string;
       namespace?: string;
-      /** @description Translations to update */
-      translations?: {
-        [key: string]: string;
-      };
+      /** @description The argument name for the plural. If null, value won't be modified. If isPlural is false, this value will be ignored. */
+      pluralArgName?: string;
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
+      /** @description IDs of screenshots to delete */
+      screenshotIdsToDelete?: number[];
+      /**
+       * @deprecated
+       * @description Ids of screenshots uploaded with /v2/image-upload endpoint
+       */
+      screenshotUploadedImageIds?: number[];
+      screenshotsToAdd?: components["schemas"]["KeyScreenshotDto"][];
       /** @description Translation states to update, if not provided states won't be modified */
       states?: {
         [key: string]: "TRANSLATED" | "REVIEWED";
       };
       /** @description Tags of the key. If not provided tags won't be modified */
       tags?: string[];
-      /** @description IDs of screenshots to delete */
-      screenshotIdsToDelete?: number[];
-      /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
-      screenshotUploadedImageIds?: number[];
-      screenshotsToAdd?: components["schemas"]["KeyScreenshotDto"][];
-      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
-      /** @description Description of the key. It's also used as a context for Tolgee AI translator */
-      description?: string;
-      /** @description If key is pluralized. If it will be reflected in the editor. If null, value won't be modified. */
-      isPlural?: boolean;
-      /** @description The argument name for the plural. If null, value won't be modified. If isPlural is false, this value will be ignored. */
-      pluralArgName?: string;
+      /** @description Translations to update */
+      translations?: {
+        [key: string]: string;
+      };
       /** @description If true, it will fail with 400 (with code plural_forms_data_loss) if plural is disabled and there are plural forms, which would be lost by the action. You can get rid of this warning by setting this value to false. */
       warnOnDataLoss?: boolean;
-      /** @description Custom values of the key. If not provided, custom values won't be modified */
-      custom?: {
-        [key: string]: Record<string, never>;
-      };
-    };
-    KeyInScreenshotPositionDto: {
-      /** Format: int32 */
-      x: number;
-      /** Format: int32 */
-      y: number;
-      /** Format: int32 */
-      width: number;
-      /** Format: int32 */
-      height: number;
-    };
-    KeyScreenshotDto: {
-      text?: string;
-      /**
-       * Format: int64
-       * @description Ids of screenshot uploaded with /v2/image-upload endpoint
-       */
-      uploadedImageId: number;
-      positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
-    };
-    /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-    RelatedKeyDto: {
-      namespace?: string;
-      keyName: string;
-    };
-    KeyInScreenshotModel: {
-      /** Format: int64 */
-      keyId: number;
-      position?: components["schemas"]["KeyInScreenshotPosition"];
-      keyName: string;
-      keyNamespace?: string;
-      originalText?: string;
-    };
-    KeyInScreenshotPosition: {
-      /** Format: int32 */
-      x: number;
-      /** Format: int32 */
-      y: number;
-      /** Format: int32 */
-      width: number;
-      /** Format: int32 */
-      height: number;
-    };
-    KeyWithDataModel: {
-      /**
-       * Format: int64
-       * @description Id of key record
-       */
-      id: number;
-      /**
-       * @description Name of key
-       * @example this_is_super_key
-       */
-      name: string;
-      /**
-       * @description Namespace of key
-       * @example homepage
-       */
-      namespace?: string;
-      /**
-       * @description Description of key
-       * @example This key is used on homepage. It's a label of sign up button.
-       */
-      description?: string;
-      /**
-       * @description Translations object containing values updated in this request
-       * @example {
-       *   "en": {
-       *     "id": 100000003,
-       *     "text": "This is super translation!"
-       *   }
-       * }
-       */
-      translations: {
-        [key: string]: components["schemas"]["TranslationModel"];
-      };
-      /** @description Tags of key */
-      tags: components["schemas"]["TagModel"][];
-      /** @description Screenshots of the key */
-      screenshots: components["schemas"]["ScreenshotModel"][];
-      /** @description If key is pluralized. If it will be reflected in the editor */
-      isPlural: boolean;
-      /** @description The argument name for the plural */
-      pluralArgName?: string;
-      /** @description Custom values of the key */
-      custom: {
-        [key: string]: Record<string, never>;
-      };
-    };
-    /** @description Screenshots of the key */
-    ScreenshotModel: {
-      /** Format: int64 */
-      id: number;
-      /**
-       * @description File name, which may be downloaded from the screenshot path.
-       *
-       * When images are secured. Encrypted timestamp is appended to the filename.
-       */
-      filename: string;
-      /**
-       * @description Thumbnail file name, which may be downloaded from the screenshot path.
-       *
-       * When images are secured. Encrypted timestamp is appended to the filename.
-       */
-      thumbnail: string;
-      fileUrl: string;
-      thumbnailUrl: string;
-      /** Format: date-time */
-      createdAt?: string;
-      keyReferences: components["schemas"]["KeyInScreenshotModel"][];
-      location?: string;
-      /** Format: int32 */
-      width?: number;
-      /** Format: int32 */
-      height?: number;
-    };
-    /** @description Tags of key */
-    TagModel: {
-      /** Format: int64 */
-      id: number;
-      name: string;
-    };
-    /**
-     * @description Translations object containing values updated in this request
-     * @example {
-     *   "en": {
-     *     "id": 100000003,
-     *     "text": "This is super translation!"
-     *   }
-     * }
-     */
-    TranslationModel: {
-      /**
-       * Format: int64
-       * @description Id of translation record
-       */
-      id: number;
-      /** @description Translation text */
-      text?: string;
-      /**
-       * @description State of translation
-       * @enum {string}
-       */
-      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
-      /** @description Whether base language translation was changed after this translation was updated */
-      outdated: boolean;
-      /** @description Was translated using Translation Memory or Machine translation service? */
-      auto: boolean;
-      /**
-       * @description Which machine translation service was used to auto translate this
-       * @enum {string}
-       */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
-    };
-    EditKeyDto: {
-      name: string;
-      namespace?: string;
-      /**
-       * @description Description of the key
-       * @example This key is used on homepage. It's a label of sign up button.
-       */
-      description?: string;
-    };
-    KeyModel: {
-      /**
-       * Format: int64
-       * @description Id of key record
-       */
-      id: number;
-      /**
-       * @description Name of key
-       * @example this_is_super_key
-       */
-      name: string;
-      /**
-       * @description Namespace of key
-       * @example homepage
-       */
-      namespace?: string;
-      /**
-       * @description Description of key
-       * @example This key is used on homepage. It's a label of sign up button.
-       */
-      description?: string;
-      /** @description Custom values of the key */
-      custom?: {
-        [key: string]: Record<string, never>;
-      };
     };
     ComplexTagKeysRequest: {
       /** @description Include keys filtered by the provided key information */
@@ -1170,434 +1138,73 @@ export interface components {
       filterTagNot?: string[];
       /** @description Specified tags will be added to filtered keys */
       tagFiltered?: string[];
-      /** @description Specified tags will be removed from filtered keys. It supports wildcards. For example, `draft-*` will remove all tags starting with `draft-`. */
-      untagFiltered?: string[];
       /** @description Specified tags will be added to keys not filtered by any of the specified filters. */
       tagOther?: string[];
+      /** @description Specified tags will be removed from filtered keys. It supports wildcards. For example, `draft-*` will remove all tags starting with `draft-`. */
+      untagFiltered?: string[];
       /** @description Specified tags will be removed from keys not filtered by any of the specified filters. It supports wildcards. For example, `draft-*` will remove all tags starting with `draft-`. */
       untagOther?: string[];
     };
-    /** @description Exclude keys filtered by the provided key information */
-    KeyId: {
-      name?: string;
-      namespace?: string;
-      /**
-       * Format: int64
-       * @description If key id is provided, name and namespace are ignored.
-       */
-      id?: number;
-    };
-    TagKeyDto: {
-      name: string;
-    };
-    SetFileNamespaceRequest: {
-      namespace?: string;
-    };
-    StreamingResponseBody: Record<string, never>;
-    ImportSettingsRequest: {
-      /** @description If true, key descriptions will be overridden by the import */
-      overrideKeyDescriptions: boolean;
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
-      /** @description If false, only updates keys, skipping the creation of new keys */
-      createNewKeys: boolean;
-    };
-    ImportSettingsModel: {
-      /** @description If false, only updates keys, skipping the creation of new keys */
-      createNewKeys: boolean;
-      /** @description If true, key descriptions will be overridden by the import */
-      overrideKeyDescriptions: boolean;
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
-    };
-    TranslationCommentModel: {
-      /**
-       * Format: int64
-       * @description Id of translation comment record
-       */
-      id: number;
-      /** @description Text of comment */
-      text: string;
-      /**
-       * @description State of translation
-       * @enum {string}
-       */
-      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
-      author: components["schemas"]["SimpleUserAccountModel"];
-      /**
-       * Format: date-time
-       * @description Date when it was created
-       */
-      createdAt: string;
-      /**
-       * Format: date-time
-       * @description Date when it was updated
-       */
-      updatedAt: string;
-    };
-    TranslationCommentDto: {
-      text: string;
+    ComputedPermissionModel: {
       /** @enum {string} */
-      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
-    };
-    SetTranslationsWithKeyDto: {
+      origin: "ORGANIZATION_BASE" | "DIRECT" | "ORGANIZATION_OWNER" | "NONE" | "SERVER_ADMIN" | "SERVER_SUPPORTER";
+      permissionModel?: components["schemas"]["PermissionModel"];
       /**
-       * @description Key name to set translations for
-       * @example what_a_key_to_translate
-       */
-      key: string;
-      /** @description The namespace of the key. (When empty or null default namespace will be used) */
-      namespace?: string;
-      /**
-       * @description Object mapping language tag to translation
-       * @example {
-       *   "en": "What a translated value!",
-       *   "cs": "Jaká to přeložená hodnota!"
-       * }
-       */
-      translations: {
-        [key: string]: string;
-      };
-      /**
-       * @description List of languages to return translations for.
+       * @deprecated
+       * @description Deprecated (use translateLanguageIds).
        *
-       * If not provided, only modified translation will be provided.
-       *
+       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
        * @example [
-       *   "en",
-       *   "de",
-       *   "fr"
+       *   200001,
+       *   200004
        * ]
        */
-      languagesToReturn?: string[];
-    };
-    SetTranslationsResponseModel: {
+      permittedLanguageIds?: number[];
       /**
-       * Format: int64
-       * @description Id of key record
-       */
-      keyId: number;
-      /**
-       * @description Name of key
-       * @example this_is_super_key
-       */
-      keyName: string;
-      /**
-       * @description The namespace of the key
-       * @example homepage
-       */
-      keyNamespace?: string;
-      keyIsPlural: boolean;
-      /**
-       * @description Translations object containing values updated in this request
-       * @example {
-       *   "en": {
-       *     "id": 100000003,
-       *     "text": "This is super translation!"
-       *   }
-       * }
-       */
-      translations: {
-        [key: string]: components["schemas"]["TranslationModel"];
-      };
-    };
-    LanguageRequest: {
-      /**
-       * @description Language name in english
-       * @example Czech
-       */
-      name: string;
-      /**
-       * @description Language name in this language
-       * @example čeština
-       */
-      originalName: string;
-      /**
-       * @description Language tag according to BCP 47 definition
-       * @example cs-CZ
-       */
-      tag: string;
-      /**
-       * @description Language flag emoji as UTF-8 emoji
-       * @example 🇨🇿
-       */
-      flagEmoji?: string;
-    };
-    OrganizationDto: {
-      /** @example Beautiful organization */
-      name: string;
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
-      /** @example btforg */
-      slug?: string;
-    };
-    OrganizationModel: {
-      /** Format: int64 */
-      id: number;
-      /** @example Beautiful organization */
-      name: string;
-      /** @example btforg */
-      slug: string;
-      /** @example This is a beautiful organization full of beautiful and clever people */
-      description?: string;
-      basePermissions: components["schemas"]["PermissionModel"];
-      /**
-       * @description The role of currently authorized user.
-       *
-       * Can be null when user has direct access to one of the projects owned by the organization.
-       * @enum {string}
-       */
-      currentUserRole?: "MEMBER" | "OWNER";
-      avatar?: components["schemas"]["Avatar"];
-    };
-    CreateProjectRequest: {
-      name: string;
-      languages: components["schemas"]["LanguageRequest"][];
-      /** @description Slug of your project used in url e.g. "/v2/projects/what-a-project". If not provided, it will be generated */
-      slug?: string;
-      /**
-       * Format: int64
-       * @description Organization to create the project in
-       */
-      organizationId: number;
-      /** @description Tag of one of created languages, to select it as base language. If not provided, first language will be selected as base. */
-      baseLanguageTag?: string;
-      /** @description Whether to use ICU placeholder visualization in the editor and it's support. */
-      icuPlaceholders: boolean;
-    };
-    CreateMultipleTasksRequest: {
-      tasks: components["schemas"]["CreateTaskRequest"][];
-    };
-    CreateTaskRequest: {
-      name: string;
-      description: string;
-      /** @enum {string} */
-      type: "TRANSLATE" | "REVIEW";
-      /**
-       * Format: int64
-       * @description Due to date in epoch format (milliseconds).
-       * @example 1661172869000
-       */
-      dueDate?: number;
-      /**
-       * Format: int64
-       * @description Id of language, this task is attached to.
-       * @example 1
-       */
-      languageId: number;
-      assignees: number[];
-      keys: number[];
-    };
-    CalculateScopeRequest: {
-      /** Format: int64 */
-      languageId: number;
-      /** @enum {string} */
-      type: "TRANSLATE" | "REVIEW";
-      keys: number[];
-    };
-    KeysScopeView: {
-      /** Format: int64 */
-      keyCount: number;
-      /** Format: int64 */
-      characterCount: number;
-      /** Format: int64 */
-      wordCount: number;
-      /** Format: int64 */
-      keyCountIncludingConflicts: number;
-    };
-    GetKeysRequestDto: {
-      keys: components["schemas"]["KeyDefinitionDto"][];
-      /** @description Tags to return language translations in */
-      languageTags: string[];
-    };
-    KeyDefinitionDto: {
-      name: string;
-      namespace?: string;
-    };
-    CollectionModelKeyWithDataModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeyWithDataModel"][];
-      };
-    };
-    ImportKeysResolvableDto: {
-      keys: components["schemas"]["ImportKeysResolvableItemDto"][];
-    };
-    ImportKeysResolvableItemDto: {
-      /**
-       * @description Key name to set translations for
-       * @example what_a_key_to_translate
-       */
-      name: string;
-      /** @description The namespace of the key. (When empty or null default namespace will be used) */
-      namespace?: string;
-      screenshots?: components["schemas"]["KeyScreenshotDto"][];
-      /** @description Object mapping language tag to translation */
-      translations: {
-        [key: string]: components["schemas"]["ImportTranslationResolvableDto"];
-      };
-    };
-    /** @description Object mapping language tag to translation */
-    ImportTranslationResolvableDto: {
-      /**
-       * @description Translation text
-       * @example Hello! I am a translation!
-       */
-      text: string;
-      /**
-       * @description Determines, how conflict is resolved.
-       *
-       * - KEEP: Translation is not changed
-       * - OVERRIDE: Translation is overridden
-       * - NEW: New translation is created)
-       *
-       * @example OVERRIDE
-       * @enum {string}
-       */
-      resolution: "KEEP" | "OVERRIDE" | "NEW";
-    };
-    KeyImportResolvableResultModel: {
-      /** @description List of keys */
-      keys: components["schemas"]["KeyModel"][];
-      /** @description Map uploadedImageId to screenshot */
-      screenshots: {
-        [key: string]: components["schemas"]["ScreenshotModel"];
-      };
-    };
-    ImportKeysDto: {
-      keys: components["schemas"]["ImportKeysItemDto"][];
-    };
-    ImportKeysItemDto: {
-      /**
-       * @description Key name to set translations for
-       * @example what_a_key_to_translate
-       */
-      name: string;
-      /** @description The namespace of the key. (When empty or null default namespace will be used) */
-      namespace?: string;
-      /**
-       * @description Description of key
-       * @example This key is used on homepage. It's a label of sign up button.
-       */
-      description?: string;
-      /**
-       * @description Object mapping language tag to translation
-       * @example {
-       *   "en": "What a translated value!",
-       *   "cs": "Jaká to přeložená hodnota!"
-       * }
-       */
-      translations: {
-        [key: string]: string;
-      };
-      /**
-       * @description Tags of the key
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
        * @example [
-       *   "homepage",
-       *   "user-profile"
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
        * ]
        */
-      tags?: string[];
-    };
-    CreateKeyDto: {
-      /** @description Name of the key */
-      name: string;
-      namespace?: string;
-      translations?: {
-        [key: string]: string;
-      };
-      /** @description Translation states to update, if not provided states won't be modified */
-      states?: {
-        [key: string]: "TRANSLATED" | "REVIEWED";
-      };
-      tags?: string[];
-      /** @description Ids of screenshots uploaded with /v2/image-upload endpoint */
-      screenshotUploadedImageIds?: number[];
-      screenshots?: components["schemas"]["KeyScreenshotDto"][];
-      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view")[];
       /**
-       * @description Description of the key
-       * @example This key is used on homepage. It's a label of sign up button.
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
-      description?: string;
-      /** @description If key is pluralized. If it will be reflected in the editor */
-      isPlural: boolean;
-      /** @description The argument name for the plural. If null, value will be guessed from the values provided in translations. */
-      pluralArgName?: string;
-    };
-    UntagKeysRequest: {
-      keyIds: number[];
-      tags: string[];
-    };
-    BatchJobModel: {
+      stateChangeLanguageIds?: number[];
       /**
-       * Format: int64
-       * @description Batch job id
+       * @description List of languages user can suggest to. If null, suggesting to all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
-      id: number;
+      suggestLanguageIds?: number[];
       /**
-       * @description Status of the batch job
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description The user's permission type. This field is null if uses granular permissions
        * @enum {string}
        */
-      status: "PENDING" | "RUNNING" | "SUCCESS" | "FAILED" | "CANCELLED" | "DEBOUNCED";
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
       /**
-       * @description Type of the batch job
-       * @enum {string}
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
        */
-      type: "PRE_TRANSLATE_BT_TM" | "MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "DELETE_KEYS" | "SET_TRANSLATIONS_STATE" | "CLEAR_TRANSLATIONS" | "COPY_TRANSLATIONS" | "TAG_KEYS" | "UNTAG_KEYS" | "SET_KEYS_NAMESPACE" | "AUTOMATION";
-      /**
-       * Format: int32
-       * @description Total items, that have been processed so far
-       */
-      progress: number;
-      /**
-       * Format: int32
-       * @description Total items
-       */
-      totalItems: number;
-      author?: components["schemas"]["SimpleUserAccountModel"];
-      /**
-       * Format: int64
-       * @description The time when the job created
-       */
-      createdAt: number;
-      /**
-       * Format: int64
-       * @description The time when the job was last updated (status change)
-       */
-      updatedAt: number;
-      /**
-       * Format: int64
-       * @description The activity revision id, that stores the activity details of the job
-       */
-      activityRevisionId?: number;
-      /** @description If the job failed, this is the error message */
-      errorMessage?: string;
-    };
-    TagKeysRequest: {
-      keyIds: number[];
-      tags: string[];
-    };
-    SetTranslationsStateStateRequest: {
-      keyIds: number[];
-      languageIds: number[];
-      /** @enum {string} */
-      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
-    };
-    SetKeysNamespaceRequest: {
-      keyIds: number[];
-      namespace?: string;
-    };
-    PreTranslationByTmRequest: {
-      keyIds: number[];
-      targetLanguageIds: number[];
-    };
-    MachineTranslationRequest: {
-      keyIds: number[];
-      targetLanguageIds: number[];
-    };
-    DeleteKeysRequest: {
-      keyIds: number[];
+      viewLanguageIds?: number[];
     };
     CopyTranslationRequest: {
       keyIds: number[];
@@ -1605,188 +1212,185 @@ export interface components {
       sourceLanguageId: number;
       targetLanguageIds: number[];
     };
-    ClearTranslationsRequest: {
-      keyIds: number[];
-      languageIds: number[];
-    };
-    /** @description Definition of mapping for each file to import. */
-    ImportFileMapping: {
-      /** @description Name of the file to import. This is the name of the file provided in `files` request part or in uploaded archive. */
-      fileName: string;
-      /** @description Namespace to import the file to. If not provided, the key will be imported without namespace. */
-      namespace?: string;
+    CreateGlossaryRequest: {
+      /** @description IDs of projects to be assigned to glossary */
+      assignedProjectIds: number[];
       /**
-       * @description Format of the file. If not provided, Tolgee will try to guess the format from the file name or file contents.
-       *
-       * It is recommended to provide these values to prevent any issues with format detection.
-       * @enum {string}
+       * @description Language tag according to BCP 47 definition
+       * @example cs-CZ
        */
-      format?: "JSON_I18NEXT" | "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY";
+      baseLanguageTag: string;
       /**
-       * @description The existing language tag in the Tolgee platform to which the imported language should be mapped.
-       *
-       * When null, Tolgee will try to guess the language from the file contents or file name.
+       * @description Glossary name
+       * @example My glossary
        */
-      languageTag?: string;
-    };
-    /**
-     * @description Maps the languages from imported files to languages existing in the Tolgee platform.
-     *
-     * Use this field only when your files contain multiple languages (e.g., XLIFF files).
-     *
-     * Otherwise, use the `languageTag` property of `fileMappings`.
-     *
-     * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
-     */
-    LanguageMapping: {
-      /**
-       * @description The language from the imported file.
-       *
-       * For xliff files, this is the `source-language` or the `target-language` attribute value of `file` element.
-       * @example en-US
-       */
-      importLanguage: string;
-      /**
-       * @description The tag of language existing in the Tolgee platform to which the imported language should be mapped.
-       * @example en-US
-       */
-      platformLanguageTag: string;
-    };
-    SingleStepImportRequest: {
-      /**
-       * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
-       * @example .
-       */
-      structureDelimiter?: string;
-      /**
-       * @description Whether to override existing translation data.
-       *
-       * When set to `KEEP`, existing translations will be kept.
-       *
-       * When set to `OVERRIDE`, existing translations will be overwrote.
-       *
-       * When set to `NO_FORCE`, error will be thrown on conflict.
-       * @enum {string}
-       */
-      forceMode: "OVERRIDE" | "KEEP" | "NO_FORCE";
-      /**
-       * @description Maps the languages from imported files to languages existing in the Tolgee platform.
-       *
-       * Use this field only when your files contain multiple languages (e.g., XLIFF files).
-       *
-       * Otherwise, use the `languageTag` property of `fileMappings`.
-       *
-       * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
-       */
-      languageMappings?: components["schemas"]["LanguageMapping"][];
-      /** @description If true, key descriptions will be overridden by the import */
-      overrideKeyDescriptions: boolean;
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
-      /** @description If false, only updates keys, skipping the creation of new keys */
-      createNewKeys: boolean;
-      /** @description Definition of mapping for each file to import. */
-      fileMappings: components["schemas"]["ImportFileMapping"][];
-      /** @description Keys created by this import will be tagged with these tags. It add tags only to new keys. The keys that already exist will not be tagged. */
-      tagNewKeys: string[];
-      /** @description If yes, keys from project that were not included in import will be deleted. */
-      removeOtherKeys?: boolean;
-    };
-    ImportAddFilesResultModel: {
-      errors: components["schemas"]["ErrorResponseBody"][];
-      result?: components["schemas"]["PagedModelImportLanguageModel"];
-    };
-    ImportLanguageModel: {
-      /** Format: int64 */
-      id: number;
       name: string;
-      /** Format: int64 */
-      existingLanguageId?: number;
-      existingLanguageTag?: string;
-      existingLanguageAbbreviation?: string;
-      existingLanguageName?: string;
-      importFileName: string;
-      /** Format: int64 */
-      importFileId: number;
-      /** Format: int32 */
-      importFileIssueCount: number;
+    };
+    CreateGlossaryTermWithTranslationRequest: {
+      /**
+       * @description A detailed explanation or definition of the glossary term
+       * @example It's trademark
+       */
+      description: string;
+      /** @description Specifies whether the term represents a shortened form of a word or phrase */
+      flagAbbreviation: boolean;
+      /** @description When true, the term matching considers uppercase and lowercase characters as distinct */
+      flagCaseSensitive: boolean;
+      /** @description When true, marks this term as prohibited or not recommended for use in translations */
+      flagForbiddenTerm: boolean;
+      /** @description When true, this term will have the same translation across all target languages */
+      flagNonTranslatable: boolean;
+      text: string;
+    };
+    CreateKeyDto: {
+      branch?: string;
+      /**
+       * @description Description of the key
+       * @example This key is used on homepage. It's a label of sign up button.
+       */
+      description?: string;
+      /** @description If key is pluralized. If it will be reflected in the editor */
+      isPlural: boolean;
+      /** @description Name of the key */
+      name: string;
       namespace?: string;
-      /** Format: int32 */
-      totalCount: number;
-      /** Format: int32 */
-      conflictCount: number;
-      /** Format: int32 */
-      resolvedCount: number;
-    };
-    PageMetadata: {
-      /** Format: int64 */
-      size?: number;
-      /** Format: int64 */
-      totalElements?: number;
-      /** Format: int64 */
-      totalPages?: number;
-      /** Format: int64 */
-      number?: number;
-    };
-    PagedModelImportLanguageModel: {
-      _embedded?: {
-        languages?: components["schemas"]["ImportLanguageModel"][];
+      /** @description The argument name for the plural. If null, value will be guessed from the values provided in translations. */
+      pluralArgName?: string;
+      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
+      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
+      /**
+       * @deprecated
+       * @description Ids of screenshots uploaded with /v2/image-upload endpoint
+       */
+      screenshotUploadedImageIds?: number[];
+      screenshots?: components["schemas"]["KeyScreenshotDto"][];
+      /** @description Translation states to update, if not provided states won't be modified */
+      states?: {
+        [key: string]: "TRANSLATED" | "REVIEWED";
       };
-      page?: components["schemas"]["PageMetadata"];
+      tags?: string[];
+      translations?: {
+        [key: string]: string;
+      };
+    };
+    CreateMultipleTasksRequest: {
+      tasks: components["schemas"]["CreateTaskRequest"][];
+    };
+    CreateProjectRequest: {
+      /** @description Tag of one of created languages, to select it as base language. If not provided, first language will be selected as base. */
+      baseLanguageTag?: string;
+      /** @description Whether to use ICU placeholder visualization in the editor and it's support. */
+      icuPlaceholders: boolean;
+      languages: components["schemas"]["LanguageRequest"][];
+      name: string;
+      /**
+       * Format: int64
+       * @description Organization to create the project in
+       */
+      organizationId: number;
+      /** @description Slug of your project used in url e.g. "/v2/projects/what-a-project". If not provided, it will be generated */
+      slug?: string;
+    };
+    CreateTaskRequest: {
+      assignees: number[];
+      /** @description Branch name. If empty or null, default branch is used. */
+      branch?: string;
+      description: string;
+      /**
+       * Format: int64
+       * @description Due to date in epoch format (milliseconds).
+       * @example 1661172869000
+       */
+      dueDate?: number;
+      keys: number[];
+      /**
+       * Format: int64
+       * @description Id of language, this task is attached to.
+       * @example 1
+       */
+      languageId: number;
+      name?: string;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+    };
+    CreateTranslationSuggestionRequest: {
+      translation: string;
+    };
+    CreateUpdateGlossaryTermResponse: {
+      term: components["schemas"]["SimpleGlossaryTermModel"];
+      translation?: components["schemas"]["GlossaryTermTranslationModel"];
+    };
+    CreditBalanceModel: {
+      /** Format: int64 */
+      bucketSize: number;
+      /** Format: int64 */
+      creditBalance: number;
+      /**
+       * Format: int64
+       * @deprecated
+       * @description Customers were able to buy extra credits separately in the past.
+       *
+       * This option is not available anymore and this field is kept only for backward compatibility purposes and is always 0.
+       */
+      extraCreditBalance: number;
+    };
+    DeleteKeysDto: {
+      /** @description IDs of keys to delete */
+      ids: number[];
+    };
+    DeleteKeysRequest: {
+      keyIds: number[];
+    };
+    DeleteMultipleGlossaryTermsRequest: {
+      termIds: number[];
+    };
+    EditKeyDto: {
+      /** @description The branch of the key. (When empty or null default branch will be used) */
+      branch?: string;
+      /**
+       * @description Description of the key
+       * @example This key is used on homepage. It's a label of sign up button.
+       */
+      description?: string;
+      name: string;
+      namespace?: string;
+    };
+    EntityDescriptionWithRelations: {
+      data: {
+        [key: string]: unknown;
+      };
+      entityClass: string;
+      /** Format: int64 */
+      entityId: number;
+    };
+    ErrorResponseBody: {
+      code: string;
+      params?: unknown[];
+    };
+    ErrorResponseTyped: {
+      /** @enum {string} */
+      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_non_matching_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "email_already_verified" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "third_party_switch_initiated" | "third_party_switch_conflict" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "slug_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "user_missing_password" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "user_is_not_owner_or_maintainer_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found" | "cannot_parse_encrypted_slack_login_data" | "slack_workspace_not_found" | "cannot_fetch_user_details_from_slack" | "slack_missing_scope" | "slack_not_connected_to_your_account" | "slack_invalid_command" | "slack_not_subscribed_yet" | "slack_connection_failed" | "tolgee_account_already_connected" | "slack_not_configured" | "slack_workspace_already_connected" | "slack_connection_error" | "email_verification_code_not_valid" | "cannot_subscribe_to_free_plan" | "plan_auto_assignment_only_for_free_plans" | "plan_auto_assignment_only_for_private_plans" | "task_not_found" | "task_not_finished" | "task_not_open" | "translation_agency_not_found" | "this_feature_is_not_implemented_in_oss" | "sso_token_exchange_failed" | "sso_user_info_retrieval_failed" | "sso_id_token_expired" | "sso_user_cannot_create_organization" | "sso_cant_verify_user" | "sso_auth_missing_domain" | "sso_domain_not_found_or_disabled" | "authentication_method_disabled" | "native_authentication_disabled" | "invitation_organization_mismatch" | "user_is_managed_by_organization" | "cannot_set_sso_provider_missing_fields" | "namespaces_cannot_be_disabled_when_namespace_exists" | "namespace_cannot_be_used_when_feature_is_disabled" | "sso_domain_not_allowed" | "sso_login_forced_for_this_account" | "use_sso_for_authentication_instead" | "date_has_to_be_in_the_future" | "custom_plan_and_plan_id_cannot_be_set_together" | "specify_plan_id_or_custom_plan" | "custom_plans_has_to_be_private" | "cannot_create_free_plan_with_prices" | "subscription_not_scheduled_for_cancellation" | "cannot_cancel_trial" | "cannot_update_without_modification" | "current_subscription_is_not_trialing" | "sorting_and_paging_is_not_supported_when_using_cursor" | "strings_metric_are_not_supported" | "plan_key_limit_exceeded" | "keys_spending_limit_exceeded" | "plan_seat_limit_exceeded" | "instance_not_using_license_key" | "invalid_path" | "llm_provider_not_found" | "llm_provider_error" | "prompt_not_found" | "llm_provider_not_returned_json" | "llm_template_parsing_error" | "llm_rate_limited" | "llm_provider_timeout" | "no_llm_provider_configured" | "glossary_not_found" | "glossary_term_not_found" | "glossary_term_translation_not_found" | "glossary_non_translatable_term_cannot_be_translated" | "llm_content_filter" | "llm_provider_empty_response" | "label_not_found" | "label_not_from_project" | "label_already_exists" | "filter_by_value_label_not_valid" | "suggestion_not_found" | "user_can_only_delete_his_suggestions" | "cannot_modify_reviewed_translation" | "cannot_modify_keys" | "expect_no_conflict_failed" | "suggestion_cant_be_plural" | "suggestion_must_be_plural" | "duplicate_suggestion" | "unsupported_media_type" | "impersonation_of_admin_by_supporter_not_allowed" | "already_impersonating_user" | "operation_not_permitted_in_read_only_mode" | "file_processing_failed" | "branch_not_found" | "cannot_delete_default_branch" | "branch_already_exists" | "origin_branch_not_found" | "branch_merge_not_found" | "branch_merge_change_not_found" | "branch_merge_revision_not_valid" | "branch_merge_conflicts_not_resolved" | "branch_merge_already_merged";
+      params?: unknown[];
+    };
+    ExistenceEntityDescription: {
+      data: {
+        [key: string]: unknown;
+      };
+      entityClass: string;
+      /** Format: int64 */
+      entityId: number;
+      exists?: boolean;
+      relations: {
+        [key: string]: components["schemas"]["EntityDescriptionWithRelations"];
+      };
     };
     ExportParams: {
       /**
-       * @description Languages to be contained in export.
+       * @description If true, HTML tags are escaped in the exported file. (Supported in the XLIFF format only).
        *
-       * If null, all languages are exported
-       * @example en
+       * e.g. Key <b>hello</b> will be exported as &lt;b&gt;hello&lt;/b&gt;
        */
-      languages?: string[];
-      /**
-       * @description Format to export to
-       * @enum {string}
-       */
-      format: "JSON" | "JSON_TOLGEE" | "JSON_I18NEXT" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
-      /**
-       * @description Delimiter to structure file content.
-       *
-       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
-       *
-       * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
-       * specific formats like `YAML_RUBY` don't honor this parameter.
-       */
-      structureDelimiter?: string;
-      /** @description Filter key IDs to be contained in export */
-      filterKeyId?: number[];
-      /** @description Filter key IDs not to be contained in export */
-      filterKeyIdNot?: number[];
-      /**
-       * @description Filter keys tagged by.
-       *
-       * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
-       */
-      filterTag?: string;
-      /** @description Filter keys tagged by one of provided tags */
-      filterTagIn?: string[];
-      /** @description Filter keys not tagged by one of provided tags */
-      filterTagNotIn?: string[];
-      /** @description Filter keys with prefix */
-      filterKeyPrefix?: string;
-      /** @description Filter translations with state. By default, all states except untranslated is exported. */
-      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-      /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
-      filterNamespace?: string[];
-      zip: boolean;
-      /**
-       * @description Message format to be used for export.
-       *
-       * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
-       *
-       * This property is honored only for generic formats like JSON or YAML.
-       * For specific formats like `YAML_RUBY` it's ignored.
-       * @enum {string}
-       */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU";
+      escapeHtml?: boolean;
       /**
        * @description This is a template that defines the structure of the resulting .zip file content.
        *
@@ -1803,44 +1407,976 @@ export interface components {
        */
       fileStructureTemplate?: string;
       /**
+       * @description Filter translations with branch.
+       *
+       * By default, default branch is exported.
+       */
+      filterBranch?: string;
+      /** @description Filter key IDs to be contained in export */
+      filterKeyId?: number[];
+      /** @description Filter key IDs not to be contained in export */
+      filterKeyIdNot?: number[];
+      /** @description Filter keys with prefix */
+      filterKeyPrefix?: string;
+      /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
+      filterNamespace?: string[];
+      /** @description Filter translations with state. By default, all states except untranslated is exported. */
+      filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+      /**
+       * @description Filter keys tagged by.
+       *
+       * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
+       */
+      filterTag?: string;
+      /** @description Filter keys tagged by one of provided tags */
+      filterTagIn?: string[];
+      /** @description Filter keys not tagged by one of provided tags */
+      filterTagNotIn?: string[];
+      /**
+       * @description Format to export to
+       * @enum {string}
+       */
+      format: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML" | "JSON_I18NEXT" | "CSV" | "RESX_ICU" | "XLSX" | "APPLE_XCSTRINGS" | "ANDROID_SDK" | "APPLE_SDK";
+      /**
+       * @description Languages to be contained in export.
+       *
+       * If null, all languages are exported
+       * @example en
+       */
+      languages?: string[];
+      /**
+       * @description Message format to be used for export.
+       *
+       * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
+       *
+       * This property is honored only for generic formats like JSON or YAML.
+       * For specific formats like `YAML_RUBY` it's ignored.
+       * @enum {string}
+       */
+      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT";
+      /**
+       * @description Delimiter to structure file content.
+       *
+       * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+       *
+       * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
+       * specific formats like `YAML_RUBY` don't honor this parameter.
+       */
+      structureDelimiter?: string;
+      /**
        * @description If true, for structured formats (like JSON) arrays are supported.
        *
        * e.g. Key hello[0] will be exported as {"hello": ["..."]}
        */
       supportArrays: boolean;
+      zip: boolean;
     };
-    BigMetaDto: {
-      /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
-      relatedKeysInOrder?: components["schemas"]["RelatedKeyDto"][];
+    GetKeysRequestDto: {
+      keys: components["schemas"]["KeyDefinitionDto"][];
+      /** @description Tags to return language translations in */
+      languageTags: string[];
     };
-    TranslationCommentWithLangKeyDto: {
+    GlossaryImportResult: {
+      /**
+       * Format: int32
+       * @description Number of imported terms
+       * @example 42
+       */
+      imported: number;
+    };
+    GlossaryLanguageDto: {
+      /**
+       * @description Indicates if this is the base (main) language of the glossary
+       * @example true
+       */
+      base: boolean;
+      /**
+       * @description The language code (e.g., 'en' for English)
+       * @example en
+       */
+      tag: string;
+    };
+    GlossaryModel: {
+      /**
+       * @description Language tag for default translations for terms
+       * @example en
+       */
+      baseLanguageTag: string;
       /** Format: int64 */
-      keyId: number;
+      id: number;
+      name: string;
+      organizationOwner: components["schemas"]["SimpleOrganizationModel"];
+    };
+    GlossaryTermModel: {
+      description: string;
+      /** @description Specifies whether the term represents a shortened form of a word or phrase */
+      flagAbbreviation: boolean;
+      /** @description When true, the term matching considers uppercase and lowercase characters as distinct */
+      flagCaseSensitive: boolean;
+      /** @description When true, marks this term as prohibited or not recommended for use in translations */
+      flagForbiddenTerm: boolean;
+      /** @description When true, this term has the same translation across all target languages */
+      flagNonTranslatable: boolean;
+      glossary: components["schemas"]["GlossaryModel"];
       /** Format: int64 */
-      languageId: number;
+      id: number;
+      translations: components["schemas"]["GlossaryTermTranslationModel"][];
+    };
+    GlossaryTermTranslationModel: {
+      languageTag: string;
       text: string;
+    };
+    ImageUploadInfoDto: {
+      location?: string;
+    };
+    ImportAddFilesResultModel: {
+      errors: components["schemas"]["ErrorResponseBody"][];
+      result?: components["schemas"]["PagedModelImportLanguageModel"];
+      warnings: components["schemas"]["ErrorResponseBody"][];
+    };
+    ImportFileIssueModel: {
+      /** Format: int64 */
+      id: number;
+      params: components["schemas"]["ImportFileIssueParamModel"][];
       /** @enum {string} */
-      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
+      type: "KEY_IS_NOT_STRING" | "MULTIPLE_VALUES_FOR_KEY_AND_LANGUAGE" | "VALUE_IS_NOT_STRING" | "KEY_IS_EMPTY" | "VALUE_IS_EMPTY" | "PO_MSGCTXT_NOT_SUPPORTED" | "ID_ATTRIBUTE_NOT_PROVIDED" | "TARGET_NOT_PROVIDED" | "TRANSLATION_TOO_LONG" | "KEY_IS_BLANK" | "TRANSLATION_DEFINED_IN_ANOTHER_FILE" | "INVALID_CUSTOM_VALUES" | "DESCRIPTION_TOO_LONG";
     };
-    TranslationWithCommentModel: {
-      translation: components["schemas"]["TranslationModel"];
-      comment: components["schemas"]["TranslationCommentModel"];
+    ImportFileIssueParamModel: {
+      /** @enum {string} */
+      type: "KEY_NAME" | "KEY_ID" | "LANGUAGE_ID" | "KEY_INDEX" | "VALUE" | "LINE" | "FILE_NODE_ORIGINAL" | "LANGUAGE_NAME";
+      value?: string;
     };
-    SuggestRequestDto: {
+    ImportFileMapping: {
+      /** @description Name of the file to import. This is the name of the file provided in `files` request part or in uploaded archive. */
+      fileName: string;
+      /**
+       * @description Format of the file. If not provided, Tolgee will try to guess the format from the file name or file contents.
+       *
+       * It is recommended to provide these values to prevent any issues with format detection.
+       * @enum {string}
+       */
+      format?: "CSV_ICU" | "CSV_JAVA" | "CSV_PHP" | "CSV_RUBY" | "JSON_I18NEXT" | "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "PO_PYTHON" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "APPLE_XCSTRINGS" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY" | "RESX_ICU" | "XLSX_ICU" | "XLSX_JAVA" | "XLSX_PHP" | "XLSX_RUBY";
+      /**
+       * @description The existing language tag in the Tolgee platform to which the imported language should be mapped.
+       *
+       * When null, Tolgee will try to guess the language from the file contents or file name.
+       */
+      languageTag?: string;
+      /**
+       * @description Tags of languages to be imported. When null, all languages from will be imported.
+       *
+       * This field is useful when the file contains multiple languages and you want to import only some of them. For example when importing Apple String Catalog (APPLE_XCSTRINGS), you might want only to import the base language.
+       */
+      languageTagsToImport?: string[];
+      /** @description Namespace to import the file to. If not provided, the key will be imported without namespace. */
+      namespace?: string;
+    };
+    ImportKeysDto: {
+      keys: components["schemas"]["ImportKeysItemDto"][];
+    };
+    ImportKeysItemDto: {
+      /**
+       * @description Description of key
+       * @example This key is used on homepage. It's a label of sign up button.
+       */
+      description?: string;
+      /**
+       * @description Key name to set translations for
+       * @example what_a_key_to_translate
+       */
+      name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
+      /**
+       * @description Tags of the key
+       * @example [
+       *   "homepage",
+       *   "user-profile"
+       * ]
+       */
+      tags?: string[];
+      /**
+       * @description Object mapping language tag to translation
+       * @example {
+       *   "en": "What a translated value!",
+       *   "cs": "Jaká to přeložená hodnota!"
+       * }
+       */
+      translations: {
+        [key: string]: string;
+      };
+    };
+    ImportKeysResolvableDto: {
+      keys: components["schemas"]["ImportKeysResolvableItemDto"][];
+    };
+    ImportKeysResolvableItemDto: {
+      branch?: string;
+      /**
+       * @description Key name to set translations for
+       * @example what_a_key_to_translate
+       */
+      name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
+      screenshots?: components["schemas"]["KeyScreenshotDto"][];
+      /** @description Object mapping language tag to translation */
+      translations: {
+        [key: string]: components["schemas"]["ImportTranslationResolvableDto"];
+      };
+    };
+    ImportLanguageModel: {
+      /** Format: int32 */
+      conflictCount: number;
+      /**
+       * @deprecated
+       * @description Use existingLanguageTag
+       */
+      existingLanguageAbbreviation?: string;
+      /** Format: int64 */
+      existingLanguageId?: number;
+      existingLanguageName?: string;
+      existingLanguageTag?: string;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      importFileId: number;
+      /** Format: int32 */
+      importFileIssueCount: number;
+      importFileName: string;
+      name: string;
+      namespace?: string;
+      /** Format: int32 */
+      resolvedCount: number;
+      /** Format: int32 */
+      totalCount: number;
+    };
+    ImportNamespaceModel: {
       /**
        * Format: int64
-       * @description Key Id to get results for. Use when key is stored already.
+       * @description The id of namespace. When null, namespace doesn't exist and will be created by import.
+       * @example 10000048
        */
-      keyId?: number;
+      id?: number;
+      /** @example homepage */
+      name: string;
+    };
+    ImportResult: {
+      unresolvedConflicts?: components["schemas"]["SimpleImportConflictResult"][];
+    };
+    ImportSettingsModel: {
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
+      /** @description If true, key descriptions will be overridden by the import */
+      overrideKeyDescriptions: boolean;
+    };
+    ImportSettingsRequest: {
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
+      /** @description If true, key descriptions will be overridden by the import */
+      overrideKeyDescriptions: boolean;
+    };
+    ImportTranslationModel: {
       /** Format: int64 */
-      targetLanguageId: number;
-      /** @description Text value of base translation. Useful, when base translation is not stored yet. */
-      baseText?: string;
-      /** @description Whether base text is plural. This value is ignored if baseText is null. */
-      isPlural?: boolean;
-      /** @description List of services to use. If null, then all enabled services are used. */
-      services?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE")[];
-      plural?: boolean;
+      conflictId?: number;
+      conflictText?: string;
+      /** @enum {string} */
+      conflictType?: "SHOULD_NOT_EDIT_REVIEWED" | "CANNOT_EDIT_REVIEWED" | "CANNOT_EDIT_DISABLED";
+      existingKeyIsPlural: boolean;
+      /** Format: int64 */
+      id: number;
+      isOverridable: boolean;
+      isPlural: boolean;
+      keyDescription?: string;
+      /** Format: int64 */
+      keyId: number;
+      keyName: string;
+      override: boolean;
+      resolved: boolean;
+      text?: string;
+    };
+    ImportTranslationResolvableDto: {
+      /**
+       * @description Determines, how conflict is resolved.
+       *       - KEEP: Translation is not changed
+       *       - OVERRIDE: Translation is overridden
+       *       - NEW: New translation is created
+       *       - FORCE_OVERRIDE: Translation is updated, created or kept.
+       *
+       * @example OVERRIDE
+       * @enum {string}
+       */
+      resolution: "KEEP" | "OVERRIDE" | "NEW" | "FORCE_OVERRIDE";
+      /**
+       * @description Translation text
+       * @example Hello! I am a translation!
+       */
+      text: string;
+    };
+    JwtAuthenticationResponse: {
+      accessToken?: string;
+      tokenType?: string;
+    };
+    KeyDefinitionDto: {
+      name: string;
+      namespace?: string;
+    };
+    KeyId: {
+      /**
+       * Format: int64
+       * @description If key id is provided, name and namespace are ignored.
+       */
+      id?: number;
+      name?: string;
+      namespace?: string;
+    };
+    KeyImportResolvableResultModel: {
+      /** @description List of keys */
+      keys: components["schemas"]["KeyModel"][];
+      /** @description Map uploadedImageId to screenshot */
+      screenshots: {
+        [key: string]: components["schemas"]["ScreenshotModel"];
+      };
+    };
+    KeyInScreenshotModel: {
+      /** Format: int64 */
+      keyId: number;
+      keyName: string;
+      keyNamespace?: string;
+      originalText?: string;
+      position?: components["schemas"]["KeyInScreenshotPosition"];
+    };
+    KeyInScreenshotPosition: {
+      /** Format: int32 */
+      height: number;
+      /** Format: int32 */
+      width: number;
+      /** Format: int32 */
+      x: number;
+      /** Format: int32 */
+      y: number;
+    };
+    KeyInScreenshotPositionDto: {
+      /** Format: int32 */
+      height: number;
+      /** Format: int32 */
+      width: number;
+      /** Format: int32 */
+      x: number;
+      /** Format: int32 */
+      y: number;
+    };
+    KeyModel: {
+      /**
+       * @description Branch of key
+       * @example dev
+       */
+      branch?: string;
+      /** @description Custom values of the key */
+      custom?: {
+        [key: string]: unknown;
+      };
+      /**
+       * @description Description of key
+       * @example This key is used on homepage. It's a label of sign up button.
+       */
+      description?: string;
+      /**
+       * Format: int64
+       * @description Id of key record
+       */
+      id: number;
+      /**
+       * @description Name of key
+       * @example this_is_super_key
+       */
+      name: string;
+      /**
+       * @description Namespace of key
+       * @example homepage
+       */
+      namespace?: string;
+    };
+    KeyScreenshotDto: {
+      positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
+      text?: string;
+      /**
+       * Format: int64
+       * @description Ids of screenshot uploaded with /v2/image-upload endpoint
+       */
+      uploadedImageId: number;
+    };
+    KeySearchResultView: {
+      baseTranslation?: string;
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      namespace?: string;
+      translation?: string;
+    };
+    KeySearchSearchResultModel: {
+      baseTranslation?: string;
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      namespace?: string;
+      translation?: string;
+      view?: components["schemas"]["KeySearchResultView"];
+    };
+    KeyTaskViewModel: {
+      done: boolean;
+      /** Format: int64 */
+      languageId: number;
+      languageTag: string;
+      /** Format: int64 */
+      number: number;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+      userAssigned: boolean;
+    };
+    KeyWithBaseTranslationModel: {
+      /**
+       * @description Base translation
+       * @example This is translation
+       */
+      baseTranslation?: string;
+      /**
+       * Format: int64
+       * @description Id of key record
+       */
+      id: number;
+      /**
+       * @description Name of key
+       * @example this_is_super_key
+       */
+      name: string;
+      /**
+       * @description Namespace of key
+       * @example homepage
+       */
+      namespace?: string;
+    };
+    KeyWithDataModel: {
+      /** @description Branch of the key */
+      branch?: string;
+      /** @description Custom values of the key */
+      custom: {
+        [key: string]: unknown;
+      };
+      /**
+       * @description Description of key
+       * @example This key is used on homepage. It's a label of sign up button.
+       */
+      description?: string;
+      /**
+       * Format: int64
+       * @description Id of key record
+       */
+      id: number;
+      /** @description If key is pluralized. If it will be reflected in the editor */
+      isPlural: boolean;
+      /**
+       * @description Name of key
+       * @example this_is_super_key
+       */
+      name: string;
+      /**
+       * @description Namespace of key
+       * @example homepage
+       */
+      namespace?: string;
+      /** @description The argument name for the plural */
+      pluralArgName?: string;
+      /** @description Screenshots of the key */
+      screenshots: components["schemas"]["ScreenshotModel"][];
+      /** @description Tags of key */
+      tags: components["schemas"]["TagModel"][];
+      /**
+       * @description Translations object containing values updated in this request
+       * @example {
+       *   "en": {
+       *     "id": 100000003,
+       *     "text": "This is super translation!"
+       *   }
+       * }
+       */
+      translations: {
+        [key: string]: components["schemas"]["TranslationModel"];
+      };
+    };
+    KeyWithTranslationsModel: {
+      /** @description There is a context available for this key */
+      contextPresent: boolean;
+      /**
+       * Format: int64
+       * @description The time when the key was created
+       */
+      createdAt: number;
+      /**
+       * @description The namespace of the key
+       * @example homepage
+       */
+      keyDescription?: string;
+      /**
+       * Format: int64
+       * @description Id of key record
+       */
+      keyId: number;
+      /**
+       * @description Is this key a plural?
+       * @example true
+       */
+      keyIsPlural: boolean;
+      /**
+       * @description Name of key
+       * @example this_is_super_key
+       */
+      keyName: string;
+      /**
+       * @description The namespace of the key
+       * @example homepage
+       */
+      keyNamespace?: string;
+      /**
+       * Format: int64
+       * @description The namespace id of the key
+       * @example 100000282
+       */
+      keyNamespaceId?: number;
+      /**
+       * @description The placeholder name for plural parameter
+       * @example value
+       */
+      keyPluralArgName?: string;
+      /** @description Tags of key */
+      keyTags: components["schemas"]["TagModel"][];
+      /**
+       * Format: int64
+       * @description Count of screenshots provided for the key
+       * @example 1
+       */
+      screenshotCount: number;
+      /** @description Key screenshots. Not provided when API key hasn't screenshots.view scope permission. */
+      screenshots?: components["schemas"]["ScreenshotModel"][];
+      /** @description Tasks related to this key */
+      tasks?: components["schemas"]["KeyTaskViewModel"][];
+      /**
+       * @description Translations object
+       * @example
+       *     {
+       *       "en": {
+       *         "id": 100000003,
+       *         "text": "This is super translation!"
+       *         "state": "TRANSLATED",
+       *         "commentCount": 1
+       *       }
+       *     }
+       */
+      translations: {
+        [key: string]: components["schemas"]["TranslationViewModel"];
+      };
+    };
+    KeysScopeView: {
+      /** Format: int64 */
+      characterCount: number;
+      /** Format: int64 */
+      keyCount: number;
+      /** Format: int64 */
+      keyCountIncludingConflicts: number;
+      /** Format: int64 */
+      wordCount: number;
+    };
+    KeysWithTranslationsPageModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeyWithTranslationsModel"][];
+      };
+      /**
+       * @description Cursor to get next data
+       * @example eyJrZXlJZCI6eyJkaXJlY3Rpb24iOiJBU0MiLCJ2YWx1ZSI6IjEwMDAwMDAxMjAifX0=
+       */
+      nextCursor?: string;
+      page?: components["schemas"]["PageMetadata"];
+      pagedModel?: components["schemas"]["PagedModelKeyWithTranslationsModel"];
+      /** @description Provided languages data */
+      selectedLanguages: components["schemas"]["LanguageModel"][];
+    };
+    LabelModel: {
+      color: string;
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
+    LabelRequest: {
+      /**
+       * @description Hex color in format #RRGGBB.
+       * @example #FF5733
+       */
+      color: string;
+      description?: string;
+      name: string;
+    };
+    LabelTranslationsRequest: {
+      keyIds: number[];
+      labelIds: number[];
+      languageIds: number[];
+    };
+    LanguageMapping: {
+      /**
+       * @description The language from the imported file.
+       *
+       * For xliff files, this is the `source-language` or the `target-language` attribute value of `file` element.
+       * @example en-US
+       */
+      importLanguage: string;
+      /**
+       * @description The tag of language existing in the Tolgee platform to which the imported language should be mapped.
+       * @example en-US
+       */
+      platformLanguageTag: string;
+    };
+    LanguageModel: {
+      /**
+       * @description Whether is base language of project
+       * @example false
+       */
+      base: boolean;
+      /**
+       * @description Language flag emoji as UTF-8 emoji
+       * @example 🇨🇿
+       */
+      flagEmoji?: string;
+      /** Format: int64 */
+      id: number;
+      /**
+       * @description Language name in english
+       * @example Czech
+       */
+      name: string;
+      /**
+       * @description Language name in this language
+       * @example čeština
+       */
+      originalName?: string;
+      /**
+       * @description Language tag according to BCP 47 definition
+       * @example cs-CZ
+       */
+      tag: string;
+    };
+    LanguageRequest: {
+      /**
+       * @description Language flag emoji as UTF-8 emoji
+       * @example 🇨🇿
+       */
+      flagEmoji?: string;
+      /**
+       * @description Language name in english
+       * @example Czech
+       */
+      name: string;
+      /**
+       * @description Language name in this language
+       * @example čeština
+       */
+      originalName: string;
+      /**
+       * @description Language tag according to BCP 47 definition
+       * @example cs-CZ
+       */
+      tag: string;
+    };
+    LanguageStatsModel: {
+      languageFlagEmoji?: string;
+      /** Format: int64 */
+      languageId?: number;
+      languageName?: string;
+      languageOriginalName?: string;
+      languageTag?: string;
+      /** Format: int64 */
+      reviewedKeyCount: number;
+      /** Format: double */
+      reviewedPercentage: number;
+      /** Format: int64 */
+      reviewedWordCount: number;
+      /** Format: int64 */
+      translatedKeyCount: number;
+      /** Format: double */
+      translatedPercentage: number;
+      /** Format: int64 */
+      translatedWordCount: number;
+      /** Format: date-time */
+      translationsUpdatedAt?: string;
+      /** Format: int64 */
+      untranslatedKeyCount: number;
+      /** Format: double */
+      untranslatedPercentage: number;
+      /** Format: int64 */
+      untranslatedWordCount: number;
+    };
+    MachineTranslationRequest: {
+      keyIds: number[];
+      llmPrompt?: components["schemas"]["PromptDto"];
+      targetLanguageIds: number[];
+    };
+    ModifiedEntityModel: {
+      description?: {
+        [key: string]: unknown;
+      };
+      entityClass: string;
+      /** Format: int64 */
+      entityId: number;
+      exists?: boolean;
+      modifications?: {
+        [key: string]: components["schemas"]["PropertyModification"];
+      };
+      relations?: {
+        [key: string]: components["schemas"]["ExistenceEntityDescription"];
+      };
+    };
+    NamespaceModel: {
+      /**
+       * Format: int64
+       * @description The id of namespace
+       * @example 10000048
+       */
+      id: number;
+      /** @example homepage */
+      name: string;
+    };
+    NotificationModel: {
+      /** Format: date-time */
+      createdAt?: string;
+      /** Format: int64 */
+      id: number;
+      linkedTask?: components["schemas"]["TaskModel"];
+      originatingUser?: components["schemas"]["SimpleUserAccountModel"];
+      project?: components["schemas"]["SimpleProjectModel"];
+      /** @enum {string} */
+      type: "TASK_ASSIGNED" | "TASK_FINISHED" | "TASK_CANCELED" | "MFA_ENABLED" | "MFA_DISABLED" | "PASSWORD_CHANGED";
+    };
+    NotificationSettingGroupModel: {
+      email: boolean;
+      inApp: boolean;
+    };
+    NotificationSettingModel: {
+      accountSecurity: components["schemas"]["NotificationSettingGroupModel"];
+      tasks: components["schemas"]["NotificationSettingGroupModel"];
+    };
+    NotificationSettingsRequest: {
+      /**
+       * @example IN_APP
+       * @enum {string}
+       */
+      channel: "IN_APP" | "EMAIL";
+      /**
+       * @description True if the setting should be enabled, false for disabled
+       * @example false
+       */
+      enabled: boolean;
+      /**
+       * @example TASKS
+       * @enum {string}
+       */
+      group: "ACCOUNT_SECURITY" | "TASKS";
+    };
+    NotificationsMarkSeenRequest: {
+      /**
+       * @description Notification IDs to be marked as seen
+       * @example [
+       *   1,
+       *   2,
+       *   3
+       * ]
+       */
+      notificationIds: number[];
+    };
+    OrganizationDto: {
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
+      /** @example Beautiful organization */
+      name: string;
+      /** @example btforg */
+      slug?: string;
+    };
+    OrganizationModel: {
+      /** @example Links to avatar images */
+      avatar?: components["schemas"]["Avatar"];
+      basePermissions: components["schemas"]["PermissionModel"];
+      /**
+       * @description The role of currently authorized user.
+       *
+       * Can be null when user has direct access to one of the projects owned by the organization.
+       * @enum {string}
+       */
+      currentUserRole?: "MEMBER" | "OWNER" | "MAINTAINER";
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      /** @example Beautiful organization */
+      name: string;
+      /** @example btforg */
+      slug: string;
+    };
+    PageMetadata: {
+      /** Format: int64 */
+      number?: number;
+      /** Format: int64 */
+      size?: number;
+      /** Format: int64 */
+      totalElements?: number;
+      /** Format: int64 */
+      totalPages?: number;
+    };
+    PagedModelBatchJobModel: {
+      _embedded?: {
+        batchJobs?: components["schemas"]["BatchJobModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelImportFileIssueModel: {
+      _embedded?: {
+        importFileIssues?: components["schemas"]["ImportFileIssueModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelImportLanguageModel: {
+      _embedded?: {
+        languages?: components["schemas"]["ImportLanguageModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelImportTranslationModel: {
+      _embedded?: {
+        translations?: components["schemas"]["ImportTranslationModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelKeyModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeyModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelKeySearchSearchResultModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeySearchSearchResultModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelKeyWithTranslationsModel: {
+      _embedded?: {
+        keys?: components["schemas"]["KeyWithTranslationsModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelLabelModel: {
+      _embedded?: {
+        labels?: components["schemas"]["LabelModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelLanguageModel: {
+      _embedded?: {
+        languages?: components["schemas"]["LanguageModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelNamespaceModel: {
+      _embedded?: {
+        namespaces?: components["schemas"]["NamespaceModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelNotificationModel: {
+      _embedded?: {
+        notificationModelList?: components["schemas"]["NotificationModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelOrganizationModel: {
+      _embedded?: {
+        organizations?: components["schemas"]["OrganizationModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelProjectActivityModel: {
+      _embedded?: {
+        activities?: components["schemas"]["ProjectActivityModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelProjectModel: {
+      _embedded?: {
+        projects?: components["schemas"]["ProjectModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelSimpleGlossaryModel: {
+      _embedded?: {
+        glossaries?: components["schemas"]["SimpleGlossaryModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelSimpleGlossaryTermModel: {
+      _embedded?: {
+        glossaryTerms?: components["schemas"]["SimpleGlossaryTermModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelSimpleGlossaryTermWithTranslationsModel: {
+      _embedded?: {
+        glossaryTerms?: components["schemas"]["SimpleGlossaryTermWithTranslationsModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelSimpleGlossaryWithStatsModel: {
+      _embedded?: {
+        glossaries?: components["schemas"]["SimpleGlossaryWithStatsModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelSimpleUserAccountModel: {
+      _embedded?: {
+        users?: components["schemas"]["SimpleUserAccountModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTagModel: {
+      _embedded?: {
+        tags?: components["schemas"]["TagModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTaskModel: {
+      _embedded?: {
+        tasks?: components["schemas"]["TaskModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTaskWithProjectModel: {
+      _embedded?: {
+        tasks?: components["schemas"]["TaskWithProjectModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTranslationCommentModel: {
+      _embedded?: {
+        translationComments?: components["schemas"]["TranslationCommentModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTranslationHistoryModel: {
+      _embedded?: {
+        revisions?: components["schemas"]["TranslationHistoryModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
     };
     PagedModelTranslationMemoryItemModel: {
       _embedded?: {
@@ -1848,14 +2384,559 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
-    TranslationMemoryItemModel: {
-      targetText: string;
-      baseText: string;
+    PagedModelTranslationSuggestionModel: {
+      _embedded?: {
+        suggestions?: components["schemas"]["TranslationSuggestionModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelWithNextCursorNotificationModel: {
+      _embedded?: {
+        notificationModelList?: components["schemas"]["NotificationModel"][];
+      };
+      /**
+       * @description Cursor to get next data
+       * @example eyJrZXlJZCI6eyJkaXJlY3Rpb24iOiJBU0MiLCJ2YWx1ZSI6IjEwMDAwMDAxMjAifX0=
+       */
+      nextCursor?: string;
+      page?: components["schemas"]["PageMetadata"];
+      pagedModel?: components["schemas"]["PagedModelNotificationModel"];
+    };
+    PatWithUserModel: {
+      /** Format: int64 */
+      createdAt: number;
+      description: string;
+      /** Format: int64 */
+      expiresAt?: number;
+      /** Format: int64 */
+      id: number;
+      /** Format: int64 */
+      lastUsedAt?: number;
+      /** Format: int64 */
+      updatedAt: number;
+      user: components["schemas"]["SimpleUserAccountModel"];
+    };
+    PermissionModel: {
+      /**
+       * @deprecated
+       * @description Deprecated (use translateLanguageIds).
+       *
+       * List of languages current user has TRANSLATE permission to. If null, all languages edition is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      permittedLanguageIds?: number[];
+      /**
+       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
+       * @example [
+       *   "KEYS_EDIT",
+       *   "TRANSLATIONS_VIEW"
+       * ]
+       */
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view")[];
+      /**
+       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      stateChangeLanguageIds?: number[];
+      /**
+       * @description List of languages user can suggest to. If null, suggesting to all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      suggestLanguageIds?: number[];
+      /**
+       * @description List of languages user can translate to. If null, all languages editing is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      translateLanguageIds?: number[];
+      /**
+       * @description The user's permission type. This field is null if uses granular permissions
+       * @enum {string}
+       */
+      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
+      /**
+       * @description List of languages user can view. If null, all languages view is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      viewLanguageIds?: number[];
+    };
+    PreTranslationByTmRequest: {
+      keyIds: number[];
+      targetLanguageIds: number[];
+    };
+    PrivateUserAccountModel: {
+      /** @enum {string} */
+      accountType: "LOCAL" | "MANAGED" | "THIRD_PARTY";
+      avatar?: components["schemas"]["Avatar"];
+      deletable: boolean;
+      domain?: string;
+      emailAwaitingVerification?: string;
+      /** @enum {string} */
+      globalServerRole: "USER" | "ADMIN" | "SUPPORTER";
+      /** Format: int64 */
+      id: number;
+      mfaEnabled: boolean;
+      name?: string;
+      needsSuperJwtToken: boolean;
+      /** @enum {string} */
+      thirdPartyAuthType?: "GOOGLE" | "GITHUB" | "OAUTH2" | "SSO" | "SSO_GLOBAL";
+      username: string;
+    };
+    ProjectActivityAuthorModel: {
+      avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
+      /** Format: int64 */
+      id: number;
+      name?: string;
+      username?: string;
+    };
+    ProjectActivityModel: {
+      author?: components["schemas"]["ProjectActivityAuthorModel"];
+      counts?: {
+        [key: string]: number;
+      };
+      meta?: {
+        [key: string]: unknown;
+      };
+      modifiedEntities?: {
+        [key: string]: components["schemas"]["ModifiedEntityModel"][];
+      };
+      params?: unknown;
+      /** Format: int64 */
+      revisionId: number;
+      /** Format: int64 */
+      timestamp: number;
+      /** @enum {string} */
+      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "BATCH_ASSIGN_TRANSLATION_LABEL" | "BATCH_UNASSIGN_TRANSLATION_LABEL" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION" | "TASKS_CREATE" | "TASK_CREATE" | "TASK_UPDATE" | "TASK_KEYS_UPDATE" | "TASK_FINISH" | "TASK_CLOSE" | "TASK_REOPEN" | "TASK_KEY_UPDATE" | "ORDER_TRANSLATION" | "GLOSSARY_CREATE" | "GLOSSARY_UPDATE" | "GLOSSARY_DELETE" | "GLOSSARY_IMPORT" | "GLOSSARY_TERM_CREATE" | "GLOSSARY_TERM_UPDATE" | "GLOSSARY_TERM_DELETE" | "GLOSSARY_TERM_TRANSLATION_UPDATE" | "TRANSLATION_LABELS_EDIT" | "TRANSLATION_LABEL_ASSIGN" | "TRANSLATION_LABEL_CREATE" | "TRANSLATION_LABEL_UPDATE" | "TRANSLATION_LABEL_DELETE" | "CREATE_SUGGESTION" | "DECLINE_SUGGESTION" | "ACCEPT_SUGGESTION" | "REVERSE_SUGGESTION" | "DELETE_SUGGESTION" | "SUGGESTION_SET_ACTIVE" | "AI_PROMPT_CREATE" | "AI_PROMPT_UPDATE" | "AI_PROMPT_DELETE";
+    };
+    ProjectModel: {
+      avatar?: components["schemas"]["Avatar"];
+      baseLanguage?: components["schemas"]["LanguageModel"];
+      computedPermission: components["schemas"]["ComputedPermissionModel"];
+      defaultNamespace?: components["schemas"]["NamespaceModel"];
+      description?: string;
+      /**
+       * @description Current user's direct permission
+       * @example MANAGE
+       */
+      directPermission?: components["schemas"]["PermissionModel"];
+      /** @description Whether to disable ICU placeholder visualization in the editor and it's support. */
+      icuPlaceholders: boolean;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
+      /** @enum {string} */
+      organizationRole?: "MEMBER" | "OWNER" | "MAINTAINER";
+      slug?: string;
+      /**
+       * @description Suggestions for translations
+       * @enum {string}
+       */
+      suggestionsMode: "DISABLED" | "ENABLED";
+      /**
+       * @description Level of protection of translations
+       * @enum {string}
+       */
+      translationProtection: "NONE" | "PROTECT_REVIEWED";
+      useNamespaces: boolean;
+    };
+    ProjectStatsModel: {
+      /** Format: int64 */
+      baseWordsCount: number;
+      /** Format: int64 */
+      keyCount: number;
+      /** Format: int32 */
+      languageCount: number;
+      languageStats: components["schemas"]["LanguageStatsModel"][];
+      /** Format: int64 */
+      membersCount: number;
+      /** Format: int64 */
+      projectId: number;
+      /** Format: double */
+      reviewedPercentage: number;
+      /** Format: int64 */
+      tagCount: number;
+      /** Format: int64 */
+      taskCount: number;
+      /** Format: double */
+      translatedPercentage: number;
+    };
+    PromptDto: {
+      basicPromptOptions?: ("KEY_NAME" | "KEY_DESCRIPTION" | "KEY_CONTEXT" | "PROJECT_DESCRIPTION" | "LANGUAGE_NOTES" | "TM_SUGGESTIONS" | "SCREENSHOT" | "GLOSSARY")[];
+      name: string;
+      providerName: string;
+      template?: string;
+    };
+    PropertyModification: {
+      new?: unknown;
+      old?: unknown;
+    };
+    PublicSsoTenantModel: {
+      domain: string;
+      force: boolean;
+      global: boolean;
+    };
+    RelatedKeyDto: {
+      branch?: string;
       keyName: string;
-      /** Format: float */
-      similarity: number;
+      namespace?: string;
+    };
+    ScreenshotInfoDto: {
+      location?: string;
+      positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
+      text?: string;
+    };
+    ScreenshotModel: {
+      /** Format: date-time */
+      createdAt?: string;
+      fileUrl: string;
+      /**
+       * @description File name, which may be downloaded from the screenshot path.
+       *
+       * When images are secured. Encrypted timestamp is appended to the filename.
+       */
+      filename: string;
+      /** Format: int32 */
+      height?: number;
+      /** Format: int64 */
+      id: number;
+      keyReferences: components["schemas"]["KeyInScreenshotModel"][];
+      location?: string;
+      middleSized?: string;
+      middleSizedUrl?: string;
+      /**
+       * @description Thumbnail file name, which may be downloaded from the screenshot path.
+       *
+       * When images are secured. Encrypted timestamp is appended to the filename.
+       */
+      thumbnail: string;
+      thumbnailUrl: string;
+      /** Format: int32 */
+      width?: number;
+    };
+    SelectAllResponse: {
+      ids: number[];
+    };
+    SetDisabledLanguagesRequest: {
+      languageIds: number[];
+    };
+    SetFileNamespaceRequest: {
+      namespace?: string;
+    };
+    SetKeysNamespaceRequest: {
+      keyIds: number[];
+      namespace?: string;
+    };
+    SetTranslationsResponseModel: {
+      /**
+       * Format: int64
+       * @description Id of key record
+       */
+      keyId: number;
+      keyIsPlural: boolean;
+      /**
+       * @description Name of key
+       * @example this_is_super_key
+       */
+      keyName: string;
+      /**
+       * @description The namespace of the key
+       * @example homepage
+       */
+      keyNamespace?: string;
+      /**
+       * @description Translations object containing values updated in this request
+       * @example {
+       *   "en": {
+       *     "id": 100000003,
+       *     "text": "This is super translation!"
+       *   }
+       * }
+       */
+      translations: {
+        [key: string]: components["schemas"]["TranslationModel"];
+      };
+    };
+    SetTranslationsStateStateRequest: {
+      keyIds: number[];
+      languageIds: number[];
+      /** @enum {string} */
+      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
+    };
+    SetTranslationsWithKeyDto: {
+      /** @description Branch name to set translations for */
+      branch?: string;
+      /**
+       * @description Key name to set translations for
+       * @example what_a_key_to_translate
+       */
+      key: string;
+      /**
+       * @description List of languages to return translations for.
+       *
+       * If not provided, only modified translation will be provided.
+       *
+       * @example [
+       *   "en",
+       *   "de",
+       *   "fr"
+       * ]
+       */
+      languagesToReturn?: string[];
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
+      /**
+       * @description Object mapping language tag to translation
+       * @example {
+       *   "en": "What a translated value!",
+       *   "cs": "Jaká to přeložená hodnota!"
+       * }
+       */
+      translations: {
+        [key: string]: string;
+      };
+    };
+    SimpleGlossaryModel: {
+      /**
+       * @description Language tag for default translations for terms
+       * @example en
+       */
+      baseLanguageTag: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
+    SimpleGlossaryTermModel: {
+      description: string;
+      /** @description Specifies whether the term represents a shortened form of a word or phrase */
+      flagAbbreviation: boolean;
+      /** @description When true, the term matching considers uppercase and lowercase characters as distinct */
+      flagCaseSensitive: boolean;
+      /** @description When true, marks this term as prohibited or not recommended for use in translations */
+      flagForbiddenTerm: boolean;
+      /** @description When true, this term has the same translation across all target languages */
+      flagNonTranslatable: boolean;
+      /** Format: int64 */
+      id: number;
+    };
+    SimpleGlossaryTermWithTranslationsModel: {
+      /**
+       * @description A detailed explanation or definition of the glossary term
+       * @example It's trademark
+       */
+      description: string;
+      /** @description Specifies whether the term represents a shortened form of a word or phrase */
+      flagAbbreviation: boolean;
+      /** @description When true, the term matching considers uppercase and lowercase characters as distinct */
+      flagCaseSensitive: boolean;
+      /** @description When true, marks this term as prohibited or not recommended for use in translations */
+      flagForbiddenTerm: boolean;
+      /** @description When true, this term has the same translation across all target languages */
+      flagNonTranslatable: boolean;
+      /** Format: int64 */
+      id: number;
+      translations: components["schemas"]["GlossaryTermTranslationModel"][];
+    };
+    SimpleGlossaryWithStatsModel: {
+      /**
+       * Format: int64
+       * @description Total number of projects currently using this glossary
+       * @example 69
+       */
+      assignedProjectsCount: number;
+      /**
+       * @description The primary language code used for terms (e.g., 'en' for English)
+       * @example en
+       */
+      baseLanguageTag: string;
+      /**
+       * @description The name of one project using this glossary (can be shown as a preview)
+       * @example My Project
+       */
+      firstAssignedProjectName?: string;
+      /** Format: int64 */
+      id: number;
+      name: string;
+    };
+    SimpleImportConflictResult: {
+      isOverridable: boolean;
+      keyName: string;
+      keyNamespace?: string;
+      language: string;
+    };
+    SimpleOrganizationModel: {
+      /** @example Links to avatar images */
+      avatar?: components["schemas"]["Avatar"];
+      basePermissions: components["schemas"]["PermissionModel"];
+      /** @example This is a beautiful organization full of beautiful and clever people */
+      description?: string;
+      /** Format: int64 */
+      id: number;
+      /** @example Beautiful organization */
+      name: string;
+      /** @example btforg */
+      slug: string;
+    };
+    SimpleProjectModel: {
+      avatar?: components["schemas"]["Avatar"];
+      baseLanguage?: components["schemas"]["LanguageModel"];
+      description?: string;
+      icuPlaceholders: boolean;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      slug?: string;
+    };
+    SimpleUserAccountModel: {
+      avatar?: components["schemas"]["Avatar"];
+      deleted: boolean;
+      /** Format: int64 */
+      id: number;
+      name?: string;
+      username: string;
+    };
+    SingleStepImportRequest: {
+      /**
+       * @description Branch to which files will be imported
+       * @example main
+       */
+      branch?: string;
+      /** @description If true, placeholders from other formats will be converted to ICU when possible */
+      convertPlaceholdersToIcu: boolean;
+      /** @description If false, only updates keys, skipping the creation of new keys */
+      createNewKeys: boolean;
+      /**
+       * @description If `false`, import will apply all `non-failed` overrides and reports `unresolvedConflict`
+       * .If `true`, import will fail completely on unresolved conflict and won't apply any changes. Unresolved conflicts are reported in the `params` of the error response
+       */
+      errorOnUnresolvedConflict?: boolean;
+      /** @description Definition of mapping for each file to import. */
+      fileMappings: components["schemas"]["ImportFileMapping"][];
+      /**
+       * @description Whether to override existing translation data.
+       *
+       * When set to `KEEP`, existing translations will be kept.
+       * When set to `NO_FORCE`, error will be thrown on conflict.
+       * When set to `OVERRIDE`, existing translations will be overwritten
+       * @enum {string}
+       */
+      forceMode: "OVERRIDE" | "KEEP" | "NO_FORCE";
+      /**
+       * @description Maps the languages from imported files to languages existing in the Tolgee platform.
+       *
+       * Use this field only when your files contain multiple languages (e.g., XLIFF files).
+       *
+       * Otherwise, use the `languageTag` property of `fileMappings`.
+       *
+       * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
+       */
+      languageMappings?: components["schemas"]["LanguageMapping"][];
+      /** @description If true, key descriptions will be overridden by the import */
+      overrideKeyDescriptions: boolean;
+      /**
+       * @description Some translations are forbidden or protected:
+       *
+       * When set to `RECOMMENDED` it will fail for DISABLED translations and protected REVIEWED translations.
+       * When set to `ALL` it will fail for DISABLED translations, but will try to update protected REVIEWED translations (fails only if user has no permission)
+       *
+       * @enum {string}
+       */
+      overrideMode?: "RECOMMENDED" | "ALL";
+      /** @description If yes, keys from project that were not included in import will be deleted (only within namespaces which are included in the import). */
+      removeOtherKeys?: boolean;
+      /**
+       * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
+       * @example .
+       */
+      structureDelimiter?: string;
+      /** @description Keys created by this import will be tagged with these tags. It add tags only to new keys. The keys that already exist will not be tagged. */
+      tagNewKeys: string[];
+    };
+    SingleStepImportResolvableItemRequest: {
+      /**
+       * @description Key name to set translations for
+       * @example what_a_key_to_translate
+       */
+      name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
+      namespace?: string;
+      screenshots?: components["schemas"]["KeyScreenshotDto"][];
+      /** @description Object mapping language tag to translation */
+      translations: {
+        [key: string]: components["schemas"]["SingleStepImportResolvableTranslationRequest"];
+      };
+    };
+    SingleStepImportResolvableRequest: {
+      /**
+       * @description If `false`, import will apply all `non-failed` overrides and reports `unresolvedConflict`
+       * .If `true`, import will fail completely on unresolved conflict and won't apply any changes. Unresolved conflicts are reported in the `params` of the error response
+       */
+      errorOnUnresolvedConflict?: boolean;
+      /** @description List of keys to import */
+      keys: components["schemas"]["SingleStepImportResolvableItemRequest"][];
+      /**
+       * @description Some translations are forbidden or protected:
+       *
+       * When set to `RECOMMENDED` it will fail for DISABLED translations and protected REVIEWED translations.
+       * When set to `ALL` it will fail for DISABLED translations, but will try to update protected REVIEWED translations (fails only if user has no permission)
+       *
+       * @enum {string}
+       */
+      overrideMode?: "RECOMMENDED" | "ALL";
+    };
+    SingleStepImportResolvableTranslationRequest: {
+      /**
+       * @description
+       *     To ensure the import doesn't override something that should not be (in case data have changed unexpectedly),
+       *     you can specify what do you "expect":
+       *       - EXPECT_NO_CONFLICT: There should be no conflict, if there is, import fails
+       *       - OVERRIDE: New translation is applied over the existing in every case (Default)
+       *
+       * @example OVERRIDE
+       * @enum {string}
+       */
+      resolution?: "EXPECT_NO_CONFLICT" | "OVERRIDE";
+      /**
+       * @description Translation text
+       * @example Hello! I am a translation!
+       */
+      text: string;
+    };
+    StreamingResponseBody: unknown;
+    SuggestRequestDto: {
+      /** @description Text value of base translation. Useful, when base translation is not stored yet. */
+      baseText?: string;
+      /** @description Whether base text is plural. This value is ignored if baseText is null. */
+      isPlural?: boolean;
+      /**
+       * Format: int64
+       * @description Key Id to get results for. Use when key is stored already.
+       */
+      keyId?: number;
+      plural?: boolean;
+      /** @description List of services to use. If null, then all enabled services are used. */
+      services?: ("GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "PROMPT")[];
+      /** Format: int64 */
+      targetLanguageId: number;
     };
     SuggestResultModel: {
+      /** @description If true, the base translation was empty and no translation was provided. */
+      baseBlank: boolean;
       /**
        * @deprecated
        * @description String translations provided by enabled services. (deprecated, use `result` instead)
@@ -1884,98 +2965,361 @@ export interface components {
       result?: {
         [key: string]: components["schemas"]["TranslationItemModel"];
       };
-      /** @description If true, the base translation was empty and no translation was provided. */
-      baseBlank: boolean;
     };
-    /**
-     * @description Results provided by enabled services.
-     * @example {
-     *   "GOOGLE": {
-     *     "output": "This was translated by Google",
-     *     "contextDescription": null
-     *   },
-     *   "TOLGEE": {
-     *     "output": "This was translated by Tolgee Translator",
-     *     "contextDescription": "This is an example in swagger"
-     *   }
-     * }
-     */
-    TranslationItemModel: {
-      output: string;
-      contextDescription?: string;
+    TagKeyDto: {
+      name: string;
     };
-    ScreenshotInfoDto: {
-      text?: string;
-      positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
-      location?: string;
+    TagKeysRequest: {
+      keyIds: number[];
+      tags: string[];
     };
-    ImageUploadInfoDto: {
-      location?: string;
-    };
-    UploadedImageModel: {
-      /** Format: int64 */
-      id: number;
-      filename: string;
-      fileUrl: string;
-      requestFilename: string;
-      /** Format: date-time */
-      createdAt: string;
-      location?: string;
-    };
-    PagedModelTaskWithProjectModel: {
-      _embedded?: {
-        tasks?: components["schemas"]["TaskWithProjectModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    SimpleProjectModel: {
+    TagModel: {
       /** Format: int64 */
       id: number;
       name: string;
-      description?: string;
-      slug?: string;
-      avatar?: components["schemas"]["Avatar"];
-      baseLanguage?: components["schemas"]["LanguageModel"];
-      icuPlaceholders: boolean;
     };
-    TaskWithProjectModel: {
-      /** Format: int64 */
-      number: number;
-      name: string;
-      description: string;
-      /** @enum {string} */
-      type: "TRANSLATE" | "REVIEW";
-      language: components["schemas"]["LanguageModel"];
-      /** Format: int64 */
-      dueDate?: number;
+    TaskKeysResponse: {
+      keys: number[];
+    };
+    TaskModel: {
+      agency?: components["schemas"]["TranslationAgencySimpleModel"];
       assignees: components["schemas"]["SimpleUserAccountModel"][];
+      author?: components["schemas"]["SimpleUserAccountModel"];
       /** Format: int64 */
-      totalItems: number;
-      /** Format: int64 */
-      doneItems: number;
+      baseCharacterCount: number;
       /** Format: int64 */
       baseWordCount: number;
       /** Format: int64 */
-      baseCharacterCount: number;
-      author?: components["schemas"]["SimpleUserAccountModel"];
-      /** Format: int64 */
-      createdAt?: number;
+      branchId?: number;
+      branchName?: string;
       /** Format: int64 */
       closedAt?: number;
+      /** Format: int64 */
+      createdAt?: number;
+      description: string;
+      /** Format: int64 */
+      doneItems: number;
+      /** Format: int64 */
+      dueDate?: number;
+      language: components["schemas"]["LanguageModel"];
+      name?: string;
+      /** Format: int64 */
+      number: number;
       /** @enum {string} */
-      state: "NEW" | "IN_PROGRESS" | "DONE" | "CLOSED";
+      state: "NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED";
+      /** Format: int64 */
+      totalItems: number;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
+    };
+    TaskPerUserReportModel: {
+      /** Format: int64 */
+      baseCharacterCount: number;
+      /** Format: int64 */
+      baseWordCount: number;
+      /** Format: int64 */
+      doneItems: number;
+      user: components["schemas"]["SimpleUserAccountModel"];
+    };
+    TaskWithProjectModel: {
+      agency?: components["schemas"]["TranslationAgencySimpleModel"];
+      assignees: components["schemas"]["SimpleUserAccountModel"][];
+      author?: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: int64 */
+      baseCharacterCount: number;
+      /** Format: int64 */
+      baseWordCount: number;
+      /** Format: int64 */
+      branchId?: number;
+      branchName?: string;
+      /** Format: int64 */
+      closedAt?: number;
+      /** Format: int64 */
+      createdAt?: number;
+      description: string;
+      /** Format: int64 */
+      doneItems: number;
+      /** Format: int64 */
+      dueDate?: number;
+      language: components["schemas"]["LanguageModel"];
+      name?: string;
+      /** Format: int64 */
+      number: number;
       project: components["schemas"]["SimpleProjectModel"];
+      /** @enum {string} */
+      state: "NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED";
+      /** Format: int64 */
+      totalItems: number;
+      /** @enum {string} */
+      type: "TRANSLATE" | "REVIEW";
     };
-    PagedModelProjectModel: {
-      _embedded?: {
-        projects?: components["schemas"]["ProjectModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
+    TranslationAgencySimpleModel: {
+      avatar?: components["schemas"]["Avatar"];
+      /** Format: int64 */
+      id: number;
+      name: string;
+      url?: string;
     };
-    CollectionModelUsedNamespaceModel: {
-      _embedded?: {
-        namespaces?: components["schemas"]["UsedNamespaceModel"][];
+    TranslationCommentDto: {
+      /** @enum {string} */
+      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
+      text: string;
+    };
+    TranslationCommentModel: {
+      /** @description User who created the comment */
+      author: components["schemas"]["SimpleUserAccountModel"];
+      /**
+       * Format: date-time
+       * @description Date when it was created
+       */
+      createdAt: string;
+      /**
+       * Format: int64
+       * @description Id of translation comment record
+       */
+      id: number;
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
+      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
+      /** @description Text of comment */
+      text: string;
+      /**
+       * Format: date-time
+       * @description Date when it was updated
+       */
+      updatedAt: string;
+    };
+    TranslationCommentWithLangKeyDto: {
+      /** Format: int64 */
+      keyId: number;
+      /** Format: int64 */
+      languageId: number;
+      /** @enum {string} */
+      state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
+      text: string;
+    };
+    TranslationHistoryModel: {
+      /** @description Author of the change */
+      author?: components["schemas"]["SimpleUserAccountModel"];
+      /** @description Modified fields */
+      modifications?: {
+        [key: string]: components["schemas"]["PropertyModification"];
       };
+      /** @enum {string} */
+      revisionType: "ADD" | "MOD" | "DEL";
+      /**
+       * Format: int64
+       * @description Unix timestamp of the revision
+       */
+      timestamp: number;
+    };
+    TranslationItemModel: {
+      contextDescription?: string;
+      output: string;
+    };
+    TranslationLabelRequest: {
+      /** Format: int64 */
+      keyId: number;
+      /** Format: int64 */
+      labelId: number;
+      /** Format: int64 */
+      languageId: number;
+    };
+    TranslationMemoryItemModel: {
+      baseText: string;
+      keyName: string;
+      /** Format: float */
+      similarity: number;
+      targetText: string;
+    };
+    TranslationModel: {
+      /** @description Was translated using Translation Memory or Machine translation service? */
+      auto: boolean;
+      /**
+       * Format: int64
+       * @description Id of translation record
+       */
+      id: number;
+      /**
+       * @description Which machine translation service was used to auto translate this
+       * @enum {string}
+       */
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "PROMPT";
+      /** @description Whether base language translation was changed after this translation was updated */
+      outdated: boolean;
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
+      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
+      /** @description Translation text */
+      text?: string;
+    };
+    TranslationSuggestionAcceptResponse: {
+      accepted: components["schemas"]["TranslationSuggestionModel"];
+      declined: number[];
+    };
+    TranslationSuggestionModel: {
+      author: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: int64 */
+      id: number;
+      isPlural: boolean;
+      /** Format: int64 */
+      keyId: number;
+      /** Format: int64 */
+      languageId: number;
+      /** @enum {string} */
+      state: "ACTIVE" | "ACCEPTED" | "DECLINED";
+      translation?: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    TranslationSuggestionSimpleModel: {
+      author: components["schemas"]["SimpleUserAccountModel"];
+      /** Format: int64 */
+      id: number;
+      isPlural: boolean;
+      /** @enum {string} */
+      state: "ACTIVE" | "ACCEPTED" | "DECLINED";
+      translation?: string;
+    };
+    TranslationViewModel: {
+      /**
+       * Format: int64
+       * @description Number of active suggestions
+       */
+      activeSuggestionCount: number;
+      /** @description Was translated using Translation Memory or Machine translation service? */
+      auto: boolean;
+      /**
+       * Format: int64
+       * @description Count of translation comments
+       */
+      commentCount: number;
+      /** @description Was translation memory used to translate this? */
+      fromTranslationMemory: boolean;
+      /**
+       * Format: int64
+       * @description Id of translation record
+       */
+      id?: number;
+      /** @description Labels assigned to this translation */
+      labels?: components["schemas"]["LabelModel"][];
+      /**
+       * @description Which machine translation service was used to auto translate this
+       * @enum {string}
+       */
+      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "PROMPT";
+      /** @description Whether base language translation was changed after this translation was updated */
+      outdated: boolean;
+      /**
+       * @description State of translation
+       * @enum {string}
+       */
+      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
+      /** @description First suggestion */
+      suggestions?: components["schemas"]["TranslationSuggestionSimpleModel"][];
+      /** @description Translation text */
+      text?: string;
+      /**
+       * Format: int64
+       * @description Number of all suggestions
+       */
+      totalSuggestionCount: number;
+      /**
+       * Format: int64
+       * @description Count of unresolved translation comments
+       */
+      unresolvedCommentCount: number;
+    };
+    TranslationWithCommentModel: {
+      comment: components["schemas"]["TranslationCommentModel"];
+      translation: components["schemas"]["TranslationModel"];
+    };
+    UntagKeysRequest: {
+      keyIds: number[];
+      tags: string[];
+    };
+    UpdateGlossaryRequest: {
+      /** @description Projects assigned to glossary; when null, assigned projects will be kept unchanged. */
+      assignedProjectIds?: number[];
+      /**
+       * @description Language tag according to BCP 47 definition
+       * @example cs-CZ
+       */
+      baseLanguageTag: string;
+      /**
+       * @description Glossary name
+       * @example My glossary
+       */
+      name: string;
+    };
+    UpdateGlossaryTermTranslationRequest: {
+      /**
+       * @description Language tag according to BCP 47 definition
+       * @example cs-CZ
+       */
+      languageTag: string;
+      /**
+       * @description Translation text
+       * @example Translated text to language of languageTag
+       */
+      text: string;
+    };
+    UpdateGlossaryTermWithTranslationRequest: {
+      description?: string;
+      /** @description Specifies whether the term represents a shortened form of a word or phrase */
+      flagAbbreviation?: boolean;
+      /** @description When true, the term matching considers uppercase and lowercase characters as distinct */
+      flagCaseSensitive?: boolean;
+      /** @description When true, marks this term as prohibited or not recommended for use in translations */
+      flagForbiddenTerm?: boolean;
+      /** @description When true, this term will have the same translation across all target languages */
+      flagNonTranslatable?: boolean;
+      text?: string;
+    };
+    UpdateNamespaceDto: {
+      name: string;
+    };
+    UpdateTaskKeyRequest: {
+      done: boolean;
+    };
+    UpdateTaskKeyResponse: {
+      /** @description Task key is marked as done */
+      done: boolean;
+      /** @description Task progress is 100% */
+      taskFinished: boolean;
+    };
+    UpdateTaskKeysRequest: {
+      /** @description Keys to add to task */
+      addKeys?: number[];
+      /** @description Keys to remove from task */
+      removeKeys?: number[];
+    };
+    UpdateTaskRequest: {
+      assignees: number[];
+      description: string;
+      /**
+       * Format: int64
+       * @description Due to date in epoch format (milliseconds).
+       * @example 1661172869000
+       */
+      dueDate?: number;
+      name?: string;
+    };
+    UploadedImageModel: {
+      /** Format: date-time */
+      createdAt: string;
+      fileUrl: string;
+      filename: string;
+      /** Format: int64 */
+      id: number;
+      location?: string;
+      requestFilename: string;
     };
     UsedNamespaceModel: {
       /**
@@ -1989,561 +3333,6 @@ export interface components {
        * @example homepage
        */
       name?: string;
-    };
-    TaskPerUserReportModel: {
-      user: components["schemas"]["SimpleUserAccountModel"];
-      /** Format: int64 */
-      doneItems: number;
-      /** Format: int64 */
-      baseCharacterCount: number;
-      /** Format: int64 */
-      baseWordCount: number;
-    };
-    TaskKeysResponse: {
-      keys: number[];
-    };
-    PagedModelSimpleUserAccountModel: {
-      _embedded?: {
-        users?: components["schemas"]["SimpleUserAccountModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelTaskModel: {
-      _embedded?: {
-        tasks?: components["schemas"]["TaskModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelNamespaceModel: {
-      _embedded?: {
-        namespaces?: components["schemas"]["NamespaceModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    KeySearchResultView: {
-      description?: string;
-      name: string;
-      /** Format: int64 */
-      id: number;
-      baseTranslation?: string;
-      namespace?: string;
-      translation?: string;
-    };
-    KeySearchSearchResultModel: {
-      view?: components["schemas"]["KeySearchResultView"];
-      description?: string;
-      name: string;
-      /** Format: int64 */
-      id: number;
-      baseTranslation?: string;
-      namespace?: string;
-      translation?: string;
-    };
-    PagedModelKeySearchSearchResultModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeySearchSearchResultModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelKeyModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeyModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    EntityDescriptionWithRelations: {
-      entityClass: string;
-      /** Format: int64 */
-      entityId: number;
-      data: {
-        [key: string]: Record<string, never>;
-      };
-    };
-    ExistenceEntityDescription: {
-      entityClass: string;
-      /** Format: int64 */
-      entityId: number;
-      data: {
-        [key: string]: Record<string, never>;
-      };
-      relations: {
-        [key: string]: components["schemas"]["EntityDescriptionWithRelations"];
-      };
-      exists?: boolean;
-    };
-    ModifiedEntityModel: {
-      entityClass: string;
-      /** Format: int64 */
-      entityId: number;
-      description?: {
-        [key: string]: Record<string, never>;
-      };
-      modifications?: {
-        [key: string]: components["schemas"]["PropertyModification"];
-      };
-      relations?: {
-        [key: string]: components["schemas"]["ExistenceEntityDescription"];
-      };
-      exists?: boolean;
-    };
-    PropertyModification: {
-      old?: Record<string, never>;
-      new?: Record<string, never>;
-    };
-    ProjectActivityAuthorModel: {
-      /** Format: int64 */
-      id: number;
-      username?: string;
-      name?: string;
-      avatar?: components["schemas"]["Avatar"];
-      deleted: boolean;
-    };
-    ProjectActivityModel: {
-      /** Format: int64 */
-      revisionId: number;
-      /** Format: int64 */
-      timestamp: number;
-      /** @enum {string} */
-      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION" | "TASKS_CREATE" | "TASK_CREATE" | "TASK_UPDATE" | "TASK_KEYS_UPDATE" | "TASK_FINISH" | "TASK_CLOSE" | "TASK_REOPEN" | "TASK_KEY_UPDATE";
-      author?: components["schemas"]["ProjectActivityAuthorModel"];
-      modifiedEntities?: {
-        [key: string]: components["schemas"]["ModifiedEntityModel"][];
-      };
-      meta?: {
-        [key: string]: Record<string, never>;
-      };
-      counts?: {
-        [key: string]: number;
-      };
-      params?: Record<string, never>;
-    };
-    PagedModelProjectActivityModel: {
-      _embedded?: {
-        activities?: components["schemas"]["ProjectActivityModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelTagModel: {
-      _embedded?: {
-        tags?: components["schemas"]["TagModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelBatchJobModel: {
-      _embedded?: {
-        batchJobs?: components["schemas"]["BatchJobModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    CreditBalanceModel: {
-      /** Format: int64 */
-      creditBalance: number;
-      /** Format: int64 */
-      bucketSize: number;
-      /** Format: int64 */
-      extraCreditBalance: number;
-    };
-    CollectionModelKeyWithBaseTranslationModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeyWithBaseTranslationModel"][];
-      };
-    };
-    KeyWithBaseTranslationModel: {
-      /**
-       * Format: int64
-       * @description Id of key record
-       */
-      id: number;
-      /**
-       * @description Name of key
-       * @example this_is_super_key
-       */
-      name: string;
-      /**
-       * @description Namespace of key
-       * @example homepage
-       */
-      namespace?: string;
-      /**
-       * @description Base translation
-       * @example This is translation
-       */
-      baseTranslation?: string;
-    };
-    ImportTranslationModel: {
-      /** Format: int64 */
-      id: number;
-      text?: string;
-      keyName: string;
-      /** Format: int64 */
-      keyId: number;
-      keyDescription?: string;
-      /** Format: int64 */
-      conflictId?: number;
-      conflictText?: string;
-      override: boolean;
-      resolved: boolean;
-      isPlural: boolean;
-      existingKeyIsPlural: boolean;
-    };
-    PagedModelImportTranslationModel: {
-      _embedded?: {
-        translations?: components["schemas"]["ImportTranslationModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    ImportFileIssueModel: {
-      /** Format: int64 */
-      id: number;
-      /** @enum {string} */
-      type: "KEY_IS_NOT_STRING" | "MULTIPLE_VALUES_FOR_KEY_AND_LANGUAGE" | "VALUE_IS_NOT_STRING" | "KEY_IS_EMPTY" | "VALUE_IS_EMPTY" | "PO_MSGCTXT_NOT_SUPPORTED" | "ID_ATTRIBUTE_NOT_PROVIDED" | "TARGET_NOT_PROVIDED" | "TRANSLATION_TOO_LONG" | "KEY_IS_BLANK" | "TRANSLATION_DEFINED_IN_ANOTHER_FILE" | "INVALID_CUSTOM_VALUES";
-      params: components["schemas"]["ImportFileIssueParamModel"][];
-    };
-    ImportFileIssueParamModel: {
-      /** @enum {string} */
-      type: "KEY_NAME" | "KEY_ID" | "LANGUAGE_ID" | "KEY_INDEX" | "VALUE" | "LINE" | "FILE_NODE_ORIGINAL" | "LANGUAGE_NAME";
-      value?: string;
-    };
-    PagedModelImportFileIssueModel: {
-      _embedded?: {
-        importFileIssues?: components["schemas"]["ImportFileIssueModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    CollectionModelImportNamespaceModel: {
-      _embedded?: {
-        namespaces?: components["schemas"]["ImportNamespaceModel"][];
-      };
-    };
-    ImportNamespaceModel: {
-      /**
-       * Format: int64
-       * @description The id of namespace. When null, namespace doesn't exist and will be created by import.
-       * @example 10000048
-       */
-      id?: number;
-      /** @example homepage */
-      name: string;
-    };
-    CollectionModelBatchJobModel: {
-      _embedded?: {
-        batchJobs?: components["schemas"]["BatchJobModel"][];
-      };
-    };
-    PagedModelTranslationCommentModel: {
-      _embedded?: {
-        translationComments?: components["schemas"]["TranslationCommentModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    PagedModelTranslationHistoryModel: {
-      _embedded?: {
-        revisions?: components["schemas"]["TranslationHistoryModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    TranslationHistoryModel: {
-      /** @description Modified fields */
-      modifications?: {
-        [key: string]: components["schemas"]["PropertyModification"];
-      };
-      /**
-       * Format: int64
-       * @description Unix timestamp of the revision
-       */
-      timestamp: number;
-      author?: components["schemas"]["SimpleUserAccountModel"];
-      /** @enum {string} */
-      revisionType: "ADD" | "MOD" | "DEL";
-    };
-    SelectAllResponse: {
-      ids: number[];
-    };
-    /** @description Tasks related to this key */
-    KeyTaskViewModel: {
-      /** Format: int64 */
-      number: number;
-      /** Format: int64 */
-      languageId: number;
-      languageTag: string;
-      done: boolean;
-      userAssigned: boolean;
-      /** @enum {string} */
-      type: "TRANSLATE" | "REVIEW";
-    };
-    KeyWithTranslationsModel: {
-      /**
-       * Format: int64
-       * @description Id of key record
-       */
-      keyId: number;
-      /**
-       * @description Name of key
-       * @example this_is_super_key
-       */
-      keyName: string;
-      /**
-       * @description Is this key a plural?
-       * @example true
-       */
-      keyIsPlural: boolean;
-      /**
-       * @description The placeholder name for plural parameter
-       * @example value
-       */
-      keyPluralArgName?: string;
-      /**
-       * Format: int64
-       * @description The namespace id of the key
-       * @example 100000282
-       */
-      keyNamespaceId?: number;
-      /**
-       * @description The namespace of the key
-       * @example homepage
-       */
-      keyNamespace?: string;
-      /**
-       * @description The namespace of the key
-       * @example homepage
-       */
-      keyDescription?: string;
-      /** @description Tags of key */
-      keyTags: components["schemas"]["TagModel"][];
-      /**
-       * Format: int64
-       * @description Count of screenshots provided for the key
-       * @example 1
-       */
-      screenshotCount: number;
-      /** @description Key screenshots. Not provided when API key hasn't screenshots.view scope permission. */
-      screenshots?: components["schemas"]["ScreenshotModel"][];
-      /** @description There is a context available for this key */
-      contextPresent: boolean;
-      /**
-       * @description Translations object
-       * @example
-       *     {
-       *       "en": {
-       *         "id": 100000003,
-       *         "text": "This is super translation!"
-       *         "state": "TRANSLATED",
-       *         "commentCount": 1
-       *       }
-       *     }
-       */
-      translations: {
-        [key: string]: components["schemas"]["TranslationViewModel"];
-      };
-      /** @description Tasks related to this key */
-      tasks?: components["schemas"]["KeyTaskViewModel"][];
-    };
-    KeysWithTranslationsPageModel: {
-      _embedded?: {
-        keys?: components["schemas"]["KeyWithTranslationsModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-      /** @description Provided languages data */
-      selectedLanguages: components["schemas"]["LanguageModel"][];
-      /**
-       * @description Cursor to get next data
-       * @example eyJrZXlJZCI6eyJkaXJlY3Rpb24iOiJBU0MiLCJ2YWx1ZSI6IjEwMDAwMDAxMjAifX0=
-       */
-      nextCursor?: string;
-    };
-    /**
-     * @description Translations object
-     * @example
-     *     {
-     *       "en": {
-     *         "id": 100000003,
-     *         "text": "This is super translation!"
-     *         "state": "TRANSLATED",
-     *         "commentCount": 1
-     *       }
-     *     }
-     */
-    TranslationViewModel: {
-      /**
-       * Format: int64
-       * @description Id of translation record
-       */
-      id: number;
-      /** @description Translation text */
-      text?: string;
-      /**
-       * @description State of translation
-       * @enum {string}
-       */
-      state: "UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED";
-      /** @description Whether base language translation was changed after this translation was updated */
-      outdated: boolean;
-      /** @description Was translated using Translation Memory or Machine translation service? */
-      auto: boolean;
-      /**
-       * @description Which machine translation service was used to auto translate this
-       * @enum {string}
-       */
-      mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "TOLGEE";
-      /**
-       * Format: int64
-       * @description Count of translation comments
-       */
-      commentCount: number;
-      /**
-       * Format: int64
-       * @description Count of unresolved translation comments
-       */
-      unresolvedCommentCount: number;
-      /** @description Was translation memory used to translate this? */
-      fromTranslationMemory: boolean;
-    };
-    LanguageStatsModel: {
-      /** Format: int64 */
-      languageId?: number;
-      languageTag?: string;
-      languageName?: string;
-      languageOriginalName?: string;
-      languageFlagEmoji?: string;
-      /** Format: int64 */
-      translatedKeyCount: number;
-      /** Format: int64 */
-      translatedWordCount: number;
-      /** Format: double */
-      translatedPercentage: number;
-      /** Format: int64 */
-      reviewedKeyCount: number;
-      /** Format: int64 */
-      reviewedWordCount: number;
-      /** Format: double */
-      reviewedPercentage: number;
-      /** Format: int64 */
-      untranslatedKeyCount: number;
-      /** Format: int64 */
-      untranslatedWordCount: number;
-      /** Format: double */
-      untranslatedPercentage: number;
-    };
-    ProjectStatsModel: {
-      /** Format: int64 */
-      projectId: number;
-      /** Format: int32 */
-      languageCount: number;
-      /** Format: int64 */
-      keyCount: number;
-      /** Format: int64 */
-      taskCount: number;
-      /** Format: int64 */
-      baseWordsCount: number;
-      /** Format: double */
-      translatedPercentage: number;
-      /** Format: double */
-      reviewedPercentage: number;
-      /** Format: int64 */
-      membersCount: number;
-      /** Format: int64 */
-      tagCount: number;
-      languageStats: components["schemas"]["LanguageStatsModel"][];
-    };
-    PagedModelLanguageModel: {
-      _embedded?: {
-        languages?: components["schemas"]["LanguageModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    CollectionModelScreenshotModel: {
-      _embedded?: {
-        screenshots?: components["schemas"]["ScreenshotModel"][];
-      };
-    };
-    PatWithUserModel: {
-      user: components["schemas"]["SimpleUserAccountModel"];
-      description: string;
-      /** Format: int64 */
-      id: number;
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-      /** Format: int64 */
-      createdAt: number;
-      /** Format: int64 */
-      updatedAt: number;
-    };
-    PagedModelOrganizationModel: {
-      _embedded?: {
-        organizations?: components["schemas"]["OrganizationModel"][];
-      };
-      page?: components["schemas"]["PageMetadata"];
-    };
-    ApiKeyWithLanguagesModel: {
-      /**
-       * @deprecated
-       * @description Languages for which user has translate permission.
-       */
-      permittedLanguageIds?: number[];
-      description: string;
-      /** Format: int64 */
-      id: number;
-      userFullName?: string;
-      projectName: string;
-      username?: string;
-      scopes: string[];
-      /** Format: int64 */
-      expiresAt?: number;
-      /** Format: int64 */
-      projectId: number;
-      /** Format: int64 */
-      lastUsedAt?: number;
-    };
-    ApiKeyPermissionsModel: {
-      /**
-       * Format: int64
-       * @description The API key's project id or the one provided as query param
-       */
-      projectId: number;
-      /**
-       * @description List of languages user can view. If null, all languages view is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      viewLanguageIds?: number[];
-      /**
-       * @description List of languages user can translate to. If null, all languages editing is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      translateLanguageIds?: number[];
-      /**
-       * @description List of languages user can change state to. If null, changing state of all language values is permitted.
-       * @example [
-       *   200001,
-       *   200004
-       * ]
-       */
-      stateChangeLanguageIds?: number[];
-      /**
-       * @description Granted scopes to the user. When user has type permissions, this field contains permission scopes of the type.
-       * @example [
-       *   "KEYS_EDIT",
-       *   "TRANSLATIONS_VIEW"
-       * ]
-       */
-      scopes: ("translations.view" | "translations.edit" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit")[];
-      /**
-       * @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions
-       * @enum {string}
-       */
-      type?: "NONE" | "VIEW" | "TRANSLATE" | "REVIEW" | "EDIT" | "MANAGE";
-      project: components["schemas"]["SimpleProjectModel"];
-    };
-    DeleteKeysDto: {
-      /** @description IDs of keys to delete */
-      ids: number[];
     };
   };
   responses: never;
@@ -2560,55 +3349,15 @@ export type external = Record<string, never>;
 export interface operations {
 
   /**
-   * Get user info
-   * @description Returns information about currently authenticated user.
+   * Get current API key info
+   * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
    */
-  getInfo_2: {
+  getCurrent_1: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["PrivateUserAccountModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Reopen task */
-  reopenTask_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TaskModel"];
+          "application/json": components["schemas"]["ApiKeyWithLanguagesModel"];
         };
       };
       /** @description Bad Request */
@@ -2638,26 +3387,21 @@ export interface operations {
     };
   };
   /**
-   * Update task key
-   * @description Mark key as done, which updates task progress.
+   * Get current permission info
+   * @description Returns current PAK or PAT permissions for current user, api-key and project
    */
-  updateTaskKey_1: {
+  getCurrentPermissions: {
     parameters: {
-      path: {
-        taskNumber: number;
-        keyId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateTaskKeyRequest"];
+      query?: {
+        /** @description Required when using with PAT */
+        projectId?: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateTaskKeyResponse"];
+          "application/json": components["schemas"]["ApiKeyPermissionsModel"];
         };
       };
       /** @description Bad Request */
@@ -2686,18 +3430,13 @@ export interface operations {
       };
     };
   };
-  /** Get task keys */
-  getTaskKeys_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
+  /** Get current third party authentication provider */
+  getCurrentAuthProvider: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskKeysResponse"];
+          "application/json": components["schemas"]["AuthProviderDto"];
         };
       };
       /** @description Bad Request */
@@ -2726,16 +3465,196 @@ export interface operations {
       };
     };
   };
-  /** Add or remove task keys */
-  updateTaskKeys_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
+  /** Initiate provider change to remove current third party authentication provider */
+  deleteCurrentAuthProvider: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
       };
     };
+  };
+  /** Get info about authentication provider which can replace the current one */
+  getChangedAuthProvider: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["AuthProviderDto"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Accept change of the third party authentication provider */
+  acceptChangeAuthProvider: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateTaskKeysRequest"];
+        "application/json": components["schemas"]["AcceptAuthProviderChangeRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["JwtAuthenticationResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Reject change of the third party authentication provider */
+  rejectChangeAuthProvider: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Upload an image for later use */
+  upload: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          image: string;
+          info?: components["schemas"]["ImageUploadInfoDto"];
+        };
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["UploadedImageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete uploaded images */
+  delete_16: {
+    parameters: {
+      path: {
+        ids: number[];
       };
     };
     responses: {
@@ -2769,18 +3688,34 @@ export interface operations {
       };
     };
   };
-  /** Finish task */
-  finishTask_1: {
+  /** Gets notifications of the currently logged in user, newest is first. */
+  getNotifications: {
     parameters: {
-      path: {
-        taskNumber: number;
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        /**
+         * @description Filter by the `seen` parameter.
+         *
+         * no value = request everything
+         *
+         * true = only seen
+         *
+         * false = only unseen
+         */
+        filterSeen?: boolean;
+        cursor?: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskModel"];
+          "application/json": components["schemas"]["PagedModelWithNextCursorNotificationModel"];
         };
       };
       /** @description Bad Request */
@@ -2809,18 +3744,16 @@ export interface operations {
       };
     };
   };
-  /** Close task */
-  closeTask_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
+  /**
+   * Get notification settings
+   * @description Returns notification settings of the currently logged in user
+   */
+  getNotificationsSettings: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskModel"];
+          "application/json": components["schemas"]["NotificationSettingModel"];
         };
       };
       /** @description Bad Request */
@@ -2849,18 +3782,107 @@ export interface operations {
       };
     };
   };
-  /** Get task */
-  getTask_1: {
+  /**
+   * Save notification setting
+   * @description Saves new value for given parameters
+   */
+  putNotificationSetting: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NotificationSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Marks notifications of the currently logged in user with given IDs as seen. */
+  markNotificationsAsSeen: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["NotificationsMarkSeenRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get all permitted organizations
+   * @description Returns all organizations, which is current user allowed to view
+   */
+  getAll_10: {
     parameters: {
-      path: {
-        taskNumber: number;
+      query: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        filterCurrentUserOwner: boolean;
+        search?: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskModel"];
+          "application/json": components["schemas"]["PagedModelOrganizationModel"];
         };
       };
       /** @description Bad Request */
@@ -2889,23 +3911,152 @@ export interface operations {
       };
     };
   };
-  /** Update task */
-  updateTask_1: {
+  /** Create organization */
+  create_13: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OrganizationDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get one organization */
+  get_15: {
     parameters: {
       path: {
-        taskNumber: number;
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all organization glossaries */
+  getAll_12: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleGlossaryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create glossary */
+  create_14: {
+    parameters: {
+      path: {
+        organizationId: number;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateTaskRequest"];
+        "application/json": components["schemas"]["CreateGlossaryRequest"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TaskModel"];
+          "application/json": components["schemas"]["GlossaryModel"];
         };
       };
       /** @description Bad Request */
@@ -2934,8 +4085,2953 @@ export interface operations {
       };
     };
   };
-  /** Update namespace */
-  update_2: {
+  /** Get all organization glossaries with some additional statistics */
+  getAllWithStats: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleGlossaryWithStatsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get glossary */
+  get_13: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update glossary */
+  update_8: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlossaryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete glossary */
+  delete_7: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all projects assigned to glossary */
+  getAssignedProjects: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelSimpleProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Export glossary terms as CSV */
+  export: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["StreamingResponseBody"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Import glossary terms from CSV */
+  importCsv: {
+    parameters: {
+      query?: {
+        removeExistingTerms?: boolean;
+      };
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryImportResult"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all languages in use by the glossary */
+  getLanguages: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelGlossaryLanguageDto"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all glossary terms */
+  getAll_13: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+        languageTags?: string[];
+      };
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleGlossaryTermModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create a new glossary term */
+  create_15: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateGlossaryTermWithTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateUpdateGlossaryTermResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Batch delete multiple terms */
+  deleteMultiple: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteMultipleGlossaryTermsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get glossary term */
+  get_14: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+        termId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryTermModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update glossary term */
+  update_9: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+        termId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlossaryTermWithTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreateUpdateGlossaryTermResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete glossary term */
+  delete_8: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+        termId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Set a new glossary term translation for language */
+  update_12: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+        termId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateGlossaryTermTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryTermTranslationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get glossary term translation for language */
+  get_23: {
+    parameters: {
+      path: {
+        organizationId: number;
+        glossaryId: number;
+        termId: number;
+        languageTag: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GlossaryTermTranslationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all glossary terms ids */
+  getAllIds: {
+    parameters: {
+      query?: {
+        search?: string;
+        languageTags?: string[];
+      };
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelLong"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all glossary terms with translations */
+  getAllWithTranslations: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+        languageTags?: string[];
+      };
+      path: {
+        organizationId: number;
+        glossaryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleGlossaryTermWithTranslationsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get credit balance for organization
+   * @description Returns machine translation credit balance for organization
+   */
+  getOrganizationCredits: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CreditBalanceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get organization by slug */
+  get_22: {
+    parameters: {
+      path: {
+        slug: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["OrganizationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Return current PAK
+   * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
+   */
+  getCurrent: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PatWithUserModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get all permitted
+   * @description Returns all projects where current user has any permission
+   */
+  getAll: {
+    parameters: {
+      query?: {
+        /** @description Filter projects by id */
+        filterId?: number[];
+        /** @description Filter projects without id */
+        filterNotId?: number[];
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Create project
+   * @description Creates a new project with languages and initial settings.
+   */
+  createProject: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get project activity */
+  getActivity_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelProjectActivityModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get one revision data */
+  getSingleRevision_1: {
+    parameters: {
+      path: {
+        revisionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProjectActivityModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** List batch operations */
+  list_4: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelBatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get batch operation */
+  get_21: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Stop batch operation
+   * @description Stops batch operation if possible.
+   */
+  cancel_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Store Big Meta
+   * @description Stores a bigMeta for a project
+   */
+  store_3: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["BigMetaDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get all running and pending batch operations
+   * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
+   */
+  currentJobs_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelBatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Export data
+   * @description
+   *       Exports project data in various formats (JSON, properties, YAML, etc.).
+   *
+   *       ## HTTP Conditional Requests Support
+   *
+   *       This endpoint supports HTTP conditional requests using both If-Modified-Since and If-None-Match headers:
+   *
+   *       - **If-Modified-Since header provided**: The server checks if the project data has been modified since the specified date
+   *       - **If-None-Match header provided**: The server checks if the project data has changed by comparing the eTag value
+   *       - **Data not modified**: Returns HTTP 304 Not Modified with empty body
+   *       - **Data modified or no header**: Returns HTTP 200 OK with the exported data, Last-Modified header, and ETag header
+   *
+   *       The Last-Modified header in the response contains the timestamp of the last project modification,
+   *       and the ETag header contains a unique identifier for the current project state. Both can be used
+   *       for subsequent conditional requests to avoid unnecessary data transfer when the project hasn't changed.
+   *
+   *       Cache-Control header is set to max-age=0 to ensure validation on each request.
+   */
+  exportData_1: {
+    parameters: {
+      query: {
+        /**
+         * @description Languages to be contained in export.
+         *
+         * If null, all languages are exported
+         * @example en
+         */
+        languages?: string[];
+        /** @description Format to export to */
+        format: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML" | "JSON_I18NEXT" | "CSV" | "RESX_ICU" | "XLSX" | "APPLE_XCSTRINGS" | "ANDROID_SDK" | "APPLE_SDK";
+        /**
+         * @description Delimiter to structure file content.
+         *
+         * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
+         *
+         * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
+         * specific formats like `YAML_RUBY` don't honor this parameter.
+         */
+        structureDelimiter?: string;
+        /** @description Filter key IDs to be contained in export */
+        filterKeyId?: number[];
+        /** @description Filter key IDs not to be contained in export */
+        filterKeyIdNot?: number[];
+        /**
+         * @description Filter keys tagged by.
+         *
+         * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
+         */
+        filterTag?: string;
+        /** @description Filter keys tagged by one of provided tags */
+        filterTagIn?: string[];
+        /** @description Filter keys not tagged by one of provided tags */
+        filterTagNotIn?: string[];
+        /** @description Filter keys with prefix */
+        filterKeyPrefix?: string;
+        /** @description Filter translations with state. By default, all states except untranslated is exported. */
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
+        filterNamespace?: string[];
+        /**
+         * @description If false, it doesn't return zip of files, but it returns single file.
+         *
+         * This is possible only when single language is exported. Otherwise it returns "400 - Bad Request" response.
+         */
+        zip: boolean;
+        /**
+         * @description Message format to be used for export.
+         *
+         * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
+         *
+         * This property is honored only for generic formats like JSON or YAML.
+         * For specific formats like `YAML_RUBY` it's ignored.
+         */
+        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT";
+        /**
+         * @description This is a template that defines the structure of the resulting .zip file content.
+         *
+         * The template is a string that can contain the following placeholders: {namespace}, {languageTag},
+         * {androidLanguageTag}, {snakeLanguageTag}, {extension}.
+         *
+         * For example, when exporting to JSON with the template `{namespace}/{languageTag}.{extension}`,
+         * the English translations of the `home` namespace will be stored in `home/en.json`.
+         *
+         * The `{snakeLanguageTag}` placeholder is the same as `{languageTag}` but in snake case. (e.g., en_US).
+         *
+         * The Android specific `{androidLanguageTag}` placeholder is the same as `{languageTag}`
+         * but in Android format. (e.g., en-rUS)
+         */
+        fileStructureTemplate?: string;
+        /**
+         * @description If true, for structured formats (like JSON) arrays are supported.
+         *
+         * e.g. Key hello[0] will be exported as {"hello": ["..."]}
+         */
+        supportArrays: boolean;
+        /**
+         * @description If true, HTML tags are escaped in the exported file. (Supported in the XLIFF format only).
+         *
+         * e.g. Key <b>hello</b> will be exported as &lt;b&gt;hello&lt;/b&gt;
+         */
+        escapeHtml?: boolean;
+        /**
+         * @description Filter translations with branch.
+         *
+         * By default, default branch is exported.
+         */
+        filterBranch?: string;
+      };
+    };
+    responses: {
+      /**
+       * @description When multiple files are exported, they are zipped and returned as a single zip file.
+       * When a single file is exported, it is returned directly.
+       */
+      200: {
+        content: {
+          "application/*": unknown;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Export data (post)
+   * @description
+   *       Exports project data in various formats (JSON, properties, YAML, etc.).
+   *       Useful when exceeding allowed URL size with GET requests.
+   *
+   *       ## HTTP Conditional Requests Support
+   *
+   *       This endpoint supports HTTP conditional requests using both If-Modified-Since and If-None-Match headers:
+   *
+   *       - **If-Modified-Since header provided**: The server checks if the project data has been modified since the specified date
+   *       - **If-None-Match header provided**: The server checks if the project data has changed by comparing the eTag value
+   *       - **Data not modified**: Returns HTTP 304 Not Modified with empty body
+   *       - **Data modified or no header**: Returns HTTP 200 OK with the exported data, Last-Modified header, and ETag header
+   *
+   *       Note: This endpoint uses a custom implementation that returns 304 Not Modified for all HTTP methods
+   *       (including POST) when conditional headers indicate the data hasn't changed. This differs from Spring's
+   *       default behavior which returns 412 for POST requests, but is appropriate here since POST is used only
+   *       to accommodate large request parameters, not to modify data.
+   *
+   *       The Last-Modified header in the response contains the timestamp of the last project modification,
+   *       and the ETag header contains a unique identifier for the current project state. Both can be used
+   *       for subsequent conditional requests to avoid unnecessary data transfer when the project hasn't changed.
+   *
+   *       Cache-Control header is set to max-age=0 to ensure validation on each request.
+   */
+  exportPost_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExportParams"];
+      };
+    };
+    responses: {
+      /**
+       * @description When multiple files are exported, they are zipped and returned as a single zip file.
+       * When a single file is exported, it is returned directly.
+       */
+      200: {
+        content: {
+          "application/*": unknown;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Add files
+   * @description Prepares provided files to import.
+   */
+  addFiles_1: {
+    parameters: {
+      query?: {
+        /**
+         * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
+         * @example .
+         */
+        structureDelimiter?: string;
+        /**
+         * @description Branch to which files will be imported
+         * @example main
+         */
+        branch?: string;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          files: string[];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportAddFilesResultModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete
+   * @description Deletes prepared import data.
+   */
+  cancelImport_1: {
+    parameters: {
+      query?: {
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get Import Settings
+   * @description Returns import settings for the authenticated user and the project.
+   */
+  get_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportSettingsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Set Import Settings
+   * @description Stores import settings for the authenticated user and the project.
+   */
+  store_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImportSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportSettingsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get namespaces
+   * @description Returns all existing and imported namespaces
+   */
+  getAllNamespaces_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelImportNamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Apply import
+   * @description Imports the data prepared in previous step
+   */
+  applyImport_1: {
+    parameters: {
+      query?: {
+        /** @description Whether override or keep all translations with unresolved conflicts */
+        forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Apply import (streaming)
+   * @description Imports the data prepared in previous step. Streams current status.
+   */
+  applyImportStreaming_1: {
+    parameters: {
+      query?: {
+        /** @description Whether override or keep all translations with unresolved conflicts */
+        forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/x-ndjson": components["schemas"]["StreamingResponseBody"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get result
+   * @description Returns the result of preparation.
+   */
+  getImportResult_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelImportLanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Select namespace
+   * @description Sets namespace for file to import.
+   */
+  selectNamespace_1: {
+    parameters: {
+      path: {
+        fileId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetFileNamespaceRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get file issues
+   * @description Returns issues for uploaded file.
+   */
+  getImportFileIssues_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+      path: {
+        importFileId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelImportFileIssueModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Reset existing language pairing
+   * @description Resets existing language paired with language to import.
+   */
+  resetExistingLanguage_1: {
+    parameters: {
+      path: {
+        importLanguageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Pair existing language
+   * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
+   */
+  selectExistingLanguage_1: {
+    parameters: {
+      path: {
+        importLanguageId: number;
+        existingLanguageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get import language
+   * @description Returns language prepared to import.
+   */
+  getImportLanguage_1: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportLanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete language
+   * @description Deletes language prepared to import.
+   */
+  deleteLanguage_3: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Resolve all translation conflicts (keep existing)
+   * @description Resolves all translation conflicts for provided language. The old translations will be kept.
+   */
+  resolveTranslationSetKeepExisting_3: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Resolve all translation conflicts (override)
+   * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
+   */
+  resolveTranslationSetOverride_3: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get translations
+   * @description Returns translations prepared to import.
+   */
+  getImportTranslations_1: {
+    parameters: {
+      query?: {
+        /** @description Whether only translations, which are in conflict with existing translations should be returned */
+        onlyConflicts?: boolean;
+        /** @description Whether only translations with unresolved conflictswith existing translations should be returned */
+        onlyUnresolved?: boolean;
+        /** @description String to search in translation text or key */
+        search?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelImportTranslationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Resolve conflict (keep existing)
+   * @description Resolves translation conflict. The old translation will be kept.
+   */
+  resolveTranslationSetKeepExisting_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        translationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Resolve conflict (override)
+   * @description Resolves translation conflict. The old translation will be overridden.
+   */
+  resolveTranslationSetOverride_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        translationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all keys */
+  getAll_8: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelKeyModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create new key */
+  create_8: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateKeyDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["KeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete one or multiple keys (post)
+   * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
+   */
+  delete_12: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteKeysDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create new key */
+  create_7: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateKeyDto"];
+      };
+    };
+    responses: {
+      /** @description Created */
+      201: {
+        content: {
+          "*/*": components["schemas"]["KeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Import keys
+   * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
+   */
+  importKeys_3: {
+    parameters: {
+      query?: {
+        branch?: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImportKeysDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Import keys (resolvable)
+   * @deprecated
+   * @description
+   *       Import's new keys with translations. Translations can be updated, when specified.\n\n
+   *       DEPRECATED: Use /v2/projects/{projectId}/single-step-import-resolvable instead.
+   */
+  importKeys_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImportKeysResolvableDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyImportResolvableResultModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get key info
+   * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
+   */
+  getInfo_2: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GetKeysRequestDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelKeyWithDataModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Search for keys
+   * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
+   *
+   * Sort is ignored for this request.
+   */
+  searchForKey_1: {
+    parameters: {
+      query: {
+        /** @description Search query */
+        search: string;
+        /** @description Language to search in */
+        languageTag?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelKeySearchSearchResultModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Select keys
+   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+   */
+  selectKeys_3: {
+    parameters: {
+      query?: {
+        /**
+         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
+         *
+         * When used with multiple states for same language it is applied with logical OR.
+         *
+         * When used with multiple languages, it is applied with logical AND.
+         */
+        filterState?: string[];
+        /**
+         * @description Languages to be contained in response.
+         *
+         * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
+         * @example en
+         */
+        languages?: string[];
+        /** @description String to search in key name or translation text */
+        search?: string;
+        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
+        filterKeyName?: string[];
+        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
+        filterKeyId?: number[];
+        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
+        filterUntranslatedAny?: boolean;
+        /** @description Selects only keys, where translation is provided in any language */
+        filterTranslatedAny?: boolean;
+        /**
+         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
+         * @example en-US
+         */
+        filterUntranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation is provided in specified language
+         * @example en-US
+         */
+        filterTranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation was auto translated for specified languages.
+         * @example en-US
+         */
+        filterAutoTranslatedInLang?: string[];
+        /** @description Selects only keys with screenshots */
+        filterHasScreenshot?: boolean;
+        /** @description Selects only keys without screenshots */
+        filterHasNoScreenshot?: boolean;
+        /**
+         * @description Selects only keys with provided namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNamespace?: string[];
+        /**
+         * @description Selects only keys without provided namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNoNamespace?: string[];
+        /** @description Selects only keys with provided tag */
+        filterTag?: string[];
+        /** @description Selects only keys without provided tag */
+        filterNoTag?: string[];
+        /**
+         * @description Selects only keys, where translation in provided langs is in outdated state
+         * @example en-US
+         */
+        filterOutdatedLanguage?: string[];
+        /**
+         * @description Selects only keys, where translation in provided langs is not in outdated state
+         * @example en-US
+         */
+        filterNotOutdatedLanguage?: string[];
+        /**
+         * @description Selects only key affected by activity with specidfied revision ID
+         * @example 1234567
+         */
+        filterRevisionId?: number[];
+        /** @description Select only keys which were not successfully translated by batch job with provided id */
+        filterFailedKeysOfJob?: number;
+        /** @description Select only keys which are in specified task */
+        filterTaskNumber?: number[];
+        /** @description Filter task keys which are `not done` */
+        filterTaskKeysNotDone?: boolean;
+        /** @description Filter task keys which are `done` */
+        filterTaskKeysDone?: boolean;
+        /** @description Filter keys with unresolved comments in lang */
+        filterHasUnresolvedCommentsInLang?: string[];
+        /** @description Filter keys with any comments in lang */
+        filterHasCommentsInLang?: string[];
+        /**
+         * @description Filter key translations with labels
+         * @example labelId1,labelId2
+         */
+        filterLabel?: string[];
+        /** @description Filter keys with any suggestions in lang */
+        filterHasSuggestionsInLang?: string[];
+        /** @description Filter keys with no suggestions in lang */
+        filterHasNoSuggestionsInLang?: string[];
+        /** @description Selects only keys from specified branch */
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SelectAllResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete one or multiple keys */
+  delete_15: {
+    parameters: {
+      path: {
+        ids: number[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get one key */
+  get_9: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Edit key name */
+  edit_1: {
     parameters: {
       path: {
         id: number;
@@ -2943,14 +7039,102 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateNamespaceDto"];
+        "application/json": components["schemas"]["EditKeyDto"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["NamespaceModel"];
+          "application/json": components["schemas"]["KeyModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get Big Meta for key */
+  getBigMeta_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelKeyWithBaseTranslationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Edit key and related data
+   * @description Edits key name, translations, tags, screenshots, and other data
+   */
+  complexEdit_1: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ComplexEditKeyDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeyWithDataModel"];
         };
       };
       /** @description Bad Request */
@@ -3071,25 +7255,70 @@ export interface operations {
     };
   };
   /**
-   * Edit key and related data
-   * @description Edits key name, translations, tags, screenshots, and other data
+   * Auto translates keys
+   * @description Uses enabled auto-translation methods.
+   * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
+   *
+   * This will replace the the existing translation with the result obtained from specified source!
    */
-  complexEdit_1: {
+  autoTranslate_1: {
     parameters: {
+      query?: {
+        /**
+         * @description Tags of languages to auto-translate.
+         * When no languages provided, it translates only untranslated languages.
+         */
+        languages?: string[];
+        useMachineTranslation?: boolean;
+        useTranslationMemory?: boolean;
+      };
       path: {
-        id: number;
+        keyId: number;
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ComplexEditKeyDto"];
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get screenshots */
+  getKeyScreenshots: {
+    parameters: {
+      path: {
+        keyId: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["KeyWithDataModel"];
+          "application/json": components["schemas"]["CollectionModelScreenshotModel"];
         };
       };
       /** @description Bad Request */
@@ -3118,18 +7347,27 @@ export interface operations {
       };
     };
   };
-  /** Get one key */
-  get_7: {
+  /** Upload screenshot */
+  uploadScreenshot: {
     parameters: {
       path: {
-        id: number;
+        keyId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          screenshot: string;
+          info?: components["schemas"]["ScreenshotInfoDto"];
+        };
       };
     };
     responses: {
-      /** @description OK */
-      200: {
+      /** @description Created */
+      201: {
         content: {
-          "application/json": components["schemas"]["KeyModel"];
+          "*/*": components["schemas"]["ScreenshotModel"];
         };
       };
       /** @description Bad Request */
@@ -3158,56 +7396,12 @@ export interface operations {
       };
     };
   };
-  /** Edit key name */
-  edit_1: {
+  /** Delete screenshots */
+  deleteScreenshots: {
     parameters: {
       path: {
-        id: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["EditKeyDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["KeyModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Execute complex tag operation */
-  executeComplexTagOperation_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ComplexTagKeysRequest"];
+        ids: number[];
+        keyId: number;
       };
     };
     responses: {
@@ -3290,14 +7484,14 @@ export interface operations {
     };
   };
   /**
-   * Resolve conflict (override)
-   * @description Resolves translation conflict. The old translation will be overridden.
+   * Remove tag
+   * @description Removes tag with provided id from key with provided id
    */
-  resolveTranslationSetOverride_1: {
+  removeTag_1: {
     parameters: {
       path: {
-        languageId: number;
-        translationId: number;
+        keyId: number;
+        tagId: number;
       };
     };
     responses: {
@@ -3331,21 +7525,25 @@ export interface operations {
       };
     };
   };
-  /**
-   * Resolve conflict (keep existing)
-   * @description Resolves translation conflict. The old translation will be kept.
-   */
-  resolveTranslationSetKeepExisting_1: {
+  /** Get available project labels */
+  getAll_2: {
     parameters: {
-      path: {
-        languageId: number;
-        translationId: number;
+      query?: {
+        search?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
       };
     };
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["PagedModelLabelModel"];
+        };
       };
       /** @description Bad Request */
       400: {
@@ -3373,20 +7571,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * Resolve all translation conflicts (override)
-   * @description Resolves all translation conflicts for provided language. The old translations will be overridden.
-   */
-  resolveTranslationSetOverride_3: {
-    parameters: {
-      path: {
-        languageId: number;
+  /** Create label */
+  createLabel_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LabelRequest"];
       };
     };
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["LabelModel"];
+        };
       };
       /** @description Bad Request */
       400: {
@@ -3414,20 +7611,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * Resolve all translation conflicts (keep existing)
-   * @description Resolves all translation conflicts for provided language. The old translations will be kept.
-   */
-  resolveTranslationSetKeepExisting_3: {
+  /** Get labels by ids */
+  getLabelsByIds_1: {
     parameters: {
-      path: {
-        languageId: number;
+      query: {
+        id: number[];
       };
     };
     responses: {
       /** @description OK */
       200: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["LabelModel"][];
+        };
       };
       /** @description Bad Request */
       400: {
@@ -3455,102 +7651,56 @@ export interface operations {
       };
     };
   };
-  /**
-   * Pair existing language
-   * @description Sets existing language to pair with language to import. Data will be imported to selected existing language when applied.
-   */
-  selectExistingLanguage_1: {
+  /** Update label */
+  updateLabel_1: {
     parameters: {
       path: {
-        importLanguageId: number;
-        existingLanguageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Reset existing language pairing
-   * @description Resets existing language paired with language to import.
-   */
-  resetExistingLanguage_1: {
-    parameters: {
-      path: {
-        importLanguageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Select namespace
-   * @description Sets namespace for file to import.
-   */
-  selectNamespace_1: {
-    parameters: {
-      path: {
-        fileId: number;
+        labelId: number;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SetFileNamespaceRequest"];
+        "application/json": components["schemas"]["LabelRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LabelModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete label */
+  deleteLabel_1: {
+    parameters: {
+      path: {
+        labelId: number;
       };
     };
     responses: {
@@ -3584,15 +7734,1372 @@ export interface operations {
       };
     };
   };
-  /**
-   * Apply import (streaming)
-   * @description Imports the data prepared in previous step. Streams current status.
-   */
-  applyImportStreaming_1: {
+  /** Get all languages */
+  getAll_6: {
     parameters: {
       query?: {
-        /** @description Whether override or keep all translations with unresolved conflicts */
-        forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        /** @description Filter languages by id */
+        filterId?: number[];
+        /** @description Filter languages without id */
+        filterNotId?: number[];
+        /** @description Filter languages by name or tag */
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelLanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create language */
+  createLanguage_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LanguageRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get one language */
+  get_7: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update language */
+  editLanguage_1: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LanguageRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LanguageModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete specific language */
+  deleteLanguage_1: {
+    parameters: {
+      path: {
+        languageId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get suggestions */
+  getSuggestions_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        /** @description Filter by suggestion state */
+        filterState?: ("ACTIVE" | "ACCEPTED" | "DECLINED")[];
+      };
+      path: {
+        languageId: number;
+        keyId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTranslationSuggestionModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create translation suggestion */
+  createSuggestion_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        keyId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTranslationSuggestionRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationSuggestionModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete suggestion
+   * @description User can only delete suggestion created by them
+   */
+  deleteSuggestion_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        keyId: number;
+        suggestionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Accept suggestion */
+  acceptSuggestion_1: {
+    parameters: {
+      query?: {
+        declineOther?: boolean;
+      };
+      path: {
+        languageId: number;
+        keyId: number;
+        suggestionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationSuggestionAcceptResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Decline suggestion */
+  declineSuggestion_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        keyId: number;
+        suggestionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationSuggestionModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Set suggestion active */
+  suggestionSetActive_1: {
+    parameters: {
+      path: {
+        languageId: number;
+        keyId: number;
+        suggestionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationSuggestionModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * List user batch operations
+   * @description List all batch operations started by current user
+   */
+  myList_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelBatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get namespace by name
+   * @description Returns information about a namespace by its name
+   */
+  getByName_1: {
+    parameters: {
+      path: {
+        name: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get namespaces */
+  getAllNamespaces_3: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelNamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update namespace */
+  update_4: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateNamespaceDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["NamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Single step import
+   * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
+   */
+  singleStepFromFiles_1: {
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          files: string[];
+          params: components["schemas"]["SingleStepImportRequest"];
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportResult"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Single step import from body */
+  singleStepResolvableImport_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SingleStepImportResolvableRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImportResult"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Translates via llm and stores result in AiPlaygroundResult */
+  aiPlaygroundTranslate_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MachineTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Assign labels to translations */
+  assignTranslationLabel_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LabelTranslationsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Clear translation values
+   * @description Clear translation values for provided keys in selected languages.
+   */
+  clearTranslations_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ClearTranslationsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Copy translation values
+   * @description Copy translation values from one language to other languages.
+   */
+  copyTranslations_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CopyTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete keys */
+  deleteKeys_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Machine Translation
+   * @description Translate provided keys to provided languages through primary MT provider.
+   */
+  machineTranslation_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["MachineTranslationRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Pre-translate by TM
+   * @description Pre-translate provided keys to provided languages by TM.
+   */
+  translate_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PreTranslationByTmRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Set keys namespace */
+  setKeysNamespace_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetKeysNamespaceRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Set translation state */
+  setTranslationState_3: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetTranslationsStateStateRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Add tags */
+  tagKeys_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TagKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Unassign labels from translations */
+  unassignTranslationLabel_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["LabelTranslationsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Remove tags */
+  untagKeys_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UntagKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get project stats */
+  getProjectStats_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProjectStatsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get project daily amount of events */
+  getProjectDailyActivity_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            [key: string]: number;
+          };
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get machine translation suggestions
+   * @description Suggests machine translations from enabled services
+   */
+  suggestMachineTranslations_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SuggestRequestDto"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["SuggestResultModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get machine translation suggestions (streaming)
+   * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
+   */
+  suggestMachineTranslationsStreaming_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
     responses: {
@@ -3629,311 +9136,30 @@ export interface operations {
     };
   };
   /**
-   * Apply import
-   * @description Imports the data prepared in previous step
+   * Get suggestions from translation memory
+   * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
    */
-  applyImport_1: {
+  suggestTranslationMemory_1: {
     parameters: {
       query?: {
-        /** @description Whether override or keep all translations with unresolved conflicts */
-        forceMode?: "OVERRIDE" | "KEEP" | "NO_FORCE";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get Import Settings
-   * @description Returns import settings for the authenticated user and the project.
-   */
-  get_11: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ImportSettingsModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Set Import Settings
-   * @description Stores import settings for the authenticated user and the project.
-   */
-  store_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ImportSettingsRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ImportSettingsModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Stop batch operation
-   * @description Stops batch operation if possible.
-   */
-  cancel_1: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Set translation state */
-  setTranslationState_1: {
-    parameters: {
-      path: {
-        translationId: number;
-        state: "TRANSLATED" | "REVIEWED";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TranslationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Set state of translation comment */
-  setState_1: {
-    parameters: {
-      path: {
-        translationId: number;
-        commentId: number;
-        state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TranslationCommentModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get one translation comment */
-  get_15: {
-    parameters: {
-      path: {
-        translationId: number;
-        commentId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TranslationCommentModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Update translation comment */
-  update_6: {
-    parameters: {
-      path: {
-        commentId: number;
-        translationId: number;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["TranslationCommentDto"];
+        "application/json": components["schemas"]["SuggestRequestDto"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TranslationCommentModel"];
+          "application/json": components["schemas"]["PagedModelTranslationMemoryItemModel"];
         };
       };
       /** @description Bad Request */
@@ -3962,12 +9188,660 @@ export interface operations {
       };
     };
   };
-  /** Delete translation comment */
-  delete_9: {
+  /** Execute complex tag operation */
+  executeComplexTagOperation_1: {
+    parameters: {
+      query?: {
+        branch?: string;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ComplexTagKeysRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get tags */
+  getAll_15: {
+    parameters: {
+      query?: {
+        search?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTagModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get tasks */
+  getTasks_1: {
+    parameters: {
+      query?: {
+        /** @description Filter tasks by state */
+        filterState?: ("NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED")[];
+        /** @description Filter tasks without state */
+        filterNotState?: ("NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED")[];
+        /** @description Filter tasks by assignee */
+        filterAssignee?: number[];
+        /** @description Filter tasks by type */
+        filterType?: ("TRANSLATE" | "REVIEW")[];
+        /** @description Filter tasks by id */
+        filterId?: number[];
+        /** @description Filter tasks without id */
+        filterNotId?: number[];
+        /** @description Filter tasks by project */
+        filterProject?: number[];
+        /** @description Filter tasks without project */
+        filterNotProject?: number[];
+        /** @description Filter tasks by language */
+        filterLanguage?: number[];
+        /** @description Filter tasks by key */
+        filterKey?: number[];
+        /** @description Filter tasks by agency */
+        filterAgency?: number[];
+        /** @description Exclude tasks which were closed before specified timestamp */
+        filterNotClosedBefore?: number;
+        /** @description Filter tasks by branch name. Defaults to project's default branch. */
+        branch?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create task */
+  createTask_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateTaskRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Calculate scope */
+  calculateScope_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CalculateScopeRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["KeysScopeView"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create multiple tasks */
+  createTasks_1: {
+    parameters: {
+      query?: {
+        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        filterOutdated?: boolean;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateMultipleTasksRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get possible assignees */
+  getPossibleAssignees_1: {
+    parameters: {
+      query?: {
+        /** @description Filter users by id */
+        filterId?: number[];
+        /** @description Filter only users that have at least following scopes */
+        filterMinimalScope?: string;
+        /** @description Filter only users that can view language */
+        filterViewLanguageId?: number;
+        /** @description Filter only users that can edit language */
+        filterEditLanguageId?: number;
+        /** @description Filter only users that can edit state of language */
+        filterStateLanguageId?: number;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleUserAccountModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get task */
+  getTask_1: {
     parameters: {
       path: {
-        translationId: number;
-        commentId: number;
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update task */
+  updateTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get blocking task numbers
+   * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
+   */
+  getBlockingTasks_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": number[];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Close task */
+  cancelTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Close task
+   * @deprecated
+   */
+  closeTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Finish task */
+  finishTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get task keys */
+  getTaskKeys_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskKeysResponse"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Add or remove task keys */
+  updateTaskKeys_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskKeysRequest"];
       };
     };
     responses: {
@@ -4002,21 +9876,26 @@ export interface operations {
     };
   };
   /**
-   * Set outdated value
-   * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+   * Update task key
+   * @description Mark key as done, which updates task progress.
    */
-  setOutdated_1: {
+  updateTaskKey_1: {
     parameters: {
       path: {
-        translationId: number;
-        state: boolean;
+        taskNumber: number;
+        keyId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTaskKeyRequest"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TranslationModel"];
+          "application/json": components["schemas"]["UpdateTaskKeyResponse"];
         };
       };
       /** @description Bad Request */
@@ -4046,20 +9925,103 @@ export interface operations {
     };
   };
   /**
-   * Dismiss auto-translated
-   * @description Removes "auto translated" indication
+   * Get report
+   * @description Detailed statistics for every assignee
    */
-  dismissAutoTranslatedState_1: {
+  getPerUserReport_1: {
     parameters: {
       path: {
-        translationId: number;
+        taskNumber: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["TranslationModel"];
+          "application/json": components["schemas"]["TaskPerUserReportModel"][];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Reopen task */
+  reopenTask_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TaskModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get report in XLSX
+   * @description Detailed statistics about the task results
+   */
+  getXlsxReport_1: {
+    parameters: {
+      path: {
+        taskNumber: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
         };
       };
       /** @description Bad Request */
@@ -4129,18 +10091,31 @@ export interface operations {
          * @example en-US
          */
         filterTranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation was auto translated for specified languages.
+         * @example en-US
+         */
+        filterAutoTranslatedInLang?: string[];
         /** @description Selects only keys with screenshots */
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
         /**
-         * @description Filter namespaces.
+         * @description Selects only keys with provided namespaces.
          *
          * To filter default namespace, set to empty string.
          */
         filterNamespace?: string[];
+        /**
+         * @description Selects only keys without provided namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
+        filterNoNamespace?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
+        /** @description Selects only keys without provided tag */
+        filterNoTag?: string[];
         /**
          * @description Selects only keys, where translation in provided langs is in outdated state
          * @example en-US
@@ -4160,6 +10135,25 @@ export interface operations {
         filterFailedKeysOfJob?: number;
         /** @description Select only keys which are in specified task */
         filterTaskNumber?: number[];
+        /** @description Filter task keys which are `not done` */
+        filterTaskKeysNotDone?: boolean;
+        /** @description Filter task keys which are `done` */
+        filterTaskKeysDone?: boolean;
+        /** @description Filter keys with unresolved comments in lang */
+        filterHasUnresolvedCommentsInLang?: string[];
+        /** @description Filter keys with any comments in lang */
+        filterHasCommentsInLang?: string[];
+        /**
+         * @description Filter key translations with labels
+         * @example labelId1,labelId2
+         */
+        filterLabel?: string[];
+        /** @description Filter keys with any suggestions in lang */
+        filterHasSuggestionsInLang?: string[];
+        /** @description Filter keys with no suggestions in lang */
+        filterHasNoSuggestionsInLang?: string[];
+        /** @description Selects only keys from specified branch */
+        branch?: string;
         /** @description Zero-based page index (0..N) */
         page?: number;
         /** @description The size of the page to be returned */
@@ -4287,746 +10281,61 @@ export interface operations {
       };
     };
   };
-  /** Get one language */
-  get_17: {
-    parameters: {
-      path: {
-        languageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["LanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Update language */
-  editLanguage_1: {
-    parameters: {
-      path: {
-        languageId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LanguageRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["LanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Delete specific language */
-  deleteLanguage_3: {
-    parameters: {
-      path: {
-        languageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
   /**
-   * Auto translates keys
-   * @description Uses enabled auto-translation methods.
-   * You need to set at least one of useMachineTranslation or useTranslationMemory to true.
-   *
-   * This will replace the the existing translation with the result obtained from specified source!
+   * Create translation comment
+   * @description Creates a translation comment. Empty translation is stored, when not exists.
    */
-  autoTranslate_1: {
-    parameters: {
-      query?: {
-        /**
-         * @description Tags of languages to auto-translate.
-         * When no languages provided, it translates only untranslated languages.
-         */
-        languages?: string[];
-        useMachineTranslation?: boolean;
-        useTranslationMemory?: boolean;
-      };
-      path: {
-        keyId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get one organization */
-  get_20: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["OrganizationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get all permitted
-   * @description Returns all projects where current user has any permission
-   */
-  getAll: {
-    parameters: {
-      query?: {
-        /** @description Filter projects by id */
-        filterId?: number[];
-        /** @description Filter projects without id */
-        filterNotId?: number[];
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        search?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["PagedModelProjectModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Create project
-   * @description Creates a new project with languages and initial settings.
-   */
-  createProject: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateProjectRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ProjectModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create multiple tasks */
-  createTasks_1: {
-    parameters: {
-      query?: {
-        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-        filterOutdated?: boolean;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateMultipleTasksRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Calculate scope */
-  calculateScope_1: {
-    parameters: {
-      query?: {
-        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-        filterOutdated?: boolean;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CalculateScopeRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["KeysScopeView"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get tasks */
-  getTasks_2: {
-    parameters: {
-      query?: {
-        /** @description Filter tasks by state */
-        filterState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
-        /** @description Filter tasks without state */
-        filterNotState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
-        /** @description Filter tasks by assignee */
-        filterAssignee?: number[];
-        /** @description Filter tasks by type */
-        filterType?: ("TRANSLATE" | "REVIEW")[];
-        /** @description Filter tasks by id */
-        filterId?: number[];
-        /** @description Filter tasks without id */
-        filterNotId?: number[];
-        /** @description Filter tasks by project */
-        filterProject?: number[];
-        /** @description Filter tasks without project */
-        filterNotProject?: number[];
-        /** @description Filter tasks by language */
-        filterLanguage?: number[];
-        /** @description Filter tasks by key */
-        filterKey?: number[];
-        /** @description Exclude "done" tasks which are older than specified timestamp */
-        filterDoneMinClosedAt?: number;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        search?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelTaskModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create task */
-  createTask_1: {
-    parameters: {
-      query?: {
-        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-        filterOutdated?: boolean;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateTaskRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TaskModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get key info
-   * @description Returns information about keys. (KeyData, Screenshots, Translation in specified language)If key is not found, it's not included in the response.
-   */
-  getInfo_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["GetKeysRequestDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelKeyWithDataModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Import keys (resolvable)
-   * @description Import's new keys with translations. Translations can be updated, when specified.
-   */
-  importKeys_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ImportKeysResolvableDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["KeyImportResolvableResultModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Import keys
-   * @description Imports new keys with translations. If key already exists, its translations and tags are not updated.
-   */
-  importKeys_3: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ImportKeysDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create new key */
-  create_3: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateKeyDto"];
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["KeyWithDataModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get all keys */
-  getAll_2: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelKeyModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create new key */
   create_4: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateKeyDto"];
+        "application/json": components["schemas"]["TranslationCommentWithLangKeyDto"];
       };
     };
     responses: {
       /** @description Created */
       201: {
         content: {
-          "*/*": components["schemas"]["KeyWithDataModel"];
+          "*/*": components["schemas"]["TranslationWithCommentModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Add label to translation by key and language id */
+  assignLabel_3: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TranslationLabelRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["LabelModel"];
         };
       };
       /** @description Bad Request */
@@ -5056,637 +10365,117 @@ export interface operations {
     };
   };
   /**
-   * Delete one or multiple keys (post)
-   * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
+   * Select keys
+   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
    */
-  delete_5: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DeleteKeysDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Remove tags */
-  untagKeys_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UntagKeysRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Add tags */
-  tagKeys_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TagKeysRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Set translation state */
-  setTranslationState_3: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetTranslationsStateStateRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Set keys namespace */
-  setKeysNamespace_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetKeysNamespaceRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Pre-translate by TM
-   * @description Pre-translate provided keys to provided languages by TM.
-   */
-  translate_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["PreTranslationByTmRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Machine Translation
-   * @description Translate provided keys to provided languages through primary MT provider.
-   */
-  machineTranslation_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["MachineTranslationRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Delete keys */
-  deleteKeys_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DeleteKeysRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Copy translation values
-   * @description Copy translation values from one language to other languages.
-   */
-  copyTranslations_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CopyTranslationRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Clear translation values
-   * @description Clear translation values for provided keys in selected languages.
-   */
-  clearTranslations_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ClearTranslationsRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["BatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Single step import
-   * @description Unlike the /v2/projects/{projectId}/import endpoint, imports the data in single request by provided files and parameters. This is useful for automated importing via API or CLI.
-   */
-  doImport_1: {
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          files: string[];
-          params: components["schemas"]["SingleStepImportRequest"];
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Add files
-   * @description Prepares provided files to import.
-   */
-  addFiles_1: {
+  selectKeys_1: {
     parameters: {
       query?: {
         /**
-         * @description When importing files in structured formats (e.g., JSON, YAML), this field defines the delimiter which will be used in names of imported keys.
-         * @example .
-         */
-        structureDelimiter?: string;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          files: string[];
-        };
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ImportAddFilesResultModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Delete
-   * @description Deletes prepared import data.
-   */
-  cancelImport_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Export data */
-  export_1: {
-    parameters: {
-      query?: {
-        /**
-         * @description Languages to be contained in export.
+         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
          *
-         * If null, all languages are exported
+         * When used with multiple states for same language it is applied with logical OR.
+         *
+         * When used with multiple languages, it is applied with logical AND.
+         */
+        filterState?: string[];
+        /**
+         * @description Languages to be contained in response.
+         *
+         * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
          * @example en
          */
         languages?: string[];
-        /** @description Format to export to */
-        format?: "JSON" | "JSON_TOLGEE" | "JSON_I18NEXT" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML";
-        /**
-         * @description Delimiter to structure file content.
-         *
-         * e.g. For key "home.header.title" would result in {"home": {"header": "title": {"Hello"}}} structure.
-         *
-         * When null, resulting file won't be structured. Works only for generic structured formats (e.g. JSON, YAML),
-         * specific formats like `YAML_RUBY` don't honor this parameter.
-         */
-        structureDelimiter?: string;
-        /** @description Filter key IDs to be contained in export */
+        /** @description String to search in key name or translation text */
+        search?: string;
+        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
+        filterKeyName?: string[];
+        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
         filterKeyId?: number[];
-        /** @description Filter key IDs not to be contained in export */
-        filterKeyIdNot?: number[];
+        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
+        filterUntranslatedAny?: boolean;
+        /** @description Selects only keys, where translation is provided in any language */
+        filterTranslatedAny?: boolean;
         /**
-         * @description Filter keys tagged by.
-         *
-         * This filter works the same as `filterTagIn` but in this cases it accepts single tag only.
+         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
+         * @example en-US
          */
-        filterTag?: string;
-        /** @description Filter keys tagged by one of provided tags */
-        filterTagIn?: string[];
-        /** @description Filter keys not tagged by one of provided tags */
-        filterTagNotIn?: string[];
-        /** @description Filter keys with prefix */
-        filterKeyPrefix?: string;
-        /** @description Filter translations with state. By default, all states except untranslated is exported. */
-        filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
-        /** @description Filter translations with namespace. By default, all namespaces everything are exported. To export default namespace, use empty string. */
+        filterUntranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation is provided in specified language
+         * @example en-US
+         */
+        filterTranslatedInLang?: string;
+        /**
+         * @description Selects only keys, where translation was auto translated for specified languages.
+         * @example en-US
+         */
+        filterAutoTranslatedInLang?: string[];
+        /** @description Selects only keys with screenshots */
+        filterHasScreenshot?: boolean;
+        /** @description Selects only keys without screenshots */
+        filterHasNoScreenshot?: boolean;
+        /**
+         * @description Selects only keys with provided namespaces.
+         *
+         * To filter default namespace, set to empty string.
+         */
         filterNamespace?: string[];
         /**
-         * @description If false, it doesn't return zip of files, but it returns single file.
+         * @description Selects only keys without provided namespaces.
          *
-         * This is possible only when single language is exported. Otherwise it returns "400 - Bad Request" response.
+         * To filter default namespace, set to empty string.
          */
-        zip?: boolean;
+        filterNoNamespace?: string[];
+        /** @description Selects only keys with provided tag */
+        filterTag?: string[];
+        /** @description Selects only keys without provided tag */
+        filterNoTag?: string[];
         /**
-         * @description Message format to be used for export.
-         *
-         * e.g. PHP_PO: Hello %s, ICU: Hello {name}.
-         *
-         * This property is honored only for generic formats like JSON or YAML.
-         * For specific formats like `YAML_RUBY` it's ignored.
+         * @description Selects only keys, where translation in provided langs is in outdated state
+         * @example en-US
          */
-        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU";
+        filterOutdatedLanguage?: string[];
         /**
-         * @description This is a template that defines the structure of the resulting .zip file content.
-         *
-         * The template is a string that can contain the following placeholders: {namespace}, {languageTag},
-         * {androidLanguageTag}, {snakeLanguageTag}, {extension}.
-         *
-         * For example, when exporting to JSON with the template `{namespace}/{languageTag}.{extension}`,
-         * the English translations of the `home` namespace will be stored in `home/en.json`.
-         *
-         * The `{snakeLanguageTag}` placeholder is the same as `{languageTag}` but in snake case. (e.g., en_US).
-         *
-         * The Android specific `{androidLanguageTag}` placeholder is the same as `{languageTag}`
-         * but in Android format. (e.g., en-rUS)
+         * @description Selects only keys, where translation in provided langs is not in outdated state
+         * @example en-US
          */
-        fileStructureTemplate?: string;
+        filterNotOutdatedLanguage?: string[];
         /**
-         * @description If true, for structured formats (like JSON) arrays are supported.
-         *
-         * e.g. Key hello[0] will be exported as {"hello": ["..."]}
+         * @description Selects only key affected by activity with specidfied revision ID
+         * @example 1234567
          */
-        supportArrays?: boolean;
+        filterRevisionId?: number[];
+        /** @description Select only keys which were not successfully translated by batch job with provided id */
+        filterFailedKeysOfJob?: number;
+        /** @description Select only keys which are in specified task */
+        filterTaskNumber?: number[];
+        /** @description Filter task keys which are `not done` */
+        filterTaskKeysNotDone?: boolean;
+        /** @description Filter task keys which are `done` */
+        filterTaskKeysDone?: boolean;
+        /** @description Filter keys with unresolved comments in lang */
+        filterHasUnresolvedCommentsInLang?: string[];
+        /** @description Filter keys with any comments in lang */
+        filterHasCommentsInLang?: string[];
+        /**
+         * @description Filter key translations with labels
+         * @example labelId1,labelId2
+         */
+        filterLabel?: string[];
+        /** @description Filter keys with any suggestions in lang */
+        filterHasSuggestionsInLang?: string[];
+        /** @description Filter keys with no suggestions in lang */
+        filterHasNoSuggestionsInLang?: string[];
+        /** @description Selects only keys from specified branch */
+        branch?: string;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StreamingResponseBody"];
+          "application/json": components["schemas"]["SelectAllResponse"];
         };
       };
       /** @description Bad Request */
@@ -5716,62 +10505,53 @@ export interface operations {
     };
   };
   /**
-   * Export data (post)
-   * @description Exports data (post). Useful when exceeding allowed URL size.
+   * Get all translations
+   * @description Returns all translations for specified languages
    */
-  exportPost_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ExportParams"];
+  getAllTranslations_1: {
+    parameters: {
+      query?: {
+        /** @description Namespace to return */
+        ns?: string;
+        /**
+         * @description Delimiter to structure response content.
+         *
+         * e.g. For key "home.header.title" would result in {"home": {"header": {"title": "Hello"}}} structure.
+         *
+         * When null, resulting file will be a flat key-value object.
+         */
+        structureDelimiter?: string;
+        /**
+         * @description Enables filtering of returned keys by their tags.
+         * Only keys with at least one provided tag will be returned.
+         * Optional, filtering is not applied if not specified.
+         * @example [
+         *   "productionReady",
+         *   "nextRelease"
+         * ]
+         */
+        filterTag?: string[];
+        /** @description Branch name to return translations from */
+        branch?: string;
+      };
+      path: {
+        /**
+         * @description Comma-separated language tags to return translations in. Languages you are not permitted to see will be silently dropped and not returned.
+         * @example [
+         *   "en",
+         *   "de",
+         *   "fr"
+         * ]
+         */
+        languages: string[];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["StreamingResponseBody"];
+          "application/json": string;
         };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Store Big Meta
-   * @description Stores a bigMeta for a project
-   */
-  store_3: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["BigMetaDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
       };
       /** @description Bad Request */
       400: {
@@ -5803,7 +10583,7 @@ export interface operations {
    * Get translation comments
    * @description Returns translation comments of translation
    */
-  getAll_6: {
+  getAll_4: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -5851,7 +10631,7 @@ export interface operations {
     };
   };
   /** Create translation comment */
-  create_8: {
+  create_2: {
     parameters: {
       path: {
         translationId: number;
@@ -5895,21 +10675,19 @@ export interface operations {
       };
     };
   };
-  /**
-   * Create translation comment
-   * @description Creates a translation comment. Empty translation is stored, when not exists.
-   */
-  create_10: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["TranslationCommentWithLangKeyDto"];
+  /** Get one translation comment */
+  get_5: {
+    parameters: {
+      path: {
+        translationId: number;
+        commentId: number;
       };
     };
     responses: {
-      /** @description Created */
-      201: {
+      /** @description OK */
+      200: {
         content: {
-          "*/*": components["schemas"]["TranslationWithCommentModel"];
+          "application/json": components["schemas"]["TranslationCommentModel"];
         };
       };
       /** @description Bad Request */
@@ -5938,31 +10716,24 @@ export interface operations {
       };
     };
   };
-  /**
-   * Get suggestions from translation memory
-   * @description Suggests machine translations from translation memory. The result is always sorted by similarity, so sorting is not supported.
-   */
-  suggestTranslationMemory_1: {
+  /** Update translation comment */
+  update_2: {
     parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
+      path: {
+        commentId: number;
+        translationId: number;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["SuggestRequestDto"];
+        "application/json": components["schemas"]["TranslationCommentDto"];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["PagedModelTranslationMemoryItemModel"];
+          "application/json": components["schemas"]["TranslationCommentModel"];
         };
       };
       /** @description Bad Request */
@@ -5991,1161 +10762,12 @@ export interface operations {
       };
     };
   };
-  /**
-   * Get machine translation suggestions (streaming)
-   * @description Suggests machine translations from enabled services. The results are streamed to the output in ndjson format. If an error occurs when for any service provider used, the error information is returned as a part of the result item, while the response has 200 status code.
-   */
-  suggestMachineTranslationsStreaming_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SuggestRequestDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/x-ndjson": components["schemas"]["StreamingResponseBody"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get machine translation suggestions
-   * @description Suggests machine translations from enabled services
-   */
-  suggestMachineTranslations_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SuggestRequestDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["SuggestResultModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get all languages */
-  getAll_8: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        /** @description Filter languages by id */
-        filterId?: number[];
-        /** @description Filter languages without id */
-        filterNotId?: number[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelLanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create language */
-  createLanguage_1: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["LanguageRequest"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["LanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get screenshots */
-  getKeyScreenshots: {
+  /** Delete translation comment */
+  delete_3: {
     parameters: {
       path: {
-        keyId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelScreenshotModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Upload screenshot */
-  uploadScreenshot: {
-    parameters: {
-      path: {
-        keyId: number;
-      };
-    };
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          /** Format: binary */
-          screenshot: string;
-          info?: components["schemas"]["ScreenshotInfoDto"];
-        };
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["ScreenshotModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get all permitted organizations
-   * @description Returns all organizations, which is current user allowed to view
-   */
-  getAll_10: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        filterCurrentUserOwner?: boolean;
-        search?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["PagedModelOrganizationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Create organization */
-  create_12: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["OrganizationDto"];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["OrganizationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Upload an image for later use */
-  upload: {
-    requestBody?: {
-      content: {
-        "multipart/form-data": {
-          /** Format: binary */
-          image: string;
-          info?: components["schemas"]["ImageUploadInfoDto"];
-        };
-      };
-    };
-    responses: {
-      /** @description Created */
-      201: {
-        content: {
-          "*/*": components["schemas"]["UploadedImageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get user tasks */
-  getTasks: {
-    parameters: {
-      query?: {
-        /** @description Filter tasks by state */
-        filterState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
-        /** @description Filter tasks without state */
-        filterNotState?: ("NEW" | "IN_PROGRESS" | "DONE" | "CLOSED")[];
-        /** @description Filter tasks by assignee */
-        filterAssignee?: number[];
-        /** @description Filter tasks by type */
-        filterType?: ("TRANSLATE" | "REVIEW")[];
-        /** @description Filter tasks by id */
-        filterId?: number[];
-        /** @description Filter tasks without id */
-        filterNotId?: number[];
-        /** @description Filter tasks by project */
-        filterProject?: number[];
-        /** @description Filter tasks without project */
-        filterNotProject?: number[];
-        /** @description Filter tasks by language */
-        filterLanguage?: number[];
-        /** @description Filter tasks by key */
-        filterKey?: number[];
-        /** @description Exclude "done" tasks which are older than specified timestamp */
-        filterDoneMinClosedAt?: number;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        search?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelTaskWithProjectModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get used namespaces
-   * @description Returns all used project namespaces. Response contains default (null) namespace if used.
-   */
-  getUsedNamespaces_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelUsedNamespaceModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get report in XLSX
-   * @description Detailed statistics about the task results
-   */
-  getXlsxReport_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": string;
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get report
-   * @description Detailed statistics for every assignee
-   */
-  getPerUserReport_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["TaskPerUserReportModel"][];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get blocking task numbers
-   * @description If the tasks is blocked by other tasks, it returns numbers of these tasks.
-   */
-  getBlockingTasks_1: {
-    parameters: {
-      path: {
-        taskNumber: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": number[];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  getPossibleAssignees_1: {
-    parameters: {
-      query?: {
-        /** @description Filter users by id */
-        filterId?: number[];
-        /** @description Filter only users that have at least following scopes */
-        filterMinimalScope?: string;
-        /** @description Filter only users that can view language */
-        filterViewLanguageId?: number;
-        /** @description Filter only users that can edit language */
-        filterEditLanguageId?: number;
-        /** @description Filter only users that can edit state of language */
-        filterStateLanguageId?: number;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-        search?: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelSimpleUserAccountModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get namespaces */
-  getAllNamespaces_1: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelNamespaceModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get namespace by name
-   * @description Returns information about a namespace by its name
-   */
-  getByName_1: {
-    parameters: {
-      path: {
-        name: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["NamespaceModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Search for keys
-   * @description This endpoint helps you to find desired key by keyName, base translation or translation in specified language.
-   */
-  searchForKey_1: {
-    parameters: {
-      query: {
-        /** @description Search query */
-        search: string;
-        /** @description Language to search in */
-        languageTag?: string;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelKeySearchSearchResultModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get one revision data */
-  getSingleRevision_1: {
-    parameters: {
-      path: {
-        revisionId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["ProjectActivityModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get project activity */
-  getActivity_1: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["PagedModelProjectActivityModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get tags */
-  getAll_4: {
-    parameters: {
-      query?: {
-        search?: string;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelTagModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * List user batch operations
-   * @description List all batch operations started by current user
-   */
-  myList_1: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelBatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get Big Meta for key */
-  getBigMeta_1: {
-    parameters: {
-      path: {
-        id: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelKeyWithBaseTranslationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get translations
-   * @description Returns translations prepared to import.
-   */
-  getImportTranslations_1: {
-    parameters: {
-      query?: {
-        /** @description Whether only translations, which are in conflict with existing translations should be returned */
-        onlyConflicts?: boolean;
-        /** @description Whether only translations with unresolved conflictswith existing translations should be returned */
-        onlyUnresolved?: boolean;
-        /** @description String to search in translation text or key */
-        search?: string;
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-      path: {
-        languageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelImportTranslationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get import language
-   * @description Returns language prepared to import.
-   */
-  getImportLanguage_1: {
-    parameters: {
-      path: {
-        languageId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ImportLanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Delete language
-   * @description Deletes language prepared to import.
-   */
-  deleteLanguage_1: {
-    parameters: {
-      path: {
-        languageId: number;
+        translationId: number;
+        commentId: number;
       };
     };
     responses: {
@@ -7179,193 +10801,20 @@ export interface operations {
       };
     };
   };
-  /**
-   * Get file issues
-   * @description Returns issues for uploaded file.
-   */
-  getImportFileIssues_1: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-      path: {
-        importFileId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelImportFileIssueModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get result
-   * @description Returns the result of preparation.
-   */
-  getImportResult_1: {
-    parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PagedModelImportLanguageModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get namespaces
-   * @description Returns all existing and imported namespaces
-   */
-  getAllNamespaces_3: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelImportNamespaceModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get all running and pending batch operations
-   * @description Returns all running and pending batch operations. Completed batch operations are returned only if they are not older than 1 hour. If user doesn't have permission to view all batch operations, only their operations are returned.
-   */
-  currentJobs_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CollectionModelBatchJobModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get batch operation */
-  get_13: {
+  /** Set state of translation comment */
+  setState_1: {
     parameters: {
       path: {
-        id: number;
+        translationId: number;
+        commentId: number;
+        state: "RESOLUTION_NOT_NEEDED" | "NEEDS_RESOLUTION" | "RESOLVED";
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["BatchJobModel"];
+          "application/json": components["schemas"]["TranslationCommentModel"];
         };
       };
       /** @description Bad Request */
@@ -7394,23 +10843,21 @@ export interface operations {
       };
     };
   };
-  /** List batch operations */
-  list_4: {
+  /**
+   * Dismiss auto-translated
+   * @description Removes "auto translated" indication
+   */
+  dismissAutoTranslatedState_1: {
     parameters: {
-      query?: {
-        /** @description Zero-based page index (0..N) */
-        page?: number;
-        /** @description The size of the page to be returned */
-        size?: number;
-        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
-        sort?: string[];
+      path: {
+        translationId: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["PagedModelBatchJobModel"];
+          "application/json": components["schemas"]["TranslationModel"];
         };
       };
       /** @description Bad Request */
@@ -7490,37 +10937,143 @@ export interface operations {
       };
     };
   };
-  /**
-   * Get all translations
-   * @description Returns all translations for specified languages
-   */
-  getAllTranslations_1: {
+  /** Add label to translation */
+  assignLabel_1: {
     parameters: {
-      query?: {
-        /** @description Namespace to return */
-        ns?: string;
-        /**
-         * @description Delimiter to structure response content.
-         *
-         * e.g. For key "home.header.title" would result in {"home": {"header": {"title": "Hello"}}} structure.
-         *
-         * When null, resulting file will be a flat key-value object.
-         */
-        structureDelimiter?: string;
-      };
       path: {
-        /**
-         * @description Comma-separated language tags to return translations in. Languages you are not permitted to see will be silently dropped and not returned.
-         * @example en,de,fr
-         */
-        languages: string[];
+        translationId: number;
+        labelId: number;
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": string;
+          "application/json": components["schemas"]["LabelModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Remove label from translation */
+  unassignLabel_1: {
+    parameters: {
+      path: {
+        translationId: number;
+        labelId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Set outdated value
+   * @description Set's "outdated" flag indicating the base translation was changed without updating current translation.
+   */
+  setOutdated_1: {
+    parameters: {
+      path: {
+        translationId: number;
+        state: boolean;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Set translation state */
+  setTranslationState_1: {
+    parameters: {
+      path: {
+        translationId: number;
+        state: "TRANSLATED" | "REVIEWED";
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationModel"];
         };
       };
       /** @description Bad Request */
@@ -7550,85 +11103,125 @@ export interface operations {
     };
   };
   /**
-   * Select keys
-   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+   * Get used namespaces
+   * @description Returns all used project namespaces. Response contains default (null) namespace if used.
    */
-  selectKeys_1: {
+  getUsedNamespaces_1: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelUsedNamespaceModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get user info
+   * @description Returns information about currently authenticated user.
+   */
+  getInfo: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PrivateUserAccountModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get user tasks */
+  getTasks_2: {
     parameters: {
       query?: {
-        /**
-         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
-         *
-         * When used with multiple states for same language it is applied with logical OR.
-         *
-         * When used with multiple languages, it is applied with logical AND.
-         */
-        filterState?: string[];
-        /**
-         * @description Languages to be contained in response.
-         *
-         * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
-         * @example en
-         */
-        languages?: string[];
-        /** @description String to search in key name or translation text */
+        /** @description Filter tasks by state */
+        filterState?: ("NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED")[];
+        /** @description Filter tasks without state */
+        filterNotState?: ("NEW" | "IN_PROGRESS" | "FINISHED" | "CANCELED")[];
+        /** @description Filter tasks by assignee */
+        filterAssignee?: number[];
+        /** @description Filter tasks by type */
+        filterType?: ("TRANSLATE" | "REVIEW")[];
+        /** @description Filter tasks by id */
+        filterId?: number[];
+        /** @description Filter tasks without id */
+        filterNotId?: number[];
+        /** @description Filter tasks by project */
+        filterProject?: number[];
+        /** @description Filter tasks without project */
+        filterNotProject?: number[];
+        /** @description Filter tasks by language */
+        filterLanguage?: number[];
+        /** @description Filter tasks by key */
+        filterKey?: number[];
+        /** @description Filter tasks by agency */
+        filterAgency?: number[];
+        /** @description Exclude tasks which were closed before specified timestamp */
+        filterNotClosedBefore?: number;
+        /** @description Filter tasks by branch name. Defaults to project's default branch. */
+        branch?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
         search?: string;
-        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
-        filterKeyName?: string[];
-        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
-        filterKeyId?: number[];
-        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
-        filterUntranslatedAny?: boolean;
-        /** @description Selects only keys, where translation is provided in any language */
-        filterTranslatedAny?: boolean;
-        /**
-         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
-         * @example en-US
-         */
-        filterUntranslatedInLang?: string;
-        /**
-         * @description Selects only keys, where translation is provided in specified language
-         * @example en-US
-         */
-        filterTranslatedInLang?: string;
-        /** @description Selects only keys with screenshots */
-        filterHasScreenshot?: boolean;
-        /** @description Selects only keys without screenshots */
-        filterHasNoScreenshot?: boolean;
-        /**
-         * @description Filter namespaces.
-         *
-         * To filter default namespace, set to empty string.
-         */
-        filterNamespace?: string[];
-        /** @description Selects only keys with provided tag */
-        filterTag?: string[];
-        /**
-         * @description Selects only keys, where translation in provided langs is in outdated state
-         * @example en-US
-         */
-        filterOutdatedLanguage?: string[];
-        /**
-         * @description Selects only keys, where translation in provided langs is not in outdated state
-         * @example en-US
-         */
-        filterNotOutdatedLanguage?: string[];
-        /**
-         * @description Selects only key affected by activity with specidfied revision ID
-         * @example 1234567
-         */
-        filterRevisionId?: number[];
-        /** @description Select only keys which were not successfully translated by batch job with provided id */
-        filterFailedKeysOfJob?: number;
-        /** @description Select only keys which are in specified task */
-        filterTaskNumber?: number[];
       };
     };
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SelectAllResponse"];
+          "application/json": components["schemas"]["PagedModelTaskWithProjectModel"];
         };
       };
       /** @description Bad Request */
@@ -7658,517 +11251,19 @@ export interface operations {
     };
   };
   /**
-   * Select keys
-   * @description Returns all key IDs for specified filter values. This way, you can apply the same filter as in the translation view and get the resulting key IDs for future use.
+   * Get information about SSO configuration
+   * @description Returns information about sso configuration affecting the user.
    */
-  selectKeys_3: {
-    parameters: {
-      query?: {
-        /**
-         * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
-         *
-         * When used with multiple states for same language it is applied with logical OR.
-         *
-         * When used with multiple languages, it is applied with logical AND.
-         */
-        filterState?: string[];
-        /**
-         * @description Languages to be contained in response.
-         *
-         * To add multiple languages, repeat this param (eg. ?languages=en&languages=de)
-         * @example en
-         */
-        languages?: string[];
-        /** @description String to search in key name or translation text */
-        search?: string;
-        /** @description Selects key with provided names. Use this param multiple times to fetch more keys. */
-        filterKeyName?: string[];
-        /** @description Selects key with provided ID. Use this param multiple times to fetch more keys. */
-        filterKeyId?: number[];
-        /** @description Selects only keys for which the translation is missing in any returned language. It only filters for translations included in returned languages. */
-        filterUntranslatedAny?: boolean;
-        /** @description Selects only keys, where translation is provided in any language */
-        filterTranslatedAny?: boolean;
-        /**
-         * @description Selects only keys where the translation is missing for the specified language. The specified language must be included in the returned languages. Otherwise, this filter doesn't apply.
-         * @example en-US
-         */
-        filterUntranslatedInLang?: string;
-        /**
-         * @description Selects only keys, where translation is provided in specified language
-         * @example en-US
-         */
-        filterTranslatedInLang?: string;
-        /** @description Selects only keys with screenshots */
-        filterHasScreenshot?: boolean;
-        /** @description Selects only keys without screenshots */
-        filterHasNoScreenshot?: boolean;
-        /**
-         * @description Filter namespaces.
-         *
-         * To filter default namespace, set to empty string.
-         */
-        filterNamespace?: string[];
-        /** @description Selects only keys with provided tag */
-        filterTag?: string[];
-        /**
-         * @description Selects only keys, where translation in provided langs is in outdated state
-         * @example en-US
-         */
-        filterOutdatedLanguage?: string[];
-        /**
-         * @description Selects only keys, where translation in provided langs is not in outdated state
-         * @example en-US
-         */
-        filterNotOutdatedLanguage?: string[];
-        /**
-         * @description Selects only key affected by activity with specidfied revision ID
-         * @example 1234567
-         */
-        filterRevisionId?: number[];
-        /** @description Select only keys which were not successfully translated by batch job with provided id */
-        filterFailedKeysOfJob?: number;
-        /** @description Select only keys which are in specified task */
-        filterTaskNumber?: number[];
-      };
-    };
+  getSso: {
     responses: {
       /** @description OK */
       200: {
         content: {
-          "application/json": components["schemas"]["SelectAllResponse"];
+          "application/json": components["schemas"]["PublicSsoTenantModel"];
         };
       };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get project daily amount of events */
-  getProjectDailyActivity_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": {
-            [key: string]: number;
-          };
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get project stats */
-  getProjectStats_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/hal+json": components["schemas"]["ProjectStatsModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Return current PAK
-   * @description Returns current Personal Access Token. If the request is not authenticated with a Personal Access Token, it will return 400 response status.
-   */
-  getCurrent: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["PatWithUserModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Get organization by slug */
-  get_19: {
-    parameters: {
-      path: {
-        slug: string;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["OrganizationModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get credit balance for organization
-   * @description Returns machine translation credit balance for organization
-   */
-  getOrganizationCredits: {
-    parameters: {
-      path: {
-        organizationId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["CreditBalanceModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get current API key info
-   * @description Returns info the API key which user currently authenticated with. Otherwise responds with 400 status code.
-   */
-  getCurrent_1: {
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ApiKeyWithLanguagesModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Get current permission info
-   * @description Returns current PAK or PAT permissions for current user, api-key and project
-   */
-  getCurrentPermissions: {
-    parameters: {
-      query?: {
-        /** @description Required when using with PAT */
-        projectId?: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: {
-          "application/json": components["schemas"]["ApiKeyPermissionsModel"];
-        };
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Delete one or multiple keys */
-  delete_3: {
-    parameters: {
-      path: {
-        ids: number[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /**
-   * Remove tag
-   * @description Removes tag with provided id from key with provided id
-   */
-  removeTag_1: {
-    parameters: {
-      path: {
-        keyId: number;
-        tagId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Delete screenshots */
-  deleteScreenshots: {
-    parameters: {
-      path: {
-        ids: number[];
-        keyId: number;
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
-        content: never;
-      };
-      /** @description Bad Request */
-      400: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Unauthorized */
-      401: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Forbidden */
-      403: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-      /** @description Not Found */
-      404: {
-        content: {
-          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
-        };
-      };
-    };
-  };
-  /** Delete uploaded images */
-  delete_12: {
-    parameters: {
-      path: {
-        ids: number[];
-      };
-    };
-    responses: {
-      /** @description OK */
-      200: {
+      /** @description No SSO configuration available for this user */
+      204: {
         content: never;
       };
       /** @description Bad Request */

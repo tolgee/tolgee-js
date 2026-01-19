@@ -86,6 +86,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [_isPlural, setIsPlural] = useState<boolean>();
     const [_pluralArgName, setPluralArgName] = useState<string>();
     const [submitError, setSubmitError] = useState<HttpError>();
+    const [readOnly, setReadOnly] = useState(false);
+    const branchParam = props.uiProps.branch;
 
     const filterTagMissing =
       Boolean(props.uiProps.filterTag?.length) &&
@@ -95,7 +97,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       // reset when key changes
       setIsPlural(undefined);
       setPluralArgName(undefined);
-    }, [props.keyName, props.namespace]);
+      setReadOnly(false);
+    }, [props.keyName, props.namespace, props.uiProps.branch]);
 
     const {
       screenshots,
@@ -161,6 +164,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         filterKeyName: [props.keyName],
         filterNamespace: [selectedNs],
         languages: selectedLanguages,
+        branch: branchParam,
       },
       options: {
         enabled: Boolean(scopesLoadable.data),
@@ -271,10 +275,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const linkToPlatform =
       scopesLoadable.data?.projectId !== undefined
         ? `${props.uiProps.apiUrl}/projects/${
-            scopesLoadable.data?.projectId
-          }/translations/single?key=${props.keyName}${
-            selectedNs !== undefined ? `&ns=${selectedNs}` : ''
-          }`
+            scopesLoadable.data.projectId
+          }/translations/single${
+            branchParam ? `/tree/${branchParam}` : ''
+          }?key=${props.keyName}${selectedNs ? `&ns=${selectedNs}` : ''}`
         : undefined;
 
     const [container, setContainer] = useState(
@@ -329,6 +333,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               content: {
                 'application/json': {
                   name: props.keyName,
+                  branch: branchParam,
                   namespace: selectedNs || undefined,
                   translations: newTranslations,
                   states: newStates,
@@ -347,6 +352,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
               content: {
                 'application/json': {
                   name: props.keyName,
+                  branch: branchParam,
                   namespace: selectedNs || undefined,
                   translations: newTranslations,
                   states: newStates,
@@ -388,6 +394,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       } catch (e: any) {
         // eslint-disable-next-line no-console
         console.error(e);
+        if (
+          e instanceof HttpError &&
+          e.code === 'operation_not_permitted_in_read_only_mode'
+        ) {
+          setReadOnly(true);
+        }
         setSubmitError(e);
       } finally {
         setSaving(false);
@@ -478,7 +490,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       updateKey.error ||
       galleryError;
 
-    const formDisabled = loading || !permissions.canSubmitForm;
+    const formDisabled = loading || !permissions.canSubmitForm || readOnly;
 
     const contextValue = {
       input: props.keyName,
@@ -492,6 +504,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       availableLanguages,
       selectedLanguages: putBaseLangFirstTags(selectedLanguages, baseLang?.tag),
       formDisabled,
+      readOnly,
       keyData,
       translationsForm,
       container,
