@@ -277,8 +277,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         ? `${props.uiProps.apiUrl}/projects/${
             scopesLoadable.data.projectId
           }/translations/single${
-            branchParam ? `/tree/${branchParam}` : ''
-          }?key=${props.keyName}${selectedNs ? `&ns=${selectedNs}` : ''}`
+            branchParam ? `/tree/${encodeURIComponent(branchParam)}` : ''
+          }?key=${encodeURIComponent(props.keyName)}${
+            selectedNs ? `&ns=${encodeURIComponent(selectedNs)}` : ''
+          }`
         : undefined;
 
     const [container, setContainer] = useState(
