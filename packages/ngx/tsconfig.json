@@ -28,8 +28,8 @@
     }
   },
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
+    "strictTemplates": true,
     "strictInjectionParameters": true,
-    "enableIvy": "ngtsc"
+    "strictInputAccessModifiers": true
   }
 }
