@@ -1,5 +1,6 @@
 import {
   ChangeDetectorRef,
+  inject,
   OnDestroy,
   Pipe,
   PipeTransform,
@@ -8,7 +9,7 @@ import { TranslateService } from './translate.service';
 import { Subscription } from 'rxjs';
 import {
   getTranslateProps,
-  TFnType,
+  CombinedOptions,
   TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
@@ -16,7 +17,7 @@ import {
 @Pipe({
   name: 'translate',
   pure: false,
-  standalone: false,
+  standalone: true,
 })
 export class TranslatePipe implements PipeTransform, OnDestroy {
   private value = '';
@@ -24,22 +25,28 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
 
   private subscription: Subscription;
 
-  constructor(
-    protected translateService: TranslateService,
-    private _cdr: ChangeDetectorRef
-  ) {}
+  protected translateService = inject(TranslateService);
+  private _cdr = inject(ChangeDetectorRef);
 
   ngOnDestroy(): void {
     this.unsubscribe();
   }
 
-  readonly transform: TFnType<string, string, TranslationKey> = (...args) => {
+  transform(props: TranslateProps<string, TranslationKey>): string;
+  transform(key: TranslationKey, options?: CombinedOptions<string>): string;
+  transform(
+    key: TranslationKey,
+    defaultValue?: string,
+    options?: CombinedOptions<string>
+  ): string;
+  transform(...args: any[]): string {
     // @ts-ignore
     const params = getTranslateProps(...args);
+
     const { key } = params;
 
-    if (!key || key.length === 0) {
-      return key;
+    if (!key) {
+      return '';
     }
 
     const newHash = this.hash(params);
@@ -52,7 +59,7 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.translate(params);
 
     return this.value;
-  };
+  }
 
   private hash(props: TranslateProps) {
     return JSON.stringify([props, this.translateService.tolgee.getLanguage()]);

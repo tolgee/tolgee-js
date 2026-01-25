@@ -3,35 +3,35 @@ import { render, RenderResult, screen } from '@testing-library/angular';
 import { Tolgee, DevTools } from '@tolgee/web';
 import { FormatIcu } from '@tolgee/format-icu';
 
-import { NamespaceResolver } from '../../lib/namespace.resolver';
-import { RootComponent } from './root.component';
+import { namespaceResolver } from '../lib/namespace.resolver';
+import { RootComponent } from './fixtures/resolving/root.component';
 import { wait } from '@tolgee/testing/wait';
-import { NgxTolgeeModule } from '../../lib/ngx-tolgee.module';
-import { TOLGEE_INSTANCE } from '../../lib/tolgee-instance-token';
 import { mockStaticDataAsync } from '@tolgee/testing/mockStaticData';
 import mockTranslations from '@tolgee/testing/mockTranslations';
+import { provideTolgee } from '../lib/provide-tolgee';
 
-let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
-
-let fixture: RenderResult<any>;
-
-const getFixture = async ({ preloadedNs } = { preloadedNs: 'test' }) => {
-  const tolgee = Tolgee().use(DevTools()).use(FormatIcu()).init({
-    staticData: staticDataMock.promises,
-    language: 'cs',
-    fallbackLanguage: 'en',
-  });
-
-  await tolgee.run();
-
-  fixture = await render(RootComponent, {
-    declarations: [],
-    imports: [NgxTolgeeModule],
+const getFixture = async (
+  { preloadedNs, staticDataMock } = {
+    preloadedNs: 'test',
+    staticDataMock: undefined as
+      | ReturnType<typeof mockStaticDataAsync>
+      | undefined,
+  }
+) => {
+  return await render(RootComponent, {
     providers: [
-      {
-        provide: TOLGEE_INSTANCE,
-        useFactory: () => tolgee,
-      },
+      provideTolgee(() =>
+        Tolgee()
+          .use(DevTools())
+          .use(FormatIcu())
+          .init({
+            language: 'en',
+            fallbackLanguage: 'en',
+            ...(staticDataMock && {
+              staticData: staticDataMock.promises,
+            }),
+          })
+      ),
     ],
     routes: [
       {
@@ -39,22 +39,22 @@ const getFixture = async ({ preloadedNs } = { preloadedNs: 'test' }) => {
         children: [
           {
             path: 'lazy',
-            loadChildren: () =>
-              import('./lazy.module').then((c) => c.LazyModule),
+            loadComponent: () => import('./fixtures/resolving/lazy.component'),
             data: { tolgeeNamespace: preloadedNs },
             resolve: {
-              _namespace: NamespaceResolver,
+              _namespace: namespaceResolver,
             },
           },
         ],
       },
     ],
   });
-
-  return fixture;
 };
 
 describe('resolving', () => {
+  let staticDataMock: ReturnType<typeof mockStaticDataAsync>;
+  let fixture: RenderResult<any>;
+
   beforeEach(async () => {
     jest.clearAllMocks();
     staticDataMock = mockStaticDataAsync();
@@ -66,18 +66,17 @@ describe('resolving', () => {
   });
 
   it('waits for namespace load before module is rendered', async () => {
-    fixture = await getFixture();
+    fixture = await getFixture({ preloadedNs: 'test', staticDataMock });
     screen.queryByTestId('lazy-link').click();
     await wait(100);
     expect(screen.queryByTestId('loaded')).not.toBeInTheDocument();
     staticDataMock.resolvablePromises['en:test'].resolve();
-    staticDataMock.resolvablePromises['cs:test'].resolve();
     await wait(100);
     expect(screen.queryByTestId('loaded')).toBeInTheDocument();
   });
 
   it('warns on undefined ns', async () => {
-    fixture = await getFixture({ preloadedNs: undefined });
+    fixture = await getFixture({ preloadedNs: undefined, staticDataMock });
     // eslint-disable-next-line no-console
     console.warn = jest.fn();
     screen.queryByTestId('lazy-link').click();
