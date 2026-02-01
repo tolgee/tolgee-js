@@ -111,42 +111,6 @@
             }
           }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "sampleapp:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/sampleapp/src/test.ts",
-            "polyfills": ["zone.js"],
-            "tsConfig": "projects/sampleapp/tsconfig.spec.json",
-            "karmaConfig": "projects/sampleapp/karma.conf.js",
-            "assets": [
-              "projects/sampleapp/src/favicon.ico",
-              "projects/sampleapp/src/assets"
-            ],
-            "styles": [
-              "projects/sampleapp/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/sampleapp/tsconfig.app.json",
-              "projects/sampleapp/tsconfig.spec.json",
-              "projects/sampleapp/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
