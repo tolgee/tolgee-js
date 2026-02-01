@@ -24,7 +24,7 @@
             "outputPath": "dist/sampleapp/browser",
             "index": "projects/sampleapp/src/index.html",
             "main": "projects/sampleapp/src/main.ts",
-            "polyfills": "projects/sampleapp/src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/sampleapp/tsconfig.app.json",
             "aot": true,
             "assets": [
@@ -46,8 +46,8 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -97,31 +97,31 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sampleapp:build"
+            "buildTarget": "sampleapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sampleapp:build:production"
+              "buildTarget": "sampleapp:build:production"
             },
             "stage": {
-              "browserTarget": "sampleapp:build:stage"
+              "buildTarget": "sampleapp:build:stage"
             },
             "e2e": {
-              "browserTarget": "sampleapp:build:e2e"
+              "buildTarget": "sampleapp:build:e2e"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sampleapp:build"
+            "buildTarget": "sampleapp:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "projects/sampleapp/src/test.ts",
-            "polyfills": "projects/sampleapp/src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/sampleapp/tsconfig.spec.json",
             "karmaConfig": "projects/sampleapp/karma.conf.js",
             "assets": [
@@ -204,11 +204,11 @@
           },
           "configurations": {
             "stage": {
-              "browserTarget": "sampleapp:build:stage",
+              "buildTarget": "sampleapp:build:stage",
               "serverTarget": "sampleapp:server:stage"
             },
             "development": {
-              "browserTarget": "sampleapp:build:development",
+              "buildTarget": "sampleapp:build:development",
               "serverTarget": "sampleapp:server:development"
             }
           },

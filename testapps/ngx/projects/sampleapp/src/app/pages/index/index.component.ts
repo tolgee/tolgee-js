@@ -1,14 +1,25 @@
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NavbarComponent } from '../../component/navbar/navbar.component';
+import { FormsModule } from '@angular/forms';
+import { TDirective, TranslatePipe } from '@tolgee/ngx';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
+  imports: [
+    RouterLink,
+    NavbarComponent,
+    FormsModule,
+    TDirective,
+    TranslatePipe,
+    NgOptimizedImage,
+  ],
 })
 export class IndexComponent implements OnInit {
   newItemValue: string;
   items: string[] = [];
-
-  constructor() {}
 
   getInitialItems() {
     let items: string[] | undefined = undefined;
@@ -34,7 +45,7 @@ export class IndexComponent implements OnInit {
     try {
       this.items = this.getInitialItems();
     } catch (e) {
-      // when local storage is not set due to SSR, don't pring any error
+      // when local storage is not set due to SSR, don't emit an error
       if (typeof localStorage !== 'undefined') {
         /* eslint-disable no-console */
         console.error(
@@ -54,7 +65,7 @@ export class IndexComponent implements OnInit {
     }
   }
 
-  onDelete(index) {
+  onDelete(index: number) {
     this.items.splice(index, 1);
     this.items = [...this.items];
     this.updateLocalStorage();
