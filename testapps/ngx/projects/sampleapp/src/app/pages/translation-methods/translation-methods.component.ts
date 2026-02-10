@@ -11,7 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
   imports: [NavbarComponent, RouterLink, TDirective, TranslatePipe],
 })
 export class TranslationMethodsComponent {
-  private translateService = inject(TranslateService);
+  private readonly translateService = inject(TranslateService);
 
   translatedWithoutParamsValue = toSignal(
     this.translateService.translate('this_is_a_key'),
