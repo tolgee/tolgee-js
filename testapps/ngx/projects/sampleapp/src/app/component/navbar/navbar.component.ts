@@ -3,7 +3,14 @@ import { LangSelectorComponent } from '../lang-selector/lang-selector.component'
 
 @Component({
   selector: 'app-navbar',
-  templateUrl: './navbar.component.html',
+  template: `
+    <div class="navbar">
+      <app-lang-selector />
+      <nav>
+        <ng-content />
+      </nav>
+    </div>
+  `,
   imports: [LangSelectorComponent],
 })
 export class NavbarComponent {}
