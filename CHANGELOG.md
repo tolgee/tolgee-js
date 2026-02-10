@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.2.8-prerelease.219fcc6c.0](https://github.com/tolgee/tolgee-js/compare/v6.2.7...v6.2.8-prerelease.219fcc6c.0) (2026-02-10)
+
+
+### Bug Fixes
+
+* pin vike version to 0.4.236 in vue-ssr testapp ([#3500](https://github.com/tolgee/tolgee-js/issues/3500)) ([f49ede5](https://github.com/tolgee/tolgee-js/commit/f49ede544fb63c9b39f1c6a84cf6d2cc801633eb))
+* **url:** handle optional window.location in createUrl for react native ([#3483](https://github.com/tolgee/tolgee-js/issues/3483)) ([af6508b](https://github.com/tolgee/tolgee-js/commit/af6508bf1a90c41002effea9f65839ba49cd16d8))
+* use Node 24 in release workflow for npm Trusted Publishers ([219fcc6](https://github.com/tolgee/tolgee-js/commit/219fcc6cf24aba248b3ba233d89e3bb1c0e25a99))
+
+
+### Features
+
+* expose window.__tolgee API for Playwright and console ([#3499](https://github.com/tolgee/tolgee-js/issues/3499)) ([0e4bf46](https://github.com/tolgee/tolgee-js/commit/0e4bf4622c9fe4253edead99967ffc15b3d1e7aa))
+
+
+
+
+
 ## [6.2.7](https://github.com/tolgee/tolgee-js/compare/v6.2.6...v6.2.7) (2025-08-05)
 
 

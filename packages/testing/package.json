@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/testing",
-  "version": "6.2.7",
+  "version": "6.2.8-prerelease.219fcc6c.0",
   "description": "Shared testing tools",
   "main": "index.ts",
   "private": true,

@@ -1,6 +1,6 @@
 {
 	"name": "@tolgee/svelte-testapp",
-	"version": "6.2.7",
+	"version": "6.2.8-prerelease.219fcc6c.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -12,8 +12,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"dependencies": {
-		"@tolgee/format-icu": "6.2.7",
-		"@tolgee/svelte": "6.2.7"
+		"@tolgee/format-icu": "6.2.8-prerelease.219fcc6c.0",
+		"@tolgee/svelte": "6.2.8-prerelease.219fcc6c.0"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^4.0.0",
