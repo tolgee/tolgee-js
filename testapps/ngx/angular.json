@@ -24,6 +24,11 @@
             "outputPath": "dist/sampleapp",
             "index": "projects/sampleapp/src/index.html",
             "browser": "projects/sampleapp/src/main.ts",
+            "server": "projects/sampleapp/src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "projects/sampleapp/routes.txt"
+            },
             "polyfills": ["zone.js"],
             "tsConfig": "projects/sampleapp/tsconfig.app.json",
             "assets": [
@@ -78,6 +83,8 @@
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
+              "server": false,
+              "prerender": false,
               "fileReplacements": [
                 {
                   "replace": "projects/sampleapp/src/environments/environment.ts",
