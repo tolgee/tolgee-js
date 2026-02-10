@@ -15,7 +15,7 @@
     "@tolgee/format-icu": "6.2.7",
     "@tolgee/vue": "6.2.7",
     "fastify": "^4.28.1",
-    "vike": "^0.4.193",
+    "vike": "0.4.236",
     "vike-vue": "^0.8.3",
     "vue": "^3.2.45"
   },
