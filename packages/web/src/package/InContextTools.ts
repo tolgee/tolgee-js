@@ -3,6 +3,7 @@ import { ContextUi } from './ContextUi';
 import { DevBackend } from './DevBackend';
 import { InContextOptions } from './types';
 import { ObserverPlugin } from './ObserverPlugin';
+import { setupWindowApi } from './WindowApi';
 
 export const InContextTools =
   (props?: InContextOptions): TolgeePlugin =>
@@ -18,5 +19,15 @@ export const InContextTools =
     if (credentials) {
       tolgee.overrideCredentials(credentials);
     }
+
+    let teardownWindowApi = setupWindowApi(tolgee);
+
+    tolgee.on('running', ({ value: isRunning }) => {
+      teardownWindowApi();
+      if (isRunning) {
+        teardownWindowApi = setupWindowApi(tolgee);
+      }
+    });
+
     return tolgee;
   };
