@@ -23,10 +23,11 @@ describe.each([
 ])('$name', ({ component }) => {
   let fixture: RenderResult<any>;
   let service: TranslateService;
+  const mockFetch = mockCoreFetch();
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    mockCoreFetch().enableMocks();
+    mockFetch.enableMocks();
 
     fixture = await render(component, {
       providers: [
@@ -42,6 +43,10 @@ describe.each([
     });
 
     service = TestBed.inject(TranslateService);
+  });
+
+  afterEach(() => {
+    mockFetch.disableMocks();
   });
 
   it('wraps translation correctly', () => {
@@ -86,7 +91,15 @@ describe.each([
   });
 
   it('empty key returns nothing', () => {
-    expect(screen.queryByTestId('empty_key')).toContainHTML('');
+    expect(screen.queryByTestId('empty_key')).toHaveTextContent('');
+  });
+
+  it('undefined key returns nothing', () => {
+    expect(screen.queryByTestId('undefined_key')).toHaveTextContent('');
+  });
+
+  it('null key returns nothing', () => {
+    expect(screen.queryByTestId('null_key')).toHaveTextContent('');
   });
 
   it('works with language prop', () => {
