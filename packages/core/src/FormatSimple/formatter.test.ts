@@ -16,7 +16,9 @@ function icu(text: string, params?: TranslateParams) {
 }
 
 function getText() {
-  return expect.getState().currentTestName.replace('simple formatter ', '');
+  return (
+    expect.getState().currentTestName?.replace('simple formatter ', '') ?? ''
+  );
 }
 
 function matchIcu(params?: TranslateParams) {
