@@ -128,6 +128,11 @@ describe('translation service', () => {
   });
 
   it('translates even it tolgee fails to start', async () => {
+    // Suppress the expected error log from the try/catch in TranslateService.start()
+    const consoleErrorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     const tolgeeMock = {
       ...Tolgee().init({
         staticData: {
@@ -156,6 +161,12 @@ describe('translation service', () => {
       mockTranslations.cs.hello_world
     );
     expect(tolgeeMock.run).toHaveBeenCalledTimes(1);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Tolgee failed to start:',
+      expect.any(Error)
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 
   it('supports providing tolgee as a promise (e.g., from dynamic import)', async () => {

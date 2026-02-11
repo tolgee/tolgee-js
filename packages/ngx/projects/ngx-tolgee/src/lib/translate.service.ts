@@ -71,7 +71,11 @@ export class TranslateService implements OnDestroy {
     }
 
     if (!this.isSSR()) {
-      await this.runIfNotRunning();
+      try {
+        await this.runIfNotRunning();
+      } catch (error) {
+        console.error('Tolgee failed to start:', error);
+      }
     }
   }
 

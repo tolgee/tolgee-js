@@ -31,6 +31,12 @@ import { TranslatePipe } from '../../../lib/translate.pipe';
     <div data-testid="with_changing_key">
       {{ key() | translate }}
     </div>
+    <div data-testid="undefined_key">
+      {{ undefined | translate }}
+    </div>
+    <div data-testid="null_key">
+      {{ null | translate }}
+    </div>
   `,
   imports: [TranslatePipe],
 })
