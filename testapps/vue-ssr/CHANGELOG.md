@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/tolgee/tolgee-js/compare/v6.2.7...v6.3.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* pin vike version to 0.4.236 in vue-ssr testapp ([#3500](https://github.com/tolgee/tolgee-js/issues/3500)) ([f49ede5](https://github.com/tolgee/tolgee-js/commit/f49ede544fb63c9b39f1c6a84cf6d2cc801633eb))
+
+
+
+
+
 ## [6.2.7](https://github.com/tolgee/tolgee-js/compare/v6.2.6...v6.2.7) (2025-08-05)
 
 **Note:** Version bump only for package @tolgee/vue-ssr-testapp

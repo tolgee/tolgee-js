@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.3.0](https://github.com/tolgee/tolgee-js/compare/v6.2.7...v6.3.0) (2026-02-11)
+
+
+### Bug Fixes
+
+* **url:** handle optional window.location in createUrl for react native ([#3483](https://github.com/tolgee/tolgee-js/issues/3483)) ([af6508b](https://github.com/tolgee/tolgee-js/commit/af6508bf1a90c41002effea9f65839ba49cd16d8))
+
+
+### Features
+
+* expose window.__tolgee API for Playwright and console ([#3499](https://github.com/tolgee/tolgee-js/issues/3499)) ([0e4bf46](https://github.com/tolgee/tolgee-js/commit/0e4bf4622c9fe4253edead99967ffc15b3d1e7aa))
+
+
+
+
+
 ## [6.2.7](https://github.com/tolgee/tolgee-js/compare/v6.2.6...v6.2.7) (2025-08-05)
 
 
