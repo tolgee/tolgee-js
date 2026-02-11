@@ -17,8 +17,8 @@
   "dependencies": {
     "@angular/animations": "^17.3.7",
     "@angular/common": "^17.3.7",
-    "@angular/compiler": "^17.3.7",
-    "@angular/core": "^17.3.7",
+    "@angular/compiler": "^19.2.18",
+    "@angular/core": "^19.2.18",
     "@angular/forms": "^17.3.7",
     "@angular/platform-browser": "^17.3.7",
     "@angular/platform-browser-dynamic": "^17.3.7",
