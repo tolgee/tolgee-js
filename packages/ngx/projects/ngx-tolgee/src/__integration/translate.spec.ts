@@ -89,6 +89,14 @@ describe.each([
     expect(screen.queryByTestId('empty_key')).toContainHTML('');
   });
 
+  it('undefined key returns nothing', () => {
+    expect(screen.queryByTestId('undefined_key')).toContainHTML('');
+  });
+
+  it('null key returns nothing', () => {
+    expect(screen.queryByTestId('null_key')).toContainHTML('');
+  });
+
   it('works with language prop', () => {
     expect(screen.queryByTestId('with_language_prop')).toContainHTML(
       'Hello world!'
