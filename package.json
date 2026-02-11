@@ -15,7 +15,7 @@
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "dev:web": "turbo run dev --parallel --cache-dir='.turbo' --filter=@tolgee/web",
     "develop": "turbo run develop --parallel --cache-dir='.turbo'",
-    "develop:web": "npm run develop -- --filter=@tolgee/web-testapp...",
+    "develop:web": "npm run develop -- --filter=@tolgee/vanilla-testapp...",
     "develop:react": "npm run develop -- --filter=@tolgee/react-testapp...",
     "develop:vue": "npm run develop -- --filter=@tolgee/vue-testapp...",
     "develop:svelte": "npm run develop -- --filter=@tolgee/svelte-testapp...",

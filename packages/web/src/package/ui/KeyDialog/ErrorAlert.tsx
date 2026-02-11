@@ -89,6 +89,22 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
         </>
       );
 
+    case 'operation_not_permitted_in_read_only_mode':
+      return (
+        <>
+          <AlertTitle>Read-only mode</AlertTitle>
+          This branch is protected or your access is read-only.
+        </>
+      );
+
+    case 'branch_not_found':
+      return (
+        <>
+          <AlertTitle>Branch not found</AlertTitle>
+          Check the branch name or switch to an existing branch.
+        </>
+      );
+
     case 'fetch_error':
       return `Failed to fetch (${apiUrl})`;
 
