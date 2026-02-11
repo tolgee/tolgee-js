@@ -35,4 +35,14 @@ describe('getTranslateProps', () => {
     });
     expect(result).toEqual(testParams);
   });
+
+  it('manages null key', () => {
+    const result = getTranslateProps(null as any);
+    expect(result).toEqual({ key: null });
+  });
+
+  it('manages undefined key', () => {
+    const result = getTranslateProps(undefined as any);
+    expect(result).toStrictEqual({ key: undefined });
+  });
 });

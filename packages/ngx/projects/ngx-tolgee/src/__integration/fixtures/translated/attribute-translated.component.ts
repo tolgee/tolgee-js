@@ -33,6 +33,8 @@ import { TDirective } from '../../../lib/t.directive';
     ></div>
     <div t key="hello_world" language="en" data-testid="with_value_props"></div>
     <div t [key]="key()" data-testid="with_changing_key"></div>
+    <div t [key]="undefined" data-testid="undefined_key"></div>
+    <div t [key]="null" data-testid="null_key"></div>
   `,
   imports: [TDirective],
 })
