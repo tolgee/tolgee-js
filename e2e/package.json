@@ -24,6 +24,6 @@
   },
   "dependencies": {
     "cypress-real-events": "^1.13.0",
-    "eslint": "^8.57.0"
+    "eslint": "^10.0.0"
   }
 }
