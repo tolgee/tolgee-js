@@ -1,6 +1,7 @@
 export default {
   en: {
     hello_world: 'Hello world!',
+    mouse: 'mouse',
     peter_dogs: 'Peter has {dogsCount} dogs.',
     english_fallback: 'English fallback',
     with_tags: 'This <b>text <i>is</i> formatted</b>',
@@ -12,6 +13,7 @@ export default {
   },
   cs: {
     hello_world: 'Ahoj světe!',
+    mouse: 'myš',
     peter_dogs: 'Petr má {dogsCount} psů.',
     with_tags: 'Tento <b>text <i>je</i> formátovaný</b>',
     with_tag: '<b>bold</b>',

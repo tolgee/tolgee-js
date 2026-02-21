@@ -10,7 +10,13 @@
     </app-navbar>
 
     <header>
-      <img src="/assets/img/appLogo.svg" />
+      <img
+        ngSrc="/assets/img/appLogo.svg"
+        priority
+        height="33"
+        width="76"
+        [alt]="'app-title' | translate"
+      />
       <h1 class="header__title" t key="app-title"></h1>
     </header>
     <section class="items">
@@ -21,23 +27,35 @@
           [ngModelOptions]="{ standalone: true }"
         />
         <button type="submit" [disabled]="!newItemValue" class="button">
-          <img src="/assets/img/iconAdd.svg" />
+          <img ngSrc="/assets/img/iconAdd.svg" height="20" width="20" alt="" />
           {{ 'add-item-add-button' | translate }}
         </button>
       </form>
       <div class="items__list">
-        <div class="item" *ngFor="let item of items; let i = index">
-          <div class="item__text">{{ item }}</div>
-          <button (click)="onDelete(i)" t key="delete-item-button"></button>
-        </div>
+        @for (item of items; track item; let i = $index) {
+          <div class="item">
+            <div class="item__text">{{ item }}</div>
+            <button (click)="onDelete(i)" t key="delete-item-button"></button>
+          </div>
+        }
       </div>
       <div class="items__buttons">
         <button class="button" (click)="onAction('share')">
-          <img src="/assets/img/iconShare.svg" />
+          <img
+            ngSrc="/assets/img/iconShare.svg"
+            height="20"
+            width="20"
+            [alt]="'share-button' | translate"
+          />
           {{ 'share-button' | translate }}
         </button>
         <button class="button button--secondary" (click)="onAction('email')">
-          <img src="/assets/img/iconMail.svg" />
+          <img
+            ngSrc="/assets/img/iconMail.svg"
+            height="20"
+            width="20"
+            [alt]="'send-via-email' | translate"
+          />
           {{ 'send-via-email' | translate }}
         </button>
       </div>

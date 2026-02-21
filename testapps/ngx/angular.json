@@ -19,14 +19,18 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular/build:application",
           "options": {
-            "outputPath": "dist/sampleapp/browser",
+            "outputPath": "dist/sampleapp",
             "index": "projects/sampleapp/src/index.html",
-            "main": "projects/sampleapp/src/main.ts",
-            "polyfills": "projects/sampleapp/src/polyfills.ts",
+            "browser": "projects/sampleapp/src/main.ts",
+            "server": "projects/sampleapp/src/main.server.ts",
+            "prerender": {
+              "discoverRoutes": false,
+              "routesFile": "projects/sampleapp/routes.txt"
+            },
+            "polyfills": ["zone.js"],
             "tsConfig": "projects/sampleapp/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "projects/sampleapp/src/favicon.ico",
               "projects/sampleapp/src/assets"
@@ -46,11 +50,9 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
+              "sourceMap": true,
+              "namedChunks": true,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -65,9 +67,7 @@
               ]
             },
             "stage": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -79,12 +79,12 @@
               ]
             },
             "e2e": {
-              "buildOptimizer": false,
               "optimization": false,
-              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
+              "server": false,
+              "prerender": false,
               "fileReplacements": [
                 {
                   "replace": "projects/sampleapp/src/environments/environment.ts",
@@ -95,124 +95,21 @@
           }
         },
         "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
+          "builder": "@angular/build:dev-server",
           "options": {
-            "browserTarget": "sampleapp:build"
+            "buildTarget": "sampleapp:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sampleapp:build:production"
+              "buildTarget": "sampleapp:build:production"
             },
             "stage": {
-              "browserTarget": "sampleapp:build:stage"
+              "buildTarget": "sampleapp:build:stage"
             },
             "e2e": {
-              "browserTarget": "sampleapp:build:e2e"
+              "buildTarget": "sampleapp:build:e2e"
             }
           }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "sampleapp:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/sampleapp/src/test.ts",
-            "polyfills": "projects/sampleapp/src/polyfills.ts",
-            "tsConfig": "projects/sampleapp/tsconfig.spec.json",
-            "karmaConfig": "projects/sampleapp/karma.conf.js",
-            "assets": [
-              "projects/sampleapp/src/favicon.ico",
-              "projects/sampleapp/src/assets"
-            ],
-            "styles": [
-              "projects/sampleapp/src/styles.scss"
-            ],
-            "scripts": []
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/sampleapp/tsconfig.app.json",
-              "projects/sampleapp/tsconfig.spec.json",
-              "projects/sampleapp/e2e/tsconfig.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "dist/sampleapp/server",
-            "main": "projects/sampleapp/server.ts",
-            "tsConfig": "projects/sampleapp/tsconfig.server.json"
-          },
-          "configurations": {
-            "production": {
-              "outputHashing": "media",
-              "fileReplacements": [
-                {
-                  "replace": "projects/sampleapp/src/environments/environment.ts",
-                  "with": "projects/sampleapp/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "sourceMap": false,
-              "extractLicenses": true,
-              "buildOptimizer": true
-            },
-            "stage": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/sampleapp/src/environments/environment.ts",
-                  "with": "projects/sampleapp/src/environments/environment.stage.ts"
-                }
-              ],
-              "optimization": false,
-              "sourceMap": true,
-              "extractLicenses": false,
-              "buildOptimizer": false
-            },
-            "e2e": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/sampleapp/src/environments/environment.ts",
-                  "with": "projects/sampleapp/src/environments/environment.e2e.ts"
-                }
-              ],
-              "optimization": false,
-              "sourceMap": true,
-              "extractLicenses": false,
-              "buildOptimizer": false
-            }
-          },
-          "defaultConfiguration": "production"
-        },
-        "prerender": {
-          "builder": "@angular-devkit/build-angular:prerender",
-          "options": {
-            "routes": [
-              "/"
-            ]
-          },
-          "configurations": {
-            "stage": {
-              "browserTarget": "sampleapp:build:stage",
-              "serverTarget": "sampleapp:server:stage"
-            },
-            "development": {
-              "browserTarget": "sampleapp:build:development",
-              "serverTarget": "sampleapp:server:development"
-            }
-          },
-          "defaultConfiguration": "production"
         }
       }
     }
