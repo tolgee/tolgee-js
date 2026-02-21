@@ -8,18 +8,18 @@
   "types": "./types/index.d.ts",
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "production": {
         "import": "./dist/tolgee-web.production.esm.js",
         "require": "./dist/tolgee-web.production.umd.cjs"
       },
       "import": "./dist/tolgee-web.development.esm.js",
-      "require": "./index.cjs",
-      "types": "./types/index.d.ts"
+      "require": "./index.cjs"
     },
     "./tools": {
+      "types": "./types/tools.d.ts",
       "import": "./dist/tolgee-in-context-tools.esm.js",
-      "require": "./dist/tolgee-in-context-tools.umd.cjs",
-      "types": "./types/tools.d.ts"
+      "require": "./dist/tolgee-in-context-tools.umd.cjs"
     },
     "./package.json": "./package.json"
   },
