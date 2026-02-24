@@ -105,12 +105,12 @@ export const config: Config = {
         dev: {
           command: 'npm run startE2e -- --port 8116',
           cwd: path.resolve(__dirname, '../../testapps/ngx/'),
-          waitForOutput: 'Compiled successfully.',
+          waitForOutput: /localhost:8116/,
         },
         prod: {
           command: 'npm run serve -- -p 8115',
           cwd: path.resolve(__dirname, '../../testapps/ngx/'),
-          waitForOutput: 'Accepting connections at',
+          waitForOutput: /localhost:8115/,
         },
       },
     },
