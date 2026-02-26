@@ -27,8 +27,8 @@ function createBaseRunCommand(commandName) {
 }
 
 function addIntegrationCommands(command: Command, commandName) {
+  command.option('--skip-build', 'skip build:e2e step', false);
   Object.entries(config.tests).forEach(([integration, integrationConfig]) => {
-    command.option('--skip-build', 'skip build:e2e step', false);
     command.command(integration).action(async () => {
       let code = 0;
       try {
@@ -41,12 +41,10 @@ function addIntegrationCommands(command: Command, commandName) {
         code = await runCypress(commandName, integration, opts.headed);
       } catch (e) {
         log('error', e);
-        await servicesRunner?.exit();
-        process.exit(1);
-      } finally {
-        await servicesRunner?.exit();
-        process.exit(code);
+        code = 1;
       }
+      await servicesRunner?.exit();
+      process.exit(code);
     });
   });
 }
