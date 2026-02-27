@@ -81,6 +81,13 @@
   "dependencies": {
     "ts-jest": "^29.0.3"
   },
+  "pnpm": {
+    "overrides": {
+      "@emotion/utils": "^1.4.0",
+      "i18next": "^23.16.0",
+      "@types/react": "^18.3.18"
+    }
+  },
   "release": {
     "plugins": [
       "@semantic-release/commit-analyzer",
