@@ -85,7 +85,7 @@
     "overrides": {
       "@emotion/utils": "^1.4.0",
       "i18next": "^23.16.0",
-      "@types/react": "^18.3.18"
+      "@types/react": "18.3.18"
     }
   },
   "release": {
