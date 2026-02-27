@@ -5,8 +5,10 @@ import { Scope } from './types';
 export const openUI = (translation = 'What To Pack') => {
   cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
-  getEditor().should('not.be.disabled');
-  cy.wait(300);
+  getDevUi()
+    .find('.MuiDialog-container', { timeout: 10000 })
+    .should('be.visible');
+  getEditor().should('be.visible').and('not.be.disabled');
 };
 
 export const visitWithApiKey = (

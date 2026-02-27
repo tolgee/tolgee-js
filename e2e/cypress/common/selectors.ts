@@ -1,7 +1,10 @@
 import { getDevUi } from './devUiTools';
 
-export const getByAriaLabel = (label: string) => {
-  return getDevUi().find(`*[aria-label="${label}"]`);
+export const getByAriaLabel = (
+  label: string,
+  options?: Parameters<typeof cy.get>[1]
+) => {
+  return getDevUi().find(`*[aria-label="${label}"]`, options);
 };
 
 export const gcyWithCustom = (
