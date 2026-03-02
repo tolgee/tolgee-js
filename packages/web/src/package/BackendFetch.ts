@@ -29,7 +29,7 @@ const fetchWithTimeout = (
     }
     if (ms !== undefined) {
       const timeout = setTimeout(rejectWithTimout, ms);
-      promise.finally(() => clearTimeout(timeout));
+      promise.finally(() => clearTimeout(timeout)).catch(() => {});
     }
     promise.catch(reject).then(resolve);
   });
