@@ -123,6 +123,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       },
     });
 
+    const canModifyProtectedBranch = (
+      scopesLoadable.data?.scopes as string[] | undefined
+    )?.includes('branch.protected-modify');
+
     const icuPlaceholders = scopesLoadable.data?.project?.icuPlaceholders;
     const pluralsSupported = icuPlaceholders !== undefined;
 
@@ -251,6 +255,31 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         });
       }
     }
+
+    const branchLoadable = useApiQuery({
+      url: '/v2/projects/branches/find',
+      method: 'get',
+      query: {
+        name: branchParam,
+      },
+      options: {
+        retry: false,
+      },
+    });
+
+    useEffect(() => {
+      if (
+        branchLoadable.data?.isProtected &&
+        scopesLoadable.data &&
+        !canModifyProtectedBranch
+      ) {
+        setReadOnly(true);
+      }
+    }, [
+      branchLoadable.data?.isProtected,
+      scopesLoadable.data,
+      canModifyProtectedBranch,
+    ]);
 
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
     const isPlural =
