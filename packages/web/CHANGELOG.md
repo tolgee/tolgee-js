@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.3.1](https://github.com/tolgee/tolgee-js/compare/v6.3.0...v6.3.1) (2026-03-02)
+
+
+### Bug Fixes
+
+* suppress unhandled rejection in BackendFetch plugin ([#3508](https://github.com/tolgee/tolgee-js/issues/3508)) ([9337965](https://github.com/tolgee/tolgee-js/commit/93379658e8351e776b057050d6d7a822d0867ef4)), closes [#3505](https://github.com/tolgee/tolgee-js/issues/3505)
+
+
+
+
+
 # [6.3.0](https://github.com/tolgee/tolgee-js/compare/v6.2.7...v6.3.0) (2026-02-11)
 
 
