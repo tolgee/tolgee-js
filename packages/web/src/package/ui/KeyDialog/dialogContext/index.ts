@@ -232,11 +232,21 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       const languages =
         languagesData ?? languagesLoadable.data?._embedded?.languages;
 
-      if (!data || !languages) {
+      if (!data) {
+        return undefined;
+      }
+
+      if (!languages) {
+        _setTranslationsForm({
+          ...data,
+        });
         return undefined;
       }
 
       const baseLang = languages.find((l) => l.base);
+      if (!baseLang?.tag) {
+        return undefined;
+      }
       const baseLangIncluded = selectedLanguages.includes(baseLang.tag);
       const baseValueEmpty = isTranslationEmpty(
         data?.[baseLang.tag]?.value,
