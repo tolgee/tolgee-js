@@ -27,6 +27,7 @@ context('Branching', () => {
   let branchId: number | undefined;
 
   before(() => {
+    login();
     setFeature('BRANCHING', true);
     setProjectBranching(1, true);
   });
