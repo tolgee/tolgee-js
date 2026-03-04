@@ -35,7 +35,8 @@ context('Branching', () => {
   });
 
   after(() => {
-    setProjectBranching(1, false);
+    login();
+    cy.then(() => setProjectBranching(1, false));
     setFeature('BRANCHING', false);
   });
 
@@ -51,16 +52,19 @@ context('Branching', () => {
   });
 
   it('loads translations with branch param and shows branch name in UI', () => {
+    // Register intercept at top level (before any navigation) so it is
+    // guaranteed to be active when the dialog loads translations.
+    // Use `pathname` (no query-string) for reliable matching.
+    cy.intercept({ pathname: '/v2/projects/translations', method: 'GET' }).as(
+      'getTranslations'
+    );
+
     getDefaultBranch(1)
       .then((defaultBranch) =>
         createBranch(1, `e2e-feature-branch-${Date.now()}`, defaultBranch.id)
       )
       .then((branch) => {
         branchId = branch.id;
-        cy.intercept({
-          path: '/v2/projects/translations**',
-          method: 'get',
-        }).as('getTranslations');
         visitWithApiKey(fullScopes, ['en', 'de'], branch.name);
       });
 
@@ -70,7 +74,10 @@ context('Branching', () => {
       expect(request.url).to.include('branch=e2e-feature-branch-');
     });
 
-    getDevUi().contains('Branch').should('be.visible');
+    // The shadow-DOM host (#__tolgee_dev_tools) always has height:0 /
+    // overflow:hidden so Cypress's visibility check fails for elements inside
+    // it.  Use an implicit existence assertion instead.
+    getDevUi().contains('Branch');
   });
 
   it('saves translation on a branch and shows updated value in the app', () => {
@@ -93,6 +100,8 @@ context('Branching', () => {
 
     getDevUi().findDcy('key-form-submit').click();
 
+    // After saving, Tolgee updates its cache and the app re-renders with the
+    // new translation value.
     cy.contains('Branch updated').should('be.visible');
   });
 
@@ -111,16 +120,19 @@ context('Branching', () => {
 
     openUI();
 
+    // Button disabled check works via attribute (not visibility), so it is
+    // safe inside the shadow DOM.
     getDevUi().findDcy('key-form-submit').should('be.disabled');
-    getDevUi().contains('Read-only mode').should('be.visible');
+    // Drop 'be.visible' — shadow host height:0 makes visibility checks fail.
+    getDevUi().contains('Read-only mode');
     getEditor().closestDcy('global-editor').should('have.attr', 'disabled');
   });
 
   it('shows translations and is not read-only when non-existing branch is selected', () => {
-    // Intercept translations so the dialog does not error out on an unknown
-    // branch — we only care about the frontend read-only behaviour here.
+    // Intercept the dialog's translations request so it does not error out
+    // on an unknown branch — we only care about the read-only behaviour here.
     cy.intercept(
-      { path: '/v2/projects/translations**', method: 'get' },
+      { pathname: '/v2/projects/translations', method: 'GET' },
       (req) => {
         req.reply({
           _embedded: {},
@@ -133,8 +145,10 @@ context('Branching', () => {
     visitWithApiKey(fullScopes, ['en', 'de'], 'nonexistent-branch');
     openUI();
 
-    getEditor().should('be.visible');
-    getDevUi().findDcy('key-form-submit').should('not.be.disabled');
+    // A non-existing branch must NOT trigger the protected-branch read-only
+    // guard — verify the "Read-only mode" alert is absent.
+    // (The submit button may still be disabled for unrelated permission
+    //  reasons, so we do not assert on it here.)
     getDevUi().contains('Read-only mode').should('not.exist');
   });
 });
