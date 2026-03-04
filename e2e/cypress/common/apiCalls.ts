@@ -19,6 +19,26 @@ const v2apiFetch = (
   });
 };
 
+const internalFetch = (
+  input: string,
+  init?: ArgumentTypes<typeof cy.request>[0]
+) => {
+  return cy.request({
+    url: API_URL + '/internal/' + input,
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    ...init,
+  });
+};
+
+export const setFeature = (feature: string, enabled: boolean) => {
+  internalFetch(`features/toggle?feature=${feature}&enabled=${enabled}`, {
+    method: 'put',
+    failOnStatusCode: false,
+  });
+};
+
 export const login = (username = USERNAME, password = PASSWORD) => {
   return cy
     .request({

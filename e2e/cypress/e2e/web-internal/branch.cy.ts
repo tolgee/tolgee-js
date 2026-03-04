@@ -4,6 +4,7 @@ import {
   deleteBranch,
   getDefaultBranch,
   setBranchProtected,
+  setFeature,
 } from '../../common/apiCalls';
 import {
   openUI,
@@ -23,6 +24,14 @@ const fullScopes: Scope[] = [
 
 context('Branching', () => {
   let branchId: number | undefined;
+
+  before(() => {
+    setFeature('BRANCHING', true);
+  });
+
+  after(() => {
+    setFeature('BRANCHING', false);
+  });
 
   beforeEach(() => {
     login();
