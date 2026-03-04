@@ -54,10 +54,13 @@ context('Branching', () => {
   it('loads translations with branch param and shows branch name in UI', () => {
     // Register intercept at top level (before any navigation) so it is
     // guaranteed to be active when the dialog loads translations.
-    // Use `pathname` (no query-string) for reliable matching.
-    cy.intercept({ pathname: '/v2/projects/translations', method: 'GET' }).as(
-      'getTranslations'
-    );
+    // The client.ts SDK injects the project ID into the URL
+    // (/projects/ → /projects/{id}/), so the actual path is
+    // /v2/projects/1/translations — use a wildcard for the project-ID segment.
+    cy.intercept({
+      pathname: '/v2/projects/*/translations',
+      method: 'GET',
+    }).as('getTranslations');
 
     getDefaultBranch(1)
       .then((defaultBranch) =>
