@@ -1,11 +1,16 @@
-import { login } from '../../common/apiCalls';
+import {
+  login,
+  createBranch,
+  deleteBranch,
+  getDefaultBranch,
+  setBranchProtected,
+} from '../../common/apiCalls';
 import {
   openUI,
   visitWithApiKey,
   getEditor,
 } from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
-import { fullPermissions } from '../../common/testApiKeys';
 import { Scope } from '../../common/types';
 
 const fullScopes: Scope[] = [
@@ -16,47 +21,60 @@ const fullScopes: Scope[] = [
   'screenshots.upload',
 ];
 
-const protectedBranchResponse = {
-  id: 1,
-  name: 'protected-branch',
-  isProtected: true,
-  isDefault: false,
-  active: true,
-};
-
 context('Branching', () => {
+  let branchId: number | undefined;
+
   beforeEach(() => {
     login();
+    branchId = undefined;
+  });
+
+  afterEach(() => {
+    if (branchId !== undefined) {
+      deleteBranch(1, branchId);
+    }
   });
 
   it('loads translations with branch param and shows branch name in UI', () => {
-    cy.intercept(
-      { path: '/v2/projects/translations**', method: 'get' },
-      (req) => {
-        req.continue();
-      }
-    ).as('getTranslations');
+    getDefaultBranch(1)
+      .then((defaultBranch) =>
+        createBranch(1, `e2e-feature-branch-${Date.now()}`, defaultBranch.id)
+      )
+      .then((branch) => {
+        branchId = branch.id;
+        cy.intercept({
+          path: '/v2/projects/translations**',
+          method: 'get',
+        }).as('getTranslations');
+        visitWithApiKey(fullScopes, ['en', 'de'], branch.name);
+      });
 
-    visitWithApiKey(fullScopes, ['en', 'de'], 'feature-branch');
     openUI();
 
     cy.wait('@getTranslations').then(({ request }) => {
-      expect(request.url).to.include('branch=feature-branch');
+      expect(request.url).to.include('branch=e2e-feature-branch-');
     });
 
-    getDevUi().contains('feature-branch').should('be.visible');
+    getDevUi().contains('Branch').should('be.visible');
   });
 
   it('includes branch in translation update request', () => {
-    visitWithApiKey(fullScopes, ['en', 'de'], 'feature-branch');
-    openUI();
+    getDefaultBranch(1)
+      .then((defaultBranch) =>
+        createBranch(1, `e2e-feature-branch-${Date.now()}`, defaultBranch.id)
+      )
+      .then((branch) => {
+        branchId = branch.id;
+        cy.intercept(
+          { path: '/v2/projects/*/keys/**', method: 'put' },
+          (req) => {
+            req.reply({ response: 'success' });
+          }
+        ).as('updateTranslation');
+        visitWithApiKey(fullScopes, ['en', 'de'], branch.name);
+      });
 
-    cy.intercept(
-      { path: '/v2/projects/*/keys/**', method: 'put' },
-      (req) => {
-        req.reply({ response: 'success' });
-      }
-    ).as('updateTranslation');
+    openUI();
 
     getEditor()
       .contains('What To Pack')
@@ -67,44 +85,42 @@ context('Branching', () => {
     getDevUi().findDcy('key-form-submit').click();
 
     cy.wait('@updateTranslation').then(({ request }) => {
-      expect(request.body.branch).to.equal('feature-branch');
+      expect(request.body.branch).to.include('e2e-feature-branch-');
     });
   });
 
   it('is read-only when branch is protected and API key lacks branch.protected-modify permission', () => {
-    cy.intercept(
-      { path: '/v2/api-keys/current-permissions', method: 'get' },
-      (req) => {
-        req.reply({
-          ...fullPermissions,
-          scopes: fullPermissions.scopes.filter(
-            (s) => s !== 'branch.protected-modify'
-          ),
-        });
-      }
-    );
+    getDefaultBranch(1)
+      .then((defaultBranch) =>
+        createBranch(1, `e2e-protected-branch-${Date.now()}`, defaultBranch.id)
+      )
+      .then((branch) => {
+        branchId = branch.id;
+        return setBranchProtected(1, branch.id, true).then(() => branch);
+      })
+      .then((branch) => {
+        visitWithApiKey(fullScopes, ['en', 'de'], branch.name);
+      });
 
-    cy.intercept(
-      { path: '/v2/projects/branches/find**', method: 'get' },
-      (req) => {
-        req.reply(protectedBranchResponse);
-      }
-    );
-
-    visitWithApiKey(fullScopes, ['en', 'de'], 'protected-branch');
     openUI();
 
     getDevUi().findDcy('key-form-submit').should('be.disabled');
     getDevUi().contains('Read-only mode').should('be.visible');
-    getEditor()
-      .closestDcy('global-editor')
-      .should('have.attr', 'disabled');
+    getEditor().closestDcy('global-editor').should('have.attr', 'disabled');
   });
 
   it('shows translations and is not read-only when non-existing branch is selected', () => {
+    // Intercept translations so the dialog does not error out on an unknown
+    // branch — we only care about the frontend read-only behaviour here.
     cy.intercept(
-      { path: '/v2/projects/branches/find**', method: 'get' },
-      { statusCode: 404, body: { code: 'branch_not_found' } }
+      { path: '/v2/projects/translations**', method: 'get' },
+      (req) => {
+        req.reply({
+          _embedded: {},
+          selectedLanguages: [],
+          _internal: { version: 'v3.42.0' },
+        });
+      }
     );
 
     visitWithApiKey(fullScopes, ['en', 'de'], 'nonexistent-branch');

@@ -43,6 +43,37 @@ export const createApiKey = (body: { projectId: number; scopes: Scope[] }) =>
     (r) => r.body
   ) as any as Promise<any>;
 
+export const getDefaultBranch = (projectId: number) =>
+  v2apiFetch(`projects/${projectId}/branches/find`).then(
+    (r) => r.body
+  ) as any as Promise<any>;
+
+export const createBranch = (
+  projectId: number,
+  name: string,
+  originBranchId: number
+) =>
+  v2apiFetch(`projects/${projectId}/branches`, {
+    method: 'POST',
+    body: { name, originBranchId },
+  }).then((r) => r.body) as any as Promise<any>;
+
+export const deleteBranch = (projectId: number, branchId: number) =>
+  v2apiFetch(`projects/${projectId}/branches/${branchId}`, {
+    method: 'DELETE',
+    failOnStatusCode: false,
+  });
+
+export const setBranchProtected = (
+  projectId: number,
+  branchId: number,
+  isProtected: boolean
+) =>
+  v2apiFetch(`projects/${projectId}/branches/${branchId}/protected`, {
+    method: 'POST',
+    body: { isProtected },
+  }).then((r) => r.body) as any as Promise<any>;
+
 export const getScreenshots = (projectId: number, keyId: number) =>
   v2apiFetch(`projects/${projectId}/keys/${keyId}/screenshots`).then(
     (r) => r.body
