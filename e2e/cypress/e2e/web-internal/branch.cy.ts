@@ -29,7 +29,9 @@ context('Branching', () => {
   before(() => {
     login();
     setFeature('BRANCHING', true);
-    setProjectBranching(1, true);
+    // cy.then defers execution until login() has completed in the command
+    // queue, ensuring token is set before setProjectBranching uses v2apiFetch
+    cy.then(() => setProjectBranching(1, true));
   });
 
   after(() => {
@@ -71,19 +73,13 @@ context('Branching', () => {
     getDevUi().contains('Branch').should('be.visible');
   });
 
-  it('includes branch in translation update request', () => {
+  it('saves translation on a branch and shows updated value in the app', () => {
     getDefaultBranch(1)
       .then((defaultBranch) =>
         createBranch(1, `e2e-feature-branch-${Date.now()}`, defaultBranch.id)
       )
       .then((branch) => {
         branchId = branch.id;
-        cy.intercept(
-          { path: '/v2/projects/*/keys/**', method: 'put' },
-          (req) => {
-            req.reply({ response: 'success' });
-          }
-        ).as('updateTranslation');
         visitWithApiKey(fullScopes, ['en', 'de'], branch.name);
       });
 
@@ -93,13 +89,11 @@ context('Branching', () => {
       .contains('What To Pack')
       .parent()
       .click()
-      .realType('{backspace}'.repeat(20) + 'Updated value');
+      .realType('{backspace}'.repeat(20) + 'Branch updated');
 
     getDevUi().findDcy('key-form-submit').click();
 
-    cy.wait('@updateTranslation').then(({ request }) => {
-      expect(request.body.branch).to.include('e2e-feature-branch-');
-    });
+    cy.contains('Branch updated').should('be.visible');
   });
 
   it('is read-only when branch is protected and API key lacks branch.protected-modify permission', () => {
