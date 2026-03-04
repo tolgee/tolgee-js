@@ -228,7 +228,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         translationData ??
         (translationsLoadable.isSuccess ? undefined : translationsForm);
       const languages =
-        languagesData ?? languagesLoadable.data._embedded.languages;
+        languagesData ?? languagesLoadable.data?._embedded?.languages;
 
       if (!data || !languages) {
         return undefined;
