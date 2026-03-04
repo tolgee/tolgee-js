@@ -39,6 +39,23 @@ export const setFeature = (feature: string, enabled: boolean) => {
   });
 };
 
+export const setProjectBranching = (projectId: number, enabled: boolean) => {
+  v2apiFetch(`projects/${projectId}`).then((r) => {
+    const project = r.body;
+    v2apiFetch(`projects/${projectId}`, {
+      method: 'PUT',
+      body: {
+        name: project.name,
+        icuPlaceholders: project.icuPlaceholders,
+        suggestionsMode: project.suggestionsMode,
+        translationProtection: project.translationProtection,
+        useNamespaces: project.useNamespaces,
+        useBranching: enabled,
+      },
+    });
+  });
+};
+
 export const login = (username = USERNAME, password = PASSWORD) => {
   return cy
     .request({

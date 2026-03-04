@@ -5,6 +5,7 @@ import {
   getDefaultBranch,
   setBranchProtected,
   setFeature,
+  setProjectBranching,
 } from '../../common/apiCalls';
 import {
   openUI,
@@ -27,9 +28,11 @@ context('Branching', () => {
 
   before(() => {
     setFeature('BRANCHING', true);
+    setProjectBranching(1, true);
   });
 
   after(() => {
+    setProjectBranching(1, false);
     setFeature('BRANCHING', false);
   });
 
