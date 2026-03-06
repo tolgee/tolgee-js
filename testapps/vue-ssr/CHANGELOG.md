@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.4.0](https://github.com/tolgee/tolgee-js/compare/v6.3.1...v6.4.0) (2026-03-06)
+
+
+### Features
+
+* implement branching support ([#3495](https://github.com/tolgee/tolgee-js/issues/3495)) ([5432835](https://github.com/tolgee/tolgee-js/commit/5432835d1d29c93aee8fde4c732dec6f52c8fb93))
+
+
+
+
+
 ## [6.3.1](https://github.com/tolgee/tolgee-js/compare/v6.3.0...v6.3.1) (2026-03-02)
 
 **Note:** Version bump only for package @tolgee/vue-ssr-testapp
