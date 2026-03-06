@@ -14,6 +14,14 @@ type Props = {
 export const createConfig = ({ entry, rollupOptions }: Props) =>
   defineConfig({
     clearScreen: false,
+    resolve: {
+      dedupe: [
+        '@codemirror/state',
+        '@codemirror/view',
+        '@codemirror/language',
+        '@codemirror/lint',
+      ],
+    },
     build: {
       target: 'es2017',
       emptyOutDir: false,

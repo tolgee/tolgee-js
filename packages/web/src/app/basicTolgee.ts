@@ -10,9 +10,9 @@ export const secrets = {
   apiKey: import.meta.env.VITE_APP_TOLGEE_API_KEY,
 };
 
-const apiKeyFromUrl = new URLSearchParams(window.location.search).get(
-  'api_key'
-);
+const urlParams = new URLSearchParams(window.location.search);
+const apiKeyFromUrl = urlParams.get('api_key');
+const branchFromUrl = urlParams.get('branch') || undefined;
 
 export const tolgee = Tolgee()
   .use(DevTools())
@@ -23,6 +23,7 @@ export const tolgee = Tolgee()
     apiKey: apiKeyFromUrl || secrets.apiKey,
     availableLanguages: ALL_LOCALES,
     defaultLanguage: 'en',
+    branch: branchFromUrl,
   });
 
 export const useTolgee = (events?: TolgeeEvent[]): TolgeeInstance => {

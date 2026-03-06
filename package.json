@@ -15,7 +15,7 @@
     "eslint": "eslint --ext .ts --ext .tsx --max-warnings 0 .",
     "dev:web": "turbo run dev --parallel --cache-dir='.turbo' --filter=@tolgee/web",
     "develop": "turbo run develop --parallel --cache-dir='.turbo'",
-    "develop:web": "npm run develop -- --filter=@tolgee/web-testapp...",
+    "develop:web": "npm run develop -- --filter=@tolgee/vanilla-testapp...",
     "develop:react": "npm run develop -- --filter=@tolgee/react-testapp...",
     "develop:vue": "npm run develop -- --filter=@tolgee/vue-testapp...",
     "develop:svelte": "npm run develop -- --filter=@tolgee/svelte-testapp...",
@@ -80,6 +80,13 @@
   "packageManager": "pnpm@8.15.9+sha512.499434c9d8fdd1a2794ebf4552b3b25c0a633abcee5bb15e7b5de90f32f47b513aca98cd5cfd001c31f0db454bc3804edccd578501e4ca293a6816166bbd9f81",
   "dependencies": {
     "ts-jest": "^29.0.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "@emotion/utils": "^1.4.0",
+      "i18next": "^23.16.0",
+      "@types/react": "18.3.18"
+    }
   },
   "release": {
     "plugins": [

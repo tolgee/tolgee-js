@@ -191,6 +191,7 @@ export function Plugins(
         apiKey,
         apiUrl,
         projectId,
+        branch,
         observerOptions,
         tagNewKeys,
         filterTag,
@@ -199,6 +200,7 @@ export function Plugins(
         apiKey: apiKey!,
         apiUrl: apiUrl!,
         projectId,
+        branch,
         highlight: self.highlight,
         changeTranslation,
         findPositions,
@@ -266,7 +268,8 @@ export function Plugins(
     }) as BackendGetRecordInternal,
 
     getBackendDevRecord: (async ({ language, namespace }) => {
-      const { apiKey, apiUrl, projectId, filterTag } = getInitialOptions();
+      const { apiKey, apiUrl, projectId, branch, filterTag } =
+        getInitialOptions();
 
       if (!apiKey || !apiUrl || !self.hasDevBackend()) {
         return undefined;
@@ -276,6 +279,7 @@ export function Plugins(
         apiKey,
         apiUrl,
         projectId,
+        branch,
         language,
         namespace,
         filterTag,

@@ -9,10 +9,18 @@ export const openUI = (translation = 'What To Pack') => {
   cy.wait(300);
 };
 
-export const visitWithApiKey = (scopes: Scope[], languages = ['en', 'de']) => {
+export const visitWithApiKey = (
+  scopes: Scope[],
+  languages = ['en', 'de'],
+  branch?: string
+) => {
   createApiKey({ projectId: 1, scopes })
     .then((data) => {
-      cy.visit(`http://localhost:8114/translation-methods?api_key=${data.key}`);
+      const params = new URLSearchParams({ api_key: data.key });
+      if (branch) params.set('branch', branch);
+      cy.visit(
+        `http://localhost:8114/translation-methods?${params.toString()}`
+      );
     })
     .then(() =>
       localStorage.setItem(
