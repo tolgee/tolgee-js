@@ -135,7 +135,7 @@ context('Branching', () => {
     // Intercept the dialog's translations request so it does not error out
     // on an unknown branch — we only care about the read-only behaviour here.
     cy.intercept(
-      { pathname: '/v2/projects/translations', method: 'GET' },
+      { pathname: '/v2/projects/*/translations', method: 'GET' },
       (req) => {
         req.reply({
           _embedded: {},

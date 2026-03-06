@@ -40,9 +40,9 @@ export const setFeature = (feature: string, enabled: boolean) => {
 };
 
 export const setProjectBranching = (projectId: number, enabled: boolean) => {
-  v2apiFetch(`projects/${projectId}`).then((r) => {
+  return v2apiFetch(`projects/${projectId}`).then((r) => {
     const project = r.body;
-    v2apiFetch(`projects/${projectId}`, {
+    return v2apiFetch(`projects/${projectId}`, {
       method: 'PUT',
       body: {
         name: project.name,

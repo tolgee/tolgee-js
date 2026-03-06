@@ -123,9 +123,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       },
     });
 
-    const canModifyProtectedBranch = (
-      scopesLoadable.data?.scopes as string[] | undefined
-    )?.includes('branch.protected-modify');
+    const canModifyProtectedBranch = scopesLoadable.data?.scopes?.includes(
+      'branch.protected-modify'
+    );
 
     const icuPlaceholders = scopesLoadable.data?.project?.icuPlaceholders;
     const pluralsSupported = icuPlaceholders !== undefined;
@@ -256,6 +256,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       }
     }
 
+    // When branchParam is undefined, fetches default branch info
     const branchLoadable = useApiQuery({
       url: '/v2/projects/branches/find',
       method: 'get',
@@ -270,16 +271,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     useEffect(() => {
       if (
         branchLoadable.data?.isProtected &&
-        scopesLoadable.data &&
-        !canModifyProtectedBranch
+        canModifyProtectedBranch === false
       ) {
         setReadOnly(true);
       }
-    }, [
-      branchLoadable.data?.isProtected,
-      scopesLoadable.data,
-      canModifyProtectedBranch,
-    ]);
+    }, [branchLoadable.data?.isProtected, canModifyProtectedBranch]);
 
     const keyData = translationsLoadable.data?._embedded?.keys?.[0];
     const isPlural =
@@ -430,8 +426,9 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
           e.code === 'operation_not_permitted_in_read_only_mode'
         ) {
           setReadOnly(true);
+        } else {
+          setSubmitError(e);
         }
-        setSubmitError(e);
       } finally {
         setSaving(false);
         setSuccess(false);
