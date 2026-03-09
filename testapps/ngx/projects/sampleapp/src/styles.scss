@@ -29,10 +29,9 @@
 
 body {
   margin: 0;
-  padding: 0;
+  padding: 0 0 40px;
   position: relative;
   min-height: 100vh;
-  padding-bottom: 40px;
   color: white;
 }
 
@@ -89,7 +88,7 @@ button img {
   display: flex;
   align-items: center;
   padding: 8px 12px;
-  margin: 16px 0px;
+  margin: 16px 0;
   font-size: 16px;
 }
 
@@ -102,16 +101,16 @@ button img {
   display: flex;
   align-items: center;
   padding: 8px 18px 8px 12px;
-  margin: 16px 0px;
+  margin: 16px 0;
   font-size: 16px;
-  background: transparent;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   cursor: pointer;
   width: 110px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-  background-repeat: no-repeat;
+  background: #344762
+    url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6L8 10L12 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    no-repeat;
   background-position-x: calc(100% - 8px);
   background-position-y: 9px;
 }
@@ -165,8 +164,8 @@ header h1 {
 
 .item {
   display: flex;
-  padding: 10px 0px;
-  margin: 0px 10px;
+  padding: 10px 0;
+  margin: 0 10px;
   color: black;
   border-bottom: 1px solid white;
 }

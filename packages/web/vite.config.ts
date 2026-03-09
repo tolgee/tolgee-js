@@ -19,7 +19,10 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
         '@codemirror/state',
         '@codemirror/view',
         '@codemirror/language',
+        '@codemirror/commands',
+        '@codemirror/search',
         '@codemirror/lint',
+        '@codemirror/autocomplete',
       ],
     },
     build: {

@@ -12,18 +12,20 @@
     "importHelpers": true,
     "target": "ES2022",
     "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2018",
-      "dom"
+      "ES2020",
+      "DOM"
     ],
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true,
-    "enableIvy": "ngtsc"
+    "strictInputAccessModifiers": true,
+    "strictInjectionParameters": true
   }
 }

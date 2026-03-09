@@ -28,6 +28,7 @@ export const ServicesRunner = ({
 
   const runServices = () =>
     new Promise<void>((resolve, reject) => {
+      const timeoutHandles: NodeJS.Timeout[] = [];
       function shouldPrint(service: string) {
         return (
           stdOutServicesArray.includes(service) ||
@@ -36,6 +37,7 @@ export const ServicesRunner = ({
       }
 
       const serviceMonitor = ServiceMonitor(servicesToRun, () => {
+        timeoutHandles.forEach((handle) => clearTimeout(handle));
         resolve();
       });
 
@@ -81,14 +83,15 @@ export const ServicesRunner = ({
       });
 
       Object.entries(runners).forEach(([serviceName, runner]) => {
-        setTimeout(
+        const timeoutHandle = setTimeout(
           () => {
             if (!serviceMonitor.isRunning(serviceName)) {
-              throw Error(`Service ${serviceName} timed out...`);
+              reject(Error(`Service ${serviceName} timed out...`));
             }
           },
           runner.config.timeout || 3 * 60 * 1000
         );
+        timeoutHandles.push(timeoutHandle);
         runner
           .run()
           .then(() => {
@@ -103,9 +106,7 @@ export const ServicesRunner = ({
       return runServices();
     },
     async exit() {
-      return Promise.all([
-        Object.values(runners).forEach((runner) => runner.exit()),
-      ]);
+      return Promise.all(Object.values(runners).map((runner) => runner.exit()));
     },
   };
 };
