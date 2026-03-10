@@ -11,6 +11,7 @@ import { NsSelect } from './NsSelect';
 import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
+import { CharLimitInput } from './CharLimitInput';
 import { ErrorAlert } from './ErrorAlert';
 import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
@@ -106,6 +107,7 @@ export const KeyForm = () => {
   const selectedNs = useDialogContext((c) => c.selectedNs);
   const permissions = useDialogContext((c) => c.permissions);
   const filterTagMissing = useDialogContext((c) => c.filterTagMissing);
+  const isOverCharLimit = useDialogContext((c) => c.isOverCharLimit);
   const branch = useDialogContext((c) => c.uiProps.branch);
 
   const screenshotsView = permissions.canViewScreenshots;
@@ -193,6 +195,7 @@ export const KeyForm = () => {
         </ScTagsWrapper>
       )}
       {ready && viewPluralCheckbox && <PluralFormCheckbox />}
+      {ready && <CharLimitInput />}
       {!error && (
         <ScFieldsWrapper>
           <TranslationFields />
@@ -220,7 +223,9 @@ export const KeyForm = () => {
         </Button>
         <LoadingButton
           loading={saving}
-          disabled={saving || formDisabled || filterTagMissing}
+          disabled={
+            saving || formDisabled || filterTagMissing || isOverCharLimit
+          }
           onClick={onSave}
           color="primary"
           variant="contained"
