@@ -32,7 +32,6 @@ context('UI with plurals', () => {
       permissions: fullPermissions,
       inForm() {
         getDevUi().findDcy('key-plural-checkbox').should('be.visible').click();
-        getDevUi().findDcy('key-plural-checkbox-expand').click();
         getDevUi()
           .findDcy('key-plural-variable-name')
           .find('input')
