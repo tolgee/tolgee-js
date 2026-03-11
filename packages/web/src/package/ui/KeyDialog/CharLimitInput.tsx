@@ -36,7 +36,7 @@ export const CharLimitInput = () => {
           label={
             <Box display="inline-flex" alignItems="center" gap="4px">
               Character limit
-              <Tooltip title="Placeholders, HTML tags, and # are not counted toward the character limit">
+              <Tooltip title="Placeholders and HTML tags are not counted to the character limit">
                 <Box component="span" display="inline-flex">
                   <HelpOutline style={{ width: 15, height: 15 }} />
                 </Box>
