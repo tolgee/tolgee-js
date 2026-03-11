@@ -1,4 +1,4 @@
-import { IconButton, Button, styled, useTheme, Link } from '@mui/material';
+import { IconButton, Box, Button, styled, useTheme, Link } from '@mui/material';
 import { OpenInNew } from '@mui/icons-material';
 
 import { TranslationFields } from './TranslationFields';
@@ -194,8 +194,12 @@ export const KeyForm = () => {
           {filterTagMissing && <FilterTagMissingInfo />}
         </ScTagsWrapper>
       )}
-      {ready && viewPluralCheckbox && <PluralFormCheckbox />}
-      {ready && <CharLimitInput />}
+      {ready && (
+        <Box display="flex" gap={4} alignItems="flex-start">
+          {viewPluralCheckbox && <PluralFormCheckbox />}
+          <CharLimitInput />
+        </Box>
+      )}
       {!error && (
         <ScFieldsWrapper>
           <TranslationFields />

@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { ExpandLess, ExpandMore, HelpOutline } from '@mui/icons-material';
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  TextField,
-} from '@mui/material';
+import { HelpOutline } from '@mui/icons-material';
+import { Box, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 import { useDialogActions, useDialogContext } from './dialogContext';
 import { Tooltip } from '../common/Tooltip';
@@ -19,8 +13,6 @@ export const CharLimitInput = () => {
   const [enabled, setEnabled] = useState(
     maxCharLimit != null && maxCharLimit > 0
   );
-  const [_expanded, setExpanded] = useState(enabled);
-  const expanded = _expanded && enabled;
 
   return (
     <Box display="grid">
@@ -36,7 +28,6 @@ export const CharLimitInput = () => {
                   setMaxCharLimit(undefined);
                 } else {
                   setEnabled(true);
-                  setExpanded(true);
                 }
               }}
               size="small"
@@ -44,7 +35,7 @@ export const CharLimitInput = () => {
           }
           label={
             <Box display="inline-flex" alignItems="center" gap="4px">
-              Limit of characters
+              Character limit
               <Tooltip title="Placeholders, HTML tags, and # are not counted toward the character limit">
                 <Box component="span" display="inline-flex">
                   <HelpOutline style={{ width: 15, height: 15 }} />
@@ -53,25 +44,11 @@ export const CharLimitInput = () => {
             </Box>
           }
         />
-        <IconButton
-          size="small"
-          onClick={() => setExpanded((val) => !val)}
-          disabled={!enabled}
-          data-cy="key-char-limit-expand"
-        >
-          {expanded ? (
-            <ExpandLess fontSize="small" />
-          ) : (
-            <ExpandMore fontSize="small" />
-          )}
-        </IconButton>
       </Box>
 
-      {expanded && (
+      {enabled && (
         <Box display="grid">
-          <ScFieldTitle style={{ marginTop: 4 }}>
-            Max characters (placeholders excluded)
-          </ScFieldTitle>
+          <ScFieldTitle style={{ marginTop: 4 }}>Maximum</ScFieldTitle>
           <TextField
             value={maxCharLimit || ''}
             onChange={(e) => {
