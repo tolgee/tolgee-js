@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1-prerelease.43dd4fa5.0](https://github.com/tolgee/tolgee-js/compare/v6.4.0...v6.4.1-prerelease.43dd4fa5.0) (2026-03-11)
+
+
+### Bug Fixes
+
+* upgrade Jest to v29 to resolve jsdom environment compatibility ([6038f22](https://github.com/tolgee/tolgee-js/commit/6038f22d7feeafba2ca7215682d5b13bccfbd9a1))
+
+
+
+
+
 # [6.4.0](https://github.com/tolgee/tolgee-js/compare/v6.3.1...v6.4.0) (2026-03-06)
 
 **Note:** Version bump only for package @tolgee/vue

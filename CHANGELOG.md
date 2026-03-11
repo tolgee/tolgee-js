@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1-prerelease.43dd4fa5.0](https://github.com/tolgee/tolgee-js/compare/v6.4.0...v6.4.1-prerelease.43dd4fa5.0) (2026-03-11)
+
+
+### Bug Fixes
+
+* **core:** accept `null` keys for translation ([a4a2ca1](https://github.com/tolgee/tolgee-js/commit/a4a2ca1d78c92ce22317b1d61fe8afb2ad10122e)), closes [#3476](https://github.com/tolgee/tolgee-js/issues/3476)
+* e2e runner ([1a8065d](https://github.com/tolgee/tolgee-js/commit/1a8065d413277f6083cf1e7389aea4b8d5a653d5))
+* e2e screenshots ([9ac0dfd](https://github.com/tolgee/tolgee-js/commit/9ac0dfd8e0430ba612b3e6c6d36eb821c141bb07))
+* upgrade Jest to v29 to resolve jsdom environment compatibility ([6038f22](https://github.com/tolgee/tolgee-js/commit/6038f22d7feeafba2ca7215682d5b13bccfbd9a1))
+* **web:** defaults init ([da889cc](https://github.com/tolgee/tolgee-js/commit/da889ccd2fdd5b6846c9cb64f8dc7e1b56cd5b17))
+* **web:** vite code mirror packages ([560dd29](https://github.com/tolgee/tolgee-js/commit/560dd29ffe9cfe854c4d023f525cc4b7e56aadb0))
+
+
+
+
+
 # [6.4.0](https://github.com/tolgee/tolgee-js/compare/v6.3.1...v6.4.0) (2026-03-06)
 
 

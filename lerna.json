@@ -1,6 +1,6 @@
 {
   "npmClient": "pnpm",
-  "version": "6.4.0",
+  "version": "6.4.1-prerelease.43dd4fa5.0",
   "command": {
     "publish": {
       "conventionalCommits": true

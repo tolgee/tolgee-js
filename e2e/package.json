@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/e2e",
-  "version": "1.0.0-alpha.8",
+  "version": "6.4.1-prerelease.43dd4fa5.0",
   "private": true,
   "description": "e2e tests for tolgee server & webapp",
   "scripts": {

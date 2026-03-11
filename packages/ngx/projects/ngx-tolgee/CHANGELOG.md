@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [6.4.1-prerelease.43dd4fa5.0](https://github.com/tolgee/tolgee-js/compare/v6.4.0...v6.4.1-prerelease.43dd4fa5.0) (2026-03-11)
+
+
+### Bug Fixes
+
+* **core:** accept `null` keys for translation ([a4a2ca1](https://github.com/tolgee/tolgee-js/commit/a4a2ca1d78c92ce22317b1d61fe8afb2ad10122e)), closes [#3476](https://github.com/tolgee/tolgee-js/issues/3476)
+
+
+
+
+
 # [6.4.0](https://github.com/tolgee/tolgee-js/compare/v6.3.1...v6.4.0) (2026-03-06)
 
 **Note:** Version bump only for package @tolgee/ngx
