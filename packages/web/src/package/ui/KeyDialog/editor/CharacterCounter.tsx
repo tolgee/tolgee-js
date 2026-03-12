@@ -26,7 +26,6 @@ export const CharacterCounter = ({ currentCount, maxLimit }: Props) => {
   if (maxLimit == null || maxLimit <= 0) return null;
 
   const over = currentCount > maxLimit;
-  const atLimit = currentCount === maxLimit;
 
   return (
     <ScContainer>
@@ -36,8 +35,7 @@ export const CharacterCounter = ({ currentCount, maxLimit }: Props) => {
           {currentCount - maxLimit !== 1 ? 's' : ''}
         </ScWarning>
       )}
-      {atLimit && <ScWarning>Limit reached</ScWarning>}
-      <ScCount over={over || atLimit}>
+      <ScCount over={over}>
         {currentCount}/{maxLimit}
       </ScCount>
     </ScContainer>
