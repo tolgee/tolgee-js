@@ -1,4 +1,17 @@
-import { IconButton, Box, Button, styled, useTheme, Link } from '@mui/material';
+import { useState } from 'react';
+import {
+  IconButton,
+  Box,
+  Button,
+  styled,
+  useTheme,
+  Link,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from '@mui/material';
 import { OpenInNew } from '@mui/icons-material';
 
 import { TranslationFields } from './TranslationFields';
@@ -8,7 +21,7 @@ import { ScreenshotGallery } from './ScreenshotGallery/ScreenshotGallery';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext, useDialogActions } from './dialogContext';
 import { NsSelect } from './NsSelect';
-import { TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
+import { DEVTOOLS_Z_INDEX, TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
 import { CharLimitInput } from './CharLimitInput';
@@ -110,11 +123,29 @@ export const KeyForm = () => {
   const isOverCharLimit = useDialogContext((c) => c.isOverCharLimit);
   const branch = useDialogContext((c) => c.uiProps.branch);
 
+  const [showCharLimitConfirmation, setShowCharLimitConfirmation] =
+    useState(false);
+
   const screenshotsView = permissions.canViewScreenshots;
   const viewPluralCheckbox = permissions.canEditPlural && pluralsSupported;
   const ready = !loading && !error;
 
   const generalError = error || submitError;
+
+  const isExistingKey = keyData?.keyId !== undefined;
+
+  const handleSaveClick = () => {
+    if (isOverCharLimit && isExistingKey) {
+      setShowCharLimitConfirmation(true);
+    } else {
+      onSave();
+    }
+  };
+
+  const handleConfirmSave = () => {
+    setShowCharLimitConfirmation(false);
+    onSave();
+  };
 
   return (
     <ScContainer {...{ [TOLGEE_RESTRICT_ATTRIBUTE]: 'true' }}>
@@ -228,9 +259,12 @@ export const KeyForm = () => {
         <LoadingButton
           loading={saving}
           disabled={
-            saving || formDisabled || filterTagMissing || isOverCharLimit
+            saving ||
+            formDisabled ||
+            filterTagMissing ||
+            (isOverCharLimit && !isExistingKey)
           }
-          onClick={onSave}
+          onClick={handleSaveClick}
           color="primary"
           variant="contained"
           style={{ marginLeft: '10px' }}
@@ -243,6 +277,40 @@ export const KeyForm = () => {
               : 'Update'}
         </LoadingButton>
       </ScControls>
+      {showCharLimitConfirmation && (
+        <Dialog
+          open
+          disablePortal
+          disableEnforceFocus
+          style={{ zIndex: DEVTOOLS_Z_INDEX }}
+          onClose={() => setShowCharLimitConfirmation(false)}
+        >
+          <DialogTitle>Translation length is exceeded</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Character limit for translation is exceeded. Are you sure you want
+              to save it?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setShowCharLimitConfirmation(false)}
+              color="secondary"
+              data-cy="char-limit-confirmation-cancel"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmSave}
+              color="primary"
+              variant="contained"
+              data-cy="char-limit-confirmation-save"
+            >
+              Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </ScContainer>
   );
 };
