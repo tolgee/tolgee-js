@@ -24,7 +24,7 @@ import { NsSelect } from './NsSelect';
 import { DEVTOOLS_Z_INDEX, TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
-import { CharLimitInput } from './CharLimitInput';
+import { CharLimitCheckbox } from './CharLimitCheckbox';
 import { ErrorAlert } from './ErrorAlert';
 import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
@@ -228,7 +228,7 @@ export const KeyForm = () => {
       {ready && (
         <Box display="flex" gap={4} alignItems="flex-start">
           {viewPluralCheckbox && <PluralFormCheckbox />}
-          <CharLimitInput />
+          <CharLimitCheckbox />
         </Box>
       )}
       {!error && (
