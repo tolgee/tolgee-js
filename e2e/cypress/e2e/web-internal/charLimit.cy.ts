@@ -22,7 +22,7 @@ context('Character limit', () => {
           .should('be.visible')
           .find('input')
           .clear()
-          .type('50');
+          .realType('50');
       },
       checkRequest(data) {
         expect(data.maxCharLimit).to.eq(50);
@@ -72,7 +72,11 @@ context('Character limit', () => {
     ]);
     openUI();
     getDevUi().findDcy('key-char-limit-checkbox').click();
-    getDevUi().findDcy('key-char-limit-input').find('input').clear().type('5');
+    getDevUi()
+      .findDcy('key-char-limit-input')
+      .find('input')
+      .clear()
+      .realType('5');
 
     // "What To Pack" is 12 chars, limit is 5 — should show counter and warning
     getDevUi().contains('12/5').should('be.visible');
@@ -80,10 +84,20 @@ context('Character limit', () => {
   });
 
   it('disables save button when over limit on new key', () => {
-    cy.visit('http://localhost:8114/translation-methods');
-    openUI('non-existant');
+    visitWithApiKey([
+      'translations.view',
+      'keys.edit',
+      'translations.edit',
+      'screenshots.view',
+      'screenshots.upload',
+    ]);
+    openUI('2 items');
     getDevUi().findDcy('key-char-limit-checkbox').click();
-    getDevUi().findDcy('key-char-limit-input').find('input').clear().type('2');
+    getDevUi()
+      .findDcy('key-char-limit-input')
+      .find('input')
+      .clear()
+      .realType('2');
 
     getDevUi()
       .findDcyWithCustom({ value: 'translation-editor', language: 'en' })
@@ -105,7 +119,11 @@ context('Character limit', () => {
     ]);
     openUI();
     getDevUi().findDcy('key-char-limit-checkbox').click();
-    getDevUi().findDcy('key-char-limit-input').find('input').clear().type('5');
+    getDevUi()
+      .findDcy('key-char-limit-input')
+      .find('input')
+      .clear()
+      .realType('5');
 
     // existing key with over-limit translation — save should show confirmation
     getDevUi().findDcy('key-form-submit').should('not.be.disabled');
@@ -124,7 +142,11 @@ context('Character limit', () => {
     ]);
     openUI();
     getDevUi().findDcy('key-char-limit-checkbox').click();
-    getDevUi().findDcy('key-char-limit-input').find('input').clear().type('5');
+    getDevUi()
+      .findDcy('key-char-limit-input')
+      .find('input')
+      .clear()
+      .realType('5');
 
     getDevUi().findDcy('key-form-submit').click();
     getDevUi().findDcy('char-limit-confirmation-cancel').click();
@@ -148,7 +170,11 @@ context('Character limit', () => {
     }).as('updateKey');
 
     getDevUi().findDcy('key-char-limit-checkbox').click();
-    getDevUi().findDcy('key-char-limit-input').find('input').clear().type('5');
+    getDevUi()
+      .findDcy('key-char-limit-input')
+      .find('input')
+      .clear()
+      .realType('5');
 
     getDevUi().findDcy('key-form-submit').click();
     getDevUi().findDcy('char-limit-confirmation-save').click();
