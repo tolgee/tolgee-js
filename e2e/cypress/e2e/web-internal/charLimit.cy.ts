@@ -86,6 +86,7 @@ context('Character limit', () => {
   it('disables save button when over limit on new key', () => {
     visitWithApiKey([
       'translations.view',
+      'keys.create',
       'keys.edit',
       'translations.edit',
       'screenshots.view',
@@ -125,6 +126,8 @@ context('Character limit', () => {
       .clear()
       .realType('5');
 
+    // wait for char limit to be applied — counter should appear
+    getDevUi().contains('12/5').should('be.visible');
     // existing key with over-limit translation — save should show confirmation
     getDevUi().findDcy('key-form-submit').should('not.be.disabled');
     getDevUi().findDcy('key-form-submit').click();
@@ -148,6 +151,7 @@ context('Character limit', () => {
       .clear()
       .realType('5');
 
+    getDevUi().contains('12/5').should('be.visible');
     getDevUi().findDcy('key-form-submit').click();
     getDevUi().findDcy('char-limit-confirmation-cancel').click();
     // dialog should close, form still visible
@@ -176,6 +180,7 @@ context('Character limit', () => {
       .clear()
       .realType('5');
 
+    getDevUi().contains('12/5').should('be.visible');
     getDevUi().findDcy('key-form-submit').click();
     getDevUi().findDcy('char-limit-confirmation-save').click();
 
