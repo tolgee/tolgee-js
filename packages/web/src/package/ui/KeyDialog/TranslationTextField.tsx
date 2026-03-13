@@ -77,7 +77,7 @@ export const TranslationTextField = ({
   const normalized = state === 'UNTRANSLATED' ? undefined : state;
   const fallbackedState = isTranslationEmpty(value, !notPlural)
     ? 'UNTRANSLATED'
-    : (normalized ?? 'TRANSLATED');
+    : normalized ?? 'TRANSLATED';
   const [mode, setMode] = useState<'placeholders' | 'syntax'>('placeholders');
   return (
     <>
