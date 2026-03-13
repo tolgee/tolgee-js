@@ -103,6 +103,7 @@ context('Character limit', () => {
     getDevUi()
       .findDcyWithCustom({ value: 'translation-editor', language: 'en' })
       .find('.cm-content')
+      .first()
       .click()
       .clear()
       .realType('This is too long');
