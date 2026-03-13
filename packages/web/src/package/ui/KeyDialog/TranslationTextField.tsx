@@ -77,7 +77,7 @@ export const TranslationTextField = ({
   const normalized = state === 'UNTRANSLATED' ? undefined : state;
   const fallbackedState = isTranslationEmpty(value, !notPlural)
     ? 'UNTRANSLATED'
-    : normalized ?? 'TRANSLATED';
+    : (normalized ?? 'TRANSLATED');
   const [mode, setMode] = useState<'placeholders' | 'syntax'>('placeholders');
   return (
     <>
@@ -127,10 +127,10 @@ export const TranslationTextField = ({
       </StyledContainer>
       {notPlural && (
         <CharacterCounter
-          currentCount={getVisibleCharCount(
-            value?.variants?.other ?? '',
-            false
-          )}
+          currentCount={getVisibleCharCount({
+            text: value?.variants?.other ?? '',
+            nested: false,
+          })}
           maxLimit={keyMaxCharLimit}
         />
       )}

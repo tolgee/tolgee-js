@@ -532,7 +532,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         if (!variants) return false;
         return Object.entries(variants).some(
           ([variant, text]) =>
-            getVisibleCharCount(text, variant !== 'other') > charLimit
+            getVisibleCharCount({ text, nested: variant !== 'other' }) >
+            charLimit
         );
       });
     }, [translationsForm, charLimit]);
