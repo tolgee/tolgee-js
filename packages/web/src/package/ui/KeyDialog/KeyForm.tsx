@@ -228,7 +228,7 @@ export const KeyForm = () => {
       {ready && (
         <Box display="flex" gap={4} alignItems="flex-start">
           {viewPluralCheckbox && <PluralFormCheckbox />}
-          <CharLimitCheckbox />
+          {permissions.canEditCharLimit && <CharLimitCheckbox />}
         </Box>
       )}
       {!error && (
