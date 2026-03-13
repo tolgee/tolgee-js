@@ -7,6 +7,7 @@ import {
   tolgeeFormatGenerateIcu,
 } from '@tginternal/editor';
 
+import { getVisibleCharCount } from '../editor/getVisibleCharCount';
 import { sleep } from '../../tools/sleep';
 import { createProvider } from '../../tools/createProvider';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
@@ -85,6 +86,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [tags, setTags] = useState<string[] | undefined>(undefined);
     const [_isPlural, setIsPlural] = useState<boolean>();
     const [_pluralArgName, setPluralArgName] = useState<string>();
+    const [_maxCharLimit, setMaxCharLimit] = useState<number | undefined>();
     const [submitError, setSubmitError] = useState<HttpError>();
     const [readOnly, setReadOnly] = useState(false);
     const branchParam = props.uiProps.branch;
@@ -372,6 +374,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   relatedKeysInOrder,
                   isPlural,
                   pluralArgName,
+                  maxCharLimit: maxCharLimit ?? null,
                 },
               },
             })
@@ -392,6 +395,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                   relatedKeysInOrder,
                   isPlural,
                   pluralArgName,
+                  maxCharLimit: maxCharLimit ?? 0,
                 },
               },
               path: { id: keyData.keyId! },
@@ -518,6 +522,22 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       updateKey.error ||
       galleryError;
 
+    const maxCharLimit =
+      _maxCharLimit !== undefined ? _maxCharLimit : keyData?.keyMaxCharLimit;
+    const charLimit = maxCharLimit;
+    const isOverCharLimit = useMemo(() => {
+      if (charLimit == null || charLimit <= 0) return false;
+      return Object.values(translationsForm).some((entry) => {
+        const variants = entry.value?.variants;
+        if (!variants) return false;
+        return Object.entries(variants).some(
+          ([variant, text]) =>
+            getVisibleCharCount({ text, nested: variant !== 'other' }) >
+            charLimit
+        );
+      });
+    }, [translationsForm, charLimit]);
+
     const formDisabled = loading || !permissions.canSubmitForm || readOnly;
 
     const contextValue = {
@@ -543,6 +563,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       screenshotDetail,
       linkToPlatform,
       keyExists,
+      maxCharLimit,
       tags: tags || [],
       permissions,
       canTakeScreenshots,
@@ -553,6 +574,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       icuPlaceholders,
       submitError,
       filterTagMissing,
+      isOverCharLimit,
     } as const;
 
     const actions = {
@@ -571,6 +593,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       setTags,
       setIsPlural,
       setPluralArgName,
+      setMaxCharLimit,
     };
 
     return [contextValue, actions];

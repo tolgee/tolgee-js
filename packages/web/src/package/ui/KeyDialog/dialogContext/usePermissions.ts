@@ -25,6 +25,7 @@ export const getComputedPermissions = (
   const canEditStates = has('translations.state-edit') && keyCreationOk;
   const canEditTags = has('keys.edit') && keyCreationOk;
   const canEditPlural = has('keys.edit') && keyCreationOk;
+  const canEditCharLimit = has('keys.edit') && keyCreationOk;
   const canViewScreenshots = has('screenshots.view');
   const canUploadScreenshots = has('screenshots.upload') && keyCreationOk;
   const canDeleteScreenshots = has('screenshots.delete') && keyCreationOk;
@@ -75,6 +76,7 @@ export const getComputedPermissions = (
     canSubmitForm,
     canSendBigMeta,
     canEditPlural,
+    canEditCharLimit,
     canEditState,
     canEditTranslation,
   };
