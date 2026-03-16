@@ -7,6 +7,8 @@ import { components } from '../client/apiSchema.generated';
 import { TRANSLATION_STATES } from './State/translationStates';
 
 import { PluralEditor } from './editor/PluralEditor';
+import { CharacterCounter } from './editor/CharacterCounter';
+import { getVisibleCharCount } from './editor/getVisibleCharCount';
 import { ControlsEditorSmall } from './editor/ControlsEditorSmall';
 import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext } from './dialogContext';
@@ -70,6 +72,7 @@ export const TranslationTextField = ({
   const textFieldRef = useRef<HTMLDivElement>(null);
   const parameter = useDialogContext((c) => c.pluralArgName);
   const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
+  const keyMaxCharLimit = useDialogContext((c) => c.maxCharLimit);
   const notPlural = !parameter;
   const normalized = state === 'UNTRANSLATED' ? undefined : state;
   const fallbackedState = isTranslationEmpty(value, !notPlural)
@@ -119,8 +122,18 @@ export const TranslationTextField = ({
           onChange={onChange}
           locale={language?.tag || 'en'}
           editorProps={{ direction: 'ltr', disabled }}
+          maxCharLimit={keyMaxCharLimit}
         />
       </StyledContainer>
+      {notPlural && (
+        <CharacterCounter
+          currentCount={getVisibleCharCount({
+            text: value?.variants?.other ?? '',
+            nested: false,
+          })}
+          maxLimit={keyMaxCharLimit}
+        />
+      )}
     </>
   );
 };

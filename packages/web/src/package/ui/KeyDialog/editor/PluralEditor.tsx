@@ -6,6 +6,8 @@ import { EditorView } from '@codemirror/view';
 import { TranslationPlurals } from './TranslationPlurals';
 import { EditorWrapper } from './EditorWrapper';
 import { Editor, EditorProps } from './Editor';
+import { CharacterCounter } from './CharacterCounter';
+import { getVisibleCharCount } from './getVisibleCharCount';
 import { useDialogContext } from '../dialogContext';
 
 type Props = {
@@ -18,6 +20,7 @@ type Props = {
   autofocus?: boolean;
   activeEditorRef?: RefObject<EditorView | null>;
   mode: 'placeholders' | 'syntax' | 'plain';
+  maxCharLimit?: number;
 };
 
 export const PluralEditor = ({
@@ -30,6 +33,7 @@ export const PluralEditor = ({
   activeEditorRef,
   editorProps,
   mode,
+  maxCharLimit,
 }: Props) => {
   function handleChange(text: string, variant: string) {
     onChange?.({ ...value, variants: { ...value.variants, [variant]: text } });
@@ -49,28 +53,39 @@ export const PluralEditor = ({
       render={({ content, variant, exampleValue }) => {
         const variantOrOther = variant || 'other';
         return (
-          <EditorWrapper
-            data-cy="translation-editor"
-            data-cy-variant={variant}
-            data-cy-language={locale}
-          >
-            <Editor
-              mode={editorMode}
-              value={content}
-              onChange={(value) => handleChange(value, variantOrOther)}
-              onFocus={() => onActiveVariantChange?.(variantOrOther)}
-              direction={getLanguageDirection(locale)}
-              autofocus={variantOrOther === activeVariant ? autofocus : false}
-              minHeight={value.parameter ? 'unset' : '50px'}
-              locale={locale}
-              editorRef={
-                variantOrOther === activeVariant ? activeEditorRef : undefined
-              }
-              examplePluralNum={exampleValue}
-              nested={Boolean(variant)}
-              {...editorProps}
-            />
-          </EditorWrapper>
+          <>
+            <EditorWrapper
+              data-cy="translation-editor"
+              data-cy-variant={variant}
+              data-cy-language={locale}
+            >
+              <Editor
+                mode={editorMode}
+                value={content}
+                onChange={(value) => handleChange(value, variantOrOther)}
+                onFocus={() => onActiveVariantChange?.(variantOrOther)}
+                direction={getLanguageDirection(locale)}
+                autofocus={variantOrOther === activeVariant ? autofocus : false}
+                minHeight={value.parameter ? 'unset' : '50px'}
+                locale={locale}
+                editorRef={
+                  variantOrOther === activeVariant ? activeEditorRef : undefined
+                }
+                examplePluralNum={exampleValue}
+                nested={Boolean(variant)}
+                {...editorProps}
+              />
+            </EditorWrapper>
+            {value.parameter && (
+              <CharacterCounter
+                currentCount={getVisibleCharCount({
+                  text: content,
+                  nested: Boolean(variant),
+                })}
+                maxLimit={maxCharLimit}
+              />
+            )}
+          </>
         );
       }}
     />
