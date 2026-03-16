@@ -4,10 +4,12 @@ import { loadInContextLib } from './loadInContextLib';
 
 export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
 export const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
+export const BRANCH_LOCAL_STORAGE = '__tolgee_branch';
 
 function getCredentials() {
   const apiKey = sessionStorage.getItem(API_KEY_LOCAL_STORAGE) || undefined;
   const apiUrl = sessionStorage.getItem(API_URL_LOCAL_STORAGE) || undefined;
+  const branch = sessionStorage.getItem(BRANCH_LOCAL_STORAGE) || undefined;
 
   if (!apiKey || !apiUrl) {
     return undefined;
@@ -16,12 +18,14 @@ function getCredentials() {
   return {
     apiKey,
     apiUrl,
+    branch,
   };
 }
 
 function clearSessionStorage() {
   sessionStorage.removeItem(API_KEY_LOCAL_STORAGE);
   sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
+  sessionStorage.removeItem(BRANCH_LOCAL_STORAGE);
 }
 
 function onDocumentReady(callback: () => void) {
@@ -70,6 +74,7 @@ if (sessionStorageAvailable()) {
         config: {
           apiUrl: tolgee.getInitialOptions().apiUrl || '',
           apiKey: tolgee.getInitialOptions().apiKey || '',
+          branch: tolgee.getInitialOptions().branch,
         },
       }) as const;
 
