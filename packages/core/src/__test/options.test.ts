@@ -61,4 +61,35 @@ describe('initial options', () => {
 
     expect(tolgee.getInitialOptions().apiUrl).toEqual('http://localhost:8000');
   });
+
+  it('overrideCredentials with branch', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      apiKey: 'test',
+      branch: 'feature-x',
+    });
+
+    expect(tolgee.getInitialOptions().branch).toEqual('feature-x');
+  });
+
+  it('overrideCredentials branch overrides init branch', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+      branch: 'original',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      apiKey: 'test',
+      branch: 'override',
+    });
+
+    expect(tolgee.getInitialOptions().branch).toEqual('override');
+  });
 });
