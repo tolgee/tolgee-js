@@ -1,6 +1,7 @@
 const handshakerUpdate = jest.fn(() => Promise.resolve());
 const Handshaker = jest.fn(() => ({ update: handshakerUpdate }));
-const loadInContextLib = jest.fn(() => Promise.resolve(() => {}));
+const inContextToolsFactory = jest.fn(() => (tolgee: any) => tolgee);
+const loadInContextLib = jest.fn(() => Promise.resolve(inContextToolsFactory));
 
 jest.mock('../tools/extension', () => ({
   Handshaker,
@@ -88,6 +89,15 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
 
     expect(loadInContextLib).toBeCalledTimes(1);
+    expect(inContextToolsFactory).toBeCalledWith(
+      expect.objectContaining({
+        credentials: {
+          apiKey: 'test',
+          apiUrl: 'test',
+          branch: 'my-branch',
+        },
+      })
+    );
   });
 
   it('builded module is valid', async () => {
