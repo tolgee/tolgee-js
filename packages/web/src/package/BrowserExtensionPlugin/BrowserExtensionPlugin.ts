@@ -18,7 +18,7 @@ function getCredentials() {
   return {
     apiKey,
     apiUrl,
-    branch,
+    ...(branch !== undefined ? { branch } : {}),
   };
 }
 
