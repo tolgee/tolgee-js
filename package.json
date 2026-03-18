@@ -82,11 +82,7 @@
   "pnpm": {
     "overrides": {
       "jest": "^29.7.0",
-      "@jest/core": "^29.7.0"
-    }
-  },
-  "pnpm": {
-    "overrides": {
+      "@jest/core": "^29.7.0",
       "@emotion/utils": "^1.4.0",
       "i18next": "^23.16.0",
       "@types/react": "18.3.18"
