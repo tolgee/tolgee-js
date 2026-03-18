@@ -62,6 +62,20 @@ describe('T component integration', () => {
         <div data-testid="with_language_prop">
           <T keyName="hello_world" language="en" />
         </div>
+        <div data-testid="element_placeholder">
+          <T
+            keyName="element_placeholder"
+            params={{ name: <i>world</i> }}
+            defaultValue="Hello {name}"
+          />
+        </div>
+        <div data-testid="element_placeholder_self_closing">
+          <T
+            keyName="element_placeholder_self_closing"
+            params={{ icon: <br /> }}
+            defaultValue="Before{icon}After"
+          />
+        </div>
       </>
     );
   };
@@ -153,6 +167,18 @@ describe('T component integration', () => {
       '<b title="bold">bold</b>'
     );
     expect(screen.queryByTestId('with_tag')).toHaveAttribute('_tolgee');
+  });
+
+  it('interpolates react element with {placeholder} syntax', () => {
+    expect(screen.queryByTestId('element_placeholder')).toContainHTML(
+      'Hello <i>world</i>'
+    );
+  });
+
+  it('interpolates self-closing react element with {placeholder} syntax', () => {
+    expect(
+      screen.queryByTestId('element_placeholder_self_closing')
+    ).toContainHTML('Before<br />After');
   });
 
   it('works with language prop', () => {

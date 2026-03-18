@@ -40,15 +40,22 @@ export const wrapTagHandlers = (
   return result;
 };
 
+function unwrapFunctions(value: any): any {
+  if (typeof value === 'function') {
+    return value();
+  }
+  return value;
+}
+
 export const addReactKeys = (
   children: React.ReactNode | React.ReactNode[] | undefined
 ) => {
   const val = unwrapSingleElementArray(children);
   if (Array.isArray(val)) {
     return val.map((item, i) => (
-      <React.Fragment key={i}>{item}</React.Fragment>
+      <React.Fragment key={i}>{unwrapFunctions(item)}</React.Fragment>
     ));
   } else {
-    return val;
+    return unwrapFunctions(val);
   }
 };
