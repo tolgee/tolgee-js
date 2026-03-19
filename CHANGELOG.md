@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/tolgee/tolgee-js/compare/v6.5.0...v6.6.0) (2026-03-19)
+
+
+### Bug Fixes
+
+* update Tomcat readiness pattern to match new output format ([#3516](https://github.com/tolgee/tolgee-js/issues/3516)) ([5823e13](https://github.com/tolgee/tolgee-js/commit/5823e1381824db7f7309566937b3db07f4989833))
+
+
+### Features
+
+* add branch support to browser extension plugin ([#3513](https://github.com/tolgee/tolgee-js/issues/3513)) ([81e2164](https://github.com/tolgee/tolgee-js/commit/81e21648687dbb1e212337c68901dddfdcce6dec))
+* allow interpolating React elements with {placeholder} syntax ([#3512](https://github.com/tolgee/tolgee-js/issues/3512)) ([86d5339](https://github.com/tolgee/tolgee-js/commit/86d5339309ff02a002052ad87450e9f3db6462de)), closes [#3511](https://github.com/tolgee/tolgee-js/issues/3511)
+
+
+
+
+
 # [6.5.0](https://github.com/tolgee/tolgee-js/compare/v6.4.0...v6.5.0) (2026-03-16)
 
 

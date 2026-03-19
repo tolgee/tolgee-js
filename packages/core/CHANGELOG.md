@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [6.6.0](https://github.com/tolgee/tolgee-js/compare/v6.5.0...v6.6.0) (2026-03-19)
+
+
+### Features
+
+* add branch support to browser extension plugin ([#3513](https://github.com/tolgee/tolgee-js/issues/3513)) ([81e2164](https://github.com/tolgee/tolgee-js/commit/81e21648687dbb1e212337c68901dddfdcce6dec))
+
+
+
+
+
 # [6.5.0](https://github.com/tolgee/tolgee-js/compare/v6.4.0...v6.5.0) (2026-03-16)
 
 **Note:** Version bump only for package @tolgee/core
