@@ -102,6 +102,7 @@ export type LibConfig = {
   config: {
     apiUrl: string;
     apiKey: string;
+    branch?: string;
   };
 };
 

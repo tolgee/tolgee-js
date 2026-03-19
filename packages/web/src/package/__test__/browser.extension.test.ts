@@ -1,6 +1,7 @@
 const handshakerUpdate = jest.fn(() => Promise.resolve());
 const Handshaker = jest.fn(() => ({ update: handshakerUpdate }));
-const loadInContextLib = jest.fn(() => Promise.resolve(() => {}));
+const inContextToolsFactory = jest.fn(() => (tolgee: any) => tolgee);
+const loadInContextLib = jest.fn(() => Promise.resolve(inContextToolsFactory));
 
 jest.mock('../tools/extension', () => ({
   Handshaker,
@@ -21,6 +22,7 @@ import { BrowserExtensionPlugin } from '../typedIndex';
 import {
   API_KEY_LOCAL_STORAGE,
   API_URL_LOCAL_STORAGE,
+  BRANCH_LOCAL_STORAGE,
 } from '../BrowserExtensionPlugin/BrowserExtensionPlugin';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -28,6 +30,7 @@ import { join } from 'path';
 describe('compatibility with browser extension', () => {
   afterEach(() => {
     sessionStorage.clear();
+    jest.clearAllMocks();
   });
 
   it('sends correct data to extension', async () => {
@@ -39,11 +42,30 @@ describe('compatibility with browser extension', () => {
       config: {
         apiKey: '',
         apiUrl: 'test',
+        branch: undefined,
       },
       mode: 'production',
       uiPresent: true,
       uiVersion: undefined,
     });
+  });
+
+  it('sends branch from SDK config to extension', async () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'test',
+      branch: 'my-branch',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+    expect(handshakerUpdate).toBeCalledTimes(1);
+    expect(handshakerUpdate).toBeCalledWith(
+      expect.objectContaining({
+        config: expect.objectContaining({
+          branch: 'my-branch',
+        }),
+      })
+    );
   });
 
   it('loads in-context lib if session storage is set', async () => {
@@ -55,6 +77,27 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
 
     expect(loadInContextLib).toBeCalledTimes(1);
+  });
+
+  it('picks up branch from sessionStorage', async () => {
+    sessionStorage.setItem(API_KEY_LOCAL_STORAGE, 'test');
+    sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
+    sessionStorage.setItem(BRANCH_LOCAL_STORAGE, 'my-branch');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).toBeCalledTimes(1);
+    expect(inContextToolsFactory).toBeCalledWith(
+      expect.objectContaining({
+        credentials: {
+          apiKey: 'test',
+          apiUrl: 'test',
+          branch: 'my-branch',
+        },
+      })
+    );
   });
 
   it('builded module is valid', async () => {

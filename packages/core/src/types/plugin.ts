@@ -111,6 +111,7 @@ export type DevCredentials =
       apiUrl?: string;
       apiKey?: string;
       projectId?: string | number;
+      branch?: string;
     };
 export type WrapperMiddleware = {
   unwrap: WrapperUnwrapFunction;
