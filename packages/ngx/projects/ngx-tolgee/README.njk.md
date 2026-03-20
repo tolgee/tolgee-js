@@ -9,55 +9,95 @@ For more information about using Tolgee with Angular, visit the [docs 📖](http
 
 {{ macros.installation('ngx') }}
 
-Then use the library in your `app.module.ts`. You have to add `NgxTolgeeModule` to your imports section and
-add factory provider for `TOLGEE_INSTANCE` token returning your Tolgee instance.
+Then register Tolgee in your application config using `provideTolgee`.
 
 ```typescript
-...
-import {
-  DevTools,
-  NgxTolgeeModule,
-  Tolgee,
-  TOLGEE_INSTANCE,
-  FormatSimple
-} from '@tolgee/ngx';
-...
-@NgModule({
-  declarations: [
-    ...
-  ],
-  imports: [
-    NgxTolgeeModule,
-    ...
-  ],
+import { ApplicationConfig } from '@angular/core';
+import { provideTolgee, Tolgee, DevTools, TolgeeOptions } from '@tolgee/ngx';
+
+const tolgeeConfig: TolgeeOptions = {
+  availableLanguages: ['en', 'cs'],
+  defaultLanguage: 'en',
+  fallbackLanguage: 'en',
+
+  // for development
+  apiUrl: environment.tolgeeApiUrl,
+  apiKey: environment.tolgeeApiKey,
+
+  // for production
+  staticData: {
+    en: () => import('../i18n/en.json').then((m) => m.default),
+    cs: () => import('../i18n/cs.json').then((m) => m.default),
+  },
+};
+
+export const appConfig: ApplicationConfig = {
   providers: [
-    {
-      provide: TOLGEE_INSTANCE,
-      useFactory: () => {
-        return Tolgee()
-          .use(DevTools())
-          .use(FormatSimple())
-          .init({
-            language: 'en'
-
-            // for development
-            apiUrl: environment.tolgeeApiUrl,
-            apiKey: environment.tolgeeApiKey,
-
-            // for production
-            staticData: {
-              ...
-            }
-          });
-      },
-    },
+    provideTolgee(() => Tolgee().use(DevTools()).init(tolgeeConfig)),
   ],
-  bootstrap: [AppComponent],
-})
-export class AppModule {}
+};
 ```
 
 ## Usage
+In standalone components, import `TranslatePipe` and `TDirective` where you use them.
+
+```typescript
+{% raw %}
+import { Component } from '@angular/core';
+import { TDirective, TranslatePipe } from '@tolgee/ngx';
+
+@Component({
+  template: `
+    <h1>{{ 'hello_world' | translate }}</h1>
+    <h2 t key="providing_default_values"></h2>
+  `,
+  imports: [TranslatePipe, TDirective],
+})
+export class AppComponent {}
+{% endraw %}
+```
+
+Imperative translation and language switching are available via `TranslateService`.
+
+```typescript
+{% raw %}
+import { Component, inject } from '@angular/core';
+import { TranslateService } from '@tolgee/ngx';
+
+@Component({
+  template: `{{ currentLanguage }}`,
+})
+export class LanguageSwitcherComponent {
+  private readonly translateService = inject(TranslateService);
+
+  currentLanguage = this.translateService.language;
+
+  async switchToCzech() {
+    await this.translateService.changeLanguage('cs');
+    this.currentLanguage = this.translateService.language;
+  }
+}
+{% endraw %}
+```
+
+For lazy routes with namespaced translations, use `namespaceResolver` to load the namespace before the route renders.
+
+```typescript
+import { Routes } from '@angular/router';
+import { namespaceResolver } from '@tolgee/ngx';
+
+export const routes: Routes = [
+  {
+    path: 'lazy',
+    loadComponent: () => import('./lazy/lazy.component'),
+    data: { tolgeeNamespace: 'namespaced' },
+    resolve: {
+      _namespace: namespaceResolver,
+    },
+  },
+];
+```
+
 Translating using pipe:
 ```html
 <h1>{{'{{\'hello_world\' | translate}}'}}</h1>

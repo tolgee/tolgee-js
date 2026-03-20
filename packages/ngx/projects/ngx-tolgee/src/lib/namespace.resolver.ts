@@ -1,26 +1,15 @@
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ResolveFn } from '@angular/router';
 import { TranslateService } from './translate.service';
-import { Injectable } from '@angular/core';
+import { inject } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
-export class NamespaceResolver  {
-  constructor(public service: TranslateService) {}
-
-  async resolve(
-    route: ActivatedRouteSnapshot,
-  ): Promise<void> {
-    const ns = this.getNamespace(route);
-    await this.service.tolgee.addActiveNs(ns, true)
+export const namespaceResolver: ResolveFn<void> = async (route) => {
+  const service = inject(TranslateService);
+  const namespace = route?.data?.tolgeeNamespace;
+  if (namespace === undefined) {
+    console.warn(
+      `No namespace provided. Please add tolgeeNamespace to your route data.\nIf you really want to lazy load default namespace set tolgeeNamespace to empty string`
+    );
   }
 
-  private getNamespace(route: ActivatedRouteSnapshot) {
-    const namespace = route?.data?.tolgeeNamespace;
-    if (namespace === undefined) {
-      console.warn(
-        'No namespace provided. Please add tolgeeNamespace to your route data. \n' +
-          'If you really want to lazy load default namespace set tolgeeNamespace to empty string'
-      );
-    }
-    return namespace;
-  }
-}
+  await service.tolgee.addActiveNs(namespace, true);
+};

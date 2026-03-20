@@ -138,6 +138,10 @@ jobs:
       matrix:
         app: ${{ fromJson(needs.prepare.outputs.dirs) }}
         node: [18, 20]
+        exclude:
+          - app: ngx
+            # angular 20+ does not support node 18 anymore
+            node: 18
 
     steps:
       - uses: actions/checkout@v4

@@ -1,39 +1,36 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@tolgee/ngx';
-import { Subscription } from 'rxjs';
+import { NavbarComponent } from '../../component/navbar/navbar.component';
+import { RouterLink } from '@angular/router';
+import { TDirective, TranslatePipe } from '@tolgee/ngx';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-translation-methods',
   templateUrl: './translation-methods.component.html',
+  imports: [NavbarComponent, RouterLink, TDirective, TranslatePipe],
 })
-export class TranslationMethodsComponent implements OnInit, OnDestroy {
-  translatedWithoutParamsValue: string;
-  translatedWithDefaultValue: string;
-  translatedWithParamsValue: string;
+export class TranslationMethodsComponent {
+  private readonly translateService = inject(TranslateService);
 
-  translatedWithoutParamsValueSubscription: Subscription;
-  translatedWithDefaultValueSubscription: Subscription;
-  translatedWithParamsValueSubscription: Subscription;
+  translatedWithoutParamsValue = toSignal(
+    this.translateService.translate('this_is_a_key'),
+    { initialValue: '' }
+  );
 
-  constructor(private translateService: TranslateService) {}
+  translatedWithDefaultValue = toSignal(
+    this.translateService.translate(
+      'this_key_does_not_exist',
+      'This is default'
+    ),
+    { initialValue: '' }
+  );
 
-  ngOnInit(): void {
-    this.translatedWithoutParamsValueSubscription = this.translateService
-      .translate('this_is_a_key')
-      .subscribe((val) => (this.translatedWithoutParamsValue = val));
-
-    this.translatedWithDefaultValueSubscription = this.translateService
-      .translate('this_key_does_not_exist', 'This is default')
-      .subscribe((val) => (this.translatedWithDefaultValue = val));
-
-    this.translatedWithParamsValueSubscription = this.translateService
-      .translate('this_is_a_key_with_params', { key: 'value', key2: 'value2' })
-      .subscribe((val) => (this.translatedWithParamsValue = val));
-  }
-
-  ngOnDestroy(): void {
-    this.translatedWithoutParamsValueSubscription.unsubscribe();
-    this.translatedWithDefaultValueSubscription.unsubscribe();
-    this.translatedWithParamsValueSubscription.unsubscribe();
-  }
+  translatedWithParamsValue = toSignal(
+    this.translateService.translate('this_is_a_key_with_params', {
+      key: 'value',
+      key2: 'value2',
+    }),
+    { initialValue: '' }
+  );
 }

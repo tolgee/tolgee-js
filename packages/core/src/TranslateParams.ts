@@ -33,7 +33,7 @@ export const getTranslateProps: TFnType<any, TranslateProps<any>> = (
 ) => {
   let result = {} as TranslateProps<any>;
   let options: CombinedOptions<any> | undefined;
-  if (typeof keyOrProps === 'object') {
+  if (keyOrProps != null && typeof keyOrProps === 'object') {
     result = keyOrProps;
   } else {
     result.key = keyOrProps;
