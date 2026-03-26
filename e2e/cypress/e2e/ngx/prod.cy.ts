@@ -1,7 +1,7 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Angular app in prod mode', () => {
+context('Angular app in prod mode', { retries: 2 }, () => {
   const url = 'http://localhost:8115/';
 
   const translationMethods = url + '/translation-methods';

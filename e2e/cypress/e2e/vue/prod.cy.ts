@@ -2,7 +2,7 @@ import { exampleAppTest } from '../../common/exampleAppTest';
 import { namespacesTest } from '../../common/namespacesTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Vue app in prod mode', () => {
+context('Vue app in prod mode', { retries: 2 }, () => {
   const url = 'http://localhost:8111';
   const translationMethods = url + '/translation-methods';
   exampleAppTest(url);

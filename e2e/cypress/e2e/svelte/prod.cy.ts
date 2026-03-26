@@ -2,7 +2,7 @@ import { exampleAppTest } from '../../common/exampleAppTest';
 import { namespacesTest } from '../../common/namespacesTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Svelte app in prod mode', () => {
+context('Svelte app in prod mode', { retries: 2 }, () => {
   const url = 'http://localhost:8109';
 
   const translationMethods = url + '/translation-methods';

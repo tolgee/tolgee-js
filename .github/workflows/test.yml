@@ -201,7 +201,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress
+          name: cypress-${{ matrix.app }}-node${{ matrix.node }}
           path: |
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*
@@ -254,7 +254,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
-          name: cypress
+          name: cypress-web-internal-node${{ matrix.node }}
           path: |
             e2e/cypress/videos/**/*
             e2e/cypress/screenshots/**/*

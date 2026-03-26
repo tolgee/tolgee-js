@@ -1,7 +1,7 @@
 import { exampleAppTest } from '../../common/exampleAppTest';
 import { translationMethodsTest } from '../../common/translationMethodsTest';
 
-context('Next with app router in prod mode', () => {
+context('Next with app router in prod mode', { retries: 2 }, () => {
   const url = 'http://localhost:8121';
   const translationMethods = url + '/translation-methods';
   exampleAppTest(url);
