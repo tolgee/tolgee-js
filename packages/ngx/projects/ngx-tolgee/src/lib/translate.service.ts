@@ -1,14 +1,12 @@
 import { Injectable, OnDestroy, NgZone, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  CombinedOptions,
   DefaultParamType,
   EventType,
   getTranslateProps,
   ListenerEvent,
   TFnType,
   TolgeeInstance,
-  TranslateProps,
   TranslationKey,
 } from '@tolgee/web';
 import { TOLGEE_INSTANCE } from './tolgee-instance-token';
@@ -79,20 +77,14 @@ export class TranslateService implements OnDestroy {
     }
   }
 
-  translate(props: TranslateProps): Observable<string>;
-  translate(
-    key: TranslationKey,
-    options?: CombinedOptions<string>
-  ): Observable<string>;
-  translate(
-    key: TranslationKey,
-    defaultValue?: string,
-    options?: CombinedOptions<string>
-  ): Observable<string>;
   /**
    * Returns translation asynchronously, this method always returns
    */
-  translate(...args: any[]): Observable<string> {
+  public readonly translate: TFnType<
+    DefaultParamType,
+    Observable<string>,
+    TranslationKey
+  > = (...args: any[]) => {
     // @ts-ignore
     const params = getTranslateProps(...args);
     return new Observable<string>((subscriber) => {
@@ -115,14 +107,14 @@ export class TranslateService implements OnDestroy {
         subscription.unsubscribe();
       };
     });
-  }
+  };
 
   /**
    * Instantly returns a translated value. May return undefined or outdated value.
    * Use only when you cannot use translate pipe.
    */
   public readonly instant: TFnType<DefaultParamType, string, TranslationKey> = (
-    ...args
+    ...args: any[]
   ) => {
     // @ts-ignore
     const params = getTranslateProps(...args);

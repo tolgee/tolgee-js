@@ -8,6 +8,7 @@ import {
 import { TranslateService } from './translate.service';
 import { Subscription } from 'rxjs';
 import {
+  DefaultParamType,
   getTranslateProps,
   CombinedOptions,
   TranslateProps,
@@ -31,12 +32,15 @@ export class TranslatePipe implements PipeTransform, OnDestroy {
     this.unsubscribe();
   }
 
-  transform(props: TranslateProps<string, TranslationKey>): string;
-  transform(key: TranslationKey, options?: CombinedOptions<string>): string;
+  transform(props: TranslateProps): string;
+  transform(
+    key: TranslationKey,
+    options?: CombinedOptions<DefaultParamType>
+  ): string;
   transform(
     key: TranslationKey,
     defaultValue?: string,
-    options?: CombinedOptions<string>
+    options?: CombinedOptions<DefaultParamType>
   ): string;
   transform(...args: any[]): string {
     // @ts-ignore
