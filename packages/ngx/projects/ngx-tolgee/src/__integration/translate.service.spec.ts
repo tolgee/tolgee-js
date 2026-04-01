@@ -77,6 +77,54 @@ describe('translation service', () => {
   it('returns current language', () => {
     expect(service.language).toEqual('en');
   });
+
+  it('languageSignal returns current language and updates on language change', async () => {
+    const language = TestBed.runInInjectionContext(
+      () => service.languageSignal
+    );
+
+    expect(language()).toEqual('en');
+
+    const changePromise = service.changeLanguage('cs');
+    await wait(0);
+    staticDataMock.resolvablePromises.cs.resolve();
+    await changePromise;
+
+    expect(language()).toEqual('cs');
+  });
+
+  it('translateSignal returns the current translation and updates on language change', async () => {
+    const translated = TestBed.runInInjectionContext(() =>
+      service.translateSignal('hello_world')
+    );
+
+    expect(translated()).toEqual(mockTranslations.en.hello_world);
+
+    const changePromise = service.changeLanguage('cs');
+    await wait(0);
+    staticDataMock.resolvablePromises.cs.resolve();
+    await changePromise;
+
+    expect(translated()).toEqual(mockTranslations.cs.hello_world);
+  });
+
+  it('translateSignal supports default values and params', () => {
+    const defaultValue = TestBed.runInInjectionContext(() =>
+      service.translateSignal('this_key_does_not_exist', 'This is default')
+    );
+    const withParams = TestBed.runInInjectionContext(() =>
+      service.translateSignal('peter_dogs', {
+        dogsCount: 5,
+      })
+    );
+
+    expect(defaultValue()).toEqual('This is default');
+    expect(withParams()).toEqual(
+      service.instant('peter_dogs', {
+        dogsCount: 5,
+      })
+    );
+  });
 });
 
 describe('translation service with promise-based tolgee', () => {
@@ -138,6 +186,11 @@ describe('translation service with promise-based tolgee', () => {
     expect(() => service.tolgee).toThrow(
       'Tolgee instance is not yet resolved. Call start() first or wait for app initialization.'
     );
+    expect(() =>
+      TestBed.runInInjectionContext(() => service.languageSignal)
+    ).toThrow(
+      'Tolgee instance is not yet resolved. Call start() first or wait for app initialization.'
+    );
   });
 
   it('works with service methods after promise resolution', async () => {
@@ -163,6 +216,9 @@ describe('translation service with promise-based tolgee', () => {
     await service.start();
 
     expect(service.language).toEqual('en');
+    expect(
+      TestBed.runInInjectionContext(() => service.languageSignal)()
+    ).toEqual('en');
 
     const languageCallback = jest.fn();
     service.languageAsync.subscribe(languageCallback);
@@ -172,6 +228,9 @@ describe('translation service with promise-based tolgee', () => {
     staticDataMock.resolvablePromises.cs.resolve();
     await changePromise;
     expect(service.language).toEqual('cs');
+    expect(
+      TestBed.runInInjectionContext(() => service.languageSignal)()
+    ).toEqual('cs');
 
     expect(service.instant('hello_world')).toEqual(
       mockTranslations.cs.hello_world
@@ -201,6 +260,33 @@ describe('translation service with promise-based tolgee', () => {
     expect(translateCallback).toHaveBeenCalledWith(
       mockTranslations.en.hello_world
     );
+  });
+
+  it('translateSignal works with promise-based tolgee', async () => {
+    const tolgeeInstance = Tolgee().init({
+      staticData: {
+        en: mockTranslations.en,
+        cs: mockTranslations.cs,
+      },
+      language: 'en',
+    });
+
+    TestBed.configureTestingModule({
+      providers: [provideTolgee(() => Promise.resolve(tolgeeInstance))],
+    });
+
+    service = TestBed.inject(TranslateService);
+    await service.start();
+
+    const translated = TestBed.runInInjectionContext(() =>
+      service.translateSignal('hello_world')
+    );
+
+    expect(translated()).toEqual(mockTranslations.en.hello_world);
+
+    await service.changeLanguage('cs');
+
+    expect(translated()).toEqual(mockTranslations.cs.hello_world);
   });
 
   it('start() can be called multiple times safely with promise-based tolgee', async () => {

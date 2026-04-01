@@ -1,5 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateService } from '@tolgee/ngx';
 
 @Component({
@@ -19,9 +18,7 @@ import { TranslateService } from '@tolgee/ngx';
 export class LangSelectorComponent {
   private readonly translateService = inject(TranslateService);
 
-  readonly language = toSignal(this.translateService.languageAsync, {
-    requireSync: true,
-  });
+  readonly language = this.translateService.languageSignal;
 
   readonly availableLanguages = [
     { code: 'en', name: 'English' },

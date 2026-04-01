@@ -65,20 +65,25 @@ import { Component, inject } from '@angular/core';
 import { TranslateService } from '@tolgee/ngx';
 
 @Component({
-  template: `{{ currentLanguage }}`,
+  template: `
+    <p>{{ title() }}</p>
+    <p>{{ currentLanguage() }}</p>
+  `,
 })
 export class LanguageSwitcherComponent {
   private readonly translateService = inject(TranslateService);
 
-  currentLanguage = this.translateService.language;
+  title = this.translateService.translateSignal('hello_world');
+  currentLanguage = this.translateService.languageSignal;
 
   async switchToCzech() {
     await this.translateService.changeLanguage('cs');
-    this.currentLanguage = this.translateService.language;
   }
 }
 {% endraw %}
 ```
+
+If you prefer RxJS, `translateService.translate(...)` still returns an `Observable<string>`.
 
 For lazy routes with namespaced translations, use `namespaceResolver` to load the namespace before the route renders.
 

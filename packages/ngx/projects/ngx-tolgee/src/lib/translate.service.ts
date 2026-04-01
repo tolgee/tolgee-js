@@ -1,4 +1,5 @@
-import { Injectable, OnDestroy, NgZone, inject } from '@angular/core';
+import { Injectable, OnDestroy, NgZone, Signal, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 import {
   DefaultParamType,
@@ -110,6 +111,25 @@ export class TranslateService implements OnDestroy {
   };
 
   /**
+   * Returns translation as an Angular signal.
+   *
+   * It starts with the current instant value and updates whenever translations change.
+   * Call this in an Angular injection context, similarly to `toSignal`.
+   */
+  public readonly translateSignal: TFnType<
+    DefaultParamType,
+    Signal<string>,
+    TranslationKey
+  > = (...args: any[]) => {
+    // @ts-ignore
+    const params = getTranslateProps(...args);
+
+    return toSignal(this.translate(params), {
+      initialValue: this.instant({ ...params, orEmpty: true }),
+    });
+  };
+
+  /**
    * Instantly returns a translated value. May return undefined or outdated value.
    * Use only when you cannot use translate pipe.
    */
@@ -140,6 +160,17 @@ export class TranslateService implements OnDestroy {
       });
 
       return () => subscription.unsubscribe();
+    });
+  }
+
+  /**
+   * Returns current language as an Angular signal.
+   *
+   * Call this in an Angular injection context, similarly to `toSignal`.
+   */
+  get languageSignal(): Signal<string> {
+    return toSignal(this.languageAsync, {
+      initialValue: this.language,
     });
   }
 
