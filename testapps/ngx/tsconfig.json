@@ -8,19 +8,17 @@
     "downlevelIteration": true,
     "experimentalDecorators": true,
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "target": "ES2022",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
-    "lib": [
-      "ES2020",
-      "DOM"
-    ],
+    "paths": {
+      "@tolgee/ngx": ["../../packages/ngx/dist/ngx-tolgee"],
+      "@tolgee/ngx/*": ["../../packages/ngx/dist/ngx-tolgee/*"]
+    },
+    "typeRoots": ["node_modules/@types"],
     "useDefineForClassFields": false
   },
   "angularCompilerOptions": {

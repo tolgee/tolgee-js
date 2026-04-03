@@ -6,8 +6,7 @@
     "target": "ES2022",
     "declaration": true,
     "inlineSources": true,
-    "types": [],
-    "lib": ["DOM", "ES2022"]
+    "types": []
   },
   "angularCompilerOptions": {
     "strictTemplates": true,
