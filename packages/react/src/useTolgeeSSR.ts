@@ -68,7 +68,7 @@ export function useTolgeeSSR(
       const providedRecords = tolgeeInstance.getAllRecords();
       const missingRecords = requiredRecords
         .map(({ namespace, language }) =>
-          namespace ? `${namespace}:${language}` : language
+          namespace ? `${language}:${namespace}` : language
         )
         .filter((key) => !providedRecords.find((r) => r?.cacheKey === key));
 

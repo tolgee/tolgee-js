@@ -68,7 +68,7 @@ export const TolgeeProvider = defineComponent({
         const missingRecords = tolgee.value
           .getRequiredDescriptors(ssr.language)
           .map(({ namespace, language }) =>
-            namespace ? `${namespace}:${language}` : language
+            namespace ? `${language}:${namespace}` : language
           )
           .filter((key) => !ssr.staticData?.[key]);
 
