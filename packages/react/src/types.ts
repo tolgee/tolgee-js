@@ -10,7 +10,7 @@ import type {
 
 export type ParamsTags =
   | DefaultParamType
-  | ((value: any) => JSX.Element | React.ReactElement | null)
+  | ((value: any) => React.ReactElement | null)
   | React.ReactNode;
 
 export type ReactOptions = {
@@ -41,6 +41,6 @@ export interface PropsWithoutKeyName extends PropsBase {
 
 export type TProps = PropsWithKeyName | PropsWithoutKeyName;
 
-export interface TBaseInterface {
-  (props: TProps & { t: TFnType<ParamsTags> }): JSX.Element;
-}
+export type TBaseInterface = (
+  props: TProps & { t: TFnType<ParamsTags> }
+) => React.ReactElement;
