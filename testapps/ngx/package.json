@@ -1,6 +1,6 @@
 {
   "name": "@tolgee/ngx-testapp",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "scripts": {
     "ng": "ng",
     "develop": "sleep 10 && ng serve --configuration=stage",
@@ -25,8 +25,8 @@
     "@angular/platform-server": "^20.3.17",
     "@angular/router": "^20.3.17",
     "@angular/ssr": "^20.3.17",
-    "@tolgee/format-icu": "7.0.0",
-    "@tolgee/ngx": "7.0.0",
+    "@tolgee/format-icu": "7.0.1",
+    "@tolgee/ngx": "7.0.1",
     "express": "^4.22.1",
     "rxjs": "~7.8.2",
     "tslib": "^2.8.1",

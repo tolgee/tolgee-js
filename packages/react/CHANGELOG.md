@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.0.1](https://github.com/tolgee/tolgee-js/compare/v7.0.0...v7.0.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* **react:** allow T component under React 19 ([#3520](https://github.com/tolgee/tolgee-js/issues/3520)) ([e4529bc](https://github.com/tolgee/tolgee-js/commit/e4529bc6c7ebd03319198263d85f80ff41e9dcb7)), closes [#3407](https://github.com/tolgee/tolgee-js/issues/3407)
+
+
+
+
+
 # [7.0.0](https://github.com/tolgee/tolgee-js/compare/v6.6.0...v7.0.0) (2026-03-26)
 
 
