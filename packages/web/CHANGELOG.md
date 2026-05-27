@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.1.0](https://github.com/tolgee/tolgee-js/compare/v7.0.1...v7.1.0) (2026-05-27)
+
+
+### Features
+
+* render msgctxt chip in key dialog ([#3523](https://github.com/tolgee/tolgee-js/issues/3523)) ([1949649](https://github.com/tolgee/tolgee-js/commit/1949649b2d588155aa974f618e58c6b963553d5b))
+
+
+
+
+
 ## [7.0.1](https://github.com/tolgee/tolgee-js/compare/v7.0.0...v7.0.1) (2026-05-21)
 
 **Note:** Version bump only for package @tolgee/web
