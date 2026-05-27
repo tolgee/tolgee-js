@@ -29,6 +29,7 @@ import { ErrorAlert } from './ErrorAlert';
 import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
 import { FilterTagMissingInfo } from './Tags/FilterTagMissingInfo';
+import { KeyName } from '../common/KeyName';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -210,7 +211,7 @@ export const KeyForm = () => {
         )}
       </ScTitle>
       <ScValue>
-        {input}
+        <KeyName name={input} />
         <ScHint>{!keyExists && ready && " (key doesn't exist yet)"}</ScHint>
       </ScValue>
       <NsSelect

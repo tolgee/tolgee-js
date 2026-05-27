@@ -1,4 +1,5 @@
 import React from 'react';
+import { KeyName } from '../../common/KeyName';
 
 import { components } from '../../client/apiSchema.generated';
 import { Tooltip } from '../../common/Tooltip';
@@ -78,7 +79,11 @@ export const ScreenshotWithLabels: React.FC<Props> = ({
           );
           if (showTooltips) {
             return (
-              <Tooltip key={i} title={key.keyName} placement="right">
+              <Tooltip
+                key={i}
+                title={<KeyName name={key.keyName} />}
+                placement="right"
+              >
                 {rectangle}
               </Tooltip>
             );
