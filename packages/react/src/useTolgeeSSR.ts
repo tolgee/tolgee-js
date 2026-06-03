@@ -1,5 +1,6 @@
 import {
   CachePublicRecord,
+  encodeCacheKey,
   getTranslateProps,
   TolgeeInstance,
   TolgeeStaticData,
@@ -67,15 +68,15 @@ export function useTolgeeSSR(
       const requiredRecords = tolgeeInstance.getRequiredDescriptors(language);
       const providedRecords = tolgeeInstance.getAllRecords();
       const missingRecords = requiredRecords
-        .map(({ namespace, language }) =>
-          namespace ? `${namespace}:${language}` : language
-        )
+        .map((descriptor) => encodeCacheKey(descriptor))
         .filter((key) => !providedRecords.find((r) => r?.cacheKey === key));
 
-      // eslint-disable-next-line no-console
-      console.warn(
-        `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
-      );
+      if (missingRecords.length) {
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+        );
+      }
     }
   });
 
