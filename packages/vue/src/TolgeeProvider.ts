@@ -10,7 +10,11 @@ import {
   computed,
 } from 'vue';
 import type { Ref, ComputedRef } from 'vue';
-import { TolgeeInstance, TolgeeStaticDataProp } from '@tolgee/web';
+import {
+  TolgeeInstance,
+  TolgeeStaticDataProp,
+  encodeCacheKey,
+} from '@tolgee/web';
 import { TolgeeVueContext } from './types';
 
 export type SSROptions = {
@@ -67,15 +71,15 @@ export const TolgeeProvider = defineComponent({
         // for proper SSR render
         const missingRecords = tolgee.value
           .getRequiredDescriptors(ssr.language)
-          .map(({ namespace, language }) =>
-            namespace ? `${namespace}:${language}` : language
-          )
+          .map((descriptor) => encodeCacheKey(descriptor))
           .filter((key) => !ssr.staticData?.[key]);
 
-        // eslint-disable-next-line no-console
-        console.warn(
-          `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
-        );
+        if (missingRecords.length) {
+          // eslint-disable-next-line no-console
+          console.warn(
+            `Tolgee: Missing records in "staticData" for proper SSR functionality: ${missingRecords.map((key) => `"${key}"`).join(', ')}`
+          );
+        }
       }
     }
 
