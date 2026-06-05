@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.1](https://github.com/tolgee/tolgee-js/compare/v7.1.0...v7.1.1) (2026-06-05)
+
+
+### Bug Fixes
+
+* stop false-positive "Missing records in staticData" SSR warning ([#3524](https://github.com/tolgee/tolgee-js/issues/3524)) ([a151099](https://github.com/tolgee/tolgee-js/commit/a151099bddd2ea1968c860314124955030c0aec8)), closes [#3518](https://github.com/tolgee/tolgee-js/issues/3518)
+
+
+
+
+
 # [7.1.0](https://github.com/tolgee/tolgee-js/compare/v7.0.1...v7.1.0) (2026-05-27)
 
 **Note:** Version bump only for package @tolgee/react
