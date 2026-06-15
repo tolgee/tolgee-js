@@ -204,7 +204,7 @@ pnpm run e2e open svelte
 
 ## Contributors
 
-<a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
+<a href="https://github.com/tolgee/tolgee-js/graphs/contributors">
   <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
 </a>
 
