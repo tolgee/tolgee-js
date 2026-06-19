@@ -87,14 +87,6 @@ Tolgee saves a lot of time you would spend on localization tasks otherwise. It e
 Read more on the [Tolgee website](https://tolgee.io)
 {% endmacro %}
 
-{% macro contributions() %}
-## Contributors
-
-<a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
-  <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
-</a>
-{% endmacro %}
-
 {% macro developmentInstallation() %}
 We welcome your PRs.
 
@@ -165,7 +157,7 @@ pnpm run e2e open {{integration}}
 {% macro contributors() %}
 ## Contributors
 
-<a href="https://github.com/tolgee/tolgee-platform/graphs/contributors">
+<a href="https://github.com/tolgee/tolgee-js/graphs/contributors">
   <img alt="contributors" src="https://contrib.rocks/image?repo=tolgee/tolgee-js"/>
 </a>
 {% endmacro %}
