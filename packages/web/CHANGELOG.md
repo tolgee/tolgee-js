@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.2](https://github.com/tolgee/tolgee-js/compare/v7.1.1...v7.1.2) (2026-07-15)
+
+
+### Bug Fixes
+
+* **web:** keep base language visible in in-context dialog ([#3527](https://github.com/tolgee/tolgee-js/issues/3527)) ([05d2336](https://github.com/tolgee/tolgee-js/commit/05d2336f6f942c24136a98978777f54ac9dd1b4b))
+
+
+
+
+
 ## [7.1.1](https://github.com/tolgee/tolgee-js/compare/v7.1.0...v7.1.1) (2026-06-05)
 
 **Note:** Version bump only for package @tolgee/web
