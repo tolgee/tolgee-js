@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { NavbarComponent } from '../../component/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { TDirective, TranslatePipe } from '@tolgee/ngx';
-import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-index',
@@ -21,8 +21,13 @@ export class IndexComponent implements OnInit {
   newItemValue: string;
   items: string[] = [];
 
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+
   getInitialItems() {
     let items: string[] | undefined = undefined;
+    if (!isPlatformBrowser(this.platformId)) {
+      return ['Passport', 'Maps and directions', 'Travel guide'];
+    }
     try {
       items = JSON.parse(
         localStorage.getItem('tolgee-example-app-items') || ''
@@ -32,9 +37,7 @@ export class IndexComponent implements OnInit {
       console.error(
         'Something went wrong while parsing stored items. Items are reset.'
       );
-      if (typeof localStorage !== 'undefined') {
-        localStorage.removeItem('tolgee-example-app-items');
-      }
+      localStorage.removeItem('tolgee-example-app-items');
     }
     return items?.length
       ? items
@@ -64,9 +67,13 @@ export class IndexComponent implements OnInit {
     alert('action: ' + action);
   }
 
-  private updateLocalStorage = () =>
+  private updateLocalStorage = () => {
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
     localStorage.setItem(
       'tolgee-example-app-items',
       JSON.stringify(this.items)
     );
+  };
 }

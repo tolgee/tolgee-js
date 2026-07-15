@@ -5,6 +5,7 @@ import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
 } from '../../../constants';
+import { putBaseLangFirstTags } from '../languageHelpers';
 
 export function getPreferredLanguages(): string[] {
   try {
@@ -23,13 +24,13 @@ export function setPreferredLanguages(languages: string[]) {
   );
 }
 
-export function getInitialLanguages(available: string[]) {
+export function getInitialLanguages(available: string[], base?: string) {
   const preferred = getPreferredLanguages();
   let langs = preferred.filter((l) => available.includes(l));
   if (langs.length === 0) {
     langs = available;
   }
-  return langs.slice(0, MAX_LANGUAGES_SELECTED);
+  return putBaseLangFirstTags(langs, base).slice(0, MAX_LANGUAGES_SELECTED);
 }
 
 export const changeInTolgeeCache = (

@@ -140,8 +140,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       },
       options: {
         onSuccess(data) {
+          const languages = data._embedded?.languages;
+          const baseTag = languages?.find((l) => l.base)?.tag;
           const selectedLanguages = getInitialLanguages(
-            data._embedded?.languages?.map((l) => l.tag!) || []
+            languages?.map((l) => l.tag!) || [],
+            baseTag
           );
           initializeWithDefaultValue(undefined, data._embedded?.languages);
           setSelectedLanguages(selectedLanguages);
