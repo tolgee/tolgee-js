@@ -36,4 +36,15 @@ describe('createServerInstance', () => {
     expect(getLocale).not.toHaveBeenCalled();
     expect(createTolgee).toHaveBeenCalledWith('cs');
   });
+
+  it('supports an explicit locale in the server T component', async () => {
+    const { createTolgee } = createTolgeeMock();
+    const getLocale = jest.fn().mockResolvedValue('en');
+    const { T } = createServerInstance({ createTolgee, getLocale });
+
+    await T({ keyName: 'hello', locale: 'cs' });
+
+    expect(getLocale).not.toHaveBeenCalled();
+    expect(createTolgee).toHaveBeenCalledWith('cs');
+  });
 });

@@ -12,6 +12,10 @@ export type CreateServerInstanceOptions = {
   getLocale: () => Promise<string>;
 };
 
+type ServerTProps = TProps & {
+  locale?: string;
+};
+
 export const createServerInstance = ({
   createTolgee,
   getLocale,
@@ -35,8 +39,8 @@ export const createServerInstance = ({
     return tolgee.t;
   };
 
-  async function T(props: TProps) {
-    const t = await getTranslate();
+  async function T({ locale, ...props }: ServerTProps) {
+    const t = await getTranslate(locale);
     return <TBase t={t as TFnType<ParamsTags>} {...props} />;
   }
 
