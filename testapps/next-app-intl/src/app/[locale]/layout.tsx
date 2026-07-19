@@ -14,7 +14,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   if (!ALL_LANGUAGES.includes(locale)) {
     notFound();
   }
-  const tolgee = await getTolgee();
+  const tolgee = await getTolgee(locale);
   const records = await tolgee.loadRequired();
 
   return (

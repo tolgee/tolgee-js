@@ -24,14 +24,14 @@ export const createServerInstance = ({
     }
   );
 
-  const getTolgee = async () => {
-    const locale = await getLocale();
-    const tolgee = await getTolgeeInstance(locale);
+  const getTolgee = async (locale?: string) => {
+    const resolvedLocale = locale ?? (await getLocale());
+    const tolgee = await getTolgeeInstance(resolvedLocale);
     return tolgee;
   };
 
-  const getTranslate = async () => {
-    const tolgee = await getTolgee();
+  const getTranslate = async (locale?: string) => {
+    const tolgee = await getTolgee(locale);
     return tolgee.t;
   };
 
