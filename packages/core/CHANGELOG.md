@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.1.3](https://github.com/tolgee/tolgee-js/compare/v7.1.2...v7.1.3) (2026-07-30)
+
+
+### Performance Improvements
+
+* store event handlers in a Set ([#3529](https://github.com/tolgee/tolgee-js/issues/3529)) ([e73e27a](https://github.com/tolgee/tolgee-js/commit/e73e27a5e6a9517b0038eb4979a06d91dfbd98b5))
+
+
+
+
+
 ## [7.1.2](https://github.com/tolgee/tolgee-js/compare/v7.1.1...v7.1.2) (2026-07-15)
 
 **Note:** Version bump only for package @tolgee/core
