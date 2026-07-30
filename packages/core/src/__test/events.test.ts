@@ -82,4 +82,51 @@ describe('events', () => {
     await tolgee.changeLanguage('es');
     expect(eventHandler).toBeCalledTimes(4);
   });
+
+  it('treats repeated subscriptions of the same handler separately', async () => {
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    const handler = jest.fn();
+
+    const first = tolgee.on('language', handler);
+    tolgee.on('language', handler);
+
+    await tolgee.changeLanguage('es');
+    expect(handler).toBeCalledTimes(2);
+
+    first.unsubscribe();
+    await tolgee.changeLanguage('en');
+    expect(handler).toBeCalledTimes(3);
+  });
+
+  it('unsubscribing in a handler does not affect the running emit', async () => {
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    const second = jest.fn();
+
+    const unsubscribeSecond = jest.fn(() => secondSubscription.unsubscribe());
+    tolgee.on('language', unsubscribeSecond);
+    const secondSubscription = tolgee.on('language', second);
+
+    await tolgee.changeLanguage('es');
+    expect(second).toBeCalledTimes(1);
+
+    await tolgee.changeLanguage('en');
+    expect(unsubscribeSecond).toBeCalledTimes(2);
+    expect(second).toBeCalledTimes(1);
+  });
+
+  it('unsubscribing in an update handler does not affect the running emit', async () => {
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    const second = jest.fn();
+
+    const unsubscribeSecond = jest.fn(() => secondSubscription.unsubscribe());
+    tolgee.on('update', unsubscribeSecond);
+    const secondSubscription = tolgee.on('update', second);
+
+    await tolgee.changeLanguage('es');
+    expect(second).toBeCalledTimes(1);
+
+    await tolgee.changeLanguage('en');
+    expect(unsubscribeSecond).toBeCalledTimes(2);
+    expect(second).toBeCalledTimes(1);
+  });
 });

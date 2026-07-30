@@ -3,7 +3,7 @@ import { Subscription, ListenerEvent, CombinedHandler } from '../../types';
 export function EventEmitterCombined<E extends ListenerEvent<string, any>>(
   isActive: () => boolean
 ): EventEmitterCombinedInstance<E> {
-  let handlers: CombinedHandler<E>[] = [];
+  const handlers = new Set<CombinedHandler<E>>();
 
   let queue: E[] = [];
 
@@ -14,7 +14,8 @@ export function EventEmitterCombined<E extends ListenerEvent<string, any>>(
     }
     const queueCopy = queue;
     queue = [];
-    handlers.forEach((handler) => {
+    // snapshot, so subscriptions changed by a handler don't affect this emit
+    Array.from(handlers).forEach((handler) => {
       handler(queueCopy);
     });
   }
@@ -25,11 +26,11 @@ export function EventEmitterCombined<E extends ListenerEvent<string, any>>(
         handler(events);
       };
 
-      handlers.push(handlerWrapper);
+      handlers.add(handlerWrapper);
 
       return {
         unsubscribe() {
-          handlers = handlers.filter((i) => handlerWrapper !== i);
+          handlers.delete(handlerWrapper);
         },
       };
     },

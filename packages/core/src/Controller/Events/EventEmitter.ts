@@ -4,7 +4,7 @@ export const EventEmitter = <Event extends ListenerEvent<string, any>>(
   type: Event['type'],
   isActive: () => boolean
 ): EventEmitterInstance<Event> => {
-  let handlers: Handler<Event>[] = [];
+  const handlers = new Set<Handler<Event>>();
 
   return {
     listen(handler: (e: Event) => void): Subscription {
@@ -12,17 +12,18 @@ export const EventEmitter = <Event extends ListenerEvent<string, any>>(
         handler(e);
       };
 
-      handlers.push(handlerWrapper);
+      handlers.add(handlerWrapper);
 
       return {
         unsubscribe() {
-          handlers = handlers.filter((i) => handlerWrapper !== i);
+          handlers.delete(handlerWrapper);
         },
       };
     },
     emit(data: Event['value']) {
       if (isActive()) {
-        handlers.forEach((handler) =>
+        // snapshot, so subscriptions changed by a handler don't affect this emit
+        Array.from(handlers).forEach((handler) =>
           handler({ type: type, value: data } as Event)
         );
       }
