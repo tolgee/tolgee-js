@@ -189,6 +189,7 @@ export function Plugins(
     run() {
       const {
         apiKey,
+        authToken,
         apiUrl,
         projectId,
         branch,
@@ -198,6 +199,7 @@ export function Plugins(
       } = getInitialOptions();
       instances.ui = plugins.ui?.({
         apiKey: apiKey!,
+        authToken,
         apiUrl: apiUrl!,
         projectId,
         branch,
@@ -268,15 +270,16 @@ export function Plugins(
     }) as BackendGetRecordInternal,
 
     getBackendDevRecord: (async ({ language, namespace }) => {
-      const { apiKey, apiUrl, projectId, branch, filterTag } =
+      const { apiKey, authToken, apiUrl, projectId, branch, filterTag } =
         getInitialOptions();
 
-      if (!apiKey || !apiUrl || !self.hasDevBackend()) {
+      if ((!apiKey && !authToken) || !apiUrl || !self.hasDevBackend()) {
         return undefined;
       }
 
       return instances.devBackend?.getRecord({
         apiKey,
+        authToken,
         apiUrl,
         projectId,
         branch,

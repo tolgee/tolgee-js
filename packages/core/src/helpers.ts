@@ -118,7 +118,7 @@ export const createFetchFunction = (
 ): FetchFn => {
   return (input, init) => {
     let headers = headersInitToRecord(init?.headers);
-    if (headers['x-api-key']) {
+    if (headers['x-api-key'] || headers['authorization']) {
       headers = {
         'x-tolgee-sdk-type': 'JS',
         'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',

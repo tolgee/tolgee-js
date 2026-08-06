@@ -22,6 +22,7 @@ import { BrowserExtensionPlugin } from '../typedIndex';
 import {
   API_KEY_LOCAL_STORAGE,
   API_URL_LOCAL_STORAGE,
+  AUTH_TOKEN_LOCAL_STORAGE,
   BRANCH_LOCAL_STORAGE,
 } from '../BrowserExtensionPlugin/BrowserExtensionPlugin';
 import { readFile } from 'fs/promises';
@@ -77,6 +78,25 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
 
     expect(loadInContextLib).toBeCalledTimes(1);
+  });
+
+  it('loads in-context lib with an OAuth token (no api key)', async () => {
+    sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
+    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'oauth-access-token');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).toBeCalledTimes(1);
+    expect(inContextToolsFactory).toBeCalledWith(
+      expect.objectContaining({
+        credentials: expect.objectContaining({
+          apiUrl: 'test',
+          authToken: 'oauth-access-token',
+        }),
+      })
+    );
   });
 
   it('picks up branch from sessionStorage', async () => {

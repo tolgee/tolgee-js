@@ -74,7 +74,7 @@ async function customFetch(
   if (!isUrlValid(options.apiUrl)) {
     throw new HttpError('api_url_not_valid');
   }
-  if (options.apiKey === undefined) {
+  if (options.apiKey === undefined && options.authToken === undefined) {
     throw new HttpError('api_key_not_specified');
   }
 
@@ -82,7 +82,9 @@ async function customFetch(
   init.headers = init.headers || {};
   init.headers = {
     ...init.headers,
-    'X-API-Key': options.apiKey,
+    ...(options.authToken
+      ? { Authorization: `Bearer ${options.authToken}` }
+      : { 'X-API-Key': options.apiKey! }),
   };
 
   const url = createUrl(options.apiUrl, input.toString()).toString();

@@ -5,19 +5,24 @@ import { loadInContextLib } from './loadInContextLib';
 export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
 export const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
 export const BRANCH_LOCAL_STORAGE = '__tolgee_branch';
+export const AUTH_TOKEN_LOCAL_STORAGE = '__tolgee_authToken';
 
 function getCredentials() {
   const apiKey = sessionStorage.getItem(API_KEY_LOCAL_STORAGE) || undefined;
   const apiUrl = sessionStorage.getItem(API_URL_LOCAL_STORAGE) || undefined;
   const branch = sessionStorage.getItem(BRANCH_LOCAL_STORAGE) || undefined;
+  const authToken =
+    sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE) || undefined;
 
-  if (!apiKey || !apiUrl) {
+  // Either a static api key or an OAuth access token is enough to authenticate against the backend.
+  if ((!apiKey && !authToken) || !apiUrl) {
     return undefined;
   }
 
   return {
     apiKey,
     apiUrl,
+    ...(authToken !== undefined ? { authToken } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
 }
@@ -26,6 +31,7 @@ function clearSessionStorage() {
   sessionStorage.removeItem(API_KEY_LOCAL_STORAGE);
   sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
   sessionStorage.removeItem(BRANCH_LOCAL_STORAGE);
+  sessionStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE);
 }
 
 function onDocumentReady(callback: () => void) {
@@ -74,6 +80,7 @@ if (sessionStorageAvailable()) {
         config: {
           apiUrl: tolgee.getInitialOptions().apiUrl || '',
           apiKey: tolgee.getInitialOptions().apiKey || '',
+          authToken: tolgee.getInitialOptions().authToken,
           branch: tolgee.getInitialOptions().branch,
         },
       }) as const;

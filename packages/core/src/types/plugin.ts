@@ -13,6 +13,7 @@ import { TranslationDescriptor } from './events';
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
+  authToken?: string;
   projectId?: number | string;
   branch?: string;
   filterTag?: string[];
@@ -110,6 +111,7 @@ export type DevCredentials =
   | {
       apiUrl?: string;
       apiKey?: string;
+      authToken?: string;
       projectId?: string | number;
       branch?: string;
     };
@@ -157,6 +159,7 @@ export type KeyPosition = {
 export type UiProps = {
   apiUrl: string;
   apiKey: string;
+  authToken?: string;
   projectId: number | string | undefined;
   branch?: string;
   highlight: HighlightInterface;

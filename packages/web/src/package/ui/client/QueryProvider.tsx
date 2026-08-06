@@ -6,6 +6,7 @@ export type GlobalOptions = {
   apiUrl: string;
   projectId: string | number | undefined;
   branch?: string;
+  authToken?: string;
 };
 
 const queryClient = new QueryClient({
@@ -28,9 +29,12 @@ export const QueryProvider = ({
   apiKey,
   projectId,
   branch,
+  authToken,
 }: React.PropsWithChildren<Props>) => {
   return (
-    <QueryContext.Provider value={{ apiUrl, apiKey, projectId, branch }}>
+    <QueryContext.Provider
+      value={{ apiUrl, apiKey, projectId, branch, authToken }}
+    >
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </QueryContext.Provider>
   );

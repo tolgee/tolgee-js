@@ -7,6 +7,7 @@ function createDevBackend(): BackendDevMiddleware {
     getRecord({
       apiUrl,
       apiKey,
+      authToken,
       projectId,
       branch,
       language,
@@ -32,13 +33,19 @@ function createDevBackend(): BackendDevMiddleware {
         url.searchParams.append('filterTag', tag);
       });
 
-      if (getApiKeyType(apiKey) === 'tgpat' && projectId === undefined) {
-        throw new Error("You need to specify 'projectId' when using PAT key");
+      const needsExplicitProject =
+        authToken !== undefined || getApiKeyType(apiKey) === 'tgpat';
+      if (needsExplicitProject && projectId === undefined) {
+        throw new Error(
+          "You need to specify 'projectId' when using a PAT key or an OAuth token"
+        );
       }
 
       return fetch(url.toString(), {
         headers: {
-          'X-API-Key': apiKey || '',
+          ...(authToken
+            ? { Authorization: `Bearer ${authToken}` }
+            : { 'X-API-Key': apiKey || '' }),
           'Content-Type': 'application/json',
         },
         // @ts-ignore - tell next.js to not use cache

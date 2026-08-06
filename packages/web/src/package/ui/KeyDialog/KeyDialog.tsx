@@ -33,6 +33,7 @@ export const KeyDialog = ({ uiProps, keyData }: Props) => {
     <QueryProvider
       apiUrl={uiProps.apiUrl}
       apiKey={uiProps.apiKey}
+      authToken={uiProps.authToken}
       projectId={uiProps.projectId}
       branch={uiProps.branch}
     >
