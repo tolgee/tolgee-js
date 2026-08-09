@@ -6,6 +6,7 @@ export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
 export const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
 export const BRANCH_LOCAL_STORAGE = '__tolgee_branch';
 export const AUTH_TOKEN_LOCAL_STORAGE = '__tolgee_authToken';
+export const PROJECT_ID_LOCAL_STORAGE = '__tolgee_projectId';
 
 function getCredentials() {
   const apiKey = sessionStorage.getItem(API_KEY_LOCAL_STORAGE) || undefined;
@@ -13,6 +14,8 @@ function getCredentials() {
   const branch = sessionStorage.getItem(BRANCH_LOCAL_STORAGE) || undefined;
   const authToken =
     sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE) || undefined;
+  const projectId =
+    sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
 
   // Either a static api key or an OAuth access token is enough to authenticate against the backend.
   if ((!apiKey && !authToken) || !apiUrl) {
@@ -23,6 +26,8 @@ function getCredentials() {
     apiKey,
     apiUrl,
     ...(authToken !== undefined ? { authToken } : {}),
+    // OAuth access tokens carry no embedded project (unlike a PAK), so the extension supplies the id explicitly.
+    ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
 }
@@ -32,6 +37,7 @@ function clearSessionStorage() {
   sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
   sessionStorage.removeItem(BRANCH_LOCAL_STORAGE);
   sessionStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE);
+  sessionStorage.removeItem(PROJECT_ID_LOCAL_STORAGE);
 }
 
 function onDocumentReady(callback: () => void) {
@@ -81,6 +87,7 @@ if (sessionStorageAvailable()) {
           apiUrl: tolgee.getInitialOptions().apiUrl || '',
           apiKey: tolgee.getInitialOptions().apiKey || '',
           authToken: tolgee.getInitialOptions().authToken,
+          projectId: tolgee.getInitialOptions().projectId,
           branch: tolgee.getInitialOptions().branch,
         },
       }) as const;

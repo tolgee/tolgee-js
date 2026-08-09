@@ -103,6 +103,7 @@ export type LibConfig = {
     apiUrl: string;
     apiKey: string;
     authToken?: string;
+    projectId?: number | string;
     branch?: string;
   };
 };
