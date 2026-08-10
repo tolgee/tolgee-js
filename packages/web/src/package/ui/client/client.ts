@@ -6,6 +6,23 @@ import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { createUrl } from '../../tools/url';
+import { AUTH_TOKEN_LOCAL_STORAGE } from '../../BrowserExtensionPlugin/constants';
+
+// The browser extension keeps a rotating OAuth access token in sessionStorage; prefer that live value over the one
+// captured at init, so a page left open past the token's lifetime still authenticates each new in-context request.
+function resolveAuthToken(fallback: string | undefined): string | undefined {
+  try {
+    if (typeof sessionStorage !== 'undefined') {
+      const injected = sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE);
+      if (injected) {
+        return injected;
+      }
+    }
+  } catch {
+    // sessionStorage can throw (SSR, sandboxed iframes) — fall back to the token passed at init.
+  }
+  return fallback;
+}
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -78,12 +95,13 @@ async function customFetch(
     throw new HttpError('api_key_not_specified');
   }
 
+  const authToken = resolveAuthToken(options.authToken);
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
     ...init.headers,
-    ...(options.authToken
-      ? { Authorization: `Bearer ${options.authToken}` }
+    ...(authToken
+      ? { Authorization: `Bearer ${authToken}` }
       : { 'X-API-Key': options.apiKey! }),
   };
 
