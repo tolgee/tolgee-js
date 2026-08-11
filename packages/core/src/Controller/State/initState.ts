@@ -49,7 +49,9 @@ export type TolgeeOptionsInternal = {
   authToken?: string;
 
   /**
-   * Project id is necessary if you are using PAT or an OAuth access token
+   * Project id is necessary if you are using PAT or an OAuth access token, and is required by the Tolgee browser
+   * extension to connect in-context editing (it cannot be derived from an OAuth token the way it is from a PAK).
+   * See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid
    */
   projectId?: number | string;
 

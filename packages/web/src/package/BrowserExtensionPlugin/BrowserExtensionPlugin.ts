@@ -104,6 +104,15 @@ if (sessionStorageAvailable()) {
       };
     };
 
+    if (tolgee.getInitialOptions().projectId === undefined) {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'Tolgee: `projectId` is missing from the SDK configuration. The Tolgee browser extension needs it to ' +
+          'connect in-context editing (an OAuth token carries no embedded project). ' +
+          'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
+      );
+    }
+
     tolgee.on('running', ({ value: isRunning }) => {
       if (isRunning) {
         onDocumentReady(() => {
