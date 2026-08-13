@@ -29,7 +29,7 @@ When the locale is already available from route params, pass it directly to
 
 ```tsx
 const { locale } = await params;
-const tolgee = await getTolgee(locale);
+const tolgee = await getTolgee({ locale });
 ```
 
 This avoids running the configured request locale resolver during static

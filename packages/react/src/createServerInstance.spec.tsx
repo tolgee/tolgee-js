@@ -27,12 +27,22 @@ describe('createServerInstance', () => {
     expect(run).toHaveBeenCalledTimes(1);
   });
 
-  it('skips locale detection when an explicit locale is provided', async () => {
+  it('supports an explicit locale parameter object', async () => {
+    const { createTolgee, tolgee } = createTolgeeMock();
+    const getLocale = jest.fn().mockResolvedValue('en');
+    const { getTolgee } = createServerInstance({ createTolgee, getLocale });
+
+    await expect(getTolgee({ locale: 'cs' })).resolves.toBe(tolgee);
+    expect(getLocale).not.toHaveBeenCalled();
+    expect(createTolgee).toHaveBeenCalledWith('cs');
+  });
+
+  it('passes an explicit locale parameter object to translations', async () => {
     const { createTolgee, t } = createTolgeeMock();
     const getLocale = jest.fn().mockResolvedValue('en');
     const { getTranslate } = createServerInstance({ createTolgee, getLocale });
 
-    await expect(getTranslate('cs')).resolves.toBe(t);
+    await expect(getTranslate({ locale: 'cs' })).resolves.toBe(t);
     expect(getLocale).not.toHaveBeenCalled();
     expect(createTolgee).toHaveBeenCalledWith('cs');
   });
