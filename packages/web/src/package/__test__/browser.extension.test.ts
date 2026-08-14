@@ -19,12 +19,14 @@ jest.mock('../BrowserExtensionPlugin/loadInContextLib', () => ({
 
 import { TolgeeCore } from '@tolgee/core';
 import { BrowserExtensionPlugin } from '../typedIndex';
+import { clearSessionStorage } from '../BrowserExtensionPlugin/BrowserExtensionPlugin';
 import {
   API_KEY_LOCAL_STORAGE,
   API_URL_LOCAL_STORAGE,
   AUTH_TOKEN_LOCAL_STORAGE,
   BRANCH_LOCAL_STORAGE,
-} from '../BrowserExtensionPlugin/BrowserExtensionPlugin';
+  PROJECT_ID_LOCAL_STORAGE,
+} from '../tools/sessionStorageKeys';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
@@ -89,11 +91,27 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
 
     expect(loadInContextLib).toBeCalledTimes(1);
+    const { credentials } = (inContextToolsFactory.mock.calls[0] as any)[0];
+    expect(credentials.apiKey).toBeUndefined();
+    expect(credentials.apiUrl).toEqual('test');
+    expect(credentials.authToken).toEqual('oauth-access-token');
+  });
+
+  it('forwards projectId injected into sessionStorage on the OAuth path', async () => {
+    sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
+    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'oauth-access-token');
+    sessionStorage.setItem(PROJECT_ID_LOCAL_STORAGE, '42');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).toBeCalledTimes(1);
     expect(inContextToolsFactory).toBeCalledWith(
       expect.objectContaining({
         credentials: expect.objectContaining({
-          apiUrl: 'test',
           authToken: 'oauth-access-token',
+          projectId: '42',
         }),
       })
     );
@@ -118,6 +136,90 @@ describe('compatibility with browser extension', () => {
         },
       })
     );
+  });
+
+  it('warns about a missing projectId in dev mode', () => {
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiKey: 'tgpat_x',
+      apiUrl: 'http://x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('projectId'));
+    warn.mockRestore();
+  });
+
+  it('does not warn when a projectId is provided', () => {
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiKey: 'tgpat_x',
+      apiUrl: 'http://x',
+      projectId: 5,
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('does not warn in production (no dev credentials)', () => {
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('does not warn when the extension injected projectId into sessionStorage', () => {
+    sessionStorage.setItem(PROJECT_ID_LOCAL_STORAGE, '42');
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      authToken: 'jwt',
+      apiUrl: 'http://x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('does not warn when the projectId is embedded in a PAK api key', () => {
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiKey: 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc',
+      apiUrl: 'http://x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('clearSessionStorage removes every injected key', () => {
+    sessionStorage.setItem(API_KEY_LOCAL_STORAGE, 'a');
+    sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'b');
+    sessionStorage.setItem(BRANCH_LOCAL_STORAGE, 'c');
+    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'd');
+    sessionStorage.setItem(PROJECT_ID_LOCAL_STORAGE, 'e');
+    clearSessionStorage();
+    [
+      API_KEY_LOCAL_STORAGE,
+      API_URL_LOCAL_STORAGE,
+      BRANCH_LOCAL_STORAGE,
+      AUTH_TOKEN_LOCAL_STORAGE,
+      PROJECT_ID_LOCAL_STORAGE,
+    ].forEach((key) => expect(sessionStorage.getItem(key)).toBeNull());
   });
 
   it('builded module is valid', async () => {

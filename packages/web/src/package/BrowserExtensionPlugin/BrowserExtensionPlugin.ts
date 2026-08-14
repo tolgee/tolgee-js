@@ -1,13 +1,14 @@
 import type { TolgeePlugin } from '@tolgee/core';
 import { Handshaker } from '../tools/extension';
+import { resolveCredential } from '../tools/auth';
+import {
+  API_KEY_LOCAL_STORAGE,
+  API_URL_LOCAL_STORAGE,
+  AUTH_TOKEN_LOCAL_STORAGE,
+  BRANCH_LOCAL_STORAGE,
+  PROJECT_ID_LOCAL_STORAGE,
+} from '../tools/sessionStorageKeys';
 import { loadInContextLib } from './loadInContextLib';
-import { AUTH_TOKEN_LOCAL_STORAGE } from './constants';
-
-export const API_KEY_LOCAL_STORAGE = '__tolgee_apiKey';
-export const API_URL_LOCAL_STORAGE = '__tolgee_apiUrl';
-export const BRANCH_LOCAL_STORAGE = '__tolgee_branch';
-export { AUTH_TOKEN_LOCAL_STORAGE };
-export const PROJECT_ID_LOCAL_STORAGE = '__tolgee_projectId';
 
 function getCredentials() {
   const apiKey = sessionStorage.getItem(API_KEY_LOCAL_STORAGE) || undefined;
@@ -18,22 +19,20 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
 
-  // Either a static api key or an OAuth access token is enough to authenticate against the backend.
   if ((!apiKey && !authToken) || !apiUrl) {
     return undefined;
   }
 
   return {
-    apiKey,
     apiUrl,
+    ...(apiKey !== undefined ? { apiKey } : {}),
     ...(authToken !== undefined ? { authToken } : {}),
-    // OAuth access tokens carry no embedded project (unlike a PAK), so the extension supplies the id explicitly.
     ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
 }
 
-function clearSessionStorage() {
+export function clearSessionStorage() {
   sessionStorage.removeItem(API_KEY_LOCAL_STORAGE);
   sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
   sessionStorage.removeItem(BRANCH_LOCAL_STORAGE);
@@ -76,8 +75,9 @@ const sessionStorageAvailable = () => {
 if (sessionStorageAvailable()) {
   BrowserExtensionPlugin = (): TolgeePlugin => (tolgee) => {
     const handshaker = Handshaker();
-    const getConfig = () =>
-      ({
+    const getConfig = () => {
+      const options = tolgee.getInitialOptions();
+      return {
         // prevent extension downloading ui library
         uiPresent: true,
         uiVersion: undefined,
@@ -85,13 +85,14 @@ if (sessionStorageAvailable()) {
         mode: tolgee.isDev() ? 'development' : 'production',
         // pass credentials
         config: {
-          apiUrl: tolgee.getInitialOptions().apiUrl || '',
-          apiKey: tolgee.getInitialOptions().apiKey || '',
-          authToken: tolgee.getInitialOptions().authToken,
-          projectId: tolgee.getInitialOptions().projectId,
-          branch: tolgee.getInitialOptions().branch,
+          apiUrl: options.apiUrl || '',
+          apiKey: options.apiKey || '',
+          authToken: options.authToken,
+          projectId: options.projectId,
+          branch: options.branch,
         },
-      }) as const;
+      } as const;
+    };
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
       const InContextTools = await loadInContextLib(
@@ -104,11 +105,21 @@ if (sessionStorageAvailable()) {
       };
     };
 
-    if (tolgee.getInitialOptions().projectId === undefined) {
+    // Ask the same authority the fetch paths use, folding in the extension-injected projectId, so the advisory can't
+    // disagree with whether a request will actually require an explicit project.
+    const options = tolgee.getInitialOptions();
+    const injectedProjectId =
+      sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
+    const { requiresExplicitProject, projectId } = resolveCredential({
+      apiKey: options.apiKey,
+      authToken: options.authToken,
+      projectId: options.projectId ?? injectedProjectId,
+    });
+    if (tolgee.isDev() && requiresExplicitProject && projectId === undefined) {
       // eslint-disable-next-line no-console
       console.warn(
         'Tolgee: `projectId` is missing from the SDK configuration. The Tolgee browser extension needs it to ' +
-          'connect in-context editing (an OAuth token carries no embedded project). ' +
+          'connect in-context editing. ' +
           'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
       );
     }
