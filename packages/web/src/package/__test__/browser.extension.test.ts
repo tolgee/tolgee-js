@@ -165,6 +165,23 @@ describe('compatibility with browser extension', () => {
     warn.mockRestore();
   });
 
+  it('warns for an injected OAuth token without a projectId in dev mode', () => {
+    // A PAK page (dev mode) whose extension injects an OAuth token but no projectId: the injected token becomes the
+    // active credential, so in-context editing needs an explicit projectId — the advisory must fire.
+    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'injected-jwt');
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiKey: 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc',
+      apiUrl: 'http://x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('projectId'));
+    warn.mockRestore();
+  });
+
   it('does not warn when a projectId is provided', () => {
     const warn = jest
       .spyOn(console, 'warn')

@@ -109,14 +109,17 @@ if (sessionStorageAvailable()) {
       };
     };
 
-    // Ask the same authority the fetch paths use, folding in the extension-injected projectId, so the advisory can't
-    // disagree with whether a request will actually require an explicit project.
+    // Ask the same authority the fetch paths use, folding in the extension-injected token and projectId, so the
+    // advisory can't disagree with whether a request will actually require an explicit project. Without the injected
+    // token, an OAuth session injected without a projectId (e.g. onto a PAK-configured page) would warn about nothing.
     const options = tolgee.getInitialOptions();
+    const injectedAuthToken =
+      sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE) || undefined;
     const injectedProjectId =
       sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
     const { requiresExplicitProject, projectId } = resolveCredential({
       apiKey: options.apiKey,
-      authToken: options.authToken,
+      authToken: options.authToken ?? injectedAuthToken,
       projectId: options.projectId ?? injectedProjectId,
     });
     if (tolgee.isDev() && requiresExplicitProject && projectId === undefined) {
