@@ -50,14 +50,16 @@ export function resolveCredential(credentials: Credentials): {
 } {
   const { apiKey, authToken, projectId } = credentials;
   const token = resolveLiveAuthToken(authToken, apiKey);
+  // Treat an empty string as no credential: buildAuthHeader emits no header for it, so keying off `!== undefined` would
+  // report hasCredential (and dispatch an unauthenticated request) and skip embedded-project resolution for `''`.
+  const hasToken = Boolean(token);
+  const hasApiKey = Boolean(apiKey);
   // embedded project applies only when the PAK itself is the active credential
-  const embedded =
-    token === undefined ? getProjectIdFromApiKey(apiKey) : undefined;
+  const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
   return {
     authHeader: buildAuthHeader(token, apiKey),
-    hasCredential: token !== undefined || apiKey !== undefined,
+    hasCredential: hasToken || hasApiKey,
     projectId: embedded ?? projectId,
-    requiresExplicitProject:
-      token !== undefined || getApiKeyType(apiKey) === 'tgpat',
+    requiresExplicitProject: hasToken || getApiKeyType(apiKey) === 'tgpat',
   };
 }

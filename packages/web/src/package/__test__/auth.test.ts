@@ -108,6 +108,19 @@ describe('resolveCredential', () => {
     expect(resolved.authHeader).toEqual({});
   });
 
+  it('treats an empty authToken as no credential (no unauthenticated request)', () => {
+    const resolved = resolveCredential({ authToken: '' });
+    expect(resolved.hasCredential).toBe(false);
+    expect(resolved.authHeader).toEqual({});
+    expect(resolved.requiresExplicitProject).toBe(false);
+  });
+
+  it('treats an empty apiKey as no credential', () => {
+    const resolved = resolveCredential({ apiKey: '' });
+    expect(resolved.hasCredential).toBe(false);
+    expect(resolved.authHeader).toEqual({});
+  });
+
   it('falls back to the supplied projectId for a malformed PAK (no NaN scope)', () => {
     // tgpak_mfrggzdf decodes to a non-numeric id, so the embedded project is unresolved.
     const resolved = resolveCredential({
