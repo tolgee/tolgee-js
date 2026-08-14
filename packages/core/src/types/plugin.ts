@@ -158,7 +158,7 @@ export type KeyPosition = {
 
 export type UiProps = {
   apiUrl: string;
-  apiKey: string;
+  apiKey?: string;
   authToken?: string;
   projectId: number | string | undefined;
   branch?: string;

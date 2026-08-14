@@ -198,7 +198,7 @@ export function Plugins(
         filterTag,
       } = getInitialOptions();
       instances.ui = plugins.ui?.({
-        apiKey: apiKey!,
+        apiKey,
         authToken,
         apiUrl: apiUrl!,
         projectId,
