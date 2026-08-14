@@ -26,5 +26,6 @@ describe('createFetchFunction SDK headers', () => {
   it('does not add SDK headers when no auth header is present', () => {
     const headers = wrappedHeaders({ headers: { 'content-type': 'x' } });
     expect(headers['x-tolgee-sdk-type']).toBeUndefined();
+    expect(headers['x-tolgee-sdk-version']).toBeUndefined();
   });
 });
