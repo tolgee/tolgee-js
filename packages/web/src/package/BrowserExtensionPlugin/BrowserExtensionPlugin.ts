@@ -19,14 +19,18 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
 
-  if ((!apiKey && !authToken) || !apiUrl) {
+  // An OAuth token authorizes in-context editing only with an explicit projectId (it carries none, unlike a PAK). A
+  // bare token is unusable, so don't treat it as a credential or pass it on: the fetch paths would otherwise pick the
+  // Bearer token over a working PAK on the same page and fail every request for want of a project.
+  const oauthUsable = Boolean(authToken && projectId);
+  if (!apiKey && !oauthUsable) {
     return undefined;
   }
 
   return {
     apiUrl,
     ...(apiKey !== undefined ? { apiKey } : {}),
-    ...(authToken !== undefined ? { authToken } : {}),
+    ...(oauthUsable ? { authToken } : {}),
     ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };

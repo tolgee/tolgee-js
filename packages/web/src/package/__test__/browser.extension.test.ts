@@ -85,6 +85,7 @@ describe('compatibility with browser extension', () => {
   it('loads in-context lib with an OAuth token (no api key)', async () => {
     sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
     sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'oauth-access-token');
+    sessionStorage.setItem(PROJECT_ID_LOCAL_STORAGE, '42');
 
     const tolgee = TolgeeCore().init({ language: 'en' });
     tolgee.addPlugin(BrowserExtensionPlugin());
@@ -95,6 +96,18 @@ describe('compatibility with browser extension', () => {
     expect(credentials.apiKey).toBeUndefined();
     expect(credentials.apiUrl).toEqual('test');
     expect(credentials.authToken).toEqual('oauth-access-token');
+    expect(credentials.projectId).toEqual('42');
+  });
+
+  it('does not load in-context lib for an OAuth token without a projectId', async () => {
+    sessionStorage.setItem(API_URL_LOCAL_STORAGE, 'test');
+    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'oauth-access-token');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).not.toBeCalled();
   });
 
   it('forwards projectId injected into sessionStorage on the OAuth path', async () => {
