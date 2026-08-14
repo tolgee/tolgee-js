@@ -74,8 +74,17 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
     case 'api_key_not_specified':
       return (
         <>
-          <AlertTitle>Oops... I miss the API key</AlertTitle>
+          <AlertTitle>Oops... I miss the API key or access token</AlertTitle>
           Add it in the code or via the chrome plugin. <DocsInContext />
+        </>
+      );
+
+    case 'project_id_not_specified':
+      return (
+        <>
+          <AlertTitle>Oops... I miss the project id</AlertTitle>
+          An OAuth token or PAT carries no project, so projectId must be set in
+          the Tolgee configuration. <DocsInContext />
         </>
       );
 

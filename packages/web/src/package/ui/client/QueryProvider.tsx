@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
 export type GlobalOptions = {
-  apiKey: string;
+  apiKey?: string;
   apiUrl: string;
   projectId: string | number | undefined;
   branch?: string;

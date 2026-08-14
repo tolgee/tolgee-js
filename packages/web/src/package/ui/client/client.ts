@@ -1,28 +1,11 @@
 import { createFetchFunction } from '@tolgee/core';
-import { getProjectIdFromApiKey } from '../../tools/decodeApiKey';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { createUrl } from '../../tools/url';
-import { AUTH_TOKEN_LOCAL_STORAGE } from '../../BrowserExtensionPlugin/constants';
-
-// The browser extension keeps a rotating OAuth access token in sessionStorage; prefer that live value over the one
-// captured at init, so a page left open past the token's lifetime still authenticates each new in-context request.
-function resolveAuthToken(fallback: string | undefined): string | undefined {
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      const injected = sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE);
-      if (injected) {
-        return injected;
-      }
-    }
-  } catch {
-    // sessionStorage can throw (SSR, sandboxed iframes) — fall back to the token passed at init.
-  }
-  return fallback;
-}
+import { resolveCredential } from '../../tools/auth';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -83,6 +66,7 @@ function buildQuery(object: { [key: string]: any }): string {
 async function customFetch(
   input: RequestInfo,
   options: GlobalOptions,
+  credential: ReturnType<typeof resolveCredential>,
   init?: RequestInit
 ) {
   if (options.apiUrl === undefined) {
@@ -91,18 +75,15 @@ async function customFetch(
   if (!isUrlValid(options.apiUrl)) {
     throw new HttpError('api_url_not_valid');
   }
-  if (options.apiKey === undefined && options.authToken === undefined) {
+  if (!credential.hasCredential) {
     throw new HttpError('api_key_not_specified');
   }
 
-  const authToken = resolveAuthToken(options.authToken);
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
     ...init.headers,
-    ...(authToken
-      ? { Authorization: `Bearer ${authToken}` }
-      : { 'X-API-Key': options.apiKey! }),
+    ...credential.authHeader,
   };
 
   const url = createUrl(options.apiUrl, input.toString()).toString();
@@ -138,9 +119,16 @@ export async function client<
   const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
 
-  const projectId = getProjectIdFromApiKey(options.apiKey) || options.projectId;
-  if (projectId !== undefined) {
-    pathParams.projectId = projectId;
+  const credential = resolveCredential(options);
+  if (
+    credential.requiresExplicitProject &&
+    credential.projectId === undefined &&
+    urlResult.includes('/projects/')
+  ) {
+    throw new HttpError('project_id_not_specified');
+  }
+  if (credential.projectId !== undefined) {
+    pathParams.projectId = credential.projectId;
     urlResult = addProjectIdToUrl(urlResult);
   }
 
@@ -182,7 +170,7 @@ export async function client<
     queryString = '?' + query;
   }
 
-  return customFetch(urlResult + queryString, options, {
+  return customFetch(urlResult + queryString, options, credential, {
     method: method as string,
     body: body || jsonBody,
     headers: jsonBody

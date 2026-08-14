@@ -64,7 +64,8 @@ export function getProjectIdFromApiKey(
     const [prefix, rest] = key.split('_');
     if (prefix === 'tgpak') {
       const [projectId] = base32Decode(rest).split('_');
-      return Number(projectId);
+      const parsed = Number(projectId);
+      return Number.isNaN(parsed) ? undefined : parsed;
     }
   } catch {
     // eslint-disable-next-line no-console
