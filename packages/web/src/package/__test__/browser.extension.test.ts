@@ -128,8 +128,10 @@ describe('compatibility with browser extension', () => {
     const { credentials } = (inContextToolsFactory.mock.calls[0] as any)[0];
     expect(credentials.apiKey).toBeUndefined();
     expect(credentials.apiUrl).toEqual('test');
-    expect(credentials.authToken).toEqual('oauth-access-token');
     expect(credentials.projectId).toEqual('42');
+    // The token is not snapshotted into the credentials — it is read live from sessionStorage so a revoked session
+    // can't be kept alive by a stale copy.
+    expect(credentials.authToken).toBeUndefined();
   });
 
   it('does not load in-context lib for an OAuth token without a projectId', async () => {
@@ -182,7 +184,7 @@ describe('compatibility with browser extension', () => {
     expect(inContextToolsFactory).toBeCalledWith(
       expect.objectContaining({
         credentials: expect.objectContaining({
-          authToken: 'oauth-access-token',
+          apiUrl: 'test',
           projectId: '42',
         }),
       })
@@ -264,6 +266,22 @@ describe('compatibility with browser extension', () => {
       apiKey: 'tgpat_x',
       apiUrl: 'http://x',
       projectId: 5,
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+
+  it('does not warn when not in dev mode, even if the credential would otherwise require a projectId', () => {
+    // authToken but no apiUrl → isDev() is false; resolveCredential would still flag requiresExplicitProject, so this
+    // isolates the isDev() early-return guard from the requiresExplicitProject check.
+    const warn = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      authToken: 'jwt',
+      apiUrl: '',
     });
     tolgee.addPlugin(BrowserExtensionPlugin());
     expect(warn).not.toHaveBeenCalled();

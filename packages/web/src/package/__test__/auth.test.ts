@@ -30,7 +30,6 @@ describe('resolveLiveAuthToken', () => {
 
   it('never overrides a configured api key with a stray sessionStorage token', () => {
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
-    // apiKey configured, no init token → stays on the api-key path
     expect(resolveLiveAuthToken(undefined, 'tgpak_x')).toBeUndefined();
   });
 

@@ -45,7 +45,7 @@ describe('ErrorAlert getErrorContent — OAuth recovery', () => {
     });
     expect(spy).toHaveBeenCalledWith(
       { type: OPEN_PLUGIN_MESSAGE },
-      expect.anything()
+      window.origin
     );
     spy.mockRestore();
     act(() => root.unmount());

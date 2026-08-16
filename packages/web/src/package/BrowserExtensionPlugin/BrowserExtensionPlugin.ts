@@ -19,16 +19,17 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
 
-  // A bare OAuth token (no projectId) is unusable — withhold it so the fetch paths don't pick it over a working PAK.
   const oauthUsable = Boolean(authToken && projectId);
   if (!apiUrl || (!apiKey && !oauthUsable)) {
     return undefined;
   }
 
+  // The OAuth token is deliberately NOT forwarded into the credentials: the in-context requests read it live from
+  // sessionStorage (resolveLiveAuthToken), so once the extension clears a revoked session the token stops — a snapshot
+  // here would live on in devCredentials and keep sending the dead token.
   return {
     apiUrl,
     ...(apiKey !== undefined ? { apiKey } : {}),
-    ...(oauthUsable ? { authToken } : {}),
     ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
@@ -96,8 +97,7 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
-      // Forward only the auth method resolveCredential actually selects, so the extension never has to re-decide
-      // precedence between a coexisting apiKey and authToken.
+      // Forward only the auth method resolveCredential selects, so the extension never re-decides precedence.
       const usingToken = Boolean(
         resolveCredential(options).authHeader.Authorization
       );

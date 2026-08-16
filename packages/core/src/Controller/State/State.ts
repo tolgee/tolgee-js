@@ -75,7 +75,7 @@ export function State(
 
     getInitialOptions() {
       const merged = { ...state.initialOptions, ...devCredentials };
-      // A dev-credentials override fully determines the auth method, clearing the base layer's other credential.
+      // An override's auth method replaces the base's; without this a partial override leaves both fields set.
       if (
         devCredentials &&
         (devCredentials.apiKey || devCredentials.authToken)
