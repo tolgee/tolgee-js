@@ -96,6 +96,11 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
+      // Forward only the auth method resolveCredential actually selects, so the extension never has to re-decide
+      // precedence between a coexisting apiKey and authToken.
+      const usingToken = Boolean(
+        resolveCredential(options).authHeader.Authorization
+      );
       return {
         // prevent extension downloading ui library
         uiPresent: true,
@@ -105,8 +110,8 @@ if (sessionStorageAvailable()) {
         // pass credentials
         config: {
           apiUrl: options.apiUrl || '',
-          apiKey: options.apiKey || '',
-          authToken: options.authToken,
+          apiKey: usingToken ? '' : options.apiKey || '',
+          authToken: usingToken ? options.authToken : undefined,
           projectId: options.projectId,
           branch: options.branch,
         },

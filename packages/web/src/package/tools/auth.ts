@@ -28,12 +28,12 @@ export function resolveCredential(credentials: Credentials): {
 }
 
 export function resolveLiveAuthToken(
-  fallback: string | undefined,
+  initAuthToken: string | undefined,
   apiKey: string | undefined
 ): string | undefined {
   // An api-key-configured SDK must not be hijacked by a stray sessionStorage token: only follow the live token when a
-  // token (fallback) is the intended auth path.
-  if (!fallback && apiKey) {
+  // token is the intended auth path.
+  if (!initAuthToken && apiKey) {
     return undefined;
   }
   try {
@@ -46,7 +46,7 @@ export function resolveLiveAuthToken(
   } catch {
     // sessionStorage can throw (SSR, sandboxed iframes).
   }
-  return fallback;
+  return initAuthToken;
 }
 
 export function buildAuthHeader(
@@ -62,8 +62,7 @@ export function buildAuthHeader(
   return {};
 }
 
-// The shared core fetch attaches the SDK headers only for x-api-key (so it never tags BackendFetch's third-party-CDN
-// path); these Tolgee-targeted Bearer request builders re-add them.
+// createFetchFunction adds the sdk headers only for x-api-key; these Tolgee-targeted Bearer builders re-add them.
 export function bearerSdkHeaders(
   authHeader: Record<string, string>
 ): Record<string, string> {

@@ -126,6 +126,21 @@ describe('compatibility with browser extension', () => {
     expect(loadInContextLib).not.toBeCalled();
   });
 
+  it('withholds a bare OAuth token (no projectId) when a PAK is also present', async () => {
+    sessionStorage.setItem(API_URL_SESSION_STORAGE, 'test');
+    sessionStorage.setItem(API_KEY_SESSION_STORAGE, 'tgpak_x');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'bare-token');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).toBeCalledTimes(1);
+    const { credentials } = (inContextToolsFactory.mock.calls[0] as any)[0];
+    expect(credentials.apiKey).toEqual('tgpak_x');
+    expect(credentials.authToken).toBeUndefined();
+  });
+
   it('does not load in-context lib when apiUrl is missing', async () => {
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'oauth-access-token');
     sessionStorage.setItem(PROJECT_ID_SESSION_STORAGE, '42');

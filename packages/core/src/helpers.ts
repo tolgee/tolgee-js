@@ -123,8 +123,8 @@ export const createFetchFunction = (
 ): FetchFn => {
   return (input, init) => {
     let headers = headersInitToRecord(init?.headers);
-    // Key off the Tolgee-proprietary x-api-key only: this shared wrapper also fronts BackendFetch, which forwards a
-    // user's Authorization header to a third-party CDN. Bearer requests to Tolgee attach the sdk headers in the web layer.
+    // Key off the Tolgee-proprietary x-api-key only — this shared wrapper also fronts BackendFetch, which forwards a
+    // user's Authorization header to a third-party CDN that must not receive these headers.
     if (headers['x-api-key']) {
       headers = {
         ...sdkHeaders(),

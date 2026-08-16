@@ -75,9 +75,8 @@ export function State(
 
     getInitialOptions() {
       const merged = { ...state.initialOptions, ...devCredentials };
-      // A dev-credentials override (the extension's in-context injection) fully determines the auth method: otherwise a
-      // statically-configured init `authToken` would out-precede a freshly-injected `apiKey` (Bearer wins in
-      // resolveCredential), so the stale token would beat the credential the user actually selected.
+      // A dev-credentials override fully determines the auth method, so a stale init `authToken` can't out-precede a
+      // freshly-injected `apiKey` (which Bearer precedence would otherwise pick).
       if (
         devCredentials &&
         (devCredentials.apiKey || devCredentials.authToken)

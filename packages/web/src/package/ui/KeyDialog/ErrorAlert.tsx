@@ -53,7 +53,10 @@ function DocsAPIKeys() {
   );
 }
 
-function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
+export function getErrorContent(
+  { code, params, message }: HttpError,
+  apiUrl: string
+) {
   switch (code) {
     case 'operation_not_permitted':
       return (
