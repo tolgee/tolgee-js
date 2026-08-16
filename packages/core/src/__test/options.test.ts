@@ -92,4 +92,40 @@ describe('initial options', () => {
 
     expect(tolgee.getInitialOptions().branch).toEqual('override');
   });
+
+  it('an injected apiKey fully replaces a statically-configured authToken', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+      authToken: 'jwt',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      apiKey: 'tgpak_x',
+      projectId: 1,
+    });
+
+    const options = tolgee.getInitialOptions();
+    expect(options.apiKey).toEqual('tgpak_x');
+    expect(options.authToken).toBeUndefined();
+  });
+
+  it('an injected authToken fully replaces a statically-configured apiKey', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+      apiKey: 'tgpak_x',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      authToken: 'jwt',
+      projectId: 1,
+    });
+
+    const options = tolgee.getInitialOptions();
+    expect(options.authToken).toEqual('jwt');
+    expect(options.apiKey).toBeUndefined();
+  });
 });
