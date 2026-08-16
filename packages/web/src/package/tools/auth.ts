@@ -1,3 +1,4 @@
+import { sdkHeaders } from '@tolgee/core';
 import { getApiKeyType, getProjectIdFromApiKey } from './decodeApiKey';
 import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
@@ -31,7 +32,7 @@ export function resolveLiveAuthToken(
   apiKey: string | undefined
 ): string | undefined {
   // An api-key-configured SDK must not be hijacked by a stray sessionStorage token: only follow the live token when a
-  // token (fallback) is the intended auth path. Boolean checks so an empty-string token doesn't slip past the guard.
+  // token (fallback) is the intended auth path.
   if (!fallback && apiKey) {
     return undefined;
   }
@@ -59,4 +60,12 @@ export function buildAuthHeader(
     return { 'X-API-Key': apiKey };
   }
   return {};
+}
+
+// The shared core fetch attaches the SDK headers only for x-api-key (so it never tags BackendFetch's third-party-CDN
+// path); these Tolgee-targeted Bearer request builders re-add them.
+export function bearerSdkHeaders(
+  authHeader: Record<string, string>
+): Record<string, string> {
+  return authHeader.Authorization ? sdkHeaders() : {};
 }

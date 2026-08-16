@@ -1,6 +1,6 @@
-import { BackendDevMiddleware, sdkHeaders, TolgeePlugin } from '@tolgee/core';
+import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
 import { createUrl } from './tools/url';
-import { resolveCredential } from './tools/auth';
+import { bearerSdkHeaders, resolveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
@@ -17,18 +17,21 @@ function createDevBackend(): BackendDevMiddleware {
     }) {
       const {
         authHeader,
-        projectId: pId,
+        projectId: resolvedProjectId,
         requiresExplicitProject,
       } = resolveCredential({ apiKey, authToken, projectId });
-      if (requiresExplicitProject && pId === undefined) {
+      if (requiresExplicitProject && resolvedProjectId === undefined) {
         throw new Error(
           "You need to specify 'projectId' when using a PAT key or an OAuth token"
         );
       }
 
       let url: URL;
-      if (pId !== undefined) {
-        url = createUrl(apiUrl, `/v2/projects/${pId}/translations/${language}`);
+      if (resolvedProjectId !== undefined) {
+        url = createUrl(
+          apiUrl,
+          `/v2/projects/${resolvedProjectId}/translations/${language}`
+        );
       } else {
         url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
       }
@@ -45,8 +48,7 @@ function createDevBackend(): BackendDevMiddleware {
 
       return fetch(url.toString(), {
         headers: {
-          // Bearer requests are Tolgee-targeted here, so attach the sdk headers the shared fetch adds only for x-api-key.
-          ...(authHeader.Authorization ? sdkHeaders() : {}),
+          ...bearerSdkHeaders(authHeader),
           ...authHeader,
           'Content-Type': 'application/json',
         },

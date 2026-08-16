@@ -16,4 +16,16 @@ describe('isDev', () => {
   it('is false with no credential', () => {
     expect(TolgeeCore().init({ apiUrl: 'http://x' }).isDev()).toBe(false);
   });
+
+  it('is false with an OAuth token but no apiUrl', () => {
+    expect(TolgeeCore().init({ authToken: 'jwt', apiUrl: '' }).isDev()).toBe(
+      false
+    );
+  });
+
+  it('is false with an api key but no apiUrl', () => {
+    expect(TolgeeCore().init({ apiKey: 'tgpak_x', apiUrl: '' }).isDev()).toBe(
+      false
+    );
+  });
 });

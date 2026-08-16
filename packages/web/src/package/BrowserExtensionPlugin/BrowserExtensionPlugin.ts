@@ -42,8 +42,6 @@ export function clearSessionStorage() {
   sessionStorage.removeItem(PROJECT_ID_SESSION_STORAGE);
 }
 
-// Warn on the SDK's own config: its DevBackend/client requests derive projectId only from init options, so an injected
-// projectId (which only the in-context UMD reads) must not silence a warning about a config that will still fail.
 function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
   if (!tolgee.isDev()) {
     return;

@@ -1,11 +1,11 @@
-import { createFetchFunction, sdkHeaders } from '@tolgee/core';
+import { createFetchFunction } from '@tolgee/core';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { createUrl } from '../../tools/url';
-import { resolveCredential } from '../../tools/auth';
+import { bearerSdkHeaders, resolveCredential } from '../../tools/auth';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -82,8 +82,7 @@ async function customFetch(
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
-    // Bearer requests are Tolgee-targeted here, so attach the sdk headers the shared fetch adds only for x-api-key.
-    ...(credential.authHeader.Authorization ? sdkHeaders() : {}),
+    ...bearerSdkHeaders(credential.authHeader),
     ...init.headers,
     ...credential.authHeader,
   };
