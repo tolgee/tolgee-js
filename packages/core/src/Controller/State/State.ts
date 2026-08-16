@@ -75,7 +75,7 @@ export function State(
 
     getInitialOptions() {
       const merged = { ...state.initialOptions, ...devCredentials };
-      // An override's auth method replaces the base's (both fields taken from the override).
+      // Clear the base's other credential — a plain merge would leave both auth fields set and pick the wrong one.
       if (
         devCredentials &&
         (devCredentials.apiKey || devCredentials.authToken)

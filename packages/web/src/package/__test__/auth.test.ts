@@ -1,4 +1,5 @@
 import {
+  bearerSdkHeaders,
   buildAuthHeader,
   resolveCredential,
   resolveLiveAuthToken,
@@ -38,6 +39,15 @@ describe('resolveLiveAuthToken', () => {
     expect(resolveLiveAuthToken('', 'tgpak_x')).toBeUndefined();
   });
 
+  it('with both an init token and an api key, follows the token (guard does not fire)', () => {
+    expect(resolveLiveAuthToken('jwt', 'tgpak_x')).toBe('jwt');
+  });
+
+  it('a live token overrides even when an api key is also configured', () => {
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
+    expect(resolveLiveAuthToken('jwt', 'tgpak_x')).toBe('rotated');
+  });
+
   it('returns the fallback when sessionStorage access throws (SSR/sandboxed iframe)', () => {
     jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('blocked');
@@ -67,6 +77,19 @@ describe('buildAuthHeader', () => {
 
   it('returns no header when neither a token nor an api key is present', () => {
     expect(buildAuthHeader(undefined, undefined)).toEqual({});
+  });
+});
+
+describe('bearerSdkHeaders', () => {
+  it('adds the SDK type/version headers on a Bearer auth header', () => {
+    const headers = bearerSdkHeaders({ Authorization: 'Bearer x' });
+    expect(headers['x-tolgee-sdk-type']).toEqual('JS');
+    expect(headers['x-tolgee-sdk-version']).toBeDefined();
+  });
+
+  it('adds nothing on an api-key auth header (the fetch wrapper adds them there)', () => {
+    expect(bearerSdkHeaders({ 'X-API-Key': 'x' })).toEqual({});
+    expect(bearerSdkHeaders({})).toEqual({});
   });
 });
 

@@ -163,9 +163,8 @@ describe('compatibility with browser extension', () => {
     expect(credentials.apiKey).toBeUndefined();
     expect(credentials.apiUrl).toEqual('test');
     expect(credentials.projectId).toEqual('42');
-    // The token is not snapshotted into the credentials — it is read live from sessionStorage so a revoked session
-    // can't be kept alive by a stale copy.
-    expect(credentials.authToken).toBeUndefined();
+    // The token flows through the credentials so isDev()/the dev-backend gate recognise the token-only session.
+    expect(credentials.authToken).toEqual('oauth-access-token');
   });
 
   it('does not load in-context lib for an OAuth token without a projectId', async () => {
@@ -218,7 +217,7 @@ describe('compatibility with browser extension', () => {
     expect(inContextToolsFactory).toBeCalledWith(
       expect.objectContaining({
         credentials: expect.objectContaining({
-          apiUrl: 'test',
+          authToken: 'oauth-access-token',
           projectId: '42',
         }),
       })

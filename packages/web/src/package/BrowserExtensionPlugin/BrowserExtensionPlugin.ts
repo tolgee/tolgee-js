@@ -19,16 +19,18 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
 
+  // A bare OAuth token (no projectId) is unusable — withhold it so the fetch paths don't pick it over a working PAK.
   const oauthUsable = Boolean(authToken && projectId);
   if (!apiUrl || (!apiKey && !oauthUsable)) {
     return undefined;
   }
 
-  // The OAuth token is deliberately NOT forwarded here — a snapshot would live on in devCredentials and keep sending a
-  // revoked token after the extension clears the session (the token is read live per request instead).
+  // The token flows through the credentials so isDev()/the dev-backend gate see it (the request path still reads the
+  // live value from sessionStorage, so rotation is picked up and a disconnect's reload drops this snapshot).
   return {
     apiUrl,
     ...(apiKey !== undefined ? { apiKey } : {}),
+    ...(oauthUsable ? { authToken } : {}),
     ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
@@ -96,7 +98,7 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
-      // Decide the winning auth method from the same snapshot we forward, so the flag and the forwarded value agree.
+      // Decide from the snapshot options we forward, not the live token, so the flag and the value can't disagree.
       const usingToken = Boolean(
         buildAuthHeader(options.authToken, options.apiKey).Authorization
       );

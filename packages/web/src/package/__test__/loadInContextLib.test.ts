@@ -53,6 +53,18 @@ describe('isTrustedInContextUrl', () => {
     ).toBe(false);
   });
 
+  it('rejects a protocol-relative override to another host', () => {
+    expect(isTrustedInContextUrl('//evil.example.com/x.js', devPage)).toBe(
+      false
+    );
+  });
+
+  it('rejects a userinfo override that embeds a dev host before an evil host', () => {
+    expect(
+      isTrustedInContextUrl('https://localhost@evil.example.com/x.js', devPage)
+    ).toBe(false);
+  });
+
   it('rejects every override on a production page (including same-origin)', () => {
     expect(
       isTrustedInContextUrl('https://app.example.com/x.js', prodPage)

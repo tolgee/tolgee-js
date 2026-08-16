@@ -29,6 +29,28 @@ describe('can handle relative urls in apiUrl', () => {
     );
   });
 
+  it('a token-only injected credential activates dev mode and fires the dev backend', async () => {
+    // The extension injects an OAuth token via overrideCredentials + sessionStorage with no init credential; isDev() and
+    // the dev-backend gate must see it, or the page silently stays on production translations.
+    const fetchMock = f.fetchWithResponse({});
+    const tolgee = TolgeeCore()
+      .use(DevBackend())
+      .init({ language: 'en', availableLanguages: ['en'], fetch: fetchMock });
+
+    expect(tolgee.isDev()).toBe(false);
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'jwt');
+    tolgee.overrideCredentials({
+      apiUrl: '/test',
+      authToken: 'jwt',
+      projectId: 1,
+    });
+
+    expect(tolgee.isDev()).toBe(true);
+    await tolgee.loadRecord({ language: 'en' });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    sessionStorage.clear();
+  });
+
   it('dev backend can resolve apiUrl with included path', async () => {
     const fetchMock = f.fetchWithResponse({});
     const tolgee = TolgeeCore()
