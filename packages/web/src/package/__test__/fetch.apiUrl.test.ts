@@ -132,8 +132,11 @@ describe('dev backend authentication headers', () => {
         apiUrl: '/test',
         authToken: 'jwt',
       });
+    const errorHandler = jest.fn();
+    tolgee.on('error', errorHandler);
     await tolgee.loadRecord({ language: 'en' });
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(errorHandler).toHaveBeenCalled();
   });
 
   it('does not fetch when a PAT (tgpat) key is used without a projectId', async () => {
@@ -147,8 +150,11 @@ describe('dev backend authentication headers', () => {
         apiUrl: '/test',
         apiKey: 'tgpat_x',
       });
+    const errorHandler = jest.fn();
+    tolgee.on('error', errorHandler);
     await tolgee.loadRecord({ language: 'en' });
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(errorHandler).toHaveBeenCalled();
   });
 
   it('prefers a live rotated sessionStorage token over the init token', async () => {

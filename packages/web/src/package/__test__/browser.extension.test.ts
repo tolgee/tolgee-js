@@ -70,6 +70,40 @@ describe('compatibility with browser extension', () => {
     );
   });
 
+  it('forwards the api key (no token) unchanged in the handshake', async () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'test',
+      apiKey: 'tgpak_x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+    expect(handshakerUpdate).toBeCalledWith(
+      expect.objectContaining({
+        config: expect.objectContaining({
+          apiKey: 'tgpak_x',
+          authToken: undefined,
+        }),
+      })
+    );
+  });
+
+  it('still forwards the api key when a stray sessionStorage token is present', async () => {
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'test',
+      apiKey: 'tgpak_x',
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+    expect(handshakerUpdate).toBeCalledWith(
+      expect.objectContaining({
+        config: expect.objectContaining({ apiKey: 'tgpak_x' }),
+      })
+    );
+  });
+
   it('forwards authToken and projectId to the extension handshake', async () => {
     const tolgee = TolgeeCore().init({
       language: 'en',

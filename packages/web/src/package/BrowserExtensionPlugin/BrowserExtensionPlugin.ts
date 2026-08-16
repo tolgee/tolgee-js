@@ -1,6 +1,6 @@
 import type { TolgeePlugin } from '@tolgee/core';
 import { Handshaker } from '../tools/extension';
-import { resolveCredential } from '../tools/auth';
+import { buildAuthHeader, resolveCredential } from '../tools/auth';
 import {
   API_KEY_SESSION_STORAGE,
   API_URL_SESSION_STORAGE,
@@ -24,9 +24,8 @@ function getCredentials() {
     return undefined;
   }
 
-  // The OAuth token is deliberately NOT forwarded into the credentials: the in-context requests read it live from
-  // sessionStorage (resolveLiveAuthToken), so once the extension clears a revoked session the token stops — a snapshot
-  // here would live on in devCredentials and keep sending the dead token.
+  // The OAuth token is deliberately NOT forwarded here — a snapshot would live on in devCredentials and keep sending a
+  // revoked token after the extension clears the session (the token is read live per request instead).
   return {
     apiUrl,
     ...(apiKey !== undefined ? { apiKey } : {}),
@@ -97,9 +96,9 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
-      // Forward only the auth method resolveCredential selects, so the extension never re-decides precedence.
+      // Decide the winning auth method from the same snapshot we forward, so the flag and the forwarded value agree.
       const usingToken = Boolean(
-        resolveCredential(options).authHeader.Authorization
+        buildAuthHeader(options.authToken, options.apiKey).Authorization
       );
       return {
         // prevent extension downloading ui library
