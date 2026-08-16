@@ -120,10 +120,11 @@ export async function client<
   let urlResult = url as string;
 
   const credential = resolveCredential(options);
+  const isProjectScopedEndpoint = urlResult.includes('/projects/');
   if (
     credential.requiresExplicitProject &&
     credential.projectId === undefined &&
-    urlResult.includes('/projects/')
+    isProjectScopedEndpoint
   ) {
     throw new HttpError('project_id_not_specified');
   }

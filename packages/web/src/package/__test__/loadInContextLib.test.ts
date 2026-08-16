@@ -32,6 +32,19 @@ describe('isTrustedInContextUrl', () => {
     );
   });
 
+  it('treats an IPv6 loopback host as a dev page', () => {
+    const v6Page = {
+      origin: 'http://[::1]:5173',
+      hostname: '[::1]',
+      href: 'http://[::1]:5173/',
+    };
+    expect(isTrustedInContextUrl('/tolgee.umd.js', v6Page)).toBe(true);
+    expect(isTrustedInContextUrl('http://[::1]:9000/x.js', v6Page)).toBe(true);
+    expect(isTrustedInContextUrl('/x.js', { ...v6Page, hostname: '::1' })).toBe(
+      true
+    );
+  });
+
   it('rejects a cross-origin override even on a dev page', () => {
     expect(
       isTrustedInContextUrl('https://evil.example.com/x.js', devPage)

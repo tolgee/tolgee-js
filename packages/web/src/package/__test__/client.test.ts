@@ -1,5 +1,5 @@
 import { client } from '../ui/client/client';
-import { AUTH_TOKEN_LOCAL_STORAGE } from '../tools/sessionStorageKeys';
+import { AUTH_TOKEN_SESSION_STORAGE } from '../tools/sessionStorageKeys';
 
 describe('in-context client auth (customFetch)', () => {
   const realFetch = global.fetch;
@@ -44,6 +44,19 @@ describe('in-context client auth (customFetch)', () => {
     expect(headers['x-api-key']).toBeUndefined();
   });
 
+  it('scopes the Bearer request URL to the supplied projectId', async () => {
+    const fetchMock = mockFetch();
+    // Real project endpoints omit the project segment (they assume a PAK); a Bearer token carries none, so the client
+    // must inject the explicit projectId into the path.
+    await client('/v2/projects/keys' as any, 'get' as any, {} as any, {
+      apiUrl: 'http://localhost',
+      authToken: 'jwt',
+      projectId: 7,
+    } as any);
+    const url = (fetchMock.mock.calls[0] as unknown as [string])[0];
+    expect(url).toContain('/v2/projects/7/keys');
+  });
+
   it('sends X-API-Key for an api key', async () => {
     const fetchMock = mockFetch();
     await call({ apiKey: 'tgpak_x' });
@@ -53,7 +66,7 @@ describe('in-context client auth (customFetch)', () => {
   });
 
   it('prefers a live sessionStorage token over the init token', async () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'rotated');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
     const fetchMock = mockFetch();
     await call({ authToken: 'init-token' });
     expect(lowerCasedHeadersOf(fetchMock)['authorization']).toEqual(
@@ -62,7 +75,7 @@ describe('in-context client auth (customFetch)', () => {
   });
 
   it('does not let a stray sessionStorage token hijack a configured api key', async () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'stray');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
     const fetchMock = mockFetch();
     await call({ apiKey: 'tgpak_x' });
     const headers = lowerCasedHeadersOf(fetchMock);
@@ -101,7 +114,7 @@ describe('in-context client auth (customFetch)', () => {
 
   it('enforces the projectId precondition off the live token, not just the init options', async () => {
     // No init credential, but a token sits in sessionStorage — the guard must still fire (it keys off the live token).
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'live');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'live');
     mockFetch();
     await expect(call({ projectId: undefined })).rejects.toThrow(
       'project_id_not_specified'

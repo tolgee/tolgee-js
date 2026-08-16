@@ -1,7 +1,7 @@
 import { TolgeeCore } from '@tolgee/core';
 import { createFetchingUtility } from './fetchingUtillity';
 import { DevBackend } from '../DevBackend';
-import { AUTH_TOKEN_LOCAL_STORAGE } from '../tools/sessionStorageKeys';
+import { AUTH_TOKEN_SESSION_STORAGE } from '../tools/sessionStorageKeys';
 
 describe('can handle relative urls in apiUrl', () => {
   let f: ReturnType<typeof createFetchingUtility>;
@@ -151,7 +151,7 @@ describe('dev backend authentication headers', () => {
   });
 
   it('prefers a live rotated sessionStorage token over the init token', async () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'rotated');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
     const fetchMock = f.fetchWithResponse({});
     const tolgee = TolgeeCore()
       .use(DevBackend())

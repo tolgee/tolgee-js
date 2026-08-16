@@ -2,28 +2,27 @@ import type { TolgeePlugin } from '@tolgee/core';
 import { Handshaker } from '../tools/extension';
 import { resolveCredential } from '../tools/auth';
 import {
-  API_KEY_LOCAL_STORAGE,
-  API_URL_LOCAL_STORAGE,
-  AUTH_TOKEN_LOCAL_STORAGE,
-  BRANCH_LOCAL_STORAGE,
-  PROJECT_ID_LOCAL_STORAGE,
+  API_KEY_SESSION_STORAGE,
+  API_URL_SESSION_STORAGE,
+  AUTH_TOKEN_SESSION_STORAGE,
+  BRANCH_SESSION_STORAGE,
+  PROJECT_ID_SESSION_STORAGE,
 } from '../tools/sessionStorageKeys';
 import { loadInContextLib } from './loadInContextLib';
 
 function getCredentials() {
-  const apiKey = sessionStorage.getItem(API_KEY_LOCAL_STORAGE) || undefined;
-  const apiUrl = sessionStorage.getItem(API_URL_LOCAL_STORAGE) || undefined;
-  const branch = sessionStorage.getItem(BRANCH_LOCAL_STORAGE) || undefined;
+  const apiKey = sessionStorage.getItem(API_KEY_SESSION_STORAGE) || undefined;
+  const apiUrl = sessionStorage.getItem(API_URL_SESSION_STORAGE) || undefined;
+  const branch = sessionStorage.getItem(BRANCH_SESSION_STORAGE) || undefined;
   const authToken =
-    sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE) || undefined;
+    sessionStorage.getItem(AUTH_TOKEN_SESSION_STORAGE) || undefined;
   const projectId =
-    sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
+    sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
 
-  // An OAuth token authorizes in-context editing only with an explicit projectId (it carries none, unlike a PAK). A
-  // bare token is unusable, so don't treat it as a credential or pass it on: the fetch paths would otherwise pick the
-  // Bearer token over a working PAK on the same page and fail every request for want of a project.
+  // A bare OAuth token (no projectId) is unusable and must not be passed on, or the fetch paths pick the Bearer token
+  // over a working PAK and fail every request for want of a project.
   const oauthUsable = Boolean(authToken && projectId);
-  if (!apiKey && !oauthUsable) {
+  if (!apiUrl || (!apiKey && !oauthUsable)) {
     return undefined;
   }
 
@@ -37,11 +36,35 @@ function getCredentials() {
 }
 
 export function clearSessionStorage() {
-  sessionStorage.removeItem(API_KEY_LOCAL_STORAGE);
-  sessionStorage.removeItem(API_URL_LOCAL_STORAGE);
-  sessionStorage.removeItem(BRANCH_LOCAL_STORAGE);
-  sessionStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE);
-  sessionStorage.removeItem(PROJECT_ID_LOCAL_STORAGE);
+  sessionStorage.removeItem(API_KEY_SESSION_STORAGE);
+  sessionStorage.removeItem(API_URL_SESSION_STORAGE);
+  sessionStorage.removeItem(BRANCH_SESSION_STORAGE);
+  sessionStorage.removeItem(AUTH_TOKEN_SESSION_STORAGE);
+  sessionStorage.removeItem(PROJECT_ID_SESSION_STORAGE);
+}
+
+// resolveCredential reads the live (extension-injected) token itself; we only supply the injected projectId, which it
+// does not read, so the advisory doesn't fire on a PAK-configured page that merely has a stray injected token.
+function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
+  if (!tolgee.isDev()) {
+    return;
+  }
+  const options = tolgee.getInitialOptions();
+  const injectedProjectId =
+    sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
+  const { requiresExplicitProject, projectId } = resolveCredential({
+    apiKey: options.apiKey,
+    authToken: options.authToken,
+    projectId: options.projectId ?? injectedProjectId,
+  });
+  if (requiresExplicitProject && projectId === undefined) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      'Tolgee: `projectId` is missing from the SDK configuration. The Tolgee browser extension needs it to ' +
+        'connect in-context editing. ' +
+        'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
+    );
+  }
 }
 
 function onDocumentReady(callback: () => void) {
@@ -109,27 +132,7 @@ if (sessionStorageAvailable()) {
       };
     };
 
-    // Ask the same authority the fetch paths use, folding in the extension-injected token and projectId, so the
-    // advisory can't disagree with whether a request will actually require an explicit project. Without the injected
-    // token, an OAuth session injected without a projectId (e.g. onto a PAK-configured page) would warn about nothing.
-    const options = tolgee.getInitialOptions();
-    const injectedAuthToken =
-      sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE) || undefined;
-    const injectedProjectId =
-      sessionStorage.getItem(PROJECT_ID_LOCAL_STORAGE) || undefined;
-    const { requiresExplicitProject, projectId } = resolveCredential({
-      apiKey: options.apiKey,
-      authToken: options.authToken ?? injectedAuthToken,
-      projectId: options.projectId ?? injectedProjectId,
-    });
-    if (tolgee.isDev() && requiresExplicitProject && projectId === undefined) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        'Tolgee: `projectId` is missing from the SDK configuration. The Tolgee browser extension needs it to ' +
-          'connect in-context editing. ' +
-          'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
-      );
-    }
+    warnIfProjectIdMissing(tolgee);
 
     tolgee.on('running', ({ value: isRunning }) => {
       if (isRunning) {

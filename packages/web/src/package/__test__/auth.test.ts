@@ -3,7 +3,7 @@ import {
   resolveCredential,
   resolveLiveAuthToken,
 } from '../tools/auth';
-import { AUTH_TOKEN_LOCAL_STORAGE } from '../tools/sessionStorageKeys';
+import { AUTH_TOKEN_SESSION_STORAGE } from '../tools/sessionStorageKeys';
 
 // A real tgpak whose base32 body decodes to project id 1 (see decodeApiKey.test.ts).
 const PAK_FOR_PROJECT_1 = 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc';
@@ -15,7 +15,7 @@ describe('resolveLiveAuthToken', () => {
   });
 
   it('prefers the live sessionStorage token over the init token (rotation)', () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'rotated');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
     expect(resolveLiveAuthToken('init-token', undefined)).toBe('rotated');
   });
 
@@ -24,12 +24,12 @@ describe('resolveLiveAuthToken', () => {
   });
 
   it('reads sessionStorage on a fresh page when no init token was supplied', () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'injected');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'injected');
     expect(resolveLiveAuthToken(undefined, undefined)).toBe('injected');
   });
 
   it('never overrides a configured api key with a stray sessionStorage token', () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'stray');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
     // apiKey configured, no init token → stays on the api-key path
     expect(resolveLiveAuthToken(undefined, 'tgpak_x')).toBeUndefined();
   });
@@ -131,7 +131,7 @@ describe('resolveCredential', () => {
   });
 
   it('prefers a live sessionStorage token for the header and project requirement', () => {
-    sessionStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE, 'rotated');
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
     const resolved = resolveCredential({ authToken: 'init', projectId: 3 });
     expect(resolved.authHeader).toEqual({ Authorization: 'Bearer rotated' });
     expect(resolved.requiresExplicitProject).toBe(true);

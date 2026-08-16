@@ -44,9 +44,7 @@ export type TolgeeOptionsInternal = {
 
   /**
    * OAuth 2.1 access token, sent as `Authorization: Bearer`. An alternative to `apiKey`, typically supplied by the
-   * Tolgee browser extension. Carries no embedded project, so `projectId` is required when using it. Note: when the
-   * browser extension has injected a (rotating) token into `sessionStorage`, that live token takes precedence over this
-   * one, so in-context editing keeps working after the token rotates.
+   * Tolgee browser extension. Carries no embedded project, so `projectId` is required when using it.
    */
   authToken?: string;
 

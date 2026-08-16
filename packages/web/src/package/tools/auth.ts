@@ -1,5 +1,5 @@
 import { getApiKeyType, getProjectIdFromApiKey } from './decodeApiKey';
-import { AUTH_TOKEN_LOCAL_STORAGE } from './sessionStorageKeys';
+import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
 export function resolveLiveAuthToken(
   fallback: string | undefined,
@@ -12,7 +12,7 @@ export function resolveLiveAuthToken(
   }
   try {
     if (typeof sessionStorage !== 'undefined') {
-      const injected = sessionStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE);
+      const injected = sessionStorage.getItem(AUTH_TOKEN_SESSION_STORAGE);
       if (injected) {
         return injected;
       }
@@ -50,11 +50,8 @@ export function resolveCredential(credentials: Credentials): {
 } {
   const { apiKey, authToken, projectId } = credentials;
   const token = resolveLiveAuthToken(authToken, apiKey);
-  // Treat an empty string as no credential: buildAuthHeader emits no header for it, so keying off `!== undefined` would
-  // report hasCredential (and dispatch an unauthenticated request) and skip embedded-project resolution for `''`.
   const hasToken = Boolean(token);
   const hasApiKey = Boolean(apiKey);
-  // embedded project applies only when the PAK itself is the active credential
   const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
   return {
     authHeader: buildAuthHeader(token, apiKey),
