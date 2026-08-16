@@ -62,7 +62,6 @@ export function buildAuthHeader(
   return {};
 }
 
-// createFetchFunction adds the sdk headers only for x-api-key; these Tolgee-targeted Bearer builders re-add them.
 export function bearerSdkHeaders(
   authHeader: Record<string, string>
 ): Record<string, string> {

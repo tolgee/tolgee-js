@@ -75,8 +75,7 @@ export function State(
 
     getInitialOptions() {
       const merged = { ...state.initialOptions, ...devCredentials };
-      // A dev-credentials override fully determines the auth method, so a stale init `authToken` can't out-precede a
-      // freshly-injected `apiKey` (which Bearer precedence would otherwise pick).
+      // A dev-credentials override fully determines the auth method, clearing the base layer's other credential.
       if (
         devCredentials &&
         (devCredentials.apiKey || devCredentials.authToken)

@@ -53,6 +53,23 @@ describe('compatibility with browser extension', () => {
     });
   });
 
+  it('forwards only the winning Bearer token when both apiKey and authToken are configured', async () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'test',
+      apiKey: 'tgpak_x',
+      authToken: 'jwt',
+      projectId: 5,
+    });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+    expect(handshakerUpdate).toBeCalledWith(
+      expect.objectContaining({
+        config: expect.objectContaining({ apiKey: '', authToken: 'jwt' }),
+      })
+    );
+  });
+
   it('forwards authToken and projectId to the extension handshake', async () => {
     const tolgee = TolgeeCore().init({
       language: 'en',

@@ -111,6 +111,24 @@ describe('initial options', () => {
     expect(options.authToken).toBeUndefined();
   });
 
+  it('an override without a credential preserves the init auth method', () => {
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+      authToken: 'jwt',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      branch: 'feature',
+    });
+
+    const options = tolgee.getInitialOptions();
+    expect(options.authToken).toEqual('jwt');
+    expect(options.apiKey).toBeUndefined();
+    expect(options.branch).toEqual('feature');
+  });
+
   it('an injected authToken fully replaces a statically-configured apiKey', () => {
     const tolgee = TolgeeCore().init({
       language: 'en',
