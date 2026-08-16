@@ -1,13 +1,38 @@
 import { getApiKeyType, getProjectIdFromApiKey } from './decodeApiKey';
 import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
+type Credentials = {
+  apiKey?: string;
+  authToken?: string;
+  projectId?: number | string;
+};
+
+export function resolveCredential(credentials: Credentials): {
+  authHeader: Record<string, string>;
+  hasCredential: boolean;
+  projectId: number | string | undefined;
+  requiresExplicitProject: boolean;
+} {
+  const { apiKey, authToken, projectId } = credentials;
+  const token = resolveLiveAuthToken(authToken, apiKey);
+  const hasToken = Boolean(token);
+  const hasApiKey = Boolean(apiKey);
+  const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
+  return {
+    authHeader: buildAuthHeader(token, apiKey),
+    hasCredential: hasToken || hasApiKey,
+    projectId: embedded ?? projectId,
+    requiresExplicitProject: hasToken || getApiKeyType(apiKey) === 'tgpat',
+  };
+}
+
 export function resolveLiveAuthToken(
   fallback: string | undefined,
   apiKey: string | undefined
 ): string | undefined {
   // An api-key-configured SDK must not be hijacked by a stray sessionStorage token: only follow the live token when a
-  // token (fallback) is the intended auth path.
-  if (fallback === undefined && apiKey !== undefined) {
+  // token (fallback) is the intended auth path. Boolean checks so an empty-string token doesn't slip past the guard.
+  if (!fallback && apiKey) {
     return undefined;
   }
   try {
@@ -34,29 +59,4 @@ export function buildAuthHeader(
     return { 'X-API-Key': apiKey };
   }
   return {};
-}
-
-type Credentials = {
-  apiKey?: string;
-  authToken?: string;
-  projectId?: number | string;
-};
-
-export function resolveCredential(credentials: Credentials): {
-  authHeader: Record<string, string>;
-  hasCredential: boolean;
-  projectId: number | string | undefined;
-  requiresExplicitProject: boolean;
-} {
-  const { apiKey, authToken, projectId } = credentials;
-  const token = resolveLiveAuthToken(authToken, apiKey);
-  const hasToken = Boolean(token);
-  const hasApiKey = Boolean(apiKey);
-  const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
-  return {
-    authHeader: buildAuthHeader(token, apiKey),
-    hasCredential: hasToken || hasApiKey,
-    projectId: embedded ?? projectId,
-    requiresExplicitProject: hasToken || getApiKeyType(apiKey) === 'tgpat',
-  };
 }

@@ -34,6 +34,11 @@ describe('resolveLiveAuthToken', () => {
     expect(resolveLiveAuthToken(undefined, 'tgpak_x')).toBeUndefined();
   });
 
+  it('an empty-string init token does not disable the api-key hijack guard', () => {
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
+    expect(resolveLiveAuthToken('', 'tgpak_x')).toBeUndefined();
+  });
+
   it('returns the fallback when sessionStorage access throws (SSR/sandboxed iframe)', () => {
     jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
       throw new Error('blocked');

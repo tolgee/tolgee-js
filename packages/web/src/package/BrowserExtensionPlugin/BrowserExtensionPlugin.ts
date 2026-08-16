@@ -19,8 +19,7 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
 
-  // A bare OAuth token (no projectId) is unusable and must not be passed on, or the fetch paths pick the Bearer token
-  // over a working PAK and fail every request for want of a project.
+  // A bare OAuth token (no projectId) is unusable — withhold it so the fetch paths don't pick it over a working PAK.
   const oauthUsable = Boolean(authToken && projectId);
   if (!apiUrl || (!apiKey && !oauthUsable)) {
     return undefined;
@@ -43,20 +42,15 @@ export function clearSessionStorage() {
   sessionStorage.removeItem(PROJECT_ID_SESSION_STORAGE);
 }
 
-// resolveCredential reads the live (extension-injected) token itself; we only supply the injected projectId, which it
-// does not read, so the advisory doesn't fire on a PAK-configured page that merely has a stray injected token.
+// Warn on the SDK's own config: its DevBackend/client requests derive projectId only from init options, so an injected
+// projectId (which only the in-context UMD reads) must not silence a warning about a config that will still fail.
 function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
   if (!tolgee.isDev()) {
     return;
   }
-  const options = tolgee.getInitialOptions();
-  const injectedProjectId =
-    sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
-  const { requiresExplicitProject, projectId } = resolveCredential({
-    apiKey: options.apiKey,
-    authToken: options.authToken,
-    projectId: options.projectId ?? injectedProjectId,
-  });
+  const { requiresExplicitProject, projectId } = resolveCredential(
+    tolgee.getInitialOptions()
+  );
   if (requiresExplicitProject && projectId === undefined) {
     // eslint-disable-next-line no-console
     console.warn(

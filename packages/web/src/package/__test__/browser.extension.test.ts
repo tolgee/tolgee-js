@@ -126,6 +126,17 @@ describe('compatibility with browser extension', () => {
     expect(loadInContextLib).not.toBeCalled();
   });
 
+  it('does not load in-context lib when apiUrl is missing', async () => {
+    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'oauth-access-token');
+    sessionStorage.setItem(PROJECT_ID_SESSION_STORAGE, '42');
+
+    const tolgee = TolgeeCore().init({ language: 'en' });
+    tolgee.addPlugin(BrowserExtensionPlugin());
+    await tolgee.run();
+
+    expect(loadInContextLib).not.toBeCalled();
+  });
+
   it('forwards projectId injected into sessionStorage on the OAuth path', async () => {
     sessionStorage.setItem(API_URL_SESSION_STORAGE, 'test');
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'oauth-access-token');
@@ -237,7 +248,9 @@ describe('compatibility with browser extension', () => {
     warn.mockRestore();
   });
 
-  it('does not warn when the extension injected projectId into sessionStorage', () => {
+  it('still warns when only an injected projectId is present (SDK config lacks its own)', () => {
+    // The injected projectId is read by the in-context UMD, not by the SDK's own DevBackend/client requests, which
+    // derive it from init options — so a token-configured SDK with no projectId of its own must still be warned.
     sessionStorage.setItem(PROJECT_ID_SESSION_STORAGE, '42');
     const warn = jest
       .spyOn(console, 'warn')
@@ -248,7 +261,7 @@ describe('compatibility with browser extension', () => {
       apiUrl: 'http://x',
     });
     tolgee.addPlugin(BrowserExtensionPlugin());
-    expect(warn).not.toHaveBeenCalled();
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('projectId'));
     warn.mockRestore();
   });
 

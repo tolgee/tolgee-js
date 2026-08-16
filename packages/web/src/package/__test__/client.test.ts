@@ -48,13 +48,35 @@ describe('in-context client auth (customFetch)', () => {
     const fetchMock = mockFetch();
     // Real project endpoints omit the project segment (they assume a PAK); a Bearer token carries none, so the client
     // must inject the explicit projectId into the path.
-    await client('/v2/projects/keys' as any, 'get' as any, {} as any, {
-      apiUrl: 'http://localhost',
-      authToken: 'jwt',
-      projectId: 7,
-    } as any);
+    await client(
+      '/v2/projects/keys' as any,
+      'get' as any,
+      {} as any,
+      {
+        apiUrl: 'http://localhost',
+        authToken: 'jwt',
+        projectId: 7,
+      } as any
+    );
     const url = (fetchMock.mock.calls[0] as unknown as [string])[0];
     expect(url).toContain('/v2/projects/7/keys');
+  });
+
+  it('scopes a PAT request to its explicit projectId and sends X-API-Key', async () => {
+    const fetchMock = mockFetch();
+    await client(
+      '/v2/projects/keys' as any,
+      'get' as any,
+      {} as any,
+      {
+        apiUrl: 'http://localhost',
+        apiKey: 'tgpat_x',
+        projectId: 9,
+      } as any
+    );
+    const url = (fetchMock.mock.calls[0] as unknown as [string])[0];
+    expect(url).toContain('/v2/projects/9/keys');
+    expect(lowerCasedHeadersOf(fetchMock)['x-api-key']).toEqual('tgpat_x');
   });
 
   it('sends X-API-Key for an api key', async () => {

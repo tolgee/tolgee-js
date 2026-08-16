@@ -1,3 +1,5 @@
+jest.mock('../tools/isSSR', () => ({ isSSR: jest.fn(() => false) }));
+import { isSSR } from '../tools/isSSR';
 import {
   inContextLibSrc,
   isTrustedInContextUrl,
@@ -90,6 +92,14 @@ describe('overrideUrl', () => {
   it('returns undefined when the global is unset', () => {
     expect(overrideUrl()).toBeUndefined();
   });
+
+  it('returns undefined under SSR without touching window', () => {
+    (isSSR as jest.Mock).mockReturnValueOnce(true);
+    (
+      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
+    ).__TOLGEE_IN_CONTEXT_URL__ = '/tolgee.umd.js';
+    expect(overrideUrl()).toBeUndefined();
+  });
 });
 
 describe('inContextLibSrc', () => {
@@ -111,5 +121,13 @@ describe('inContextLibSrc', () => {
     ).__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
     expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
     expect(inContextLibSrc('1.2.3')).toContain('@tolgee/web@1.2.3');
+  });
+
+  it('falls back to the CDN under SSR (ignoring any override)', () => {
+    (isSSR as jest.Mock).mockReturnValueOnce(true);
+    (
+      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
+    ).__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
+    expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
   });
 });
