@@ -1,4 +1,4 @@
-import { createFetchFunction } from '@tolgee/core';
+import { createFetchFunction, sdkHeaders } from '@tolgee/core';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
@@ -82,6 +82,8 @@ async function customFetch(
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
+    // Bearer requests are Tolgee-targeted here, so attach the sdk headers the shared fetch adds only for x-api-key.
+    ...(credential.authHeader.Authorization ? sdkHeaders() : {}),
     ...init.headers,
     ...credential.authHeader,
   };

@@ -15,12 +15,12 @@ describe('createFetchFunction SDK headers', () => {
     expect(headers['x-tolgee-sdk-version']).toBeDefined();
   });
 
-  it('adds SDK type/version headers for a Bearer Authorization request', () => {
+  it('does not add SDK headers for a bare Authorization request (BackendFetch may target a third-party host)', () => {
     const headers = wrappedHeaders({
       headers: { authorization: 'Bearer jwt' },
     });
-    expect(headers['x-tolgee-sdk-type']).toEqual('JS');
-    expect(headers['x-tolgee-sdk-version']).toBeDefined();
+    expect(headers['x-tolgee-sdk-type']).toBeUndefined();
+    expect(headers['x-tolgee-sdk-version']).toBeUndefined();
   });
 
   it('does not add SDK headers when no auth header is present', () => {

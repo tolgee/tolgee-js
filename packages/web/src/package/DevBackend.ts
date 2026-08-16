@@ -1,4 +1,4 @@
-import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
+import { BackendDevMiddleware, sdkHeaders, TolgeePlugin } from '@tolgee/core';
 import { createUrl } from './tools/url';
 import { resolveCredential } from './tools/auth';
 
@@ -45,6 +45,8 @@ function createDevBackend(): BackendDevMiddleware {
 
       return fetch(url.toString(), {
         headers: {
+          // Bearer requests are Tolgee-targeted here, so attach the sdk headers the shared fetch adds only for x-api-key.
+          ...(authHeader.Authorization ? sdkHeaders() : {}),
           ...authHeader,
           'Content-Type': 'application/json',
         },

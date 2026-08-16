@@ -87,6 +87,14 @@ describe('in-context client auth (customFetch)', () => {
     expect(headers['authorization']).toBeUndefined();
   });
 
+  it('attaches SDK type/version headers on a Bearer request', async () => {
+    const fetchMock = mockFetch();
+    await call({ authToken: 'jwt' });
+    const headers = lowerCasedHeadersOf(fetchMock);
+    expect(headers['x-tolgee-sdk-type']).toEqual('JS');
+    expect(headers['x-tolgee-sdk-version']).toBeDefined();
+  });
+
   it('prefers a live sessionStorage token over the init token', async () => {
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
     const fetchMock = mockFetch();

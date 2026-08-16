@@ -118,6 +118,7 @@ describe('dev backend authentication headers', () => {
     const headers = lowerCasedHeadersOf(fetchMock);
     expect(headers['authorization']).toEqual('Bearer jwt');
     expect(headers['x-api-key']).toBeUndefined();
+    expect(headers['x-tolgee-sdk-type']).toEqual('JS');
   });
 
   it('does not fetch when an OAuth token is used without a projectId', async () => {
