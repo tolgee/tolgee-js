@@ -118,6 +118,16 @@ export function getErrorContent(
         </>
       );
 
+    case 'project_not_found':
+      return (
+        <>
+          <AlertTitle>Project not found</AlertTitle>
+          The configured project doesn't exist on this server, or your account
+          can't access it. Check the projectId in the Tolgee configuration, or
+          ask for access. <DocsInContext />
+        </>
+      );
+
     case 'permissions_not_sufficient_to_edit':
       return (
         <>
