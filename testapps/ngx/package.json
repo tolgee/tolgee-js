@@ -6,7 +6,7 @@
     "develop": "sleep 10 && ng serve --configuration=stage",
     "start": "ng serve --configuration=stage",
     "startE2e": "ng serve --configuration=e2e",
-    "build": "ng build --configuration=production",
+    "build": "node ../../scripts/customLinks.js && ng build --configuration=production",
     "clean": "rm -rf build build-e2e dist dist-e2e lib .angular",
     "lint": "ng lint",
     "e2e": "ng e2e",
