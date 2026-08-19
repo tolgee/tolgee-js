@@ -1,12 +1,13 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
-import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
 import { createUrl } from './tools/url';
+import { bearerSdkHeaders, resolveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
     getRecord({
       apiUrl,
       apiKey,
+      authToken,
       projectId,
       branch,
       language,
@@ -14,10 +15,23 @@ function createDevBackend(): BackendDevMiddleware {
       filterTag,
       fetch,
     }) {
-      const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
+      const {
+        authHeader,
+        projectId: resolvedProjectId,
+        requiresExplicitProject,
+      } = resolveCredential({ apiKey, authToken, projectId });
+      if (requiresExplicitProject && resolvedProjectId === undefined) {
+        throw new Error(
+          "You need to specify 'projectId' when using a PAT key or an OAuth token"
+        );
+      }
+
       let url: URL;
-      if (pId !== undefined) {
-        url = createUrl(apiUrl, `/v2/projects/${pId}/translations/${language}`);
+      if (resolvedProjectId !== undefined) {
+        url = createUrl(
+          apiUrl,
+          `/v2/projects/${resolvedProjectId}/translations/${language}`
+        );
       } else {
         url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
       }
@@ -32,13 +46,10 @@ function createDevBackend(): BackendDevMiddleware {
         url.searchParams.append('filterTag', tag);
       });
 
-      if (getApiKeyType(apiKey) === 'tgpat' && projectId === undefined) {
-        throw new Error("You need to specify 'projectId' when using PAT key");
-      }
-
       return fetch(url.toString(), {
         headers: {
-          'X-API-Key': apiKey || '',
+          ...bearerSdkHeaders(authHeader),
+          ...authHeader,
           'Content-Type': 'application/json',
         },
         // @ts-ignore - tell next.js to not use cache

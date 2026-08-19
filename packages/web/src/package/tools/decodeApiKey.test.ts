@@ -11,4 +11,9 @@ describe('get projectId from api key', () => {
   it("won't fail on legacy code", () => {
     expect(getProjectIdFromApiKey(OLD_KEY)).toBeUndefined();
   });
+
+  it('returns undefined for a tgpak whose body decodes to a non-numeric id', () => {
+    // tgpak_mfrggzdf base32-decodes to "abcde" -> Number(...) is NaN
+    expect(getProjectIdFromApiKey('tgpak_mfrggzdf')).toBeUndefined();
+  });
 });

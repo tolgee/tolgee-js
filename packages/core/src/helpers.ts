@@ -113,15 +113,21 @@ function headersInitToRecord(headersInit?: HeadersInit | undefined) {
   return Object.fromEntries(new Headers(headersInit).entries());
 }
 
+export const sdkHeaders = (): Record<string, string> => ({
+  'x-tolgee-sdk-type': 'JS',
+  'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+});
+
 export const createFetchFunction = (
   fetchFn: FetchFn = defaultFetchFunction
 ): FetchFn => {
   return (input, init) => {
     let headers = headersInitToRecord(init?.headers);
+    // Key off the Tolgee-proprietary x-api-key only — this shared wrapper also fronts BackendFetch, which forwards a
+    // user's Authorization header to a third-party CDN that must not receive these headers.
     if (headers['x-api-key']) {
       headers = {
-        'x-tolgee-sdk-type': 'JS',
-        'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+        ...sdkHeaders(),
         ...headers,
       };
     }

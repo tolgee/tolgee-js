@@ -1,8 +1,9 @@
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, Link } from '@mui/material';
 import { HttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
 import { createUrl } from '../../tools/url';
+import { OPEN_PLUGIN_MESSAGE } from '../../BrowserExtensionPlugin/constants';
 
 type Props = {
   error: HttpError | Error;
@@ -29,6 +30,21 @@ function DocsInContext() {
   );
 }
 
+function OpenExtension() {
+  return (
+    <Link
+      component="button"
+      type="button"
+      sx={{ verticalAlign: 'baseline' }}
+      onClick={() =>
+        window.postMessage({ type: OPEN_PLUGIN_MESSAGE }, window.origin)
+      }
+    >
+      Open the Tolgee plugin
+    </Link>
+  );
+}
+
 function DocsAPIKeys() {
   return (
     <NewTabLink href="https://tolgee.io/platform/account_settings/api_keys_and_pat_tokens">
@@ -37,7 +53,10 @@ function DocsAPIKeys() {
   );
 }
 
-function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
+export function getErrorContent(
+  { code, params, message }: HttpError,
+  apiUrl: string
+) {
   switch (code) {
     case 'operation_not_permitted':
       return (
@@ -52,6 +71,17 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
         <>
           <AlertTitle>Invalid API key</AlertTitle>
           Check it in the code or in the chrome plugin. <DocsInContext />
+        </>
+      );
+
+    case 'unauthenticated':
+    case 'invalid_jwt_token':
+    case 'expired_jwt_token':
+    case 'general_jwt_error':
+      return (
+        <>
+          <AlertTitle>You're not signed in</AlertTitle>
+          Sign in again in the Tolgee plugin to keep editing. <OpenExtension />
         </>
       );
 
@@ -74,8 +104,27 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
     case 'api_key_not_specified':
       return (
         <>
-          <AlertTitle>Oops... I miss the API key</AlertTitle>
+          <AlertTitle>Oops... I miss the API key or access token</AlertTitle>
           Add it in the code or via the chrome plugin. <DocsInContext />
+        </>
+      );
+
+    case 'project_id_not_specified':
+      return (
+        <>
+          <AlertTitle>Oops... I miss the project id</AlertTitle>
+          An OAuth token or PAT carries no project, so projectId must be set in
+          the Tolgee configuration. <DocsInContext />
+        </>
+      );
+
+    case 'project_not_found':
+      return (
+        <>
+          <AlertTitle>Project not found</AlertTitle>
+          The configured project doesn't exist on this server, or your account
+          can't access it. Check the projectId in the Tolgee configuration, or
+          ask for access. <DocsInContext />
         </>
       );
 

@@ -1,0 +1,59 @@
+import { createRoot, Root } from 'react-dom/client';
+import { act } from 'react-dom/test-utils';
+import { getErrorContent } from '../ui/KeyDialog/ErrorAlert';
+import { HttpError, ErrorStatusCode } from '../ui/client/HttpError';
+import { OPEN_PLUGIN_MESSAGE } from '../BrowserExtensionPlugin/constants';
+
+const renderFor = (code: string) => {
+  const container = document.createElement('div');
+  document.body.appendChild(container);
+  const root: Root = createRoot(container);
+  act(() => {
+    root.render(
+      getErrorContent(new HttpError(code as ErrorStatusCode), 'http://x') as any
+    );
+  });
+  return { container, root };
+};
+
+describe('ErrorAlert getErrorContent — OAuth recovery', () => {
+  const jwtCodes = [
+    'unauthenticated',
+    'invalid_jwt_token',
+    'expired_jwt_token',
+    'general_jwt_error',
+  ];
+
+  it.each(jwtCodes)('renders the sign-in-again recovery for %s', (code) => {
+    const { container, root } = renderFor(code);
+    expect(container.textContent).toContain("You're not signed in");
+    expect(container.querySelector('button')?.textContent).toContain(
+      'Open the Tolgee plugin'
+    );
+    act(() => root.unmount());
+  });
+
+  it('the recovery button posts the open-plugin message', () => {
+    const spy = jest
+      .spyOn(window, 'postMessage')
+      .mockImplementation(() => undefined);
+    const { container, root } = renderFor('expired_jwt_token');
+    act(() => {
+      container
+        .querySelector('button')
+        ?.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+    });
+    expect(spy).toHaveBeenCalledWith(
+      { type: OPEN_PLUGIN_MESSAGE },
+      window.origin
+    );
+    spy.mockRestore();
+    act(() => root.unmount());
+  });
+
+  it('renders the missing-projectId guidance', () => {
+    const { container, root } = renderFor('project_id_not_specified');
+    expect(container.textContent).toContain('project id');
+    act(() => root.unmount());
+  });
+});

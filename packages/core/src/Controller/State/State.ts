@@ -74,7 +74,16 @@ export function State(
     },
 
     getInitialOptions() {
-      return { ...state.initialOptions, ...devCredentials };
+      const merged = { ...state.initialOptions, ...devCredentials };
+      // Clear the base's other credential — a plain merge would leave both auth fields set and pick the wrong one.
+      if (
+        devCredentials &&
+        (devCredentials.apiKey || devCredentials.authToken)
+      ) {
+        merged.apiKey = devCredentials.apiKey;
+        merged.authToken = devCredentials.authToken;
+      }
+      return merged;
     },
 
     addActiveNs(ns: NsFallback) {

@@ -1,11 +1,11 @@
 import { createFetchFunction } from '@tolgee/core';
-import { getProjectIdFromApiKey } from '../../tools/decodeApiKey';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { createUrl } from '../../tools/url';
+import { bearerSdkHeaders, resolveCredential } from '../../tools/auth';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -66,6 +66,7 @@ function buildQuery(object: { [key: string]: any }): string {
 async function customFetch(
   input: RequestInfo,
   options: GlobalOptions,
+  credential: ReturnType<typeof resolveCredential>,
   init?: RequestInit
 ) {
   if (options.apiUrl === undefined) {
@@ -74,15 +75,16 @@ async function customFetch(
   if (!isUrlValid(options.apiUrl)) {
     throw new HttpError('api_url_not_valid');
   }
-  if (options.apiKey === undefined) {
+  if (!credential.hasCredential) {
     throw new HttpError('api_key_not_specified');
   }
 
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
+    ...bearerSdkHeaders(credential.authHeader),
     ...init.headers,
-    'X-API-Key': options.apiKey,
+    ...credential.authHeader,
   };
 
   const url = createUrl(options.apiUrl, input.toString()).toString();
@@ -118,9 +120,17 @@ export async function client<
   const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
 
-  const projectId = getProjectIdFromApiKey(options.apiKey) || options.projectId;
-  if (projectId !== undefined) {
-    pathParams.projectId = projectId;
+  const credential = resolveCredential(options);
+  const isProjectScopedEndpoint = urlResult.includes('/projects/');
+  if (
+    credential.requiresExplicitProject &&
+    credential.projectId === undefined &&
+    isProjectScopedEndpoint
+  ) {
+    throw new HttpError('project_id_not_specified');
+  }
+  if (credential.projectId !== undefined) {
+    pathParams.projectId = credential.projectId;
     urlResult = addProjectIdToUrl(urlResult);
   }
 
@@ -162,7 +172,7 @@ export async function client<
     queryString = '?' + query;
   }
 
-  return customFetch(urlResult + queryString, options, {
+  return customFetch(urlResult + queryString, options, credential, {
     method: method as string,
     body: body || jsonBody,
     headers: jsonBody

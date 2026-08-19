@@ -102,6 +102,8 @@ export type LibConfig = {
   config: {
     apiUrl: string;
     apiKey: string;
+    authToken?: string;
+    projectId?: number | string;
     branch?: string;
   };
 };
