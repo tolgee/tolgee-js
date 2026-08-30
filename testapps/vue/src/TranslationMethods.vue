@@ -111,6 +111,25 @@
           }}
         </div>
       </div>
+
+      <div>
+        <h1>T2 component with templates for tag interpolation</h1>
+        <div>
+          <T2
+            key-name="hello"
+            default-value="Pro vytváření <strong>Hostů</strong> je třeba mít <link-to-help>ověřenou doménu</link-to-help>"
+          >
+            <template #strong="{ text }">
+              <strong>{{ text }}</strong>
+            </template>
+            <template #link-to-help="{ text }">
+              <a href="https://google.com">
+                {{ text }}
+              </a>
+            </template>
+          </T2>
+        </div>
+      </div>
     </div>
 
     <div v-if="!revealed" class="load-more-section">
@@ -122,7 +141,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { T } from '@tolgee/vue';
+import { T, T2 } from '@tolgee/vue';
 import Navbar from './components/Navbar.vue';
 import Namespaces from './components/Namespaces.vue';
 
