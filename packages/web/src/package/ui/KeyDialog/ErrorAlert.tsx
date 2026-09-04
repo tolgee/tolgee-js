@@ -10,17 +10,24 @@ type Props = {
   severity?: 'error' | 'info';
 };
 
-export const ErrorAlert = ({ error, severity = 'error' }: Props) => {
+export const ErrorAlert = ({ error, severity }: Props) => {
   const apiUrl = useDialogContext((c) => c.uiProps.apiUrl);
 
   return (
-    <Alert sx={{ mt: 2 }} severity={severity}>
+    <Alert sx={{ mt: 2 }} severity={severity ?? severityFor(error)}>
       {error instanceof HttpError
         ? getErrorContent(error, createUrl(apiUrl).toString())
         : error.message}
     </Alert>
   );
 };
+
+// Missing credentials is the normal state of a page nobody has connected yet, not a failure.
+export function severityFor(error: HttpError | Error): 'error' | 'info' {
+  return error instanceof HttpError && error.code === 'api_key_not_specified'
+    ? 'info'
+    : 'error';
+}
 
 function DocsInContext() {
   return (
@@ -104,8 +111,10 @@ export function getErrorContent(
     case 'api_key_not_specified':
       return (
         <>
-          <AlertTitle>Oops... I miss the API key or access token</AlertTitle>
-          Add it in the code or via the chrome plugin. <DocsInContext />
+          <AlertTitle>Sign in to make changes</AlertTitle>
+          To edit translations here, sign in with the Tolgee browser extension
+          or add an API key to the Tolgee configuration. <OpenExtension />{' '}
+          <DocsInContext />
         </>
       );
 

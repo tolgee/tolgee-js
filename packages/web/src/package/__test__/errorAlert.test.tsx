@@ -1,6 +1,6 @@
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-import { getErrorContent } from '../ui/KeyDialog/ErrorAlert';
+import { getErrorContent, severityFor } from '../ui/KeyDialog/ErrorAlert';
 import { HttpError, ErrorStatusCode } from '../ui/client/HttpError';
 import { OPEN_PLUGIN_MESSAGE } from '../constants';
 
@@ -58,6 +58,22 @@ describe('ErrorAlert getErrorContent — OAuth recovery', () => {
   it('renders the missing-projectId guidance', () => {
     const { container, root } = renderFor('project_id_not_specified');
     expect(container.textContent).toContain('project id');
+    act(() => root.unmount());
+  });
+});
+
+describe('ErrorAlert — missing credentials', () => {
+  it('is informational, not an error, and offers both ways to sign in', () => {
+    expect(severityFor(new HttpError('api_key_not_specified'))).toBe('info');
+    expect(severityFor(new HttpError('invalid_jwt_token'))).toBe('error');
+    expect(severityFor(new Error('boom'))).toBe('error');
+
+    const { container, root } = renderFor('api_key_not_specified');
+    expect(container.textContent).toContain('Sign in to make changes');
+    expect(container.textContent).toContain('API key');
+    expect(container.querySelector('button')?.textContent).toContain(
+      'Open the Tolgee plugin'
+    );
     act(() => root.unmount());
   });
 });
