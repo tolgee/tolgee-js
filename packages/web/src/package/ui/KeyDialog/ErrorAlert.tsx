@@ -1,9 +1,11 @@
-import { Alert, AlertTitle, Link } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Alert, AlertTitle, Box, Button } from '@mui/material';
 import { HttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
 import { createUrl } from '../../tools/url';
-import { openPlugin } from '../../tools/extension';
+import { detectExtension, openPlugin } from '../../tools/extension';
+import { CHROME_EXTENSION_LINK } from '../../constants';
 
 type Props = {
   error: HttpError | Error;
@@ -38,15 +40,35 @@ function DocsInContext() {
 }
 
 function OpenExtension() {
+  const [present, setPresent] = useState<boolean>();
+  useEffect(() => {
+    let mounted = true;
+    detectExtension().then((found) => mounted && setPresent(found));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  if (present === undefined) {
+    return null;
+  }
   return (
-    <Link
-      component="button"
-      type="button"
-      sx={{ verticalAlign: 'baseline' }}
-      onClick={openPlugin}
-    >
-      Open the Tolgee plugin
-    </Link>
+    <Box mt={1}>
+      {present ? (
+        <Button size="small" variant="contained" onClick={openPlugin}>
+          Open the Tolgee plugin
+        </Button>
+      ) : (
+        <Button
+          size="small"
+          variant="outlined"
+          href={CHROME_EXTENSION_LINK}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Install the Tolgee plugin
+        </Button>
+      )}
+    </Box>
   );
 }
 
