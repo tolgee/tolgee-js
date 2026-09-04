@@ -34,7 +34,7 @@ unpublished changes to it instead:
 3. Set `VITE_APP_IN_CONTEXT_URL=/tolgee-in-context-tools.umd.min.js` in `.env.development.local`.
 4. Run `npm run develop` as above.
 
-This only takes effect on `localhost`/`127.0.0.1` — see `isTrustedInContextUrl` in
+This only takes effect on `localhost`, `127.0.0.1` or `[::1]`, see `isTrustedInContextUrl` in
 `packages/web/src/package/BrowserExtensionPlugin/loadInContextLib.ts`.
 
 ## To run the app in production mode

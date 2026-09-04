@@ -16,4 +16,8 @@ describe('get projectId from api key', () => {
     // tgpak_mfrggzdf base32-decodes to "abcde" -> Number(...) is NaN
     expect(getProjectIdFromApiKey('tgpak_mfrggzdf')).toBeUndefined();
   });
+
+  it('returns undefined for a tgpak with an empty body (Number("") would be 0)', () => {
+    expect(getProjectIdFromApiKey('tgpak_')).toBeUndefined();
+  });
 });
