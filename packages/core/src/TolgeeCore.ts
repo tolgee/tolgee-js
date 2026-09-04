@@ -184,7 +184,7 @@ function createTolgee(options: TolgeeOptions) {
     getInitialOptions: controller.getInitialOptions,
 
     /**
-     * Tolgee is in dev mode if `DevTools` plugin is used and (`apiKey` or `authToken`) + `apiUrl` are specified.
+     * Tolgee is in dev mode if `DevTools` plugin is used and `apiUrl` plus a credential (`apiKey`, or the browser extension's transport) are specified.
      * @return `true` if tolgee is in dev mode.
      */
     isDev: controller.isDev,

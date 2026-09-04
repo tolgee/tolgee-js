@@ -77,10 +77,10 @@ export function State(
       const merged = { ...state.initialOptions, ...devCredentials };
       if (
         devCredentials &&
-        (devCredentials.apiKey || devCredentials.authToken)
+        (devCredentials.apiKey || devCredentials.transport)
       ) {
         merged.apiKey = devCredentials.apiKey;
-        merged.authToken = devCredentials.authToken;
+        merged.transport = devCredentials.transport;
       }
       return merged;
     },

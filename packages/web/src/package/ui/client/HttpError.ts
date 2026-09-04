@@ -14,7 +14,11 @@ type ErrorCustomStatus =
   // that PR merges and `npm run schema` is re-run against it, at which point these two belong in
   // ErrorResponseTypedCode instead and this pair should be deleted.
   | 'invalid_oauth_token'
-  | 'oauth_token_expired';
+  | 'oauth_token_expired'
+  // Answered by the browser extension when it proxies a request: no session for this page, or the body is over the
+  // extension's payload cap.
+  | 'extension_session_missing'
+  | 'extension_request_too_large';
 
 export type ErrorStatusCode = ErrorResponseTypedCode | ErrorCustomStatus;
 

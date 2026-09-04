@@ -318,7 +318,7 @@ export function Controller({ options }: StateServiceProps) {
 
     isDev() {
       const options = state.getInitialOptions();
-      return Boolean((options.apiKey || options.authToken) && options.apiUrl);
+      return Boolean((options.apiKey || options.transport) && options.apiUrl);
     },
 
     async loadRequired(options?: LoadRequiredOptions) {

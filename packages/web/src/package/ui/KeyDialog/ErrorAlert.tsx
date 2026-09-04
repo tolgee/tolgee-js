@@ -113,10 +113,19 @@ export function getErrorContent(
     case 'general_jwt_error':
     case 'invalid_oauth_token':
     case 'oauth_token_expired':
+    case 'extension_session_missing':
       return (
         <>
           <AlertTitle>You're not signed in</AlertTitle>
           Sign in again in the Tolgee plugin to keep editing. <OpenExtension />
+        </>
+      );
+
+    case 'extension_request_too_large':
+      return (
+        <>
+          <AlertTitle>Image is too large to upload</AlertTitle>
+          The Tolgee plugin sends images up to 20 MB. Pick a smaller one.
         </>
       );
 

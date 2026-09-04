@@ -1,16 +1,15 @@
-import { sdkHeaders } from '@tolgee/core';
+import { DevApiTransport, sdkHeaders } from '@tolgee/core';
 import { getApiKeyType, getProjectIdFromApiKey } from './decodeApiKey';
-import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
 type Credentials = {
   apiKey?: string;
-  authToken?: string;
   projectId?: number | string;
+  transport?: DevApiTransport;
 };
 
 export type ResolvedLiveCredential = {
   authHeader: Record<string, string>;
-  usesToken: boolean;
+  viaExtension: boolean;
   hasCredential: boolean;
   projectId: number | string | undefined;
   requiresExplicitProject: boolean;
@@ -19,54 +18,34 @@ export type ResolvedLiveCredential = {
 export function resolveLiveCredential(
   credentials: Credentials
 ): ResolvedLiveCredential {
-  const { apiKey, authToken, projectId } = credentials;
-  const token = resolveLiveAuthToken(authToken, apiKey);
-  const hasToken = Boolean(token);
-  const hasApiKey = Boolean(apiKey);
-  const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
+  const { apiKey, projectId, transport } = credentials;
+  if (transport) {
+    return {
+      authHeader: {},
+      viaExtension: true,
+      hasCredential: true,
+      projectId,
+      requiresExplicitProject: true,
+    };
+  }
   return {
-    authHeader: buildAuthHeader(token, apiKey),
-    usesToken: hasToken,
-    hasCredential: hasToken || hasApiKey,
-    projectId: embedded ?? projectId,
-    requiresExplicitProject: hasToken || getApiKeyType(apiKey) === 'tgpat',
+    authHeader: buildAuthHeader(apiKey),
+    viaExtension: false,
+    hasCredential: Boolean(apiKey),
+    projectId: getProjectIdFromApiKey(apiKey) ?? projectId,
+    requiresExplicitProject: getApiKeyType(apiKey) === 'tgpat',
   };
 }
 
-export function resolveLiveAuthToken(
-  initAuthToken: string | undefined,
-  apiKey: string | undefined
-): string | undefined {
-  // An api-key-configured SDK must not be hijacked by a stray sessionStorage token.
-  if (!initAuthToken && apiKey) {
-    return undefined;
-  }
-  try {
-    if (typeof sessionStorage !== 'undefined') {
-      const injected = sessionStorage.getItem(AUTH_TOKEN_SESSION_STORAGE);
-      if (injected) {
-        return injected;
-      }
-    }
-  } catch {
-    // sessionStorage can throw (SSR, sandboxed iframes).
-  }
-  return initAuthToken;
-}
-
 export function buildAuthHeader(
-  authToken: string | undefined,
   apiKey: string | undefined
 ): Record<string, string> {
-  if (authToken) {
-    return { Authorization: `Bearer ${authToken}` };
-  }
-  if (apiKey) {
-    return { 'X-API-Key': apiKey };
-  }
-  return {};
+  return apiKey ? { 'X-API-Key': apiKey } : {};
 }
 
-export function bearerSdkHeaders(usesToken: boolean): Record<string, string> {
-  return usesToken ? sdkHeaders() : {};
+// The fetch wrapper adds these on an api-key request itself; a request through the extension carries no api key.
+export function bearerSdkHeaders(
+  viaExtension: boolean
+): Record<string, string> {
+  return viaExtension ? sdkHeaders() : {};
 }

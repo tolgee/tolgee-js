@@ -2,86 +2,26 @@ import {
   bearerSdkHeaders,
   buildAuthHeader,
   resolveLiveCredential,
-  resolveLiveAuthToken,
 } from './auth';
-import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
 // See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
 const PAK_FOR_PROJECT_1 = 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc';
 
-describe('resolveLiveAuthToken', () => {
-  afterEach(() => {
-    sessionStorage.clear();
-    jest.restoreAllMocks();
-  });
-
-  it('prefers the live sessionStorage token over the init token (rotation)', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
-    expect(resolveLiveAuthToken('init-token', undefined)).toBe('rotated');
-  });
-
-  it('falls back to the init token when sessionStorage has none', () => {
-    expect(resolveLiveAuthToken('init-token', undefined)).toBe('init-token');
-  });
-
-  it('reads sessionStorage on a fresh page when no init token was supplied', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'injected');
-    expect(resolveLiveAuthToken(undefined, undefined)).toBe('injected');
-  });
-
-  it('never overrides a configured api key with a stray sessionStorage token', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
-    expect(resolveLiveAuthToken(undefined, 'tgpak_x')).toBeUndefined();
-  });
-
-  it('an empty-string init token does not disable the api-key hijack guard', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'stray');
-    expect(resolveLiveAuthToken('', 'tgpak_x')).toBeUndefined();
-  });
-
-  it('with both an init token and an api key, follows the token (guard does not fire)', () => {
-    expect(resolveLiveAuthToken('jwt', 'tgpak_x')).toBe('jwt');
-  });
-
-  it('a live token overrides even when an api key is also configured', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
-    expect(resolveLiveAuthToken('jwt', 'tgpak_x')).toBe('rotated');
-  });
-
-  it('returns the fallback when sessionStorage access throws (SSR/sandboxed iframe)', () => {
-    jest.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
-      throw new Error('blocked');
-    });
-    expect(resolveLiveAuthToken('init-token', undefined)).toBe('init-token');
-  });
-});
+const transport = jest.fn();
 
 describe('buildAuthHeader', () => {
-  it('sends a Bearer header when a token is present', () => {
-    expect(buildAuthHeader('jwt', undefined)).toEqual({
-      Authorization: 'Bearer jwt',
-    });
+  it('sends X-API-Key for an api key', () => {
+    expect(buildAuthHeader('tgpak_x')).toEqual({ 'X-API-Key': 'tgpak_x' });
   });
 
-  it('sends X-API-Key when only an api key is present', () => {
-    expect(buildAuthHeader(undefined, 'tgpak_x')).toEqual({
-      'X-API-Key': 'tgpak_x',
-    });
-  });
-
-  it('prefers the token over the api key when both are present', () => {
-    expect(buildAuthHeader('jwt', 'tgpak_x')).toEqual({
-      Authorization: 'Bearer jwt',
-    });
-  });
-
-  it('returns no header when neither a token nor an api key is present', () => {
-    expect(buildAuthHeader(undefined, undefined)).toEqual({});
+  it('returns no header without an api key', () => {
+    expect(buildAuthHeader(undefined)).toEqual({});
+    expect(buildAuthHeader('')).toEqual({});
   });
 });
 
 describe('bearerSdkHeaders', () => {
-  it('adds the SDK type/version headers when the credential uses a token', () => {
+  it('adds the SDK type/version headers for a request through the extension', () => {
     const headers = bearerSdkHeaders(true);
     expect(headers['x-tolgee-sdk-type']).toEqual('JS');
     expect(headers['x-tolgee-sdk-version']).toBeDefined();
@@ -93,20 +33,31 @@ describe('bearerSdkHeaders', () => {
 });
 
 describe('resolveLiveCredential', () => {
-  afterEach(() => sessionStorage.clear());
-
-  it('sends a Bearer header and requires an explicit project for an OAuth token', () => {
-    expect(resolveLiveCredential({ authToken: 'jwt', projectId: 7 })).toEqual({
-      authHeader: { Authorization: 'Bearer jwt' },
-      usesToken: true,
+  it('routes through the extension with no auth header and requires an explicit project', () => {
+    expect(resolveLiveCredential({ transport, projectId: 7 })).toEqual({
+      authHeader: {},
+      viaExtension: true,
       hasCredential: true,
       projectId: 7,
       requiresExplicitProject: true,
     });
   });
 
-  it('reports usesToken as false for an api-key credential', () => {
-    expect(resolveLiveCredential({ apiKey: 'tgpak_x' }).usesToken).toBe(false);
+  it('lets the transport win over an api key that is also present', () => {
+    const resolved = resolveLiveCredential({
+      apiKey: PAK_FOR_PROJECT_1,
+      transport,
+      projectId: 9,
+    });
+    expect(resolved.authHeader).toEqual({});
+    expect(resolved.viaExtension).toBe(true);
+    expect(resolved.projectId).toBe(9);
+  });
+
+  it('reports viaExtension as false for an api-key credential', () => {
+    expect(resolveLiveCredential({ apiKey: 'tgpak_x' }).viaExtension).toBe(
+      false
+    );
   });
 
   it('requires an explicit project for a PAT (tgpat) key', () => {
@@ -122,24 +73,8 @@ describe('resolveLiveCredential', () => {
     expect(resolved.authHeader).toEqual({ 'X-API-Key': PAK_FOR_PROJECT_1 });
   });
 
-  it('scopes to the supplied projectId (not the PAK) when a token is also present', () => {
-    const resolved = resolveLiveCredential({
-      apiKey: PAK_FOR_PROJECT_1,
-      authToken: 'jwt',
-      projectId: 9,
-    });
-    expect(resolved.authHeader).toEqual({ Authorization: 'Bearer jwt' });
-    expect(resolved.projectId).toBe(9);
-  });
-
   it('reports no credential and no header when neither is present', () => {
     const resolved = resolveLiveCredential({});
-    expect(resolved.hasCredential).toBe(false);
-    expect(resolved.authHeader).toEqual({});
-  });
-
-  it('treats an empty authToken as no credential (no unauthenticated request)', () => {
-    const resolved = resolveLiveCredential({ authToken: '' });
     expect(resolved.hasCredential).toBe(false);
     expect(resolved.authHeader).toEqual({});
     expect(resolved.requiresExplicitProject).toBe(false);
@@ -158,12 +93,5 @@ describe('resolveLiveCredential', () => {
       projectId: 5,
     });
     expect(resolved.projectId).toBe(5);
-  });
-
-  it('prefers a live sessionStorage token for the header and project requirement', () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
-    const resolved = resolveLiveCredential({ authToken: 'init', projectId: 3 });
-    expect(resolved.authHeader).toEqual({ Authorization: 'Bearer rotated' });
-    expect(resolved.requiresExplicitProject).toBe(true);
   });
 });

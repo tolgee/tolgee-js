@@ -1,5 +1,5 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
-import { createUrl } from './tools/url';
+import { directTransport } from './tools/apiTransport';
 import { bearerSdkHeaders, resolveLiveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
@@ -7,7 +7,7 @@ function createDevBackend(): BackendDevMiddleware {
     getRecord({
       apiUrl,
       apiKey,
-      authToken,
+      transport,
       projectId,
       branch,
       language,
@@ -17,44 +17,42 @@ function createDevBackend(): BackendDevMiddleware {
     }) {
       const {
         authHeader,
-        usesToken,
+        viaExtension,
         projectId: resolvedProjectId,
         requiresExplicitProject,
-      } = resolveLiveCredential({ apiKey, authToken, projectId });
+      } = resolveLiveCredential({ apiKey, projectId, transport });
       if (requiresExplicitProject && resolvedProjectId === undefined) {
         throw new Error(
-          "You need to specify 'projectId' when using a PAT key or an OAuth token"
+          "You need to specify 'projectId' when using a PAT key or signing in through the Tolgee browser extension"
         );
       }
 
-      let url: URL;
-      if (resolvedProjectId !== undefined) {
-        url = createUrl(
-          apiUrl,
-          `/v2/projects/${resolvedProjectId}/translations/${language}`
-        );
-      } else {
-        url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
-      }
-
+      const path =
+        resolvedProjectId !== undefined
+          ? `/v2/projects/${resolvedProjectId}/translations/${language}`
+          : `/v2/projects/translations/${language}`;
+      const query = new URLSearchParams();
       if (branch) {
-        url.searchParams.append('branch', branch);
+        query.append('branch', branch);
       }
       if (namespace) {
-        url.searchParams.append('ns', namespace);
+        query.append('ns', namespace);
       }
       filterTag?.forEach((tag) => {
-        url.searchParams.append('filterTag', tag);
+        query.append('filterTag', tag);
       });
+      const search = query.toString();
 
-      return fetch(url.toString(), {
+      const send =
+        transport ??
+        directTransport({ apiUrl: apiUrl ?? '', fetch, authHeader });
+      return send({
+        path: search ? `${path}?${search}` : path,
+        method: 'GET',
         headers: {
-          ...bearerSdkHeaders(usesToken),
-          ...authHeader,
+          ...bearerSdkHeaders(viaExtension),
           'Content-Type': 'application/json',
         },
-        // @ts-ignore - tell next.js to not use cache
-        next: { revalidate: 0 },
       }).then((r) => {
         if (r.ok) {
           return r.json().then((data) => data[language]);

@@ -1,37 +1,40 @@
-import type { TolgeePlugin } from '@tolgee/core';
-import { Handshaker } from '../tools/extension';
+import type { DevCredentials, TolgeePlugin } from '@tolgee/core';
+import { EXTENSION_PROTOCOL_VERSION, Handshaker } from '../tools/extension';
 import { resolveLiveCredential } from '../tools/auth';
+import { proxyTransport } from '../tools/apiTransport';
 import {
   API_KEY_SESSION_STORAGE,
   API_URL_SESSION_STORAGE,
-  AUTH_TOKEN_SESSION_STORAGE,
   BRANCH_SESSION_STORAGE,
+  OAUTH_SESSION_STORAGE,
   PROJECT_ID_SESSION_STORAGE,
   TOLGEE_EXTENSION_SESSION_STORAGE_PREFIX,
 } from '../tools/sessionStorageKeys';
 import { loadInContextLib } from './loadInContextLib';
 
-function getCredentials() {
+function getCredentials(): DevCredentials {
   const apiKey = sessionStorage.getItem(API_KEY_SESSION_STORAGE) || undefined;
   const apiUrl = sessionStorage.getItem(API_URL_SESSION_STORAGE) || undefined;
   const branch = sessionStorage.getItem(BRANCH_SESSION_STORAGE) || undefined;
-  const authToken =
-    sessionStorage.getItem(AUTH_TOKEN_SESSION_STORAGE) || undefined;
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
+  const signedIn = sessionStorage.getItem(OAUTH_SESSION_STORAGE) === '1';
 
-  const oauthUsable = Boolean(authToken && projectId);
-  if (!apiUrl || (!apiKey && !oauthUsable)) {
+  if (!apiUrl) {
     return undefined;
   }
-
-  return {
+  const common = {
     apiUrl,
-    ...(apiKey !== undefined ? { apiKey } : {}),
-    ...(oauthUsable ? { authToken } : {}),
     ...(projectId !== undefined ? { projectId } : {}),
     ...(branch !== undefined ? { branch } : {}),
   };
+  if (apiKey) {
+    return { ...common, apiKey };
+  }
+  if (signedIn && projectId) {
+    return { ...common, transport: proxyTransport() };
+  }
+  return undefined;
 }
 
 // Sweeps by prefix rather than an enumerated key list: the extension owns some of these slots privately (e.g. its
@@ -59,7 +62,7 @@ function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
     // eslint-disable-next-line no-console
     console.warn(
       'Tolgee: `projectId` is missing from the SDK configuration. It is required when authenticating with a PAT ' +
-        'or an OAuth access token. ' +
+        'or signing in through the Tolgee browser extension. ' +
         'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
     );
   }
@@ -102,17 +105,17 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
-      const usingToken = Boolean(options.authToken);
       return {
         // prevent extension downloading ui library
         uiPresent: true,
         uiVersion: undefined,
+        protocolVersion: EXTENSION_PROTOCOL_VERSION,
         // tolgee mode
         mode: tolgee.isDev() ? 'development' : 'production',
         // pass credentials
         config: {
           apiUrl: options.apiUrl || '',
-          apiKey: usingToken ? '' : options.apiKey || '',
+          apiKey: options.transport ? '' : options.apiKey || '',
           projectId: options.projectId,
           branch: options.branch,
         },

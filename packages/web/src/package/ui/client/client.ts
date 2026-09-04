@@ -1,17 +1,17 @@
-import { createFetchFunction } from '@tolgee/core';
+import { createFetchFunction, DevApiResponse } from '@tolgee/core';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
-import { createUrl } from '../../tools/url';
+import { directTransport } from '../../tools/apiTransport';
 import {
   bearerSdkHeaders,
   resolveLiveCredential,
   ResolvedLiveCredential,
 } from '../../tools/auth';
 
-const errorFromResponse = (status: number, body: any) => {
+export const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
     return new HttpError(body.code, status, body.params);
   } else {
@@ -25,7 +25,7 @@ type Params = {
   [k: string]: string | string[] | null | undefined | Params;
 };
 
-async function getResObject(r: Response) {
+async function getResObject(r: DevApiResponse) {
   const textBody = await r.text();
   try {
     if (textBody) {
@@ -83,28 +83,38 @@ async function customFetch(
     throw new HttpError('api_key_not_specified');
   }
 
-  init = init || {};
-  init.headers = init.headers || {};
-  init.headers = {
-    ...bearerSdkHeaders(credential.usesToken),
-    ...init.headers,
-    ...credential.authHeader,
-  };
-
-  const url = createUrl(options.apiUrl, input.toString()).toString();
-  return fetchFn(url, init).then(async (r) => {
-    if (!r.ok) {
-      const data = await getResObject(r);
-      throw errorFromResponse(r.status, data);
-    }
-    const result = await getResObject(r);
-    if (typeof result === 'object' && result !== null) {
-      result._internal = {
-        version: r.headers.get('X-Tolgee-Version'),
-      };
-    }
-    return result;
+  const send =
+    options.transport ??
+    directTransport({
+      apiUrl: options.apiUrl,
+      fetch: fetchFn,
+      authHeader: credential.authHeader,
+    });
+  const response = await send({
+    path: input.toString(),
+    method: init?.method ?? 'GET',
+    headers: {
+      ...bearerSdkHeaders(credential.viaExtension),
+      ...((init?.headers as Record<string, string> | undefined) ?? {}),
+    },
+    body: init?.body as string | FormData | undefined,
   });
+  return readApiResponse(response);
+}
+
+/** Parses a Tolgee API response the way the in-context client does: HttpError on a failure, the JSON body otherwise. */
+export async function readApiResponse(r: DevApiResponse) {
+  if (!r.ok) {
+    const data = await getResObject(r);
+    throw errorFromResponse(r.status, data);
+  }
+  const result = await getResObject(r);
+  if (typeof result === 'object' && result !== null) {
+    result._internal = {
+      version: r.headers.get('X-Tolgee-Version'),
+    };
+  }
+  return result;
 }
 
 const addProjectIdToUrl = (url: string) => {

@@ -1,7 +1,15 @@
-import { TolgeeCore } from '@tolgee/core';
+import { DevApiResponse, TolgeeCore } from '@tolgee/core';
 import { createFetchingUtility } from './fetchingUtillity';
 import { DevBackend } from '../DevBackend';
-import { AUTH_TOKEN_SESSION_STORAGE } from '../tools/sessionStorageKeys';
+
+const okJson = (body: unknown): DevApiResponse => ({
+  ok: true,
+  status: 200,
+  statusText: 'OK',
+  headers: { get: () => null },
+  text: () => Promise.resolve(JSON.stringify(body)),
+  json: () => Promise.resolve(body),
+});
 
 describe('can handle relative urls in apiUrl', () => {
   let f: ReturnType<typeof createFetchingUtility>;
@@ -29,26 +37,39 @@ describe('can handle relative urls in apiUrl', () => {
     );
   });
 
-  it('a token-only injected credential activates dev mode and fires the dev backend', async () => {
-    // The extension injects an OAuth token via overrideCredentials + sessionStorage with no init credential; isDev() and
-    // the dev-backend gate must see it, or the page silently stays on production translations.
+  it('an injected transport activates dev mode and the dev backend sends through it, not through fetch', async () => {
+    // The extension injects a transport via overrideCredentials with no init credential; isDev() and the dev-backend
+    // gate must see it, or the page silently stays on production translations.
     const fetchMock = f.fetchWithResponse({});
+    const transport = jest.fn(() =>
+      Promise.resolve(okJson({ en: { a: 'A' } }))
+    );
     const tolgee = TolgeeCore()
       .use(DevBackend())
       .init({ language: 'en', availableLanguages: ['en'], fetch: fetchMock });
 
     expect(tolgee.isDev()).toBe(false);
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'jwt');
     tolgee.overrideCredentials({
       apiUrl: '/test',
-      authToken: 'jwt',
+      transport,
       projectId: 1,
+      branch: 'feature/x',
     });
 
     expect(tolgee.isDev()).toBe(true);
-    await tolgee.loadRecord({ language: 'en' });
-    expect(fetchMock).toHaveBeenCalledTimes(1);
-    sessionStorage.clear();
+    await expect(
+      tolgee.loadRecord({ language: 'en', namespace: 'home' })
+    ).resolves.toEqual({ a: 'A' });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(transport).toHaveBeenCalledTimes(1);
+    const request = (transport.mock.calls[0] as any)[0];
+    expect(request.path).toEqual(
+      '/v2/projects/1/translations/en?branch=feature%2Fx&ns=home'
+    );
+    expect(request.method).toEqual('GET');
+    expect(request.headers['x-tolgee-sdk-type']).toEqual('JS');
+    expect(request.headers['Authorization']).toBeUndefined();
+    expect(request.headers['X-API-Key']).toBeUndefined();
   });
 
   it('dev backend can resolve apiUrl with included path', async () => {
@@ -100,10 +121,6 @@ describe('dev backend authentication headers', () => {
     f = createFetchingUtility();
   });
 
-  afterEach(() => {
-    sessionStorage.clear();
-  });
-
   const lowerCasedHeadersOf = (fetchMock: any) =>
     fetchMock.mock.calls[0][1].headers as Record<string, string>;
 
@@ -124,40 +141,18 @@ describe('dev backend authentication headers', () => {
     expect(headers['authorization']).toBeUndefined();
   });
 
-  it('sends a Bearer token and no X-API-Key for an OAuth token', async () => {
+  it('does not send when signed in through the extension without a projectId', async () => {
     const fetchMock = f.fetchWithResponse({});
+    const transport = jest.fn();
     const tolgee = TolgeeCore()
       .use(DevBackend())
-      .init({
-        language: 'en',
-        availableLanguages: ['en'],
-        fetch: fetchMock,
-        apiUrl: '/test',
-        authToken: 'jwt',
-        projectId: 1,
-      });
-    await tolgee.loadRecord({ language: 'en' });
-    const headers = lowerCasedHeadersOf(fetchMock);
-    expect(headers['authorization']).toEqual('Bearer jwt');
-    expect(headers['x-api-key']).toBeUndefined();
-    expect(headers['x-tolgee-sdk-type']).toEqual('JS');
-  });
-
-  it('does not fetch when an OAuth token is used without a projectId', async () => {
-    const fetchMock = f.fetchWithResponse({});
-    const tolgee = TolgeeCore()
-      .use(DevBackend())
-      .init({
-        language: 'en',
-        availableLanguages: ['en'],
-        fetch: fetchMock,
-        apiUrl: '/test',
-        authToken: 'jwt',
-      });
+      .init({ language: 'en', availableLanguages: ['en'], fetch: fetchMock });
+    tolgee.overrideCredentials({ apiUrl: '/test', transport });
     const errorHandler = jest.fn();
     tolgee.on('error', errorHandler);
     await tolgee.loadRecord({ language: 'en' });
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(transport).not.toHaveBeenCalled();
     expect(errorHandler).toHaveBeenCalled();
   });
 
@@ -177,24 +172,5 @@ describe('dev backend authentication headers', () => {
     await tolgee.loadRecord({ language: 'en' });
     expect(fetchMock).not.toHaveBeenCalled();
     expect(errorHandler).toHaveBeenCalled();
-  });
-
-  it('prefers a live rotated sessionStorage token over the init token', async () => {
-    sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
-    const fetchMock = f.fetchWithResponse({});
-    const tolgee = TolgeeCore()
-      .use(DevBackend())
-      .init({
-        language: 'en',
-        availableLanguages: ['en'],
-        fetch: fetchMock,
-        apiUrl: '/test',
-        authToken: 'init-token',
-        projectId: 1,
-      });
-    await tolgee.loadRecord({ language: 'en' });
-    expect(lowerCasedHeadersOf(fetchMock)['authorization']).toEqual(
-      'Bearer rotated'
-    );
   });
 });

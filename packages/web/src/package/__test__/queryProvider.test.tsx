@@ -8,7 +8,8 @@ import {
 } from '../ui/client/QueryProvider';
 
 describe('QueryProvider auth wiring', () => {
-  it('threads authToken from props into the QueryContext the client reads', () => {
+  it('threads the transport from props into the QueryContext the client reads', () => {
+    const transport = jest.fn();
     let captured: GlobalOptions | undefined;
     const Consumer = () => {
       captured = useContext(QueryContext);
@@ -20,14 +21,15 @@ describe('QueryProvider auth wiring', () => {
     const root = createRoot(container);
     act(() => {
       root.render(
-        <QueryProvider apiUrl="http://x" projectId={1} authToken="jwt">
+        <QueryProvider apiUrl="http://x" projectId={1} transport={transport}>
           <Consumer />
         </QueryProvider>
       );
     });
 
-    expect(captured?.authToken).toEqual('jwt');
+    expect(captured?.transport).toBe(transport);
     expect(captured?.apiUrl).toEqual('http://x');
+    expect(captured?.apiKey).toBeUndefined();
     act(() => root.unmount());
   });
 });

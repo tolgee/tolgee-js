@@ -93,13 +93,18 @@ describe('initial options', () => {
     expect(tolgee.getInitialOptions().branch).toEqual('override');
   });
 
-  it('an injected apiKey fully replaces a statically-configured authToken', () => {
+  it('an injected apiKey fully replaces an injected transport', () => {
+    const transport = jest.fn();
     const tolgee = TolgeeCore().init({
       language: 'en',
       apiUrl: 'http://localhost:8080',
-      authToken: 'jwt',
     });
 
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      transport,
+      projectId: 1,
+    });
     tolgee.overrideCredentials({
       apiUrl: 'http://localhost:8000',
       apiKey: 'tgpak_x',
@@ -108,28 +113,10 @@ describe('initial options', () => {
 
     const options = tolgee.getInitialOptions();
     expect(options.apiKey).toEqual('tgpak_x');
-    expect(options.authToken).toBeUndefined();
+    expect(options.transport).toBeUndefined();
   });
 
   it('an override without a credential preserves the init auth method', () => {
-    const tolgee = TolgeeCore().init({
-      language: 'en',
-      apiUrl: 'http://localhost:8080',
-      authToken: 'jwt',
-    });
-
-    tolgee.overrideCredentials({
-      apiUrl: 'http://localhost:8000',
-      branch: 'feature',
-    });
-
-    const options = tolgee.getInitialOptions();
-    expect(options.authToken).toEqual('jwt');
-    expect(options.apiKey).toBeUndefined();
-    expect(options.branch).toEqual('feature');
-  });
-
-  it('an injected authToken fully replaces a statically-configured apiKey', () => {
     const tolgee = TolgeeCore().init({
       language: 'en',
       apiUrl: 'http://localhost:8080',
@@ -138,12 +125,31 @@ describe('initial options', () => {
 
     tolgee.overrideCredentials({
       apiUrl: 'http://localhost:8000',
-      authToken: 'jwt',
+      branch: 'feature',
+    });
+
+    const options = tolgee.getInitialOptions();
+    expect(options.apiKey).toEqual('tgpak_x');
+    expect(options.transport).toBeUndefined();
+    expect(options.branch).toEqual('feature');
+  });
+
+  it('an injected transport fully replaces a statically-configured apiKey', () => {
+    const transport = jest.fn();
+    const tolgee = TolgeeCore().init({
+      language: 'en',
+      apiUrl: 'http://localhost:8080',
+      apiKey: 'tgpak_x',
+    });
+
+    tolgee.overrideCredentials({
+      apiUrl: 'http://localhost:8000',
+      transport,
       projectId: 1,
     });
 
     const options = tolgee.getInitialOptions();
-    expect(options.authToken).toEqual('jwt');
+    expect(options.transport).toBe(transport);
     expect(options.apiKey).toBeUndefined();
   });
 });

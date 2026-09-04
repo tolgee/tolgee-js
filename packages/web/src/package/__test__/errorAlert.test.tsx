@@ -45,6 +45,8 @@ describe('ErrorAlert getErrorContent — OAuth recovery', () => {
     // session needs the same "reconnect via the plugin" recovery as a dead webapp JWT.
     'invalid_oauth_token',
     'oauth_token_expired',
+    // Answered by the extension itself when the page it proxies for has no session.
+    'extension_session_missing',
   ];
 
   it.each(jwtCodes)(
@@ -84,6 +86,13 @@ describe('ErrorAlert getErrorContent — OAuth recovery', () => {
   it('renders the missing-projectId guidance', () => {
     const { container, root } = renderFor('project_id_not_specified');
     expect(container.textContent).toContain('project id');
+    act(() => root.unmount());
+  });
+
+  it('names the payload cap when the extension refuses an oversized image', () => {
+    const { container, root } = renderFor('extension_request_too_large');
+    expect(container.textContent).toContain('Image is too large to upload');
+    expect(container.textContent).toContain('20 MB');
     act(() => root.unmount());
   });
 });

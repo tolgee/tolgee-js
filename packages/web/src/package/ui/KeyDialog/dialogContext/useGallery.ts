@@ -8,6 +8,13 @@ import {
   Size,
 } from './tools';
 import { detectExtension, takeScreenshot } from '../../../tools/extension';
+import { uploadScreenshotViaExtension } from '../../../tools/extensionRpc';
+import {
+  httpErrorFromExtension,
+  toResponseLike,
+} from '../../../tools/apiTransport';
+import { readApiResponse } from '../../client/client';
+import { HttpError } from '../../client/HttpError';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
 
@@ -35,6 +42,8 @@ export interface ScreenshotInterface {
   keyReferences?: KeyInScreenshot[];
 }
 
+type ExtensionUpload = { loading: boolean; error: HttpError | null };
+
 export const useGallery = (uiProps: UiProps) => {
   const [pluginAvailable, setPluginAvailable] = useState<boolean | undefined>(
     undefined
@@ -43,6 +52,10 @@ export const useGallery = (uiProps: UiProps) => {
   const [screenshots, setScreenshots] = useState<ScreenshotInterface[]>([]);
   const [screenshotDetail, setScreenshotDetail] =
     useState<ScreenshotInterface | null>(null);
+  const [extensionUpload, setExtensionUpload] = useState<ExtensionUpload>({
+    loading: false,
+    error: null,
+  });
 
   useEffect(() => {
     detectExtension().then((available) => setPluginAvailable(available));
@@ -58,6 +71,21 @@ export const useGallery = (uiProps: UiProps) => {
     method: 'post',
   });
 
+  const addScreenshot = (
+    data: Omit<ScreenshotInterface, 'justUploaded'>,
+    size: Size,
+    positions: KeyPosition[]
+  ) =>
+    setScreenshots((screenshots) => [
+      ...screenshots,
+      {
+        ...data,
+        ...size,
+        keyReferences: positions.map((ref) => ({ ...ref, keyId: -1 })),
+        justUploaded: true,
+      },
+    ]);
+
   const uploadScreenshot = (blob: Blob, size: Size, positions: KeyPosition[]) =>
     uploadImage.mutateAsync(
       {
@@ -65,15 +93,7 @@ export const useGallery = (uiProps: UiProps) => {
       },
       {
         onSuccess(data) {
-          setScreenshots((screenshots) => [
-            ...screenshots,
-            {
-              ...data,
-              ...size,
-              keyReferences: positions.map((ref) => ({ ...ref, keyId: -1 })),
-              justUploaded: true,
-            },
-          ]);
+          addScreenshot(data, size, positions);
         },
       }
     );
@@ -101,6 +121,13 @@ export const useGallery = (uiProps: UiProps) => {
       uiProps.changeTranslation
     );
     await sleep(400);
+    const screenSize = { width: window.innerWidth, height: window.innerHeight };
+
+    if (uiProps.transport) {
+      await takeScreenshotViaExtension(key, ns, revert, screenSize);
+      return;
+    }
+
     let screenshot: string;
     try {
       screenshot = await takeScreenshot();
@@ -114,7 +141,6 @@ export const useGallery = (uiProps: UiProps) => {
     }
 
     const positions = uiProps.findPositions(key, ns);
-    const screenSize = { width: window.innerWidth, height: window.innerHeight };
     const imgSize = await getImgSize(screenshot);
     const blob = await fetch(screenshot).then((r) => r.blob());
 
@@ -123,6 +149,41 @@ export const useGallery = (uiProps: UiProps) => {
     const scaledPositions = scalePositionsToImg(screenSize, imgSize, positions);
 
     uploadScreenshot(blob, imgSize, scaledPositions);
+  }
+
+  // The extension captures and uploads the image itself; the page only learns the result and the image size.
+  async function takeScreenshotViaExtension(
+    key: string,
+    ns: string,
+    revert: () => void,
+    screenSize: Size
+  ) {
+    let positions: KeyPosition[] | undefined;
+    const restore = () => {
+      if (positions) {
+        return;
+      }
+      revert();
+      setTakingScreenshot(false);
+      positions = uiProps.findPositions(key, ns);
+    };
+    setExtensionUpload({ loading: true, error: null });
+    try {
+      const { response, width, height } =
+        await uploadScreenshotViaExtension(restore);
+      restore();
+      const data = await readApiResponse(toResponseLike(response));
+      const imgSize = { width, height };
+      addScreenshot(
+        data,
+        imgSize,
+        scalePositionsToImg(screenSize, imgSize, positions!)
+      );
+      setExtensionUpload({ loading: false, error: null });
+    } catch (e) {
+      restore();
+      setExtensionUpload({ loading: false, error: httpErrorFromExtension(e) });
+    }
   }
 
   function handleRemoveScreenshot(id: number) {
@@ -138,8 +199,8 @@ export const useGallery = (uiProps: UiProps) => {
   }
 
   return {
-    error: deleteImage.error || uploadImage.error,
-    screenshotsUploading: uploadImage.isLoading,
+    error: deleteImage.error || uploadImage.error || extensionUpload.error,
+    screenshotsUploading: uploadImage.isLoading || extensionUpload.loading,
     takingScreenshot,
     screenshots,
     setScreenshots,

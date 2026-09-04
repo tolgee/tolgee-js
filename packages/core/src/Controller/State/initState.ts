@@ -6,6 +6,7 @@ import {
   FetchFn,
   MissingTranslationHandler,
   CachePublicRecord,
+  DevApiTransport,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -43,14 +44,16 @@ export type TolgeeOptionsInternal = {
   apiKey?: string;
 
   /**
-   * OAuth 2.1 access token, sent as `Authorization: Bearer`. An alternative to `apiKey`, typically supplied by the
-   * Tolgee browser extension. Carries no embedded project, so `projectId` is required when using it.
+   * Sends the SDK's Tolgee API requests instead of an `apiKey`, so the page holds no credential. Injected by the
+   * Tolgee browser extension through `overrideCredentials`; carries no project, so `projectId` is required with it.
+   *
+   * @internal
    */
-  authToken?: string;
+  transport?: DevApiTransport;
 
   /**
-   * Project id is necessary if you are using PAT or an OAuth access token, and is required by the Tolgee browser
-   * extension to connect in-context editing.
+   * Project id is necessary if you are using PAT or signing in through the Tolgee browser extension, and is required
+   * by the extension to connect in-context editing.
    * See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid
    */
   projectId?: number | string;
