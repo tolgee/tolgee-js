@@ -6,16 +6,41 @@ import {
   IN_CONTEXT_EXPORT_NAME,
 } from './constants';
 
+declare global {
+  interface Window {
+    __TOLGEE_IN_CONTEXT_URL__?: string;
+  }
+}
+
 const CDN_URL = 'https://cdn.jsdelivr.net/npm';
 
-function injectScript(src: string) {
-  return new Promise<void>((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.addEventListener('load', () => resolve());
-    script.addEventListener('error', (e) => reject(e.error));
-    document.head.appendChild(script);
-  });
+let injectPromise = null as any as Promise<typeof InContextTools>;
+
+export function loadInContextLib(version: string) {
+  if (!injectPromise) {
+    injectPromise = injectScript(inContextLibSrc(version)).then(() => {
+      // @ts-ignore
+      return window[IN_CONTEXT_UMD_NAME][IN_CONTEXT_EXPORT_NAME];
+    });
+  }
+  return injectPromise;
+}
+
+export function inContextLibSrc(version: string): string {
+  return (
+    trustedOverrideUrl() ||
+    `${CDN_URL}/@tolgee/web@${version}/dist/${IN_CONTEXT_FILE}`
+  );
+}
+
+export function trustedOverrideUrl(): string | undefined {
+  if (isSSR()) {
+    return undefined;
+  }
+  const override = window.__TOLGEE_IN_CONTEXT_URL__;
+  return isTrustedInContextUrl(override, window.location)
+    ? override
+    : undefined;
 }
 
 type LocationLike = { origin: string; hostname: string; href: string };
@@ -43,31 +68,12 @@ export function isTrustedInContextUrl(
   }
 }
 
-export function overrideUrl(): string | undefined {
-  if (isSSR()) {
-    return undefined;
-  }
-  const override = (window as { __TOLGEE_IN_CONTEXT_URL__?: string })
-    .__TOLGEE_IN_CONTEXT_URL__;
-  return isTrustedInContextUrl(override, window.location)
-    ? override
-    : undefined;
-}
-
-export function inContextLibSrc(version: string): string {
-  return (
-    overrideUrl() || `${CDN_URL}/@tolgee/web@${version}/dist/${IN_CONTEXT_FILE}`
-  );
-}
-
-let injectPromise = null as any as Promise<typeof InContextTools>;
-
-export function loadInContextLib(version: string) {
-  if (!injectPromise) {
-    injectPromise = injectScript(inContextLibSrc(version)).then(() => {
-      // @ts-ignore
-      return window[IN_CONTEXT_UMD_NAME][IN_CONTEXT_EXPORT_NAME];
-    });
-  }
-  return injectPromise;
+function injectScript(src: string) {
+  return new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.addEventListener('load', () => resolve());
+    script.addEventListener('error', (e) => reject(e.error));
+    document.head.appendChild(script);
+  });
 }

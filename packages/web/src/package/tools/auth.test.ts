@@ -1,12 +1,12 @@
 import {
   bearerSdkHeaders,
   buildAuthHeader,
-  resolveCredential,
+  resolveLiveCredential,
   resolveLiveAuthToken,
-} from '../tools/auth';
-import { AUTH_TOKEN_SESSION_STORAGE } from '../tools/sessionStorageKeys';
+} from './auth';
+import { AUTH_TOKEN_SESSION_STORAGE } from './sessionStorageKeys';
 
-// A real tgpak whose base32 body decodes to project id 1 (see decodeApiKey.test.ts).
+// See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
 const PAK_FOR_PROJECT_1 = 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc';
 
 describe('resolveLiveAuthToken', () => {
@@ -81,46 +81,49 @@ describe('buildAuthHeader', () => {
 });
 
 describe('bearerSdkHeaders', () => {
-  it('adds the SDK type/version headers on a Bearer auth header', () => {
-    const headers = bearerSdkHeaders({ Authorization: 'Bearer x' });
+  it('adds the SDK type/version headers when the credential uses a token', () => {
+    const headers = bearerSdkHeaders(true);
     expect(headers['x-tolgee-sdk-type']).toEqual('JS');
     expect(headers['x-tolgee-sdk-version']).toBeDefined();
   });
 
-  it('adds nothing on an api-key auth header (the fetch wrapper adds them there)', () => {
-    expect(bearerSdkHeaders({ 'X-API-Key': 'x' })).toEqual({});
-    expect(bearerSdkHeaders({})).toEqual({});
+  it('adds nothing for an api-key credential (the fetch wrapper adds them there)', () => {
+    expect(bearerSdkHeaders(false)).toEqual({});
   });
 });
 
-describe('resolveCredential', () => {
+describe('resolveLiveCredential', () => {
   afterEach(() => sessionStorage.clear());
 
   it('sends a Bearer header and requires an explicit project for an OAuth token', () => {
-    expect(resolveCredential({ authToken: 'jwt', projectId: 7 })).toEqual({
+    expect(resolveLiveCredential({ authToken: 'jwt', projectId: 7 })).toEqual({
       authHeader: { Authorization: 'Bearer jwt' },
+      usesToken: true,
       hasCredential: true,
       projectId: 7,
       requiresExplicitProject: true,
     });
   });
 
+  it('reports usesToken as false for an api-key credential', () => {
+    expect(resolveLiveCredential({ apiKey: 'tgpak_x' }).usesToken).toBe(false);
+  });
+
   it('requires an explicit project for a PAT (tgpat) key', () => {
     expect(
-      resolveCredential({ apiKey: 'tgpat_x' }).requiresExplicitProject
+      resolveLiveCredential({ apiKey: 'tgpat_x' }).requiresExplicitProject
     ).toBe(true);
   });
 
   it('extracts the embedded project from a PAK and requires no explicit one', () => {
-    const resolved = resolveCredential({ apiKey: PAK_FOR_PROJECT_1 });
+    const resolved = resolveLiveCredential({ apiKey: PAK_FOR_PROJECT_1 });
     expect(resolved.projectId).toBe(1);
     expect(resolved.requiresExplicitProject).toBe(false);
     expect(resolved.authHeader).toEqual({ 'X-API-Key': PAK_FOR_PROJECT_1 });
   });
 
   it('scopes to the supplied projectId (not the PAK) when a token is also present', () => {
-    // Incoherent config, but the active credential is the token, so its request must not scope to the PAK's project.
-    const resolved = resolveCredential({
+    const resolved = resolveLiveCredential({
       apiKey: PAK_FOR_PROJECT_1,
       authToken: 'jwt',
       projectId: 9,
@@ -130,27 +133,27 @@ describe('resolveCredential', () => {
   });
 
   it('reports no credential and no header when neither is present', () => {
-    const resolved = resolveCredential({});
+    const resolved = resolveLiveCredential({});
     expect(resolved.hasCredential).toBe(false);
     expect(resolved.authHeader).toEqual({});
   });
 
   it('treats an empty authToken as no credential (no unauthenticated request)', () => {
-    const resolved = resolveCredential({ authToken: '' });
+    const resolved = resolveLiveCredential({ authToken: '' });
     expect(resolved.hasCredential).toBe(false);
     expect(resolved.authHeader).toEqual({});
     expect(resolved.requiresExplicitProject).toBe(false);
   });
 
   it('treats an empty apiKey as no credential', () => {
-    const resolved = resolveCredential({ apiKey: '' });
+    const resolved = resolveLiveCredential({ apiKey: '' });
     expect(resolved.hasCredential).toBe(false);
     expect(resolved.authHeader).toEqual({});
   });
 
   it('falls back to the supplied projectId for a malformed PAK (no NaN scope)', () => {
-    // tgpak_mfrggzdf decodes to a non-numeric id, so the embedded project is unresolved.
-    const resolved = resolveCredential({
+    // See decodeApiKey.test.ts for why tgpak_mfrggzdf's embedded project is unresolved.
+    const resolved = resolveLiveCredential({
       apiKey: 'tgpak_mfrggzdf',
       projectId: 5,
     });
@@ -159,7 +162,7 @@ describe('resolveCredential', () => {
 
   it('prefers a live sessionStorage token for the header and project requirement', () => {
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'rotated');
-    const resolved = resolveCredential({ authToken: 'init', projectId: 3 });
+    const resolved = resolveLiveCredential({ authToken: 'init', projectId: 3 });
     expect(resolved.authHeader).toEqual({ Authorization: 'Bearer rotated' });
     expect(resolved.requiresExplicitProject).toBe(true);
   });

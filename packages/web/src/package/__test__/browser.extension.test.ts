@@ -53,7 +53,7 @@ describe('compatibility with browser extension', () => {
     });
   });
 
-  it('forwards only the winning Bearer token when both apiKey and authToken are configured', async () => {
+  it('blanks the api key when a Bearer token wins (the token itself is never forwarded back to the extension)', async () => {
     const tolgee = TolgeeCore().init({
       language: 'en',
       apiUrl: 'test',
@@ -65,9 +65,13 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
     expect(handshakerUpdate).toBeCalledWith(
       expect.objectContaining({
-        config: expect.objectContaining({ apiKey: '', authToken: 'jwt' }),
+        config: expect.objectContaining({ apiKey: '' }),
       })
     );
+    const calls = handshakerUpdate.mock.calls as unknown as {
+      config: object;
+    }[][];
+    expect(calls[0][0].config).not.toHaveProperty('authToken');
   });
 
   it('forwards the api key (no token) unchanged in the handshake', async () => {
@@ -80,10 +84,7 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
     expect(handshakerUpdate).toBeCalledWith(
       expect.objectContaining({
-        config: expect.objectContaining({
-          apiKey: 'tgpak_x',
-          authToken: undefined,
-        }),
+        config: expect.objectContaining({ apiKey: 'tgpak_x' }),
       })
     );
   });
@@ -104,7 +105,7 @@ describe('compatibility with browser extension', () => {
     );
   });
 
-  it('forwards authToken and projectId to the extension handshake', async () => {
+  it('forwards projectId to the extension handshake for a token-configured SDK (no api key)', async () => {
     const tolgee = TolgeeCore().init({
       language: 'en',
       apiUrl: 'test',
@@ -115,7 +116,7 @@ describe('compatibility with browser extension', () => {
     await tolgee.run();
     expect(handshakerUpdate).toBeCalledWith(
       expect.objectContaining({
-        config: expect.objectContaining({ authToken: 'jwt', projectId: 42 }),
+        config: expect.objectContaining({ apiKey: '', projectId: 42 }),
       })
     );
   });
@@ -163,7 +164,6 @@ describe('compatibility with browser extension', () => {
     expect(credentials.apiKey).toBeUndefined();
     expect(credentials.apiUrl).toEqual('test');
     expect(credentials.projectId).toEqual('42');
-    // The token flows through the credentials so isDev()/the dev-backend gate recognise the token-only session.
     expect(credentials.authToken).toEqual('oauth-access-token');
   });
 
@@ -306,7 +306,7 @@ describe('compatibility with browser extension', () => {
   });
 
   it('does not warn when not in dev mode, even if the credential would otherwise require a projectId', () => {
-    // authToken but no apiUrl → isDev() is false; resolveCredential would still flag requiresExplicitProject, so this
+    // authToken but no apiUrl → isDev() is false; resolveLiveCredential would still flag requiresExplicitProject, so this
     // isolates the isDev() early-return guard from the requiresExplicitProject check.
     const warn = jest
       .spyOn(console, 'warn')
@@ -368,6 +368,8 @@ describe('compatibility with browser extension', () => {
     sessionStorage.setItem(BRANCH_SESSION_STORAGE, 'c');
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'd');
     sessionStorage.setItem(PROJECT_ID_SESSION_STORAGE, 'e');
+    // The chrome extension's own session-routing key, which the SDK never reads.
+    sessionStorage.setItem('__tolgee_projectKey', 'f');
     clearSessionStorage();
     [
       API_KEY_SESSION_STORAGE,
@@ -375,7 +377,18 @@ describe('compatibility with browser extension', () => {
       BRANCH_SESSION_STORAGE,
       AUTH_TOKEN_SESSION_STORAGE,
       PROJECT_ID_SESSION_STORAGE,
+      '__tolgee_projectKey',
     ].forEach((key) => expect(sessionStorage.getItem(key)).toBeNull());
+  });
+
+  it('clearSessionStorage sweeps by prefix, so an extension-private key the SDK does not enumerate is still removed', () => {
+    sessionStorage.setItem('__tolgee_someFutureExtensionKey', 'x');
+    sessionStorage.setItem('unrelated_key', 'keep-me');
+    clearSessionStorage();
+    expect(
+      sessionStorage.getItem('__tolgee_someFutureExtensionKey')
+    ).toBeNull();
+    expect(sessionStorage.getItem('unrelated_key')).toBe('keep-me');
   });
 
   it('builded module is valid', async () => {

@@ -8,12 +8,17 @@ type Credentials = {
   projectId?: number | string;
 };
 
-export function resolveCredential(credentials: Credentials): {
+export type ResolvedLiveCredential = {
   authHeader: Record<string, string>;
+  usesToken: boolean;
   hasCredential: boolean;
   projectId: number | string | undefined;
   requiresExplicitProject: boolean;
-} {
+};
+
+export function resolveLiveCredential(
+  credentials: Credentials
+): ResolvedLiveCredential {
   const { apiKey, authToken, projectId } = credentials;
   const token = resolveLiveAuthToken(authToken, apiKey);
   const hasToken = Boolean(token);
@@ -21,6 +26,7 @@ export function resolveCredential(credentials: Credentials): {
   const embedded = !hasToken ? getProjectIdFromApiKey(apiKey) : undefined;
   return {
     authHeader: buildAuthHeader(token, apiKey),
+    usesToken: hasToken,
     hasCredential: hasToken || hasApiKey,
     projectId: embedded ?? projectId,
     requiresExplicitProject: hasToken || getApiKeyType(apiKey) === 'tgpat',
@@ -31,8 +37,7 @@ export function resolveLiveAuthToken(
   initAuthToken: string | undefined,
   apiKey: string | undefined
 ): string | undefined {
-  // An api-key-configured SDK must not be hijacked by a stray sessionStorage token: only follow the live token when a
-  // token is the intended auth path.
+  // An api-key-configured SDK must not be hijacked by a stray sessionStorage token.
   if (!initAuthToken && apiKey) {
     return undefined;
   }
@@ -62,8 +67,6 @@ export function buildAuthHeader(
   return {};
 }
 
-export function bearerSdkHeaders(
-  authHeader: Record<string, string>
-): Record<string, string> {
-  return authHeader.Authorization ? sdkHeaders() : {};
+export function bearerSdkHeaders(usesToken: boolean): Record<string, string> {
+  return usesToken ? sdkHeaders() : {};
 }

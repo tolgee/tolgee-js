@@ -2,7 +2,7 @@ import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
 import { getErrorContent } from '../ui/KeyDialog/ErrorAlert';
 import { HttpError, ErrorStatusCode } from '../ui/client/HttpError';
-import { OPEN_PLUGIN_MESSAGE } from '../BrowserExtensionPlugin/constants';
+import { OPEN_PLUGIN_MESSAGE } from '../constants';
 
 const renderFor = (code: string) => {
   const container = document.createElement('div');
@@ -22,6 +22,10 @@ describe('ErrorAlert getErrorContent — OAuth recovery', () => {
     'invalid_jwt_token',
     'expired_jwt_token',
     'general_jwt_error',
+    // Emitted by OAuth2AccessTokenResolver for the extension's opaque Bearer token — a dead or revoked OAuth
+    // session needs the same "reconnect via the plugin" recovery as a dead webapp JWT.
+    'invalid_oauth_token',
+    'oauth_token_expired',
   ];
 
   it.each(jwtCodes)('renders the sign-in-again recovery for %s', (code) => {

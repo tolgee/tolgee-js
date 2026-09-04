@@ -143,7 +143,6 @@ describe('in-context client auth (customFetch)', () => {
   });
 
   it('enforces the projectId precondition off the live token, not just the init options', async () => {
-    // No init credential, but a token sits in sessionStorage — the guard must still fire (it keys off the live token).
     sessionStorage.setItem(AUTH_TOKEN_SESSION_STORAGE, 'live');
     mockFetch();
     await expect(call({ projectId: undefined })).rejects.toThrow(

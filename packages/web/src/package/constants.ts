@@ -6,6 +6,9 @@ export const DEVTOOLS_Z_INDEX = 2147483000;
 export const CHROME_EXTENSION_LINK =
   'https://chrome.google.com/webstore/detail/tolgee-tools/hacnbapajkkfohnonhbmegojnddagfnj';
 
+// Cross-repo wire value: the chrome-plugin content script matches this exact string. Changing it breaks that match.
+export const OPEN_PLUGIN_MESSAGE = 'TOLGEE_OPEN_PLUGIN';
+
 export const PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY =
   '__tolgee_preferredLanguages';
 

@@ -3,7 +3,7 @@ import { HttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
 import { createUrl } from '../../tools/url';
-import { OPEN_PLUGIN_MESSAGE } from '../../BrowserExtensionPlugin/constants';
+import { openPlugin } from '../../tools/extension';
 
 type Props = {
   error: HttpError | Error;
@@ -36,9 +36,7 @@ function OpenExtension() {
       component="button"
       type="button"
       sx={{ verticalAlign: 'baseline' }}
-      onClick={() =>
-        window.postMessage({ type: OPEN_PLUGIN_MESSAGE }, window.origin)
-      }
+      onClick={openPlugin}
     >
       Open the Tolgee plugin
     </Link>
@@ -78,6 +76,8 @@ export function getErrorContent(
     case 'invalid_jwt_token':
     case 'expired_jwt_token':
     case 'general_jwt_error':
+    case 'invalid_oauth_token':
+    case 'oauth_token_expired':
       return (
         <>
           <AlertTitle>You're not signed in</AlertTitle>

@@ -1,3 +1,5 @@
+import { OPEN_PLUGIN_MESSAGE } from '../constants';
+
 type Props = {
   message: string;
   recievingMessage: string[];
@@ -82,6 +84,10 @@ export function takeScreenshot(): Promise<string> {
   }).promise as Promise<string>;
 }
 
+export function openPlugin(): void {
+  window.postMessage({ type: OPEN_PLUGIN_MESSAGE }, window.origin);
+}
+
 export async function detectExtension(): Promise<boolean> {
   try {
     await sendAndRecieve({
@@ -102,7 +108,6 @@ export type LibConfig = {
   config: {
     apiUrl: string;
     apiKey: string;
-    authToken?: string;
     projectId?: number | string;
     branch?: string;
   };

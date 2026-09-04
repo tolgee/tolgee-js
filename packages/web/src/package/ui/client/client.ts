@@ -5,7 +5,11 @@ import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { createUrl } from '../../tools/url';
-import { bearerSdkHeaders, resolveCredential } from '../../tools/auth';
+import {
+  bearerSdkHeaders,
+  resolveLiveCredential,
+  ResolvedLiveCredential,
+} from '../../tools/auth';
 
 const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
@@ -66,7 +70,7 @@ function buildQuery(object: { [key: string]: any }): string {
 async function customFetch(
   input: RequestInfo,
   options: GlobalOptions,
-  credential: ReturnType<typeof resolveCredential>,
+  credential: ResolvedLiveCredential,
   init?: RequestInit
 ) {
   if (options.apiUrl === undefined) {
@@ -82,7 +86,7 @@ async function customFetch(
   init = init || {};
   init.headers = init.headers || {};
   init.headers = {
-    ...bearerSdkHeaders(credential.authHeader),
+    ...bearerSdkHeaders(credential.usesToken),
     ...init.headers,
     ...credential.authHeader,
   };
@@ -103,7 +107,7 @@ async function customFetch(
   });
 }
 
-export const addProjectIdToUrl = (url: string) => {
+const addProjectIdToUrl = (url: string) => {
   return url.replace('/projects/', '/projects/{projectId}/');
 };
 
@@ -120,7 +124,7 @@ export async function client<
   const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
 
-  const credential = resolveCredential(options);
+  const credential = resolveLiveCredential(options);
   const isProjectScopedEndpoint = urlResult.includes('/projects/');
   if (
     credential.requiresExplicitProject &&
@@ -134,11 +138,9 @@ export async function client<
     urlResult = addProjectIdToUrl(urlResult);
   }
 
-  if (pathParams) {
-    Object.entries(pathParams).forEach(([key, value]) => {
-      urlResult = urlResult.replace(`{${key}}`, value as any);
-    });
-  }
+  Object.entries(pathParams).forEach(([key, value]) => {
+    urlResult = urlResult.replace(`{${key}}`, value as any);
+  });
 
   const formData = request?.content?.['multipart/form-data'] as Record<
     string,

@@ -75,7 +75,6 @@ export function State(
 
     getInitialOptions() {
       const merged = { ...state.initialOptions, ...devCredentials };
-      // Clear the base's other credential — a plain merge would leave both auth fields set and pick the wrong one.
       if (
         devCredentials &&
         (devCredentials.apiKey || devCredentials.authToken)

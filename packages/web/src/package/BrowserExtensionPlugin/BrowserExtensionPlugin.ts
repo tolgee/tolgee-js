@@ -1,12 +1,13 @@
 import type { TolgeePlugin } from '@tolgee/core';
 import { Handshaker } from '../tools/extension';
-import { buildAuthHeader, resolveCredential } from '../tools/auth';
+import { resolveLiveCredential } from '../tools/auth';
 import {
   API_KEY_SESSION_STORAGE,
   API_URL_SESSION_STORAGE,
   AUTH_TOKEN_SESSION_STORAGE,
   BRANCH_SESSION_STORAGE,
   PROJECT_ID_SESSION_STORAGE,
+  TOLGEE_EXTENSION_SESSION_STORAGE_PREFIX,
 } from '../tools/sessionStorageKeys';
 import { loadInContextLib } from './loadInContextLib';
 
@@ -19,14 +20,11 @@ function getCredentials() {
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
 
-  // A bare OAuth token (no projectId) is unusable — withhold it so the fetch paths don't pick it over a working PAK.
   const oauthUsable = Boolean(authToken && projectId);
   if (!apiUrl || (!apiKey && !oauthUsable)) {
     return undefined;
   }
 
-  // The token flows through the credentials so isDev()/the dev-backend gate see it (the request path still reads the
-  // live value from sessionStorage, so rotation is picked up and a disconnect's reload drops this snapshot).
   return {
     apiUrl,
     ...(apiKey !== undefined ? { apiKey } : {}),
@@ -36,26 +34,32 @@ function getCredentials() {
   };
 }
 
+// Sweeps by prefix rather than an enumerated key list: the extension owns some of these slots privately (e.g. its
+// session-routing key) and this must keep clearing them even if the SDK never reads them and the two repos'
+// release cycles drift.
 export function clearSessionStorage() {
-  sessionStorage.removeItem(API_KEY_SESSION_STORAGE);
-  sessionStorage.removeItem(API_URL_SESSION_STORAGE);
-  sessionStorage.removeItem(BRANCH_SESSION_STORAGE);
-  sessionStorage.removeItem(AUTH_TOKEN_SESSION_STORAGE);
-  sessionStorage.removeItem(PROJECT_ID_SESSION_STORAGE);
+  const keysToRemove: string[] = [];
+  for (let i = 0; i < sessionStorage.length; i++) {
+    const key = sessionStorage.key(i);
+    if (key?.startsWith(TOLGEE_EXTENSION_SESSION_STORAGE_PREFIX)) {
+      keysToRemove.push(key);
+    }
+  }
+  keysToRemove.forEach((key) => sessionStorage.removeItem(key));
 }
 
 function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
   if (!tolgee.isDev()) {
     return;
   }
-  const { requiresExplicitProject, projectId } = resolveCredential(
+  const { requiresExplicitProject, projectId } = resolveLiveCredential(
     tolgee.getInitialOptions()
   );
   if (requiresExplicitProject && projectId === undefined) {
     // eslint-disable-next-line no-console
     console.warn(
-      'Tolgee: `projectId` is missing from the SDK configuration. The Tolgee browser extension needs it to ' +
-        'connect in-context editing. ' +
+      'Tolgee: `projectId` is missing from the SDK configuration. It is required when authenticating with a PAT ' +
+        'or an OAuth access token. ' +
         'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
     );
   }
@@ -98,10 +102,7 @@ if (sessionStorageAvailable()) {
     const handshaker = Handshaker();
     const getConfig = () => {
       const options = tolgee.getInitialOptions();
-      // Decide from the snapshot options we forward, not the live token, so the flag and the value can't disagree.
-      const usingToken = Boolean(
-        buildAuthHeader(options.authToken, options.apiKey).Authorization
-      );
+      const usingToken = Boolean(options.authToken);
       return {
         // prevent extension downloading ui library
         uiPresent: true,
@@ -112,7 +113,6 @@ if (sessionStorageAvailable()) {
         config: {
           apiUrl: options.apiUrl || '',
           apiKey: usingToken ? '' : options.apiKey || '',
-          authToken: usingToken ? options.authToken : undefined,
           projectId: options.projectId,
           branch: options.branch,
         },

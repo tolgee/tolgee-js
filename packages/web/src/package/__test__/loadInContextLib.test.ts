@@ -3,7 +3,7 @@ import { isSSR } from '../tools/isSSR';
 import {
   inContextLibSrc,
   isTrustedInContextUrl,
-  overrideUrl,
+  trustedOverrideUrl,
 } from '../BrowserExtensionPlugin/loadInContextLib';
 
 const devPage = {
@@ -80,66 +80,52 @@ describe('isTrustedInContextUrl', () => {
   });
 });
 
-describe('overrideUrl', () => {
+describe('trustedOverrideUrl', () => {
   // jsdom serves the tests from http://localhost, i.e. a dev origin.
   afterEach(() => {
-    delete (window as { __TOLGEE_IN_CONTEXT_URL__?: string })
-      .__TOLGEE_IN_CONTEXT_URL__;
+    delete window.__TOLGEE_IN_CONTEXT_URL__;
   });
 
   it('returns a trusted same-origin override', () => {
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = '/tolgee.umd.js';
-    expect(overrideUrl()).toEqual('/tolgee.umd.js');
+    window.__TOLGEE_IN_CONTEXT_URL__ = '/tolgee.umd.js';
+    expect(trustedOverrideUrl()).toEqual('/tolgee.umd.js');
   });
 
   it('discards a cross-origin override', () => {
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
-    expect(overrideUrl()).toBeUndefined();
+    window.__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
+    expect(trustedOverrideUrl()).toBeUndefined();
   });
 
   it('returns undefined when the global is unset', () => {
-    expect(overrideUrl()).toBeUndefined();
+    expect(trustedOverrideUrl()).toBeUndefined();
   });
 
   it('returns undefined under SSR without touching window', () => {
     (isSSR as jest.Mock).mockReturnValueOnce(true);
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = '/tolgee.umd.js';
-    expect(overrideUrl()).toBeUndefined();
+    window.__TOLGEE_IN_CONTEXT_URL__ = '/tolgee.umd.js';
+    expect(trustedOverrideUrl()).toBeUndefined();
   });
 });
 
 describe('inContextLibSrc', () => {
   afterEach(() => {
-    delete (window as { __TOLGEE_IN_CONTEXT_URL__?: string })
-      .__TOLGEE_IN_CONTEXT_URL__;
+    delete window.__TOLGEE_IN_CONTEXT_URL__;
   });
 
   it('uses a trusted override as the script source', () => {
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
+    window.__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
     expect(inContextLibSrc('1.2.3')).toEqual('/local.umd.js');
   });
 
   it('falls back to the CDN when there is no trusted override', () => {
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
+    window.__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
     expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
     expect(inContextLibSrc('1.2.3')).toContain('@tolgee/web@1.2.3');
   });
 
   it('falls back to the CDN under SSR (ignoring any override)', () => {
     (isSSR as jest.Mock).mockReturnValueOnce(true);
-    (
-      window as { __TOLGEE_IN_CONTEXT_URL__?: string }
-    ).__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
+    window.__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
     expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
   });
 });

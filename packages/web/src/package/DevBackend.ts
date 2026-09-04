@@ -1,6 +1,6 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
 import { createUrl } from './tools/url';
-import { bearerSdkHeaders, resolveCredential } from './tools/auth';
+import { bearerSdkHeaders, resolveLiveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
@@ -17,9 +17,10 @@ function createDevBackend(): BackendDevMiddleware {
     }) {
       const {
         authHeader,
+        usesToken,
         projectId: resolvedProjectId,
         requiresExplicitProject,
-      } = resolveCredential({ apiKey, authToken, projectId });
+      } = resolveLiveCredential({ apiKey, authToken, projectId });
       if (requiresExplicitProject && resolvedProjectId === undefined) {
         throw new Error(
           "You need to specify 'projectId' when using a PAT key or an OAuth token"
@@ -48,7 +49,7 @@ function createDevBackend(): BackendDevMiddleware {
 
       return fetch(url.toString(), {
         headers: {
-          ...bearerSdkHeaders(authHeader),
+          ...bearerSdkHeaders(usesToken),
           ...authHeader,
           'Content-Type': 'application/json',
         },
