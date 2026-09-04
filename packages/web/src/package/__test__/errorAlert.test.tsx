@@ -110,8 +110,11 @@ describe('ErrorAlert — missing credentials', () => {
     await settle(800);
     expect(buttons(container)).toContain('Install the Tolgee plugin');
     expect(buttons(container)).not.toContain('Open the Tolgee plugin');
-    expect(container.querySelector('a')?.getAttribute('href')).toContain(
-      'chrome.google.com/webstore'
+    const links = [...container.querySelectorAll('a')].map((a) =>
+      a.getAttribute('href')
+    );
+    expect(links.some((h) => h?.includes('chrome.google.com/webstore'))).toBe(
+      true
     );
     act(() => root.unmount());
   });

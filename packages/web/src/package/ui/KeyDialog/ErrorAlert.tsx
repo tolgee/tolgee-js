@@ -52,15 +52,21 @@ function OpenExtension() {
     return null;
   }
   return (
-    <Box mt={1}>
+    <Box mt={1.5}>
       {present ? (
-        <Button size="small" variant="contained" onClick={openPlugin}>
+        <Button
+          size="small"
+          variant="outlined"
+          color="inherit"
+          onClick={openPlugin}
+        >
           Open the Tolgee plugin
         </Button>
       ) : (
         <Button
           size="small"
           variant="outlined"
+          color="inherit"
           href={CHROME_EXTENSION_LINK}
           target="_blank"
           rel="noreferrer"
@@ -135,8 +141,8 @@ export function getErrorContent(
         <>
           <AlertTitle>Sign in to make changes</AlertTitle>
           To edit translations here, sign in with the Tolgee browser extension
-          or add an API key to the Tolgee configuration. <OpenExtension />{' '}
-          <DocsInContext />
+          or add an API key to the Tolgee configuration. <DocsInContext />
+          <OpenExtension />
         </>
       );
 
