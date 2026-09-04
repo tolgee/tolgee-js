@@ -34,10 +34,16 @@ const buildFolders = [
   // './testapps/next-internal/.next'
 ];
 
+// See testapps/react/src/inContextUrl.ts: Vite copies public/ verbatim into dist/, and that file legitimately
+// contains DevTools code this build did not bundle.
+const DEV_OVERRIDE_FILE = 'tolgee-in-context-tools.umd.min.js';
+
 describe('testapps ommit dev tools', () => {
   buildFolders.forEach((folder) => {
     describe(`checking ${folder}`, () => {
-      const jsFiles = getFiles(folder).filter((f) => f.endsWith('js'));
+      const jsFiles = getFiles(folder).filter(
+        (f) => f.endsWith('js') && !f.endsWith(DEV_OVERRIDE_FILE)
+      );
       jsFiles.forEach((filePath) => {
         checkBuildFile(filePath);
       });

@@ -23,6 +23,20 @@ To run the app in dev mode with in-context translating mode:
 5. Run `npm run develop`
 6. Have fun
 
+## To exercise an unpublished @tolgee/web change in-context
+
+The in-context editor is normally loaded from the CDN as a published `@tolgee/web` version. To try out local,
+unpublished changes to it instead:
+
+1. `cd packages/web && pnpm run build` (or the `build --filter=@tolgee/web...` turbo task) to produce
+   `packages/web/dist/tolgee-in-context-tools.umd.min.js`.
+2. Copy that file into `testapps/react/public/` (gitignored, so it never gets committed).
+3. Set `VITE_APP_IN_CONTEXT_URL=/tolgee-in-context-tools.umd.min.js` in `.env.development.local`.
+4. Run `npm run develop` as above.
+
+This only takes effect on `localhost`/`127.0.0.1` — see `isTrustedInContextUrl` in
+`packages/web/src/package/BrowserExtensionPlugin/loadInContextLib.ts`.
+
 ## To run the app in production mode
 
 To build the app for production run:
