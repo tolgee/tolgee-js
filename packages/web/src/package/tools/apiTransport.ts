@@ -11,7 +11,12 @@ import {
   ExtensionRpcError,
   requestFromExtension,
 } from './extensionRpc';
-import { ProxyBody, ProxyFormEntry } from './extensionProtocol';
+import {
+  ProxyBody,
+  ProxyFormEntry,
+  TOLGEE_API_REQUEST,
+  TOLGEE_API_RESPONSE,
+} from './extensionProtocol';
 
 type DirectProps = {
   apiUrl: string;
@@ -40,8 +45,8 @@ export function proxyTransport(): DevApiTransport {
     let reply: { response?: ExtensionApiResponse };
     try {
       reply = await requestFromExtension({
-        type: 'TOLGEE_API_REQUEST',
-        replyType: 'TOLGEE_API_RESPONSE',
+        type: TOLGEE_API_REQUEST,
+        replyType: TOLGEE_API_RESPONSE,
         payload: {
           path: request.path,
           method: request.method,

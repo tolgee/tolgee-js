@@ -94,6 +94,7 @@ export const ScreenshotThumbnail: React.FC<Props> = (props) => {
 
       <ScreenshotOverflowWrapper
         key={props.data.id}
+        data-cy="screenshot-thumbnail"
         onClick={props.onClick}
         aria-label="Screenshot"
       >

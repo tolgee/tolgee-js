@@ -1,14 +1,10 @@
 import { KeyPosition, UiProps } from '@tolgee/core';
 import { useEffect, useState } from 'react';
 
-import {
-  changeInTolgeeCache,
-  getImgSize,
-  scalePositionsToImg,
-  Size,
-} from './tools';
+import { changeInTolgeeCache, getImgSize, Size } from './tools';
 import { useExtensionScreenshotUpload } from './useExtensionScreenshotUpload';
-import { detectExtension, takeScreenshot } from '../../../tools/extension';
+import { legacyScreenshotUpload } from './legacyScreenshotUpload';
+import { detectExtension } from '../../../tools/extension';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
 
@@ -97,6 +93,11 @@ export const useGallery = (uiProps: UiProps) => {
       }
     );
 
+  const legacyScreenshot = legacyScreenshotUpload(
+    uiProps.findPositions,
+    uploadScreenshot
+  );
+
   async function handleUploadImages(files: File[]) {
     await Promise.all(
       files.map(async (content) => {
@@ -135,27 +136,13 @@ export const useGallery = (uiProps: UiProps) => {
       return;
     }
 
-    let screenshot: string;
-    try {
-      screenshot = await takeScreenshot();
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e);
-      return;
-    } finally {
-      revert();
-      setTakingScreenshot(false);
-    }
-
-    const positions = uiProps.findPositions(key, ns);
-    const imgSize = await getImgSize(screenshot);
-    const blob = await fetch(screenshot).then((r) => r.blob());
-
-    // on hdpi screens, the screenshot can be different than the window size,
-    // so we need to scale the coordinates accordingly
-    const scaledPositions = scalePositionsToImg(screenSize, imgSize, positions);
-
-    uploadScreenshot(blob, imgSize, scaledPositions);
+    await legacyScreenshot.take({
+      key,
+      ns,
+      revert,
+      onTakingScreenshotChange: setTakingScreenshot,
+      screenSize,
+    });
   }
 
   function handleRemoveScreenshot(id: number) {

@@ -136,6 +136,7 @@ export const ScreenshotGallery: React.FC = () => {
               {(isChrome || ableToTakeScreenshot) && (
                 <Tooltip title="Take screenshot">
                   <IconButton
+                    data-cy="screenshot-take"
                     sx={{ fontSize: 24 }}
                     onClick={
                       ableToTakeScreenshot
@@ -149,7 +150,11 @@ export const ScreenshotGallery: React.FC = () => {
               )}
 
               <Tooltip title="Add image">
-                <IconButton sx={{ fontSize: 24 }} onClick={onFileSelect}>
+                <IconButton
+                  data-cy="screenshot-add"
+                  sx={{ fontSize: 24 }}
+                  onClick={onFileSelect}
+                >
                   <AddCircleOutline />
                 </IconButton>
               </Tooltip>
@@ -184,6 +189,7 @@ export const ScreenshotGallery: React.FC = () => {
         )}
         {!screenshots.length && !screenshotsUploading && (
           <ScPlaceholder
+            data-cy="screenshot-empty"
             style={{ cursor: uploadEnabled ? 'pointer' : 'default' }}
             onClick={uploadEnabled ? onFileSelect : undefined}
           >

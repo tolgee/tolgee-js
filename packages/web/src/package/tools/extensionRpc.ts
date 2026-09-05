@@ -1,6 +1,11 @@
 import {
   EXTENSION_REQUEST_TIMEOUT_MS,
   ExtensionErrorKind,
+  TOLGEE_PROXY_PING,
+  TOLGEE_PROXY_PONG,
+  TOLGEE_SCREENSHOT_CAPTURED,
+  TOLGEE_SCREENSHOT_UPLOAD,
+  TOLGEE_SCREENSHOT_UPLOADED,
 } from './extensionProtocol';
 
 export class ExtensionRpcError extends Error {
@@ -46,8 +51,8 @@ type Pending = {
 // is there at all; a tab still marked signed in after the extension was removed must not wait the request timeout.
 export const RELAY_DISCOVERY_TIMEOUT_MS = 3_000;
 const RELAY_PING_INTERVAL_MS = 200;
-const RELAY_PING = 'TOLGEE_PROXY_PING';
-const RELAY_PONG = 'TOLGEE_PROXY_PONG';
+const RELAY_PING = TOLGEE_PROXY_PING;
+const RELAY_PONG = TOLGEE_PROXY_PONG;
 
 let counter = 0;
 const pending = new Map<string, Pending>();
@@ -106,9 +111,9 @@ export function uploadScreenshotViaExtension(
   onCaptured: () => void
 ): Promise<ScreenshotUploadReply> {
   return requestFromExtension<ExtensionReply & ScreenshotUploadReply>({
-    type: 'TOLGEE_SCREENSHOT_UPLOAD',
-    replyType: 'TOLGEE_SCREENSHOT_UPLOADED',
-    progressType: 'TOLGEE_SCREENSHOT_CAPTURED',
+    type: TOLGEE_SCREENSHOT_UPLOAD,
+    replyType: TOLGEE_SCREENSHOT_UPLOADED,
+    progressType: TOLGEE_SCREENSHOT_CAPTURED,
     onProgress: onCaptured,
   });
 }
@@ -137,7 +142,10 @@ function ensureListener() {
       return;
     }
     const data = event.data?.data as ExtensionReply | undefined;
-    const entry = typeof data?.id === 'string' ? pending.get(data.id) : null;
+    if (typeof data?.id !== 'string') {
+      return;
+    }
+    const entry = pending.get(data.id);
     if (!entry) {
       return;
     }
@@ -148,12 +156,10 @@ function ensureListener() {
     if (type !== entry.replyType) {
       return;
     }
-    pending.delete(data!.id);
+    pending.delete(data.id);
     clearTimeout(entry.timer);
-    if (data!.error) {
-      entry.reject(
-        new ExtensionRpcError(data!.error.kind, data!.error.message)
-      );
+    if (data.error) {
+      entry.reject(new ExtensionRpcError(data.error.kind, data.error.message));
     } else {
       entry.resolve(data);
     }

@@ -38,7 +38,7 @@ export const useExtensionScreenshotUpload = (
   const upload = useMutation<UploadResult, HttpError, TakeArgs>(
     async ({ key, ns, revert, onTakingScreenshotChange, screenSize }) => {
       let measured: KeyPosition[] | undefined;
-      const revertAndMeasure = () => {
+      const finishCaptureOnce = () => {
         if (!measured) {
           revert();
           onTakingScreenshotChange(false);
@@ -49,10 +49,10 @@ export const useExtensionScreenshotUpload = (
       try {
         const { response, width, height } = await uploadScreenshotViaExtension(
           () => {
-            revertAndMeasure();
+            finishCaptureOnce();
           }
         );
-        const positions = revertAndMeasure();
+        const positions = finishCaptureOnce();
         const data = await readApiResponse(toResponseLike(response));
         const imgSize = { width, height };
         return {
@@ -61,7 +61,7 @@ export const useExtensionScreenshotUpload = (
           positions: scalePositionsToImg(screenSize, imgSize, positions),
         };
       } catch (e) {
-        revertAndMeasure();
+        finishCaptureOnce();
         throw httpErrorFromExtension(e);
       }
     },

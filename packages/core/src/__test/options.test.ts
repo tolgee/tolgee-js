@@ -1,4 +1,5 @@
 import { TolgeeCore } from '../TolgeeCore';
+import { DevApiTransport, DevCredentials, TolgeeOptions } from '../types';
 
 describe('initial options', () => {
   it('combines options correctly', () => {
@@ -151,5 +152,16 @@ describe('initial options', () => {
     const options = tolgee.getInitialOptions();
     expect(options.transport).toBe(transport);
     expect(options.apiKey).toBeUndefined();
+  });
+
+  it('does not accept the extension transport, which only enters through overrideCredentials', () => {
+    const transport: DevApiTransport = () =>
+      Promise.reject(new Error('unused'));
+    // @ts-expect-error transport is not an init option
+    const options: TolgeeOptions = { transport };
+    const credentials: DevCredentials = { transport, projectId: 1 };
+
+    expect(options).toBeDefined();
+    expect(credentials.transport).toBe(transport);
   });
 });
