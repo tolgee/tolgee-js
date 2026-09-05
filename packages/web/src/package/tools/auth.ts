@@ -1,7 +1,7 @@
 import { DevApiTransport, sdkHeaders } from '@tolgee/core';
 import { getApiKeyType, getProjectIdFromApiKey } from './decodeApiKey';
 
-type Credentials = {
+export type LiveCredentials = {
   apiKey?: string;
   projectId?: number | string;
   transport?: DevApiTransport;
@@ -16,7 +16,7 @@ export type ResolvedLiveCredential = {
 };
 
 export function resolveLiveCredential(
-  credentials: Credentials
+  credentials: LiveCredentials
 ): ResolvedLiveCredential {
   const { apiKey, projectId, transport } = credentials;
   if (transport) {
@@ -43,8 +43,9 @@ export function buildAuthHeader(
   return apiKey ? { 'X-API-Key': apiKey } : {};
 }
 
-// The fetch wrapper adds these on an api-key request itself; a request through the extension carries no api key.
-export function bearerSdkHeaders(
+// createFetchFunction (@tolgee/core) adds these on a direct request already; a request routed through the
+// extension's transport bypasses that wrapper, so they have to be added here instead.
+export function extensionSdkHeaders(
   viaExtension: boolean
 ): Record<string, string> {
   return viaExtension ? sdkHeaders() : {};

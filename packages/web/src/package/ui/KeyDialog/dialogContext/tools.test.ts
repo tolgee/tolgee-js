@@ -1,5 +1,36 @@
 import { MAX_LANGUAGES_SELECTED } from '../../../constants';
-import { getInitialLanguages, setPreferredLanguages } from './tools';
+import {
+  getInitialLanguages,
+  permissionsQueryProjectId,
+  setPreferredLanguages,
+} from './tools';
+
+// See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
+const PAK_FOR_PROJECT_1 = 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc';
+
+describe('permissionsQueryProjectId', () => {
+  it("uses the PAK's own project even when the site configures another one", () => {
+    expect(
+      permissionsQueryProjectId({ apiKey: PAK_FOR_PROJECT_1, projectId: 9 })
+    ).toBe(1);
+  });
+
+  it('uses the configured project for a PAT', () => {
+    expect(
+      permissionsQueryProjectId({ apiKey: 'tgpat_x', projectId: '9' })
+    ).toBe(9);
+  });
+
+  it('uses the configured project for the extension transport', () => {
+    expect(
+      permissionsQueryProjectId({ transport: jest.fn(), projectId: '9' })
+    ).toBe(9);
+  });
+
+  it('sends no project when none is known', () => {
+    expect(permissionsQueryProjectId({ apiKey: 'tgpat_x' })).toBeUndefined();
+  });
+});
 
 describe('getInitialLanguages', () => {
   beforeEach(() => {

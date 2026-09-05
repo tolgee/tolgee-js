@@ -135,6 +135,7 @@ describe('useGallery through the extension', () => {
     });
     await settle();
     await done!;
+    expect(h.revert).toHaveBeenCalledTimes(1);
     expect(h.gallery.screenshotsUploading).toBe(false);
     expect(h.gallery.error).toBeFalsy();
     expect(h.gallery.screenshots).toEqual([

@@ -17,6 +17,7 @@ import {
   getInitialLanguages,
   getPreferredLanguages,
   mapPosition,
+  permissionsQueryProjectId,
   setPreferredLanguages,
 } from './tools';
 import { useGallery } from './useGallery';
@@ -28,7 +29,7 @@ import {
   StateType,
 } from '../State/translationStates';
 import { useComputedPermissions } from './usePermissions';
-import { HttpError } from '../../client/HttpError';
+import { HttpError, isHttpError } from '../../client/HttpError';
 import { components } from '../../client/apiSchema.generated';
 import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
 
@@ -121,7 +122,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       url: '/v2/api-keys/current-permissions',
       method: 'get',
       query: {
-        projectId: Number(props.uiProps.projectId),
+        projectId: permissionsQueryProjectId(props.uiProps),
       },
     });
 
@@ -439,7 +440,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         // eslint-disable-next-line no-console
         console.error(e);
         if (
-          e instanceof HttpError &&
+          isHttpError(e) &&
           e.code === 'operation_not_permitted_in_read_only_mode'
         ) {
           setReadOnly(true);

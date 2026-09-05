@@ -1,5 +1,6 @@
 import { client } from '../ui/client/client';
 import { DevApiRequest, DevApiResponse } from '@tolgee/core';
+import { EDITING_SESSION_STORAGE } from '../tools/sessionStorageKeys';
 
 describe('in-context client auth (customFetch)', () => {
   const realFetch = global.fetch;
@@ -70,6 +71,23 @@ describe('in-context client auth (customFetch)', () => {
     const url = (fetchMock.mock.calls[0] as unknown as [string])[0];
     expect(url).toContain('/v2/projects/9/keys');
     expect(lowerCasedHeadersOf(fetchMock)['x-api-key']).toEqual('tgpat_x');
+  });
+
+  it("scopes a PAK request to the key's own project, not the configured one", async () => {
+    // See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
+    const fetchMock = mockFetch();
+    await client(
+      '/v2/projects/keys' as any,
+      'get' as any,
+      {} as any,
+      {
+        apiUrl: 'http://localhost',
+        apiKey: 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc',
+        projectId: 9,
+      } as any
+    );
+    const url = (fetchMock.mock.calls[0] as unknown as [string])[0];
+    expect(url).toContain('/v2/projects/1/keys');
   });
 
   it('uses the transport, sends a path only and sets no auth header', async () => {
@@ -159,6 +177,37 @@ describe('in-context client auth (customFetch)', () => {
   it('throws when neither an api key nor a transport is available', async () => {
     mockFetch();
     await expect(call({})).rejects.toThrow('api_key_not_specified');
+  });
+
+  describe('editing switched off in the extension', () => {
+    afterEach(() => {
+      sessionStorage.removeItem(EDITING_SESSION_STORAGE);
+    });
+
+    it('throws extension_editing_off instead of api_key_not_specified while the page has no credential', async () => {
+      sessionStorage.setItem(EDITING_SESSION_STORAGE, 'off');
+      mockFetch();
+      await expect(call({})).rejects.toThrow('extension_editing_off');
+    });
+
+    it('leaves a page that still has a credential alone', async () => {
+      sessionStorage.setItem(EDITING_SESSION_STORAGE, 'off');
+      const fetchMock = mockFetch();
+      await call({ apiKey: 'tgpak_x' });
+      expect(fetchMock).toHaveBeenCalledTimes(1);
+
+      const transport = mockTransport();
+      await call({ transport });
+      expect(transport).toHaveBeenCalledTimes(1);
+    });
+
+    it('asks to sign in as before once the slot is gone or holds anything but off', async () => {
+      mockFetch();
+      sessionStorage.setItem(EDITING_SESSION_STORAGE, 'on');
+      await expect(call({})).rejects.toThrow('api_key_not_specified');
+      sessionStorage.removeItem(EDITING_SESSION_STORAGE);
+      await expect(call({})).rejects.toThrow('api_key_not_specified');
+    });
   });
 
   it('throws project_id_not_specified for a request through the extension to a project endpoint with no projectId', async () => {

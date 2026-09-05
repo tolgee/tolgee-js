@@ -7,14 +7,8 @@ import {
   scalePositionsToImg,
   Size,
 } from './tools';
+import { useExtensionScreenshotUpload } from './useExtensionScreenshotUpload';
 import { detectExtension, takeScreenshot } from '../../../tools/extension';
-import { uploadScreenshotViaExtension } from '../../../tools/extensionRpc';
-import {
-  httpErrorFromExtension,
-  toResponseLike,
-} from '../../../tools/apiTransport';
-import { readApiResponse } from '../../client/client';
-import { HttpError } from '../../client/HttpError';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
 
@@ -42,8 +36,6 @@ export interface ScreenshotInterface {
   keyReferences?: KeyInScreenshot[];
 }
 
-type ExtensionUpload = { loading: boolean; error: HttpError | null };
-
 export const useGallery = (uiProps: UiProps) => {
   const [pluginAvailable, setPluginAvailable] = useState<boolean | undefined>(
     undefined
@@ -52,10 +44,6 @@ export const useGallery = (uiProps: UiProps) => {
   const [screenshots, setScreenshots] = useState<ScreenshotInterface[]>([]);
   const [screenshotDetail, setScreenshotDetail] =
     useState<ScreenshotInterface | null>(null);
-  const [extensionUpload, setExtensionUpload] = useState<ExtensionUpload>({
-    loading: false,
-    error: null,
-  });
 
   useEffect(() => {
     detectExtension().then((available) => setPluginAvailable(available));
@@ -85,6 +73,11 @@ export const useGallery = (uiProps: UiProps) => {
         justUploaded: true,
       },
     ]);
+
+  const extensionScreenshot = useExtensionScreenshotUpload(
+    uiProps.findPositions,
+    addScreenshot
+  );
 
   const uploadScreenshot = (blob: Blob, size: Size, positions: KeyPosition[]) =>
     uploadImage.mutateAsync(
@@ -124,7 +117,15 @@ export const useGallery = (uiProps: UiProps) => {
     const screenSize = { width: window.innerWidth, height: window.innerHeight };
 
     if (uiProps.transport) {
-      await takeScreenshotViaExtension(key, ns, revert, screenSize);
+      await extensionScreenshot
+        .take({
+          key,
+          ns,
+          revert,
+          onTakingScreenshotChange: setTakingScreenshot,
+          screenSize,
+        })
+        .catch(() => undefined);
       return;
     }
 
@@ -151,41 +152,6 @@ export const useGallery = (uiProps: UiProps) => {
     uploadScreenshot(blob, imgSize, scaledPositions);
   }
 
-  // The extension captures and uploads the image itself; the page only learns the result and the image size.
-  async function takeScreenshotViaExtension(
-    key: string,
-    ns: string,
-    revert: () => void,
-    screenSize: Size
-  ) {
-    let positions: KeyPosition[] | undefined;
-    const restore = () => {
-      if (positions) {
-        return;
-      }
-      revert();
-      setTakingScreenshot(false);
-      positions = uiProps.findPositions(key, ns);
-    };
-    setExtensionUpload({ loading: true, error: null });
-    try {
-      const { response, width, height } =
-        await uploadScreenshotViaExtension(restore);
-      restore();
-      const data = await readApiResponse(toResponseLike(response));
-      const imgSize = { width, height };
-      addScreenshot(
-        data,
-        imgSize,
-        scalePositionsToImg(screenSize, imgSize, positions!)
-      );
-      setExtensionUpload({ loading: false, error: null });
-    } catch (e) {
-      restore();
-      setExtensionUpload({ loading: false, error: httpErrorFromExtension(e) });
-    }
-  }
-
   function handleRemoveScreenshot(id: number) {
     const screenshot = screenshots.find((sc) => sc.id === id);
     if (screenshot?.justUploaded) {
@@ -199,8 +165,8 @@ export const useGallery = (uiProps: UiProps) => {
   }
 
   return {
-    error: deleteImage.error || uploadImage.error || extensionUpload.error,
-    screenshotsUploading: uploadImage.isLoading || extensionUpload.loading,
+    error: deleteImage.error || uploadImage.error || extensionScreenshot.error,
+    screenshotsUploading: uploadImage.isLoading || extensionScreenshot.loading,
     takingScreenshot,
     screenshots,
     setScreenshots,

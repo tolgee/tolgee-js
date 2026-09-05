@@ -1,12 +1,16 @@
 import type { DevCredentials, TolgeePlugin } from '@tolgee/core';
-import { EXTENSION_PROTOCOL_VERSION, Handshaker } from '../tools/extension';
+import { Handshaker } from '../tools/extension';
+import {
+  EXTENSION_PROTOCOL_VERSION,
+  isExtensionSessionKind,
+} from '../tools/extensionProtocol';
 import { resolveLiveCredential } from '../tools/auth';
 import { proxyTransport } from '../tools/apiTransport';
 import {
   API_KEY_SESSION_STORAGE,
   API_URL_SESSION_STORAGE,
   BRANCH_SESSION_STORAGE,
-  OAUTH_SESSION_STORAGE,
+  EXTENSION_SESSION_STORAGE,
   PROJECT_ID_SESSION_STORAGE,
   TOLGEE_EXTENSION_SESSION_STORAGE_PREFIX,
 } from '../tools/sessionStorageKeys';
@@ -18,7 +22,9 @@ function getCredentials(): DevCredentials {
   const branch = sessionStorage.getItem(BRANCH_SESSION_STORAGE) || undefined;
   const projectId =
     sessionStorage.getItem(PROJECT_ID_SESSION_STORAGE) || undefined;
-  const signedIn = sessionStorage.getItem(OAUTH_SESSION_STORAGE) === '1';
+  const viaExtension = isExtensionSessionKind(
+    sessionStorage.getItem(EXTENSION_SESSION_STORAGE)
+  );
 
   if (!apiUrl) {
     return undefined;
@@ -31,15 +37,13 @@ function getCredentials(): DevCredentials {
   if (apiKey) {
     return { ...common, apiKey };
   }
-  if (signedIn && projectId) {
+  if (viaExtension && projectId) {
     return { ...common, transport: proxyTransport() };
   }
   return undefined;
 }
 
-// Sweeps by prefix rather than an enumerated key list: the extension owns some of these slots privately (e.g. its
-// session-routing key) and this must keep clearing them even if the SDK never reads them and the two repos'
-// release cycles drift.
+// See TOLGEE_EXTENSION_SESSION_STORAGE_PREFIX in sessionStorageKeys.ts for why this sweeps by prefix.
 export function clearSessionStorage() {
   const keysToRemove: string[] = [];
   for (let i = 0; i < sessionStorage.length; i++) {
@@ -62,7 +66,7 @@ function warnIfProjectIdMissing(tolgee: Parameters<TolgeePlugin>[0]) {
     // eslint-disable-next-line no-console
     console.warn(
       'Tolgee: `projectId` is missing from the SDK configuration. It is required when authenticating with a PAT ' +
-        'or signing in through the Tolgee browser extension. ' +
+        'or connecting through the Tolgee browser extension. ' +
         'See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid'
     );
   }

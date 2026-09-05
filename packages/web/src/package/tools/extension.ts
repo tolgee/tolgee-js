@@ -88,13 +88,8 @@ export function openPlugin(): void {
   window.postMessage({ type: OPEN_PLUGIN_MESSAGE }, window.origin);
 }
 
-// Page <-> extension wire protocol. 2 = the SDK sends its Tolgee API requests through the extension; an extension
-// answering TOLGEE_PONG without a payload speaks 1 (token pushed into the page, no longer supported).
-export const EXTENSION_PROTOCOL_VERSION = 2;
-
 export type ExtensionInfo = { protocolVersion?: number };
 
-/** The extension's PONG payload, or undefined when no extension answers. */
 export async function pingExtension(): Promise<ExtensionInfo | undefined> {
   try {
     const payload = await sendAndRecieve<ExtensionInfo | undefined>({

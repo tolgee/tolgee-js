@@ -1,11 +1,21 @@
 import { ChangeTranslationInterface, KeyPosition } from '@tolgee/core';
 
 import { KeyInScreenshot } from './useGallery';
+import { LiveCredentials, resolveLiveCredential } from '../../../tools/auth';
 import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
 } from '../../../constants';
 import { putBaseLangFirstTags } from '../languageHelpers';
+
+// The `/v2/api-keys/current-permissions` query names the project explicitly, unlike the path-scoped endpoints the
+// client rewrites itself; a PAK's own project wins over the configured one there too.
+export function permissionsQueryProjectId(
+  credentials: LiveCredentials
+): number | undefined {
+  const { projectId } = resolveLiveCredential(credentials);
+  return projectId === undefined ? undefined : Number(projectId);
+}
 
 export function getPreferredLanguages(): string[] {
   try {

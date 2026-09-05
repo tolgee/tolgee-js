@@ -1,6 +1,6 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
 import { directTransport } from './tools/apiTransport';
-import { bearerSdkHeaders, resolveLiveCredential } from './tools/auth';
+import { extensionSdkHeaders, resolveLiveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
@@ -23,7 +23,7 @@ function createDevBackend(): BackendDevMiddleware {
       } = resolveLiveCredential({ apiKey, projectId, transport });
       if (requiresExplicitProject && resolvedProjectId === undefined) {
         throw new Error(
-          "You need to specify 'projectId' when using a PAT key or signing in through the Tolgee browser extension"
+          "You need to specify 'projectId' when using a PAT key or connecting through the Tolgee browser extension"
         );
       }
 
@@ -50,7 +50,7 @@ function createDevBackend(): BackendDevMiddleware {
         path: search ? `${path}?${search}` : path,
         method: 'GET',
         headers: {
-          ...bearerSdkHeaders(viaExtension),
+          ...extensionSdkHeaders(viaExtension),
           'Content-Type': 'application/json',
         },
       }).then((r) => {

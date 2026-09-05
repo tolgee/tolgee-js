@@ -1,5 +1,5 @@
 import {
-  bearerSdkHeaders,
+  extensionSdkHeaders,
   buildAuthHeader,
   resolveLiveCredential,
 } from './auth';
@@ -20,15 +20,15 @@ describe('buildAuthHeader', () => {
   });
 });
 
-describe('bearerSdkHeaders', () => {
+describe('extensionSdkHeaders', () => {
   it('adds the SDK type/version headers for a request through the extension', () => {
-    const headers = bearerSdkHeaders(true);
+    const headers = extensionSdkHeaders(true);
     expect(headers['x-tolgee-sdk-type']).toEqual('JS');
     expect(headers['x-tolgee-sdk-version']).toBeDefined();
   });
 
   it('adds nothing for an api-key credential (the fetch wrapper adds them there)', () => {
-    expect(bearerSdkHeaders(false)).toEqual({});
+    expect(extensionSdkHeaders(false)).toEqual({});
   });
 });
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert, AlertTitle, Box, Button } from '@mui/material';
-import { HttpError } from '../client/HttpError';
+import { HttpError, isHttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
 import { createUrl } from '../../tools/url';
@@ -16,17 +16,26 @@ export const ErrorAlert = ({ error, severity }: Props) => {
   const apiUrl = useDialogContext((c) => c.uiProps.apiUrl);
 
   return (
-    <Alert sx={{ mt: 2 }} severity={severity ?? severityFor(error)}>
-      {error instanceof HttpError
+    <Alert
+      sx={{ mt: 2 }}
+      severity={severity ?? severityFor(error)}
+      data-cy="error-alert"
+      data-cy-error-code={isHttpError(error) ? error.code : undefined}
+    >
+      {isHttpError(error)
         ? getErrorContent(error, createUrl(apiUrl).toString())
         : error.message}
     </Alert>
   );
 };
 
-// Missing credentials is the normal state of a page nobody has connected yet, not a failure.
+// Missing credentials, in the page or in the extension, is the normal state of a page nobody has connected yet,
+// not a failure.
 export function severityFor(error: HttpError | Error): 'error' | 'info' {
-  return error instanceof HttpError && error.code === 'api_key_not_specified'
+  return isHttpError(error) &&
+    (error.code === 'api_key_not_specified' ||
+      error.code === 'extension_session_missing' ||
+      error.code === 'extension_editing_off')
     ? 'info'
     : 'error';
 }
@@ -125,7 +134,8 @@ export function getErrorContent(
       return (
         <>
           <AlertTitle>Image is too large to upload</AlertTitle>
-          The Tolgee plugin sends images up to 20 MB. Pick a smaller one.
+          This image is too large for the Tolgee plugin to send. Pick a smaller
+          one.
         </>
       );
 
@@ -152,6 +162,15 @@ export function getErrorContent(
           To edit translations here, sign in with the Tolgee browser extension
           or add an API key to the Tolgee configuration. <DocsInContext />
           <OpenExtension />
+        </>
+      );
+
+    case 'extension_editing_off':
+      return (
+        <>
+          <AlertTitle>In-context editing is switched off</AlertTitle>
+          You switched editing off for this page in the Tolgee plugin. Turn it
+          on to edit here. <OpenExtension />
         </>
       );
 

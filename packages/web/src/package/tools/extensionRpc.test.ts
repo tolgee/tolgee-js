@@ -1,8 +1,12 @@
-import {
-  ExtensionRpcError,
-  requestFromExtension,
-  uploadScreenshotViaExtension,
-} from './extensionRpc';
+type Rpc = typeof import('./extensionRpc');
+
+// extensionRpc remembers a confirmed relay for the life of the module, so every case gets its own instance.
+let rpc: Rpc;
+beforeEach(() => {
+  jest.isolateModules(() => {
+    rpc = require('./extensionRpc');
+  });
+});
 
 type Sent = { type: string; data: { id: string } & Record<string, unknown> };
 
@@ -65,9 +69,68 @@ describe('requestFromExtension', () => {
   });
   afterEach(() => r.detach());
 
+  it('rejects as unavailable when the relay never answers a single ping', async () => {
+    answerPings = false;
+    const promise = rpc.requestFromExtension({
+      type: 'TOLGEE_API_REQUEST',
+      replyType: 'TOLGEE_API_RESPONSE',
+      timeoutMs: 250,
+    });
+    await expect(promise).rejects.toMatchObject({
+      kind: 'unavailable',
+      message: expect.stringContaining('did not answer'),
+    });
+    expect(r.sent).toHaveLength(0);
+    expect(pings.length).toBeGreaterThan(0);
+  });
+
+  it('gives up on a relay that never answers after RELAY_DISCOVERY_TIMEOUT_MS, not after the full request timeout', async () => {
+    jest.useFakeTimers();
+    try {
+      answerPings = false;
+      const promise = rpc.requestFromExtension({
+        type: 'TOLGEE_API_REQUEST',
+        replyType: 'TOLGEE_API_RESPONSE',
+      });
+      const outcome = promise.then(
+        () => 'resolved',
+        () => 'rejected'
+      );
+      await jest.advanceTimersByTimeAsync(rpc.RELAY_DISCOVERY_TIMEOUT_MS - 500);
+      expect(await Promise.race([outcome, Promise.resolve('pending')])).toBe(
+        'pending'
+      );
+      await jest.advanceTimersByTimeAsync(1_000);
+      expect(await outcome).toBe('rejected');
+      await expect(promise).rejects.toMatchObject({ kind: 'unavailable' });
+      expect(r.sent).toHaveLength(0);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  it('caps the total wait at timeoutMs when the relay answers late, instead of stacking a second full wait for the reply', async () => {
+    answerPings = false;
+    const start = Date.now();
+    const promise = rpc.requestFromExtension({
+      type: 'TOLGEE_API_REQUEST',
+      replyType: 'TOLGEE_API_RESPONSE',
+      timeoutMs: 600,
+    });
+    setTimeout(() => {
+      answerPings = true;
+    }, 250);
+
+    await expect(promise).rejects.toMatchObject({ kind: 'unavailable' });
+
+    const elapsed = Date.now() - start;
+    expect(elapsed).toBeGreaterThanOrEqual(550);
+    expect(elapsed).toBeLessThan(800);
+  });
+
   it('posts the request only once the relay has answered a ping, and pings again until it does', async () => {
     answerPings = false;
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       timeoutMs: 5_000,
@@ -84,7 +147,7 @@ describe('requestFromExtension', () => {
 
     // Once the relay is known to be there, later requests do not wait for another ping.
     pings.length = 0;
-    const second = requestFromExtension({
+    const second = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
     });
@@ -96,7 +159,7 @@ describe('requestFromExtension', () => {
   });
 
   it('posts the payload under a fresh id and resolves the reply carrying that id', async () => {
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       payload: { path: '/v2/x', method: 'GET' },
@@ -112,12 +175,12 @@ describe('requestFromExtension', () => {
   });
 
   it('keeps concurrent requests apart by id, whatever order the replies arrive in', async () => {
-    const a = requestFromExtension({
+    const a = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       payload: { path: '/a' },
     });
-    const b = requestFromExtension({
+    const b = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       payload: { path: '/b' },
@@ -133,7 +196,7 @@ describe('requestFromExtension', () => {
   });
 
   it('rejects with the error kind the extension answers', async () => {
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
     });
@@ -143,11 +206,11 @@ describe('requestFromExtension', () => {
       error: { kind: 'no_session', message: 'nope' },
     });
     await expect(promise).rejects.toMatchObject({ kind: 'no_session' });
-    await expect(promise).rejects.toBeInstanceOf(ExtensionRpcError);
+    await expect(promise).rejects.toBeInstanceOf(rpc.ExtensionRpcError);
   });
 
   it('ignores a reply from another origin or another window', async () => {
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       timeoutMs: 200,
@@ -172,7 +235,7 @@ describe('requestFromExtension', () => {
   });
 
   it('rejects as unavailable when nothing answers in time', async () => {
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       timeoutMs: 50,
@@ -183,8 +246,48 @@ describe('requestFromExtension', () => {
     });
   });
 
+  it('re-discovers the relay after a request went unanswered, so a removed extension fails fast again', async () => {
+    const first = rpc.requestFromExtension({
+      type: 'TOLGEE_API_REQUEST',
+      replyType: 'TOLGEE_API_RESPONSE',
+      timeoutMs: 1_000,
+    });
+    await settle();
+    r.answer('TOLGEE_API_RESPONSE', { id: r.sent[0].data.id, response: {} });
+    await first;
+
+    answerPings = false;
+    await expect(
+      rpc.requestFromExtension({
+        type: 'TOLGEE_API_REQUEST',
+        replyType: 'TOLGEE_API_RESPONSE',
+        timeoutMs: 100,
+      })
+    ).rejects.toMatchObject({ kind: 'unavailable' });
+    expect(r.sent).toHaveLength(2);
+
+    const pingsBefore = pings.length;
+    jest.useFakeTimers();
+    try {
+      const third = rpc.requestFromExtension({
+        type: 'TOLGEE_API_REQUEST',
+        replyType: 'TOLGEE_API_RESPONSE',
+      });
+      const outcome = third.then(
+        () => 'resolved',
+        () => 'rejected'
+      );
+      await jest.advanceTimersByTimeAsync(rpc.RELAY_DISCOVERY_TIMEOUT_MS + 500);
+      expect(await outcome).toBe('rejected');
+      expect(pings.length).toBeGreaterThan(pingsBefore);
+      expect(r.sent).toHaveLength(2);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
   it('ignores a reply of another type for the same id', async () => {
-    const promise = requestFromExtension({
+    const promise = rpc.requestFromExtension({
       type: 'TOLGEE_API_REQUEST',
       replyType: 'TOLGEE_API_RESPONSE',
       timeoutMs: 200,
@@ -207,7 +310,9 @@ describe('uploadScreenshotViaExtension', () => {
 
   it('reports the capture before the upload result, both under the request id', async () => {
     const events: string[] = [];
-    const promise = uploadScreenshotViaExtension(() => events.push('captured'));
+    const promise = rpc.uploadScreenshotViaExtension(() =>
+      events.push('captured')
+    );
     await settle();
     expect(r.sent).toEqual([
       { type: 'TOLGEE_SCREENSHOT_UPLOAD', data: { id: expect.any(String) } },
@@ -236,7 +341,7 @@ describe('uploadScreenshotViaExtension', () => {
 
   it('does not fire the capture callback for another request id', async () => {
     const onCaptured = jest.fn();
-    const promise = uploadScreenshotViaExtension(onCaptured);
+    const promise = rpc.uploadScreenshotViaExtension(onCaptured);
     await settle();
     const id = r.sent[0].data.id;
     r.answer('TOLGEE_SCREENSHOT_CAPTURED', { id: 'someone-else' });

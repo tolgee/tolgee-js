@@ -5,8 +5,9 @@ import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
 import { directTransport } from '../../tools/apiTransport';
+import { isEditingSwitchedOffByExtension } from '../../tools/extensionEditing';
 import {
-  bearerSdkHeaders,
+  extensionSdkHeaders,
   resolveLiveCredential,
   ResolvedLiveCredential,
 } from '../../tools/auth';
@@ -80,7 +81,11 @@ async function customFetch(
     throw new HttpError('api_url_not_valid');
   }
   if (!credential.hasCredential) {
-    throw new HttpError('api_key_not_specified');
+    throw new HttpError(
+      isEditingSwitchedOffByExtension()
+        ? 'extension_editing_off'
+        : 'api_key_not_specified'
+    );
   }
 
   const send =
@@ -94,7 +99,7 @@ async function customFetch(
     path: input.toString(),
     method: init?.method ?? 'GET',
     headers: {
-      ...bearerSdkHeaders(credential.viaExtension),
+      ...extensionSdkHeaders(credential.viaExtension),
       ...((init?.headers as Record<string, string> | undefined) ?? {}),
     },
     body: init?.body as string | FormData | undefined,
@@ -102,7 +107,6 @@ async function customFetch(
   return readApiResponse(response);
 }
 
-/** Parses a Tolgee API response the way the in-context client does: HttpError on a failure, the JSON body otherwise. */
 export async function readApiResponse(r: DevApiResponse) {
   if (!r.ok) {
     const data = await getResObject(r);

@@ -5,12 +5,13 @@ import type {
   FetchFn,
 } from '@tolgee/core';
 import { createUrl } from './url';
-import { HttpError } from '../ui/client/HttpError';
+import { HttpError, isHttpError } from '../ui/client/HttpError';
 import {
   ExtensionApiResponse,
   ExtensionRpcError,
   requestFromExtension,
 } from './extensionRpc';
+import { ProxyBody, ProxyFormEntry } from './extensionProtocol';
 
 type DirectProps = {
   apiUrl: string;
@@ -18,7 +19,6 @@ type DirectProps = {
   authHeader: Record<string, string>;
 };
 
-/** Today's request path: the page holds the credential and calls the server itself. */
 export function directTransport({
   apiUrl,
   fetch,
@@ -34,16 +34,6 @@ export function directTransport({
     });
 }
 
-export type ProxyFormEntry =
-  | { name: string; value: string }
-  | { name: string; file: { name: string; type: string; base64: string } };
-
-export type ProxyBody =
-  | { kind: 'none' }
-  | { kind: 'json'; text: string }
-  | { kind: 'form'; entries: ProxyFormEntry[] };
-
-/** The extension's service worker performs the request; the page never sees the token. */
 export function proxyTransport(): DevApiTransport {
   return async (request) => {
     const body = await encodeBody(request.body);
@@ -116,12 +106,12 @@ export function toResponseLike(response: ExtensionApiResponse): DevApiResponse {
     statusText: response.statusText,
     headers: { get: (name) => headers[name.toLowerCase()] ?? null },
     text: () => Promise.resolve(response.body),
-    json: () => Promise.resolve(JSON.parse(response.body)),
+    json: async () => JSON.parse(response.body),
   };
 }
 
 export function httpErrorFromExtension(e: unknown): HttpError {
-  if (e instanceof HttpError) {
+  if (isHttpError(e)) {
     return e;
   }
   if (e instanceof ExtensionRpcError) {
@@ -131,6 +121,10 @@ export function httpErrorFromExtension(e: unknown): HttpError {
       case 'too_large':
         return new HttpError('extension_request_too_large');
       default:
+        // eslint-disable-next-line no-console
+        console.warn(
+          `Tolgee: the browser extension did not serve the request (${e.kind}): ${e.message}`
+        );
         return new HttpError('fetch_error');
     }
   }
