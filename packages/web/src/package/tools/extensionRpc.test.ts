@@ -1,3 +1,4 @@
+import { dispatchExtensionMessage as dispatch } from './testDispatch';
 type Rpc = typeof import('./extensionRpc');
 
 // extensionRpc remembers a confirmed relay for the life of the module, so every case gets its own instance.
@@ -9,16 +10,6 @@ beforeEach(() => {
 });
 
 type Sent = { type: string; data: { id: string } & Record<string, unknown> };
-
-// jsdom's own postMessage carries no source or origin; a real browser stamps both, and the SDK checks them.
-const dispatch = (type: string, data: unknown) =>
-  window.dispatchEvent(
-    new MessageEvent('message', {
-      data: { type, data },
-      origin: window.location.origin,
-      source: window,
-    })
-  );
 
 // A fake extension relay: sees what the page posts, answers on the same window under the same id.
 let answerPings = true;

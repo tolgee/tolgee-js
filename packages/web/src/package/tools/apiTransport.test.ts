@@ -8,18 +8,9 @@ import {
 import { ExtensionRpcError } from './extensionRpc';
 import { HttpError } from '../ui/client/HttpError';
 import { errorFromResponse, readApiResponse } from '../ui/client/client';
+import { dispatchExtensionMessage as dispatch } from './testDispatch';
 
 const settle = () => new Promise((r) => setTimeout(r, 20));
-
-// jsdom's own postMessage carries no source or origin; a real browser stamps both, and the SDK checks them.
-const dispatch = (type: string, data: unknown) =>
-  window.dispatchEvent(
-    new MessageEvent('message', {
-      data: { type, data },
-      origin: window.location.origin,
-      source: window,
-    })
-  );
 
 describe('directTransport', () => {
   it('joins the api url and the path, and sends the auth header last', async () => {

@@ -3,18 +3,9 @@ import { act } from 'react-dom/test-utils';
 import type { UiProps } from '@tolgee/core';
 import { QueryProvider } from '../ui/client/QueryProvider';
 import { useGallery } from '../ui/KeyDialog/dialogContext/useGallery';
+import { dispatchExtensionMessage as dispatch } from '../tools/testDispatch';
 
 type Gallery = ReturnType<typeof useGallery>;
-
-// jsdom's own postMessage carries no source or origin; a real browser stamps both, and the SDK checks them.
-const dispatch = (type: string, data: unknown) =>
-  window.dispatchEvent(
-    new MessageEvent('message', {
-      data: { type, data },
-      origin: window.location.origin,
-      source: window,
-    })
-  );
 
 const settle = (ms = 20) =>
   act(async () => {
