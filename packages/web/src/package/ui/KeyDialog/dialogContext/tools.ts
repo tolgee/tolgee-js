@@ -8,13 +8,18 @@ import {
 } from '../../../constants';
 import { putBaseLangFirstTags } from '../languageHelpers';
 
-// The `/v2/api-keys/current-permissions` query names the project explicitly, unlike the path-scoped endpoints the
-// client rewrites itself; a PAK's own project wins over the configured one there too.
+// `/v2/api-keys/current-permissions` takes the project in the query rather than the path, and naming it is what a
+// PAT and an unbound OAuth token need. A project key names its own project, and telling the server which project to
+// answer for makes it answer for the account instead of the key, dropping the key's own restrictions.
 export function permissionsQueryProjectId(
   credentials: LiveCredentials
 ): number | undefined {
-  const { projectId } = resolveLiveCredential(credentials);
-  return projectId === undefined ? undefined : Number(projectId);
+  const { projectId, requiresExplicitProject } =
+    resolveLiveCredential(credentials);
+  if (!requiresExplicitProject || projectId === undefined) {
+    return undefined;
+  }
+  return Number(projectId);
 }
 
 export function getPreferredLanguages(): string[] {

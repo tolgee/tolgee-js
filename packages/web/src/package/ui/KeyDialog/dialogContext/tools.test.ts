@@ -9,10 +9,10 @@ import {
 const PAK_FOR_PROJECT_1 = 'tgpak_gfpxm4lin4zdazleoq4gm2rumfxgi2lfom2gw4dpguzxc';
 
 describe('permissionsQueryProjectId', () => {
-  it("uses the PAK's own project even when the site configures another one", () => {
+  it('leaves the project to the key itself for a PAK, whatever the site configures', () => {
     expect(
       permissionsQueryProjectId({ apiKey: PAK_FOR_PROJECT_1, projectId: 9 })
-    ).toBe(1);
+    ).toBeUndefined();
   });
 
   it('uses the configured project for a PAT', () => {

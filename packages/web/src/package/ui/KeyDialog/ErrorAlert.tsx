@@ -159,8 +159,8 @@ export function getErrorContent(
       return (
         <>
           <AlertTitle>Sign in to make changes</AlertTitle>
-          To edit translations here, sign in with the Tolgee browser extension
-          or add an API key to the Tolgee configuration. <DocsInContext />
+          To edit strings here, sign in with the Tolgee browser extension or add
+          an API key to the Tolgee configuration. <DocsInContext />
           <OpenExtension />
         </>
       );

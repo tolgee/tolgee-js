@@ -46,7 +46,13 @@ export const useGallery = (uiProps: UiProps) => {
     useState<ScreenshotInterface | null>(null);
 
   useEffect(() => {
-    detectExtension().then((available) => setPluginAvailable(available));
+    let mounted = true;
+    detectExtension().then(
+      (available) => mounted && setPluginAvailable(available)
+    );
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const deleteImage = useApiMutation({
