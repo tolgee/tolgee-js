@@ -51,8 +51,6 @@ type Pending = {
 // is there at all; a tab still marked signed in after the extension was removed must not wait the request timeout.
 export const RELAY_DISCOVERY_TIMEOUT_MS = 3_000;
 const RELAY_PING_INTERVAL_MS = 200;
-const RELAY_PING = TOLGEE_PROXY_PING;
-const RELAY_PONG = TOLGEE_PROXY_PONG;
 
 let counter = 0;
 const pending = new Map<string, Pending>();
@@ -137,7 +135,7 @@ function ensureListener() {
       return;
     }
     const type = event.data?.type;
-    if (type === RELAY_PONG) {
+    if (type === TOLGEE_PROXY_PONG) {
       onRelayPong?.();
       return;
     }
@@ -172,7 +170,7 @@ function awaitRelay(deadline: number): Promise<void> {
   if (!relayReady) {
     relayReady = new Promise<void>((resolve, reject) => {
       const ping = () =>
-        window.postMessage({ type: RELAY_PING }, window.origin);
+        window.postMessage({ type: TOLGEE_PROXY_PING }, window.origin);
       const giveUp = () => {
         clearInterval(timer);
         forgetRelay();

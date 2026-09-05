@@ -3,7 +3,7 @@ import { act } from 'react-dom/test-utils';
 import type { UiProps } from '@tolgee/core';
 import { QueryProvider } from '../ui/client/QueryProvider';
 import { useGallery } from '../ui/KeyDialog/dialogContext/useGallery';
-import { dispatchExtensionMessage as dispatch } from '../tools/testDispatch';
+import { dispatchExtensionMessage as dispatch } from './testDispatch';
 
 type Gallery = ReturnType<typeof useGallery>;
 

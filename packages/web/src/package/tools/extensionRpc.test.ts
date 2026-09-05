@@ -1,4 +1,4 @@
-import { dispatchExtensionMessage as dispatch } from './testDispatch';
+import { dispatchExtensionMessage as dispatch } from '../__test__/testDispatch';
 type Rpc = typeof import('./extensionRpc');
 
 // extensionRpc remembers a confirmed relay for the life of the module, so every case gets its own instance.

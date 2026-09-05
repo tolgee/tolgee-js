@@ -8,7 +8,7 @@ import {
 import { ExtensionRpcError } from './extensionRpc';
 import { HttpError } from '../ui/client/HttpError';
 import { errorFromResponse, readApiResponse } from '../ui/client/client';
-import { dispatchExtensionMessage as dispatch } from './testDispatch';
+import { dispatchExtensionMessage as dispatch } from '../__test__/testDispatch';
 
 const settle = () => new Promise((r) => setTimeout(r, 20));
 
