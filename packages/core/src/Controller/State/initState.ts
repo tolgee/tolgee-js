@@ -44,10 +44,8 @@ export type TolgeeOptionsInternal = {
   apiKey?: string;
 
   /**
-   * Sends the SDK's Tolgee API requests instead of an `apiKey`, so the page holds no credential. Injected by the
-   * Tolgee browser extension through `overrideCredentials`; carries no project, so `projectId` is required with it.
-   *
-   * @internal
+   * See {@link DevApiTransport}. Injected by the Tolgee browser extension through `overrideCredentials`; carries no
+   * project, so `projectId` is required with it.
    */
   transport?: DevApiTransport;
 
@@ -165,7 +163,7 @@ export type TolgeeOptionsInternal = {
 };
 
 export type TolgeeOptions = Partial<
-  Omit<TolgeeOptionsInternal, 'observerOptions'>
+  Omit<TolgeeOptionsInternal, 'observerOptions' | 'transport'>
 > & {
   observerOptions?: ObserverOptions;
 };

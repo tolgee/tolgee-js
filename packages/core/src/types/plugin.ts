@@ -24,7 +24,8 @@ export type DevApiResponse = Pick<
 
 /**
  * Sends a Tolgee API request on behalf of the SDK. Supplied by the browser extension in place of a credential: the
- * request carries a path only, the transport owns the server and the token.
+ * request carries a path only, the transport owns the server and the credential (a session token or an API key
+ * entered in the extension), neither of which the page ever sees.
  */
 export type DevApiTransport = (
   request: DevApiRequest
