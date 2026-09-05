@@ -123,26 +123,20 @@ export const useGallery = (uiProps: UiProps) => {
     await sleep(400);
     const screenSize = { width: window.innerWidth, height: window.innerHeight };
 
-    if (uiProps.transport) {
-      await extensionScreenshot
-        .take({
-          key,
-          ns,
-          revert,
-          onTakingScreenshotChange: setTakingScreenshot,
-          screenSize,
-        })
-        .catch(() => undefined);
-      return;
-    }
-
-    await legacyScreenshot.take({
+    const args = {
       key,
       ns,
       revert,
       onTakingScreenshotChange: setTakingScreenshot,
       screenSize,
-    });
+    };
+
+    if (uiProps.transport) {
+      await extensionScreenshot.take(args).catch(() => undefined);
+      return;
+    }
+
+    await legacyScreenshot.take(args);
   }
 
   function handleRemoveScreenshot(id: number) {

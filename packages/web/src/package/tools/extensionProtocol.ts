@@ -35,6 +35,8 @@ export const TOLGEE_PROXY_PONG = 'TOLGEE_PROXY_PONG';
 
 export type ExtensionSessionKind = 'oauth' | 'apiKey';
 
-export const isExtensionSessionKind = (
+export function isExtensionSessionKind(
   value: string | null | undefined
-): value is ExtensionSessionKind => value === 'oauth' || value === 'apiKey';
+): value is ExtensionSessionKind {
+  return value === 'oauth' || value === 'apiKey';
+}

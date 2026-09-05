@@ -121,6 +121,7 @@ export const ScreenshotGallery: React.FC = () => {
     <>
       <input
         type="file"
+        data-cy="screenshot-file-input"
         style={{ display: 'none' }}
         ref={fileRef}
         onChange={(e) => onFileSelected(e)}

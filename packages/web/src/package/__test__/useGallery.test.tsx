@@ -200,3 +200,29 @@ describe('useGallery through the extension', () => {
     expect(h.gallery.screenshots).toEqual([]);
   });
 });
+
+describe('useGallery without a transport', () => {
+  it('takes the page-side capture path, never the extension upload one', async () => {
+    const posted: string[] = [];
+    const listener = (event: MessageEvent) => {
+      if (typeof event.data?.type === 'string') {
+        posted.push(event.data.type);
+      }
+    };
+    window.addEventListener('message', listener);
+    try {
+      const h = render(undefined);
+
+      await act(async () => {
+        h.gallery.handleTakeScreenshot('k', '', []);
+      });
+      // handleTakeScreenshot sleeps 400ms to let the page repaint before the branch it is under test for.
+      await settle(600);
+
+      expect(posted).toContain('TOLGEE_TAKE_SCREENSHOT');
+      expect(posted).not.toContain('TOLGEE_SCREENSHOT_UPLOAD');
+    } finally {
+      window.removeEventListener('message', listener);
+    }
+  });
+});
