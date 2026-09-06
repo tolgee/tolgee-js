@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/tolgee/tolgee-js/compare/v7.1.3...v7.2.0) (2026-09-06)
+
+**Note:** Version bump only for package @tolgee/ngx-workspace
+
+
+
+
+
 ## [7.1.3](https://github.com/tolgee/tolgee-js/compare/v7.1.2...v7.1.3) (2026-07-30)
 
 **Note:** Version bump only for package @tolgee/ngx-workspace

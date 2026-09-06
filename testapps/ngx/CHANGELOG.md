@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [7.2.0](https://github.com/tolgee/tolgee-js/compare/v7.1.3...v7.2.0) (2026-09-06)
+
+
+### Bug Fixes
+
+* repair E2E CI (local lerna + relink @tolgee/ngx for the testapp) ([#3533](https://github.com/tolgee/tolgee-js/issues/3533)) ([cac2227](https://github.com/tolgee/tolgee-js/commit/cac2227c186380f7b3e0daa6b3f75608b0b08346)), closes [#3531](https://github.com/tolgee/tolgee-js/issues/3531)
+
+
+
+
+
 ## [7.1.3](https://github.com/tolgee/tolgee-js/compare/v7.1.2...v7.1.3) (2026-07-30)
 
 **Note:** Version bump only for package @tolgee/ngx-testapp
