@@ -1,11 +1,26 @@
 import { ChangeTranslationInterface, KeyPosition } from '@tolgee/core';
 
 import { KeyInScreenshot } from './useGallery';
+import { LiveCredentials, resolveLiveCredential } from '../../../tools/auth';
 import {
   MAX_LANGUAGES_SELECTED,
   PREFERRED_LANGUAGES_LOCAL_STORAGE_KEY,
 } from '../../../constants';
 import { putBaseLangFirstTags } from '../languageHelpers';
+
+// `/v2/api-keys/current-permissions` takes the project in the query rather than the path, and naming it is what a
+// PAT and an unbound OAuth token need. A project key names its own project, and telling the server which project to
+// answer for makes it answer for the account instead of the key, dropping the key's own restrictions.
+export function permissionsQueryProjectId(
+  credentials: LiveCredentials
+): number | undefined {
+  const { projectId, requiresExplicitProject } =
+    resolveLiveCredential(credentials);
+  if (!requiresExplicitProject || projectId === undefined) {
+    return undefined;
+  }
+  return Number(projectId);
+}
 
 export function getPreferredLanguages(): string[] {
   try {

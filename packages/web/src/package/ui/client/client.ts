@@ -1,13 +1,18 @@
-import { createFetchFunction } from '@tolgee/core';
-import { getProjectIdFromApiKey } from '../../tools/decodeApiKey';
+import { createFetchFunction, DevApiResponse } from '@tolgee/core';
 import { paths } from './apiSchema.generated';
 import { GlobalOptions } from './QueryProvider';
 import { RequestParamsType, ResponseContent } from './types';
 import { HttpError } from './HttpError';
 import { isUrlValid } from '../tools/validateUrl';
-import { createUrl } from '../../tools/url';
+import { directTransport } from '../../tools/apiTransport';
+import { isEditingSwitchedOffByExtension } from '../../tools/extensionEditing';
+import {
+  extensionSdkHeaders,
+  resolveLiveCredential,
+  ResolvedLiveCredential,
+} from '../../tools/auth';
 
-const errorFromResponse = (status: number, body: any) => {
+export const errorFromResponse = (status: number, body: any) => {
   if (body?.code) {
     return new HttpError(body.code, status, body.params);
   } else {
@@ -21,7 +26,7 @@ type Params = {
   [k: string]: string | string[] | null | undefined | Params;
 };
 
-async function getResObject(r: Response) {
+async function getResObject(r: DevApiResponse) {
   const textBody = await r.text();
   try {
     if (textBody) {
@@ -66,6 +71,7 @@ function buildQuery(object: { [key: string]: any }): string {
 async function customFetch(
   input: RequestInfo,
   options: GlobalOptions,
+  credential: ResolvedLiveCredential,
   init?: RequestInit
 ) {
   if (options.apiUrl === undefined) {
@@ -74,34 +80,48 @@ async function customFetch(
   if (!isUrlValid(options.apiUrl)) {
     throw new HttpError('api_url_not_valid');
   }
-  if (options.apiKey === undefined) {
-    throw new HttpError('api_key_not_specified');
+  if (!credential.hasCredential) {
+    throw new HttpError(
+      isEditingSwitchedOffByExtension()
+        ? 'extension_editing_off'
+        : 'api_key_not_specified'
+    );
   }
 
-  init = init || {};
-  init.headers = init.headers || {};
-  init.headers = {
-    ...init.headers,
-    'X-API-Key': options.apiKey,
-  };
-
-  const url = createUrl(options.apiUrl, input.toString()).toString();
-  return fetchFn(url, init).then(async (r) => {
-    if (!r.ok) {
-      const data = await getResObject(r);
-      throw errorFromResponse(r.status, data);
-    }
-    const result = await getResObject(r);
-    if (typeof result === 'object' && result !== null) {
-      result._internal = {
-        version: r.headers.get('X-Tolgee-Version'),
-      };
-    }
-    return result;
+  const send =
+    options.transport ??
+    directTransport({
+      apiUrl: options.apiUrl,
+      fetch: fetchFn,
+      authHeader: credential.authHeader,
+    });
+  const response = await send({
+    path: input.toString(),
+    method: init?.method ?? 'GET',
+    headers: {
+      ...extensionSdkHeaders(credential.viaExtension),
+      ...((init?.headers as Record<string, string> | undefined) ?? {}),
+    },
+    body: init?.body as string | FormData | undefined,
   });
+  return readApiResponse(response);
 }
 
-export const addProjectIdToUrl = (url: string) => {
+export async function readApiResponse(r: DevApiResponse) {
+  if (!r.ok) {
+    const data = await getResObject(r);
+    throw errorFromResponse(r.status, data);
+  }
+  const result = await getResObject(r);
+  if (typeof result === 'object' && result !== null) {
+    result._internal = {
+      version: r.headers.get('X-Tolgee-Version'),
+    };
+  }
+  return result;
+}
+
+const addProjectIdToUrl = (url: string) => {
   return url.replace('/projects/', '/projects/{projectId}/');
 };
 
@@ -118,17 +138,23 @@ export async function client<
   const pathParams = (request as any)?.path || {};
   let urlResult = url as string;
 
-  const projectId = getProjectIdFromApiKey(options.apiKey) || options.projectId;
-  if (projectId !== undefined) {
-    pathParams.projectId = projectId;
+  const credential = resolveLiveCredential(options);
+  const isProjectScopedEndpoint = urlResult.includes('/projects/');
+  if (
+    credential.requiresExplicitProject &&
+    credential.projectId === undefined &&
+    isProjectScopedEndpoint
+  ) {
+    throw new HttpError('project_id_not_specified');
+  }
+  if (credential.projectId !== undefined) {
+    pathParams.projectId = credential.projectId;
     urlResult = addProjectIdToUrl(urlResult);
   }
 
-  if (pathParams) {
-    Object.entries(pathParams).forEach(([key, value]) => {
-      urlResult = urlResult.replace(`{${key}}`, value as any);
-    });
-  }
+  Object.entries(pathParams).forEach(([key, value]) => {
+    urlResult = urlResult.replace(`{${key}}`, value as any);
+  });
 
   const formData = request?.content?.['multipart/form-data'] as Record<
     string,
@@ -162,7 +188,7 @@ export async function client<
     queryString = '?' + query;
   }
 
-  return customFetch(urlResult + queryString, options, {
+  return customFetch(urlResult + queryString, options, credential, {
     method: method as string,
     body: body || jsonBody,
     headers: jsonBody

@@ -1,11 +1,13 @@
 import { createContext } from 'react';
 import { QueryClientProvider, QueryClient } from 'react-query';
+import type { DevApiTransport } from '@tolgee/core';
 
 export type GlobalOptions = {
-  apiKey: string;
+  apiKey?: string;
   apiUrl: string;
   projectId: string | number | undefined;
   branch?: string;
+  transport?: DevApiTransport;
 };
 
 const queryClient = new QueryClient({
@@ -28,9 +30,12 @@ export const QueryProvider = ({
   apiKey,
   projectId,
   branch,
+  transport,
 }: React.PropsWithChildren<Props>) => {
   return (
-    <QueryContext.Provider value={{ apiUrl, apiKey, projectId, branch }}>
+    <QueryContext.Provider
+      value={{ apiUrl, apiKey, projectId, branch, transport }}
+    >
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </QueryContext.Provider>
   );

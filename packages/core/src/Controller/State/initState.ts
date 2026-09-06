@@ -6,6 +6,7 @@ import {
   FetchFn,
   MissingTranslationHandler,
   CachePublicRecord,
+  DevApiTransport,
 } from '../../types';
 import { createFetchFunction, sanitizeUrl } from '../../helpers';
 import {
@@ -43,7 +44,15 @@ export type TolgeeOptionsInternal = {
   apiKey?: string;
 
   /**
-   * Project id is necessary if you are using PAT
+   * See {@link DevApiTransport}. Injected by the Tolgee browser extension through `overrideCredentials`; carries no
+   * project, so `projectId` is required with it.
+   */
+  transport?: DevApiTransport;
+
+  /**
+   * Project id is necessary if you are using PAT or signing in through the Tolgee browser extension, and is required
+   * by the extension to connect in-context editing.
+   * See https://docs.tolgee.io/js-sdk/api/core_package/options#projectid
    */
   projectId?: number | string;
 
@@ -154,7 +163,7 @@ export type TolgeeOptionsInternal = {
 };
 
 export type TolgeeOptions = Partial<
-  Omit<TolgeeOptionsInternal, 'observerOptions'>
+  Omit<TolgeeOptionsInternal, 'observerOptions' | 'transport'>
 > & {
   observerOptions?: ObserverOptions;
 };

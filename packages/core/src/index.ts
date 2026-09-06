@@ -1,4 +1,9 @@
-export { getFallback, getFallbackArray, createFetchFunction } from './helpers';
+export {
+  getFallback,
+  getFallbackArray,
+  createFetchFunction,
+  sdkHeaders,
+} from './helpers';
 export { encodeCacheKey } from './Controller/Cache/helpers';
 export { TolgeeCore } from './TolgeeCore';
 export * from './types';

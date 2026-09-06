@@ -1,13 +1,10 @@
 import { KeyPosition, UiProps } from '@tolgee/core';
 import { useEffect, useState } from 'react';
 
-import {
-  changeInTolgeeCache,
-  getImgSize,
-  scalePositionsToImg,
-  Size,
-} from './tools';
-import { detectExtension, takeScreenshot } from '../../../tools/extension';
+import { changeInTolgeeCache, getImgSize, Size } from './tools';
+import { useExtensionScreenshotUpload } from './useExtensionScreenshotUpload';
+import { legacyScreenshotUpload } from './legacyScreenshotUpload';
+import { detectExtension } from '../../../tools/extension';
 import { useApiMutation } from '../../client/useQueryApi';
 import { sleep } from '../../tools/sleep';
 
@@ -45,7 +42,13 @@ export const useGallery = (uiProps: UiProps) => {
     useState<ScreenshotInterface | null>(null);
 
   useEffect(() => {
-    detectExtension().then((available) => setPluginAvailable(available));
+    let mounted = true;
+    detectExtension().then(
+      (available) => mounted && setPluginAvailable(available)
+    );
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const deleteImage = useApiMutation({
@@ -58,6 +61,26 @@ export const useGallery = (uiProps: UiProps) => {
     method: 'post',
   });
 
+  const addScreenshot = (
+    data: Omit<ScreenshotInterface, 'justUploaded'>,
+    size: Size,
+    positions: KeyPosition[]
+  ) =>
+    setScreenshots((screenshots) => [
+      ...screenshots,
+      {
+        ...data,
+        ...size,
+        keyReferences: positions.map((ref) => ({ ...ref, keyId: -1 })),
+        justUploaded: true,
+      },
+    ]);
+
+  const extensionScreenshot = useExtensionScreenshotUpload(
+    uiProps.findPositions,
+    addScreenshot
+  );
+
   const uploadScreenshot = (blob: Blob, size: Size, positions: KeyPosition[]) =>
     uploadImage.mutateAsync(
       {
@@ -65,18 +88,15 @@ export const useGallery = (uiProps: UiProps) => {
       },
       {
         onSuccess(data) {
-          setScreenshots((screenshots) => [
-            ...screenshots,
-            {
-              ...data,
-              ...size,
-              keyReferences: positions.map((ref) => ({ ...ref, keyId: -1 })),
-              justUploaded: true,
-            },
-          ]);
+          addScreenshot(data, size, positions);
         },
       }
     );
+
+  const legacyScreenshot = legacyScreenshotUpload(
+    uiProps.findPositions,
+    uploadScreenshot
+  );
 
   async function handleUploadImages(files: File[]) {
     await Promise.all(
@@ -101,28 +121,22 @@ export const useGallery = (uiProps: UiProps) => {
       uiProps.changeTranslation
     );
     await sleep(400);
-    let screenshot: string;
-    try {
-      screenshot = await takeScreenshot();
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e);
+    const screenSize = { width: window.innerWidth, height: window.innerHeight };
+
+    const args = {
+      key,
+      ns,
+      revert,
+      onTakingScreenshotChange: setTakingScreenshot,
+      screenSize,
+    };
+
+    if (uiProps.transport) {
+      await extensionScreenshot.take(args).catch(() => undefined);
       return;
-    } finally {
-      revert();
-      setTakingScreenshot(false);
     }
 
-    const positions = uiProps.findPositions(key, ns);
-    const screenSize = { width: window.innerWidth, height: window.innerHeight };
-    const imgSize = await getImgSize(screenshot);
-    const blob = await fetch(screenshot).then((r) => r.blob());
-
-    // on hdpi screens, the screenshot can be different than the window size,
-    // so we need to scale the coordinates accordingly
-    const scaledPositions = scalePositionsToImg(screenSize, imgSize, positions);
-
-    uploadScreenshot(blob, imgSize, scaledPositions);
+    await legacyScreenshot.take(args);
   }
 
   function handleRemoveScreenshot(id: number) {
@@ -138,8 +152,8 @@ export const useGallery = (uiProps: UiProps) => {
   }
 
   return {
-    error: deleteImage.error || uploadImage.error,
-    screenshotsUploading: uploadImage.isLoading,
+    error: deleteImage.error || uploadImage.error || extensionScreenshot.error,
+    screenshotsUploading: uploadImage.isLoading || extensionScreenshot.loading,
     takingScreenshot,
     screenshots,
     setScreenshots,

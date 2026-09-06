@@ -1,12 +1,13 @@
 import { BackendDevMiddleware, TolgeePlugin } from '@tolgee/core';
-import { getApiKeyType, getProjectIdFromApiKey } from './tools/decodeApiKey';
-import { createUrl } from './tools/url';
+import { directTransport } from './tools/apiTransport';
+import { extensionSdkHeaders, resolveLiveCredential } from './tools/auth';
 
 function createDevBackend(): BackendDevMiddleware {
   return {
     getRecord({
       apiUrl,
       apiKey,
+      transport,
       projectId,
       branch,
       language,
@@ -14,35 +15,44 @@ function createDevBackend(): BackendDevMiddleware {
       filterTag,
       fetch,
     }) {
-      const pId = getProjectIdFromApiKey(apiKey) ?? projectId;
-      let url: URL;
-      if (pId !== undefined) {
-        url = createUrl(apiUrl, `/v2/projects/${pId}/translations/${language}`);
-      } else {
-        url = createUrl(apiUrl, `/v2/projects/translations/${language}`);
+      const {
+        authHeader,
+        viaExtension,
+        projectId: resolvedProjectId,
+        requiresExplicitProject,
+      } = resolveLiveCredential({ apiKey, projectId, transport });
+      if (requiresExplicitProject && resolvedProjectId === undefined) {
+        throw new Error(
+          "You need to specify 'projectId' when using a PAT key or connecting through the Tolgee browser extension"
+        );
       }
 
+      const path =
+        resolvedProjectId !== undefined
+          ? `/v2/projects/${resolvedProjectId}/translations/${language}`
+          : `/v2/projects/translations/${language}`;
+      const query = new URLSearchParams();
       if (branch) {
-        url.searchParams.append('branch', branch);
+        query.append('branch', branch);
       }
       if (namespace) {
-        url.searchParams.append('ns', namespace);
+        query.append('ns', namespace);
       }
       filterTag?.forEach((tag) => {
-        url.searchParams.append('filterTag', tag);
+        query.append('filterTag', tag);
       });
+      const search = query.toString();
 
-      if (getApiKeyType(apiKey) === 'tgpat' && projectId === undefined) {
-        throw new Error("You need to specify 'projectId' when using PAT key");
-      }
-
-      return fetch(url.toString(), {
+      const send =
+        transport ??
+        directTransport({ apiUrl: apiUrl ?? '', fetch, authHeader });
+      return send({
+        path: search ? `${path}?${search}` : path,
+        method: 'GET',
         headers: {
-          'X-API-Key': apiKey || '',
+          ...extensionSdkHeaders(viaExtension),
           'Content-Type': 'application/json',
         },
-        // @ts-ignore - tell next.js to not use cache
-        next: { revalidate: 0 },
       }).then((r) => {
         if (r.ok) {
           return r.json().then((data) => data[language]);

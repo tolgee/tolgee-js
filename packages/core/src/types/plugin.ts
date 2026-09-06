@@ -10,9 +10,31 @@ import type { ObserverOptionsInternal } from '../Controller/State/observerOption
 import { TolgeeInstance } from '../TolgeeCore';
 import { TranslationDescriptor } from './events';
 
+export type DevApiRequest = {
+  path: string;
+  method: string;
+  headers: Record<string, string>;
+  body?: string | FormData;
+};
+
+export type DevApiResponse = Pick<
+  Response,
+  'ok' | 'status' | 'statusText' | 'text' | 'json'
+> & { headers: { get(name: string): string | null } };
+
+/**
+ * Sends a Tolgee API request on behalf of the SDK. Supplied by the browser extension in place of a credential: the
+ * request carries a path only, the transport owns the server and the credential (a session token or an API key
+ * entered in the extension), neither of which the page ever sees.
+ */
+export type DevApiTransport = (
+  request: DevApiRequest
+) => Promise<DevApiResponse>;
+
 export type BackendDevProps = {
   apiUrl?: string;
   apiKey?: string;
+  transport?: DevApiTransport;
   projectId?: number | string;
   branch?: string;
   filterTag?: string[];
@@ -110,6 +132,7 @@ export type DevCredentials =
   | {
       apiUrl?: string;
       apiKey?: string;
+      transport?: DevApiTransport;
       projectId?: string | number;
       branch?: string;
     };
@@ -156,7 +179,8 @@ export type KeyPosition = {
 
 export type UiProps = {
   apiUrl: string;
-  apiKey: string;
+  apiKey?: string;
+  transport?: DevApiTransport;
   projectId: number | string | undefined;
   branch?: string;
   highlight: HighlightInterface;

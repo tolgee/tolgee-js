@@ -74,7 +74,15 @@ export function State(
     },
 
     getInitialOptions() {
-      return { ...state.initialOptions, ...devCredentials };
+      const merged = { ...state.initialOptions, ...devCredentials };
+      if (
+        devCredentials &&
+        (devCredentials.apiKey || devCredentials.transport)
+      ) {
+        merged.apiKey = devCredentials.apiKey;
+        merged.transport = devCredentials.transport;
+      }
+      return merged;
     },
 
     addActiveNs(ns: NsFallback) {

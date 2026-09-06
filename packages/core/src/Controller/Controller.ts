@@ -317,9 +317,8 @@ export function Controller({ options }: StateServiceProps) {
     }) as TFnType,
 
     isDev() {
-      return Boolean(
-        state.getInitialOptions().apiKey && state.getInitialOptions().apiUrl
-      );
+      const options = state.getInitialOptions();
+      return Boolean((options.apiKey || options.transport) && options.apiUrl);
     },
 
     async loadRequired(options?: LoadRequiredOptions) {

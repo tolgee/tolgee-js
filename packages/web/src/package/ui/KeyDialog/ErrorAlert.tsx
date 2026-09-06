@@ -1,31 +1,89 @@
-import { Alert, AlertTitle } from '@mui/material';
-import { HttpError } from '../client/HttpError';
+import { useEffect, useState } from 'react';
+import { Alert, AlertTitle, Box, Button } from '@mui/material';
+import { HttpError, isHttpError } from '../client/HttpError';
 import { useDialogContext } from './dialogContext';
 import { NewTabLink } from './Link';
 import { createUrl } from '../../tools/url';
+import { detectExtension, openPlugin } from '../../tools/extension';
+import { CHROME_EXTENSION_LINK } from '../../constants';
 
 type Props = {
   error: HttpError | Error;
   severity?: 'error' | 'info';
 };
 
-export const ErrorAlert = ({ error, severity = 'error' }: Props) => {
+export const ErrorAlert = ({ error, severity }: Props) => {
   const apiUrl = useDialogContext((c) => c.uiProps.apiUrl);
 
   return (
-    <Alert sx={{ mt: 2 }} severity={severity}>
-      {error instanceof HttpError
+    <Alert
+      sx={{ mt: 2 }}
+      severity={severity ?? severityFor(error)}
+      data-cy="error-alert"
+      data-cy-error-code={isHttpError(error) ? error.code : undefined}
+    >
+      {isHttpError(error)
         ? getErrorContent(error, createUrl(apiUrl).toString())
         : error.message}
     </Alert>
   );
 };
 
+// Missing credentials, in the page or in the extension, is the normal state of a page nobody has connected yet,
+// not a failure.
+export function severityFor(error: HttpError | Error): 'error' | 'info' {
+  return isHttpError(error) &&
+    (error.code === 'api_key_not_specified' ||
+      error.code === 'extension_session_missing' ||
+      error.code === 'extension_editing_off')
+    ? 'info'
+    : 'error';
+}
+
 function DocsInContext() {
   return (
     <NewTabLink href="https://tolgee.io/js-sdk/in-context">
       Learn more in Docs
     </NewTabLink>
+  );
+}
+
+function OpenExtension() {
+  const [present, setPresent] = useState<boolean>();
+  useEffect(() => {
+    let mounted = true;
+    detectExtension().then((found) => mounted && setPresent(found));
+    return () => {
+      mounted = false;
+    };
+  }, []);
+  if (present === undefined) {
+    return null;
+  }
+  return (
+    <Box mt={1.5}>
+      {present ? (
+        <Button
+          size="small"
+          variant="outlined"
+          color="inherit"
+          onClick={openPlugin}
+        >
+          Open the Tolgee plugin
+        </Button>
+      ) : (
+        <Button
+          size="small"
+          variant="outlined"
+          color="inherit"
+          href={CHROME_EXTENSION_LINK}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Install the Tolgee plugin
+        </Button>
+      )}
+    </Box>
   );
 }
 
@@ -37,7 +95,10 @@ function DocsAPIKeys() {
   );
 }
 
-function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
+export function getErrorContent(
+  { code, params, message }: HttpError,
+  apiUrl: string
+) {
   switch (code) {
     case 'operation_not_permitted':
       return (
@@ -52,6 +113,29 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
         <>
           <AlertTitle>Invalid API key</AlertTitle>
           Check it in the code or in the chrome plugin. <DocsInContext />
+        </>
+      );
+
+    case 'unauthenticated':
+    case 'invalid_jwt_token':
+    case 'expired_jwt_token':
+    case 'general_jwt_error':
+    case 'invalid_oauth_token':
+    case 'oauth_token_expired':
+    case 'extension_session_missing':
+      return (
+        <>
+          <AlertTitle>You're not signed in</AlertTitle>
+          Sign in again in the Tolgee plugin to keep editing. <OpenExtension />
+        </>
+      );
+
+    case 'extension_request_too_large':
+      return (
+        <>
+          <AlertTitle>Image is too large to upload</AlertTitle>
+          This image is too large for the Tolgee plugin to send. Pick a smaller
+          one.
         </>
       );
 
@@ -74,8 +158,38 @@ function getErrorContent({ code, params, message }: HttpError, apiUrl: string) {
     case 'api_key_not_specified':
       return (
         <>
-          <AlertTitle>Oops... I miss the API key</AlertTitle>
-          Add it in the code or via the chrome plugin. <DocsInContext />
+          <AlertTitle>Sign in to make changes</AlertTitle>
+          To edit strings here, sign in with the Tolgee browser extension or add
+          an API key to the Tolgee configuration. <DocsInContext />
+          <OpenExtension />
+        </>
+      );
+
+    case 'extension_editing_off':
+      return (
+        <>
+          <AlertTitle>In-context editing is switched off</AlertTitle>
+          You switched editing off for this page in the Tolgee plugin. Turn it
+          on to edit here. <OpenExtension />
+        </>
+      );
+
+    case 'project_id_not_specified':
+      return (
+        <>
+          <AlertTitle>Oops... I miss the project id</AlertTitle>
+          An OAuth token or PAT carries no project, so projectId must be set in
+          the Tolgee configuration. <DocsInContext />
+        </>
+      );
+
+    case 'project_not_found':
+      return (
+        <>
+          <AlertTitle>Project not found</AlertTitle>
+          The configured project doesn't exist on this server, or your account
+          can't access it. Check the projectId in the Tolgee configuration, or
+          ask for access. <DocsInContext />
         </>
       );
 

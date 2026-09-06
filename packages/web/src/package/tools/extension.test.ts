@@ -2,6 +2,7 @@ import { sleep } from '../ui/tools/sleep';
 import {
   detectExtension,
   Handshaker,
+  pingExtension,
   sendAndRecieve,
   takeScreenshot,
 } from './extension';
@@ -86,6 +87,23 @@ describe('communicates with extension correctly', () => {
     const result = await detectExtension();
     expect(result).toEqual(false);
     expect(postMessageMock).toBeCalledTimes(2);
+  });
+
+  it('ping resolves the protocol version the extension answers with', async () => {
+    const promise = pingExtension();
+    registerListener.mock.calls[0][0]({
+      data: { type: 'TOLGEE_PONG', data: { protocolVersion: 2 } },
+    });
+    expect(await promise).toEqual({ protocolVersion: 2 });
+  });
+
+  it('ping treats an extension answering without a payload as an older protocol', async () => {
+    const promise = pingExtension();
+    registerListener.mock.calls[0][0]({
+      data: { type: 'TOLGEE_PONG', data: undefined },
+    });
+    expect(await promise).toEqual({});
+    expect(await pingExtension()).toBeUndefined();
   });
 
   it('take screenshot works', async () => {

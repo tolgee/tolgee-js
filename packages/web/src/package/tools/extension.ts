@@ -1,3 +1,5 @@
+import { OPEN_PLUGIN_MESSAGE } from '../constants';
+
 type Props = {
   message: string;
   recievingMessage: string[];
@@ -82,26 +84,38 @@ export function takeScreenshot(): Promise<string> {
   }).promise as Promise<string>;
 }
 
-export async function detectExtension(): Promise<boolean> {
+export function openPlugin(): void {
+  window.postMessage({ type: OPEN_PLUGIN_MESSAGE }, window.origin);
+}
+
+export type ExtensionInfo = { protocolVersion?: number };
+
+export async function pingExtension(): Promise<ExtensionInfo | undefined> {
   try {
-    await sendAndRecieve({
+    const payload = await sendAndRecieve<ExtensionInfo | undefined>({
       message: 'TOLGEE_PING',
       recievingMessage: ['TOLGEE_PONG'],
       attempts: 2,
     }).promise;
-    return true;
+    return payload ?? {};
   } catch {
-    return false;
+    return undefined;
   }
+}
+
+export async function detectExtension(): Promise<boolean> {
+  return (await pingExtension()) !== undefined;
 }
 
 export type LibConfig = {
   uiPresent: boolean;
   uiVersion?: string;
+  protocolVersion?: number;
   mode: 'production' | 'development';
   config: {
     apiUrl: string;
     apiKey: string;
+    projectId?: number | string;
     branch?: string;
   };
 };
