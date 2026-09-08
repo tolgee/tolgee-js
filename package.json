@@ -36,13 +36,13 @@
     "clean:turbo": "node scripts/cleanTurbo.js",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "custom-links": "node scripts/customLinks.js",
-    "ui-version": "node scripts/tolgeeUiVersion.js",
     "postinstall": "npm run custom-links",
     "version": "pnpm i --no-frozen-lockfile && git add pnpm-lock.yaml",
     "builder": "docker compose --project-directory e2e run builder pnpm",
     "e2e": "ts-node scripts/e2eRunner/index.ts",
     "generate-readmes": "ts-node scripts/generateReadmes.ts",
-    "build-packages": "pnpm build --filter='./packages/*'"
+    "build-packages": "pnpm build --filter='./packages/*'",
+    "check-built-version": "node scripts/checkBuiltVersion.js"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",

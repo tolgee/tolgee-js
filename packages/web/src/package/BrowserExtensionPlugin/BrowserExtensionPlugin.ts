@@ -127,8 +127,10 @@ if (sessionStorageAvailable()) {
     };
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
+      // Replaced at build time with this package's own version (see vite.config.ts). It is not read from the
+      // environment: a build that left it to one published artifacts asking the CDN for a stale dist-tag (#3537).
       const InContextTools = await loadInContextLib(
-        process.env.TOLGEE_UI_VERSION || 'prerelease'
+        process.env.TOLGEE_UI_VERSION || 'unbuilt'
       );
       return (tolgee) => {
         const credentials = getCredentials()!;

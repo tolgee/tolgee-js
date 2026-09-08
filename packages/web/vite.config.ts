@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react';
 import { buildPackage } from './rollup.common';
 import { RollupOptions } from 'rollup';
 import { replaceCodePlugin } from 'vite-plugin-replace';
+import { version } from './package.json';
 
 type Props = {
   entry: string;
@@ -51,7 +52,7 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
         replacements: [
           {
             from: 'process.env.TOLGEE_UI_VERSION',
-            to: JSON.stringify(process.env.TOLGEE_UI_VERSION) || 'undefined',
+            to: JSON.stringify(version),
           },
         ],
       }),

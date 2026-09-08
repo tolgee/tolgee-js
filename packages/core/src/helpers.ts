@@ -115,7 +115,8 @@ function headersInitToRecord(headersInit?: HeadersInit | undefined) {
 
 export const sdkHeaders = (): Record<string, string> => ({
   'x-tolgee-sdk-type': 'JS',
-  'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+  // Replaced at build time with this package's own version (see rollup.config.js), not read from the environment.
+  'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'unbuilt',
 });
 
 export const createFetchFunction = (

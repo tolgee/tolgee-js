@@ -5,6 +5,11 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 
+// The version the built artifact reports and, in @tolgee/web, fetches its in-context bundle with. Read from the
+// package rather than the environment: a build tool that does not forward the variable produces a bundle that
+// silently points at a dist-tag instead of this release (tolgee/tolgee-js#3537).
+import { version } from './package.json';
+
 export default {
   input: 'src/index.ts',
   preserveSymlinks: true,
@@ -69,8 +74,7 @@ export default {
     sizes(),
     visualizer(),
     replace({
-      'process.env.TOLGEE_UI_VERSION':
-        JSON.stringify(process.env.TOLGEE_UI_VERSION) || 'undefined',
+      'process.env.TOLGEE_UI_VERSION': JSON.stringify(version),
       preventAssignment: true,
     }),
   ],

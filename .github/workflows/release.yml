@@ -70,16 +70,15 @@ jobs:
           lerna version prerelease --yes --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --no-push --no-git-tag-version --exact
 
-      # Set TOLGEE_UI_VERSION for @tolgee/core build
-      - name: Set env
-        if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
-        run: |
-          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
-          pnpm run --silent ui-version
-
       - name: Build all packages
         if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
         run: pnpm build || pnpm build
+
+      # The published artifacts fetch their in-context bundle by version, so a build that lost the version would
+      # publish packages pointing at someone else's release (#3537).
+      - name: Check the built artifacts carry their own version
+        if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
+        run: pnpm check-built-version
 
       - name: Recreate release with push (release)
         if: ${{ github.event_name != 'push' && steps.version.outputs.VERSION != '' }}
