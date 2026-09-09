@@ -103,11 +103,6 @@ jobs:
           pnpm exec lerna version prerelease --yes --conventional-prerelease --preid "test.$(git ls-files -s packages | git hash-object --stdin)" --ignore-scripts \
             --force-publish --no-push --no-git-tag-version --exact
 
-      - name: Set TOLGEE_UI_VERSION
-        run: |
-          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
-          pnpm run --silent ui-version
-
       - name: Build packages
         run: pnpm build-packages
 

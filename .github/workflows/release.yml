@@ -70,13 +70,6 @@ jobs:
           lerna version prerelease --yes --conventional-prerelease --preid prerelease.$(git rev-parse --short HEAD) \
             --force-publish --no-push --no-git-tag-version --exact
 
-      # Set TOLGEE_UI_VERSION for @tolgee/core build
-      - name: Set env
-        if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
-        run: |
-          echo "TOLGEE_UI_VERSION=$(pnpm run --silent ui-version)" >> $GITHUB_ENV
-          pnpm run --silent ui-version
-
       - name: Build all packages
         if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
         run: pnpm build || pnpm build

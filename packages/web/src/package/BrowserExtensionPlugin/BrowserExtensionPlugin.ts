@@ -16,6 +16,9 @@ import {
 } from '../tools/sessionStorageKeys';
 import { loadInContextLib } from './loadInContextLib';
 
+/** This package's own version, substituted at build time (vite.config.ts) and by the jest config for tests. */
+declare const __TOLGEE_VERSION__: string;
+
 function getCredentials(): DevCredentials {
   const apiKey = sessionStorage.getItem(API_KEY_SESSION_STORAGE) || undefined;
   const apiUrl = sessionStorage.getItem(API_URL_SESSION_STORAGE) || undefined;
@@ -127,9 +130,7 @@ if (sessionStorageAvailable()) {
     };
 
     const getTolgeePlugin = async (): Promise<TolgeePlugin> => {
-      const InContextTools = await loadInContextLib(
-        process.env.TOLGEE_UI_VERSION || 'prerelease'
-      );
+      const InContextTools = await loadInContextLib(__TOLGEE_VERSION__);
       return (tolgee) => {
         const credentials = getCredentials()!;
         tolgee.addPlugin(InContextTools({ credentials }));

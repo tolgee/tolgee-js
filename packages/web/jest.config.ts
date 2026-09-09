@@ -6,4 +6,5 @@ export default {
     '@testFixtures/(.*)': '<rootDir>/src/__testFixtures/$1',
   },
   roots: ['src'],
+  globals: { __TOLGEE_VERSION__: '0.0.0-test' },
 };

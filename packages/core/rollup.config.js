@@ -5,6 +5,8 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import { visualizer } from 'rollup-plugin-visualizer';
 import replace from '@rollup/plugin-replace';
 
+import { version } from './package.json';
+
 export default {
   input: 'src/index.ts',
   preserveSymlinks: true,
@@ -69,8 +71,7 @@ export default {
     sizes(),
     visualizer(),
     replace({
-      'process.env.TOLGEE_UI_VERSION':
-        JSON.stringify(process.env.TOLGEE_UI_VERSION) || 'undefined',
+      __TOLGEE_VERSION__: JSON.stringify(version),
       preventAssignment: true,
     }),
   ],

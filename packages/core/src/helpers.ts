@@ -8,6 +8,9 @@ import {
 } from './types';
 import { EventEmitterInstance } from './Controller/Events/EventEmitter';
 
+/** This package's own version, substituted at build time (rollup.config.js) and by the jest config for tests. */
+declare const __TOLGEE_VERSION__: string;
+
 export function isPromise(value: unknown): value is Promise<unknown> {
   return Boolean(
     value && typeof (value as unknown as Promise<unknown>).then === 'function'
@@ -115,7 +118,7 @@ function headersInitToRecord(headersInit?: HeadersInit | undefined) {
 
 export const sdkHeaders = (): Record<string, string> => ({
   'x-tolgee-sdk-type': 'JS',
-  'x-tolgee-sdk-version': process.env.TOLGEE_UI_VERSION || 'prerelease',
+  'x-tolgee-sdk-version': __TOLGEE_VERSION__,
 });
 
 export const createFetchFunction = (
