@@ -51,7 +51,7 @@ export const createConfig = ({ entry, rollupOptions }: Props) =>
       replaceCodePlugin({
         replacements: [
           {
-            from: 'process.env.TOLGEE_UI_VERSION',
+            from: '__TOLGEE_VERSION__',
             to: JSON.stringify(version),
           },
         ],

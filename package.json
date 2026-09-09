@@ -41,8 +41,7 @@
     "builder": "docker compose --project-directory e2e run builder pnpm",
     "e2e": "ts-node scripts/e2eRunner/index.ts",
     "generate-readmes": "ts-node scripts/generateReadmes.ts",
-    "build-packages": "pnpm build --filter='./packages/*'",
-    "check-built-version": "node scripts/checkBuiltVersion.js"
+    "build-packages": "pnpm build --filter='./packages/*'"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
