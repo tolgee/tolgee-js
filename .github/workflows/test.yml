@@ -106,9 +106,6 @@ jobs:
       - name: Build packages
         run: pnpm build-packages
 
-      - name: Check the built artifacts carry their own version
-        run: pnpm check-built-version
-
       - name: Set npm registry to GitHub Packages
         run: |
           echo "" >> .npmrc

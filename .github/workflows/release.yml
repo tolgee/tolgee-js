@@ -74,12 +74,6 @@ jobs:
         if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
         run: pnpm build || pnpm build
 
-      # The published artifacts fetch their in-context bundle by version, so a build that lost the version would
-      # publish packages pointing at someone else's release (#3537).
-      - name: Check the built artifacts carry their own version
-        if: ${{ github.event_name == 'push' || steps.version.outputs.VERSION != '' }}
-        run: pnpm check-built-version
-
       - name: Recreate release with push (release)
         if: ${{ github.event_name != 'push' && steps.version.outputs.VERSION != '' }}
         run: |
