@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [7.2.1](https://github.com/tolgee/tolgee-js/compare/v7.2.0...v7.2.1) (2026-09-09)
+
+
+### Bug Fixes
+
+* build each package with its own version instead of an env var ([#3538](https://github.com/tolgee/tolgee-js/issues/3538)) ([3b43e30](https://github.com/tolgee/tolgee-js/commit/3b43e30bf92eba8af801e69591d0f2ed4f8be852)), closes [#3537](https://github.com/tolgee/tolgee-js/issues/3537)
+
+
+
+
+
 # [7.2.0](https://github.com/tolgee/tolgee-js/compare/v7.1.3...v7.2.0) (2026-09-06)
 
 
