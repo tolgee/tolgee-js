@@ -7,6 +7,9 @@ type ApiKeyPermissionsModel = components['schemas']['ApiKeyPermissionsModel'];
 type LanguageModel = components['schemas']['LanguageModel'];
 type KeyWithTranslationsModel =
   components['schemas']['KeyWithTranslationsModel'];
+type TranslationState = components['schemas']['TranslationModel']['state'];
+
+export type Disposition = 'save' | 'suggest' | 'readonly';
 
 export const getComputedPermissions = (
   permissions: ApiKeyPermissionsModel | undefined,
@@ -32,17 +35,39 @@ export const getComputedPermissions = (
   const canSendBigMeta = has('translations.edit');
   const isAssignedToTranslation = keyData?.tasks?.find((i) => i?.userAssigned);
 
+  const getLanguageId = (language: string) => {
+    return availableLanguages?.find((l) => l.tag === language)?.id;
+  };
+
+  const hasForLanguage = (
+    scope: string,
+    language: string,
+    permittedLanguages: number[] | undefined
+  ) =>
+    has(scope) &&
+    isLanguagePermitted(getLanguageId(language), permittedLanguages);
+
+  const suggestionsEnabled = permissions?.suggestionsMode === 'ENABLED';
+  const reviewedProtected =
+    permissions?.translationProtection === 'PROTECT_REVIEWED';
+
+  const canSuggestTranslation = (language: string) =>
+    suggestionsEnabled &&
+    keyExists &&
+    hasForLanguage(
+      'translations.suggest',
+      language,
+      permissions?.suggestLanguageIds
+    );
+
   const canSubmitForm =
     canEditTranslations ||
     canEditStates ||
     canEditTags ||
     canUploadScreenshots ||
     canDeleteScreenshots ||
-    isAssignedToTranslation;
-
-  const getLanguageId = (language: string) => {
-    return availableLanguages?.find((l) => l.tag === language)?.id;
-  };
+    isAssignedToTranslation ||
+    availableLanguages?.some((l) => canSuggestTranslation(l.tag));
 
   const canEditTranslation = (language: string) => {
     const firstTask = keyData?.tasks?.find((t) => t.languageTag === language);
@@ -68,7 +93,42 @@ export const getComputedPermissions = (
     );
   };
 
+  const getDisposition = (
+    language: string,
+    state: TranslationState | undefined
+  ): Disposition => {
+    const blockedByProtection =
+      state === 'REVIEWED' && reviewedProtected && !canEditState(language);
+    if (canEditTranslation(language) && !blockedByProtection) return 'save';
+    if (canSuggestTranslation(language)) return 'suggest';
+    return 'readonly';
+  };
+
+  const canDeleteOwnSuggestion =
+    suggestionsEnabled && has('translation-suggestions.own-access');
+
+  const canModerateSuggestions = (language: string) =>
+    suggestionsEnabled &&
+    hasForLanguage(
+      'translation-suggestions.manage',
+      language,
+      permissions?.suggestManageLanguageIds
+    );
+
+  const canReviewSuggestions = (language: string) =>
+    suggestionsEnabled &&
+    hasForLanguage(
+      'translations.state-edit',
+      language,
+      permissions?.stateChangeLanguageIds
+    );
+
   return {
+    canSuggestTranslation,
+    getDisposition,
+    canDeleteOwnSuggestion,
+    canModerateSuggestions,
+    canReviewSuggestions,
     canEditTags,
     canViewScreenshots,
     canUploadScreenshots,
