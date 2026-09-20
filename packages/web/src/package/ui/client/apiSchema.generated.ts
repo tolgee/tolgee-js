@@ -15,7 +15,7 @@ export interface paths {
   "/v2/api-keys/current-permissions": {
     /**
      * Get current permission info
-     * @description Returns current PAK or PAT permissions for current user, api-key and project
+     * @description Returns the current PAK, PAT or OAuth token permissions for current user, api-key and project
      */
     get: operations["getCurrentPermissions"];
   };
@@ -39,7 +39,7 @@ export interface paths {
   };
   "/v2/image-upload/{ids}": {
     /** Delete uploaded images */
-    delete: operations["delete_17"];
+    delete: operations["delete_19"];
   };
   "/v2/notification": {
     /** Gets notifications of the currently logged in user, newest is first. */
@@ -72,29 +72,29 @@ export interface paths {
   };
   "/v2/organizations/{id}": {
     /** Get one organization */
-    get: operations["get_15"];
+    get: operations["get_17"];
   };
   "/v2/organizations/{organizationId}/glossaries": {
     /** Get all organization glossaries */
-    get: operations["getAll_12"];
+    get: operations["getAll_13"];
     /** Create glossary */
-    post: operations["create_15"];
+    post: operations["create_17"];
   };
   "/v2/organizations/{organizationId}/glossaries-with-stats": {
     /** Get all organization glossaries with some additional statistics */
-    get: operations["getAllWithStats"];
+    get: operations["getAllWithStats_1"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}": {
     /** Get glossary */
-    get: operations["get_13"];
+    get: operations["get_15"];
     /** Update glossary */
-    put: operations["update_8"];
+    put: operations["update_10"];
     /** Delete glossary */
-    delete: operations["delete_7"];
+    delete: operations["delete_9"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/assigned-projects": {
     /** Get all projects assigned to glossary */
-    get: operations["getAssignedProjects"];
+    get: operations["getAssignedProjects_1"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/export": {
     /** Export glossary terms as CSV */
@@ -110,27 +110,27 @@ export interface paths {
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms": {
     /** Get all glossary terms */
-    get: operations["getAll_13"];
+    get: operations["getAll_14"];
     /** Create a new glossary term */
-    post: operations["create_16"];
+    post: operations["create_18"];
     /** Batch delete multiple terms */
     delete: operations["deleteMultiple"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}": {
     /** Get glossary term */
-    get: operations["get_14"];
+    get: operations["get_16"];
     /** Update glossary term */
-    put: operations["update_9"];
+    put: operations["update_11"];
     /** Delete glossary term */
-    delete: operations["delete_8"];
+    delete: operations["delete_10"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}/translations": {
     /** Set a new glossary term translation for language */
-    post: operations["update_12"];
+    post: operations["update_14"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/terms/{termId}/translations/{languageTag}": {
     /** Get glossary term translation for language */
-    get: operations["get_23"];
+    get: operations["get_25"];
   };
   "/v2/organizations/{organizationId}/glossaries/{glossaryId}/termsIds": {
     /** Get all glossary terms ids */
@@ -147,9 +147,96 @@ export interface paths {
      */
     get: operations["getOrganizationCredits"];
   };
+  "/v2/organizations/{organizationId}/translation-memories": {
+    /** Get all translation memories in the organization */
+    get: operations["getAll_11"];
+    /** Create shared translation memory */
+    post: operations["create_15"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories-with-stats": {
+    /** Get all translation memories with statistics */
+    get: operations["getAllWithStats"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/entry-counts": {
+    /**
+     * Get entry counts for a set of translation memories
+     * @description Returns the entry count for each requested TM id (stored + virtual). Unknown ids are omitted from the response. Separate from the list endpoint so the list can render without waiting on the per-TM virtual-row aggregation.
+     */
+    get: operations["getEntryCounts"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}": {
+    /** Get translation memory */
+    get: operations["get_13"];
+    /** Update shared translation memory */
+    put: operations["update_8"];
+    /** Delete shared translation memory */
+    delete: operations["delete_7"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/assigned-projects": {
+    /** Get projects assigned to a translation memory */
+    get: operations["getAssignedProjects"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/entries": {
+    /**
+     * List rows of a translation memory (paginated)
+     * @description Pagination is row-level: each STORED bucket (manual entries on a source collapse into one row; each TMX `tuid` is its own row) and each VIRTUAL origin (one row per project key) gets its own page item. The `targetLanguageTag` filter narrows the *cells* of a row to a subset of target languages; rows themselves still appear with empty cells so the user can add a translation.
+     */
+    get: operations["list_3"];
+    /** Create a translation memory entry */
+    post: operations["create_16"];
+    /**
+     * Batch delete translation memory entry groups
+     * @description For every entry ID in the payload, deletes the entire group that shares the same source text (and key). The request is deduplicated to distinct groups so passing multiple entries from the same row is a no-op past the first one.
+     */
+    delete: operations["deleteMultipleGroups"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/entries/entryIds": {
+    /**
+     * List representative entry IDs for every stored row
+     * @description Returns one entry ID per stored row matching the optional `search` filter — the same row identities that the paged endpoint exposes, but flattened to a single long list for client-side `Select all` flows. Virtual rows are not included (they have no entry IDs).
+     */
+    get: operations["getAllStoredEntryIds"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/entries/multiple": {
+    /**
+     * Create translation memory entries for multiple target languages
+     * @description Atomic counterpart to the per-language POST. All entries land in one transaction, or none do — replaces the UI's previous per-language loop which could leave a partial result if a later language failed. The same target language must not appear twice in the same request.
+     */
+    post: operations["createMultiple"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/entries/{entryId}": {
+    /** Get a single translation memory entry */
+    get: operations["get_14"];
+    /** Update a translation memory entry */
+    put: operations["update_9"];
+    /** Delete a translation memory entry */
+    delete: operations["delete_8"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/entries/{entryId}/group": {
+    /**
+     * Delete a whole translation memory entry group
+     * @description Deletes every entry that shares the same source text (and key) as the given entry — i.e. the entire translation-unit group visible as one row in the UI.
+     */
+    delete: operations["deleteGroup"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/export": {
+    /** Export translation memory as TMX file */
+    get: operations["exportTmx"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/import": {
+    /** Import TMX file into translation memory */
+    post: operations["importTmx"];
+  };
+  "/v2/organizations/{organizationId}/translation-memories/{translationMemoryId}/write-only-reviewed": {
+    /**
+     * Toggle the reviewed-only flag on any TM in the organization
+     * @description Sets `writeOnlyReviewed` on the given TM. Unlike the main update endpoint, this accepts PROJECT-type TMs too, so org maintainers can edit this single setting from the org-level TM list without switching into project settings.
+     */
+    put: operations["setWriteOnlyReviewed"];
+  };
   "/v2/organizations/{slug}": {
     /** Get organization by slug */
-    get: operations["get_22"];
+    get: operations["get_24"];
   };
   "/v2/pats/current": {
     /**
@@ -178,13 +265,17 @@ export interface paths {
     /** Get one revision data */
     get: operations["getSingleRevision_1"];
   };
+  "/v2/projects/activity/revisions/{revisionId}/modified-entities": {
+    /** Get modified entities in revision */
+    get: operations["getModifiedEntitiesByRevision_1"];
+  };
   "/v2/projects/batch-jobs": {
     /** List batch operations */
-    get: operations["list_4"];
+    get: operations["list_5"];
   };
   "/v2/projects/batch-jobs/{id}": {
     /** Get batch operation */
-    get: operations["get_21"];
+    get: operations["get_23"];
   };
   "/v2/projects/batch-jobs/{id}/cancel": {
     /**
@@ -258,7 +349,7 @@ export interface paths {
     /** Rename branch */
     post: operations["rename_1"];
     /** Delete branch */
-    delete: operations["delete_14"];
+    delete: operations["delete_16"];
   };
   "/v2/projects/branches/{branchId}/protected": {
     /** Set branch protected flag */
@@ -457,7 +548,7 @@ export interface paths {
      * Delete one or multiple keys (post)
      * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
      */
-    delete: operations["delete_12"];
+    delete: operations["delete_14"];
   };
   "/v2/projects/keys/create": {
     /** Create new key */
@@ -505,7 +596,7 @@ export interface paths {
   };
   "/v2/projects/keys/trash": {
     /** List trashed keys */
-    get: operations["list_6"];
+    get: operations["list_9"];
   };
   "/v2/projects/keys/trash/deleters": {
     /** List users who deleted keys */
@@ -525,7 +616,7 @@ export interface paths {
   };
   "/v2/projects/keys/{ids}": {
     /** Delete one or multiple keys */
-    delete: operations["delete_16"];
+    delete: operations["delete_18"];
   };
   "/v2/projects/keys/{id}": {
     /** Get one key */
@@ -627,10 +718,7 @@ export interface paths {
     post: operations["createSuggestion_1"];
   };
   "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}": {
-    /**
-     * Delete suggestion
-     * @description User can only delete suggestion created by them
-     */
+    /** Delete suggestion */
     delete: operations["deleteSuggestion_1"];
   };
   "/v2/projects/languages/{languageId}/key/{keyId}/suggestion/{suggestionId}/accept": {
@@ -717,10 +805,14 @@ export interface paths {
   };
   "/v2/projects/start-batch-job/pre-translate-by-tm": {
     /**
-     * Pre-translate by TM
+     * Translate from memory
      * @description Pre-translate provided keys to provided languages by TM.
      */
     post: operations["translate_1"];
+  };
+  "/v2/projects/start-batch-job/qa-check": {
+    /** Rerun QA checks for translations of selected keys */
+    post: operations["qaCheck_1"];
   };
   "/v2/projects/start-batch-job/restore-keys": {
     /** Restore soft-deleted keys */
@@ -754,6 +846,10 @@ export interface paths {
     /** Get project daily amount of events */
     get: operations["getProjectDailyActivity_1"];
   };
+  "/v2/projects/stats/qa-issue-counts": {
+    /** Get QA issue counts grouped by check type for a language */
+    get: operations["getQaIssueCountsByCheckType_1"];
+  };
   "/v2/projects/suggest/machine-translations": {
     /**
      * Get machine translation suggestions
@@ -781,7 +877,7 @@ export interface paths {
   };
   "/v2/projects/tags": {
     /** Get tags */
-    get: operations["getAll_15"];
+    get: operations["getAll_16"];
   };
   "/v2/projects/tasks": {
     /** Get tasks */
@@ -859,6 +955,31 @@ export interface paths {
      * @description Detailed statistics about the task results
      */
     get: operations["getXlsxReport_1"];
+  };
+  "/v2/projects/translation-memories": {
+    /**
+     * List all translation memory assignments for the project
+     * @description Always readable. When the TRANSLATION_MEMORY feature is not enabled for the organization, only the project-type assignment (if any) is returned so the settings page can still show the row that already drives in-project suggestions.
+     */
+    get: operations["list_7"];
+  };
+  "/v2/projects/translation-memories/project-tm-settings": {
+    /**
+     * Update the project's own TM settings
+     * @description Sets TM-level flags on the project's own PROJECT-type TM. The shared-TM update endpoint rejects PROJECT TMs; this narrow endpoint exists so project admins can toggle the `writeOnlyReviewed` flag without org-level privileges.
+     */
+    put: operations["updateProjectTmSettings_1"];
+  };
+  "/v2/projects/translation-memories/{translationMemoryId}": {
+    /** Update project's translation memory assignment (read/write/priority) */
+    put: operations["updateAssignment_1"];
+    /** Assign a shared translation memory to the project */
+    post: operations["assign_1"];
+    /**
+     * Unassign a shared translation memory from the project
+     * @description Removes the assignment between the project and the shared translation memory. The shared TM and its entries remain intact for other projects.
+     */
+    delete: operations["unassign_1"];
   };
   "/v2/projects/translations": {
     /** Get translations in project */
@@ -999,7 +1120,7 @@ export interface components {
        *   "TRANSLATIONS_VIEW"
        * ]
        */
-      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify")[];
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "translation-suggestions.manage" | "translation-suggestions.own-access" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "tasks.assigned-access" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify" | "organization-quotas.view")[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
        * @example [
@@ -1017,6 +1138,16 @@ export interface components {
        */
       suggestLanguageIds?: number[];
       /**
+       * @description List of languages user can manage suggestions for. If null, managing suggestions for all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      suggestManageLanguageIds?: number[];
+      /** @enum {string} */
+      suggestionsMode: "DISABLED" | "ENABLED";
+      /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
        * @example [
        *   200001,
@@ -1024,6 +1155,8 @@ export interface components {
        * ]
        */
       translateLanguageIds?: number[];
+      /** @enum {string} */
+      translationProtection: "NONE" | "PROTECT_REVIEWED";
       /**
        * @description The user's permission type. This field is null if user has assigned granular permissions or if returning API key's permissions
        * @enum {string}
@@ -1039,6 +1172,8 @@ export interface components {
       viewLanguageIds?: number[];
     };
     ApiKeyWithLanguagesModel: {
+      /** @description Whether branching is enabled and active on this project. */
+      branchingEnabled: boolean;
       description: string;
       /** Format: int64 */
       expiresAt?: number;
@@ -1061,12 +1196,29 @@ export interface components {
     ApplyBranchMergeRequest: {
       deleteBranch: boolean;
     };
+    AssignSharedTranslationMemoryRequest: {
+      /**
+       * Format: int32
+       * @description Per-assignment penalty override (0–100). When null, the TM's default penalty applies.
+       */
+      penalty?: number;
+      /**
+       * Format: int32
+       * @description Priority in suggestion results (lower = higher priority). When null, the assignment is placed after every existing one (max + 1) so it stacks at the bottom of the list.
+       */
+      priority?: number;
+      /** @description Whether this project can read from the TM */
+      readAccess: boolean;
+      /** @description Whether this project writes new translations to the TM */
+      writeAccess: boolean;
+    };
     AuthProviderDto: {
       /** @enum {string} */
       authType?: "GOOGLE" | "GITHUB" | "OAUTH2" | "SSO" | "SSO_GLOBAL";
       id?: string;
       ssoDomain?: string;
     };
+    /** @example Links to avatar images */
     Avatar: {
       large: string;
       thumbnail: string;
@@ -1077,7 +1229,6 @@ export interface components {
        * @description The activity revision id, that stores the activity details of the job
        */
       activityRevisionId?: number;
-      /** @description The user who started the job */
       author?: components["schemas"]["SimpleUserAccountModel"];
       /**
        * Format: int64
@@ -1110,7 +1261,7 @@ export interface components {
        * @description Type of the batch job
        * @enum {string}
        */
-      type: "AI_PLAYGROUND_TRANSLATE" | "PRE_TRANSLATE_BT_TM" | "MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "DELETE_KEYS" | "RESTORE_KEYS" | "HARD_DELETE_KEYS" | "SET_TRANSLATIONS_STATE" | "CLEAR_TRANSLATIONS" | "COPY_TRANSLATIONS" | "TAG_KEYS" | "UNTAG_KEYS" | "SET_KEYS_NAMESPACE" | "AUTOMATION" | "BILLING_TRIAL_EXPIRATION_NOTICE" | "ASSIGN_TRANSLATION_LABEL" | "UNASSIGN_TRANSLATION_LABEL" | "NO_OP";
+      type: "AI_PLAYGROUND_TRANSLATE" | "PRE_TRANSLATE_BT_TM" | "MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "DELETE_KEYS" | "RESTORE_KEYS" | "HARD_DELETE_KEYS" | "SET_TRANSLATIONS_STATE" | "CLEAR_TRANSLATIONS" | "COPY_TRANSLATIONS" | "TAG_KEYS" | "UNTAG_KEYS" | "SET_KEYS_NAMESPACE" | "AUTOMATION" | "BILLING_TRIAL_EXPIRATION_NOTICE" | "BILLING_AUTO_UPGRADE_NOTICE" | "BILLING_AUTO_UPGRADE_RENEWAL" | "ASSIGN_TRANSLATION_LABEL" | "UNASSIGN_TRANSLATION_LABEL" | "QA_CHECK" | "NO_OP";
       /**
        * Format: int64
        * @description The time when the job was last updated (status change)
@@ -1134,16 +1285,13 @@ export interface components {
        * @description Branch merge change id
        */
       id: number;
-      /** @description Merged branch key (post-merge result) */
       mergedKey?: components["schemas"]["BranchMergeKeyModel"];
       /**
        * @description Type of key conflict resolution
        * @enum {string}
        */
       resolution?: "SOURCE" | "TARGET";
-      /** @description Source branch key */
       sourceKey?: components["schemas"]["BranchMergeKeyModel"];
-      /** @description Target branch key */
       targetKey?: components["schemas"]["BranchMergeKeyModel"];
       /**
        * @description Change type
@@ -1164,18 +1312,16 @@ export interface components {
        * @description Branch merge session id
        */
       id: number;
-      /** @description Merged branch key (post-merge result) */
       mergedKey?: components["schemas"]["BranchMergeKeyModel"];
       /**
        * @description Type of key conflict resolution
        * @enum {string}
        */
       resolution?: "SOURCE" | "TARGET";
-      /** @description Source branch key */
       sourceKey: components["schemas"]["BranchMergeKeyModel"];
-      /** @description Target branch key */
       targetKey: components["schemas"]["BranchMergeKeyModel"];
     };
+    /** @description Target branch key */
     BranchMergeKeyModel: {
       /** @description Key description */
       keyDescription?: string;
@@ -1253,6 +1399,7 @@ export interface components {
        */
       uncompletedTasksCount: number;
     };
+    /** @description Ongoing (or applied) merge operation related to this branch. Null when the branch is not being merged yet */
     BranchMergeRefModel: {
       /**
        * Format: int64
@@ -1267,6 +1414,7 @@ export interface components {
       /** @description Target branch name */
       targetBranchName: string;
     };
+    /** @description Translations indexed by language tag */
     BranchMergeTranslationModel: {
       /**
        * Format: int64
@@ -1288,7 +1436,6 @@ export interface components {
     BranchModel: {
       /** @description Indicates whether this branch is currently active (visible and usable for editing translations and keys). Inactive branches are hidden but still stored in the project. */
       active: boolean;
-      /** @description User who created or owns this branch. Can be null for system-generated branches. */
       author?: components["schemas"]["SimpleUserAccountModel"];
       /**
        * Format: int64
@@ -1304,7 +1451,6 @@ export interface components {
       isDefault: boolean;
       /** @description Is branch protected */
       isProtected: boolean;
-      /** @description Ongoing (or applied) merge operation related to this branch. Null when the branch is not being merged yet */
       merge?: components["schemas"]["BranchMergeRefModel"];
       /** @description Human-readable name of the branch. Similar to Git branch names, it identifies the feature or purpose of this branch (e.g. 'feature-login-page') */
       name: string;
@@ -1358,6 +1504,11 @@ export interface components {
         longList?: number[];
       };
     };
+    CollectionModelProjectTranslationMemoryAssignmentModel: {
+      _embedded?: {
+        translationMemoryAssignments?: components["schemas"]["ProjectTranslationMemoryAssignmentModel"][];
+      };
+    };
     CollectionModelScreenshotModel: {
       _embedded?: {
         screenshots?: components["schemas"]["ScreenshotModel"][];
@@ -1373,6 +1524,16 @@ export interface components {
         users?: components["schemas"]["SimpleUserAccountModel"][];
       };
     };
+    CollectionModelTmAssignedProjectModel: {
+      _embedded?: {
+        assignedProjects?: components["schemas"]["TmAssignedProjectModel"][];
+      };
+    };
+    CollectionModelTranslationMemoryEntryModel: {
+      _embedded?: {
+        translationMemoryEntries?: components["schemas"]["TranslationMemoryEntryModel"][];
+      };
+    };
     CollectionModelUsedNamespaceModel: {
       _embedded?: {
         namespaces?: components["schemas"]["UsedNamespaceModel"][];
@@ -1383,7 +1544,7 @@ export interface components {
       branch?: string;
       /** @description Custom values of the key. If not provided, custom values won't be modified */
       custom?: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       /** @description Description of the key. It's also used as a context for Tolgee AI translator */
       description?: string;
@@ -1396,6 +1557,7 @@ export interface components {
       maxCharLimit?: number;
       /** @description Name of the key */
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
       namespace?: string;
       /** @description The argument name for the plural. If null, value won't be modified. If isPlural is false, this value will be ignored. */
       pluralArgName?: string;
@@ -1442,7 +1604,7 @@ export interface components {
     };
     ComputedPermissionModel: {
       /** @enum {string} */
-      origin: "ORGANIZATION_BASE" | "DIRECT" | "ORGANIZATION_OWNER" | "NONE" | "SERVER_ADMIN" | "SERVER_SUPPORTER";
+      origin: "ORGANIZATION_BASE" | "DIRECT" | "ORGANIZATION_OWNER" | "NONE" | "SERVER_ADMIN" | "SERVER_SUPPORTER" | "COMMUNITY";
       permissionModel?: components["schemas"]["PermissionModel"];
       /**
        * @deprecated
@@ -1462,7 +1624,7 @@ export interface components {
        *   "TRANSLATIONS_VIEW"
        * ]
        */
-      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify")[];
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "translation-suggestions.manage" | "translation-suggestions.own-access" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "tasks.assigned-access" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify" | "organization-quotas.view")[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
        * @example [
@@ -1479,6 +1641,14 @@ export interface components {
        * ]
        */
       suggestLanguageIds?: number[];
+      /**
+       * @description List of languages user can manage suggestions for. If null, managing suggestions for all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      suggestManageLanguageIds?: number[];
       /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
        * @example [
@@ -1565,6 +1735,7 @@ export interface components {
       maxCharLimit?: number;
       /** @description Name of the key */
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
       namespace?: string;
       /** @description The argument name for the plural. If null, value will be guessed from the values provided in translations. */
       pluralArgName?: string;
@@ -1587,6 +1758,28 @@ export interface components {
     };
     CreateMultipleTasksRequest: {
       tasks: components["schemas"]["CreateTaskRequest"][];
+    };
+    CreateMultipleTranslationMemoryEntriesRequest: {
+      /**
+       * @description Source text (in the TM's source language)
+       * @example Hello world
+       */
+      sourceText: string;
+      /** @description Target translations to create, one per target language */
+      translations: components["schemas"]["CreateMultipleTranslationMemoryEntriesTranslationRequest"][];
+    };
+    /** @description Target translations to create, one per target language */
+    CreateMultipleTranslationMemoryEntriesTranslationRequest: {
+      /**
+       * @description Target language tag according to BCP 47 definition
+       * @example de
+       */
+      targetLanguageTag: string;
+      /**
+       * @description Target translation text
+       * @example Hallo Welt
+       */
+      targetText: string;
     };
     CreateProjectRequest: {
       /** @description Tag of one of created languages, to select it as base language. If not provided, first language will be selected as base. */
@@ -1656,6 +1849,9 @@ export interface components {
     DeleteMultipleGlossaryTermsRequest: {
       termIds: number[];
     };
+    DeleteMultipleTranslationMemoryEntriesRequest: {
+      entryIds: number[];
+    };
     DryRunMergeBranchRequest: {
       /**
        * Format: int64
@@ -1677,11 +1873,12 @@ export interface components {
        */
       maxCharLimit?: number;
       name: string;
+      /** @description The namespace of the key. (When empty or null default namespace will be used) */
       namespace?: string;
     };
     EntityDescriptionWithRelations: {
       data: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       entityClass: string;
       /** Format: int64 */
@@ -1689,16 +1886,16 @@ export interface components {
     };
     ErrorResponseBody: {
       code: string;
-      params?: unknown[];
+      params?: Record<string, never>[];
     };
     ErrorResponseTyped: {
       /** @enum {string} */
-      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_non_matching_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "email_already_verified" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "third_party_switch_initiated" | "third_party_switch_conflict" | "username_already_exists" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "slug_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "could_not_resolve_property" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "request_validation_error" | "filter_by_value_state_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "user_missing_password" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "user_is_not_owner_or_maintainer_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found" | "cannot_parse_encrypted_slack_login_data" | "slack_workspace_not_found" | "cannot_fetch_user_details_from_slack" | "slack_missing_scope" | "slack_not_connected_to_your_account" | "slack_invalid_command" | "slack_not_subscribed_yet" | "slack_connection_failed" | "tolgee_account_already_connected" | "slack_not_configured" | "slack_workspace_already_connected" | "slack_connection_error" | "email_verification_code_not_valid" | "cannot_subscribe_to_free_plan" | "plan_auto_assignment_only_for_free_plans" | "plan_auto_assignment_only_for_private_plans" | "task_not_found" | "task_not_finished" | "task_not_open" | "translation_agency_not_found" | "this_feature_is_not_implemented_in_oss" | "sso_token_exchange_failed" | "sso_user_info_retrieval_failed" | "sso_id_token_expired" | "sso_user_cannot_create_organization" | "sso_cant_verify_user" | "sso_auth_missing_domain" | "sso_domain_not_found_or_disabled" | "authentication_method_disabled" | "native_authentication_disabled" | "invitation_organization_mismatch" | "user_is_managed_by_organization" | "cannot_set_sso_provider_missing_fields" | "namespaces_cannot_be_disabled_when_namespace_exists" | "namespace_cannot_be_used_when_feature_is_disabled" | "sso_domain_not_allowed" | "sso_login_forced_for_this_account" | "use_sso_for_authentication_instead" | "date_has_to_be_in_the_future" | "custom_plan_and_plan_id_cannot_be_set_together" | "specify_plan_id_or_custom_plan" | "custom_plans_has_to_be_private" | "cannot_create_free_plan_with_prices" | "subscription_not_scheduled_for_cancellation" | "cannot_cancel_trial" | "cannot_update_without_modification" | "current_subscription_is_not_trialing" | "sorting_and_paging_is_not_supported_when_using_cursor" | "strings_metric_are_not_supported" | "plan_key_limit_exceeded" | "keys_spending_limit_exceeded" | "plan_seat_limit_exceeded" | "instance_not_using_license_key" | "invalid_path" | "llm_provider_not_found" | "llm_provider_error" | "prompt_not_found" | "llm_provider_not_returned_json" | "llm_template_parsing_error" | "llm_rate_limited" | "llm_provider_timeout" | "no_llm_provider_configured" | "glossary_not_found" | "glossary_term_not_found" | "glossary_term_translation_not_found" | "glossary_non_translatable_term_cannot_be_translated" | "llm_content_filter" | "llm_provider_empty_response" | "label_not_found" | "label_not_from_project" | "label_already_exists" | "filter_by_value_label_not_valid" | "suggestion_not_found" | "user_can_only_delete_his_suggestions" | "cannot_modify_reviewed_translation" | "cannot_modify_keys" | "expect_no_conflict_failed" | "suggestion_cant_be_plural" | "suggestion_must_be_plural" | "duplicate_suggestion" | "unsupported_media_type" | "impersonation_of_admin_by_supporter_not_allowed" | "already_impersonating_user" | "operation_not_permitted_in_read_only_mode" | "file_processing_failed" | "multiple_items_in_chunk_failed" | "branch_not_found" | "cannot_delete_default_branch" | "cannot_delete_branch_with_children" | "branch_already_exists" | "origin_branch_not_found" | "branch_merge_not_found" | "branch_merge_change_not_found" | "branch_merge_revision_not_valid" | "branch_merge_conflicts_not_resolved" | "branch_merge_already_merged" | "branching_not_enabled_for_project" | "export_key_plural_suffix_collision";
-      params?: unknown[];
+      code: "unauthenticated" | "api_access_forbidden" | "api_key_not_found" | "invalid_api_key" | "invalid_project_api_key" | "project_api_key_expired" | "bad_credentials" | "mfa_enabled" | "invalid_otp_code" | "mfa_not_enabled" | "can_not_revoke_own_permissions" | "data_corrupted" | "invitation_code_does_not_exist_or_expired" | "invitation_email_mismatch" | "language_tag_exists" | "language_name_exists" | "language_not_found" | "operation_not_permitted" | "registrations_not_allowed" | "project_not_found" | "resource_not_found" | "scope_not_found" | "key_exists" | "third_party_auth_error_message" | "third_party_auth_no_email" | "third_party_auth_non_matching_email" | "third_party_auth_no_sub" | "third_party_auth_unknown_error" | "email_already_verified" | "third_party_unauthorized" | "third_party_google_workspace_mismatch" | "third_party_switch_initiated" | "third_party_switch_conflict" | "username_already_exists" | "email_domain_not_allowed" | "username_or_password_invalid" | "user_already_has_permissions" | "user_already_has_role" | "user_not_found" | "file_not_image" | "file_too_big" | "invalid_timestamp" | "email_not_verified" | "missing_callback_url" | "invalid_jwt_token" | "expired_jwt_token" | "general_jwt_error" | "cannot_find_suitable_address_part" | "slug_not_unique" | "user_is_not_member_of_organization" | "organization_has_no_other_owner" | "user_has_no_project_access" | "user_is_organization_owner" | "cannot_set_your_own_permissions" | "user_is_organization_member" | "property_not_mutable" | "import_language_not_from_project" | "existing_language_not_selected" | "conflict_is_not_resolved" | "language_already_selected" | "cannot_parse_file" | "cannot_add_more_then_100_languages" | "no_languages_provided" | "language_with_base_language_tag_not_found" | "language_not_from_project" | "namespace_not_from_project" | "cannot_delete_base_language" | "key_not_from_project" | "max_screenshots_exceeded" | "translation_not_from_project" | "can_edit_only_own_comment" | "request_parse_error" | "request_validation_error" | "filter_by_value_state_not_valid" | "filter_by_value_qa_check_type_not_valid" | "filter_pattern_not_valid" | "filter_pattern_language_not_valid" | "import_has_expired" | "tag_not_from_project" | "translation_text_too_long" | "invalid_recaptcha_token" | "cannot_leave_owning_project" | "cannot_leave_project_with_organization_role" | "dont_have_direct_permissions" | "tag_too_log" | "too_many_uploaded_images" | "one_or_more_images_not_found" | "screenshot_not_of_key" | "service_not_found" | "too_many_requests" | "translation_not_found" | "out_of_credits" | "key_not_found" | "organization_not_found" | "cannot_find_base_language" | "base_language_not_found" | "no_exported_result" | "cannot_set_your_own_role" | "only_translate_review_or_view_permission_accepts_view_languages" | "oauth2_token_url_not_set" | "oauth2_user_url_not_set" | "email_already_invited_or_member" | "price_not_found" | "invoice_not_from_organization" | "invoice_not_found" | "plan_not_found" | "plan_not_available_any_more" | "no_auto_translation_method" | "cannot_translate_base_language" | "pat_not_found" | "invalid_pat" | "pat_expired" | "operation_unavailable_for_account_type" | "validation_email_is_not_valid" | "current_password_required" | "cannot_create_organization" | "wrong_current_password" | "wrong_param_type" | "user_missing_password" | "expired_super_jwt_token" | "cannot_delete_your_own_account" | "cannot_sort_by_this_column" | "namespace_not_found" | "namespace_exists" | "invalid_authentication_method" | "unknown_sort_property" | "only_review_permission_accepts_state_change_languages" | "only_translate_or_review_permission_accepts_translate_languages" | "cannot_set_language_permissions_for_admin_scope" | "cannot_set_view_languages_without_translations_view_scope" | "cannot_set_translate_languages_without_translations_edit_scope" | "cannot_set_state_change_languages_without_translations_state_edit_scope" | "language_not_permitted" | "scopes_has_to_be_set" | "set_exactly_one_of_scopes_or_type" | "translation_exists" | "import_keys_error" | "provide_only_one_of_screenshots_and_screenshot_uploaded_image_ids" | "multiple_projects_not_supported" | "plan_translation_limit_exceeded" | "feature_not_enabled" | "license_key_not_found" | "cannot_set_view_languages_without_for_level_based_permissions" | "cannot_set_different_translate_and_state_change_languages_for_level_based_permissions" | "cannot_disable_your_own_account" | "user_account_disabled" | "subscription_not_found" | "invoice_does_not_have_usage" | "customer_not_found" | "subscription_not_active" | "organization_already_subscribed" | "organization_not_subscribed" | "license_key_used_by_another_instance" | "translation_spending_limit_exceeded" | "credit_spending_limit_exceeded" | "seats_spending_limit_exceeded" | "this_instance_is_already_licensed" | "big_meta_not_from_project" | "mt_service_not_enabled" | "project_not_selected" | "organization_not_selected" | "plan_has_subscribers" | "translation_failed" | "batch_job_not_found" | "no_translations_to_recheck" | "key_exists_in_namespace" | "tag_is_blank" | "execution_failed_on_management_error" | "translation_api_rate_limit" | "cannot_finalize_activity" | "formality_not_supported_by_service" | "language_not_supported_by_service" | "rate_limited" | "pat_access_not_allowed" | "pak_access_not_allowed" | "oauth_access_not_allowed" | "invalid_oauth_token" | "oauth_token_expired" | "oauth_unknown_client" | "oauth_redirect_uri_not_registered" | "oauth_unknown_state" | "oauth_project_required" | "oauth_project_scope_required" | "cannot_modify_disabled_translation" | "azure_config_required" | "s3_config_required" | "content_storage_config_required" | "content_storage_test_failed" | "content_storage_config_invalid" | "invalid_connection_string" | "cannot_create_azure_storage_client" | "s3_access_key_required" | "azure_connection_string_required" | "s3_secret_key_required" | "cannot_store_file_to_content_storage" | "unexpected_error_while_publishing_to_content_storage" | "webhook_responded_with_non_200_status" | "unexpected_error_while_executing_webhook" | "content_storage_is_in_use" | "cannot_set_state_for_missing_translation" | "no_project_id_provided" | "license_key_not_provided" | "subscription_already_canceled" | "user_is_subscribed_to_paid_plan" | "cannot_create_free_plan_without_fixed_type" | "cannot_modify_plan_free_status" | "plan_invoiced_requires_free" | "plan_incomplete_usd_pricing" | "self_hosted_plan_usd_price_only_for_hosted_words" | "key_id_not_provided" | "free_self_hosted_seat_limit_exceeded" | "advanced_params_not_supported" | "plural_forms_not_found_for_language" | "nested_plurals_not_supported" | "message_is_not_plural" | "content_outside_plural_forms" | "invalid_plural_form" | "multiple_plurals_not_supported" | "custom_values_json_too_long" | "unsupported_po_message_format" | "plural_forms_data_loss" | "current_user_does_not_own_image" | "user_cannot_view_this_organization" | "user_is_not_owner_of_organization" | "user_is_not_owner_or_maintainer_of_organization" | "pak_created_for_different_project" | "custom_slug_is_only_applicable_for_custom_storage" | "invalid_slug_format" | "batch_job_cancellation_timeout" | "import_failed" | "cannot_add_more_then_1000_languages" | "no_data_to_import" | "multiple_namespaces_mapped_to_single_file" | "multiple_mappings_for_same_file_language_name" | "multiple_mappings_for_null_file_language_name" | "too_many_mappings_for_file" | "missing_placeholder_in_template" | "tag_not_found" | "cannot_parse_encrypted_slack_login_data" | "slack_workspace_not_found" | "cannot_fetch_user_details_from_slack" | "slack_missing_scope" | "slack_not_connected_to_your_account" | "slack_invalid_command" | "slack_not_subscribed_yet" | "slack_connection_failed" | "tolgee_account_already_connected" | "slack_not_configured" | "slack_workspace_already_connected" | "slack_connection_error" | "email_verification_code_not_valid" | "cannot_subscribe_to_free_plan" | "plan_auto_assignment_only_for_free_plans" | "plan_auto_assignment_only_for_private_plans" | "task_not_found" | "task_not_finished" | "task_not_open" | "translation_agency_not_found" | "this_feature_is_not_implemented_in_oss" | "sso_token_exchange_failed" | "sso_user_info_retrieval_failed" | "sso_id_token_expired" | "sso_user_cannot_create_organization" | "sso_cant_verify_user" | "sso_auth_missing_domain" | "sso_domain_not_found_or_disabled" | "authentication_method_disabled" | "native_authentication_disabled" | "invitation_organization_mismatch" | "user_is_managed_by_organization" | "user_is_not_managed_by_organization" | "user_disabled_by_admin" | "cannot_manage_platform_staff_account" | "cannot_set_sso_provider_missing_fields" | "namespaces_cannot_be_disabled_when_namespace_exists" | "namespace_cannot_be_used_when_feature_is_disabled" | "sso_domain_not_allowed" | "sso_login_forced_for_this_account" | "use_sso_for_authentication_instead" | "date_has_to_be_in_the_future" | "custom_plan_and_plan_id_cannot_be_set_together" | "specify_plan_id_or_custom_plan" | "custom_plans_has_to_be_private" | "cannot_create_free_plan_with_prices" | "cannot_create_free_plan_with_multiple_tiers" | "cloud_plan_must_have_at_least_one_tier" | "cloud_plan_must_have_exactly_one_tier" | "cloud_plan_tier_missing_included_words" | "cloud_plan_tier_invalid_allowance_for_metric" | "cloud_plan_tier_missing_eur_price" | "cloud_plan_usd_price_only_for_hosted_words" | "organization_currency_already_set" | "plan_not_priced_in_organization_currency" | "plan_tiers_disagree_on_billing_period" | "self_hosted_plan_missing_included_words" | "stripe_product_id_required" | "stripe_product_name_required" | "subscription_not_scheduled_for_cancellation" | "cannot_cancel_trial" | "cannot_update_without_modification" | "plan_is_not_a_downgrade" | "cannot_downgrade_word_tier" | "current_subscription_is_not_trialing" | "sorting_and_paging_is_not_supported_when_using_cursor" | "strings_metric_are_not_supported" | "plan_key_limit_exceeded" | "keys_spending_limit_exceeded" | "plan_seat_limit_exceeded" | "plan_word_limit_exceeded" | "words_spending_limit_exceeded" | "auto_upgrade_cannot_be_disabled_over_limit" | "instance_not_using_license_key" | "invalid_path" | "llm_provider_not_found" | "llm_provider_error" | "prompt_not_found" | "llm_provider_not_returned_json" | "llm_template_parsing_error" | "llm_rate_limited" | "llm_provider_timeout" | "no_llm_provider_configured" | "glossary_not_found" | "glossary_term_not_found" | "glossary_term_translation_not_found" | "glossary_non_translatable_term_cannot_be_translated" | "translation_memory_name_already_exists" | "translation_memory_not_found" | "translation_memory_project_assignment_not_found" | "cannot_unassign_project_from_own_translation_memory" | "cannot_modify_project_translation_memory" | "translation_memory_already_assigned_to_project" | "translation_memory_duplicate_project_assignment" | "translation_memory_base_language_mismatch" | "cannot_change_tm_base_language_while_assigned" | "cannot_change_project_base_language_tm_conflict" | "project_translation_memory_not_found" | "translation_memory_entry_not_found" | "translation_memory_entry_read_only" | "translation_memory_entry_duplicate_target_language" | "translation_memory_import_empty" | "llm_content_filter" | "llm_provider_empty_response" | "llm_provider_max_tokens_exceeded" | "label_not_found" | "label_not_from_project" | "label_already_exists" | "filter_by_value_label_not_valid" | "suggestion_not_found" | "user_can_only_delete_his_suggestions" | "cannot_modify_reviewed_translation" | "cannot_modify_keys" | "expect_no_conflict_failed" | "suggestion_cant_be_plural" | "suggestion_must_be_plural" | "duplicate_suggestion" | "unsupported_media_type" | "impersonation_of_admin_by_supporter_not_allowed" | "already_impersonating_user" | "operation_not_permitted_in_read_only_mode" | "file_processing_failed" | "multiple_items_in_chunk_failed" | "content_delivery_prune_failed" | "branch_not_found" | "cannot_delete_default_branch" | "cannot_delete_branch_with_children" | "branch_already_exists" | "origin_branch_not_found" | "branch_merge_not_found" | "branch_merge_change_not_found" | "branch_merge_revision_not_valid" | "branch_merge_conflicts_not_resolved" | "branch_merge_already_merged" | "feature_not_enabled_for_project" | "export_key_plural_suffix_collision" | "translation_exceeds_char_limit" | "url_not_valid" | "qa_checks_not_enabled" | "plan_migration_not_found" | "plan_has_migrations" | "source_and_target_plan_must_be_different" | "project_import_version_mismatch" | "project_import_missing_project_json" | "project_import_corrupt_archive" | "server_busy" | "cannot_delete_initial_user" | "suggestions_disabled";
+      params?: Record<string, never>[];
     };
     ExistenceEntityDescription: {
       data: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       entityClass: string;
       /** Format: int64 */
@@ -1777,7 +1974,7 @@ export interface components {
        * For specific formats like `YAML_RUBY` it's ignored.
        * @enum {string}
        */
-      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT";
+      messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT" | "PYTHON_BRACE";
       /**
        * @description Delimiter to structure file content.
        *
@@ -1873,6 +2070,7 @@ export interface components {
       type: "KEY_NAME" | "KEY_ID" | "LANGUAGE_ID" | "KEY_INDEX" | "VALUE" | "LINE" | "FILE_NODE_ORIGINAL" | "LANGUAGE_NAME";
       value?: string;
     };
+    /** @description Definition of mapping for each file to import. */
     ImportFileMapping: {
       /** @description Name of the file to import. This is the name of the file provided in `files` request part or in uploaded archive. */
       fileName: string;
@@ -1882,7 +2080,7 @@ export interface components {
        * It is recommended to provide these values to prevent any issues with format detection.
        * @enum {string}
        */
-      format?: "CSV_ICU" | "CSV_JAVA" | "CSV_PHP" | "CSV_RUBY" | "JSON_I18NEXT" | "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "PO_PYTHON" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "APPLE_XCSTRINGS" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY" | "RESX_ICU" | "XLSX_ICU" | "XLSX_JAVA" | "XLSX_PHP" | "XLSX_RUBY";
+      format?: "CSV_ICU" | "CSV_JAVA" | "CSV_PHP" | "CSV_RUBY" | "JSON_I18NEXT" | "JSON_ICU" | "JSON_JAVA" | "JSON_PHP" | "JSON_RUBY" | "JSON_C" | "PO_PHP" | "PO_C" | "PO_JAVA" | "PO_ICU" | "PO_RUBY" | "PO_PYTHON" | "PO_PYTHON_BRACE" | "STRINGS" | "STRINGSDICT" | "APPLE_XLIFF" | "APPLE_XCSTRINGS" | "PROPERTIES_ICU" | "PROPERTIES_JAVA" | "PROPERTIES_UNKNOWN" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "YAML_RUBY" | "YAML_JAVA" | "YAML_ICU" | "YAML_PHP" | "YAML_UNKNOWN" | "XLIFF_ICU" | "XLIFF_JAVA" | "XLIFF_PHP" | "XLIFF_RUBY" | "RESX_ICU" | "XLSX_ICU" | "XLSX_JAVA" | "XLSX_PHP" | "XLSX_RUBY";
       /**
        * @description The existing language tag in the Tolgee platform to which the imported language should be mapped.
        *
@@ -1991,16 +2189,12 @@ export interface components {
       unresolvedConflicts?: components["schemas"]["SimpleImportConflictResult"][];
     };
     ImportSettingsModel: {
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
       /** @description If false, only updates keys, skipping the creation of new keys */
       createNewKeys: boolean;
       /** @description If true, key descriptions will be overridden by the import */
       overrideKeyDescriptions: boolean;
     };
     ImportSettingsRequest: {
-      /** @description If true, placeholders from other formats will be converted to ICU when possible */
-      convertPlaceholdersToIcu: boolean;
       /** @description If false, only updates keys, skipping the creation of new keys */
       createNewKeys: boolean;
       /** @description If true, key descriptions will be overridden by the import */
@@ -2025,6 +2219,7 @@ export interface components {
       resolved: boolean;
       text?: string;
     };
+    /** @description Object mapping language tag to translation */
     ImportTranslationResolvableDto: {
       /**
        * @description Determines, how conflict is resolved.
@@ -2051,6 +2246,7 @@ export interface components {
       name: string;
       namespace?: string;
     };
+    /** @description Exclude keys filtered by the provided key information */
     KeyId: {
       /**
        * Format: int64
@@ -2104,7 +2300,7 @@ export interface components {
       branch?: string;
       /** @description Custom values of the key */
       custom?: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       /**
        * @description Description of key
@@ -2178,6 +2374,7 @@ export interface components {
       translation?: string;
       view?: components["schemas"]["KeySearchResultView"];
     };
+    /** @description Tasks related to this key */
     KeyTaskViewModel: {
       done: boolean;
       /** Format: int64 */
@@ -2216,7 +2413,7 @@ export interface components {
       branch?: string;
       /** @description Custom values of the key */
       custom: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       /**
        * @description Description of key
@@ -2391,6 +2588,15 @@ export interface components {
       labelIds: number[];
       languageIds: number[];
     };
+    /**
+     * @description Maps the languages from imported files to languages existing in the Tolgee platform.
+     *
+     * Use this field only when your files contain multiple languages (e.g., XLIFF files).
+     *
+     * Otherwise, use the `languageTag` property of `fileMappings`.
+     *
+     * Example: In xliff files, there are `source-language` and `target-language` attributes defined on `file` element. Using this field you can map source and target values to languages stored in the Tolgee Platform.
+     */
     LanguageMapping: {
       /**
        * @description The language from the imported file.
@@ -2464,6 +2670,10 @@ export interface components {
       languageOriginalName?: string;
       languageTag?: string;
       /** Format: int64 */
+      qaChecksStaleCount: number;
+      /** Format: int64 */
+      qaIssueCount: number;
+      /** Format: int64 */
       reviewedKeyCount: number;
       /** Format: double */
       reviewedPercentage: number;
@@ -2491,7 +2701,7 @@ export interface components {
     };
     ModifiedEntityModel: {
       description?: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       entityClass: string;
       /** Format: int64 */
@@ -2570,7 +2780,6 @@ export interface components {
       slug?: string;
     };
     OrganizationModel: {
-      /** @example Links to avatar images */
       avatar?: components["schemas"]["Avatar"];
       basePermissions: components["schemas"]["PermissionModel"];
       /**
@@ -2677,6 +2886,12 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
+    PagedModelModifiedEntityModel: {
+      _embedded?: {
+        modifiedEntities?: components["schemas"]["ModifiedEntityModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
     PagedModelNamespaceModel: {
       _embedded?: {
         namespaces?: components["schemas"]["NamespaceModel"][];
@@ -2731,6 +2946,12 @@ export interface components {
       };
       page?: components["schemas"]["PageMetadata"];
     };
+    PagedModelSimpleTranslationMemoryModel: {
+      _embedded?: {
+        translationMemories?: components["schemas"]["SimpleTranslationMemoryModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
     PagedModelSimpleUserAccountModel: {
       _embedded?: {
         users?: components["schemas"]["SimpleUserAccountModel"][];
@@ -2770,6 +2991,18 @@ export interface components {
     PagedModelTranslationMemoryItemModel: {
       _embedded?: {
         translationMemoryItems?: components["schemas"]["TranslationMemoryItemModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTranslationMemoryRowModel: {
+      _embedded?: {
+        translationMemoryRows?: components["schemas"]["TranslationMemoryRowModel"][];
+      };
+      page?: components["schemas"]["PageMetadata"];
+    };
+    PagedModelTranslationMemoryWithStatsModel: {
+      _embedded?: {
+        translationMemories?: components["schemas"]["TranslationMemoryWithStatsModel"][];
       };
       page?: components["schemas"]["PageMetadata"];
     };
@@ -2830,7 +3063,7 @@ export interface components {
        *   "TRANSLATIONS_VIEW"
        * ]
        */
-      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify")[];
+      scopes: ("translations.view" | "translations.edit" | "translations.suggest" | "translation-suggestions.manage" | "translation-suggestions.own-access" | "keys.edit" | "screenshots.upload" | "screenshots.delete" | "screenshots.view" | "activity.view" | "languages.edit" | "admin" | "project.edit" | "members.view" | "members.edit" | "translation-comments.add" | "translation-comments.edit" | "translation-comments.set-state" | "translations.state-edit" | "keys.view" | "keys.delete" | "keys.create" | "batch-jobs.view" | "batch-jobs.cancel" | "translations.batch-by-tm" | "translations.batch-machine" | "content-delivery.manage" | "content-delivery.publish" | "webhooks.manage" | "tasks.view" | "tasks.edit" | "tasks.assigned-access" | "prompts.view" | "prompts.edit" | "translation-labels.manage" | "translation-labels.assign" | "all.view" | "branch.management" | "branch.protected-modify" | "organization-quotas.view")[];
       /**
        * @description List of languages user can change state to. If null, changing state of all language values is permitted.
        * @example [
@@ -2847,6 +3080,14 @@ export interface components {
        * ]
        */
       suggestLanguageIds?: number[];
+      /**
+       * @description List of languages user can manage suggestions for. If null, managing suggestions for all languages is permitted.
+       * @example [
+       *   200001,
+       *   200004
+       * ]
+       */
+      suggestManageLanguageIds?: number[];
       /**
        * @description List of languages user can translate to. If null, all languages editing is permitted.
        * @example [
@@ -2905,18 +3146,35 @@ export interface components {
         [key: string]: number;
       };
       meta?: {
-        [key: string]: unknown;
+        [key: string]: Record<string, never>;
       };
       modifiedEntities?: {
         [key: string]: components["schemas"]["ModifiedEntityModel"][];
       };
-      params?: unknown;
+      params?: Record<string, never>;
       /** Format: int64 */
       revisionId: number;
       /** Format: int64 */
       timestamp: number;
       /** @enum {string} */
-      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_DELETE" | "KEY_SOFT_DELETE" | "KEY_RESTORE" | "KEY_HARD_DELETE" | "BATCH_KEY_RESTORE" | "BATCH_KEY_HARD_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "BATCH_ASSIGN_TRANSLATION_LABEL" | "BATCH_UNASSIGN_TRANSLATION_LABEL" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION" | "TASKS_CREATE" | "TASK_CREATE" | "TASK_UPDATE" | "TASK_KEYS_UPDATE" | "TASK_FINISH" | "TASK_CLOSE" | "TASK_REOPEN" | "TASK_KEY_UPDATE" | "ORDER_TRANSLATION" | "GLOSSARY_CREATE" | "GLOSSARY_UPDATE" | "GLOSSARY_DELETE" | "GLOSSARY_IMPORT" | "GLOSSARY_TERM_CREATE" | "GLOSSARY_TERM_UPDATE" | "GLOSSARY_TERM_DELETE" | "GLOSSARY_TERM_TRANSLATION_UPDATE" | "TRANSLATION_LABELS_EDIT" | "TRANSLATION_LABEL_ASSIGN" | "TRANSLATION_LABEL_CREATE" | "TRANSLATION_LABEL_UPDATE" | "TRANSLATION_LABEL_DELETE" | "CREATE_SUGGESTION" | "DECLINE_SUGGESTION" | "ACCEPT_SUGGESTION" | "REVERSE_SUGGESTION" | "DELETE_SUGGESTION" | "SUGGESTION_SET_ACTIVE" | "AI_PROMPT_CREATE" | "AI_PROMPT_UPDATE" | "AI_PROMPT_DELETE" | "BRANCH_CREATE" | "BRANCH_RENAME" | "BRANCH_DELETE" | "BRANCH_PROTECTION_CHANGE" | "BRANCH_MERGE";
+      type: "UNKNOWN" | "SET_TRANSLATION_STATE" | "SET_TRANSLATIONS" | "DISMISS_AUTO_TRANSLATED_STATE" | "SET_OUTDATED_FLAG" | "TRANSLATION_COMMENT_ADD" | "TRANSLATION_COMMENT_DELETE" | "TRANSLATION_COMMENT_EDIT" | "TRANSLATION_COMMENT_SET_STATE" | "SCREENSHOT_DELETE" | "SCREENSHOT_ADD" | "KEY_TAGS_EDIT" | "KEY_NAME_EDIT" | "KEY_CHARACTER_LIMIT_EDIT" | "KEY_DELETE" | "KEY_SOFT_DELETE" | "KEY_RESTORE" | "KEY_HARD_DELETE" | "BATCH_KEY_RESTORE" | "BATCH_KEY_HARD_DELETE" | "CREATE_KEY" | "COMPLEX_EDIT" | "IMPORT" | "CREATE_LANGUAGE" | "EDIT_LANGUAGE" | "DELETE_LANGUAGE" | "HARD_DELETE_LANGUAGE" | "CREATE_PROJECT" | "EDIT_PROJECT" | "NAMESPACE_EDIT" | "BATCH_PRE_TRANSLATE_BY_TM" | "BATCH_MACHINE_TRANSLATE" | "AUTO_TRANSLATE" | "BATCH_CLEAR_TRANSLATIONS" | "BATCH_COPY_TRANSLATIONS" | "BATCH_SET_TRANSLATION_STATE" | "BATCH_TAG_KEYS" | "BATCH_UNTAG_KEYS" | "BATCH_SET_KEYS_NAMESPACE" | "BATCH_ASSIGN_TRANSLATION_LABEL" | "BATCH_UNASSIGN_TRANSLATION_LABEL" | "AUTOMATION" | "CONTENT_DELIVERY_CONFIG_CREATE" | "CONTENT_DELIVERY_CONFIG_UPDATE" | "CONTENT_DELIVERY_CONFIG_DELETE" | "CONTENT_STORAGE_CREATE" | "CONTENT_STORAGE_UPDATE" | "CONTENT_STORAGE_DELETE" | "WEBHOOK_CONFIG_CREATE" | "WEBHOOK_CONFIG_UPDATE" | "WEBHOOK_CONFIG_DELETE" | "COMPLEX_TAG_OPERATION" | "TASKS_CREATE" | "TASK_CREATE" | "TASK_UPDATE" | "TASK_KEYS_UPDATE" | "TASK_FINISH" | "TASK_CLOSE" | "TASK_REOPEN" | "TASK_KEY_UPDATE" | "ORDER_TRANSLATION" | "GLOSSARY_CREATE" | "GLOSSARY_UPDATE" | "GLOSSARY_DELETE" | "GLOSSARY_IMPORT" | "GLOSSARY_TERM_CREATE" | "GLOSSARY_TERM_UPDATE" | "GLOSSARY_TERM_DELETE" | "GLOSSARY_TERM_TRANSLATION_UPDATE" | "TRANSLATION_MEMORY_CREATE" | "TRANSLATION_MEMORY_UPDATE" | "TRANSLATION_MEMORY_DELETE" | "TRANSLATION_MEMORY_ASSIGN_PROJECT" | "TRANSLATION_MEMORY_UNASSIGN_PROJECT" | "TRANSLATION_MEMORY_UPDATE_PROJECT_CONFIG" | "TRANSLATION_MEMORY_ENTRY_CREATE" | "TRANSLATION_MEMORY_ENTRY_UPDATE" | "TRANSLATION_MEMORY_ENTRY_DELETE" | "TRANSLATION_MEMORY_IMPORT" | "TRANSLATION_MEMORY_COPY_FROM_PROJECT" | "TRANSLATION_LABELS_EDIT" | "TRANSLATION_LABEL_ASSIGN" | "TRANSLATION_LABEL_CREATE" | "TRANSLATION_LABEL_UPDATE" | "TRANSLATION_LABEL_DELETE" | "CREATE_SUGGESTION" | "DECLINE_SUGGESTION" | "ACCEPT_SUGGESTION" | "REVERSE_SUGGESTION" | "DELETE_SUGGESTION" | "SUGGESTION_SET_ACTIVE" | "AI_PROMPT_CREATE" | "AI_PROMPT_UPDATE" | "AI_PROMPT_DELETE" | "BRANCH_CREATE" | "BRANCH_RENAME" | "BRANCH_DELETE" | "BRANCH_PROTECTION_CHANGE" | "BRANCH_MERGE" | "QA_ISSUE_IGNORE" | "QA_ISSUE_UNIGNORE";
+    };
+    /** @description Project assignments with access settings. */
+    ProjectAssignmentDto: {
+      /**
+       * Format: int32
+       * @description Per-assignment penalty override (0–100). When null, the TM's default penalty applies.
+       */
+      penalty?: number;
+      /**
+       * Format: int64
+       * @description Project ID
+       */
+      projectId: number;
+      /** @description Whether the project can read from this TM */
+      readAccess: boolean;
+      /** @description Whether the project can write to this TM */
+      writeAccess: boolean;
     };
     ProjectModel: {
       avatar?: components["schemas"]["Avatar"];
@@ -2924,10 +3182,6 @@ export interface components {
       computedPermission: components["schemas"]["ComputedPermissionModel"];
       defaultNamespace?: components["schemas"]["NamespaceModel"];
       description?: string;
-      /**
-       * @description Current user's direct permission
-       * @example MANAGE
-       */
       directPermission?: components["schemas"]["PermissionModel"];
       /** @description Whether to disable ICU placeholder visualization in the editor and it's support. */
       icuPlaceholders: boolean;
@@ -2937,6 +3191,8 @@ export interface components {
       organizationOwner?: components["schemas"]["SimpleOrganizationModel"];
       /** @enum {string} */
       organizationRole?: "MEMBER" | "OWNER" | "MAINTAINER";
+      /** @description Whether the project is public — discoverable and open to community suggestions */
+      public: boolean;
       slug?: string;
       /**
        * @description Suggestions for translations
@@ -2950,6 +3206,7 @@ export interface components {
       translationProtection: "NONE" | "PROTECT_REVIEWED";
       useBranching: boolean;
       useNamespaces: boolean;
+      useQaChecks: boolean;
     };
     ProjectStatsModel: {
       /** Format: int64 */
@@ -2972,21 +3229,63 @@ export interface components {
       /** Format: double */
       translatedPercentage: number;
     };
+    ProjectTranslationMemoryAssignmentModel: {
+      /** Format: int32 */
+      defaultPenalty: number;
+      /** Format: int32 */
+      penalty?: number;
+      /** Format: int32 */
+      priority: number;
+      readAccess: boolean;
+      sourceLanguageTag: string;
+      /** Format: int64 */
+      translationMemoryId: number;
+      translationMemoryName: string;
+      /** @enum {string} */
+      type: "PROJECT" | "SHARED";
+      writeAccess: boolean;
+      writeOnlyReviewed: boolean;
+    };
     PromptDto: {
       basicPromptOptions?: ("KEY_NAME" | "KEY_DESCRIPTION" | "KEY_CONTEXT" | "PROJECT_DESCRIPTION" | "LANGUAGE_NOTES" | "TM_SUGGESTIONS" | "SCREENSHOT" | "GLOSSARY")[];
       name: string;
       providerName: string;
       template?: string;
     };
+    /** @description Modified fields */
     PropertyModification: {
-      new?: unknown;
-      old?: unknown;
+      new?: Record<string, never>;
+      old?: Record<string, never>;
     };
     PublicSsoTenantModel: {
       domain: string;
       force: boolean;
       global: boolean;
     };
+    QaIssueModel: {
+      /** Format: int64 */
+      id: number;
+      /** @enum {string} */
+      message: "qa_empty_translation" | "qa_missing_plural_category" | "qa_check_failed" | "qa_spaces_leading_added" | "qa_spaces_leading_removed" | "qa_spaces_trailing_added" | "qa_spaces_trailing_removed" | "qa_spaces_doubled" | "qa_spaces_non_breaking_added" | "qa_spaces_non_breaking_removed" | "qa_punctuation_add" | "qa_punctuation_remove" | "qa_punctuation_replace" | "qa_case_capitalize" | "qa_case_lowercase" | "qa_numbers_missing" | "qa_leading_spaces" | "qa_trailing_spaces" | "qa_leading_newlines" | "qa_trailing_newlines" | "qa_newlines_missing" | "qa_newlines_extra" | "qa_newlines_too_many_sections" | "qa_newlines_too_few_sections" | "qa_brackets_missing" | "qa_brackets_extra" | "qa_brackets_unclosed" | "qa_brackets_unmatched_close" | "qa_special_char_missing" | "qa_special_char_added" | "qa_url_missing" | "qa_url_extra" | "qa_url_replace" | "qa_repeated_word" | "qa_placeholders_missing" | "qa_placeholders_extra" | "qa_placeholders_replace" | "qa_html_tag_missing" | "qa_html_tag_extra" | "qa_html_unclosed_tag" | "qa_html_unopened_tag" | "qa_icu_syntax_error" | "qa_spelling_error" | "qa_grammar_error" | "qa_key_length_limit_exceeded";
+      params?: {
+        [key: string]: string;
+      };
+      pluralVariant?: string;
+      /** Format: int32 */
+      positionEnd?: number;
+      /** Format: int32 */
+      positionStart?: number;
+      replacement?: string;
+      /** @enum {string} */
+      state: "OPEN" | "IGNORED";
+      /** @enum {string} */
+      type: "EMPTY_TRANSLATION" | "MISSING_PLURAL_CATEGORIES" | "CHARACTER_CASE_MISMATCH" | "REPEATED_WORDS" | "PUNCTUATION_MISMATCH" | "TRIM_CHECK" | "SPACES_MISMATCH" | "UNMATCHED_NEWLINES" | "MISSING_NUMBERS" | "SPECIAL_CHARACTER_MISMATCH" | "BRACKETS_MISMATCH" | "BRACKETS_UNBALANCED" | "SPELLING" | "GRAMMAR" | "KEY_LENGTH_LIMIT" | "DIFFERENT_URLS" | "INCONSISTENT_PLACEHOLDERS" | "INCONSISTENT_HTML" | "HTML_SYNTAX" | "ICU_SYNTAX";
+    };
+    QaRecheckByKeysRequest: {
+      keyIds: number[];
+      languageIds?: number[];
+    };
+    /** @description Keys in the document used as a context for machine translation. Keys in the same order as they appear in the document. The order is important! We are using it for graph distance calculation. */
     RelatedKeyDto: {
       branch?: string;
       keyName: string;
@@ -3023,6 +3322,7 @@ export interface components {
       positions?: components["schemas"]["KeyInScreenshotPositionDto"][];
       text?: string;
     };
+    /** @description Screenshots of the key */
     ScreenshotModel: {
       /** Format: date-time */
       createdAt?: string;
@@ -3140,6 +3440,27 @@ export interface components {
         [key: string]: string;
       };
     };
+    SharedTranslationMemoryRequest: {
+      /** @description Project assignments with access settings. */
+      assignedProjects?: components["schemas"]["ProjectAssignmentDto"][];
+      /**
+       * Format: int32
+       * @description Default penalty (0–100) subtracted from match scores for every assignment that does not define its own override. Defaults to 0.
+       */
+      defaultPenalty?: number;
+      /**
+       * @description Translation memory name
+       * @example Marketing TM
+       */
+      name: string;
+      /**
+       * @description Source language tag according to BCP 47 definition
+       * @example en
+       */
+      sourceLanguageTag: string;
+      /** @description When true, only translations whose state is REVIEWED are written to this TM. Translations that drop back to TRANSLATED or UNTRANSLATED also remove the entry. TMX import and direct TM-browser edits bypass this filter. Defaults to false. */
+      writeOnlyReviewed?: boolean;
+    };
     SimpleGlossaryModel: {
       /**
        * @description Language tag for default translations for terms
@@ -3209,7 +3530,6 @@ export interface components {
       language: string;
     };
     SimpleOrganizationModel: {
-      /** @example Links to avatar images */
       avatar?: components["schemas"]["Avatar"];
       basePermissions: components["schemas"]["PermissionModel"];
       /** @example This is a beautiful organization full of beautiful and clever people */
@@ -3231,6 +3551,19 @@ export interface components {
       name: string;
       slug?: string;
     };
+    SimpleTranslationMemoryModel: {
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * @description Source language tag of the translation memory
+       * @example en
+       */
+      sourceLanguageTag: string;
+      /** @enum {string} */
+      type: "PROJECT" | "SHARED";
+    };
+    /** @description User who created the comment */
     SimpleUserAccountModel: {
       avatar?: components["schemas"]["Avatar"];
       deleted: boolean;
@@ -3296,6 +3629,7 @@ export interface components {
       /** @description Keys created by this import will be tagged with these tags. It add tags only to new keys. The keys that already exist will not be tagged. */
       tagNewKeys: string[];
     };
+    /** @description List of keys to import */
     SingleStepImportResolvableItemRequest: {
       /**
        * @description Key name to set translations for
@@ -3311,6 +3645,8 @@ export interface components {
       };
     };
     SingleStepImportResolvableRequest: {
+      /** @description Branch to import keys into. If not specified, default branch is used. */
+      branch?: string;
       /**
        * @description If `false`, import will apply all `non-failed` overrides and reports `unresolvedConflict`
        * .If `true`, import will fail completely on unresolved conflict and won't apply any changes. Unresolved conflicts are reported in the `params` of the error response
@@ -3328,6 +3664,7 @@ export interface components {
        */
       overrideMode?: "RECOMMENDED" | "ALL";
     };
+    /** @description Object mapping language tag to translation */
     SingleStepImportResolvableTranslationRequest: {
       /**
        * @description
@@ -3480,6 +3817,25 @@ export interface components {
       /** @enum {string} */
       type: "TRANSLATE" | "REVIEW";
     };
+    TmAssignedProjectModel: {
+      /** Format: int32 */
+      penalty?: number;
+      /** Format: int32 */
+      priority: number;
+      /** Format: int64 */
+      projectId: number;
+      projectName: string;
+      readAccess: boolean;
+      writeAccess: boolean;
+    };
+    TmxImportResult: {
+      /** Format: int32 */
+      created: number;
+      /** Format: int32 */
+      skipped: number;
+      /** Format: int32 */
+      updated: number;
+    };
     TranslationAgencySimpleModel: {
       avatar?: components["schemas"]["Avatar"];
       /** Format: int64 */
@@ -3493,7 +3849,6 @@ export interface components {
       text: string;
     };
     TranslationCommentModel: {
-      /** @description User who created the comment */
       author: components["schemas"]["SimpleUserAccountModel"];
       /**
        * Format: date-time
@@ -3528,7 +3883,6 @@ export interface components {
       text: string;
     };
     TranslationHistoryModel: {
-      /** @description Author of the change */
       author?: components["schemas"]["SimpleUserAccountModel"];
       /** @description Modified fields */
       modifications?: {
@@ -3542,6 +3896,19 @@ export interface components {
        */
       timestamp: number;
     };
+    /**
+     * @description Results provided by enabled services.
+     * @example {
+     *   "GOOGLE": {
+     *     "output": "This was translated by Google",
+     *     "contextDescription": null
+     *   },
+     *   "TOLGEE": {
+     *     "output": "This was translated by Tolgee Translator",
+     *     "contextDescription": "This is an example in swagger"
+     *   }
+     * }
+     */
     TranslationItemModel: {
       contextDescription?: string;
       output: string;
@@ -3554,12 +3921,162 @@ export interface components {
       /** Format: int64 */
       languageId: number;
     };
+    TranslationMemoryEntryCountsModel: {
+      /** @description Entry counts keyed by translation memory id. TM ids not visible to the caller are omitted from the response. */
+      counts: {
+        [key: string]: number;
+      };
+    };
+    TranslationMemoryEntryModel: {
+      /**
+       * Format: int64
+       * @description Creation timestamp
+       */
+      createdAt: number;
+      /** Format: int64 */
+      id: number;
+      /**
+       * @description Source text in the TM's source language
+       * @example Hello world
+       */
+      sourceText: string;
+      /**
+       * @description Target language tag (BCP 47)
+       * @example de
+       */
+      targetLanguageTag: string;
+      /**
+       * @description Translated target text
+       * @example Hallo Welt
+       */
+      targetText: string;
+      /**
+       * Format: int64
+       * @description Last update timestamp
+       */
+      updatedAt: number;
+    };
+    TranslationMemoryEntryRequest: {
+      /**
+       * @description Source text (in the TM's source language)
+       * @example Hello world
+       */
+      sourceText: string;
+      /**
+       * @description Target language tag according to BCP 47 definition
+       * @example de
+       */
+      targetLanguageTag: string;
+      /**
+       * @description Target translation text
+       * @example Hallo Welt
+       */
+      targetText: string;
+    };
     TranslationMemoryItemModel: {
       baseText: string;
       keyName: string;
       /** Format: float */
+      rawSimilarity: number;
+      /** Format: float */
       similarity: number;
       targetText: string;
+      translationMemoryName?: string;
+      /** Format: date-time */
+      updatedAt?: string;
+    };
+    TranslationMemoryModel: {
+      /**
+       * Format: int32
+       * @description Default penalty (0–100) subtracted from match scores for every assignment that does not define its own override.
+       */
+      defaultPenalty: number;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      organizationOwner: components["schemas"]["SimpleOrganizationModel"];
+      /**
+       * @description Source language tag of the translation memory
+       * @example en
+       */
+      sourceLanguageTag: string;
+      /** @enum {string} */
+      type: "PROJECT" | "SHARED";
+      /** @description When true, only translations in REVIEWED state contribute to this TM. */
+      writeOnlyReviewed: boolean;
+    };
+    /** @description Cells of this row, already filtered by the requested languages */
+    TranslationMemoryRowCellModel: {
+      /**
+       * Format: int64
+       * @description Id of the underlying TM entry when the cell is editable. Absent for read-only cells mirrored from project translations.
+       * @example 12345
+       */
+      entryId?: number;
+      /**
+       * @description Target language tag (BCP 47)
+       * @example de
+       */
+      targetLanguageTag: string;
+      /**
+       * @description Translated target text
+       * @example Hallo Welt
+       */
+      targetText: string;
+    };
+    TranslationMemoryRowModel: {
+      /** @description Cells of this row, already filtered by the requested languages */
+      cells: components["schemas"]["TranslationMemoryRowCellModel"][];
+      /**
+       * @description Whether the row can be edited (manual TM entries) or is read-only (mirrored from a project key — change it in the project).
+       * @example true
+       */
+      editable: boolean;
+      /**
+       * @description Originating project key name when the row mirrors a project key
+       * @example greeting.hello
+       */
+      keyName?: string;
+      /**
+       * Format: int64
+       * @description Originating project id when the row mirrors a project key
+       * @example 42
+       */
+      projectId?: number;
+      /**
+       * @description Originating project name when the row mirrors a project key
+       * @example My project
+       */
+      projectName?: string;
+      /**
+       * @description Source text in the TM's source language
+       * @example Hello world
+       */
+      sourceText: string;
+    };
+    TranslationMemoryWithStatsModel: {
+      /** @description Names of all assigned projects (size = total assignment count) */
+      assignedProjectNames: string[];
+      /**
+       * Format: int32
+       * @description Default penalty (0–100) subtracted from match scores unless an assignment overrides it.
+       */
+      defaultPenalty: number;
+      /** Format: int64 */
+      id: number;
+      name: string;
+      /**
+       * @description Source language tag
+       * @example en
+       */
+      sourceLanguageTag: string;
+      /**
+       * @description PROJECT or SHARED
+       * @example SHARED
+       */
+      type: string;
+      /** @description When true, only REVIEWED translations contribute to this TM. */
+      writeOnlyReviewed: boolean;
     };
     TranslationModel: {
       /** @description Was translated using Translation Memory or Machine translation service? */
@@ -3605,6 +4122,7 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    /** @description First suggestion */
     TranslationSuggestionSimpleModel: {
       author: components["schemas"]["SimpleUserAccountModel"];
       /** Format: int64 */
@@ -3614,6 +4132,18 @@ export interface components {
       state: "ACTIVE" | "ACCEPTED" | "DECLINED";
       translation?: string;
     };
+    /**
+     * @description Translations object
+     * @example
+     *     {
+     *       "en": {
+     *         "id": 100000003,
+     *         "text": "This is super translation!"
+     *         "state": "TRANSLATED",
+     *         "commentCount": 1
+     *       }
+     *     }
+     */
     TranslationViewModel: {
       /**
        * Format: int64
@@ -3643,6 +4173,15 @@ export interface components {
       mtProvider?: "GOOGLE" | "AWS" | "DEEPL" | "AZURE" | "BAIDU" | "PROMPT";
       /** @description Whether base language translation was changed after this translation was updated */
       outdated: boolean;
+      /** @description Whether QA checks are stale and need re-running */
+      qaChecksStale: boolean;
+      /**
+       * Format: int64
+       * @description Number of open QA issues
+       */
+      qaIssueCount: number;
+      /** @description Detailed QA issues for inline highlighting (only when includeQaIssues=true) */
+      qaIssues?: components["schemas"]["QaIssueModel"][];
       /**
        * @description State of translation
        * @enum {string}
@@ -3673,7 +4212,6 @@ export interface components {
        * @description When the key was deleted
        */
       deletedAt: string;
-      /** @description User who deleted the key */
       deletedBy?: components["schemas"]["SimpleUserAccountModel"];
       /** @description Description of the key */
       description?: string;
@@ -3752,6 +4290,26 @@ export interface components {
     };
     UpdateNamespaceDto: {
       name: string;
+    };
+    UpdateProjectTmSettingsRequest: {
+      /** @description When true, only translations whose state is REVIEWED are written to this project's own TM. Translations that drop back to TRANSLATED or UNTRANSLATED also remove the entry. TMX import and direct TM-browser edits bypass this filter. */
+      writeOnlyReviewed: boolean;
+    };
+    UpdateProjectTranslationMemoryAssignmentRequest: {
+      /**
+       * Format: int32
+       * @description Per-assignment penalty override (0–100). When null, the TM's default penalty applies.
+       */
+      penalty?: number;
+      /**
+       * Format: int32
+       * @description Priority in suggestion results (lower = higher priority). Omit to leave the current priority unchanged.
+       */
+      priority?: number;
+      /** @description Whether this project can read from the TM */
+      readAccess: boolean;
+      /** @description Whether this project writes new translations to the TM */
+      writeAccess: boolean;
     };
     UpdateTaskKeyRequest: {
       done: boolean;
@@ -3856,12 +4414,12 @@ export interface operations {
   };
   /**
    * Get current permission info
-   * @description Returns current PAK or PAT permissions for current user, api-key and project
+   * @description Returns the current PAK, PAT or OAuth token permissions for current user, api-key and project
    */
   getCurrentPermissions: {
     parameters: {
       query?: {
-        /** @description Required when using with PAT */
+        /** @description Required with a PAT, and with an OAuth token not bound to exactly one project */
         projectId?: number;
       };
     };
@@ -4119,7 +4677,7 @@ export interface operations {
     };
   };
   /** Delete uploaded images */
-  delete_17: {
+  delete_19: {
     parameters: {
       path: {
         ids: number[];
@@ -4335,14 +4893,14 @@ export interface operations {
    */
   getAll_10: {
     parameters: {
-      query: {
+      query?: {
         /** @description Zero-based page index (0..N) */
         page?: number;
         /** @description The size of the page to be returned */
         size?: number;
         /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
         sort?: string[];
-        filterCurrentUserOwner: boolean;
+        filterCurrentUserOwner?: boolean;
         search?: string;
       };
     };
@@ -4420,7 +4978,7 @@ export interface operations {
     };
   };
   /** Get one organization */
-  get_15: {
+  get_17: {
     parameters: {
       path: {
         id: number;
@@ -4460,7 +5018,7 @@ export interface operations {
     };
   };
   /** Get all organization glossaries */
-  getAll_12: {
+  getAll_13: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -4509,7 +5067,7 @@ export interface operations {
     };
   };
   /** Create glossary */
-  create_15: {
+  create_17: {
     parameters: {
       path: {
         organizationId: number;
@@ -4554,7 +5112,7 @@ export interface operations {
     };
   };
   /** Get all organization glossaries with some additional statistics */
-  getAllWithStats: {
+  getAllWithStats_1: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -4603,7 +5161,7 @@ export interface operations {
     };
   };
   /** Get glossary */
-  get_13: {
+  get_15: {
     parameters: {
       path: {
         organizationId: number;
@@ -4644,7 +5202,7 @@ export interface operations {
     };
   };
   /** Update glossary */
-  update_8: {
+  update_10: {
     parameters: {
       path: {
         organizationId: number;
@@ -4690,7 +5248,7 @@ export interface operations {
     };
   };
   /** Delete glossary */
-  delete_7: {
+  delete_9: {
     parameters: {
       path: {
         organizationId: number;
@@ -4729,7 +5287,7 @@ export interface operations {
     };
   };
   /** Get all projects assigned to glossary */
-  getAssignedProjects: {
+  getAssignedProjects_1: {
     parameters: {
       path: {
         organizationId: number;
@@ -4904,7 +5462,7 @@ export interface operations {
     };
   };
   /** Get all glossary terms */
-  getAll_13: {
+  getAll_14: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -4955,7 +5513,7 @@ export interface operations {
     };
   };
   /** Create a new glossary term */
-  create_16: {
+  create_18: {
     parameters: {
       path: {
         organizationId: number;
@@ -5045,7 +5603,7 @@ export interface operations {
     };
   };
   /** Get glossary term */
-  get_14: {
+  get_16: {
     parameters: {
       path: {
         organizationId: number;
@@ -5087,7 +5645,7 @@ export interface operations {
     };
   };
   /** Update glossary term */
-  update_9: {
+  update_11: {
     parameters: {
       path: {
         organizationId: number;
@@ -5134,7 +5692,7 @@ export interface operations {
     };
   };
   /** Delete glossary term */
-  delete_8: {
+  delete_10: {
     parameters: {
       path: {
         organizationId: number;
@@ -5174,7 +5732,7 @@ export interface operations {
     };
   };
   /** Set a new glossary term translation for language */
-  update_12: {
+  update_14: {
     parameters: {
       path: {
         organizationId: number;
@@ -5221,7 +5779,7 @@ export interface operations {
     };
   };
   /** Get glossary term translation for language */
-  get_23: {
+  get_25: {
     parameters: {
       path: {
         organizationId: number;
@@ -5402,8 +5960,920 @@ export interface operations {
       };
     };
   };
+  /** Get all translation memories in the organization */
+  getAll_11: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+      };
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelSimpleTranslationMemoryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create shared translation memory */
+  create_15: {
+    parameters: {
+      path: {
+        organizationId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SharedTranslationMemoryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get all translation memories with statistics */
+  getAllWithStats: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        search?: string;
+        type?: string;
+      };
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTranslationMemoryWithStatsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Get entry counts for a set of translation memories
+   * @description Returns the entry count for each requested TM id (stored + virtual). Unknown ids are omitted from the response. Separate from the list endpoint so the list can render without waiting on the per-TM virtual-row aggregation.
+   */
+  getEntryCounts: {
+    parameters: {
+      query: {
+        ids: number[];
+      };
+      path: {
+        organizationId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryEntryCountsModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get translation memory */
+  get_13: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update shared translation memory */
+  update_8: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SharedTranslationMemoryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete shared translation memory */
+  delete_7: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get projects assigned to a translation memory */
+  getAssignedProjects: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelTmAssignedProjectModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * List rows of a translation memory (paginated)
+   * @description Pagination is row-level: each STORED bucket (manual entries on a source collapse into one row; each TMX `tuid` is its own row) and each VIRTUAL origin (one row per project key) gets its own page item. The `targetLanguageTag` filter narrows the *cells* of a row to a subset of target languages; rows themselves still appear with empty cells so the user can add a translation.
+   */
+  list_3: {
+    parameters: {
+      query?: {
+        search?: string;
+        targetLanguageTag?: string;
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+      };
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelTranslationMemoryRowModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Create a translation memory entry */
+  create_16: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TranslationMemoryEntryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryEntryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Batch delete translation memory entry groups
+   * @description For every entry ID in the payload, deletes the entire group that shares the same source text (and key). The request is deduplicated to distinct groups so passing multiple entries from the same row is a no-op past the first one.
+   */
+  deleteMultipleGroups: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteMultipleTranslationMemoryEntriesRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * List representative entry IDs for every stored row
+   * @description Returns one entry ID per stored row matching the optional `search` filter — the same row identities that the paged endpoint exposes, but flattened to a single long list for client-side `Select all` flows. Virtual rows are not included (they have no entry IDs).
+   */
+  getAllStoredEntryIds: {
+    parameters: {
+      query?: {
+        search?: string;
+      };
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelLong"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Create translation memory entries for multiple target languages
+   * @description Atomic counterpart to the per-language POST. All entries land in one transaction, or none do — replaces the UI's previous per-language loop which could leave a partial result if a later language failed. The same target language must not appear twice in the same request.
+   */
+  createMultiple: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateMultipleTranslationMemoryEntriesRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelTranslationMemoryEntryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Get a single translation memory entry */
+  get_14: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+        entryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryEntryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update a translation memory entry */
+  update_9: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+        entryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TranslationMemoryEntryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TranslationMemoryEntryModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Delete a translation memory entry */
+  delete_8: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+        entryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Delete a whole translation memory entry group
+   * @description Deletes every entry that shares the same source text (and key) as the given entry — i.e. the entire translation-unit group visible as one row in the UI.
+   */
+  deleteGroup: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+        entryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Export translation memory as TMX file */
+  exportTmx: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": string;
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Import TMX file into translation memory */
+  importTmx: {
+    parameters: {
+      query?: {
+        overrideExisting?: boolean;
+      };
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody?: {
+      content: {
+        "multipart/form-data": {
+          /** Format: binary */
+          file: string;
+        };
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["TmxImportResult"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Toggle the reviewed-only flag on any TM in the organization
+   * @description Sets `writeOnlyReviewed` on the given TM. Unlike the main update endpoint, this accepts PROJECT-type TMs too, so org maintainers can edit this single setting from the org-level TM list without switching into project settings.
+   */
+  setWriteOnlyReviewed: {
+    parameters: {
+      path: {
+        organizationId: number;
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectTmSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
   /** Get organization by slug */
-  get_22: {
+  get_24: {
     parameters: {
       path: {
         slug: string;
@@ -5491,6 +6961,8 @@ export interface operations {
         filterId?: number[];
         /** @description Filter projects without id */
         filterNotId?: number[];
+        /** @description Filter projects whose base language tag matches */
+        filterBaseLanguageTag?: string;
         /** @description Zero-based page index (0..N) */
         page?: number;
         /** @description The size of the page to be returned */
@@ -5665,8 +7137,59 @@ export interface operations {
       };
     };
   };
+  /** Get modified entities in revision */
+  getModifiedEntitiesByRevision_1: {
+    parameters: {
+      query?: {
+        /** @description Zero-based page index (0..N) */
+        page?: number;
+        /** @description The size of the page to be returned */
+        size?: number;
+        /** @description Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported. */
+        sort?: string[];
+        /** @description Filters results by specific entity class */
+        filterEntityClass?: string[];
+        branch?: string;
+      };
+      path: {
+        revisionId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["PagedModelModifiedEntityModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
   /** List batch operations */
-  list_4: {
+  list_5: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -5711,7 +7234,7 @@ export interface operations {
     };
   };
   /** Get batch operation */
-  get_21: {
+  get_23: {
     parameters: {
       path: {
         id: number;
@@ -6474,7 +7997,7 @@ export interface operations {
     };
   };
   /** Delete branch */
-  delete_14: {
+  delete_16: {
     parameters: {
       path: {
         branchId: number;
@@ -6616,7 +8139,7 @@ export interface operations {
    */
   exportData_1: {
     parameters: {
-      query: {
+      query?: {
         /**
          * @description Languages to be contained in export.
          *
@@ -6625,7 +8148,7 @@ export interface operations {
          */
         languages?: string[];
         /** @description Format to export to */
-        format: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML" | "JSON_I18NEXT" | "CSV" | "RESX_ICU" | "XLSX" | "APPLE_XCSTRINGS" | "ANDROID_SDK" | "APPLE_SDK";
+        format?: "JSON" | "JSON_TOLGEE" | "XLIFF" | "PO" | "APPLE_STRINGS_STRINGSDICT" | "APPLE_XLIFF" | "ANDROID_XML" | "COMPOSE_XML" | "FLUTTER_ARB" | "PROPERTIES" | "YAML_RUBY" | "YAML" | "JSON_I18NEXT" | "CSV" | "RESX_ICU" | "XLSX" | "APPLE_XCSTRINGS" | "ANDROID_SDK" | "APPLE_SDK";
         /**
          * @description Delimiter to structure file content.
          *
@@ -6660,7 +8183,7 @@ export interface operations {
          *
          * This is possible only when single language is exported. Otherwise it returns "400 - Bad Request" response.
          */
-        zip: boolean;
+        zip?: boolean;
         /**
          * @description Message format to be used for export.
          *
@@ -6669,7 +8192,7 @@ export interface operations {
          * This property is honored only for generic formats like JSON or YAML.
          * For specific formats like `YAML_RUBY` it's ignored.
          */
-        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT";
+        messageFormat?: "C_SPRINTF" | "PHP_SPRINTF" | "JAVA_STRING_FORMAT" | "APPLE_SPRINTF" | "RUBY_SPRINTF" | "I18NEXT" | "ICU" | "PYTHON_PERCENT" | "PYTHON_BRACE";
         /**
          * @description This is a template that defines the structure of the resulting .zip file content.
          *
@@ -6690,7 +8213,7 @@ export interface operations {
          *
          * e.g. Key hello[0] will be exported as {"hello": ["..."]}
          */
-        supportArrays: boolean;
+        supportArrays?: boolean;
         /**
          * @description If true, HTML tags are escaped in the exported file. (Supported in the XLIFF format only).
          *
@@ -7742,7 +9265,7 @@ export interface operations {
    * Delete one or multiple keys (post)
    * @description Delete one or multiple keys by their IDs in request body. Useful for larger requests esxceeding allowed URL length.
    */
-  delete_12: {
+  delete_14: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["DeleteKeysDto"];
@@ -7873,6 +9396,11 @@ export interface operations {
    *       DEPRECATED: Use /v2/projects/{projectId}/single-step-import-resolvable instead.
    */
   importKeys_1: {
+    parameters: {
+      query?: {
+        branch?: string;
+      };
+    };
     requestBody: {
       content: {
         "application/json": components["schemas"]["ImportKeysResolvableDto"];
@@ -8065,6 +9593,10 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /** @description Selects only keys with a description */
+        filterHasDescription?: boolean;
+        /** @description Selects only keys without a description */
+        filterHasNoDescription?: boolean;
         /**
          * @description Selects only keys with provided namespaces.
          *
@@ -8077,6 +9609,129 @@ export interface operations {
          * To filter default namespace, set to empty string.
          */
         filterNoNamespace?: string[];
+        /**
+         * @description Selects only keys with name matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterKeyPattern?: string[];
+        /**
+         * @description Selects only keys with name not matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoKeyPattern?: string[];
+        /**
+         * @description Selects only keys with description matching the provided pattern.
+         * Keys without a description never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with description not matching the provided pattern.
+         * Keys without a description always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with namespace matching the provided pattern.
+         * Keys in the default namespace never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with namespace not matching the provided pattern.
+         * Keys in the default namespace always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with a translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match any of the returned languages.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterTranslationPattern?: string[];
+        /**
+         * @description Selects only keys with no translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match against any of the returned
+         * languages. Keys with no translation in the specified language always match.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoTranslationPattern?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
         /** @description Selects only keys without provided tag */
@@ -8113,6 +9768,17 @@ export interface operations {
          * @example labelId1,labelId2
          */
         filterLabel?: string[];
+        /** @description Filter keys with open QA issues in lang */
+        filterHasQaIssuesInLang?: string[];
+        /**
+         * @description Filter keys with specific QA check type issues in the format: languageTag,checkType.
+         * You can use this parameter multiple times.
+         *
+         * A key matches if any of the selected check types is present in any of the selected languages.
+         */
+        filterQaCheckType?: string[];
+        /** @description Filter keys whose QA checks are stale (pending recomputation) in lang. When set, only keys with at least one stale translation in any of the provided languages are returned. */
+        filterQaChecksStaleInLang?: string[];
         /** @description Filter keys with any suggestions in lang */
         filterHasSuggestionsInLang?: string[];
         /** @description Filter keys with no suggestions in lang */
@@ -8157,7 +9823,7 @@ export interface operations {
     };
   };
   /** List trashed keys */
-  list_6: {
+  list_9: {
     parameters: {
       query?: {
         /** @description Zero-based page index (0..N) */
@@ -8210,6 +9876,10 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /** @description Selects only keys with a description */
+        filterHasDescription?: boolean;
+        /** @description Selects only keys without a description */
+        filterHasNoDescription?: boolean;
         /**
          * @description Selects only keys with provided namespaces.
          *
@@ -8222,6 +9892,129 @@ export interface operations {
          * To filter default namespace, set to empty string.
          */
         filterNoNamespace?: string[];
+        /**
+         * @description Selects only keys with name matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterKeyPattern?: string[];
+        /**
+         * @description Selects only keys with name not matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoKeyPattern?: string[];
+        /**
+         * @description Selects only keys with description matching the provided pattern.
+         * Keys without a description never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with description not matching the provided pattern.
+         * Keys without a description always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with namespace matching the provided pattern.
+         * Keys in the default namespace never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with namespace not matching the provided pattern.
+         * Keys in the default namespace always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with a translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match any of the returned languages.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterTranslationPattern?: string[];
+        /**
+         * @description Selects only keys with no translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match against any of the returned
+         * languages. Keys with no translation in the specified language always match.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoTranslationPattern?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
         /** @description Selects only keys without provided tag */
@@ -8258,6 +10051,17 @@ export interface operations {
          * @example labelId1,labelId2
          */
         filterLabel?: string[];
+        /** @description Filter keys with open QA issues in lang */
+        filterHasQaIssuesInLang?: string[];
+        /**
+         * @description Filter keys with specific QA check type issues in the format: languageTag,checkType.
+         * You can use this parameter multiple times.
+         *
+         * A key matches if any of the selected check types is present in any of the selected languages.
+         */
+        filterQaCheckType?: string[];
+        /** @description Filter keys whose QA checks are stale (pending recomputation) in lang. When set, only keys with at least one stale translation in any of the provided languages are returned. */
+        filterQaChecksStaleInLang?: string[];
         /** @description Filter keys with any suggestions in lang */
         filterHasSuggestionsInLang?: string[];
         /** @description Filter keys with no suggestions in lang */
@@ -8389,6 +10193,10 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /** @description Selects only keys with a description */
+        filterHasDescription?: boolean;
+        /** @description Selects only keys without a description */
+        filterHasNoDescription?: boolean;
         /**
          * @description Selects only keys with provided namespaces.
          *
@@ -8401,6 +10209,129 @@ export interface operations {
          * To filter default namespace, set to empty string.
          */
         filterNoNamespace?: string[];
+        /**
+         * @description Selects only keys with name matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterKeyPattern?: string[];
+        /**
+         * @description Selects only keys with name not matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoKeyPattern?: string[];
+        /**
+         * @description Selects only keys with description matching the provided pattern.
+         * Keys without a description never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with description not matching the provided pattern.
+         * Keys without a description always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with namespace matching the provided pattern.
+         * Keys in the default namespace never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with namespace not matching the provided pattern.
+         * Keys in the default namespace always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with a translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match any of the returned languages.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterTranslationPattern?: string[];
+        /**
+         * @description Selects only keys with no translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match against any of the returned
+         * languages. Keys with no translation in the specified language always match.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoTranslationPattern?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
         /** @description Selects only keys without provided tag */
@@ -8437,6 +10368,17 @@ export interface operations {
          * @example labelId1,labelId2
          */
         filterLabel?: string[];
+        /** @description Filter keys with open QA issues in lang */
+        filterHasQaIssuesInLang?: string[];
+        /**
+         * @description Filter keys with specific QA check type issues in the format: languageTag,checkType.
+         * You can use this parameter multiple times.
+         *
+         * A key matches if any of the selected check types is present in any of the selected languages.
+         */
+        filterQaCheckType?: string[];
+        /** @description Filter keys whose QA checks are stale (pending recomputation) in lang. When set, only keys with at least one stale translation in any of the provided languages are returned. */
+        filterQaChecksStaleInLang?: string[];
         /** @description Filter keys with any suggestions in lang */
         filterHasSuggestionsInLang?: string[];
         /** @description Filter keys with no suggestions in lang */
@@ -8559,7 +10501,7 @@ export interface operations {
     };
   };
   /** Delete one or multiple keys */
-  delete_16: {
+  delete_18: {
     parameters: {
       path: {
         ids: number[];
@@ -9651,10 +11593,7 @@ export interface operations {
       };
     };
   };
-  /**
-   * Delete suggestion
-   * @description User can only delete suggestion created by them
-   */
+  /** Delete suggestion */
   deleteSuggestion_1: {
     parameters: {
       path: {
@@ -10381,13 +12320,53 @@ export interface operations {
     };
   };
   /**
-   * Pre-translate by TM
+   * Translate from memory
    * @description Pre-translate provided keys to provided languages by TM.
    */
   translate_1: {
     requestBody: {
       content: {
         "application/json": components["schemas"]["PreTranslationByTmRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["BatchJobModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Rerun QA checks for translations of selected keys */
+  qaCheck_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["QaRecheckByKeysRequest"];
       };
     };
     responses: {
@@ -10740,6 +12719,49 @@ export interface operations {
       };
     };
   };
+  /** Get QA issue counts grouped by check type for a language */
+  getQaIssueCountsByCheckType_1: {
+    parameters: {
+      query: {
+        languageId: number;
+        branch?: string;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": {
+            [key: string]: number;
+          };
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
   /**
    * Get machine translation suggestions
    * @description Suggests machine translations from enabled services
@@ -10923,7 +12945,7 @@ export interface operations {
     };
   };
   /** Get tags */
-  getAll_15: {
+  getAll_16: {
     parameters: {
       query?: {
         search?: string;
@@ -11044,7 +13066,9 @@ export interface operations {
   createTask_1: {
     parameters: {
       query?: {
+        /** @description Include keys with translation in certain states */
         filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        /** @description Include keys where translation is outdated */
         filterOutdated?: boolean;
       };
     };
@@ -11090,7 +13114,9 @@ export interface operations {
   calculateScope_1: {
     parameters: {
       query?: {
+        /** @description Include keys with translation in certain states */
         filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        /** @description Include keys where translation is outdated */
         filterOutdated?: boolean;
       };
     };
@@ -11136,7 +13162,9 @@ export interface operations {
   createTasks_1: {
     parameters: {
       query?: {
+        /** @description Include keys with translation in certain states */
         filterState?: ("UNTRANSLATED" | "TRANSLATED" | "REVIEWED" | "DISABLED")[];
+        /** @description Include keys where translation is outdated */
         filterOutdated?: boolean;
       };
     };
@@ -11741,12 +13769,224 @@ export interface operations {
       };
     };
   };
+  /**
+   * List all translation memory assignments for the project
+   * @description Always readable. When the TRANSLATION_MEMORY feature is not enabled for the organization, only the project-type assignment (if any) is returned so the settings page can still show the row that already drives in-project suggestions.
+   */
+  list_7: {
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["CollectionModelProjectTranslationMemoryAssignmentModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Update the project's own TM settings
+   * @description Sets TM-level flags on the project's own PROJECT-type TM. The shared-TM update endpoint rejects PROJECT TMs; this narrow endpoint exists so project admins can toggle the `writeOnlyReviewed` flag without org-level privileges.
+   */
+  updateProjectTmSettings_1: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectTmSettingsRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Update project's translation memory assignment (read/write/priority) */
+  updateAssignment_1: {
+    parameters: {
+      path: {
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectTranslationMemoryAssignmentRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProjectTranslationMemoryAssignmentModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /** Assign a shared translation memory to the project */
+  assign_1: {
+    parameters: {
+      path: {
+        translationMemoryId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["AssignSharedTranslationMemoryRequest"];
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: {
+          "application/json": components["schemas"]["ProjectTranslationMemoryAssignmentModel"];
+        };
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
+  /**
+   * Unassign a shared translation memory from the project
+   * @description Removes the assignment between the project and the shared translation memory. The shared TM and its entries remain intact for other projects.
+   */
+  unassign_1: {
+    parameters: {
+      path: {
+        translationMemoryId: number;
+      };
+    };
+    responses: {
+      /** @description OK */
+      200: {
+        content: never;
+      };
+      /** @description Bad Request */
+      400: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Unauthorized */
+      401: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Forbidden */
+      403: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+      /** @description Not Found */
+      404: {
+        content: {
+          "application/json": components["schemas"]["ErrorResponseTyped"] | components["schemas"]["ErrorResponseBody"];
+        };
+      };
+    };
+  };
   /** Get translations in project */
   getTranslations_1: {
     parameters: {
       query?: {
         /** @description Cursor to get next data */
         cursor?: string;
+        /** @description Include detailed QA issues for inline highlighting */
+        includeQaIssues?: boolean;
         /**
          * @description Translation state in the format: languageTag,state. You can use this parameter multiple times.
          *
@@ -11791,6 +14031,10 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /** @description Selects only keys with a description */
+        filterHasDescription?: boolean;
+        /** @description Selects only keys without a description */
+        filterHasNoDescription?: boolean;
         /**
          * @description Selects only keys with provided namespaces.
          *
@@ -11803,6 +14047,129 @@ export interface operations {
          * To filter default namespace, set to empty string.
          */
         filterNoNamespace?: string[];
+        /**
+         * @description Selects only keys with name matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterKeyPattern?: string[];
+        /**
+         * @description Selects only keys with name not matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoKeyPattern?: string[];
+        /**
+         * @description Selects only keys with description matching the provided pattern.
+         * Keys without a description never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with description not matching the provided pattern.
+         * Keys without a description always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with namespace matching the provided pattern.
+         * Keys in the default namespace never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with namespace not matching the provided pattern.
+         * Keys in the default namespace always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with a translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match any of the returned languages.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterTranslationPattern?: string[];
+        /**
+         * @description Selects only keys with no translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match against any of the returned
+         * languages. Keys with no translation in the specified language always match.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoTranslationPattern?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
         /** @description Selects only keys without provided tag */
@@ -11839,6 +14206,17 @@ export interface operations {
          * @example labelId1,labelId2
          */
         filterLabel?: string[];
+        /** @description Filter keys with open QA issues in lang */
+        filterHasQaIssuesInLang?: string[];
+        /**
+         * @description Filter keys with specific QA check type issues in the format: languageTag,checkType.
+         * You can use this parameter multiple times.
+         *
+         * A key matches if any of the selected check types is present in any of the selected languages.
+         */
+        filterQaCheckType?: string[];
+        /** @description Filter keys whose QA checks are stale (pending recomputation) in lang. When set, only keys with at least one stale translation in any of the provided languages are returned. */
+        filterQaChecksStaleInLang?: string[];
         /** @description Filter keys with any suggestions in lang */
         filterHasSuggestionsInLang?: string[];
         /** @description Filter keys with no suggestions in lang */
@@ -12108,6 +14486,10 @@ export interface operations {
         filterHasScreenshot?: boolean;
         /** @description Selects only keys without screenshots */
         filterHasNoScreenshot?: boolean;
+        /** @description Selects only keys with a description */
+        filterHasDescription?: boolean;
+        /** @description Selects only keys without a description */
+        filterHasNoDescription?: boolean;
         /**
          * @description Selects only keys with provided namespaces.
          *
@@ -12120,6 +14502,129 @@ export interface operations {
          * To filter default namespace, set to empty string.
          */
         filterNoNamespace?: string[];
+        /**
+         * @description Selects only keys with name matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterKeyPattern?: string[];
+        /**
+         * @description Selects only keys with name not matching the provided pattern.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoKeyPattern?: string[];
+        /**
+         * @description Selects only keys with description matching the provided pattern.
+         * Keys without a description never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with description not matching the provided pattern.
+         * Keys without a description always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoDescriptionPattern?: string[];
+        /**
+         * @description Selects only keys with namespace matching the provided pattern.
+         * Keys in the default namespace never match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with namespace not matching the provided pattern.
+         * Keys in the default namespace always match.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoNamespacePattern?: string[];
+        /**
+         * @description Selects only keys with a translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match any of the returned languages.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterTranslationPattern?: string[];
+        /**
+         * @description Selects only keys with no translation text matching the provided pattern,
+         * in the format: languageTag,pattern. Use `*` as the language tag to match against any of the returned
+         * languages. Keys with no translation in the specified language always match.
+         * The language tag is matched case-insensitively and must be included in the returned languages,
+         * otherwise the request fails with 400.
+         *
+         * Pattern syntax: `*` matches any sequence of characters
+         * (`cart*` = starts with, `*_title` = ends with). A pattern without `*` matches anywhere in the value.
+         * A leading `=` matches the whole value (`=cart` = exactly "cart"); `*` still works inside it.
+         * To match a value that itself starts with `=`, use `*=…*`.
+         * Matching is case-insensitive. `%` and `_` are matched literally.
+         * You can use this parameter multiple times; all patterns must match (logical AND).
+         * Limits: a pattern must not be empty, may be at most 500 characters long
+         * with at most 5 wildcards, and at most 20
+         * patterns may be provided per parameter; violations fail with 400.
+         */
+        filterNoTranslationPattern?: string[];
         /** @description Selects only keys with provided tag */
         filterTag?: string[];
         /** @description Selects only keys without provided tag */
@@ -12156,6 +14661,17 @@ export interface operations {
          * @example labelId1,labelId2
          */
         filterLabel?: string[];
+        /** @description Filter keys with open QA issues in lang */
+        filterHasQaIssuesInLang?: string[];
+        /**
+         * @description Filter keys with specific QA check type issues in the format: languageTag,checkType.
+         * You can use this parameter multiple times.
+         *
+         * A key matches if any of the selected check types is present in any of the selected languages.
+         */
+        filterQaCheckType?: string[];
+        /** @description Filter keys whose QA checks are stale (pending recomputation) in lang. When set, only keys with at least one stale translation in any of the provided languages are returned. */
+        filterQaChecksStaleInLang?: string[];
         /** @description Filter keys with any suggestions in lang */
         filterHasSuggestionsInLang?: string[];
         /** @description Filter keys with no suggestions in lang */
