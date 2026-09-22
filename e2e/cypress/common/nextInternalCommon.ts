@@ -1,4 +1,5 @@
 import { createApiKey } from './apiCalls';
+import { WEB_INTERNAL_URL } from './constants';
 import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
@@ -20,9 +21,7 @@ export const visitWithApiKey = (
     .then((data) => {
       const params = new URLSearchParams({ api_key: data.key });
       if (branch) params.set('branch', branch);
-      cy.visit(
-        `http://localhost:8114/translation-methods?${params.toString()}`
-      );
+      cy.visit(`${WEB_INTERNAL_URL}/translation-methods?${params.toString()}`);
     })
     .then(() =>
       localStorage.setItem(

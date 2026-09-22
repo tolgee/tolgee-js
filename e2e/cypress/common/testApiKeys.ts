@@ -12,6 +12,8 @@ export const fullPermissions: ApiKeyPermissionsModel = {
   viewLanguageIds: null,
   translateLanguageIds: null,
   stateChangeLanguageIds: null,
+  suggestionsMode: 'DISABLED',
+  translationProtection: 'NONE',
   scopes: [
     'keys.create',
     'keys.edit',
@@ -30,6 +32,8 @@ export const translateEnglish: ApiKeyPermissionsModel = {
   viewLanguageIds: null,
   translateLanguageIds: [1000000001],
   stateChangeLanguageIds: null,
+  suggestionsMode: 'DISABLED',
+  translationProtection: 'NONE',
   scopes: ['translations.view', 'translations.edit', 'screenshots.view'],
 };
 
@@ -39,5 +43,7 @@ export const changeStateEnglish: ApiKeyPermissionsModel = {
   viewLanguageIds: null,
   translateLanguageIds: null,
   stateChangeLanguageIds: [1000000001],
+  suggestionsMode: 'DISABLED',
+  translationProtection: 'NONE',
   scopes: ['translations.view', 'screenshots.view', 'translations.state-edit'],
 };

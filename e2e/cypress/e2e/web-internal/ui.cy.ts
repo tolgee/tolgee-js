@@ -28,7 +28,7 @@ context('UI Dialog', () => {
     ]);
     openUI();
     getDevUi().contains('Quick translation');
-    getDevUi().contains('Update');
+    getDevUi().findDcy('key-form-submit');
     getDevUi()
       .find('#_tolgee_platform_link')
       .invoke('attr', 'href')
@@ -40,7 +40,9 @@ context('UI Dialog', () => {
     openUI();
     getDevUi().contains('There are no screenshots.').should('be.visible');
     getByAriaLabel('Take screenshot').should('not.exist');
-    getDevUi().contains('Update').should('not.have.attr', 'contenteditable');
+    getDevUi()
+      .findDcy('key-form-submit')
+      .should('not.have.attr', 'contenteditable');
   });
 
   it('updates translation properly', () => {
