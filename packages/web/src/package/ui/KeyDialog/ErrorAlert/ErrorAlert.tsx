@@ -12,6 +12,11 @@ type Props = {
 
 export const ErrorAlert = ({ error, severity }: Props) => {
   const apiUrl = useDialogContext((c) => c.uiProps.apiUrl);
+  const credentialBlocksSubmit = useDialogContext(
+    (c) => c.permissions.credentialBlocksSubmit
+  );
+  const accountHolds = useDialogContext((c) => c.permissions.accountHolds);
+  const viaExtension = useDialogContext((c) => c.viaExtension);
 
   return (
     <Alert
@@ -21,7 +26,11 @@ export const ErrorAlert = ({ error, severity }: Props) => {
       data-cy-error-code={isHttpError(error) ? error.code : undefined}
     >
       {isHttpError(error)
-        ? getErrorContent(error, createUrl(apiUrl).toString())
+        ? getErrorContent(error, createUrl(apiUrl).toString(), {
+            credentialBlocksSubmit,
+            accountHolds,
+            viaExtension,
+          })
         : error.message}
     </Alert>
   );

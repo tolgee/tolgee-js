@@ -42,6 +42,7 @@ import { Disposition, useComputedPermissions } from './usePermissions';
 import { HttpError, isHttpError } from '../../client/HttpError';
 import { components } from '../../client/apiSchema.generated';
 import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
+import { resolveLiveCredential } from '../../../tools/auth';
 
 // TODO(pitch-3780): platform version
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
@@ -668,12 +669,16 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     );
 
     const dispositions: Record<string, Disposition> = {};
+    const credentialBlocksField: Record<string, boolean> = {};
     selectedLanguages.forEach((language) => {
       const state = keyData?.translations?.[language]?.state;
-      dispositions[language] =
-        formDisabled || state === 'DISABLED'
-          ? 'readonly'
-          : permissions.getDisposition(language, state);
+      const lockedElsewhere = formDisabled || state === 'DISABLED';
+      dispositions[language] = lockedElsewhere
+        ? 'readonly'
+        : permissions.getDisposition(language, state);
+      credentialBlocksField[language] =
+        !lockedElsewhere &&
+        permissions.credentialBlocksTranslation(language, state) === true;
     });
 
     const serverValue = (language: string) =>
@@ -730,6 +735,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       clearedSuggestFields: submitPlan.cleared,
       busy: saving || refreshing,
       dispositions,
+      credentialBlocksField,
+      viaExtension: resolveLiveCredential(props.uiProps).viaExtension,
       suggestOnly,
       submitKind: submitPlan.kind,
       nothingToSuggest: suggestOnly && !submitPlan.toSuggest.length,

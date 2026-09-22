@@ -123,7 +123,43 @@ export const getComputedPermissions = (
       permissions?.stateChangeLanguageIds
     );
 
+  // The schema declares userScopes required, but servers before it never send the field.
+  const asAccount =
+    permissions?.userScopes === undefined
+      ? undefined
+      : getComputedPermissions(
+          {
+            ...permissions,
+            scopes: permissions.userScopes,
+            userScopes: undefined,
+          },
+          keyData,
+          availableLanguages
+        );
+
+  const credentialBlocksSubmit =
+    asAccount === undefined
+      ? undefined
+      : !canSubmitForm && Boolean(asAccount.canSubmitForm);
+
+  const credentialBlocksTranslation = (
+    language: string,
+    state: TranslationState | undefined
+  ) =>
+    asAccount === undefined
+      ? undefined
+      : getDisposition(language, state) === 'readonly' &&
+        asAccount.getDisposition(language, state) !== 'readonly';
+
+  const accountHolds = (scopes: string[]) =>
+    asAccount === undefined
+      ? undefined
+      : scopes.every((scope) => isAuthorizedTo(scope, permissions?.userScopes));
+
   return {
+    credentialBlocksSubmit,
+    credentialBlocksTranslation,
+    accountHolds,
     canSuggestTranslation,
     getDisposition,
     canDeleteOwnSuggestion,

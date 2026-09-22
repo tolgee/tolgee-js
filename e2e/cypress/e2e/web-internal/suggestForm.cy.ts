@@ -8,6 +8,8 @@ import {
 import {
   suggestOnly,
   translateEnglishSuggestRest,
+  suggestGermanKeyOfEditor,
+  viewOnlyKeyOfEditor,
 } from '../../common/testApiKeys';
 
 const EN_ID = 1000000001;
@@ -145,5 +147,36 @@ context('Suggesting from the dialog', () => {
 
     retype('de', 'Hallo');
     getDevUi().findDcy('translation-field-error').should('not.exist');
+  });
+
+  it('tells an editor whose API key is view-only that the key is the limit', () => {
+    // not openDialogAs: openUI asserts an enabled editor, and this form is disabled by design
+    mockPermissions(viewOnlyKeyOfEditor);
+    visitWithApiKey(['translations.view', 'screenshots.view']);
+    cy.contains('What To Pack').should('be.visible').click({ altKey: true });
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'error-alert',
+        'error-code': 'permissions_not_sufficient_to_edit',
+      })
+      .should(
+        'contain.text',
+        "the API key this page uses doesn't include that permission"
+      )
+      // no extension drives this page, so nothing may send the user to a plugin they don't have
+      .and('not.contain.text', 'Tolgee plugin');
+    getDevUi().findDcy('translation-field-credential-note').should('not.exist');
+  });
+
+  it('tells an editor whose API key may only suggest in German that the key is why English is read-only', () => {
+    openDialogAs(suggestGermanKeyOfEditor);
+    getDevUi().findDcy('error-alert').should('not.exist');
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-credential-note',
+        language: 'en',
+      })
+      .should('contain.text', 'API key this page uses')
+      .and('not.contain.text', 'Tolgee plugin');
   });
 });

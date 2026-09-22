@@ -1,21 +1,44 @@
-import { AlertTitle } from '@mui/material';
+import { AlertTitle, Box } from '@mui/material';
 import { HttpError } from '../../client/HttpError';
 import { DocsInContext } from './DocsInContext';
 import { OpenExtension } from './OpenExtension';
 import { DocsAPIKeys } from './DocsAPIKeys';
+import { CredentialHint } from './CredentialHint';
+
+type CredentialContext = {
+  credentialBlocksSubmit: boolean | undefined;
+  accountHolds: (scopes: string[]) => boolean | undefined;
+  viaExtension: boolean;
+};
 
 export function getErrorContent(
   { code, params, message }: HttpError,
-  apiUrl: string
+  apiUrl: string,
+  credential: CredentialContext = {
+    credentialBlocksSubmit: undefined,
+    accountHolds: () => undefined,
+    viaExtension: false,
+  }
 ) {
   switch (code) {
-    case 'operation_not_permitted':
+    case 'operation_not_permitted': {
+      const missing = params ?? [];
       return (
         <>
           <AlertTitle>Operation not permitted</AlertTitle>
-          {Boolean(params?.length) && 'Missing scopes: ' + params?.join(', ')}
+          {missing.length > 0 && (
+            <>
+              {'Missing scopes: ' + missing.join(', ')}
+              {credential.accountHolds(missing) && (
+                <Box mt={1}>
+                  <CredentialHint viaExtension={credential.viaExtension} />
+                </Box>
+              )}
+            </>
+          )}
         </>
       );
+    }
 
     case 'invalid_project_api_key':
       return (
@@ -102,15 +125,26 @@ export function getErrorContent(
         </>
       );
 
-    case 'permissions_not_sufficient_to_edit':
+    case 'permissions_not_sufficient_to_edit': {
+      const limit = credential.credentialBlocksSubmit;
       return (
         <>
           <AlertTitle>
             Sorry, you don't have permissions to make changes
           </AlertTitle>
-          Update your API key or ask admin for more permissions <DocsAPIKeys />
+          {limit === true ? (
+            <CredentialHint viaExtension={credential.viaExtension} />
+          ) : limit === false ? (
+            'Ask a project admin for more permissions.'
+          ) : (
+            <>
+              Update your API key or ask admin for more permissions{' '}
+              <DocsAPIKeys />
+            </>
+          )}
         </>
       );
+    }
 
     case 'operation_not_permitted_in_read_only_mode':
       return (
