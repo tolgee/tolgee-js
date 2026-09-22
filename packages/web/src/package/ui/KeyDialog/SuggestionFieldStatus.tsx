@@ -1,6 +1,7 @@
 import { styled } from '@mui/material';
 
 import { useDialogContext } from './dialogContext';
+import { CredentialHint } from './ErrorAlert/CredentialHint';
 import { ErrorAlert } from './ErrorAlert/ErrorAlert';
 
 const StyledNote = styled('div')`
@@ -25,6 +26,10 @@ export const SuggestionFieldStatus = ({ language }: Props) => {
   const willSuggest = useDialogContext(
     (c) => c.dispositions[tag] === 'suggest'
   );
+  const credentialBlocksField = useDialogContext(
+    (c) => c.credentialBlocksField[tag]
+  );
+  const viaExtension = useDialogContext((c) => c.viaExtension);
   const mayEdit = useDialogContext((c) =>
     c.permissions.canEditTranslation(tag)
   );
@@ -47,6 +52,14 @@ export const SuggestionFieldStatus = ({ language }: Props) => {
           data-cy-kind={note}
         >
           {NOTES[note]}
+        </StyledNote>
+      )}
+      {credentialBlocksField && (
+        <StyledNote
+          data-cy="translation-field-credential-note"
+          data-cy-language={language}
+        >
+          <CredentialHint viaExtension={viaExtension} />
         </StyledNote>
       )}
       {error && (

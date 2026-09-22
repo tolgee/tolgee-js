@@ -7,7 +7,7 @@ import {
   keepFormFields,
   planSubmit,
   setPreferredLanguages,
-  deriveDispositions,
+  deriveFieldStates,
 } from './tools';
 
 // See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
@@ -190,41 +190,58 @@ describe('planSubmit', () => {
   });
 });
 
-describe('deriveDispositions', () => {
+describe('deriveFieldStates', () => {
   const getDisposition = (language: string) =>
     language === 'de' ? ('suggest' as const) : ('save' as const);
+  const derive = (over: Partial<Parameters<typeof deriveFieldStates>[0]>) =>
+    deriveFieldStates({
+      languages: ['en', 'de'],
+      states: { en: 'TRANSLATED', de: 'TRANSLATED' },
+      formDisabled: false,
+      getDisposition,
+      credentialBlocksTranslation: () => undefined,
+      ...over,
+    });
 
   it('asks the permissions for every shown language', () => {
-    expect(
-      deriveDispositions({
-        languages: ['en', 'de'],
-        states: { en: 'TRANSLATED', de: 'TRANSLATED' },
-        formDisabled: false,
-        getDisposition,
-      })
-    ).toEqual({ en: 'save', de: 'suggest' });
+    expect(derive({}).dispositions).toEqual({ en: 'save', de: 'suggest' });
   });
 
   it('makes a disabled translation read-only whatever the permissions say', () => {
     expect(
-      deriveDispositions({
-        languages: ['en', 'de'],
-        states: { en: 'DISABLED', de: undefined },
-        formDisabled: false,
-        getDisposition,
-      })
+      derive({ states: { en: 'DISABLED', de: undefined } }).dispositions
     ).toEqual({ en: 'readonly', de: 'suggest' });
   });
 
   it('makes every field read-only while the form is disabled', () => {
+    expect(derive({ formDisabled: true }).dispositions).toEqual({
+      en: 'readonly',
+      de: 'readonly',
+    });
+  });
+
+  it('blames the credential only where it is the credential that locks the field', () => {
+    const credentialBlocksTranslation = (language: string) => language === 'en';
     expect(
-      deriveDispositions({
-        languages: ['en', 'de'],
-        states: {},
-        formDisabled: true,
-        getDisposition,
-      })
-    ).toEqual({ en: 'readonly', de: 'readonly' });
+      derive({ credentialBlocksTranslation }).credentialBlocksField
+    ).toEqual({
+      en: true,
+      de: false,
+    });
+    expect(
+      derive({
+        credentialBlocksTranslation,
+        states: { en: 'DISABLED', de: 'TRANSLATED' },
+      }).credentialBlocksField
+    ).toEqual({ en: false, de: false });
+    expect(
+      derive({ credentialBlocksTranslation, formDisabled: true })
+        .credentialBlocksField
+    ).toEqual({ en: false, de: false });
+  });
+
+  it('does not blame the credential when the server reports no account scopes', () => {
+    expect(derive({}).credentialBlocksField).toEqual({ en: false, de: false });
   });
 });
 

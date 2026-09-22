@@ -3,13 +3,19 @@ import { WEB_INTERNAL_URL } from './constants';
 import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
-export const openUI = (translation = 'What To Pack') => {
+export const openUI = (
+  translation = 'What To Pack',
+  { editable = true }: { editable?: boolean } = {}
+) => {
   cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
   getDevUi()
     .find('.MuiDialog-container', { timeout: 10000 })
     .should('be.visible');
-  getEditor().should('be.visible').and('not.be.disabled');
+  getEditor().should('be.visible');
+  if (editable) {
+    getEditor().should('not.be.disabled');
+  }
 };
 
 export const visitWithApiKey = (

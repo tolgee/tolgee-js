@@ -13,6 +13,9 @@ import {
   suggestOnly,
   translateEnglishSuggestRest,
   editEnglishSuggestRestWithTags,
+  editorOnProtectedProject,
+  suggestGermanKeyOfEditor,
+  viewOnlyKeyOfEditor,
 } from '../../common/testApiKeys';
 
 const EN_ID = 1000000001;
@@ -212,6 +215,41 @@ context('Suggesting from the dialog', () => {
     });
   });
 
+  it("turns an editor's change to a reviewed translation into a suggestion and says why", () => {
+    cy.intercept(
+      { path: '/v2/projects/*/translations**', method: 'get' },
+      (req) =>
+        req.continue((res) => {
+          const key = res.body._embedded?.keys?.[0];
+          expect(key, 'the imported key in the translations response').to.exist;
+          key.translations.en.state = 'REVIEWED';
+        })
+    );
+    openDialogAs(editorOnProtectedProject);
+
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'en',
+        kind: 'reviewedProtected',
+      })
+      .should(
+        'have.text',
+        'Reviewed translations are protected. Your change will be sent as a suggestion.'
+      );
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'de',
+      })
+      .should('not.exist');
+
+    retype('de', 'Hallo Welt');
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Save');
+    retype('en', 'Hello world');
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Save & suggest');
+  });
+
   it("says an emptied suggestion can't be sent and leaves the field out of the submit", () => {
     openDialogAs(suggestOnly);
 
@@ -246,5 +284,34 @@ context('Suggesting from the dialog', () => {
       expect(request.url).to.contain(`/languages/${DE_ID}/key/`);
     });
     cy.get('@suggest.all').should('have.length', 1);
+  });
+
+  it('tells an editor whose API key is view-only that the key, not a plugin, is the limit', () => {
+    mockPermissions(viewOnlyKeyOfEditor);
+    visitWithApiKey(['translations.view', 'screenshots.view']);
+    openUI('What To Pack', { editable: false });
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'error-alert',
+        'error-code': 'permissions_not_sufficient_to_edit',
+      })
+      .should(
+        'contain.text',
+        "The API key this page uses doesn't have this permission"
+      )
+      .and('not.contain.text', 'Tolgee plugin');
+    getDevUi().findDcy('translation-field-credential-note').should('not.exist');
+  });
+
+  it('tells an editor whose API key may only suggest in German that the key is why English is read-only', () => {
+    openDialogAs(suggestGermanKeyOfEditor);
+    getDevUi().findDcy('error-alert').should('not.exist');
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-credential-note',
+        language: 'en',
+      })
+      .should('contain.text', 'API key this page uses')
+      .and('not.contain.text', 'Tolgee plugin');
   });
 });

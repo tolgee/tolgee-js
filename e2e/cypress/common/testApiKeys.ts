@@ -6,6 +6,11 @@ const project: ApiKeyPermissionsModel['project'] = {
   icuPlaceholders: true,
 };
 
+const heldByBoth = (scopes: ApiKeyPermissionsModel['scopes']) => ({
+  userScopes: scopes,
+  scopes,
+});
+
 export const fullPermissions: ApiKeyPermissionsModel = {
   projectId: 1,
   project,
@@ -14,7 +19,8 @@ export const fullPermissions: ApiKeyPermissionsModel = {
   stateChangeLanguageIds: null,
   suggestionsMode: 'DISABLED',
   translationProtection: 'NONE',
-  scopes: [
+  userId: 1,
+  ...heldByBoth([
     'keys.create',
     'keys.edit',
     'translations.view',
@@ -23,7 +29,7 @@ export const fullPermissions: ApiKeyPermissionsModel = {
     'screenshots.view',
     'screenshots.delete',
     'screenshots.upload',
-  ],
+  ]),
 };
 
 export const translateEnglish: ApiKeyPermissionsModel = {
@@ -34,7 +40,8 @@ export const translateEnglish: ApiKeyPermissionsModel = {
   stateChangeLanguageIds: null,
   suggestionsMode: 'DISABLED',
   translationProtection: 'NONE',
-  scopes: ['translations.view', 'translations.edit', 'screenshots.view'],
+  userId: 1,
+  ...heldByBoth(['translations.view', 'translations.edit', 'screenshots.view']),
 };
 
 export const changeStateEnglish: ApiKeyPermissionsModel = {
@@ -45,7 +52,12 @@ export const changeStateEnglish: ApiKeyPermissionsModel = {
   stateChangeLanguageIds: [1000000001],
   suggestionsMode: 'DISABLED',
   translationProtection: 'NONE',
-  scopes: ['translations.view', 'screenshots.view', 'translations.state-edit'],
+  userId: 1,
+  ...heldByBoth([
+    'translations.view',
+    'screenshots.view',
+    'translations.state-edit',
+  ]),
 };
 
 export const suggestOnly: ApiKeyPermissionsModel = {
@@ -57,18 +69,43 @@ export const suggestOnly: ApiKeyPermissionsModel = {
   suggestLanguageIds: null,
   suggestionsMode: 'ENABLED',
   translationProtection: 'NONE',
-  scopes: ['translations.view', 'translations.suggest', 'screenshots.view'],
+  userId: 1,
+  ...heldByBoth([
+    'translations.view',
+    'translations.suggest',
+    'screenshots.view',
+  ]),
 };
 
 export const translateEnglishSuggestRest: ApiKeyPermissionsModel = {
   ...suggestOnly,
   translateLanguageIds: [1000000001],
-  scopes: [...suggestOnly.scopes, 'translations.edit'],
+  ...heldByBoth([...suggestOnly.scopes, 'translations.edit']),
+};
+
+export const viewOnlyKeyOfEditor: ApiKeyPermissionsModel = {
+  ...suggestOnly,
+  suggestionsMode: 'DISABLED',
+  userScopes: ['translations.view', 'translations.edit', 'screenshots.view'],
+  scopes: ['translations.view', 'screenshots.view'],
 };
 
 export const editEnglishSuggestRestWithTags: ApiKeyPermissionsModel = {
   ...fullPermissions,
   suggestionsMode: 'ENABLED',
   translateLanguageIds: [1000000001],
-  scopes: [...fullPermissions.scopes, 'translations.suggest'],
+  ...heldByBoth([...fullPermissions.scopes, 'translations.suggest']),
+};
+
+export const editorOnProtectedProject: ApiKeyPermissionsModel = {
+  ...fullPermissions,
+  suggestionsMode: 'ENABLED',
+  translationProtection: 'PROTECT_REVIEWED',
+  ...heldByBoth([...suggestOnly.scopes, 'translations.edit', 'keys.edit']),
+};
+
+export const suggestGermanKeyOfEditor: ApiKeyPermissionsModel = {
+  ...suggestOnly,
+  suggestLanguageIds: [1000000000],
+  userScopes: [...suggestOnly.scopes, 'translations.edit'],
 };

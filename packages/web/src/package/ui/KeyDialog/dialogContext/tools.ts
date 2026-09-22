@@ -207,11 +207,12 @@ export function sameTranslation(
   return JSON.stringify(nonEmpty(a)) === JSON.stringify(nonEmpty(b));
 }
 
-export function deriveDispositions({
+export function deriveFieldStates({
   languages,
   states,
   formDisabled,
   getDisposition,
+  credentialBlocksTranslation,
 }: {
   languages: string[];
   states: Record<string, TranslationState | undefined>;
@@ -220,14 +221,21 @@ export function deriveDispositions({
     language: string,
     state: TranslationState | undefined
   ) => Disposition;
-}): Record<string, Disposition> {
+  credentialBlocksTranslation: (
+    language: string,
+    state: TranslationState | undefined
+  ) => boolean | undefined;
+}) {
   const dispositions: Record<string, Disposition> = {};
+  const credentialBlocksField: Record<string, boolean> = {};
   languages.forEach((language) => {
     const state = states[language];
-    dispositions[language] =
-      formDisabled || state === 'DISABLED'
-        ? 'readonly'
-        : getDisposition(language, state);
+    const lockedElsewhere = formDisabled || state === 'DISABLED';
+    dispositions[language] = lockedElsewhere
+      ? 'readonly'
+      : getDisposition(language, state);
+    credentialBlocksField[language] =
+      !lockedElsewhere && credentialBlocksTranslation(language, state) === true;
   });
-  return dispositions;
+  return { dispositions, credentialBlocksField };
 }

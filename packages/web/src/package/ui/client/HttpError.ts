@@ -12,7 +12,8 @@ type ErrorCustomStatus =
   | 'permissions_not_sufficient_to_edit'
   | 'extension_session_missing'
   | 'extension_request_too_large'
-  | 'extension_editing_off';
+  | 'extension_editing_off'
+  | 'suggestion_needs_existing_key';
 
 export type ErrorStatusCode = ErrorResponseTypedCode | ErrorCustomStatus;
 

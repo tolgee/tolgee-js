@@ -199,3 +199,120 @@ describe('suggestion actions', () => {
     expect(result.canReviewSuggestions('cs')).toBe(false);
   });
 });
+
+describe('whose permission is missing', () => {
+  it('is unknown on a server that does not report the user scopes', () => {
+    expect(compute({ scopes: [] }).credentialBlocksSubmit).toBeUndefined();
+    expect(
+      compute({ scopes: [] }).credentialBlocksTranslation('en', 'TRANSLATED')
+    ).toBeUndefined();
+    expect(compute({ scopes: [] }).accountHolds(['keys.edit'])).toBeUndefined();
+  });
+
+  it('blames the credential when the account could submit and the credential cannot', () => {
+    const result = compute({
+      scopes: ['translations.view'],
+      userScopes: ['translations.view', 'translations.edit'],
+    });
+    expect(result.credentialBlocksSubmit).toBe(true);
+    expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(true);
+  });
+
+  it('does not blame the credential when the account cannot submit either', () => {
+    const result = compute({
+      scopes: ['translations.view'],
+      userScopes: ['translations.view'],
+    });
+    expect(result.credentialBlocksSubmit).toBe(false);
+    expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(false);
+  });
+
+  it('knows that keys.create is what a missing key needs', () => {
+    const result = getComputedPermissions(
+      permissions({
+        scopes: ['translations.view', 'translations.edit'],
+        userScopes: ['translations.view', 'translations.edit', 'keys.create'],
+      }),
+      undefined,
+      languages
+    );
+    expect(result.canSubmitForm).toBeFalsy();
+    expect(result.credentialBlocksSubmit).toBe(true);
+  });
+
+  it('does not tell a suggester to sign in again when the project has suggestions off', () => {
+    const result = compute({
+      scopes: ['translations.view'],
+      userScopes: ['translations.view', 'translations.suggest'],
+      suggestionsMode: 'DISABLED',
+    });
+    expect(result.credentialBlocksSubmit).toBe(false);
+    expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(false);
+  });
+
+  it('does not blame the credential for a reviewed translation the account may not edit either', () => {
+    const result = compute({
+      scopes: ['translations.view'],
+      userScopes: ['translations.view', 'translations.edit'],
+      translationProtection: 'PROTECT_REVIEWED',
+      suggestionsMode: 'DISABLED',
+    });
+    expect(result.credentialBlocksTranslation('en', 'REVIEWED')).toBe(false);
+    expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(true);
+  });
+
+  it('says the account holds a server-reported missing set only when it holds all of it', () => {
+    const result = compute({
+      scopes: [],
+      userScopes: ['keys.edit'],
+    });
+    expect(result.accountHolds(['keys.edit'])).toBe(true);
+    expect(result.accountHolds(['keys.edit', 'screenshots.upload'])).toBe(
+      false
+    );
+  });
+});
+
+describe('suggestionNeedsKey', () => {
+  const withoutKey = (overrides: Partial<ApiKeyPermissionsModel>) =>
+    getComputedPermissions(permissions(overrides), undefined, languages);
+  const suggester: Partial<ApiKeyPermissionsModel> = {
+    scopes: ['translations.view', 'translations.suggest'],
+  };
+
+  it('holds for a suggester opening a string whose key does not exist yet', () => {
+    expect(withoutKey(suggester).suggestionNeedsKey).toBe(true);
+  });
+
+  it('does not hold once the key exists', () => {
+    expect(compute(suggester).suggestionNeedsKey).toBe(false);
+  });
+
+  it('does not hold for someone who may create the key themselves', () => {
+    expect(
+      withoutKey({
+        scopes: ['translations.view', 'translations.suggest', 'keys.create'],
+      }).suggestionNeedsKey
+    ).toBe(false);
+  });
+
+  it('is a fact about the key, so the credential hint can take precedence over it', () => {
+    const result = withoutKey({
+      scopes: ['translations.view', 'translations.suggest'],
+      userScopes: [
+        'translations.view',
+        'translations.suggest',
+        'keys.create',
+        'translations.edit',
+      ],
+    });
+    expect(result.suggestionNeedsKey).toBe(true);
+    expect(result.credentialBlocksSubmit).toBe(true);
+  });
+
+  it('does not hold for a user who cannot suggest at all', () => {
+    expect(
+      withoutKey({ scopes: ['translations.view'] }).suggestionNeedsKey
+    ).toBe(false);
+  });
+});

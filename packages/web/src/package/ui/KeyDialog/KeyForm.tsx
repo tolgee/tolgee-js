@@ -123,6 +123,12 @@ export const KeyForm = () => {
   const input = useDialogContext((c) => c.input);
   const keyData = useDialogContext((c) => c.keyData);
   const formDisabled = useDialogContext((c) => c.formDisabled);
+  const suggestionNeedsKey = useDialogContext(
+    (c) => c.permissions.suggestionNeedsKey
+  );
+  const credentialBlocksSubmit = useDialogContext(
+    (c) => c.permissions.credentialBlocksSubmit
+  );
   const readOnly = useDialogContext((c) => c.readOnly);
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
@@ -263,7 +269,9 @@ export const KeyForm = () => {
           error={
             readOnly
               ? new HttpError('operation_not_permitted_in_read_only_mode')
-              : new HttpError('permissions_not_sufficient_to_edit')
+              : suggestionNeedsKey && credentialBlocksSubmit !== true
+                ? new HttpError('suggestion_needs_existing_key')
+                : new HttpError('permissions_not_sufficient_to_edit')
           }
           severity="info"
         />

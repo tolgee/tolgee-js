@@ -12,7 +12,14 @@ import { OPEN_PLUGIN_MESSAGE } from '../constants';
 
 jest.mock('../ui/KeyDialog/dialogContext', () => ({
   useDialogContext: (select: (c: unknown) => unknown) =>
-    select({ uiProps: { apiUrl: 'http://x' } }),
+    select({
+      uiProps: { apiUrl: 'http://x' },
+      permissions: {
+        credentialBlocksSubmit: undefined,
+        accountHolds: () => undefined,
+      },
+      viaExtension: false,
+    }),
 }));
 
 class OtherBundleHttpError extends Error {
@@ -24,13 +31,23 @@ class OtherBundleHttpError extends Error {
   }
 }
 
+const noCredentialContext = {
+  credentialBlocksSubmit: undefined,
+  accountHolds: () => undefined,
+  viaExtension: false,
+};
+
 const renderFor = (code: string) => {
   const container = document.createElement('div');
   document.body.appendChild(container);
   const root: Root = createRoot(container);
   act(() => {
     root.render(
-      getErrorContent(new HttpError(code as ErrorStatusCode), 'http://x') as any
+      getErrorContent(
+        new HttpError(code as ErrorStatusCode),
+        'http://x',
+        noCredentialContext
+      ) as any
     );
   });
   return { container, root };
@@ -220,5 +237,132 @@ describe('ErrorAlert: cross-bundle HttpError', () => {
   it('scores severity for a cross-bundle api_key_not_specified as informational, not an error', () => {
     const foreign = new OtherBundleHttpError('api_key_not_specified');
     expect(severityFor(foreign as unknown as HttpError)).toBe('info');
+  });
+});
+
+describe('ErrorAlert: whose permission is missing', () => {
+  const renderWith = (
+    code: string,
+    params: string[] | undefined,
+    credential: Parameters<typeof getErrorContent>[2]
+  ) => {
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+    const root: Root = createRoot(container);
+    act(() => {
+      root.render(
+        getErrorContent(
+          new HttpError(code as ErrorStatusCode, 403, params),
+          'http://x',
+          credential
+        ) as any
+      );
+    });
+    return { container, root };
+  };
+  const verdict = (credentialBlocksSubmit: boolean | undefined) => ({
+    credentialBlocksSubmit,
+    accountHolds: () => credentialBlocksSubmit,
+    viaExtension: false,
+  });
+  const serverDoesNotSay = verdict(undefined);
+  const credentialIsShort = verdict(true);
+  const accountIsShort = verdict(false);
+
+  it('says the key is missing, not the permission, when a suggester opens a string without one', () => {
+    const { container, root } = renderWith(
+      'suggestion_needs_existing_key',
+      undefined,
+      serverDoesNotSay
+    );
+    expect(container.textContent).toContain(
+      'This string has no key in Tolgee yet'
+    );
+    expect(container.textContent).not.toContain('permissions');
+    act(() => root.unmount());
+  });
+
+  it('keeps the old wording when the server does not say', () => {
+    const { container, root } = renderWith(
+      'permissions_not_sufficient_to_edit',
+      undefined,
+      serverDoesNotSay
+    );
+    expect(container.textContent).toContain('Update your API key');
+    act(() => root.unmount());
+  });
+
+  it('blames the API key when the account has the permission', () => {
+    const { container, root } = renderWith(
+      'permissions_not_sufficient_to_edit',
+      undefined,
+      credentialIsShort
+    );
+    expect(container.textContent).toContain(
+      "The API key this page uses doesn't have this permission"
+    );
+    expect(container.textContent).not.toContain('Update your API key');
+    expect(container.textContent).not.toContain('Tolgee plugin');
+    expect(buttons(container)).toEqual(['Learn more in Docs']);
+    act(() => root.unmount());
+  });
+
+  it('blames the API key on a scope error too, with no word about a plugin', () => {
+    const { container, root } = renderWith(
+      'operation_not_permitted',
+      ['keys.edit'],
+      credentialIsShort
+    );
+    expect(container.textContent).toContain('Missing scopes: keys.edit');
+    expect(container.textContent).toContain(
+      "The API key this page uses doesn't have this permission"
+    );
+    expect(container.textContent).not.toContain('Tolgee plugin');
+    expect(buttons(container)).toEqual(['Learn more in Docs']);
+    act(() => root.unmount());
+  });
+
+  it('points to the plugin instead when the page is signed in through it', () => {
+    const { container, root } = renderWith(
+      'operation_not_permitted',
+      ['keys.edit'],
+      { ...credentialIsShort, viaExtension: true }
+    );
+    expect(container.textContent).toContain('Missing scopes: keys.edit');
+    expect(container.textContent).toContain(
+      "The Tolgee plugin doesn't have this permission yet"
+    );
+    act(() => root.unmount());
+  });
+
+  it('never hints on a server error that names no scope', () => {
+    const { container, root } = renderWith(
+      'operation_not_permitted',
+      undefined,
+      credentialIsShort
+    );
+    expect(container.textContent).toBe('Operation not permitted');
+    act(() => root.unmount());
+  });
+
+  it('says nothing about signing in when the account lacks the permission too', () => {
+    const { container, root } = renderWith(
+      'permissions_not_sufficient_to_edit',
+      undefined,
+      accountIsShort
+    );
+    expect(container.textContent).toContain('Ask a project admin');
+    expect(container.textContent).not.toContain('API key');
+    expect(container.textContent).not.toContain('Sign in');
+    const other = renderWith(
+      'operation_not_permitted',
+      ['keys.edit'],
+      accountIsShort
+    );
+    expect(other.container.textContent).toBe(
+      'Operation not permittedMissing scopes: keys.edit'
+    );
+    act(() => root.unmount());
+    act(() => other.root.unmount());
   });
 });

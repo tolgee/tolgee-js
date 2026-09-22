@@ -19,7 +19,7 @@ import {
 } from '../../client/useQueryApi';
 import {
   changeInTolgeeCache,
-  deriveDispositions,
+  deriveFieldStates,
   getInitialLanguages,
   getPreferredLanguages,
   mapPosition,
@@ -44,6 +44,7 @@ import { useComputedPermissions } from './usePermissions';
 import { HttpError, isHttpError } from '../../client/HttpError';
 import { components } from '../../client/apiSchema.generated';
 import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
+import { resolveLiveCredential } from '../../../tools/auth';
 
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
 
@@ -667,7 +668,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       availableLanguages?.map((l) => l.tag) ?? []
     );
 
-    const dispositions = deriveDispositions({
+    const { dispositions, credentialBlocksField } = deriveFieldStates({
       languages: selectedLanguages,
       states: Object.fromEntries(
         selectedLanguages.map((language) => [
@@ -677,6 +678,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       ),
       formDisabled,
       getDisposition: permissions.getDisposition,
+      credentialBlocksTranslation: permissions.credentialBlocksTranslation,
     });
 
     const serverValue = (language: string) =>
@@ -737,6 +739,8 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       clearedSuggestFields: submitPlan.cleared,
       busy: saving || refreshing,
       dispositions,
+      credentialBlocksField,
+      viaExtension: resolveLiveCredential(props.uiProps).viaExtension,
       suggestOnly,
       submitKind: submitPlan.kind,
       nothingToSuggest: suggestOnly && !submitPlan.toSuggest.length,
