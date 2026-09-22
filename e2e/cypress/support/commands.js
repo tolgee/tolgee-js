@@ -50,7 +50,7 @@ Cypress.Commands.add(
   'findDcyWithCustom',
   { prevSubject: 'element' },
   (subject, { value, ...other }, options) =>
-    subject.find(
+    cy.wrap(subject).find(
       `[data-cy="${value}"]${Object.entries(other)
         .map(([key, value]) => `[data-cy-${key}="${value}"]`)
         .join('')}`,

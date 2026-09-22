@@ -119,7 +119,7 @@ context('UI Dialog', () => {
     // we should be able to delete just uploaded images
     getByAriaLabel('Delete').should('be.visible');
 
-    getDevUi().contains('Update').click();
+    getDevUi().findDcy('key-form-submit').click();
 
     openUI();
     getByAriaLabel('Screenshot', { timeout: 10000 })
@@ -140,12 +140,12 @@ context('UI Dialog', () => {
     ]);
     openUI();
     takeScreenshotAndWait();
-    getDevUi().contains('Update').click();
+    getDevUi().findDcy('key-form-submit').click();
 
     openUI();
     getByAriaLabel('Screenshot', { timeout: 10000 }).trigger('mouseover');
     getByAriaLabel('Delete').should('be.visible').click();
-    getDevUi().contains('Update').click();
+    getDevUi().findDcy('key-form-submit').click();
 
     openUI();
     getByAriaLabel('Screenshot').should('not.exist');
