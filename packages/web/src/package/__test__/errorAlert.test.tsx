@@ -117,6 +117,15 @@ describe('ErrorAlert getErrorContent: OAuth recovery', () => {
     expect(container.textContent).toContain('too large for the Tolgee plugin');
     act(() => root.unmount());
   });
+
+  it.each([
+    ['duplicate_suggestion', 'This suggestion already exists'],
+    ['suggestions_disabled', 'Suggestions are disabled'],
+  ])('explains %s instead of showing the raw code', (code, title) => {
+    const { container, root } = renderFor(code);
+    expect(container.textContent).toContain(title);
+    act(() => root.unmount());
+  });
 });
 
 describe('ErrorAlert: missing credentials', () => {

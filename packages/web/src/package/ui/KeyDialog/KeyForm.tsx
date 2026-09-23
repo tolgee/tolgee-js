@@ -30,6 +30,7 @@ import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
 import { FilterTagMissingInfo } from './Tags/FilterTagMissingInfo';
 import { KeyName } from '../common/KeyName';
+import type { SubmitKind } from './dialogContext/tools';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -99,6 +100,18 @@ const ScControls = styled('div')`
   min-height: 36px;
 `;
 
+const SUBMIT_LABELS: Record<SubmitKind, string> = {
+  save: 'Save',
+  suggest: 'Suggest',
+  saveAndSuggest: 'Save & suggest',
+};
+
+const SUCCESS_LABELS: Record<SubmitKind, string> = {
+  save: 'Saved! ✓',
+  suggest: 'Suggested! ✓',
+  saveAndSuggest: 'Saved & suggested! ✓',
+};
+
 export const KeyForm = () => {
   const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
@@ -114,6 +127,9 @@ export const KeyForm = () => {
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
   const submitError = useDialogContext((c) => c.submitError);
+  const submitKind = useDialogContext((c) => c.submitKind);
+  const nothingToSuggest = useDialogContext((c) => c.nothingToSuggest);
+  const suggestOnly = useDialogContext((c) => c.suggestOnly);
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
@@ -219,7 +235,7 @@ export const KeyForm = () => {
         value={selectedNs}
         onChange={setSelectedNs}
       />
-      {ready && (
+      {ready && !suggestOnly && (
         <ScTagsWrapper>
           <ScFieldTitle>Tags</ScFieldTitle>
           <Tags />
@@ -262,6 +278,7 @@ export const KeyForm = () => {
           disabled={
             saving ||
             formDisabled ||
+            nothingToSuggest ||
             filterTagMissing ||
             (isOverCharLimit && !isExistingKey)
           }
@@ -272,10 +289,10 @@ export const KeyForm = () => {
           data-cy="key-form-submit"
         >
           {success
-            ? 'Saved! ✓'
-            : keyData?.keyId === undefined
-              ? 'Create'
-              : 'Update'}
+            ? SUCCESS_LABELS[success]
+            : isExistingKey
+              ? SUBMIT_LABELS[submitKind]
+              : 'Create'}
         </LoadingButton>
       </ScControls>
       {showCharLimitConfirmation && (

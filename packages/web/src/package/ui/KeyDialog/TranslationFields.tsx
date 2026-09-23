@@ -38,6 +38,7 @@ export const TranslationFields: FunctionComponent = () => {
   const { onInputChange, onStateChange } = useDialogActions();
 
   const permissions = useDialogContext((c) => c.permissions);
+  const dispositions = useDialogContext((c) => c.dispositions);
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
   const langFields = selectedLanguages.length
     ? selectedLanguages
@@ -65,7 +66,7 @@ export const TranslationFields: FunctionComponent = () => {
         selectedLanguages.map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
 
-          const editPermitted = permissions.canEditTranslation(key);
+          const editPermitted = dispositions[key] !== 'readonly';
           const stateChangePermitted = permissions.canEditState(key);
 
           const translation = keyData?.translations[key];
