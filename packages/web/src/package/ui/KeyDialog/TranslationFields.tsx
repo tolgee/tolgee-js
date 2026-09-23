@@ -5,6 +5,7 @@ import { keyframes } from '@mui/styled-engine';
 import { useDialogContext, useDialogActions } from './dialogContext';
 import { getPreferredLanguages } from './dialogContext/tools';
 import { TranslationTextField } from './TranslationTextField';
+import { Suggestions } from './Suggestions/Suggestions';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -87,6 +88,7 @@ export const TranslationFields: FunctionComponent = () => {
                 state={formValue?.state}
                 stateChangePermitted={stateChangePermitted}
               />
+              <Suggestions language={lang} />
             </React.Fragment>
           );
         })

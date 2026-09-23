@@ -160,6 +160,8 @@ export const getComputedPermissions = (
     credentialBlocksSubmit,
     credentialBlocksTranslation,
     accountHolds,
+    suggestionsEnabled,
+    currentUserId: permissions?.userId,
     canSuggestTranslation,
     getDisposition,
     canDeleteOwnSuggestion,
