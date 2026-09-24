@@ -65,7 +65,12 @@ const suggestionIdFromUrl = (url: string) =>
 // own-access scope, so the key is created with plain view scope and everything suggestion-related is mocked.
 const openWithSuggestions = (
   permissions: ApiKeyPermissionsModel,
-  { languagesWithSuggestions = ['en'], pluralKey = false, count = 5 } = {}
+  {
+    languagesWithSuggestions = ['en'],
+    pluralKey = false,
+    count = 5,
+    untranslatedLanguage = undefined as string | undefined,
+  } = {}
 ) => {
   let active = newestFirst()
     .slice(0, count)
@@ -96,8 +101,27 @@ const openWithSuggestions = (
             translations[tag].activeSuggestionCount = active.length;
           }
         });
+        if (translations && untranslatedLanguage) {
+          // what the server sends for a language the key was never translated into: no translation
+          // record, so no count, but the suggestions of that language are still listed
+          translations[untranslatedLanguage] = {
+            id: null,
+            state: 'UNTRANSLATED',
+            text: null,
+            activeSuggestionCount: 0,
+            totalSuggestionCount: 0,
+            suggestions: active.slice(0, 1),
+            auto: false,
+            commentCount: 0,
+            unresolvedCommentCount: 0,
+            fromTranslationMemory: false,
+            outdated: false,
+            qaChecksStale: false,
+            qaIssueCount: 0,
+          };
+        }
       })
-  );
+  ).as('translations');
   cy.intercept(
     { path: '/v2/projects/*/languages/*/key/*/suggestion?**', method: 'get' },
     (req) => {
@@ -257,22 +281,22 @@ context('Suggestions in the dialog', () => {
     getSuggestionsList('en').should('not.exist');
   });
 
-  it('declines, and deletes only own suggestion', () => {
+  // Each action gets its own dialog: an action re-renders the row as it locks, refetches and
+  // refreshes, and Cypress 10 pins the element it resolved, so a second click in the same test
+  // lands on a detached button. Which rows offer delete is covered by the permission cases below.
+  it('declines someone else’s suggestion', () => {
     openWithSuggestions(reviewer);
     getSuggestionsList('en').findDcy('suggestion-decline').eq(1).click();
     cy.wait('@decline').its('request.url').should('contain', '/suggestion/4/');
     shouldShowEnglishSuggestions([5, 3, 2]);
+  });
 
+  it('deletes the current user’s own suggestion', () => {
+    openWithSuggestions(reviewer);
     openMenuOfSuggestion('en', 0);
     getSuggestionsList('en').findDcy('suggestion-delete').click();
     cy.wait('@delete').its('request.url').should('contain', '/suggestion/5');
-    shouldShowEnglishSuggestions([3, 2, 1]);
-
-    openMenuOfSuggestion('en', 0);
-    getSuggestionsList('en')
-      .findDcy('suggestion-accept-decline-others')
-      .should('be.visible');
-    getSuggestionsList('en').findDcy('suggestion-delete').should('not.exist');
+    shouldShowEnglishSuggestions([4, 3, 2]);
   });
 
   it('offers review actions only for the permitted language', () => {
@@ -296,6 +320,48 @@ context('Suggestions in the dialog', () => {
     getSuggestionsList('de')
       .findDcy('suggestion-accept-decline-others')
       .should('not.exist');
+  });
+
+  it('lists suggestions for a language the key was never translated into', () => {
+    openWithSuggestions(reviewer, { untranslatedLanguage: 'de' });
+    // the payload's German entry carries no count, only the suggestion itself; the list endpoint is
+    // mocked per key rather than per language, so what matters here is that the panel loads at all
+    getSuggestionsList('de').should('be.visible');
+    getSuggestionsList('de')
+      .findDcy('suggestion-item-text')
+      .should('have.length.at.least', 1)
+      .and('contain', 'Suggested title');
+    getSuggestionsList('de')
+      .findDcy('suggestion-accept')
+      .should('have.length.at.least', 1);
+  });
+
+  it('locks the actions while the dialog is saving', () => {
+    openWithSuggestions(reviewer);
+    cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) =>
+      req.reply({ body: { response: 'success' }, delay: 2000 })
+    ).as('save');
+
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'en' })
+      .find('.cm-content')
+      .click()
+      .realType('{backspace}'.repeat(20) + 'What to take');
+    getDevUi().findDcy('key-form-submit').click();
+
+    getSuggestionsList('en')
+      .findDcy('suggestion-accept')
+      .first()
+      .should('be.disabled');
+    getSuggestionsList('en')
+      .findDcy('suggestion-decline')
+      .first()
+      .should('be.disabled');
+    getSuggestionsList('en')
+      .findDcy('suggestion-menu')
+      .first()
+      .should('be.disabled');
+    cy.wait('@save');
   });
 
   it('shows a plural suggestion form by form', () => {
