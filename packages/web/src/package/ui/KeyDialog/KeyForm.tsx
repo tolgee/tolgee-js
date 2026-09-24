@@ -30,6 +30,7 @@ import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
 import { FilterTagMissingInfo } from './Tags/FilterTagMissingInfo';
 import { KeyName } from '../common/KeyName';
+import type { SubmitKind } from './dialogContext/tools';
 
 const ScContainer = styled('div')`
   font-family: Rubik, Roboto, Arial;
@@ -71,7 +72,18 @@ const ScValue = styled('p')`
 `;
 
 const ScHint = styled('span')`
-  color: grey;
+  color: ${({ theme }) => theme.palette.text.secondary};
+`;
+
+const ScDescription = styled('p')`
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: ${({ theme }) => theme.palette.text.secondary};
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const ScLinkIcon = styled(Link)`
@@ -99,6 +111,18 @@ const ScControls = styled('div')`
   min-height: 36px;
 `;
 
+const SUBMIT_LABELS: Record<SubmitKind, string> = {
+  save: 'Save',
+  suggest: 'Suggest',
+  saveAndSuggest: 'Save & suggest',
+};
+
+const SUCCESS_LABELS: Record<SubmitKind, string> = {
+  save: 'Saved! ✓',
+  suggest: 'Suggested! ✓',
+  saveAndSuggest: 'Saved & suggested! ✓',
+};
+
 export const KeyForm = () => {
   const theme = useTheme();
   const { setUseBrowserWindow, onClose, onSave, setSelectedNs } =
@@ -114,6 +138,9 @@ export const KeyForm = () => {
   const loading = useDialogContext((c) => c.loading);
   const error = useDialogContext((c) => c.error);
   const submitError = useDialogContext((c) => c.submitError);
+  const submitKind = useDialogContext((c) => c.submitKind);
+  const nothingToSuggest = useDialogContext((c) => c.nothingToSuggest);
+  const suggestOnly = useDialogContext((c) => c.suggestOnly);
   const saving = useDialogContext((c) => c.saving);
   const success = useDialogContext((c) => c.success);
   const keyExists = useDialogContext((c) => c.keyExists);
@@ -214,12 +241,17 @@ export const KeyForm = () => {
         <KeyName name={input} />
         <ScHint>{!keyExists && ready && " (key doesn't exist yet)"}</ScHint>
       </ScValue>
+      {keyData?.keyDescription && (
+        <ScDescription data-cy="key-description" title={keyData.keyDescription}>
+          {keyData.keyDescription}
+        </ScDescription>
+      )}
       <NsSelect
         options={fallbackNamespaces}
         value={selectedNs}
         onChange={setSelectedNs}
       />
-      {ready && (
+      {ready && !suggestOnly && (
         <ScTagsWrapper>
           <ScFieldTitle>Tags</ScFieldTitle>
           <Tags />
@@ -262,6 +294,7 @@ export const KeyForm = () => {
           disabled={
             saving ||
             formDisabled ||
+            nothingToSuggest ||
             filterTagMissing ||
             (isOverCharLimit && !isExistingKey)
           }
@@ -272,10 +305,10 @@ export const KeyForm = () => {
           data-cy="key-form-submit"
         >
           {success
-            ? 'Saved! ✓'
-            : keyData?.keyId === undefined
-              ? 'Create'
-              : 'Update'}
+            ? SUCCESS_LABELS[success]
+            : isExistingKey
+              ? SUBMIT_LABELS[submitKind]
+              : 'Create'}
         </LoadingButton>
       </ScControls>
       {showCharLimitConfirmation && (

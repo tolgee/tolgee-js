@@ -11,14 +11,24 @@ import { getVisibleCharCount } from '../editor/getVisibleCharCount';
 import { sleep } from '../../tools/sleep';
 import { createProvider } from '../../tools/createProvider';
 import { putBaseLangFirst, putBaseLangFirstTags } from '../languageHelpers';
-import { useApiMutation, useApiQuery } from '../../client/useQueryApi';
+import { useQueryClient } from 'react-query';
+import {
+  invalidateUrlPrefix,
+  useApiMutation,
+  useApiQuery,
+} from '../../client/useQueryApi';
 import {
   changeInTolgeeCache,
   getInitialLanguages,
   getPreferredLanguages,
   mapPosition,
   permissionsQueryProjectId,
+  sameTranslation,
+  isSuggestOnly,
+  keepFormFields,
+  planSubmit,
   setPreferredLanguages,
+  SubmitKind,
 } from './tools';
 import { useGallery } from './useGallery';
 import { checkPlatformVersion } from '../../tools/checkPlatformVersion';
@@ -28,12 +38,18 @@ import {
   STATES_FOR_UPDATE,
   StateType,
 } from '../State/translationStates';
-import { useComputedPermissions } from './usePermissions';
+import { Disposition, useComputedPermissions } from './usePermissions';
 import { HttpError, isHttpError } from '../../client/HttpError';
 import { components } from '../../client/apiSchema.generated';
 import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
+import { resolveLiveCredential } from '../../../tools/auth';
 
+// Raising this blanks the whole dialog on every older server, and the suggestion work does not need
+// it: each current-permissions field the dialog reads is optional, and the suggestion UI hides
+// itself when the server does not report suggestionsMode. The platform version suggestions require
+// is stated in the SDK docs, not enforced here.
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
+const SUGGESTIONS_URL_PREFIX = '/v2/projects/languages/{languageId}/key';
 
 type LanguageModel = components['schemas']['LanguageModel'];
 
@@ -56,7 +72,7 @@ type DialogProps = {
 
 export const [DialogProvider, useDialogActions, useDialogContext] =
   createProvider((props: DialogProps) => {
-    const [success, setSuccess] = useState<boolean>(false);
+    const [success, setSuccess] = useState<SubmitKind | false>(false);
     const [translationsForm, _setTranslationsForm] = useState<FormTranslations>(
       {}
     );
@@ -89,6 +105,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [_pluralArgName, setPluralArgName] = useState<string>();
     const [_maxCharLimit, setMaxCharLimit] = useState<number | undefined>();
     const [submitError, setSubmitError] = useState<HttpError>();
+    const [suggestionErrors, setSuggestionErrors] = useState<
+      Record<string, HttpError>
+    >({});
+    const [refreshing, setRefreshing] = useState(false);
+    const queryClient = useQueryClient();
     const [readOnly, setReadOnly] = useState(false);
     const branchParam = props.uiProps.branch;
 
@@ -313,6 +334,11 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       method: 'put',
     });
 
+    const createSuggestion = useApiMutation({
+      url: '/v2/projects/languages/{languageId}/key/{keyId}/suggestion',
+      method: 'post',
+    });
+
     const linkToPlatform =
       scopesLoadable.data?.projectId !== undefined
         ? `${props.uiProps.apiUrl}/projects/${
@@ -330,7 +356,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const [useBrowserWindow, setUseBrowserWindow] = useState(false);
 
     function onInputChange(key: string, value: TolgeeFormat) {
+      // the editor also reports a change when a re-seed replaces its value
+      if (sameTranslation(value, translationsForm[key]?.value)) {
+        return;
+      }
       setSubmitError(undefined);
+      setSuggestionErrors(({ [key]: _, ...rest }) => rest);
       setSuccess(false);
       setTranslation(key, value);
     }
@@ -340,20 +371,24 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       setState(key, value);
     }
 
+    function toIcu(value: TolgeeFormat) {
+      return tolgeeFormatGenerateIcu(
+        { ...value, parameter: pluralArgName },
+        !icuPlaceholders
+      );
+    }
+
     async function onSave() {
       setSaving(true);
+      setSuggestionErrors({});
       try {
         const newTranslations = {} as Record<string, string>;
         const newStates = {} as Record<string, StateInType>;
         Object.entries(translationsForm).forEach(([language, value]) => {
-          const canBeTranslated = permissions.canEditTranslation(language);
           const stateCanBeChanged = permissions.canEditState(language);
 
-          if (canBeTranslated) {
-            newTranslations[language] = tolgeeFormatGenerateIcu(
-              { ...value.value, parameter: pluralArgName },
-              !icuPlaceholders
-            );
+          if (submitPlan.toSave.includes(language)) {
+            newTranslations[language] = toIcu(value.value);
           }
           if (
             STATES_FOR_UPDATE.includes(value.state as StateInType) &&
@@ -371,64 +406,78 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
             })
           : undefined;
 
-        await (keyData === undefined
-          ? createKey.mutateAsync({
-              content: {
-                'application/json': {
-                  name: props.keyName,
-                  branch: branchParam,
-                  namespace: selectedNs || undefined,
-                  translations: newTranslations,
-                  states: newStates,
-                  screenshots: screenshots.map((sc) => ({
-                    uploadedImageId: sc.id,
-                    positions: sc.keyReferences?.map(mapPosition),
-                  })),
-                  tags,
-                  relatedKeysInOrder,
-                  isPlural,
-                  pluralArgName,
-                  maxCharLimit: maxCharLimit ?? null,
+        if (!suggestOnly) {
+          await (keyData === undefined
+            ? createKey.mutateAsync({
+                content: {
+                  'application/json': {
+                    name: props.keyName,
+                    branch: branchParam,
+                    namespace: selectedNs || undefined,
+                    translations: newTranslations,
+                    states: newStates,
+                    screenshots: screenshots.map((sc) => ({
+                      uploadedImageId: sc.id,
+                      positions: sc.keyReferences?.map(mapPosition),
+                    })),
+                    tags,
+                    relatedKeysInOrder,
+                    isPlural,
+                    pluralArgName,
+                    maxCharLimit: maxCharLimit ?? null,
+                  },
                 },
-              },
-            })
-          : updateKey.mutateAsync({
-              content: {
-                'application/json': {
-                  name: props.keyName,
-                  branch: branchParam,
-                  namespace: selectedNs || undefined,
-                  translations: newTranslations,
-                  states: newStates,
-                  screenshotIdsToDelete: getRemovedScreenshots(),
-                  screenshotsToAdd: getJustUploadedScreenshots().map((sc) => ({
-                    uploadedImageId: sc.id,
-                    positions: sc.keyReferences?.map(mapPosition),
-                  })),
-                  tags,
-                  relatedKeysInOrder,
-                  isPlural,
-                  pluralArgName,
-                  maxCharLimit: maxCharLimit ?? 0,
+              })
+            : updateKey.mutateAsync({
+                content: {
+                  'application/json': {
+                    name: props.keyName,
+                    branch: branchParam,
+                    namespace: selectedNs || undefined,
+                    translations: newTranslations,
+                    states: newStates,
+                    screenshotIdsToDelete: getRemovedScreenshots(),
+                    screenshotsToAdd: getJustUploadedScreenshots().map(
+                      (sc) => ({
+                        uploadedImageId: sc.id,
+                        positions: sc.keyReferences?.map(mapPosition),
+                      })
+                    ),
+                    tags,
+                    relatedKeysInOrder,
+                    isPlural,
+                    pluralArgName,
+                    maxCharLimit: maxCharLimit ?? 0,
+                  },
                 },
-              },
-              path: { id: keyData.keyId! },
-            }));
+                path: { id: keyData.keyId! },
+              }));
 
-        changeInTolgeeCache(
-          props.keyName,
-          selectedNs,
-          Object.entries(newTranslations),
-          props.uiProps.changeTranslation
-        );
+          changeInTolgeeCache(
+            props.keyName,
+            selectedNs,
+            Object.entries(newTranslations),
+            props.uiProps.changeTranslation
+          );
 
-        props.uiProps.onPermanentChange({
-          key: props.keyName,
-          namespace: selectedNs,
+          props.uiProps.onPermanentChange({
+            key: props.keyName,
+            namespace: selectedNs,
+          });
+        }
+
+        const failed = await sendSuggestions(submitPlan.toSuggest);
+        const failedLanguages = Object.keys(failed);
+        setSuggestionErrors(failed);
+        await refetchKeeping({
+          keepLanguages: failedLanguages,
+          keepTagsAndScreenshots: false,
         });
-        translationsLoadable.refetch();
+        if (failedLanguages.length) {
+          return;
+        }
         setSaving(false);
-        setSuccess(true);
+        setSuccess(submitPlan.kind);
         if (useBrowserWindow) {
           await sleep(2000);
           setSuccess(false);
@@ -453,6 +502,71 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       }
     }
 
+    async function sendSuggestions(languages: string[]) {
+      const failed: Record<string, HttpError> = {};
+      await Promise.all(
+        languages.map((language) =>
+          createSuggestion
+            .mutateAsync({
+              path: {
+                languageId: availableLanguages!.find((l) => l.tag === language)!
+                  .id,
+                keyId: keyData!.keyId!,
+              },
+              content: {
+                'application/json': {
+                  translation: toIcu(translationsForm[language].value),
+                },
+              },
+            })
+            .catch((error: HttpError) => {
+              failed[language] = error;
+            })
+        )
+      );
+      const anySent = Object.keys(failed).length < languages.length;
+      if (anySent) {
+        invalidateUrlPrefix(queryClient, SUGGESTIONS_URL_PREFIX);
+      }
+      return failed;
+    }
+
+    // Relies on react-query (v3) running the query's onSuccess, which re-seeds the whole form, before the awaited
+    // refetch() continues; what is restored here would otherwise be overwritten.
+    async function refetchKeeping({
+      keepLanguages,
+      keepTagsAndScreenshots,
+    }: {
+      keepLanguages: string[];
+      keepTagsAndScreenshots: boolean;
+    }) {
+      const form = translationsForm;
+      const unsavedTags = tags;
+      const unsavedScreenshots = screenshots;
+      setRefreshing(true);
+      try {
+        await translationsLoadable.refetch();
+        _setTranslationsForm((fetched) =>
+          keepFormFields(fetched, form, keepLanguages)
+        );
+        if (keepTagsAndScreenshots) {
+          setTags(unsavedTags);
+          setScreenshots(unsavedScreenshots);
+        }
+      } finally {
+        setRefreshing(false);
+      }
+    }
+
+    function refreshTranslation(reseedLanguage?: string) {
+      return refetchKeeping({
+        keepLanguages: Object.keys(translationsForm).filter(
+          (l) => l !== reseedLanguage
+        ),
+        keepTagsAndScreenshots: true,
+      });
+    }
+
     function onClose() {
       if (screenshotDetail) {
         setScreenshotDetail(null);
@@ -466,6 +580,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         setScreenshots([]);
       }
     }
+
+    useEffect(() => {
+      setSuggestionErrors({});
+    }, [selectedLanguages, selectedNs]);
 
     function onSelectedLanguagesChange(languages: string[]) {
       if (languages.length) {
@@ -506,13 +624,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         selectedNs,
         Object.entries(translationsForm).map(
           ([language, value]) =>
-            [
-              language,
-              tolgeeFormatGenerateIcu(
-                { ...value.value, parameter: pluralArgName },
-                !icuPlaceholders
-              ),
-            ] as [string, string]
+            [language, toIcu(value.value)] as [string, string]
         )
       );
     }
@@ -554,6 +666,45 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     const formDisabled = loading || !permissions.canSubmitForm || readOnly;
 
+    const suggestOnly = isSuggestOnly(
+      permissions,
+      availableLanguages?.map((l) => l.tag) ?? []
+    );
+
+    const dispositions: Record<string, Disposition> = {};
+    const credentialBlocksField: Record<string, boolean> = {};
+    selectedLanguages.forEach((language) => {
+      const state = keyData?.translations?.[language]?.state;
+      const lockedElsewhere = formDisabled || state === 'DISABLED';
+      dispositions[language] = lockedElsewhere
+        ? 'readonly'
+        : permissions.getDisposition(language, state);
+      credentialBlocksField[language] =
+        !lockedElsewhere &&
+        permissions.credentialBlocksTranslation(language, state) === true;
+    });
+
+    const serverValue = (language: string) =>
+      getTolgeeFormat(
+        keyData?.translations?.[language]?.text || '',
+        isPlural,
+        !icuPlaceholders
+      );
+
+    const submitPlan = planSubmit({
+      fields: Object.entries(translationsForm).map(([language, { value }]) => ({
+        language,
+        disposition: dispositions[language] ?? 'readonly',
+        changed: !sameTranslation(value, serverValue(language)),
+        isEmpty: isTranslationEmpty(value, isPlural),
+      })),
+      suggestOnly,
+      pluralChanged:
+        keyData !== undefined &&
+        (isPlural !== Boolean(keyData.keyIsPlural) ||
+          (isPlural && pluralArgName !== keyData.keyPluralArgName)),
+    });
+
     const contextValue = {
       input: props.keyName,
       fallbackNamespaces: props.fallbackNamespaces,
@@ -587,6 +738,15 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       pluralsSupported,
       icuPlaceholders,
       submitError,
+      suggestionErrors,
+      clearedSuggestFields: submitPlan.cleared,
+      busy: saving || refreshing,
+      dispositions,
+      credentialBlocksField,
+      viaExtension: resolveLiveCredential(props.uiProps).viaExtension,
+      suggestOnly,
+      submitKind: submitPlan.kind,
+      nothingToSuggest: suggestOnly && !submitPlan.toSuggest.length,
       filterTagMissing,
       isOverCharLimit,
     } as const;
@@ -598,6 +758,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       handleTakeScreenshot,
       handleRemoveScreenshot,
       onSave,
+      refreshTranslation,
       onClose,
       onSelectedLanguagesChange,
       setContainer,

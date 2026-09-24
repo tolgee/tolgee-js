@@ -5,6 +5,7 @@ import { keyframes } from '@mui/styled-engine';
 import { useDialogContext, useDialogActions } from './dialogContext';
 import { getPreferredLanguages } from './dialogContext/tools';
 import { TranslationTextField } from './TranslationTextField';
+import { Suggestions } from './Suggestions/Suggestions';
 
 const inputLoading = keyframes`
   0%   { background-position: 0%; }
@@ -38,16 +39,14 @@ export const TranslationFields: FunctionComponent = () => {
   const { onInputChange, onStateChange } = useDialogActions();
 
   const permissions = useDialogContext((c) => c.permissions);
+  const dispositions = useDialogContext((c) => c.dispositions);
   const selectedLanguages = useDialogContext((c) => c.selectedLanguages);
   const langFields = selectedLanguages.length
     ? selectedLanguages
     : getPreferredLanguages();
   const availableLanguages = useDialogContext((c) => c.availableLanguages);
   const translationsForm = useDialogContext((c) => c.translationsForm);
-  const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
-
-  const keyData = useDialogContext((c) => c.keyData);
 
   const Loading = () => (
     <>
@@ -65,20 +64,15 @@ export const TranslationFields: FunctionComponent = () => {
         selectedLanguages.map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
 
-          const editPermitted = permissions.canEditTranslation(key);
+          const inputPermitted = dispositions[key] !== 'readonly';
           const stateChangePermitted = permissions.canEditState(key);
 
-          const translation = keyData?.translations[key];
           const formValue = translationsForm[key];
 
           return (
             <React.Fragment key={key}>
               <TranslationTextField
-                disabled={
-                  formDisabled ||
-                  !editPermitted ||
-                  translation?.state === 'DISABLED'
-                }
+                disabled={!inputPermitted}
                 language={lang}
                 value={formValue?.value}
                 onChange={(value) => onInputChange(key, value)}
@@ -86,6 +80,7 @@ export const TranslationFields: FunctionComponent = () => {
                 state={formValue?.state}
                 stateChangePermitted={stateChangePermitted}
               />
+              <Suggestions language={lang} />
             </React.Fragment>
           );
         })

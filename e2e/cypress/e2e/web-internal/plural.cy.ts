@@ -2,6 +2,7 @@ import { login } from '../../common/apiCalls';
 import { fullPermissions } from '../../common/testApiKeys';
 import { openUI, visitWithApiKey } from '../../common/nextInternalCommon';
 import { getDevUi } from '../../common/devUiTools';
+import { WEB_INTERNAL_URL } from '../../common/constants';
 import { simulateReqAndResponse } from '../../common/simulateReqAndResponse';
 
 context('UI with plurals', () => {
@@ -19,7 +20,7 @@ context('UI with plurals', () => {
     ]);
     openUI();
     getDevUi().contains('Quick translation');
-    getDevUi().contains('Update');
+    getDevUi().findDcy('key-form-submit');
     getDevUi().findDcy('key-plural-checkbox').should('be.visible').click();
     checkPluralValue('en', 'one', '');
     checkPluralValue('en', 'other', 'What To Pack');
@@ -73,7 +74,7 @@ context('UI with plurals', () => {
   });
 
   it('correctly detects plural from default value', () => {
-    cy.visit('http://localhost:8114/translation-methods');
+    cy.visit(`${WEB_INTERNAL_URL}/translation-methods`);
     openUI('2 items');
     getDevUi().contains('Quick translation');
     getDevUi().contains("(key doesn't exist yet)");

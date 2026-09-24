@@ -1,112 +1,44 @@
-import { useEffect, useState } from 'react';
-import { Alert, AlertTitle, Box, Button } from '@mui/material';
-import { HttpError, isHttpError } from '../client/HttpError';
-import { useDialogContext } from './dialogContext';
-import { NewTabLink } from './Link';
-import { createUrl } from '../../tools/url';
-import { detectExtension, openPlugin } from '../../tools/extension';
-import { CHROME_EXTENSION_LINK } from '../../constants';
+import { AlertTitle, Box } from '@mui/material';
+import { HttpError } from '../../client/HttpError';
+import { DocsInContext } from './DocsInContext';
+import { OpenExtension } from './OpenExtension';
+import { DocsAPIKeys } from './DocsAPIKeys';
+import { CredentialHint } from './CredentialHint';
 
-type Props = {
-  error: HttpError | Error;
-  severity?: 'error' | 'info';
+type CredentialContext = {
+  credentialBlocksSubmit: boolean | undefined;
+  accountHolds: (scopes: string[]) => boolean | undefined;
+  viaExtension: boolean;
 };
-
-export const ErrorAlert = ({ error, severity }: Props) => {
-  const apiUrl = useDialogContext((c) => c.uiProps.apiUrl);
-
-  return (
-    <Alert
-      sx={{ mt: 2 }}
-      severity={severity ?? severityFor(error)}
-      data-cy="error-alert"
-      data-cy-error-code={isHttpError(error) ? error.code : undefined}
-    >
-      {isHttpError(error)
-        ? getErrorContent(error, createUrl(apiUrl).toString())
-        : error.message}
-    </Alert>
-  );
-};
-
-// Missing credentials, in the page or in the extension, is the normal state of a page nobody has connected yet,
-// not a failure.
-export function severityFor(error: HttpError | Error): 'error' | 'info' {
-  return isHttpError(error) &&
-    (error.code === 'api_key_not_specified' ||
-      error.code === 'extension_session_missing' ||
-      error.code === 'extension_editing_off')
-    ? 'info'
-    : 'error';
-}
-
-function DocsInContext() {
-  return (
-    <NewTabLink href="https://tolgee.io/js-sdk/in-context">
-      Learn more in Docs
-    </NewTabLink>
-  );
-}
-
-function OpenExtension() {
-  const [present, setPresent] = useState<boolean>();
-  useEffect(() => {
-    let mounted = true;
-    detectExtension().then((found) => mounted && setPresent(found));
-    return () => {
-      mounted = false;
-    };
-  }, []);
-  if (present === undefined) {
-    return null;
-  }
-  return (
-    <Box mt={1.5}>
-      {present ? (
-        <Button
-          size="small"
-          variant="outlined"
-          color="inherit"
-          onClick={openPlugin}
-        >
-          Open the Tolgee plugin
-        </Button>
-      ) : (
-        <Button
-          size="small"
-          variant="outlined"
-          color="inherit"
-          href={CHROME_EXTENSION_LINK}
-          target="_blank"
-          rel="noreferrer"
-        >
-          Install the Tolgee plugin
-        </Button>
-      )}
-    </Box>
-  );
-}
-
-function DocsAPIKeys() {
-  return (
-    <NewTabLink href="https://tolgee.io/platform/account_settings/api_keys_and_pat_tokens">
-      Learn more in Docs
-    </NewTabLink>
-  );
-}
 
 export function getErrorContent(
   { code, params, message }: HttpError,
-  apiUrl: string
+  apiUrl: string,
+  credential: CredentialContext = {
+    credentialBlocksSubmit: undefined,
+    accountHolds: () => undefined,
+    viaExtension: false,
+  }
 ) {
   switch (code) {
-    case 'operation_not_permitted':
+    case 'operation_not_permitted': {
+      const missing = params ?? [];
       return (
         <>
           <AlertTitle>Operation not permitted</AlertTitle>
-          {Boolean(params?.length) && 'Missing scopes: ' + params?.join(', ')}
+          {missing.length > 0 && (
+            <>
+              {'Missing scopes: ' + missing.join(', ')}
+              {credential.accountHolds(missing) && (
+                <Box mt={1}>
+                  <CredentialHint viaExtension={credential.viaExtension} />
+                </Box>
+              )}
+            </>
+          )}
         </>
       );
+    }
 
     case 'invalid_project_api_key':
       return (
@@ -193,21 +125,49 @@ export function getErrorContent(
         </>
       );
 
-    case 'permissions_not_sufficient_to_edit':
+    case 'permissions_not_sufficient_to_edit': {
+      const limit = credential.credentialBlocksSubmit;
       return (
         <>
           <AlertTitle>
             Sorry, you don't have permissions to make changes
           </AlertTitle>
-          Update your API key or ask admin for more permissions <DocsAPIKeys />
+          {limit === true ? (
+            <CredentialHint viaExtension={credential.viaExtension} />
+          ) : limit === false ? (
+            'Ask a project admin for more permissions.'
+          ) : (
+            <>
+              Update your API key or ask admin for more permissions{' '}
+              <DocsAPIKeys />
+            </>
+          )}
         </>
       );
+    }
 
     case 'operation_not_permitted_in_read_only_mode':
       return (
         <>
           <AlertTitle>Read-only mode</AlertTitle>
           This branch is protected or your access is read-only.
+        </>
+      );
+
+    case 'duplicate_suggestion':
+      return (
+        <>
+          <AlertTitle>This suggestion already exists</AlertTitle>
+          Someone has already suggested exactly this text.
+        </>
+      );
+
+    case 'suggestions_disabled':
+      return (
+        <>
+          <AlertTitle>Suggestions are disabled</AlertTitle>
+          This project doesn't accept suggestions any more. Reopen the dialog to
+          see what you can still do.
         </>
       );
 

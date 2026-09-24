@@ -47,7 +47,7 @@ context('Tags editing', () => {
     cy.wait(100);
     getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
 
-    getDevUi().contains('Update').click();
+    getDevUi().findDcy('key-form-submit').click();
 
     cy.wait('@updateTranslation').then(({ request }) => {
       expect(request.body.tags).to.deep.eq(['test-tag']);
