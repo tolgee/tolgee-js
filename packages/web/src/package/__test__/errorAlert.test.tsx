@@ -1,10 +1,8 @@
 import { createRoot, Root } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
-import {
-  ErrorAlert,
-  getErrorContent,
-  severityFor,
-} from '../ui/KeyDialog/ErrorAlert';
+import { ErrorAlert } from '../ui/KeyDialog/ErrorAlert/ErrorAlert';
+import { getErrorContent } from '../ui/KeyDialog/ErrorAlert/getErrorContent';
+import { severityFor } from '../ui/KeyDialog/ErrorAlert/severityFor';
 import {
   HttpError,
   ErrorStatusCode,

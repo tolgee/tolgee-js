@@ -25,7 +25,7 @@ import { DEVTOOLS_Z_INDEX, TOLGEE_RESTRICT_ATTRIBUTE } from '../../constants';
 import { Tags } from './Tags/Tags';
 import { PluralFormCheckbox } from './PluralFormCheckbox';
 import { CharLimitCheckbox } from './CharLimitCheckbox';
-import { ErrorAlert } from './ErrorAlert';
+import { ErrorAlert } from './ErrorAlert/ErrorAlert';
 import { HttpError } from '../client/HttpError';
 import { Tooltip } from '../common/Tooltip';
 import { FilterTagMissingInfo } from './Tags/FilterTagMissingInfo';
