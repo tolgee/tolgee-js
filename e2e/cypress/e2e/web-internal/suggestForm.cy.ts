@@ -179,4 +179,23 @@ context('Suggesting from the dialog', () => {
       .should('contain.text', 'API key this page uses')
       .and('not.contain.text', 'Tolgee plugin');
   });
+
+  it('shows the key description under the key name, and nothing when there is none', () => {
+    openDialogAs(suggestOnly);
+    getDevUi().findDcy('key-description').should('not.exist');
+
+    cy.intercept(
+      { path: '/v2/projects/*/translations**', method: 'get' },
+      (req) =>
+        req.continue((res) => {
+          const key = res.body._embedded?.keys?.[0];
+          expect(key, 'the imported key in the translations response').to.exist;
+          key.keyDescription = 'Shown on the packing page';
+        })
+    );
+    openDialogAs(suggestOnly);
+    getDevUi()
+      .findDcy('key-description')
+      .should('have.text', 'Shown on the packing page');
+  });
 });

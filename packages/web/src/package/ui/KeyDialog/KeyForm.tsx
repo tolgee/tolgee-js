@@ -72,7 +72,18 @@ const ScValue = styled('p')`
 `;
 
 const ScHint = styled('span')`
-  color: grey;
+  color: ${({ theme }) => theme.palette.text.secondary};
+`;
+
+const ScDescription = styled('p')`
+  margin: 2px 0 0;
+  font-size: 13px;
+  color: ${({ theme }) => theme.palette.text.secondary};
+  white-space: pre-wrap;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const ScLinkIcon = styled(Link)`
@@ -230,6 +241,11 @@ export const KeyForm = () => {
         <KeyName name={input} />
         <ScHint>{!keyExists && ready && " (key doesn't exist yet)"}</ScHint>
       </ScValue>
+      {keyData?.keyDescription && (
+        <ScDescription data-cy="key-description" title={keyData.keyDescription}>
+          {keyData.keyDescription}
+        </ScDescription>
+      )}
       <NsSelect
         options={fallbackNamespaces}
         value={selectedNs}
