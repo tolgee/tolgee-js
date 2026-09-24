@@ -425,6 +425,46 @@ context('Suggestions in the dialog', () => {
     getSuggestionsList('en').findDcy('error-alert').should('not.exist');
   });
 
+  it('keeps the rest of the form when accepting refreshes the key', () => {
+    openWithSuggestions(reviewer);
+    cy.intercept({ path: '/v2/projects/*/tags**', method: 'get' }).as(
+      'getTags'
+    );
+
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'en' })
+      .find('.cm-content')
+      .click()
+      .realType('{backspace}'.repeat(20) + 'Typed english');
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'de' })
+      .find('.cm-content')
+      .click()
+      .realType('{backspace}'.repeat(20) + 'Hallo Welt');
+    getDevUi()
+      .findDcy('tag-autocomplete-input')
+      .scrollIntoView()
+      .click({ force: true })
+      .type('test-tag');
+    cy.wait('@getTags');
+    getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
+
+    getSuggestionsList('en').findDcy('suggestion-accept').first().click();
+    cy.wait('@accept');
+    shouldShowEnglishSuggestions([4, 3, 2]);
+
+    // English is the accepted language, so the refresh re-seeds it from the server: once that shows,
+    // the whole form has been overwritten and what is kept had to survive it
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'en' })
+      .should('not.contain.text', 'Typed english');
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'de' })
+      .should('contain.text', 'Hallo Welt');
+    getDevUi().findDcy('translations-tag-close').should('have.length', 1);
+    getDevUi().should('contain.text', 'test-tag');
+  });
+
   it('is hidden when suggestions are disabled', () => {
     openWithSuggestions({ ...reviewer, suggestionsMode: 'DISABLED' });
     getDevUi().findDcy('translation-field').should('be.visible');

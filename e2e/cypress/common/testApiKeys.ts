@@ -103,6 +103,15 @@ export const editEnglishSuggestRestWithTags: ApiKeyPermissionsModel = {
   scopes: [...fullPermissions.scopes, 'translations.suggest'],
 };
 
+// may translate, may not review, and the project protects reviewed strings
+export const editorOnProtectedProject: ApiKeyPermissionsModel = {
+  ...fullPermissions,
+  suggestionsMode: 'ENABLED',
+  translationProtection: 'PROTECT_REVIEWED',
+  userScopes: [...suggestOnly.scopes, 'translations.edit', 'keys.edit'],
+  scopes: [...suggestOnly.scopes, 'translations.edit', 'keys.edit'],
+};
+
 export const suggestGermanKeyOfEditor: ApiKeyPermissionsModel = {
   ...suggestOnly,
   suggestLanguageIds: [1000000000],

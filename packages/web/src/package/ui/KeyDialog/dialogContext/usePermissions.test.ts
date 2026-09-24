@@ -277,6 +277,19 @@ describe('whose permission is missing', () => {
     expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(false);
   });
 
+  it('does not blame the credential for a reviewed translation the account may not edit either', () => {
+    // the account may translate, but the project protects reviewed strings and it may not review,
+    // so this field is read-only whichever credential the page holds
+    const result = compute({
+      scopes: ['translations.view'],
+      userScopes: ['translations.view', 'translations.edit'],
+      translationProtection: 'PROTECT_REVIEWED',
+      suggestionsMode: 'DISABLED',
+    });
+    expect(result.credentialBlocksTranslation('en', 'REVIEWED')).toBe(false);
+    expect(result.credentialBlocksTranslation('en', 'TRANSLATED')).toBe(true);
+  });
+
   it('says the account holds a server-reported missing set only when it holds all of it', () => {
     const result = compute({
       scopes: [],
