@@ -10,6 +10,7 @@ import { fullPermissions } from '../../common/testApiKeys';
 const ME = 1;
 const SOMEONE_ELSE = 2;
 const ENGLISH_ID = 1000000001;
+const GERMAN_ID = 1000000000;
 
 const reviewer: ApiKeyPermissionsModel = {
   ...fullPermissions,
@@ -70,6 +71,7 @@ const openWithSuggestions = (
     pluralKey = false,
     count = 5,
     untranslatedLanguage = undefined as string | undefined,
+    createFailsForLanguageId = undefined as number | undefined,
   } = {}
 ) => {
   let active = newestFirst()
@@ -166,9 +168,31 @@ const openWithSuggestions = (
       req.reply({});
     }
   ).as('delete');
+  cy.intercept(
+    { path: '/v2/projects/*/languages/*/key/*/suggestion', method: 'post' },
+    (req) => {
+      if (
+        createFailsForLanguageId &&
+        req.url.includes(`/languages/${createFailsForLanguageId}/`)
+      ) {
+        req.reply({ statusCode: 400, body: { code: 'suggestions_disabled' } });
+        return;
+      }
+      active = [suggestion(active.length + 1, ME), ...active];
+      req.reply({});
+    }
+  ).as('create');
 
   visitWithApiKey(['translations.view', 'screenshots.view']);
   openUI();
+};
+
+const retype = (language: string, text: string) => {
+  getDevUi()
+    .findDcyWithCustom({ value: 'translation-field', language })
+    .find('.cm-content')
+    .click()
+    .realType('{backspace}'.repeat(20) + text);
 };
 
 const openMenuOfSuggestion = (language: string, index: number) => {
@@ -362,6 +386,23 @@ context('Suggestions in the dialog', () => {
       .first()
       .should('be.disabled');
     cy.wait('@save');
+  });
+
+  it('adds a suggestion made from the form to the open list', () => {
+    // German fails so the dialog stays open after the submit: this has to prove that the list the
+    // user is looking at refreshes, not that a freshly mounted dialog loads what is on the server
+    openWithSuggestions(contributor, {
+      createFailsForLanguageId: GERMAN_ID,
+    });
+    shouldShowEnglishSuggestions([5, 4, 3]);
+
+    retype('en', 'Suggested title 6');
+    retype('de', 'Vorschlag');
+    getDevUi().findDcy('key-form-submit').click();
+    cy.wait(['@create', '@create']);
+
+    getDevUi().findDcy('key-form-submit').should('exist');
+    shouldShowEnglishSuggestions([6, 5, 4]);
   });
 
   it('shows a plural suggestion form by form', () => {
