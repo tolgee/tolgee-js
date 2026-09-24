@@ -67,7 +67,7 @@ export const TranslationFields: FunctionComponent = () => {
         selectedLanguages.map((key) => {
           const lang = availableLanguages?.find((l) => l.tag === key);
 
-          const editPermitted = dispositions[key] !== 'readonly';
+          const inputPermitted = dispositions[key] !== 'readonly';
           const stateChangePermitted = permissions.canEditState(key);
 
           const translation = keyData?.translations[key];
@@ -78,7 +78,7 @@ export const TranslationFields: FunctionComponent = () => {
               <TranslationTextField
                 disabled={
                   formDisabled ||
-                  !editPermitted ||
+                  !inputPermitted ||
                   translation?.state === 'DISABLED'
                 }
                 language={lang}
