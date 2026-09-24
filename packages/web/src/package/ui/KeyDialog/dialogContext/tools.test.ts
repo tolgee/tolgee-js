@@ -95,7 +95,7 @@ describe('planSubmit', () => {
         fields: [field('en', 'save'), field('de', 'suggest', unchanged)],
         suggestOnly: false,
       })
-    ).toEqual({ toSuggest: [], cleared: [], kind: 'save' });
+    ).toEqual({ toSuggest: [], toSave: ['en'], cleared: [], kind: 'save' });
   });
 
   it('suggests when every changed field is a suggestion', () => {
@@ -104,7 +104,7 @@ describe('planSubmit', () => {
         fields: [field('en', 'save', unchanged), field('de', 'suggest')],
         suggestOnly: false,
       })
-    ).toEqual({ toSuggest: ['de'], cleared: [], kind: 'suggest' });
+    ).toEqual({ toSuggest: ['de'], toSave: [], cleared: [], kind: 'suggest' });
   });
 
   it('does both for a mixed change', () => {
@@ -113,7 +113,12 @@ describe('planSubmit', () => {
         fields: [field('en', 'save'), field('de', 'suggest')],
         suggestOnly: false,
       })
-    ).toEqual({ toSuggest: ['de'], cleared: [], kind: 'saveAndSuggest' });
+    ).toEqual({
+      toSuggest: ['de'],
+      toSave: ['en'],
+      cleared: [],
+      kind: 'saveAndSuggest',
+    });
   });
 
   it('never suggests an unchanged, emptied or read-only field', () => {
@@ -126,7 +131,7 @@ describe('planSubmit', () => {
         ],
         suggestOnly: false,
       })
-    ).toEqual({ toSuggest: [], cleared: ['fr'], kind: 'save' });
+    ).toEqual({ toSuggest: [], toSave: [], cleared: ['fr'], kind: 'save' });
   });
 
   it('is a suggest submit before anything is typed when that is all the user can do', () => {
@@ -135,7 +140,53 @@ describe('planSubmit', () => {
         fields: [field('de', 'suggest', unchanged)],
         suggestOnly: true,
       })
-    ).toEqual({ toSuggest: [], cleared: [], kind: 'suggest' });
+    ).toEqual({ toSuggest: [], toSave: [], cleared: [], kind: 'suggest' });
+  });
+
+  it('leaves an untouched savable language out of the update', () => {
+    const plan = planSubmit({
+      fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+      suggestOnly: false,
+    });
+    expect(plan.toSave).toEqual([]);
+    expect(plan.kind).toBe('suggest');
+  });
+
+  it('updates only the savable language the user actually changed', () => {
+    expect(
+      planSubmit({
+        fields: [
+          field('en', 'save'),
+          field('cs', 'save', unchanged),
+          field('de', 'suggest'),
+        ],
+        suggestOnly: false,
+      }).toSave
+    ).toEqual(['en']);
+  });
+
+  it('updates every savable language when the key changes plural shape', () => {
+    // the ICU of an untouched field is rewritten by the switch, though its variants are the same
+    expect(
+      planSubmit({
+        fields: [
+          field('en', 'save', unchanged),
+          field('cs', 'save', unchanged),
+          field('de', 'suggest', unchanged),
+        ],
+        suggestOnly: false,
+        pluralChanged: true,
+      }).toSave
+    ).toEqual(['en', 'cs']);
+  });
+
+  it('updates a savable language that was emptied on purpose', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', { isEmpty: true })],
+        suggestOnly: false,
+      }).toSave
+    ).toEqual(['en']);
   });
 });
 
