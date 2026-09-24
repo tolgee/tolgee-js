@@ -95,6 +95,14 @@ export const viewOnlyKeyOfEditor: ApiKeyPermissionsModel = {
   scopes: ['translations.view', 'screenshots.view'],
 };
 
+export const editEnglishSuggestRestWithTags: ApiKeyPermissionsModel = {
+  ...fullPermissions,
+  suggestionsMode: 'ENABLED',
+  translateLanguageIds: [1000000001],
+  userScopes: [...fullPermissions.scopes, 'translations.suggest'],
+  scopes: [...fullPermissions.scopes, 'translations.suggest'],
+};
+
 export const suggestGermanKeyOfEditor: ApiKeyPermissionsModel = {
   ...suggestOnly,
   suggestLanguageIds: [1000000000],

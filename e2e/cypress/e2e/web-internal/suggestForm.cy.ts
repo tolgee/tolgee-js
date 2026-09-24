@@ -8,6 +8,7 @@ import {
 import {
   suggestOnly,
   translateEnglishSuggestRest,
+  editEnglishSuggestRestWithTags,
   suggestGermanKeyOfEditor,
   viewOnlyKeyOfEditor,
 } from '../../common/testApiKeys';
@@ -147,6 +148,46 @@ context('Suggesting from the dialog', () => {
 
     retype('de', 'Hallo');
     getDevUi().findDcy('translation-field-error').should('not.exist');
+  });
+
+  it('leaves an untouched translation out of the update while tags and states still ride on it', () => {
+    openDialogAs(editEnglishSuggestRestWithTags);
+
+    cy.intercept({ path: '/v2/projects/*/tags**', method: 'get' }).as(
+      'getTags'
+    );
+    cy.intercept({ path: '/v2/projects/*/keys/**', method: 'put' }, (req) =>
+      req.reply({})
+    ).as('update');
+    cy.intercept({ path: SUGGESTION_URL, method: 'post' }, (req) =>
+      req.reply({})
+    ).as('suggest');
+
+    // English is savable and deliberately left alone; only its state changes
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-state-button', language: 'en' })
+      .click();
+    getDevUi()
+      .findDcy('tag-autocomplete-input')
+      .should('be.visible')
+      .click()
+      .type('test-tag');
+    cy.wait('@getTags');
+    getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
+    retype('de', 'Hallo Welt');
+
+    getDevUi().findDcy('key-form-submit').click();
+
+    cy.wait('@update').then(({ request }) => {
+      // sending it back would overwrite whatever someone else saved meanwhile
+      expect(request.body.translations).to.deep.eq({});
+      expect(request.body.states).to.deep.eq({ en: 'REVIEWED' });
+      expect(request.body.tags).to.deep.eq(['test-tag']);
+    });
+    cy.wait('@suggest').then(({ request }) => {
+      expect(request.url).to.contain(`/languages/${DE_ID}/key/`);
+      expect(request.body).to.deep.eq({ translation: 'Hallo Welt' });
+    });
   });
 
   it('tells an editor whose API key is view-only that the key is the limit', () => {

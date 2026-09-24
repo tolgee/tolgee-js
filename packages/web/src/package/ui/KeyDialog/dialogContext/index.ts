@@ -384,7 +384,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         Object.entries(translationsForm).forEach(([language, value]) => {
           const stateCanBeChanged = permissions.canEditState(language);
 
-          if (dispositions[language] === 'save') {
+          if (submitPlan.toSave.includes(language)) {
             newTranslations[language] = toIcu(value.value);
           }
           if (
@@ -696,6 +696,10 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         isEmpty: isTranslationEmpty(value, isPlural),
       })),
       suggestOnly,
+      pluralChanged:
+        keyData !== undefined &&
+        (isPlural !== Boolean(keyData.keyIsPlural) ||
+          (isPlural && pluralArgName !== keyData.keyPluralArgName)),
     });
 
     const contextValue = {

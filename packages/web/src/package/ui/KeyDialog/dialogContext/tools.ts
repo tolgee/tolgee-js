@@ -125,24 +125,32 @@ type SubmitField = {
 export function planSubmit({
   fields,
   suggestOnly,
+  pluralChanged,
 }: {
   fields: SubmitField[];
   suggestOnly: boolean;
+  pluralChanged?: boolean;
 }) {
   const changedFields = fields.filter((f) => f.changed);
   const suggested = changedFields.filter((f) => f.disposition === 'suggest');
   // the server has no "suggest removing the translation"
   const toSuggest = suggested.filter((f) => !f.isEmpty).map((f) => f.language);
   const cleared = suggested.filter((f) => f.isEmpty).map((f) => f.language);
-  const savesSomething = changedFields.some((f) => f.disposition === 'save');
+  // A language the form did not touch must stay out of the update: the server writes any value that
+  // differs from the stored one, so sending back what this dialog loaded overwrites whatever someone
+  // else saved in the meantime. Switching the key's plural shape rewrites the ICU of every field
+  // without touching its variants, so it counts as a change to all of them.
+  const toSave = (pluralChanged ? fields : changedFields)
+    .filter((f) => f.disposition === 'save')
+    .map((f) => f.language);
 
   let kind: SubmitKind = 'save';
   if (toSuggest.length) {
-    kind = savesSomething ? 'saveAndSuggest' : 'suggest';
+    kind = toSave.length ? 'saveAndSuggest' : 'suggest';
   } else if (suggestOnly) {
     kind = 'suggest';
   }
-  return { toSuggest, cleared, kind };
+  return { toSuggest, toSave, cleared, kind };
 }
 
 type EditCapabilities = {
