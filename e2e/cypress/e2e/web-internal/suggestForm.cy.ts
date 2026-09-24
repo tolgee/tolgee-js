@@ -9,6 +9,7 @@ import {
   suggestOnly,
   translateEnglishSuggestRest,
   editEnglishSuggestRestWithTags,
+  editorOnProtectedProject,
   suggestGermanKeyOfEditor,
   viewOnlyKeyOfEditor,
 } from '../../common/testApiKeys';
@@ -188,6 +189,78 @@ context('Suggesting from the dialog', () => {
       expect(request.url).to.contain(`/languages/${DE_ID}/key/`);
       expect(request.body).to.deep.eq({ translation: 'Hallo Welt' });
     });
+  });
+
+  it("turns an editor's change to a reviewed translation into a suggestion and says why", () => {
+    cy.intercept(
+      { path: '/v2/projects/*/translations**', method: 'get' },
+      (req) =>
+        req.continue((res) => {
+          const key = res.body._embedded?.keys?.[0];
+          expect(key, 'the imported key in the translations response').to.exist;
+          key.translations.en.state = 'REVIEWED';
+        })
+    );
+    openDialogAs(editorOnProtectedProject);
+
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'en',
+        kind: 'reviewedProtected',
+      })
+      .should(
+        'have.text',
+        'Reviewed translations are protected. Your change will be sent as a suggestion.'
+      );
+    // German is not reviewed, so it stays an ordinary save with no note
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'de',
+      })
+      .should('not.exist');
+
+    retype('de', 'Hallo Welt');
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Save');
+    retype('en', 'Hello world');
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Save & suggest');
+  });
+
+  it("says an emptied suggestion can't be sent and leaves the field out of the submit", () => {
+    openDialogAs(suggestOnly);
+
+    retype('en', '');
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'en',
+        kind: 'cleared',
+      })
+      .should(
+        'have.text',
+        "An empty suggestion can't be sent — this field is left unchanged."
+      );
+    getDevUi().findDcy('key-form-submit').should('be.disabled');
+
+    retype('de', 'Hallo Welt');
+    getDevUi()
+      .findDcyWithCustom({
+        value: 'translation-field-suggest-note',
+        language: 'en',
+        kind: 'cleared',
+      })
+      .should('exist');
+    cy.intercept({ path: SUGGESTION_URL, method: 'post' }, (req) =>
+      req.reply({})
+    ).as('suggest');
+
+    getDevUi().findDcy('key-form-submit').should('not.be.disabled').click();
+
+    cy.wait('@suggest').then(({ request }) => {
+      expect(request.url).to.contain(`/languages/${DE_ID}/key/`);
+    });
+    cy.get('@suggest.all').should('have.length', 1);
   });
 
   it('tells an editor whose API key is view-only that the key is the limit', () => {
