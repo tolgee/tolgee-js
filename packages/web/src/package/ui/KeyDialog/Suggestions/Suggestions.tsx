@@ -45,14 +45,20 @@ export const Suggestions = ({ language }: Props) => {
   const keyData = useDialogContext((c) => c.keyData);
   const permissions = useDialogContext((c) => c.permissions);
   const readOnly = useDialogContext((c) => c.readOnly);
+  const busy = useDialogContext((c) => c.busy);
   const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
   const [size, setSize] = useState(INITIAL_SIZE);
 
   const tag = language?.tag;
   const languageId = language?.id;
   const keyId = keyData?.keyId;
-  const expectedCount =
-    (tag && keyData?.translations[tag]?.activeSuggestionCount) || 0;
+  const translation = tag ? keyData?.translations[tag] : undefined;
+  // activeSuggestionCount hangs off the translation record, so a language the key was never translated
+  // into reports 0 while its suggestions are right there in the same payload.
+  const expectedCount = Math.max(
+    translation?.activeSuggestionCount ?? 0,
+    translation?.suggestions?.filter((s) => s.state === 'ACTIVE').length ?? 0
+  );
 
   const enabled =
     permissions.suggestionsEnabled &&
@@ -156,6 +162,7 @@ export const Suggestions = ({ language }: Props) => {
 
   const disabled =
     readOnly ||
+    busy ||
     accept.isLoading ||
     decline.isLoading ||
     remove.isLoading ||
