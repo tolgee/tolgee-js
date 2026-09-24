@@ -44,7 +44,10 @@ import { components } from '../../client/apiSchema.generated';
 import { isTranslationEmpty } from '../../tools/isTranslationEmpty';
 import { resolveLiveCredential } from '../../../tools/auth';
 
-// TODO(pitch-3780): platform version
+// Raising this blanks the whole dialog on every older server, and the suggestion work does not need
+// it: each current-permissions field the dialog reads is optional, and the suggestion UI hides
+// itself when the server does not report suggestionsMode. The platform version suggestions require
+// is stated in the SDK docs, not enforced here.
 const MINIMAL_PLATFORM_VERSION = 'v3.42.0';
 const SUGGESTIONS_URL_PREFIX = '/v2/projects/languages/{languageId}/key';
 
