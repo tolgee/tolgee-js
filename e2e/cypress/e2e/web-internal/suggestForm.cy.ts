@@ -191,7 +191,6 @@ context('Suggesting from the dialog', () => {
   });
 
   it('tells an editor whose API key is view-only that the key is the limit', () => {
-    // not openDialogAs: openUI asserts an enabled editor, and this form is disabled by design
     mockPermissions(viewOnlyKeyOfEditor);
     visitWithApiKey(['translations.view', 'screenshots.view']);
     cy.contains('What To Pack').should('be.visible').click({ altKey: true });

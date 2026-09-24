@@ -7,7 +7,5 @@ export const getDevUi = () => {
 };
 
 export const getSuggestionsList = (language: string) => {
-  return getDevUi().find(
-    `[data-cy="suggestions-list"][data-cy-language="${language}"]`
-  );
+  return getDevUi().findDcyWithCustom({ value: 'suggestions-list', language });
 };

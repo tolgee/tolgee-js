@@ -46,7 +46,6 @@ export const TranslationFields: FunctionComponent = () => {
     : getPreferredLanguages();
   const availableLanguages = useDialogContext((c) => c.availableLanguages);
   const translationsForm = useDialogContext((c) => c.translationsForm);
-  const formDisabled = useDialogContext((c) => c.formDisabled);
   const loading = useDialogContext((c) => c.loading);
 
   const keyData = useDialogContext((c) => c.keyData);
@@ -70,17 +69,12 @@ export const TranslationFields: FunctionComponent = () => {
           const inputPermitted = dispositions[key] !== 'readonly';
           const stateChangePermitted = permissions.canEditState(key);
 
-          const translation = keyData?.translations[key];
           const formValue = translationsForm[key];
 
           return (
             <React.Fragment key={key}>
               <TranslationTextField
-                disabled={
-                  formDisabled ||
-                  !inputPermitted ||
-                  translation?.state === 'DISABLED'
-                }
+                disabled={!inputPermitted}
                 language={lang}
                 value={formValue?.value}
                 onChange={(value) => onInputChange(key, value)}

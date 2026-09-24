@@ -62,7 +62,7 @@ const suggestionIdFromUrl = (url: string) =>
   Number(url.match(/\/suggestion\/(\d+)/)[1]);
 
 // The suite runs against the released platform image, which knows neither the new permission fields nor the
-// own-access scope, so the key is created with plain view scope and everything suggestion-related is mocked.
+// own-access scope.
 const openWithSuggestions = (
   permissions: ApiKeyPermissionsModel,
   {
@@ -412,9 +412,10 @@ context('Suggestions in the dialog', () => {
     );
     getSuggestionsList('en').findDcy('suggestion-decline').first().click();
     getSuggestionsList('en')
-      .find(
-        '[data-cy="error-alert"][data-cy-error-code="suggestions_disabled"]'
-      )
+      .findDcyWithCustom({
+        value: 'error-alert',
+        'error-code': 'suggestions_disabled',
+      })
       .should('be.visible');
     shouldShowEnglishSuggestions([5, 4, 3]);
 
