@@ -48,8 +48,6 @@ export const TranslationFields: FunctionComponent = () => {
   const translationsForm = useDialogContext((c) => c.translationsForm);
   const loading = useDialogContext((c) => c.loading);
 
-  const keyData = useDialogContext((c) => c.keyData);
-
   const Loading = () => (
     <>
       {langFields.map((lang) => (
