@@ -21,3 +21,17 @@ NEXT_PUBLIC_TOLGEE_API_KEY=<your project API key>
 ```
 
 6. Re-run `npm run dev`
+
+## Static rendering
+
+When the locale is already available from route params, pass it directly to
+`getTolgee`:
+
+```tsx
+const { locale } = await params;
+const tolgee = await getTolgee({ locale });
+```
+
+This avoids running the configured request locale resolver during static
+generation. The `/[locale]/ssg` route demonstrates this with
+`generateStaticParams`.
