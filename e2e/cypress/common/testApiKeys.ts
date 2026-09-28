@@ -47,3 +47,28 @@ export const changeStateEnglish: ApiKeyPermissionsModel = {
   translationProtection: 'NONE',
   scopes: ['translations.view', 'screenshots.view', 'translations.state-edit'],
 };
+
+export const suggestOnly: ApiKeyPermissionsModel = {
+  projectId: 1,
+  project,
+  viewLanguageIds: null,
+  translateLanguageIds: null,
+  stateChangeLanguageIds: null,
+  suggestLanguageIds: null,
+  suggestionsMode: 'ENABLED',
+  translationProtection: 'NONE',
+  scopes: ['translations.view', 'translations.suggest', 'screenshots.view'],
+};
+
+export const translateEnglishSuggestRest: ApiKeyPermissionsModel = {
+  ...suggestOnly,
+  translateLanguageIds: [1000000001],
+  scopes: [...suggestOnly.scopes, 'translations.edit'],
+};
+
+export const editEnglishSuggestRestWithTags: ApiKeyPermissionsModel = {
+  ...fullPermissions,
+  suggestionsMode: 'ENABLED',
+  translateLanguageIds: [1000000001],
+  scopes: [...fullPermissions.scopes, 'translations.suggest'],
+};

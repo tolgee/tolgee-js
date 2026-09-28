@@ -120,6 +120,23 @@ export function getErrorContent(
         </>
       );
 
+    case 'duplicate_suggestion':
+      return (
+        <>
+          <AlertTitle>This suggestion already exists</AlertTitle>
+          Someone has already suggested exactly this text.
+        </>
+      );
+
+    case 'suggestions_disabled':
+      return (
+        <>
+          <AlertTitle>Suggestions are disabled</AlertTitle>
+          This project doesn't accept suggestions any more. Reopen the dialog to
+          see what you can still do.
+        </>
+      );
+
     case 'branch_not_found':
       return (
         <>

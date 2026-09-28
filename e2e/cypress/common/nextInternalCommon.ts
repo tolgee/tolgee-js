@@ -35,3 +35,17 @@ export const visitWithApiKey = (
 export const getEditor = () => {
   return getDevUi().findDcy('global-editor').find('.cm-content');
 };
+
+export const retype = (language: string, text: string) => {
+  const editor = () =>
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language })
+      .find('.cm-content');
+  editor()
+    .click()
+    .realPress([Cypress.platform === 'darwin' ? 'Meta' : 'Control', 'a'])
+    .realPress('Backspace');
+  if (text) {
+    editor().realType(text);
+  }
+};
