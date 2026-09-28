@@ -5,3 +5,7 @@ export const getDevUiRoot = () => {
 export const getDevUi = () => {
   return getDevUiRoot().shadow().find('div').first();
 };
+
+export const getSuggestionsList = (language: string) => {
+  return getDevUi().findDcyWithCustom({ value: 'suggestions-list', language });
+};

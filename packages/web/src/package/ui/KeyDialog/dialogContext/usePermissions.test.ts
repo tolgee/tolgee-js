@@ -35,6 +35,33 @@ const compute = (
   keyData: KeyWithTranslationsModel | undefined = existingKey
 ) => getComputedPermissions(permissions(overrides), keyData, languages);
 
+describe('suggestionsEnabled', () => {
+  it('is on for a view-only user of a project with suggestions enabled', () => {
+    expect(compute({ scopes: ['translations.view'] }).suggestionsEnabled).toBe(
+      true
+    );
+  });
+
+  it('is off when disabled or not reported by an older server', () => {
+    expect(compute({ suggestionsMode: 'DISABLED' }).suggestionsEnabled).toBe(
+      false
+    );
+    expect(compute({ suggestionsMode: undefined }).suggestionsEnabled).toBe(
+      false
+    );
+  });
+});
+
+describe('currentUserId', () => {
+  it('is the user the credentials belong to', () => {
+    expect(compute({ userId: 7 }).currentUserId).toBe(7);
+  });
+
+  it('is unknown against an older server that does not report it', () => {
+    expect(compute({}).currentUserId).toBeUndefined();
+  });
+});
+
 describe('canSuggestTranslation', () => {
   it('is limited to the languages the user may suggest in', () => {
     const result = compute({

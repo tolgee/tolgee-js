@@ -443,17 +443,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
                 path: { id: keyData.keyId! },
               }));
 
-          changeInTolgeeCache(
-            props.keyName,
-            selectedNs,
-            Object.entries(newTranslations),
-            props.uiProps.changeTranslation
-          );
-
-          props.uiProps.onPermanentChange({
-            key: props.keyName,
-            namespace: selectedNs,
-          });
+          commitToPage(Object.entries(newTranslations));
         }
 
         const failed = await sendSuggestions(submitPlan.toSuggest);
@@ -490,6 +480,19 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         setSaving(false);
         setSuccess(false);
       }
+    }
+
+    function commitToPage(translations: [string, string][]) {
+      changeInTolgeeCache(
+        props.keyName,
+        selectedNs,
+        translations,
+        props.uiProps.changeTranslation
+      );
+      props.uiProps.onPermanentChange({
+        key: props.keyName,
+        namespace: selectedNs,
+      });
     }
 
     async function sendSuggestions(languages: string[]) {
@@ -755,6 +758,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       handleTakeScreenshot,
       handleRemoveScreenshot,
       onSubmit,
+      commitToPage,
       reloadKeepingEdits,
       onClose,
       onSelectedLanguagesChange,
