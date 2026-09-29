@@ -14,6 +14,7 @@ import { ScFieldTitle } from '../common/FieldTitle';
 import { useDialogContext } from './dialogContext';
 import { isTranslationEmpty } from '../tools/isTranslationEmpty';
 import { Tooltip } from '../common/Tooltip';
+import { SuggestionFieldStatus } from './SuggestionFieldStatus';
 
 type State = components['schemas']['TranslationModel']['state'];
 type LanguageModel = components['schemas']['LanguageModel'];
@@ -73,6 +74,8 @@ export const TranslationTextField = ({
   const parameter = useDialogContext((c) => c.pluralArgName);
   const icuPlaceholders = useDialogContext((c) => c.icuPlaceholders);
   const keyMaxCharLimit = useDialogContext((c) => c.maxCharLimit);
+  const busy = useDialogContext((c) => c.busy);
+  const fieldDisabled = disabled || busy;
   const notPlural = !parameter;
   const normalized = state === 'UNTRANSLATED' ? undefined : state;
   const fallbackedState = isTranslationEmpty(value, !notPlural)
@@ -90,14 +93,14 @@ export const TranslationTextField = ({
           stateChangeEnabled={stateChangePermitted}
           mode={mode}
           onModeToggle={
-            icuPlaceholders && !disabled
+            icuPlaceholders && !fieldDisabled
               ? () => setMode(mode === 'syntax' ? 'placeholders' : 'syntax')
               : undefined
           }
         />
       </ScFieldTitle>
       <StyledContainer
-        className={clsx({ disabled, notPlural })}
+        className={clsx({ disabled: fieldDisabled, notPlural })}
         data-cy="translation-field"
         data-cy-language={language?.tag}
       >
@@ -121,7 +124,7 @@ export const TranslationTextField = ({
           }
           onChange={onChange}
           locale={language?.tag || 'en'}
-          editorProps={{ direction: 'ltr', disabled }}
+          editorProps={{ direction: 'ltr', disabled: fieldDisabled }}
           maxCharLimit={keyMaxCharLimit}
         />
       </StyledContainer>
@@ -134,6 +137,7 @@ export const TranslationTextField = ({
           maxLimit={keyMaxCharLimit}
         />
       )}
+      <SuggestionFieldStatus language={language?.tag} />
     </>
   );
 };

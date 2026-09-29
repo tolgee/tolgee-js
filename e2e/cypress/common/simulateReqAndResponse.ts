@@ -27,16 +27,7 @@ export const simulateReqAndResponse = ({
   selectedLanguages,
 }: Props) => {
   const randomId = String(Math.random());
-  // simulating restricted languages in api key info (english only)
-  cy.intercept(
-    { path: '/v2/api-keys/current-permissions', method: 'get' },
-    (req) => {
-      req.reply(permissions);
-    }
-  );
-  cy.intercept({ path: '/v2/projects/*/languages**', method: 'get' }, (req) => {
-    req.reply(testLanguages);
-  });
+  mockPermissions(permissions);
   visitWithApiKey(permissions.scopes as any, selectedLanguages);
 
   if (language) {
@@ -53,5 +44,17 @@ export const simulateReqAndResponse = ({
   getDevUi().findDcy('key-form-submit').click();
   return cy.wait(`@${randomId}`).then(() => {
     checkPage?.();
+  });
+};
+
+export const mockPermissions = (permissions: ApiKeyPermissionsModel) => {
+  cy.intercept(
+    { path: '/v2/api-keys/current-permissions', method: 'get' },
+    (req) => {
+      req.reply(permissions);
+    }
+  );
+  cy.intercept({ path: '/v2/projects/*/languages**', method: 'get' }, (req) => {
+    req.reply(testLanguages);
   });
 };

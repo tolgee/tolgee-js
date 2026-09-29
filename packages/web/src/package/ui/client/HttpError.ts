@@ -13,11 +13,7 @@ type ErrorCustomStatus =
   | 'extension_session_missing'
   | 'extension_request_too_large'
   | 'extension_editing_off'
-  // Emitted by the platform's OAuth2AccessTokenResolver (tolgee-platform#3893). Staged here as custom codes until
-  // that PR merges and `npm run schema` is re-run against it, at which point these two belong in
-  // ErrorResponseTypedCode instead and this pair should be deleted.
-  | 'invalid_oauth_token'
-  | 'oauth_token_expired';
+  | 'suggestion_needs_existing_key';
 
 export type ErrorStatusCode = ErrorResponseTypedCode | ErrorCustomStatus;
 

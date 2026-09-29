@@ -1,14 +1,21 @@
 import { createApiKey } from './apiCalls';
+import { WEB_INTERNAL_URL } from './constants';
 import { getDevUi, getDevUiRoot } from './devUiTools';
 import { Scope } from './types';
 
-export const openUI = (translation = 'What To Pack') => {
+export const openUI = (
+  translation = 'What To Pack',
+  { editable = true }: { editable?: boolean } = {}
+) => {
   cy.contains(translation).should('be.visible').click({ altKey: true });
   getDevUiRoot().should('exist');
   getDevUi()
     .find('.MuiDialog-container', { timeout: 10000 })
     .should('be.visible');
-  getEditor().should('be.visible').and('not.be.disabled');
+  getEditor().should('be.visible');
+  if (editable) {
+    getEditor().should('not.be.disabled');
+  }
 };
 
 export const visitWithApiKey = (
@@ -20,9 +27,7 @@ export const visitWithApiKey = (
     .then((data) => {
       const params = new URLSearchParams({ api_key: data.key });
       if (branch) params.set('branch', branch);
-      cy.visit(
-        `http://localhost:8114/translation-methods?${params.toString()}`
-      );
+      cy.visit(`${WEB_INTERNAL_URL}/translation-methods?${params.toString()}`);
     })
     .then(() =>
       localStorage.setItem(
@@ -35,4 +40,18 @@ export const visitWithApiKey = (
 
 export const getEditor = () => {
   return getDevUi().findDcy('global-editor').find('.cm-content');
+};
+
+export const retype = (language: string, text: string) => {
+  const editor = () =>
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language })
+      .find('.cm-content');
+  editor()
+    .click()
+    .realPress([Cypress.platform === 'darwin' ? 'Meta' : 'Control', 'a'])
+    .realPress('Backspace');
+  if (text) {
+    editor().realType(text);
+  }
 };
