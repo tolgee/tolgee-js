@@ -181,7 +181,7 @@ const openWithSuggestions = (
         createFailsForLanguageId &&
         req.url.includes(`/languages/${createFailsForLanguageId}/`)
       ) {
-        req.reply({ statusCode: 400, body: { code: 'suggestions_disabled' } });
+        req.reply({ statusCode: 409, body: { code: 'suggestions_disabled' } });
         return;
       }
       active = [suggestion(active.length + 1, ME), ...active];
@@ -446,7 +446,7 @@ context('Suggestions in the dialog', () => {
         method: 'put',
       },
       (req) =>
-        req.reply({ statusCode: 400, body: { code: 'suggestions_disabled' } })
+        req.reply({ statusCode: 409, body: { code: 'suggestions_disabled' } })
     );
     getSuggestionsList('en').findDcy('suggestion-decline').first().click();
     getSuggestionsList('en')

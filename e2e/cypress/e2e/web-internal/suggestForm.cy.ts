@@ -115,7 +115,7 @@ context('Suggesting from the dialog', () => {
       'translations'
     );
     cy.intercept({ path: SUGGESTION_URL, method: 'post' }, (req) =>
-      req.reply({ statusCode: 400, body: { code: 'suggestions_disabled' } })
+      req.reply({ statusCode: 409, body: { code: 'suggestions_disabled' } })
     ).as('suggest');
 
     retype('en', 'Hello world');
