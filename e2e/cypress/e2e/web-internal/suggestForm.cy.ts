@@ -177,7 +177,7 @@ context('Suggesting from the dialog', () => {
     getDevUi().findDcy('translation-field-error').should('not.exist');
   });
 
-  it('leaves an untouched translation out of the update while tags and states still ride on it', () => {
+  it("labels the submit 'Save & suggest' once tags and states ride on it, and leaves an untouched translation out of the update", () => {
     openDialogAs(editEnglishSuggestRestWithTags);
 
     cy.intercept({ path: '/v2/projects/*/tags**', method: 'get' }).as(
@@ -190,9 +190,13 @@ context('Suggesting from the dialog', () => {
       req.reply({})
     ).as('suggest');
 
+    retype('de', 'Hallo Welt');
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Suggest');
+
     getDevUi()
       .findDcyWithCustom({ value: 'translation-state-button', language: 'en' })
       .click();
+    getDevUi().findDcy('key-form-submit').should('have.text', 'Save & suggest');
     getDevUi()
       .findDcy('tag-autocomplete-input')
       .should('be.visible')
@@ -200,9 +204,11 @@ context('Suggesting from the dialog', () => {
       .type('test-tag');
     cy.wait('@getTags');
     getDevUi().findDcy('tag-autocomplete-option').contains('test-tag').click();
-    retype('de', 'Hallo Welt');
 
-    getDevUi().findDcy('key-form-submit').click();
+    getDevUi()
+      .findDcy('key-form-submit')
+      .should('have.text', 'Save & suggest')
+      .click();
 
     cy.wait('@update').then(({ request }) => {
       expect(request.body.translations).to.deep.eq({});

@@ -28,7 +28,9 @@ import {
   sameTranslation,
   isSuggestOnly,
   keepFormFields,
+  keyUpdateCarriesOtherChanges,
   planSubmit,
+  statesToUpdate,
   setPreferredLanguages,
   SubmitKind,
   SUGGESTIONS_URL,
@@ -36,11 +38,7 @@ import {
 import { useGallery } from './useGallery';
 import { checkPlatformVersion } from '../../tools/checkPlatformVersion';
 import { limitSurroundingKeys } from '../../tools/limitSurroundingKeys';
-import {
-  StateInType,
-  STATES_FOR_UPDATE,
-  StateType,
-} from '../State/translationStates';
+import { StateType } from '../State/translationStates';
 import { useComputedPermissions } from './usePermissions';
 import { HttpError, isHttpError } from '../../client/HttpError';
 import { components } from '../../client/apiSchema.generated';
@@ -373,22 +371,12 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
       setSaving(true);
       setSuggestionErrors({});
       try {
-        const newTranslations = {} as Record<string, string>;
-        const newStates = {} as Record<string, StateInType>;
-        Object.entries(translationsForm).forEach(([language, value]) => {
-          const stateCanBeChanged = permissions.canEditState(language);
-
-          if (submitPlan.toSave.includes(language)) {
-            newTranslations[language] = toIcu(value.value);
-          }
-          if (
-            STATES_FOR_UPDATE.includes(value.state as StateInType) &&
-            keyData?.translations?.[language]?.state !== value.state &&
-            stateCanBeChanged
-          ) {
-            newStates[language] = value.state as StateInType;
-          }
-        });
+        const newTranslations = Object.fromEntries(
+          submitPlan.toSave.map((language) => [
+            language,
+            toIcu(translationsForm[language].value),
+          ])
+        );
 
         const relatedKeysInOrder = permissions.canSendBigMeta
           ? limitSurroundingKeys(props.uiProps.findPositions(), {
@@ -701,6 +689,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     const fields = Object.entries(translationsForm).map(
       ([language, { value, state }]) => ({
         language,
+        state,
         disposition: dispositions[language] ?? 'readonly',
         changed: !sameTranslation(value, serverValue(language)),
         stateChanged: state !== serverState(language),
@@ -709,7 +698,25 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
     );
     const edited = editedLanguages(fields, pluralChanged);
 
-    const submitPlan = planSubmit({ fields, suggestOnly, pluralChanged });
+    const newStates = statesToUpdate(fields, permissions.canEditState);
+
+    const submitPlan = planSubmit({
+      fields,
+      suggestOnly,
+      pluralChanged,
+      otherKeyChanges:
+        keyData !== undefined &&
+        keyUpdateCarriesOtherChanges({
+          tags,
+          serverTags: keyData.keyTags?.map((t) => t.name) ?? [],
+          screenshotsAdded: getJustUploadedScreenshots().length,
+          screenshotsRemoved: getRemovedScreenshots().length,
+          maxCharLimit,
+          serverMaxCharLimit: keyData.keyMaxCharLimit,
+          pluralChanged,
+          states: newStates,
+        }),
+    });
 
     const contextValue = {
       input: props.keyName,

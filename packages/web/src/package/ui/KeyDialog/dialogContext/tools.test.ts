@@ -6,7 +6,9 @@ import {
   sameTranslation,
   isSuggestOnly,
   keepFormFields,
+  keyUpdateCarriesOtherChanges,
   planSubmit,
+  statesToUpdate,
   setPreferredLanguages,
   deriveFieldStates,
 } from './tools';
@@ -181,6 +183,36 @@ describe('planSubmit', () => {
     ).toEqual(['en', 'cs']);
   });
 
+  it('is a save and suggest when a key-level change rides along with a suggestion', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+        suggestOnly: false,
+        otherKeyChanges: true,
+      }).kind
+    ).toBe('saveAndSuggest');
+  });
+
+  it('is a plain suggest when nothing key-level changed', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+        suggestOnly: false,
+        otherKeyChanges: false,
+      }).kind
+    ).toBe('suggest');
+  });
+
+  it('ignores key-level changes for a user who may only suggest', () => {
+    expect(
+      planSubmit({
+        fields: [field('de', 'suggest')],
+        suggestOnly: true,
+        otherKeyChanges: true,
+      }).kind
+    ).toBe('suggest');
+  });
+
   it('updates a savable language that was emptied on purpose', () => {
     expect(
       planSubmit({
@@ -188,6 +220,77 @@ describe('planSubmit', () => {
         suggestOnly: false,
       }).toSave
     ).toEqual(['en']);
+  });
+});
+
+describe('statesToUpdate', () => {
+  const field = (
+    language: string,
+    state: 'UNTRANSLATED' | 'TRANSLATED' | 'REVIEWED' | 'DISABLED',
+    stateChanged = true
+  ) => ({ language, state, stateChanged });
+
+  it('sends a changed, settable state the user may change', () => {
+    expect(
+      statesToUpdate(
+        [field('en', 'REVIEWED'), field('de', 'TRANSLATED')],
+        () => true
+      )
+    ).toEqual({ en: 'REVIEWED', de: 'TRANSLATED' });
+  });
+
+  it('leaves out an unchanged state, one the server cannot take and one the user may not change', () => {
+    expect(
+      statesToUpdate(
+        [
+          field('en', 'REVIEWED', false),
+          field('de', 'UNTRANSLATED'),
+          field('cs', 'DISABLED'),
+          field('fr', 'REVIEWED'),
+        ],
+        (language) => language !== 'fr'
+      )
+    ).toEqual({});
+  });
+});
+
+describe('keyUpdateCarriesOtherChanges', () => {
+  const unchanged = {
+    tags: ['a', 'b'],
+    serverTags: ['b', 'a'],
+    screenshotsAdded: 0,
+    screenshotsRemoved: 0,
+    maxCharLimit: undefined,
+    serverMaxCharLimit: null,
+    pluralChanged: false,
+    states: {},
+  };
+
+  it('is false while the form matches the key, whatever the tag order and the empty char limit spelling', () => {
+    expect(keyUpdateCarriesOtherChanges(unchanged)).toBe(false);
+    expect(
+      keyUpdateCarriesOtherChanges({
+        ...unchanged,
+        maxCharLimit: 0,
+        serverMaxCharLimit: undefined,
+      })
+    ).toBe(false);
+    expect(
+      keyUpdateCarriesOtherChanges({ ...unchanged, tags: undefined })
+    ).toBe(false);
+  });
+
+  it.each([
+    ['a tag added', { tags: ['a', 'b', 'c'] }],
+    ['a tag removed', { tags: ['a'] }],
+    ['a tag swapped', { tags: ['a', 'c'] }],
+    ['a screenshot added', { screenshotsAdded: 1 }],
+    ['a screenshot removed', { screenshotsRemoved: 1 }],
+    ['a char limit set', { maxCharLimit: 10 }],
+    ['a plural switch', { pluralChanged: true }],
+    ['a state change', { states: { en: 'REVIEWED' } }],
+  ])('is true with %s', (_, over) => {
+    expect(keyUpdateCarriesOtherChanges({ ...unchanged, ...over })).toBe(true);
   });
 });
 

@@ -9,6 +9,11 @@ import {
 import { putBaseLangFirstTags } from '../languageHelpers';
 import type { TolgeeFormat } from '@tginternal/editor';
 import type { Disposition } from './usePermissions';
+import {
+  StateInType,
+  STATES_FOR_UPDATE,
+  StateType,
+} from '../State/translationStates';
 import type { components } from '../../client/apiSchema.generated';
 
 type TranslationState = components['schemas']['TranslationModel']['state'];
@@ -141,10 +146,12 @@ export function planSubmit({
   fields,
   suggestOnly,
   pluralChanged,
+  otherKeyChanges = false,
 }: {
   fields: SubmitField[];
   suggestOnly: boolean;
   pluralChanged?: boolean;
+  otherKeyChanges?: boolean;
 }) {
   const changedFields = fields.filter((f) => f.changed);
   const suggested = changedFields.filter((f) => f.disposition === 'suggest');
@@ -158,13 +165,65 @@ export function planSubmit({
     .filter((f) => f.disposition === 'save')
     .map((f) => f.language);
 
+  const keyIsAlsoUpdated =
+    toSave.length > 0 || (otherKeyChanges && !suggestOnly);
   let kind: SubmitKind = 'save';
   if (toSuggest.length) {
-    kind = toSave.length ? 'saveAndSuggest' : 'suggest';
+    kind = keyIsAlsoUpdated ? 'saveAndSuggest' : 'suggest';
   } else if (suggestOnly) {
     kind = 'suggest';
   }
   return { toSuggest, toSave, cleared, kind };
+}
+
+export function statesToUpdate(
+  fields: { language: string; state: StateType; stateChanged: boolean }[],
+  canEditState: (language: string) => boolean
+) {
+  const states: Record<string, StateInType> = {};
+  fields.forEach(({ language, state, stateChanged }) => {
+    if (
+      stateChanged &&
+      STATES_FOR_UPDATE.includes(state) &&
+      canEditState(language)
+    ) {
+      states[language] = state as StateInType;
+    }
+  });
+  return states;
+}
+
+export function keyUpdateCarriesOtherChanges({
+  tags,
+  serverTags,
+  screenshotsAdded,
+  screenshotsRemoved,
+  maxCharLimit,
+  serverMaxCharLimit,
+  pluralChanged,
+  states,
+}: {
+  tags: string[] | undefined;
+  serverTags: string[];
+  screenshotsAdded: number;
+  screenshotsRemoved: number;
+  maxCharLimit: number | null | undefined;
+  serverMaxCharLimit: number | null | undefined;
+  pluralChanged: boolean;
+  states: Record<string, unknown>;
+}) {
+  const tagsChanged =
+    tags !== undefined &&
+    (tags.length !== serverTags.length ||
+      tags.some((t) => !serverTags.includes(t)));
+  return (
+    tagsChanged ||
+    screenshotsAdded > 0 ||
+    screenshotsRemoved > 0 ||
+    (maxCharLimit ?? 0) !== (serverMaxCharLimit ?? 0) ||
+    pluralChanged ||
+    Object.keys(states).length > 0
+  );
 }
 
 type EditCapabilities = {
