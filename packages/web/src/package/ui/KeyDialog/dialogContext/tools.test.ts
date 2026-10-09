@@ -1,8 +1,16 @@
 import { MAX_LANGUAGES_SELECTED } from '../../../constants';
 import {
+  editedLanguages,
   getInitialLanguages,
   permissionsQueryProjectId,
+  sameTranslation,
+  isSuggestOnly,
+  keepFormFields,
+  keyUpdateCarriesOtherChanges,
+  planSubmit,
+  statesToUpdate,
   setPreferredLanguages,
+  deriveFieldStates,
 } from './tools';
 
 // See decodeApiKey.test.ts for how a tgpak's embedded project id is decoded.
@@ -74,5 +82,375 @@ describe('getInitialLanguages', () => {
     setPreferredLanguages(['en', 'cs']);
     const rawTags = ['ar', 'cs', 'de', 'en'];
     expect(getInitialLanguages(rawTags, 'en')).toEqual(['en', 'cs']);
+  });
+});
+
+describe('planSubmit', () => {
+  const field = (
+    language: string,
+    disposition: 'save' | 'suggest' | 'readonly',
+    { changed = true, isEmpty = false } = {}
+  ) => ({ language, disposition, changed, isEmpty });
+  const unchanged = { changed: false };
+
+  it('saves when every changed field is savable', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save'), field('de', 'suggest', unchanged)],
+        suggestOnly: false,
+      })
+    ).toEqual({ toSuggest: [], toSave: ['en'], cleared: [], kind: 'save' });
+  });
+
+  it('suggests when every changed field is a suggestion', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+        suggestOnly: false,
+      })
+    ).toEqual({ toSuggest: ['de'], toSave: [], cleared: [], kind: 'suggest' });
+  });
+
+  it('does both for a mixed change', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save'), field('de', 'suggest')],
+        suggestOnly: false,
+      })
+    ).toEqual({
+      toSuggest: ['de'],
+      toSave: ['en'],
+      cleared: [],
+      kind: 'saveAndSuggest',
+    });
+  });
+
+  it('never suggests an unchanged, emptied or read-only field', () => {
+    expect(
+      planSubmit({
+        fields: [
+          field('de', 'suggest', unchanged),
+          field('fr', 'suggest', { isEmpty: true }),
+          field('cs', 'readonly'),
+        ],
+        suggestOnly: false,
+      })
+    ).toEqual({ toSuggest: [], toSave: [], cleared: ['fr'], kind: 'save' });
+  });
+
+  it('is a suggest submit before anything is typed when that is all the user can do', () => {
+    expect(
+      planSubmit({
+        fields: [field('de', 'suggest', unchanged)],
+        suggestOnly: true,
+      })
+    ).toEqual({ toSuggest: [], toSave: [], cleared: [], kind: 'suggest' });
+  });
+
+  it('leaves an untouched savable language out of the update', () => {
+    const plan = planSubmit({
+      fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+      suggestOnly: false,
+    });
+    expect(plan.toSave).toEqual([]);
+    expect(plan.kind).toBe('suggest');
+  });
+
+  it('updates only the savable language the user actually changed', () => {
+    expect(
+      planSubmit({
+        fields: [
+          field('en', 'save'),
+          field('cs', 'save', unchanged),
+          field('de', 'suggest'),
+        ],
+        suggestOnly: false,
+      }).toSave
+    ).toEqual(['en']);
+  });
+
+  it('updates every savable language when the key changes plural shape', () => {
+    expect(
+      planSubmit({
+        fields: [
+          field('en', 'save', unchanged),
+          field('cs', 'save', unchanged),
+          field('de', 'suggest', unchanged),
+        ],
+        suggestOnly: false,
+        pluralChanged: true,
+      }).toSave
+    ).toEqual(['en', 'cs']);
+  });
+
+  it('is a save and suggest when a key-level change rides along with a suggestion', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+        suggestOnly: false,
+        otherKeyChanges: true,
+      }).kind
+    ).toBe('saveAndSuggest');
+  });
+
+  it('is a plain suggest when nothing key-level changed', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', unchanged), field('de', 'suggest')],
+        suggestOnly: false,
+        otherKeyChanges: false,
+      }).kind
+    ).toBe('suggest');
+  });
+
+  it('ignores key-level changes for a user who may only suggest', () => {
+    expect(
+      planSubmit({
+        fields: [field('de', 'suggest')],
+        suggestOnly: true,
+        otherKeyChanges: true,
+      }).kind
+    ).toBe('suggest');
+  });
+
+  it('updates a savable language that was emptied on purpose', () => {
+    expect(
+      planSubmit({
+        fields: [field('en', 'save', { isEmpty: true })],
+        suggestOnly: false,
+      }).toSave
+    ).toEqual(['en']);
+  });
+});
+
+describe('statesToUpdate', () => {
+  const field = (
+    language: string,
+    state: 'UNTRANSLATED' | 'TRANSLATED' | 'REVIEWED' | 'DISABLED',
+    stateChanged = true
+  ) => ({ language, state, stateChanged });
+
+  it('sends a changed, settable state the user may change', () => {
+    expect(
+      statesToUpdate(
+        [field('en', 'REVIEWED'), field('de', 'TRANSLATED')],
+        () => true
+      )
+    ).toEqual({ en: 'REVIEWED', de: 'TRANSLATED' });
+  });
+
+  it('leaves out an unchanged state, one the server cannot take and one the user may not change', () => {
+    expect(
+      statesToUpdate(
+        [
+          field('en', 'REVIEWED', false),
+          field('de', 'UNTRANSLATED'),
+          field('cs', 'DISABLED'),
+          field('fr', 'REVIEWED'),
+        ],
+        (language) => language !== 'fr'
+      )
+    ).toEqual({});
+  });
+});
+
+describe('keyUpdateCarriesOtherChanges', () => {
+  const unchanged = {
+    tags: ['a', 'b'],
+    serverTags: ['b', 'a'],
+    screenshotsAdded: 0,
+    screenshotsRemoved: 0,
+    maxCharLimit: undefined,
+    serverMaxCharLimit: null,
+    pluralChanged: false,
+    states: {},
+  };
+
+  it('is false while the form matches the key, whatever the tag order and the empty char limit spelling', () => {
+    expect(keyUpdateCarriesOtherChanges(unchanged)).toBe(false);
+    expect(
+      keyUpdateCarriesOtherChanges({
+        ...unchanged,
+        maxCharLimit: 0,
+        serverMaxCharLimit: undefined,
+      })
+    ).toBe(false);
+    expect(
+      keyUpdateCarriesOtherChanges({ ...unchanged, tags: undefined })
+    ).toBe(false);
+  });
+
+  it.each([
+    ['a tag added', { tags: ['a', 'b', 'c'] }],
+    ['a tag removed', { tags: ['a'] }],
+    ['a tag swapped', { tags: ['a', 'c'] }],
+    ['a screenshot added', { screenshotsAdded: 1 }],
+    ['a screenshot removed', { screenshotsRemoved: 1 }],
+    ['a char limit set', { maxCharLimit: 10 }],
+    ['a plural switch', { pluralChanged: true }],
+    ['a state change', { states: { en: 'REVIEWED' } }],
+  ])('is true with %s', (_, over) => {
+    expect(keyUpdateCarriesOtherChanges({ ...unchanged, ...over })).toBe(true);
+  });
+});
+
+describe('editedLanguages', () => {
+  const field = (
+    language: string,
+    { changed = false, stateChanged = false } = {}
+  ) => ({ language, changed, stateChanged });
+
+  it('names a language whose text or state differs from the server', () => {
+    expect(
+      editedLanguages(
+        [
+          field('en', { changed: true }),
+          field('de', { stateChanged: true }),
+          field('cs'),
+        ],
+        false
+      )
+    ).toEqual(['en', 'de']);
+  });
+
+  it('names every language when the key changes plural shape', () => {
+    expect(editedLanguages([field('en'), field('de')], true)).toEqual([
+      'en',
+      'de',
+    ]);
+  });
+});
+
+describe('deriveFieldStates', () => {
+  const getDisposition = (language: string) =>
+    language === 'de' ? ('suggest' as const) : ('save' as const);
+  const derive = (over: Partial<Parameters<typeof deriveFieldStates>[0]>) =>
+    deriveFieldStates({
+      languages: ['en', 'de'],
+      states: { en: 'TRANSLATED', de: 'TRANSLATED' },
+      formDisabled: false,
+      getDisposition,
+      credentialBlocksTranslation: () => undefined,
+      ...over,
+    });
+
+  it('asks the permissions for every shown language', () => {
+    expect(derive({}).dispositions).toEqual({ en: 'save', de: 'suggest' });
+  });
+
+  it('makes a disabled translation read-only whatever the permissions say', () => {
+    expect(
+      derive({ states: { en: 'DISABLED', de: undefined } }).dispositions
+    ).toEqual({ en: 'readonly', de: 'suggest' });
+  });
+
+  it('makes every field read-only while the form is disabled', () => {
+    expect(derive({ formDisabled: true }).dispositions).toEqual({
+      en: 'readonly',
+      de: 'readonly',
+    });
+  });
+
+  it('blames the credential only where it is the credential that locks the field', () => {
+    const credentialBlocksTranslation = (language: string) => language === 'en';
+    expect(
+      derive({ credentialBlocksTranslation }).credentialBlocksField
+    ).toEqual({
+      en: true,
+      de: false,
+    });
+    expect(
+      derive({
+        credentialBlocksTranslation,
+        states: { en: 'DISABLED', de: 'TRANSLATED' },
+      }).credentialBlocksField
+    ).toEqual({ en: false, de: false });
+    expect(
+      derive({ credentialBlocksTranslation, formDisabled: true })
+        .credentialBlocksField
+    ).toEqual({ en: false, de: false });
+  });
+
+  it('does not blame the credential when the server reports no account scopes', () => {
+    expect(derive({}).credentialBlocksField).toEqual({ en: false, de: false });
+  });
+});
+
+describe('isSuggestOnly', () => {
+  const permissions = (over: Partial<Parameters<typeof isSuggestOnly>[0]>) => ({
+    canEditTags: false,
+    canUploadScreenshots: false,
+    canDeleteScreenshots: false,
+    canEditTranslation: () => false,
+    canEditState: () => false,
+    canSuggestTranslation: () => true,
+    ...over,
+  });
+
+  it('holds for a user who can only suggest', () => {
+    expect(isSuggestOnly(permissions({}), ['en', 'de'])).toBe(true);
+  });
+
+  it('does not hold for a view-only user', () => {
+    expect(
+      isSuggestOnly(permissions({ canSuggestTranslation: () => false }), ['en'])
+    ).toBe(false);
+  });
+
+  it.each([
+    ['tags', { canEditTags: true }],
+    ['screenshot upload', { canUploadScreenshots: true }],
+    ['screenshot delete', { canDeleteScreenshots: true }],
+    [
+      'one editable language',
+      { canEditTranslation: (l: string) => l === 'en' },
+    ],
+    ['one reviewable language', { canEditState: (l: string) => l === 'de' }],
+  ])('does not hold when the key update can carry %s', (_, over) => {
+    expect(isSuggestOnly(permissions(over), ['en', 'de'])).toBe(false);
+  });
+});
+
+describe('keepFormFields', () => {
+  const fetched = { en: 'server en', de: 'server de' };
+  const current = { en: 'typed en', de: 'typed de', cs: 'typed cs' };
+
+  it('re-seeds everything when nothing is kept', () => {
+    expect(keepFormFields(fetched, current, [])).toEqual(fetched);
+  });
+
+  it('keeps the named languages as typed and re-seeds the rest', () => {
+    expect(keepFormFields(fetched, current, ['de'])).toEqual({
+      en: 'server en',
+      de: 'typed de',
+    });
+  });
+
+  it('does not resurrect a language that is no longer shown', () => {
+    expect(keepFormFields(fetched, current, ['cs'])).toEqual(fetched);
+  });
+});
+
+describe('sameTranslation', () => {
+  const f = (variants: Record<string, string>) => ({ variants });
+
+  it('treats a form seeded from the server as unchanged', () => {
+    expect(sameTranslation(f({ other: 'Hi' }), f({ other: 'Hi' }))).toBe(true);
+  });
+
+  it('ignores empty plural forms and their order', () => {
+    expect(sameTranslation(f({ one: '', other: '' }), f({ other: '' }))).toBe(
+      true
+    );
+    expect(
+      sameTranslation(f({ other: 'x', one: 'y' }), f({ one: 'y', other: 'x' }))
+    ).toBe(true);
+  });
+
+  it('sees a real edit', () => {
+    expect(sameTranslation(f({ other: 'Hi' }), f({ other: 'Hello' }))).toBe(
+      false
+    );
+    expect(sameTranslation(f({ other: 'Hi' }), undefined)).toBe(false);
   });
 });
