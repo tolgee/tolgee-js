@@ -6,7 +6,7 @@ export type NsType = string;
  * Augment this interface to narrow `TranslationKey` to your own keys:
  *
  * ```ts
- * declare module '@tolgee/react' {
+ * declare module '@tolgee/core' {
  *   interface TranslationKeyConfig {
  *     key: 'hello' | 'world';
  *   }
