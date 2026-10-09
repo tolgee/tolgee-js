@@ -1,5 +1,6 @@
 import { MAX_LANGUAGES_SELECTED } from '../../../constants';
 import {
+  editedLanguages,
   getInitialLanguages,
   permissionsQueryProjectId,
   sameTranslation,
@@ -187,6 +188,33 @@ describe('planSubmit', () => {
         suggestOnly: false,
       }).toSave
     ).toEqual(['en']);
+  });
+});
+
+describe('editedLanguages', () => {
+  const field = (
+    language: string,
+    { changed = false, stateChanged = false } = {}
+  ) => ({ language, changed, stateChanged });
+
+  it('names a language whose text or state differs from the server', () => {
+    expect(
+      editedLanguages(
+        [
+          field('en', { changed: true }),
+          field('de', { stateChanged: true }),
+          field('cs'),
+        ],
+        false
+      )
+    ).toEqual(['en', 'de']);
+  });
+
+  it('names every language when the key changes plural shape', () => {
+    expect(editedLanguages([field('en'), field('de')], true)).toEqual([
+      'en',
+      'de',
+    ]);
   });
 });
 

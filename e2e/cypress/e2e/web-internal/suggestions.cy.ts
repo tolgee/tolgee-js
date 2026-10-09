@@ -82,6 +82,7 @@ const openWithSuggestions = (
   const removeFromActive = (url: string) => {
     active = active.filter((s) => s.id !== suggestionIdFromUrl(url));
   };
+  const savedByColleague: Record<string, string> = {};
 
   // mockPermissions' language glob also matches the suggestion url below, and Cypress lets the last
   // matching intercept win, so it has to be registered first.
@@ -100,6 +101,11 @@ const openWithSuggestions = (
           key.keyPluralArgName = 'count';
         }
         const translations = key?.translations;
+        Object.entries(savedByColleague).forEach(([tag, text]) => {
+          if (translations?.[tag]) {
+            translations[tag].text = text;
+          }
+        });
         languagesWithSuggestions.forEach((tag) => {
           if (translations?.[tag]) {
             translations[tag].activeSuggestionCount = active.length;
@@ -185,6 +191,14 @@ const openWithSuggestions = (
 
   visitWithApiKey(['translations.view', 'screenshots.view']);
   openUI();
+
+  return {
+    colleagueSaves(tag: string, text: string) {
+      cy.then(() => {
+        savedByColleague[tag] = text;
+      });
+    },
+  };
 };
 
 const openMenuOfSuggestion = (language: string, index: number) => {
@@ -477,6 +491,26 @@ context('Suggestions in the dialog', () => {
       .should('contain.text', 'Hallo Welt');
     getDevUi().findDcy('translations-tag-close').should('have.length', 1);
     getDevUi().should('contain.text', 'test-tag');
+  });
+
+  it('shows what a colleague saved meanwhile in a field the user left alone', () => {
+    const { colleagueSaves } = openWithSuggestions(reviewer);
+
+    retype('en', 'Typed english');
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'de' })
+      .should('contain.text', 'Was mitnehmen');
+    colleagueSaves('de', 'Von Kollegen gespeichert');
+
+    getSuggestionsList('en').findDcy('suggestion-decline').first().click();
+    cy.wait('@decline');
+
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'de' })
+      .should('contain.text', 'Von Kollegen gespeichert');
+    getDevUi()
+      .findDcyWithCustom({ value: 'translation-field', language: 'en' })
+      .should('contain.text', 'Typed english');
   });
 
   it('is hidden when suggestions are disabled', () => {

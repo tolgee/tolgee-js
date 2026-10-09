@@ -128,6 +128,15 @@ type SubmitField = {
   isEmpty: boolean;
 };
 
+export function editedLanguages(
+  fields: { language: string; changed: boolean; stateChanged: boolean }[],
+  pluralChanged: boolean
+) {
+  return fields
+    .filter((f) => pluralChanged || f.changed || f.stateChanged)
+    .map((f) => f.language);
+}
+
 export function planSubmit({
   fields,
   suggestOnly,

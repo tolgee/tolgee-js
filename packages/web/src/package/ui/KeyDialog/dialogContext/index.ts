@@ -20,6 +20,7 @@ import {
 import {
   changeInTolgeeCache,
   deriveFieldStates,
+  editedLanguages,
   getInitialLanguages,
   getPreferredLanguages,
   mapPosition,
@@ -553,9 +554,7 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
 
     function reloadKeepingEdits({ except }: { except?: string } = {}) {
       return refetchKeeping({
-        keepLanguages: Object.keys(translationsForm).filter(
-          (l) => l !== except
-        ),
+        keepLanguages: edited.filter((l) => l !== except),
         keepTagsAndScreenshots: true,
       });
     }
@@ -691,19 +690,26 @@ export const [DialogProvider, useDialogActions, useDialogContext] =
         !icuPlaceholders
       );
 
-    const submitPlan = planSubmit({
-      fields: Object.entries(translationsForm).map(([language, { value }]) => ({
+    const serverState = (language: string) =>
+      keyData?.translations?.[language]?.state || 'UNTRANSLATED';
+
+    const pluralChanged =
+      keyData !== undefined &&
+      (isPlural !== Boolean(keyData.keyIsPlural) ||
+        (isPlural && pluralArgName !== keyData.keyPluralArgName));
+
+    const fields = Object.entries(translationsForm).map(
+      ([language, { value, state }]) => ({
         language,
         disposition: dispositions[language] ?? 'readonly',
         changed: !sameTranslation(value, serverValue(language)),
+        stateChanged: state !== serverState(language),
         isEmpty: isTranslationEmpty(value, isPlural),
-      })),
-      suggestOnly,
-      pluralChanged:
-        keyData !== undefined &&
-        (isPlural !== Boolean(keyData.keyIsPlural) ||
-          (isPlural && pluralArgName !== keyData.keyPluralArgName)),
-    });
+      })
+    );
+    const edited = editedLanguages(fields, pluralChanged);
+
+    const submitPlan = planSubmit({ fields, suggestOnly, pluralChanged });
 
     const contextValue = {
       input: props.keyName,
