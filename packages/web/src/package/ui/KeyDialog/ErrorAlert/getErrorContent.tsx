@@ -160,12 +160,7 @@ export function getErrorContent(
       );
 
     case 'duplicate_suggestion':
-      return (
-        <>
-          <AlertTitle>This suggestion already exists</AlertTitle>
-          Someone has already suggested exactly this text.
-        </>
-      );
+      return <>This suggestion already exists.</>;
 
     case 'suggestions_disabled':
       return (
