@@ -1,6 +1,12 @@
 import React, { Profiler, useLayoutEffect } from 'react';
 import '@testing-library/jest-dom';
-import { Tolgee, TolgeeInstance, TolgeeProvider, useTranslate } from '..';
+import {
+  Tolgee,
+  TolgeeInstance,
+  TolgeeProvider,
+  useTolgee,
+  useTranslate,
+} from '..';
 import { render, screen, waitFor } from '@testing-library/react';
 
 describe('language change before the update subscription', () => {
@@ -64,6 +70,41 @@ describe('language change before the update subscription', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('greeting')).toHaveTextContent('Hello');
+    });
+    expect(onRender).toHaveBeenCalledTimes(1);
+  });
+
+  const LanguageName = () => {
+    const language = useTolgee(['language']).getLanguage();
+    return <p data-testid="language">{language}</p>;
+  };
+
+  it('renders the new language in a useTolgee reader that subscribed late', async () => {
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        <SwitchToFrenchBeforeSubscriptions>
+          <LanguageName />
+        </SwitchToFrenchBeforeSubscriptions>
+      </TolgeeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('language')).toHaveTextContent('fr');
+    });
+  });
+
+  it('does not render a useTolgee reader again when the language did not change', async () => {
+    const onRender = jest.fn();
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        <Profiler id="language" onRender={onRender}>
+          <LanguageName />
+        </Profiler>
+      </TolgeeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('language')).toHaveTextContent('en');
     });
     expect(onRender).toHaveBeenCalledTimes(1);
   });
