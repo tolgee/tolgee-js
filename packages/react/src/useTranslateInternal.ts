@@ -30,9 +30,14 @@ export const useTranslateInternal = (
   subscriptionQueue.current = [];
 
   const isLoaded = tolgee.isLoaded(namespaces);
+  const renderedLanguage = tolgee.getLanguage();
 
   useEffect(() => {
     const subscription = tolgee.on('update', rerender);
+
+    if (tolgee.getLanguage() !== renderedLanguage) {
+      rerender();
+    }
 
     return () => {
       subscription.unsubscribe();
