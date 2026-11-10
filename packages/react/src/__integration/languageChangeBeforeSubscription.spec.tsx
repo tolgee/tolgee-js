@@ -1,6 +1,7 @@
 import React, { Profiler, useLayoutEffect } from 'react';
 import '@testing-library/jest-dom';
 import {
+  T,
   Tolgee,
   TolgeeInstance,
   TolgeeProvider,
@@ -107,5 +108,56 @@ describe('language change before the update subscription', () => {
       expect(screen.getByTestId('language')).toHaveTextContent('en');
     });
     expect(onRender).toHaveBeenCalledTimes(1);
+  });
+
+  const UpdateReader = () => {
+    const { t } = useTolgee(['update']);
+    return <p data-testid="update-reader">{t('greeting')}</p>;
+  };
+
+  it('renders the new language in a useTolgee update reader that subscribed late', async () => {
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        <SwitchToFrenchBeforeSubscriptions>
+          <UpdateReader />
+        </SwitchToFrenchBeforeSubscriptions>
+      </TolgeeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('update-reader')).toHaveTextContent('Bonjour');
+    });
+  });
+
+  it('does not render a useTolgee update reader again when the language did not change', async () => {
+    const onRender = jest.fn();
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        <Profiler id="update-reader" onRender={onRender}>
+          <UpdateReader />
+        </Profiler>
+      </TolgeeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('update-reader')).toHaveTextContent('Hello');
+    });
+    expect(onRender).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders the new language in a T component that subscribed late', async () => {
+    render(
+      <TolgeeProvider tolgee={tolgee} fallback="Loading...">
+        <SwitchToFrenchBeforeSubscriptions>
+          <p data-testid="t-component">
+            <T keyName="greeting" />
+          </p>
+        </SwitchToFrenchBeforeSubscriptions>
+      </TolgeeProvider>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('t-component')).toHaveTextContent('Bonjour');
+    });
   });
 });

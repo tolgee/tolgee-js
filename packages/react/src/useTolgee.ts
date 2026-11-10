@@ -13,7 +13,7 @@ export const useTolgee = (events?: TolgeeEvent[]): TolgeeInstance => {
     const listeners = events?.map((e) => tolgee.on(e, rerender));
     // A language change between this render and the subscription would be missed.
     if (
-      events?.includes('language') &&
+      (events?.includes('language') || events?.includes('update')) &&
       tolgee.getLanguage() !== renderedLanguage
     ) {
       rerender();
