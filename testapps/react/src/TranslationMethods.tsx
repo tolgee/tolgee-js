@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react';
+import { useRef, useState, Suspense } from 'react';
 import { T, useTranslate } from '@tolgee/react';
 
 import { Navbar } from './components/Navbar';
@@ -7,6 +7,7 @@ import { Namespaces } from './components/Namespaces';
 export const TranslationMethods = () => {
   const { t } = useTranslate();
   const [revealed, setRevealed] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   return (
     <main className="translation-methods">
@@ -137,6 +138,30 @@ export const TranslationMethods = () => {
                 {'<b>Translation</b> in translation'}
               </T>
             </div>
+          </div>
+        </div>
+
+        <div>
+          <h1>Translation inside dialog</h1>
+          <div>
+            <button
+              className="button"
+              data-cy="openDialogButton"
+              onClick={() => dialogRef.current?.showModal()}
+            >
+              Open dialog
+            </button>
+            <dialog ref={dialogRef} data-cy="translationDialog">
+              <div data-cy="translationDialogContent">
+                <T
+                  keyName="this_is_a_key_in_dialog"
+                  defaultValue="This is a translation inside a dialog"
+                />
+              </div>
+              <form method="dialog">
+                <button className="button">Close</button>
+              </form>
+            </dialog>
           </div>
         </div>
       </div>
