@@ -423,4 +423,94 @@ describe('cache', () => {
       );
     }
   );
+  it('releases every acquired request without waiting for a pending sibling after a start listener throws', async () => {
+    const en = deferred();
+    const de = deferred();
+    mockedBackendGetRecord
+      .mockReturnValueOnce(en.promise)
+      .mockReturnValueOnce(de.promise);
+    const error = new Error('start observer failure');
+    onFetchingChange.mockImplementationOnce(() => {
+      throw error;
+    });
+    const batch = cache.loadRecords([{ language: 'en' }, { language: 'de' }], {
+      noDev: true,
+    });
+    await expect(batch).rejects.toBe(error);
+    expect(cache.isFetching()).toBe(true);
+    en.resolve({ greeting: 'Discarded' });
+    await new Promise((done) => setTimeout(done, 0));
+    expect(cache.isFetching()).toBe(true);
+    expect(cache.isLoading('en')).toBe(true);
+    expect(cache.getRecord({ language: 'en' })).toBeUndefined();
+    de.resolve({ greeting: 'Discarded' });
+    await new Promise((done) => setTimeout(done, 0));
+    expect(cache.isFetching()).toBe(false);
+    expect(cache.getAllRecords()).toEqual([]);
+    expect(onLoadingChange.mock.calls).toEqual([[true], [false]]);
+  });
+
+  it('keeps a shared subset usable after its original batch start notification throws', async () => {
+    const pending = deferred();
+    mockedBackendGetRecord.mockReturnValue(pending.promise);
+    const error = new Error('start observer failure');
+    onFetchingChange.mockImplementationOnce(() => {
+      throw error;
+    });
+    const failed = cache.loadRecords([{ language: 'en' }], { noDev: true });
+    const subset = cache.loadRecords([{ language: 'en' }], { noDev: true });
+    await expect(failed).rejects.toBe(error);
+    expect(mockedBackendGetRecord).toBeCalledTimes(1);
+    pending.resolve({ greeting: 'Hello' });
+    await subset;
+    expect(cache.getRecord({ language: 'en' })?.data.greeting).toBe('Hello');
+    expect(cache.isFetching()).toBe(false);
+  });
+
+  it('releases a request when the loading start listener throws', async () => {
+    const pending = deferred();
+    mockedBackendGetRecord.mockReturnValue(pending.promise);
+    const error = new Error('loading start failure');
+    onLoadingChange.mockImplementationOnce(() => {
+      throw error;
+    });
+    await expect(
+      cache.loadRecords([{ language: 'en' }], { noDev: true })
+    ).rejects.toBe(error);
+    pending.resolve({ greeting: 'Discarded' });
+    await new Promise((done) => setTimeout(done, 0));
+    expect(cache.isFetching()).toBe(false);
+    expect(cache.getAllRecords()).toEqual([]);
+  });
+
+  it.each(['batch', 'orphan'] as const)(
+    'notifies loading when fetching notification throws during %s cleanup',
+    async (kind) => {
+      jest.spyOn(console, 'error').mockImplementation(() => {});
+      const pending = deferred();
+      mockedBackendGetRecord
+        .mockReturnValueOnce(pending.promise)
+        .mockRejectedValueOnce(new Error('backend failure'));
+      const error = new Error('fetching completion failure');
+      onFetchingChange.mockImplementation((value) => {
+        if (!value) throw error;
+      });
+      const batch = cache.loadRecords(
+        kind === 'batch'
+          ? [{ language: 'en' }]
+          : [{ language: 'en' }, { language: 'de' }],
+        { noDev: true }
+      );
+      const result =
+        kind === 'batch'
+          ? expect(batch).rejects.toBe(error)
+          : expect(batch).rejects.toThrow('Failed to fetch record');
+      if (kind === 'orphan') await result;
+      pending.resolve({ greeting: 'Hello' });
+      if (kind === 'batch') await result;
+      await new Promise((done) => setTimeout(done, 0));
+      expect(cache.isFetching()).toBe(false);
+      expect(onLoadingChange.mock.calls).toEqual([[true], [false]]);
+    }
+  );
 });

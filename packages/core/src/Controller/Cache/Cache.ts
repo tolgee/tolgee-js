@@ -280,55 +280,63 @@ export function Cache(
         data?: TranslationsFlat;
       };
 
-      const withPromises: WithPromise[] = descriptors.map((descriptor) => {
-        const keyObject = withDefaultNs(descriptor);
-        const cacheKey = encodeCacheKey(keyObject);
-        if (options?.useCache) {
-          const exists = self.exists(keyObject, true);
-
-          if (exists) {
-            return {
-              ...keyObject,
-              cacheKey,
-              data: self.getRecord(keyObject)!.data,
-            } as WithPromise;
-          }
-        }
-
-        let request = asyncRequests.get(cacheKey);
-        if (!request) {
-          const newRequest = {
-            promise: fetchData(keyObject, !options?.noDev),
-            users: 0,
-            settled: false,
-          };
-          // Keep deferred cleanup in the promise observed by every batch.
-          newRequest.promise = newRequest.promise.finally(() => {
-            newRequest.settled = true;
-            if (clearRequest(cacheKey, newRequest)) {
-              fetchingObserver.notify();
-              loadingObserver.notify();
-            }
-          });
-          request = newRequest;
-          asyncRequests.set(cacheKey, request);
-        }
-        request.users += 1;
-
-        return {
-          ...keyObject,
-          request,
-          cacheKey,
-        };
-      });
-      fetchingObserver.notify();
-      loadingObserver.notify();
-
-      const promisesToWait = withPromises
-        .map((val) => val.request?.promise)
-        .filter(Boolean);
+      const withPromises: WithPromise[] = [];
+      const promisesToWait: Promise<TreeTranslationsData | undefined>[] = [];
 
       try {
+        try {
+          descriptors.forEach((descriptor) => {
+            const keyObject = withDefaultNs(descriptor);
+            const cacheKey = encodeCacheKey(keyObject);
+            if (options?.useCache) {
+              const exists = self.exists(keyObject, true);
+
+              if (exists) {
+                withPromises.push({
+                  ...keyObject,
+                  cacheKey,
+                  data: self.getRecord(keyObject)!.data,
+                });
+                return;
+              }
+            }
+
+            let request = asyncRequests.get(cacheKey);
+            if (!request) {
+              const newRequest = {
+                promise: fetchData(keyObject, !options?.noDev),
+                users: 0,
+                settled: false,
+              };
+              // Keep deferred cleanup in the promise observed by every batch.
+              newRequest.promise = newRequest.promise.finally(() => {
+                newRequest.settled = true;
+                if (clearRequest(cacheKey, newRequest)) {
+                  try {
+                    fetchingObserver.notify();
+                  } finally {
+                    loadingObserver.notify();
+                  }
+                }
+              });
+              request = newRequest;
+              asyncRequests.set(cacheKey, request);
+            }
+            request.users += 1;
+
+            withPromises.push({ ...keyObject, request, cacheKey });
+            promisesToWait.push(request.promise);
+          });
+          try {
+            fetchingObserver.notify();
+          } finally {
+            loadingObserver.notify();
+          }
+        } catch (error) {
+          // Observe launched requests even when acquisition or notification fails.
+          promisesToWait.unshift(Promise.reject(error));
+        }
+
         const fetchedData = await Promise.all(promisesToWait);
 
         withPromises.forEach((value) => {
@@ -365,8 +373,11 @@ export function Cache(
             clearRequest(cacheKey, request);
           }
         });
-        fetchingObserver.notify();
-        loadingObserver.notify();
+        try {
+          fetchingObserver.notify();
+        } finally {
+          loadingObserver.notify();
+        }
       }
     },
   });

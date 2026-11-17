@@ -205,4 +205,97 @@ describe('translation records', () => {
       expect(tolgee.t('greeting')).toBe('Hallo');
     }
   );
+  it.each(['resolve', 'reject'] as const)(
+    'releases a public request after a fetching start listener throws and the loader %s',
+    async (settlement) => {
+      let resolve!: (value: { greeting: string }) => void;
+      let reject!: (error: Error) => void;
+      const pending = new Promise<{ greeting: string }>((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      const loader = jest
+        .fn()
+        .mockReturnValueOnce(pending)
+        .mockResolvedValue({ greeting: 'Hallo' });
+      const tolgee = TolgeeCore().init({
+        language: 'en',
+        staticData: { en: { greeting: 'Hello' }, de: loader },
+      });
+      await tolgee.run();
+      const observerError = new Error('start listener failure');
+      const listener = tolgee.on('fetching', ({ value }) => {
+        if (value) throw observerError;
+      });
+      await expect(tolgee.changeLanguage('de')).rejects.toBe(observerError);
+      listener.unsubscribe();
+      expect(tolgee.getLanguage()).toBe('en');
+      expect(tolgee.isFetching()).toBe(true);
+      if (settlement === 'reject') reject(new Error('late backend failure'));
+      else resolve({ greeting: 'Discarded' });
+      await new Promise((done) => setTimeout(done, 0));
+      expect(tolgee.isFetching()).toBe(false);
+      expect(tolgee.getRecord({ language: 'de' })).toBeUndefined();
+      await tolgee.changeLanguage('de');
+      expect(loader).toBeCalledTimes(2);
+      expect(tolgee.t('greeting')).toBe('Hallo');
+    }
+  );
+
+  it.each(['resolve', 'reject'] as const)(
+    'notifies initial loading completion when a fetching listener throws after %s',
+    async (settlement) => {
+      const observerError = new Error('initial fetching listener failure');
+      const loader = jest.fn();
+      if (settlement === 'reject')
+        loader.mockRejectedValue(new Error('backend failure'));
+      else loader.mockResolvedValue({ greeting: 'Hello' });
+      const tolgee = TolgeeCore().init({
+        language: 'en',
+        staticData: { en: loader },
+      });
+      const loading = jest.fn();
+      const initialLoaded = jest.fn();
+      tolgee.on('loading', loading);
+      tolgee.on('initialLoad', initialLoaded);
+      tolgee.on('fetching', ({ value }) => {
+        if (!value) throw observerError;
+      });
+      await expect(tolgee.run()).rejects.toBe(observerError);
+      expect(tolgee.isInitialLoading()).toBe(false);
+      expect(tolgee.isLoading()).toBe(false);
+      expect(tolgee.isFetching()).toBe(false);
+      expect(loading.mock.calls.map(([event]) => event.value)).toEqual([
+        true,
+        false,
+      ]);
+      expect(initialLoaded).not.toBeCalled();
+    }
+  );
+  it('observes initial detector failure after an initial fetching start listener throws', async () => {
+    let reject!: (error: Error) => void;
+    const pending = new Promise<string>((_resolve, rej) => {
+      reject = rej;
+    });
+    const observerError = new Error('initial start listener failure');
+    const tolgee = TolgeeCore()
+      .use((app, tools) => {
+        tools.setLanguageDetector({ getLanguage: () => pending });
+        return app;
+      })
+      .init({ defaultLanguage: 'en', availableLanguages: ['en'] });
+    tolgee.on('fetching', ({ value }) => {
+      if (value) throw observerError;
+    });
+    const initialLoaded = jest.fn();
+    tolgee.on('initialLoad', initialLoaded);
+    await expect(Promise.resolve().then(() => tolgee.run())).rejects.toBe(
+      observerError
+    );
+    reject(new Error('late detector failure'));
+    await new Promise((done) => setTimeout(done, 0));
+    expect(tolgee.isInitialLoading()).toBe(false);
+    expect(tolgee.isFetching()).toBe(false);
+    expect(initialLoaded).not.toBeCalled();
+  });
 });
