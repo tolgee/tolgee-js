@@ -17,10 +17,13 @@ import { ValueObserverInstance } from '../ValueObserver';
 import { decodeCacheKey, encodeCacheKey, flattenTranslations } from './helpers';
 import { EventsInstance } from '../Events/Events';
 
-type CacheAsyncRequests = Map<
-  string,
-  Promise<TreeTranslationsData | undefined> | undefined
->;
+type CacheAsyncRequest = {
+  promise: Promise<TreeTranslationsData | undefined>;
+  users: number;
+  settled: boolean;
+};
+
+type CacheAsyncRequests = Map<string, CacheAsyncRequest>;
 
 type CacheRecord = {
   version: number;
@@ -107,6 +110,17 @@ export function Cache(
     }
 
     return result;
+  }
+
+  function clearRequest(cacheKey: string, request: CacheAsyncRequest) {
+    if (
+      request.settled &&
+      !request.users &&
+      asyncRequests.get(cacheKey) === request
+    ) {
+      return asyncRequests.delete(cacheKey);
+    }
+    return false;
   }
 
   const self = Object.freeze({
@@ -259,91 +273,112 @@ export function Cache(
       options?: LoadOptions
     ): Promise<CacheInternalRecord[]> {
       type WithPromise = {
-        new: boolean;
         language: string;
         namespace: string;
         cacheKey: string;
-        promise?: Promise<TreeTranslationsData | undefined>;
+        request?: CacheAsyncRequest;
         data?: TranslationsFlat;
       };
 
-      const withPromises: WithPromise[] = descriptors.map((descriptor) => {
-        const keyObject = withDefaultNs(descriptor);
-        const cacheKey = encodeCacheKey(keyObject);
-        if (options?.useCache) {
-          const exists = self.exists(keyObject, true);
+      const withPromises: WithPromise[] = [];
+      const promisesToWait: Promise<TreeTranslationsData | undefined>[] = [];
 
-          if (exists) {
-            return {
-              ...keyObject,
-              new: false,
-              cacheKey,
-              data: self.getRecord(keyObject)!.data,
-            } as WithPromise;
+      try {
+        try {
+          descriptors.forEach((descriptor) => {
+            const keyObject = withDefaultNs(descriptor);
+            const cacheKey = encodeCacheKey(keyObject);
+            if (options?.useCache) {
+              const exists = self.exists(keyObject, true);
+
+              if (exists) {
+                withPromises.push({
+                  ...keyObject,
+                  cacheKey,
+                  data: self.getRecord(keyObject)!.data,
+                });
+                return;
+              }
+            }
+
+            let request = asyncRequests.get(cacheKey);
+            if (!request) {
+              const newRequest = {
+                promise: fetchData(keyObject, !options?.noDev),
+                users: 0,
+                settled: false,
+              };
+              // Keep deferred cleanup in the promise observed by every batch.
+              newRequest.promise = newRequest.promise.finally(() => {
+                newRequest.settled = true;
+                if (clearRequest(cacheKey, newRequest)) {
+                  try {
+                    fetchingObserver.notify();
+                  } finally {
+                    loadingObserver.notify();
+                  }
+                }
+              });
+              request = newRequest;
+              asyncRequests.set(cacheKey, request);
+            }
+            request.users += 1;
+
+            withPromises.push({ ...keyObject, request, cacheKey });
+            promisesToWait.push(request.promise);
+          });
+          try {
+            fetchingObserver.notify();
+          } finally {
+            loadingObserver.notify();
           }
+        } catch (error) {
+          // Observe launched requests even when acquisition or notification fails.
+          promisesToWait.unshift(Promise.reject(error));
         }
 
-        const existingPromise = asyncRequests.get(cacheKey);
+        const fetchedData = await Promise.all(promisesToWait);
 
-        if (existingPromise) {
-          return {
-            ...keyObject,
-            new: false,
-            promise: existingPromise,
-            cacheKey,
-          };
-        }
-
-        const dataPromise =
-          fetchData(keyObject, !options?.noDev) || Promise.resolve(undefined);
-
-        asyncRequests.set(cacheKey, dataPromise);
-
-        return {
-          ...keyObject,
-          new: true,
-          promise: dataPromise,
-          cacheKey,
-        };
-      });
-      fetchingObserver.notify();
-      loadingObserver.notify();
-
-      const promisesToWait = withPromises
-        .map((val) => val.promise)
-        .filter(Boolean);
-
-      const fetchedData = await Promise.all(promisesToWait);
-
-      withPromises.forEach((value) => {
-        if (value.promise) {
-          value.data = flattenTranslations(fetchedData[0] ?? {});
-          fetchedData.shift();
-        }
-        // if promise has changed in between, it means cache been invalidated or
-        // new data are being fetched
-        const promiseChanged =
-          asyncRequests.get(value.cacheKey) !== value.promise;
-        if (value.new && !promiseChanged) {
-          asyncRequests.delete(value.cacheKey);
-          if (value.data) {
-            self.addRecord(value, value.data);
-          } else if (!self.getRecord(value)) {
-            // if no data exist, put empty object
-            // so we know we don't have to fetch again
-            self.addRecord(value, {});
+        withPromises.forEach((value) => {
+          if (value.request) {
+            value.data = flattenTranslations(fetchedData[0] ?? {});
+            fetchedData.shift();
           }
-        }
-      });
-      fetchingObserver.notify();
-      loadingObserver.notify();
+          // Only the current request may apply data after invalidation.
+          if (
+            value.request &&
+            asyncRequests.get(value.cacheKey) === value.request
+          ) {
+            asyncRequests.delete(value.cacheKey);
+            if (value.data) {
+              self.addRecord(value, value.data);
+            } else if (!self.getRecord(value)) {
+              // if no data exist, put empty object
+              // so we know we don't have to fetch again
+              self.addRecord(value, {});
+            }
+          }
+        });
 
-      return withPromises.map((val) => ({
-        language: val.language,
-        namespace: val.namespace,
-        data: val.data ?? {},
-        cacheKey: val.cacheKey,
-      }));
+        return withPromises.map((val) => ({
+          language: val.language,
+          namespace: val.namespace,
+          data: val.data ?? {},
+          cacheKey: val.cacheKey,
+        }));
+      } finally {
+        withPromises.forEach(({ request, cacheKey }) => {
+          if (request) {
+            request.users -= 1;
+            clearRequest(cacheKey, request);
+          }
+        });
+        try {
+          fetchingObserver.notify();
+        } finally {
+          loadingObserver.notify();
+        }
+      }
     },
   });
 

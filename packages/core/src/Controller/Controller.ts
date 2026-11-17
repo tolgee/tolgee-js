@@ -194,15 +194,29 @@ export function Controller({ options }: StateServiceProps) {
     });
 
     if (isPromise(data)) {
+      const promisesToWait = [Promise.resolve(data)];
       state.setInitialLoading(true);
-      fetchingObserver.notify();
-      loadingObserver.notify();
-      return Promise.resolve(data).then(() => {
-        state.setInitialLoading(false);
-        fetchingObserver.notify();
-        loadingObserver.notify();
-        events.onInitialLoaded.emit();
-      });
+      try {
+        try {
+          fetchingObserver.notify();
+        } finally {
+          loadingObserver.notify();
+        }
+      } catch (error) {
+        promisesToWait.unshift(Promise.reject(error));
+      }
+      return Promise.all(promisesToWait)
+        .finally(() => {
+          state.setInitialLoading(false);
+          try {
+            fetchingObserver.notify();
+          } finally {
+            loadingObserver.notify();
+          }
+        })
+        .then(() => {
+          events.onInitialLoaded.emit();
+        });
     } else {
       events.onInitialLoaded.emit();
     }
