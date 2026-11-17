@@ -197,12 +197,15 @@ export function Controller({ options }: StateServiceProps) {
       state.setInitialLoading(true);
       fetchingObserver.notify();
       loadingObserver.notify();
-      return Promise.resolve(data).then(() => {
-        state.setInitialLoading(false);
-        fetchingObserver.notify();
-        loadingObserver.notify();
-        events.onInitialLoaded.emit();
-      });
+      return Promise.resolve(data)
+        .finally(() => {
+          state.setInitialLoading(false);
+          fetchingObserver.notify();
+          loadingObserver.notify();
+        })
+        .then(() => {
+          events.onInitialLoaded.emit();
+        });
     } else {
       events.onInitialLoaded.emit();
     }
