@@ -2,9 +2,24 @@ export type FallbackGeneral = undefined | false | string | string[];
 
 export type NsType = string;
 
-// This prevents typescript to optimize this to 'string'
-// this type needs to be overritable everywhere
-export type TranslationKey = string & Record<never, never>;
+/**
+ * Augment this interface to narrow `TranslationKey` to your own keys:
+ *
+ * ```ts
+ * declare module '@tolgee/core' {
+ *   interface TranslationKeyConfig {
+ *     key: 'hello' | 'world';
+ *   }
+ * }
+ * ```
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface TranslationKeyConfig {}
+
+// `string & Record<never, never>` prevents typescript to optimize this to 'string'
+export type TranslationKey = TranslationKeyConfig extends { key: infer K }
+  ? K
+  : string & Record<never, never>;
 
 export type NsFallback = undefined | NsType | NsType[];
 
