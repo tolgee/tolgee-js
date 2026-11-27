@@ -132,11 +132,7 @@ jobs:
       fail-fast: false
       matrix:
         app: ${{ fromJson(needs.prepare.outputs.dirs) }}
-        node: [18, 20]
-        exclude:
-          - app: ngx
-            # angular 20+ does not support node 18 anymore
-            node: 18
+        node: [22, 24]
 
     steps:
       - uses: actions/checkout@v4
@@ -208,7 +204,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [18, 20]
+        node: [22, 24]
 
     steps:
       - uses: actions/checkout@v4
