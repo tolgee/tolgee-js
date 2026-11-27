@@ -12,7 +12,7 @@ declare global {
   }
 }
 
-const CDN_URL = 'https://cdn.jsdelivr.net/npm';
+const CDN_URL = 'https://sdk.tolgee.io';
 
 let injectPromise = null as any as Promise<typeof InContextTools>;
 
@@ -28,8 +28,7 @@ export function loadInContextLib(version: string) {
 
 export function inContextLibSrc(version: string): string {
   return (
-    trustedOverrideUrl() ||
-    `${CDN_URL}/@tolgee/web@${version}/dist/${IN_CONTEXT_FILE}`
+    trustedOverrideUrl() || `${CDN_URL}/web@${version}/dist/${IN_CONTEXT_FILE}`
   );
 }
 
