@@ -1,5 +1,5 @@
-export const PASSWORD = Cypress.env('DEFAULT_PASSWORD') || 'admin';
-export const USERNAME = Cypress.env('DEFAULT_USERNAME') || 'admin';
-export const API_URL = Cypress.env('API_URL') || 'http://localhost:8202';
+export const PASSWORD = Cypress.expose('DEFAULT_PASSWORD') || 'admin';
+export const USERNAME = Cypress.expose('DEFAULT_USERNAME') || 'admin';
+export const API_URL = Cypress.expose('API_URL') || 'http://localhost:8202';
 export const WEB_INTERNAL_URL =
-  Cypress.env('WEB_INTERNAL_URL') || 'http://localhost:8114';
+  Cypress.expose('WEB_INTERNAL_URL') || 'http://localhost:8114';

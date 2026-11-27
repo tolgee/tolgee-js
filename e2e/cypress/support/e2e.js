@@ -19,3 +19,9 @@ require('cypress-xpath');
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// Cypress 10 cleared these before each test; with testIsolation off (cypress.config.ts) Cypress 16 does not.
+beforeEach(() => {
+  cy.clearAllLocalStorage();
+  cy.clearAllCookies();
+});
