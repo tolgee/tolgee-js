@@ -119,13 +119,14 @@ describe('inContextLibSrc', () => {
 
   it('falls back to the CDN when there is no trusted override', () => {
     window.__TOLGEE_IN_CONTEXT_URL__ = 'https://evil.example.com/x.js';
-    expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
-    expect(inContextLibSrc('1.2.3')).toContain('@tolgee/web@1.2.3');
+    expect(inContextLibSrc('1.2.3')).toEqual(
+      'https://sdk.tolgee.io/web@1.2.3/dist/tolgee-in-context-tools.umd.min.js'
+    );
   });
 
   it('falls back to the CDN under SSR (ignoring any override)', () => {
     (isSSR as jest.Mock).mockReturnValueOnce(true);
     window.__TOLGEE_IN_CONTEXT_URL__ = '/local.umd.js';
-    expect(inContextLibSrc('1.2.3')).toContain('cdn.jsdelivr.net');
+    expect(inContextLibSrc('1.2.3')).toContain('https://sdk.tolgee.io/');
   });
 });
